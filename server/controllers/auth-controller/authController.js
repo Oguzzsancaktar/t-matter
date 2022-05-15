@@ -27,7 +27,8 @@ const loginController = async (req, res) => {
 
   res.send({
     userId: user._id.toString(),
-    accessToken
+    accessToken,
+    refreshToken
   })
 }
 

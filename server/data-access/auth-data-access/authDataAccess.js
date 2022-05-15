@@ -5,7 +5,6 @@ const findUserByEmail = ({ email }) => {
 }
 
 const createUser = data => {
-  console.log(data)
   return User.create(data)
 }
 
