@@ -21,7 +21,7 @@ const SigninComponent: React.FC<Props> = () => {
 
   const [credentials, setCredentials] = useState<IUserLoginCredentials>({
     email: 'admin@admin.com',
-    password: 'adminadmin'
+    password: 'admin2022'
   })
 
   const validateFormFields = (): boolean => {
