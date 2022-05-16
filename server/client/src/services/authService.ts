@@ -12,7 +12,7 @@ const login = (builder: IBuilder) => {
   return builder.mutation<ILoginResponse, IUserLoginCredentials>({
     query(credentials) {
       return {
-        url: '/auth',
+        url: '/auth/login',
         method: 'POST',
         data: credentials
       }
