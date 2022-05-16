@@ -1,9 +1,12 @@
 {
   "scripts": {
     "start": "env-cmd -f .env.production node app.js",
-    "heroku-postbuild": "cd client && npm install && npm run build",
+    "heroku-postbuild": "cd client && npm install --legacy-peer-deps && npm run build",
     "start:dev": "NODE_ENV=development env-cmd -f .env.development nodemon app.js",
     "start:prod": "env-cmd -f .env.production node app.js"
+  },
+  "engines": {
+    "node": "16.13.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.16",
