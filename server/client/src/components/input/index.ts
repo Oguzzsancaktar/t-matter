@@ -1,6 +1,5 @@
-export { default as InputRegular } from './InputRegular'
-export { default as InputCheckbox } from './InputCheckbox'
-export { default as InputWithIcon } from './InputWithIcon'
+export { default as InputRegular } from './InputRegular/InputRegular'
+export { default as InputCheckbox } from '../image/InputCheckbox'
+export { default as InputWithIcon } from './InputWithIcon/InputWithIcon'
 
-export { default as Checkbox } from './Checkbox'
-
+export { default as Checkbox } from './Checkbox/Checkbox'

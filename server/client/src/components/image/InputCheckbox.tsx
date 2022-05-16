@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Checkbox from './Checkbox'
+import Checkbox from '../input/Checkbox/Checkbox'
 
 const Label = styled.label``
 const Span = styled.span`

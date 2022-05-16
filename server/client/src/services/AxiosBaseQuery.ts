@@ -1,6 +1,6 @@
 import axios from '@/apis/axios.instance'
 import { BaseQueryFn } from '@reduxjs/toolkit/query'
-import { AxiosError, AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig } from 'axios'
 
 type IAxiosBaseQueryFn = BaseQueryFn<AxiosRequestConfig, unknown, unknown>
 
