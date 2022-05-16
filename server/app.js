@@ -1,3 +1,5 @@
+const path = require('path')
+
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
@@ -35,6 +37,12 @@ const main = async () => {
   app.use(function (err, req, res, next) {
     console.log(err)
     res.sendStatus(err.status || 500)
+  })
+
+  app.use(express.static(path.join(__dirname, 'client')))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/build', 'index.html'))
   })
 
   app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
