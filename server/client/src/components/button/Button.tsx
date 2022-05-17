@@ -4,7 +4,7 @@ import { IProps } from './types'
 
 const Button: React.FC<IProps> = ({ children, width, ...rest }) => {
   return (
-    <ButtonSC width={width} type="submit">
+    <ButtonSC width={width} type="submit" {...rest}>
       {children}
     </ButtonSC>
   )

@@ -4,8 +4,9 @@ import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { PrivateRoute } from '@/routes/PrivateRoute'
 import GlobalStyle from './styles/GlobalStyle'
-import { GlobalModal } from './components'
+import { GlobalModal, SideBar } from '@/components'
 
+const SettingsPage = lazy(() => import('./pages/SettingsPage'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 
@@ -14,8 +15,20 @@ function App() {
     <Suspense fallback={<div>Loading...</div>}>
       <GlobalStyle />
       <GlobalModal />
+      <SideBar />
 
       <Routes>
+        <Route path="/login" element={<LoginPage />} />
+
+        <Route
+          path="/settings"
+          element={
+            <PrivateRoute>
+              <SettingsPage />
+            </PrivateRoute>
+          }
+        />
+
         <Route
           path="/"
           element={
@@ -24,7 +37,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/*" element={<Navigate replace to="/" />} />
       </Routes>
 

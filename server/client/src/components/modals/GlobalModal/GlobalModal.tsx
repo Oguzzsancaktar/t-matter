@@ -1,19 +1,26 @@
 import React from 'react'
 import useAccessStore from '@/hooks/useAccessStore'
-import { selectIsModalOpen, selectModal } from '@/store'
+import { hideModal, selectIsModalOpen, selectModal } from '@/store'
 import { CloseButton, Container, Modal } from './styled'
 
 const GlobalModal = () => {
-  const { useAppSelector } = useAccessStore()
+  const { useAppDispatch, useAppSelector } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   const isModalOpen = useAppSelector(selectIsModalOpen)
   const modal = useAppSelector(selectModal)
 
-  console.log('isModalOpen', isModalOpen)
+  const handleModalClose = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+    dispatch(hideModal())
+  }
 
   return (
     <Modal show={isModalOpen}>
-      <CloseButton>x</CloseButton>
-      <Container size={modal?.size}>{modal?.body}</Container>
+      <Container size={modal?.size}>
+        {modal?.body}
+        <CloseButton onClick={handleModalClose}>x</CloseButton>
+      </Container>
     </Modal>
   )
 }

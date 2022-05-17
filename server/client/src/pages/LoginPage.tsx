@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background: ${colors.green.primary};
-  background: linear-gradient(-45deg, ${colors.green.primary} 0%, ${colors.yellow.primary} 100%);
+  background: linear-gradient(-45deg, ${colors.black.dark} 0%, ${colors.black.primary} 100%);
   background-size: 150% 150%;
   animation: ${rotate} 10s ease-in-out infinite;
 `

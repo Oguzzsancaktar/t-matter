@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
    * {
   box-sizing: border-box;
   font-family: 'Satoshi-Bold';
-
+    color: #566a7f;
 }
 
 html {

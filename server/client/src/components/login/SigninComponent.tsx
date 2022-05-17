@@ -70,7 +70,7 @@ const SigninComponent: React.FC<Props> = () => {
           type="text"
           value={credentials.email}
         >
-          <User />
+          <User size="16px" />
         </InputWithIcon>
         <InputWithIcon
           validationError={passwordError}
@@ -83,7 +83,7 @@ const SigninComponent: React.FC<Props> = () => {
           isPasswordVisible={isPasswordVisible}
           type={isPasswordVisible ? 'text' : 'password'}
         >
-          <Key />
+          <Key size="16px" />
         </InputWithIcon>
         <Row>
           <FormErrorMessage message={errorMessage} />

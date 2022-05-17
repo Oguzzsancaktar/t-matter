@@ -6,7 +6,7 @@ interface Props {}
 const Wrapper = styled.div`
   height: 100%;
   width: 100%;
-  margin: 0;
+  margin: auto;
 `
 
 const PageWrapper: React.FC<Props> = ({ children, ...rest }) => {

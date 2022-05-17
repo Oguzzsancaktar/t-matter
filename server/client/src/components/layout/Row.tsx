@@ -1,10 +1,15 @@
 import { RowStyled } from '@/shared'
 import React from 'react'
 
-interface Props {}
+type IProps = {
+  margin?: string
+  padding?: string
+  height?: string
+  width?: string
+}
 
-const Row: React.FC<Props> = ({ children, ...rest }) => {
-  return <RowStyled>{children}</RowStyled>
+const Row: React.FC<IProps> = ({ children, ...rest }) => {
+  return <RowStyled {...rest}>{children}</RowStyled>
 }
 
 export default Row

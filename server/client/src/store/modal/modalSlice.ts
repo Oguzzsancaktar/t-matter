@@ -20,7 +20,7 @@ const modalSlice = createSlice({
       state.isModalOpen = true
       state.modal = action.payload
     },
-    hideModal(state: IModalState, action: PayloadAction<IModal>) {
+    hideModal(state: IModalState) {
       state.isModalOpen = false
       state.modal = null
     }

@@ -13,10 +13,10 @@ const CircleButtonSC = styled.button`
   border-radius: 0.3rem;
   border: 1px solid ${colors.green.primary};
   background-color: ${colors.green.primary};
-  color: ${colors.green.light};
+  color: ${colors.green.primary};
   transition: background 0.3s ease-in-out;
   &:hover {
-    background-color: ${colors.green.secondary};
+    background-color: ${colors.green.primary};
   }
 `
 

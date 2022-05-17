@@ -1,7 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
-import { CircleButtonPrimary } from '@/components/button'
+import colors from '@/constants/colors'
 import styled from 'styled-components'
 import { IContainerProps, IModalProps } from './types'
 
@@ -22,12 +19,17 @@ export const Container = styled.div<IContainerProps>`
   width: 100%;
   height: 70%;
   background-color: white;
+  border-radius: 0.3rem;
   max-width: ${({ size }) =>
-    size === 'xl' ? '1200' : size === 'lg' ? '900' : size === 'md' ? '600' : size === 'sm' ? '300' : '100'}px;
+    size === 'xl' ? '1600' : size === 'lg' ? '1200' : size === 'md' ? '900' : size === 'sm' ? '600' : '100'}px;
 `
 
-export const CloseButton = styled(CircleButtonPrimary)`
+export const CloseButton = styled.button`
   position: absolute;
   top: 0;
   right: 0;
+  background-color: ${colors.blue.primary};
+  color: ${colors.white.light};
+  cursor: pointer;
+  border-radius: 0.3rem;
 `

@@ -9,6 +9,7 @@ const DashboardPage: React.FC = () => {
   return (
     <div>
       {loggedUser.user?.email}
+      dashboard page
       <button onClick={handleLogout}>Logout</button>
     </div>
   )
