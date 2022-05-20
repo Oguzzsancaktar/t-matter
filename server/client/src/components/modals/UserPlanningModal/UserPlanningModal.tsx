@@ -1,9 +1,9 @@
-import { JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
-import { Tab } from '@/components/tab'
-import { InnerWrapper } from '@/components/wrapper'
-import colors from '@/constants/colors'
+import { JustifyBetweenColumn, JustifyCenterRow } from '@components/layout'
+import { Tab } from '@components/tab'
+import { InnerWrapper } from '@components/wrapper'
+import colors from '@constants/colors'
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const ModalHeader = styled.div`
   border-bottom: 1px solid ${colors.cyan.primary};

@@ -1,12 +1,8 @@
-import { RowStyled } from '@/shared'
+import { IComponentProps } from '@models/index'
+import { RowStyled } from '@shared/index'
 import React from 'react'
 
-type IProps = {
-  margin?: string
-  padding?: string
-  height?: string
-  width?: string
-}
+interface IProps extends IComponentProps {}
 
 const Row: React.FC<IProps> = ({ children, ...rest }) => {
   return <RowStyled {...rest}>{children}</RowStyled>

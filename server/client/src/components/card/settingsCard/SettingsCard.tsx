@@ -1,12 +1,13 @@
-import { Button, JustifyBetweenColumn } from '@/components'
-import colors from '@/constants/colors'
-import useAccessStore from '@/hooks/useAccessStore'
-import { IModal } from '@/models'
-import { showModal } from '@/store'
+import { Button, JustifyBetweenColumn } from '@components/index'
+import colors from '@constants/colors'
+import useAccessStore from '@hooks/useAccessStore'
+import { IModal } from '@models/index'
+import { showModal } from '@store/index'
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 interface IProps {
+  children?: React.ReactNode
   modal: IModal
 }
 const Card = styled.div`

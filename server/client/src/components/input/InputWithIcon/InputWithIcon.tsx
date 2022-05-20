@@ -1,10 +1,11 @@
-import { Column, Row } from '@/components/layout'
+import { Column, Row } from '@components/layout'
 import { Eye, EyeOff } from 'react-feather'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { Container, IconContainer, Input } from './styled'
 
 interface Props {
-  type: string
+  children?: React.ReactNode
+  type?: string
   placeholder: string
   name: string
   validationError?: boolean
@@ -13,7 +14,7 @@ interface Props {
   isPasswordVisible?: boolean
   handleVisibility?: (isVisible: boolean) => void
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
 }
 
 const Label = styled.label`
@@ -25,7 +26,7 @@ const Label = styled.label`
 const InputWithIcon: React.FC<Props> = ({
   children,
   validationError,
-  type,
+  type = 'text',
   isPasswordVisible,
   labelText,
   handleVisibility,

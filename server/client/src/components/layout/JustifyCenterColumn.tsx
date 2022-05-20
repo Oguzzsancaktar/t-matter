@@ -1,11 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
+import { IComponentProps } from '@models/index'
 
-interface IProps {
-  margin?: string
-  padding?: string
-  height?: string
-}
+interface IProps extends IComponentProps {}
+
 const JustifyCenterColumnStyled = styled.div<IProps>`
   margin: ${({ margin }) => margin && margin};
   padding: ${({ padding }) => padding && padding};

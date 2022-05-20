@@ -1,4 +1,4 @@
-import axios from '@/apis/axios.instance'
+import axios from '@api/axios.instance'
 import { BaseQueryFn } from '@reduxjs/toolkit/query'
 import { AxiosRequestConfig } from 'axios'
 

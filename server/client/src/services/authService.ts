@@ -1,7 +1,7 @@
-import { ILoginResponse, IUserLoginCredentials } from '@/models'
+import { ILoginResponse, IUserLoginCredentials } from '@models/index'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { axiosBaseQuery, IAxiosBaseQueryFn } from '@/services/AxiosBaseQuery'
+import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 
 const AUTH_API_REDUCER_PATH = 'authApi'
 const AUTH_TAG = 'authTag'

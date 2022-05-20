@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, TabIndex } from '@components/index'
-import styled from 'styled-components'
-import colors from '@/constants/colors'
+import styled from '@emotion/styled'
+import colors from '@constants/colors'
 
 interface IProps {
   name: string

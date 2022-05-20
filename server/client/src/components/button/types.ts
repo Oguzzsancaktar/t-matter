@@ -1,6 +1,6 @@
+import { IComponentProps } from '@models/index'
 import React from 'react'
-export interface IProps {
+export interface IProps extends IComponentProps {
   content?: string
-  width?: string
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }

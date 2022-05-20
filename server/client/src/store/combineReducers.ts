@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
-import { AuthReducer, ModalReducer } from '@/store'
-import { authApi } from '@/services/authService'
-import { userApi } from '@/services/userService'
+import { AuthReducer, ModalReducer } from '@store/index'
+import { authApi } from '@services/authService'
+import { userApi } from '@services/userService'
 
 const rootReducer = combineReducers({
   auth: AuthReducer,

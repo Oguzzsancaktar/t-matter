@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { IUser, IUserCreateDTO, IUserUpdateDTO } from '@/models'
-import { axiosBaseQuery, IAxiosBaseQueryFn } from '@/services/AxiosBaseQuery'
+import { IUser, IUserCreateDTO, IUserUpdateDTO } from '@models/index'
+import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 
 const USER_REDUCER_PATH = 'userApi'

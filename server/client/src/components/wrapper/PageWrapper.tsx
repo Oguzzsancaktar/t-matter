@@ -1,7 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
+import { IComponentProps } from '@models/index'
 
-interface Props {}
+interface IProps extends IComponentProps {}
 
 const Wrapper = styled.div`
   height: 100%;
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
   margin: auto;
 `
 
-const PageWrapper: React.FC<Props> = ({ children, ...rest }) => {
+const PageWrapper: React.FC<IProps> = ({ children, ...rest }) => {
   return <Wrapper>{children}</Wrapper>
 }
 

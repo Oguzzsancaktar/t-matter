@@ -1,9 +1,10 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 type IProps = {
   margin?: string
   padding?: string
   height?: string
+  width?: string
 }
 
 export const RowStyled = styled.div<IProps>`

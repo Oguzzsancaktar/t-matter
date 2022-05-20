@@ -1,12 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
+import { IComponentProps } from '@models/index'
 
-interface IProps {
-  width?: string
-  margin?: string
-  padding?: string
-  height?: string
-}
+interface IProps extends IComponentProps {}
 
 const JustifyBetweenRowStyled = styled.div<IProps>`
   margin: ${({ margin }) => margin && margin};

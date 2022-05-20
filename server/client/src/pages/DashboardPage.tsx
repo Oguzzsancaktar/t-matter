@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@hooks/useAuth'
 import React from 'react'
 
 const DashboardPage: React.FC = () => {

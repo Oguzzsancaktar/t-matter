@@ -1,8 +1,8 @@
-import colors from '@/constants/colors'
-import styled from 'styled-components'
+import colors from '@constants/colors'
+import styled from '@emotion/styled'
 import { IProps } from './types'
 
-export const ButtonSC = styled.button<Pick<IProps, 'width'>>`
+export const ButtonSC = styled.button<Pick<IProps, 'width' | 'height'>>`
   font-family: 'Chillax-Regular';
   cursor: pointer;
   padding: 0.4rem 0.6rem;
@@ -13,6 +13,7 @@ export const ButtonSC = styled.button<Pick<IProps, 'width'>>`
   transition: background 0.3s ease-in-out;
 
   width: ${({ width }) => (width ? width : '100%')};
+  height: ${({ height }) => (height ? height : '100%')};
   &:hover {
     background-color: ${colors.blue.primary};
   }

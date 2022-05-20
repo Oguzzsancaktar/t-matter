@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
-import { CompanyPricing, JustifyBetweenColumn, JustifyCenterRow, SalarySettings } from '@/components'
-import { InnerWrapper } from '@/components/wrapper'
+import { CompanyPricing, JustifyBetweenColumn, JustifyCenterRow, SalarySettings } from '@components/index'
+import { InnerWrapper } from '@components/wrapper'
 
-import { Tab } from '@/components/index'
-import styled from 'styled-components'
-import colors from '@/constants/colors'
+import { Tab } from '@components/index'
+import styled from '@emotion/styled'
+import colors from '@constants/colors'
 
 const ModalHeader = styled.div`
   border-bottom: 1px solid ${colors.cyan.primary};
   padding: 1rem;
-  margin-bottom: 4rem;
 `
 
-const ModalBody = styled.div``
+const ModalBody = styled.div`
+  height: calc(100% - 4rem - 2rem - 84px);
+`
 
 const CompanyPlanningModal = () => {
   const [activeTab, setActiveTab] = useState('salary-settings')

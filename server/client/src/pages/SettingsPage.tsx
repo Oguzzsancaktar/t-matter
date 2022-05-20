@@ -1,7 +1,7 @@
 import React from 'react'
-import { CompanyPlanningModal, InnerWrapper, PageWrapper, SettingsCard, UserPlanningModal } from '@/components'
-import { ESize } from '@/models'
-import styled from 'styled-components'
+import { CompanyPlanningModal, InnerWrapper, PageWrapper, SettingsCard, UserPlanningModal } from '@components/index'
+import { ESize } from '@models/index'
+import styled from '@emotion/styled'
 
 const WrapLayout = styled.div`
   width: 100%;

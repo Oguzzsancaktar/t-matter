@@ -1,20 +1,34 @@
 import React from 'react'
 import {
+  Button,
+  Column,
   InputRegular,
   InputWithIcon,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
-  SelectInput
+  SalarySettingsSummaryBody,
+  SalarySettingsSummaryFooter,
+  SelectInput,
+  SummaryCard
 } from '@components/index'
 import { DollarSign } from 'react-feather'
-import { NOTIFICATION_BEFORE_AFTER, USER_ROLE_TYPES } from '@/constants/statuses'
+import { NOTIFICATION_BEFORE_AFTER, USER_ROLE_TYPES } from '@constants/statuses'
+import styled from '@emotion/styled'
+import colors from '@constants/colors'
 
 const DEFAULT_HOUR_IN_YEAR: number = 1920
 const DEFAULT_INCREASE_YEAR_COUNT: number = 5
 const DEFAULT_TEMPORARY_ARR: any[] = Array.apply(null, Array(DEFAULT_INCREASE_YEAR_COUNT)).map(function (x, i) {
   return i
 })
+
+const HeaderLabel = styled.h3`
+  width: 100%;
+  color: ${colors.orange.primary};
+  margin-bottom: 2rem;
+  text-align: left;
+`
 
 const SalarySettings = () => {
   const notificationOptions = [
@@ -37,9 +51,10 @@ const SalarySettings = () => {
   }
 
   return (
-    <JustifyBetweenRow height="100%">
-      <JustifyBetweenColumn>
-        <JustifyBetweenRow margin="0 0 2rem 0">
+    <JustifyBetweenRow height="100%" margin="3rem" width="auto">
+      <JustifyBetweenColumn height="100%">
+        <Column margin="0 0 2rem 0">
+          <HeaderLabel>Default</HeaderLabel>
           <InputWithIcon
             labelText="Default Payroll Rate"
             onBlur={() => console.log('blue')}
@@ -49,11 +64,11 @@ const SalarySettings = () => {
             placeholder="Default Payroll Rate"
             type="text"
           />
-        </JustifyBetweenRow>
+        </Column>
 
         {DEFAULT_TEMPORARY_ARR.map((_, index: number) => {
           return (
-            <JustifyBetweenRow key={index}>
+            <JustifyBetweenRow key={index} margin={`${index === 0 && '1rem'} 0 0 0`}>
               <InputRegular
                 margin="0 1rem 0 0"
                 labelText={index === 0 ? 'Default Payroll Rate' : null}
@@ -76,8 +91,9 @@ const SalarySettings = () => {
         })}
       </JustifyBetweenColumn>
 
-      <JustifyBetweenColumn margin="0px 1rem" height="100%">
-        <JustifyBetweenRow>
+      <JustifyBetweenColumn margin="0px 3rem" height="100%">
+        <Column>
+          <HeaderLabel>Notifications</HeaderLabel>
           <SelectInput
             name="notificationType"
             options={notificationOptions}
@@ -85,7 +101,7 @@ const SalarySettings = () => {
             labelText="Type"
             onChange={handleSelectChange}
           />
-        </JustifyBetweenRow>
+        </Column>
         <JustifyBetweenRow>
           <SelectInput
             name="taskType"
@@ -96,7 +112,7 @@ const SalarySettings = () => {
           />
         </JustifyBetweenRow>
 
-        <JustifyBetweenRow>
+        <JustifyBetweenRow margin="0 0 1rem 0">
           <SelectInput
             name="sendAllertFor"
             options={userRoleOptions}
@@ -108,7 +124,15 @@ const SalarySettings = () => {
         </JustifyBetweenRow>
       </JustifyBetweenColumn>
 
-      <JustifyCenterColumn>teset</JustifyCenterColumn>
+      <JustifyCenterColumn height="100%" margin="0 0 1rem 0">
+        <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
+          <HeaderLabel>Summary</HeaderLabel>
+          <SummaryCard body={<SalarySettingsSummaryBody />} footer={<SalarySettingsSummaryFooter />} />
+        </JustifyBetweenColumn>
+        <Column margin="1rem 0 0 0" height="40px">
+          <Button>Save</Button>
+        </Column>
+      </JustifyCenterColumn>
     </JustifyBetweenRow>
   )
 }

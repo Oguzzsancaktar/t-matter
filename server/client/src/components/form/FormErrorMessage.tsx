@@ -1,6 +1,6 @@
-import colors from '@/constants/colors'
+import colors from '@constants/colors'
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 interface IProps {
   message: string

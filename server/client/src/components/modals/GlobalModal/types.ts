@@ -1,4 +1,4 @@
-import { ESize } from '@/models'
+import { ESize } from '@models/index'
 
 export type IModalProps = {
   show: boolean

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Form, JustifyBetweenRow, Column, Row, FormErrorMessage } from '@/components'
-import { IUserLoginCredentials } from '@/models'
+import { Button, Form, JustifyBetweenRow, Column, Row, FormErrorMessage } from '@components/index'
+import { IUserLoginCredentials } from '@models/index'
 import { InputWithIcon } from '../input'
 import { Key, User } from 'react-feather'
-import { isEmailValid, isPasswordValid } from '@/utils/validationUtils'
-import { useAuth } from '@/hooks/useAuth'
-import { useToggle } from '@/hooks/useToggle'
+import { isEmailValid, isPasswordValid } from '@utils/validationUtils'
+import { useAuth } from '@hooks/useAuth'
+import { useToggle } from '@hooks/useToggle'
 
 interface Props {}
 const SigninComponent: React.FC<Props> = () => {

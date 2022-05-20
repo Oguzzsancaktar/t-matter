@@ -1,214 +1,204 @@
-import { createGlobalStyle } from 'styled-components'
+import { css } from '@emotion/react'
 
-const GlobalStyle = createGlobalStyle`
-
-   * {
-  box-sizing: border-box;
-  font-family: 'Satoshi-Bold';
+const GlobalStyle = css`
+  * {
+    box-sizing: border-box;
+    font-family: 'Satoshi-Bold';
     color: #566a7f;
-}
+  }
 
-html {
-  line-height: 1.15;
-  -webkit-text-size-adjust: 100%;
-}
+  html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+  }
 
-body {
-  margin: 0;
-}
+  body {
+    margin: 0;
+  }
 
-main {
-  display: block;
-}
+  main {
+    display: block;
+  }
 
-h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-}
+  h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+  }
 
+  hr {
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible;
+  }
 
-hr {
-  box-sizing: content-box;
-  height: 0;
-  overflow: visible;
-}
+  pre {
+    font-family: monospace, monospace;
+    font-size: 1em;
+  }
 
+  a {
+    background-color: transparent;
+  }
 
-pre {
-  font-family: monospace, monospace;
-  font-size: 1em;
-}
+  abbr[title] {
+    border-bottom: none;
+    text-decoration: underline;
+    text-decoration: underline dotted;
+  }
 
-a {
-  background-color: transparent;
-}
+  b,
+  strong {
+    font-weight: bolder;
+  }
 
-abbr[title] {
-  border-bottom: none;
-  text-decoration: underline;
-  text-decoration: underline dotted;
-}
+  code,
+  kbd,
+  samp {
+    font-family: monospace, monospace;
+    font-size: 1em;
+  }
 
-b,
-strong {
-  font-weight: bolder;
-}
+  small {
+    font-size: 80%;
+  }
 
-code,
-kbd,
-samp {
-  font-family: monospace, monospace;
-  font-size: 1em;
-}
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
 
+  sub {
+    bottom: -0.25em;
+  }
 
-small {
-  font-size: 80%;
-}
+  sup {
+    top: -0.5em;
+  }
 
-sub,
-sup {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
+  img {
+    border-style: none;
+  }
 
-sub {
-  bottom: -0.25em;
-}
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+  }
 
-sup {
-  top: -0.5em;
-}
+  button,
+  input {
+    overflow: visible;
+    border: none;
+  }
 
-img {
-  border-style: none;
-}
+  button,
+  select {
+    text-transform: none;
+  }
 
-button,
-input,
-optgroup,
-select,
-textarea {
-  font-family: inherit;
-  font-size: 100%;
-  line-height: 1.15;
-  margin: 0;
+  button,
+  [type='button'],
+  [type='reset'],
+  [type='submit'] {
+    -webkit-appearance: button;
+  }
 
-}
+  button::-moz-focus-inner,
+  [type='button']::-moz-focus-inner,
+  [type='reset']::-moz-focus-inner,
+  [type='submit']::-moz-focus-inner {
+    border-style: none;
+    padding: 0;
+  }
 
+  button:-moz-focusring,
+  [type='button']:-moz-focusring,
+  [type='reset']:-moz-focusring,
+  [type='submit']:-moz-focusring {
+    outline: 1px dotted ButtonText;
+  }
 
-button,
-input {
-  overflow: visible;
-  border: none;
-}
+  fieldset {
+    padding: 0.35em 0.75em 0.625em;
+  }
 
-button,
-select {
-  text-transform: none;
-}
+  legend {
+    box-sizing: border-box;
+    color: inherit;
+    display: table;
+    max-width: 100%;
+    padding: 0;
+    white-space: normal;
+  }
 
+  progress {
+    vertical-align: baseline;
+  }
 
-button,
-[type=button],
-[type=reset],
-[type=submit] {
-  -webkit-appearance: button;
-}
+  textarea {
+    overflow: auto;
+  }
 
-button::-moz-focus-inner,
-[type=button]::-moz-focus-inner,
-[type=reset]::-moz-focus-inner,
-[type=submit]::-moz-focus-inner {
-  border-style: none;
-  padding: 0;
-}
+  [type='checkbox'],
+  [type='radio'] {
+    box-sizing: border-box;
+    padding: 0;
+  }
 
-button:-moz-focusring,
-[type=button]:-moz-focusring,
-[type=reset]:-moz-focusring,
-[type=submit]:-moz-focusring {
-  outline: 1px dotted ButtonText;
-}
+  [type='number']::-webkit-inner-spin-button,
+  [type='number']::-webkit-outer-spin-button {
+    height: auto;
+  }
 
+  [type='search'] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+  }
 
-fieldset {
-  padding: 0.35em 0.75em 0.625em;
-}
+  [type='search']::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
 
-legend {
-  box-sizing: border-box;
-  color: inherit;
-  display: table;
-  max-width: 100%;
-  padding: 0;
-  white-space: normal;
-}
+  ::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
+  }
 
-progress {
-  vertical-align: baseline;
-}
+  details {
+    display: block;
+  }
 
-textarea {
-  overflow: auto;
-}
+  summary {
+    display: list-item;
+  }
 
-[type=checkbox],
-[type=radio] {
-  box-sizing: border-box;
-  padding: 0;
-}
+  template {
+    display: none;
+  }
 
-[type=number]::-webkit-inner-spin-button,
-[type=number]::-webkit-outer-spin-button {
-  height: auto;
-}
+  [hidden] {
+    display: none;
+  }
 
-[type=search] {
-  -webkit-appearance: textfield;
-  outline-offset: -2px;
-}
+  /* Change the white to any color */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px transparent inset !important;
+  }
 
-[type=search]::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-
-::-webkit-file-upload-button {
-  -webkit-appearance: button;
-  font: inherit;
-}
-
-details {
-  display: block;
-}
-
-summary {
-  display: list-item;
-}
-
-template {
-  display: none;
-}
-
-[hidden] {
-  display: none;
-}
-
-/* Change the white to any color */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px transparent inset !important;
-}
-
-input:-webkit-autofill {
-  -webkit-background-clip: text;
-}
-
-
+  input:-webkit-autofill {
+    -webkit-background-clip: text;
+  }
 `
 
 export default GlobalStyle

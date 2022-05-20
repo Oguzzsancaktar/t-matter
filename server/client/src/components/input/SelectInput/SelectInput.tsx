@@ -1,6 +1,7 @@
 import React from 'react'
 import { Column, Row } from '@components/index'
 import Select from 'react-select'
+import styled from '@emotion/styled'
 
 interface IProps {
   labelText?: string
@@ -14,6 +15,11 @@ interface IProps {
   name: string
   options: any[]
 }
+const Label = styled.label`
+  width: 100%;
+  text-align: start;
+  margin-bottom: 0.4rem;
+`
 
 const SelectInput: React.FC<IProps> = ({
   selectedOption,
@@ -29,7 +35,7 @@ const SelectInput: React.FC<IProps> = ({
 }) => {
   return (
     <Column>
-      {labelText && <Row>{labelText}</Row>}
+      {labelText && <Label>{labelText}</Label>}
       <Select
         className="react-basic-single"
         classNamePrefix="select"
