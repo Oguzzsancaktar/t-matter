@@ -14,4 +14,10 @@ router.post(
   controllers.authController.registerController
 )
 
+router.get(
+  '/refreshToken',
+  middlewares.validations.authValidations.refreshTokenValidation,
+  controllers.authController.refreshTokenController
+)
+
 module.exports = router

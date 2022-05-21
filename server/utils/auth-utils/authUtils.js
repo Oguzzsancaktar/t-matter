@@ -21,8 +21,15 @@ const generateTokens = async ({ userId, role }) => {
   return { accessToken, refreshToken }
 }
 
+const generateAccessToken = async ({ userId, role }) => {
+  return jwt.sign({ userId, role }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: '30s'
+  })
+}
+
 module.exports = {
   comparePassword,
   hashPassword,
-  generateTokens
+  generateTokens,
+  generateAccessToken
 }

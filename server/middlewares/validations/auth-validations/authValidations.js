@@ -50,7 +50,23 @@ const registerValidation = async (req, res, next) => {
   }
 }
 
+const refreshTokenValidation = async (req, res, next) => {
+  const { body } = req
+  const schema = joi
+    .object({
+      refreshToken: joi.string().required()
+    })
+    .options({ abortEarly: true })
+  try {
+    await schema.validateAsync(body)
+    next()
+  } catch (error) {
+    res.status(400).json(utils.errorUtils.errorInstance({ message: error.message, validationError: error.details }))
+  }
+}
+
 module.exports = {
   loginValidation,
-  registerValidation
+  registerValidation,
+  refreshTokenValidation
 }

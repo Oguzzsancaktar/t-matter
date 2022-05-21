@@ -2,6 +2,7 @@ const dataAccess = require('../../data-access')
 const utils = require('../../utils')
 const constants = require('../../constants')
 const { AUTH_COOKIE_OPTIONS } = require('../../constants/constants')
+const { ref } = require('joi')
 
 const loginController = async (req, res) => {
   const { body } = req
@@ -20,6 +21,12 @@ const loginController = async (req, res) => {
   const { accessToken, refreshToken } = await utils.authUtils.generateTokens({
     userId: user._id.toString(),
     role: user.role
+  })
+
+  await dataAccess.authDataAccess.createRefreshToken({
+    user: user._id,
+    refreshToken,
+    expiryDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
   })
 
   res.cookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_ACCESS_KEY, accessToken, AUTH_COOKIE_OPTIONS)
@@ -48,7 +55,42 @@ const registerController = async (req, res) => {
   }
 }
 
+const refreshTokenController = async (req, res) => {
+  let { refreshToken } = req.body
+  if (!refreshToken) {
+    res.status(400).json(utils.errorUtils.errorInstance({ message: 'Refresh token required!' }))
+    return
+  }
+
+  refreshToken = await dataAccess.authDataAccess.findRefreshTokenByRefreshToken({ refreshToken })
+  if (!refreshToken) {
+    res.status(403).json(utils.errorUtils.errorInstance({ message: 'Refresh token is not in database!' }))
+    return
+  }
+
+  const { expiryDate, user } = refreshToken
+  if (expiryDate.getTime() < new Date().getTime()) {
+    res
+      .status(403)
+      .json(utils.errorUtils.errorInstance({ message: 'Refresh token was expired. Please make a new login request' }))
+  }
+
+  const accessToken = await utils.authUtils.generateAccessToken({
+    userId: user._id.toString(),
+    role: user.role
+  })
+
+  res.cookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_ACCESS_KEY, accessToken, AUTH_COOKIE_OPTIONS)
+
+  res.send({
+    userId: user._id.toString(),
+    accessToken,
+    refreshToken: refreshToken.refreshToken
+  })
+}
+
 module.exports = {
   loginController,
-  registerController
+  registerController,
+  refreshTokenController
 }
