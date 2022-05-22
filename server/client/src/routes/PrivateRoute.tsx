@@ -1,5 +1,5 @@
 import { RouteProps } from 'react-router-dom'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@hooks/useAuth'
 import { useEffect } from 'react'
 
 export const PrivateRoute = ({ children }: RouteProps) => {

@@ -1,10 +1,13 @@
-import { RowStyled } from '@/shared'
+import { IComponentProps } from '@models/index'
+import { RowStyled } from '@shared/index'
 import React from 'react'
 
-interface Props {}
+interface IProps extends IComponentProps {
+  onClick?: () => void
+}
 
-const Row: React.FC<Props> = ({ children, ...rest }) => {
-  return <RowStyled>{children}</RowStyled>
+const Row: React.FC<IProps> = ({ children, ...rest }) => {
+  return <RowStyled {...rest}>{children}</RowStyled>
 }
 
 export default Row

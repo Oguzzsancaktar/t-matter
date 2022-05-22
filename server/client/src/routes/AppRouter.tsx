@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect } from 'react'
-import App from '@/App'
+import App from '../App'
 import { BrowserRouter as Router } from 'react-router-dom'
-import axios from '@/apis/axios.instance'
+import axios from '../api/axios.instance'
 import { AxiosRequestConfig } from 'axios'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@hooks/useAuth'
 const AppRouter = () => {
   const {
     loggedUser: { accessToken }

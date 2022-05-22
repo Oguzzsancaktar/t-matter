@@ -1,12 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 import styled from 'styled-components'
 import { IStyledProps } from './types'
 
 export const CheckboxContainer = styled.div`
-  display: inline-block;
+  display: flex;
   vertical-align: middle;
+  cursor: pointer;
+  margin-right: 0.4rem;
 `
 
 export const Icon = styled.svg`
@@ -15,7 +14,7 @@ export const Icon = styled.svg`
   stroke-width: 2px;
 `
 
-export const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
+export const HiddenCheckbox = styled.input`
   border: 0;
   clip: rect(0 0 0 0);
   clippath: inset(50%);

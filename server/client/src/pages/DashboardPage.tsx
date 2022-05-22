@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@hooks/useAuth'
 import React from 'react'
 
 const DashboardPage: React.FC = () => {
@@ -9,6 +9,7 @@ const DashboardPage: React.FC = () => {
   return (
     <div>
       {loggedUser.user?.email}
+      dashboard page
       <button onClick={handleLogout}>Logout</button>
     </div>
   )

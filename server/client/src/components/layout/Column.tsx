@@ -1,16 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
+import { IComponentProps } from '@models/index'
 
-interface Props {}
-const ColumnSC = styled.div`
+interface IProps extends IComponentProps {}
+
+const ColumnSC = styled.div<IProps>`
+  margin: ${({ margin }) => margin && margin};
+  padding: ${({ padding }) => padding && padding};
+  height: ${({ height }) => (height ? height : 'auto')};
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 `
-const Column: React.FC<Props> = ({ children, ...rest }) => {
-  return <ColumnSC>{children}</ColumnSC>
+const Column: React.FC<IProps> = ({ children, ...rest }) => {
+  return <ColumnSC {...rest}>{children}</ColumnSC>
 }
 
 export default Column

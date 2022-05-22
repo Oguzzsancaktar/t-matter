@@ -1,14 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
+import { IComponentProps } from '@models/index'
 
-interface Props {}
+interface IProps extends IComponentProps {}
+
 const Wrapper = styled.div`
   height: 100%;
-  width: 100%;
-  max-width: 1200px;
+  width: calc(100% - 2rem);
+  max-width: 1600px;
   margin: auto;
 `
-const InnerWrapper: React.FC<Props> = ({ children, ...rest }) => {
+const InnerWrapper: React.FC<IProps> = ({ children, ...rest }) => {
   return <Wrapper>{children}</Wrapper>
 }
 

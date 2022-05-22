@@ -1,9 +1,10 @@
-import { InnerWrapper, JustifyCenterColumn, PageWrapper, SigninComponent } from '@/components'
-import colors from '@/constants/colors'
-import { useAuth } from '@/hooks/useAuth'
+import { InnerWrapper, JustifyCenterColumn, PageWrapper, SigninComponent } from '@components/index'
+import colors from '@constants/colors'
+import { useAuth } from '@hooks/useAuth'
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import styled, { keyframes } from 'styled-components'
+import { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 const rotate = keyframes`
 	0% {
@@ -21,7 +22,7 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background: ${colors.green.primary};
-  background: linear-gradient(-45deg, ${colors.green.primary} 0%, ${colors.yellow.primary} 100%);
+  background: linear-gradient(-45deg, ${colors.black.light} 0%, ${colors.black.primary} 100%);
   background-size: 150% 150%;
   animation: ${rotate} 10s ease-in-out infinite;
 `

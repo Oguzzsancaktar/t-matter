@@ -1,18 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
+import { IComponentProps } from '@models/index'
 
-interface Props {}
-const JustifyBetweenColumnStyled = styled.div`
+interface IProps extends IComponentProps {}
+
+const JustifyBetweenColumnStyled = styled.div<IProps>`
+  margin: ${({ margin }) => margin && margin};
+  padding: ${({ padding }) => padding && padding};
+  height: ${({ height }) => (height ? height : 'auto')};
   width: 100%;
   padding: 0;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 `
-const JustifyBetweenColumn: React.FC<Props> = ({ children, ...rest }) => {
-  return <JustifyBetweenColumnStyled>{children}</JustifyBetweenColumnStyled>
+const JustifyBetweenColumn: React.FC<IProps> = ({ children, ...rest }) => {
+  return <JustifyBetweenColumnStyled {...rest}>{children}</JustifyBetweenColumnStyled>
 }
 
 export default JustifyBetweenColumn

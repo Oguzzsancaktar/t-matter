@@ -1,36 +1,55 @@
 const colors = Object.freeze({
-  green: {
-    primary: '#06d6a0',
-    secondary: '#898C32',
-    thirth: '#BDBF8A',
-    fourth: '#F1F2D8',
-    light: '#F2F2F2'
-  },
-  yellow: {
-    primary: '#ffd166',
-    secondary: '#99999F'
-  },
-  orange: {
-    primary: '#f95738'
-  },
-  red: {
-    primary: '#ff0000'
-  },
   blue: {
-    primary: '#118ab2',
-    dark: '#073b4c'
+    primary: '#007bff'
   },
-
-  pink: {
-    primary: '#ef476f'
+  indigo: {
+    primary: '#6610f2'
   },
   purple: {
-    primary: '#9381ff'
+    primary: '#696cff'
+  },
+  pink: {
+    primary: '#e83e8c'
+  },
+  red: {
+    primary: '#ff3e1d'
+  },
+  orange: {
+    primary: '#fd7e14'
+  },
+  yellow: {
+    primary: '#ffab00'
+  },
+  green: {
+    primary: '#71dd37'
+  },
+  teal: {
+    primary: '#20c997'
+  },
+  cyan: {
+    primary: '#03c3ec'
+  },
+  white: {
+    primary: '#fff',
+    light: '#fcfdfd',
+    bg: '#f5f5f9'
+  },
+  gray: {
+    primary: '#43597199',
+    light: '#43597106',
+    middle: '#4359710d',
+    dark: '#435971cc',
+    disabled: '#dddddd'
+  },
+
+  black: {
+    primary: '#233446',
+    dark: '#697a8d',
+    middle: '#435971',
+    light: '#4359711a'
   },
   text: {
-    dark: '#212529',
-    normal: '#343a40',
-    light: '#6c757d'
+    primary: '#566a7f'
   }
 })
 

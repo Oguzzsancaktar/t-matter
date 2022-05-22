@@ -5,7 +5,6 @@ const GlobalStyle = createGlobalStyle`
    * {
   box-sizing: border-box;
   font-family: 'Satoshi-Bold';
-
 }
 
 html {
@@ -23,7 +22,7 @@ main {
 
 h1 {
   font-size: 2em;
-  margin: 0.67em 0;
+  margin: 0;
 }
 
 

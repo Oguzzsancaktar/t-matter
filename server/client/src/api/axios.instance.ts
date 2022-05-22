@@ -1,4 +1,4 @@
-import { toastError, toastWarning } from '@/utils/toastUtil'
+import { toastError, toastWarning } from '../utils/toastUtil'
 import axios, { AxiosError } from 'axios'
 
 const axiosInstance = axios.create({

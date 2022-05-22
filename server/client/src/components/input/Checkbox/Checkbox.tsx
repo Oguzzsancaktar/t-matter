@@ -4,6 +4,7 @@ import { CheckboxContainer, HiddenCheckbox, Icon, StyledCheckbox } from './style
 interface Props {
   className?: string[]
   isChecked: boolean
+  onClick?: (e: React.MouseEvent<HTMLInputElement>) => void
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 

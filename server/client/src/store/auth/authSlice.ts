@@ -1,6 +1,6 @@
-import { userApi } from '@/services/userService'
-import { authApi } from '@/services/authService'
-import { IUser } from '@/models'
+import { userApi } from '@services/userService'
+import { authApi } from '@services/authService'
+import { IUser } from '@models/index'
 import { createSlice } from '@reduxjs/toolkit'
 import { IRootState } from '../store'
 

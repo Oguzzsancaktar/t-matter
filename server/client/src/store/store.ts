@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import reducer from '@/store/combineReducers'
-import StoreMiddlewares from '@/store/StoreMiddlewares'
+import reducer from '@store/combineReducers'
+import StoreMiddlewares from '@store/StoreMiddlewares'
 
 const store = configureStore({
   reducer,
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(StoreMiddlewares)
+  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }).concat(StoreMiddlewares)
 })
 
 type IRootState = ReturnType<typeof store.getState>
