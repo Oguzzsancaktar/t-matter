@@ -17,12 +17,12 @@ const CompanyPricingSummaryBody = () => {
     <JustifyBetweenColumn>
       <JustifyBetweenRow>
         <Text>Total Employer Items</Text>
-        <Value>10 </Value>
+        <Value>$10</Value>
       </JustifyBetweenRow>
 
       <JustifyBetweenRow>
         <Text>Weekly Company Work Hours</Text>
-        <Value>40 Hours</Value>
+        <Value>$40</Value>
       </JustifyBetweenRow>
 
       <JustifyBetweenRow>
