@@ -32,7 +32,6 @@ const SummaryCardFooter = styled.div`
 `
 
 const SummaryCard: React.FC<IProps> = ({ body, footer }) => {
-  console.log(body, footer)
   return (
     <SummaryContainer>
       <SummaryCardBody>{body} </SummaryCardBody>
