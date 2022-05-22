@@ -1,5 +1,5 @@
 import colors from '@constants/colors'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 import { IStyledProps } from './types'
 
 export const Input = styled.input<IStyledProps>`
@@ -11,7 +11,6 @@ export const Input = styled.input<IStyledProps>`
   outline: none;
   padding: 0rem 0.4rem;
   border-radius: 0.5rem;
-  margin-bottom: 1rem;
   font-weight: 400;
   font-family: 'Satoshi-Variable';
   &:hover,

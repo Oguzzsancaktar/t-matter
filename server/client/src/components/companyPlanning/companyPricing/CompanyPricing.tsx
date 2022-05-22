@@ -1,39 +1,71 @@
-import React from 'react'
-
+import React, { useState } from 'react'
 import {
   Button,
   Checkbox,
   Column,
+  H1,
   InputWithIcon,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
+  Label,
   Row,
   SalarySettingsSummaryBody,
   SalarySettingsSummaryFooter,
   SummaryCard
 } from '@components/index'
-import { ClockPicker } from '@components/input/ClockPicker'
-import colors from '@constants/colors'
+import { ClockPicker } from '@components/index'
 import { Clock, DollarSign, Percent } from 'react-feather'
-import styled from '@emotion/styled/macro'
+import { dayOfWeek } from '@/constants/dates'
+import { ETime } from '@/models'
 
-const HeaderLabel = styled.h3`
-  width: 100%;
-  color: ${colors.orange.primary};
-  margin-bottom: 2rem;
-  text-align: left;
-`
-const handleInputChange = (e: any) => {
-  console.log(e)
+interface IDaysIsChecked {
+  Monday: boolean
+  Tuesday: boolean
+  Wednesday: boolean
+  Thursday: boolean
+  Friday: boolean
+  Saturday: boolean
+  Sunday: boolean
 }
 
 const CompanyPricing = () => {
+  const [dayIsChecked, setDayIsChecked] = useState<IDaysIsChecked>({
+    Monday: true,
+    Tuesday: false,
+    Wednesday: false,
+    Thursday: false,
+    Friday: false,
+    Saturday: false,
+    Sunday: false
+  })
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e)
+    // setDayIsChecked({ ...dayIsChecked, Monday: !dayIsChecked[ETime[day]] })
+  }
+
+  const handleCheckboxClick = (day: ETime) => {
+    const selectedDay = ETime[day]
+    const newState = {
+      ...dayIsChecked,
+      [selectedDay]: !dayIsChecked[selectedDay]
+    }
+
+    setDayIsChecked(newState)
+    console.log(dayIsChecked, selectedDay)
+  }
+
+  const handleInputChange = (e: any) => {
+    console.log(e)
+  }
+
   return (
-    <JustifyBetweenRow height="100%" margin="3rem" width="auto">
-      <JustifyBetweenColumn height="100%">
-        <Column>
-          <HeaderLabel>Default</HeaderLabel>
+    <JustifyBetweenRow height="100%" margin="3rem 1rem" width="auto">
+      <Column height="100%">
+        <H1>Default</H1>
+
+        <JustifyBetweenColumn height="100%">
           <InputWithIcon
             placeholder="Daily Avarage Expence Amount"
             name="dailyAvarageExpenceAmount"
@@ -42,77 +74,56 @@ const CompanyPricing = () => {
           >
             <DollarSign size="16px" />
           </InputWithIcon>
-        </Column>
-        <JustifyBetweenRow>
-          <InputWithIcon
-            placeholder="Daily Company Work Hours"
-            name="dailyCompanyWorkHours"
-            labelText="Daily Company Work Hours"
-            onChange={handleInputChange}
-          >
-            <Clock size="16px" />
-          </InputWithIcon>
-        </JustifyBetweenRow>
+          <JustifyBetweenRow>
+            <InputWithIcon
+              placeholder="Daily Company Work Hours"
+              name="dailyCompanyWorkHours"
+              labelText="Daily Company Work Hours"
+              onChange={handleInputChange}
+            >
+              <Clock size="16px" />
+            </InputWithIcon>
+          </JustifyBetweenRow>
 
-        <JustifyBetweenRow margin="0 0 1rem 0">
-          <InputWithIcon
-            placeholder="Specified Company Profit"
-            name="specifiedCompanyProfit"
-            labelText="Specified Company Profit"
-            onChange={handleInputChange}
-          >
-            <Percent size="16px" />
-          </InputWithIcon>
-        </JustifyBetweenRow>
-      </JustifyBetweenColumn>
+          <JustifyBetweenRow margin="0 0 0rem 0">
+            <InputWithIcon
+              placeholder="Specified Company Profit"
+              name="specifiedCompanyProfit"
+              labelText="Specified Company Profit"
+              onChange={handleInputChange}
+            >
+              <Percent size="16px" />
+            </InputWithIcon>
+          </JustifyBetweenRow>
+        </JustifyBetweenColumn>
+      </Column>
 
-      <JustifyBetweenColumn margin="0px 3rem" height="100%">
-        <Column>
-          <HeaderLabel>Default</HeaderLabel>
-          <Row>
-            <Checkbox
-              isChecked={false}
-              onChange={function (event: any): void {
-                throw new Error('Function not implemented.')
-              }}
-            />
-            Monday
-            <ClockPicker />
-            <ClockPicker />
-          </Row>
-        </Column>
-        <JustifyBetweenRow>
-          <InputWithIcon
-            placeholder="Daily Company Work Hours"
-            name="dailyCompanyWorkHours"
-            labelText="Daily Company Work Hours"
-            onChange={handleInputChange}
-          >
-            <Clock size="16px" />
-          </InputWithIcon>
-        </JustifyBetweenRow>
+      <Column height="100%" margin="0px 3rem">
+        <H1>Default</H1>
+        <JustifyBetweenColumn height="100%">
+          {dayOfWeek.map((day, index) => (
+            <Row key={index}>
+              <Row onClick={() => handleCheckboxClick(day)}>
+                <Checkbox isChecked={dayIsChecked[ETime[day]]} onChange={handleCheckboxChange} />
+                <Label> {ETime[day]}</Label>
+              </Row>
 
-        <JustifyBetweenRow margin="0 0 1rem 0">
-          <InputWithIcon
-            placeholder="Specified Company Profit"
-            name="specifiedCompanyProfit"
-            labelText="Specified Company Profit"
-            onChange={handleInputChange}
-          >
-            <Percent size="16px" />
-          </InputWithIcon>
-        </JustifyBetweenRow>
-      </JustifyBetweenColumn>
+              <ClockPicker name={day + 'Start'} />
+              <ClockPicker name={day + 'End'} />
+            </Row>
+          ))}
+        </JustifyBetweenColumn>
+      </Column>
 
-      <JustifyCenterColumn height="100%" margin="0 0 1rem 0">
-        <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
-          <HeaderLabel>Summary</HeaderLabel>
+      <Column height="100%">
+        <H1>Summary</H1>
+        <JustifyBetweenColumn height="calc(100% - 1rem - 40px - 2rem - 18px)">
           <SummaryCard body={<SalarySettingsSummaryBody />} footer={<SalarySettingsSummaryFooter />} />
         </JustifyBetweenColumn>
         <Column margin="1rem 0 0 0" height="40px">
           <Button>Save</Button>
         </Column>
-      </JustifyCenterColumn>
+      </Column>
     </JustifyBetweenRow>
   )
 }

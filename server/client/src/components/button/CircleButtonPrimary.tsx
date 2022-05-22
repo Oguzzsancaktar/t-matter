@@ -1,6 +1,6 @@
 import colors from '@constants/colors'
 import React from 'react'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 
 interface Props {
   children?: React.ReactNode

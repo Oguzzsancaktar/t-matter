@@ -2,11 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import reportWebVitals from './reportWebVitals'
-import store from './store/store'
+import { store } from './store/index'
 import AppRoute from './routes/AppRouter'
 import 'react-toastify/dist/ReactToastify.css'
 import './styles/index.css'
 import './styles/vendors/react-select.css'
+import './styles/vendors/timekeeper.css'
 
 ReactDOM.render(
   <React.StrictMode>

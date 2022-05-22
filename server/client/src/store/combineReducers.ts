@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
-import { AuthReducer, ModalReducer } from '@store/index'
+import { ModalReducer } from '@store/modal/index'
+import { AuthReducer } from '@store/auth/index'
 import { authApi } from '@services/authService'
 import { userApi } from '@services/userService'
 

@@ -1,8 +1,7 @@
 import { toast } from 'react-toastify'
-import Md from 'react-markdown'
 
-const toastError = (msg: string) => {
-  toast.error(msg ? <Md>{msg}</Md> : 'Something went wrong', {
+export const toastError = (msg: string) => {
+  toast.error(msg ? msg : 'Something went wrong', {
     position: 'top-right',
     autoClose: 3000,
     hideProgressBar: false,
@@ -13,8 +12,8 @@ const toastError = (msg: string) => {
   })
 }
 
-const toastWarning = (msg: string) => {
-  toast.warn(msg ? <Md>{msg}</Md> : 'Something went wrong', {
+export const toastWarning = (msg: string) => {
+  toast.warn(msg ? msg : 'Something went wrong', {
     position: 'top-right',
     autoClose: 3000,
     hideProgressBar: false,
@@ -22,12 +21,12 @@ const toastWarning = (msg: string) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    icon: false,
+    icon: false
   })
 }
 
-const toastSuccess = (msg: string) => {
-  toast.success(msg ? <Md>{msg}</Md> : 'Success', {
+export const toastSuccess = (msg: string) => {
+  toast.success(msg ? msg : 'Success', {
     position: 'top-right',
     autoClose: 3000,
     hideProgressBar: false,
@@ -36,10 +35,4 @@ const toastSuccess = (msg: string) => {
     draggable: true,
     progress: undefined
   })
-}
-
-export {
-  toastError,
-  toastSuccess,
-  toastWarning,
 }

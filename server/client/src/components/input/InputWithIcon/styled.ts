@@ -1,12 +1,11 @@
 import colors from '@constants/colors'
 import { RowStyled } from '@shared/index'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 import { IStyledProps } from './types'
 
 export const Container = styled(RowStyled)<IStyledProps>`
   border: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.black.light)};
   color: ${({ validationError }) => (validationError ? colors.red.primary : colors.black.light)};
-  margin-bottom: 0.5rem;
   transition: all 0.4s ease-in-out;
   border-radius: 0.3rem;
   font-weight: 300;

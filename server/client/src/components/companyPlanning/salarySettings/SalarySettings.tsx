@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Button,
   Column,
+  H1,
   InputRegular,
   InputWithIcon,
   JustifyBetweenColumn,
@@ -14,21 +15,12 @@ import {
 } from '@components/index'
 import { DollarSign } from 'react-feather'
 import { NOTIFICATION_BEFORE_AFTER, USER_ROLE_TYPES } from '@constants/statuses'
-import styled from '@emotion/styled'
-import colors from '@constants/colors'
 
 const DEFAULT_HOUR_IN_YEAR: number = 1920
 const DEFAULT_INCREASE_YEAR_COUNT: number = 5
 const DEFAULT_TEMPORARY_ARR: any[] = Array.apply(null, Array(DEFAULT_INCREASE_YEAR_COUNT)).map(function (x, i) {
   return i
 })
-
-const HeaderLabel = styled.h3`
-  width: 100%;
-  color: ${colors.orange.primary};
-  margin-bottom: 2rem;
-  text-align: left;
-`
 
 const SalarySettings = () => {
   const notificationOptions = [
@@ -51,10 +43,10 @@ const SalarySettings = () => {
   }
 
   return (
-    <JustifyBetweenRow height="100%" margin="3rem" width="auto">
+    <JustifyBetweenRow height="100%" margin="3rem 1rem" width="auto">
       <JustifyBetweenColumn height="100%">
         <Column margin="0 0 2rem 0">
-          <HeaderLabel>Default</HeaderLabel>
+          <H1>Default</H1>
           <InputWithIcon
             labelText="Default Payroll Rate"
             onBlur={() => console.log('blue')}
@@ -93,7 +85,7 @@ const SalarySettings = () => {
 
       <JustifyBetweenColumn margin="0px 3rem" height="100%">
         <Column>
-          <HeaderLabel>Notifications</HeaderLabel>
+          <H1>Notifications</H1>
           <SelectInput
             name="notificationType"
             options={notificationOptions}
@@ -112,7 +104,7 @@ const SalarySettings = () => {
           />
         </JustifyBetweenRow>
 
-        <JustifyBetweenRow margin="0 0 1rem 0">
+        <JustifyBetweenRow>
           <SelectInput
             name="sendAllertFor"
             options={userRoleOptions}
@@ -124,9 +116,9 @@ const SalarySettings = () => {
         </JustifyBetweenRow>
       </JustifyBetweenColumn>
 
-      <JustifyCenterColumn height="100%" margin="0 0 1rem 0">
+      <JustifyCenterColumn height="100%">
         <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
-          <HeaderLabel>Summary</HeaderLabel>
+          <H1>Summary</H1>
           <SummaryCard body={<SalarySettingsSummaryBody />} footer={<SalarySettingsSummaryFooter />} />
         </JustifyBetweenColumn>
         <Column margin="1rem 0 0 0" height="40px">

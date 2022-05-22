@@ -3,7 +3,7 @@ import { CompanyPricing, JustifyBetweenColumn, JustifyCenterRow, SalarySettings 
 import { InnerWrapper } from '@components/wrapper'
 
 import { Tab } from '@components/index'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 import colors from '@constants/colors'
 
 const ModalHeader = styled.div`

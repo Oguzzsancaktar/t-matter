@@ -1,7 +1,7 @@
 import React from 'react'
 import { Column, Row } from '@components/index'
 import Select from 'react-select'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 
 interface IProps {
   labelText?: string

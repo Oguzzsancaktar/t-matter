@@ -3,8 +3,8 @@ import colors from '@constants/colors'
 import { useAuth } from '@hooks/useAuth'
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { keyframes } from '@emotion/react'
-import styled from '@emotion/styled'
+import { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 const rotate = keyframes`
 	0% {

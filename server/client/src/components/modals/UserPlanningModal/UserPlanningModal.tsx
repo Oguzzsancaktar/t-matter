@@ -3,7 +3,7 @@ import { Tab } from '@components/tab'
 import { InnerWrapper } from '@components/wrapper'
 import colors from '@constants/colors'
 import React, { useState } from 'react'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 
 const ModalHeader = styled.div`
   border-bottom: 1px solid ${colors.cyan.primary};

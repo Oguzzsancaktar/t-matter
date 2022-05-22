@@ -1,3 +1,4 @@
+export * from './texts'
 export * from './modals'
 export * from './wrapper'
 export * from './layout'

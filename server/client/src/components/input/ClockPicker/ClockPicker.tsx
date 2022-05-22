@@ -1,22 +1,49 @@
+import { Row } from '@/components/layout'
 import * as React from 'react'
-import TextField from '@mui/material/TextField'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { TimePicker } from '@mui/x-date-pickers/TimePicker'
+import { useState } from 'react'
+import { Clock } from 'react-feather'
+import TimeKeeper from 'react-timekeeper'
+import styled from 'styled-components'
+import { InputWithIcon } from '../InputWithIcon'
 
-export default function BasicTimePicker() {
-  const [value, setValue] = React.useState<Date | null>(null)
+interface IProps {
+  name: string
+}
+const ClockPickerRelative = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`
+
+const ClockPicker: React.FC<IProps> = ({ name }) => {
+  const [time, setTime] = useState('12:34pm')
+  const [showTime, setShowTime] = useState(false)
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <TimePicker
-        label="Basic example"
-        value={value}
-        onChange={newValue => {
-          setValue(newValue)
-        }}
-        renderInput={params => <TextField {...params} />}
-      />
-    </LocalizationProvider>
+    <Row>
+      <ClockPickerRelative>
+        <InputWithIcon
+          onChange={e => console.log(e)}
+          name={name}
+          placeholder="00:00"
+          type="text"
+          value={time}
+          children={<Clock />}
+          onFocus={() => setShowTime(true)}
+          onBlur={() => setShowTime(false)}
+        />
+
+        {showTime && (
+          <TimeKeeper
+            time={time}
+            onChange={newTime => setTime(newTime.formatted12)}
+            onDoneClick={() => setShowTime(false)}
+            switchToMinuteOnHourSelect
+          />
+        )}
+      </ClockPickerRelative>
+    </Row>
   )
 }
+
+export default ClockPicker

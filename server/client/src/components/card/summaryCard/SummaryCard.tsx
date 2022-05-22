@@ -1,6 +1,6 @@
 import colors from '@constants/colors'
 import React from 'react'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 
 interface IProps {
   body: React.ReactNode | string
@@ -11,7 +11,7 @@ const SummaryContainer = styled.div`
   width: 100%;
   border: 1px solid ${colors.black.light};
   border-radius: 0.3rem;
-  height: calc(100% - 1rem - 40px - 1rem - 18px);
+  height: calc(100%);
 `
 
 const SummaryCardBody = styled.div`

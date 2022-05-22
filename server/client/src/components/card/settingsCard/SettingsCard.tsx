@@ -4,7 +4,7 @@ import useAccessStore from '@hooks/useAccessStore'
 import { IModal } from '@models/index'
 import { showModal } from '@store/index'
 import React from 'react'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 
 interface IProps {
   children?: React.ReactNode

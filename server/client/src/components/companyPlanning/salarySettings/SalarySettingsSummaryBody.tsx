@@ -1,7 +1,7 @@
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@components/layout'
 import colors from '@constants/colors'
 import React from 'react'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 
 const Text = styled.h3`
   font-size: 0.8rem;

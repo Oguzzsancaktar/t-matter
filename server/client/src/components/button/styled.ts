@@ -1,5 +1,5 @@
 import colors from '@constants/colors'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 import { IProps } from './types'
 
 export const ButtonSC = styled.button<Pick<IProps, 'width' | 'height'>>`

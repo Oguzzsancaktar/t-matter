@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { PrivateRoute } from '@routes/PrivateRoute'
 import GlobalStyle from './styles/GlobalStyle'
-import { Global } from '@emotion/react'
 import { GlobalModal, SideBar } from '@components/index'
 
 const SettingsPage = lazy(() => import('./pages/SettingsPage'))
@@ -14,7 +13,7 @@ const LoginPage = lazy(() => import('./pages/LoginPage'))
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Global styles={GlobalStyle} />
+      <GlobalStyle />
       <GlobalModal />
       <SideBar />
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import App from '@/App'
+import App from '../App'
 import { BrowserRouter as Router } from 'react-router-dom'
 import axios from '../api/axios.instance'
 import { AxiosRequestConfig } from 'axios'

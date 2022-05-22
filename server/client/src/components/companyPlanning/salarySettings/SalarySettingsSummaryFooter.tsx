@@ -1,6 +1,6 @@
 import React from 'react'
 import { JustifyBetweenRow } from '@components/layout'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 import colors from '@constants/colors'
 
 const Text = styled.h3`

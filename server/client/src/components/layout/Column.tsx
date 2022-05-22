@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 import { IComponentProps } from '@models/index'
 
 interface IProps extends IComponentProps {}
