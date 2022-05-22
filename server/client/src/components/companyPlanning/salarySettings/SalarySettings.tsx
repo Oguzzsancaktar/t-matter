@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Column,
@@ -22,7 +22,18 @@ const DEFAULT_TEMPORARY_ARR: any[] = Array.apply(null, Array(DEFAULT_INCREASE_YE
   return i
 })
 
+const DEFAULT_INCREASE_PERCENTAGE = 20
+
 const SalarySettings = () => {
+  const [salarySettingsData, setSalarySettingsData] = useState({
+    defaultPayrollRate: 10,
+    increasedPercentage0: 10,
+    increasedPercentage1: 10,
+    increasedPercentage2: 10,
+    increasedPercentage3: 10,
+    increasedPercentage4: 10
+  })
+
   const notificationOptions = [
     { value: NOTIFICATION_BEFORE_AFTER.AFTER, label: 'After' },
     { value: NOTIFICATION_BEFORE_AFTER.BEFORE, label: 'Before' }
@@ -38,6 +49,10 @@ const SalarySettings = () => {
     { value: USER_ROLE_TYPES.USER, label: 'User' }
   ]
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSalarySettingsData({ ...salarySettingsData, [event.target.name]: event.target.value })
+  }
+
   const handleSelectChange = (e: React.ChangeEvent) => {
     console.log(e)
   }
@@ -52,7 +67,7 @@ const SalarySettings = () => {
             onBlur={() => console.log('blue')}
             children={<DollarSign size="16px" />}
             name="defaultPayrollRate"
-            onChange={() => console.log('change')}
+            onChange={handleInputChange}
             placeholder="Default Payroll Rate"
             type="text"
           />
@@ -64,19 +79,20 @@ const SalarySettings = () => {
               <InputRegular
                 margin="0 1rem 0 0"
                 labelText={index === 0 ? 'Default Payroll Rate' : null}
-                name={'defaultPayrollRate' + index}
-                onChange={() => console.log('change')}
+                name={'totalHoursInYear' + index}
+                onChange={handleInputChange}
                 placeholder="Default Payroll Rate"
                 type="text"
                 value={DEFAULT_HOUR_IN_YEAR * (index + 1) + ' Hours'}
                 disabled={true}
               />
-              <InputRegular
+              <InputWithIcon
                 labelText={index === 0 ? 'Increase Rate' : null}
-                name="defaultPayrollRate"
-                onChange={() => console.log('change')}
+                name={'increasedPercentage' + index}
+                onChange={handleInputChange}
                 placeholder="Default Payroll Rate"
-                type="text"
+                type="number"
+                value={salarySettingsData['increasedPercentage' + index]}
               />
             </JustifyBetweenRow>
           )
@@ -119,7 +135,10 @@ const SalarySettings = () => {
       <JustifyCenterColumn height="100%">
         <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
           <H1>Summary</H1>
-          <SummaryCard body={<SalarySettingsSummaryBody />} footer={<SalarySettingsSummaryFooter />} />
+          <SummaryCard
+            body={<SalarySettingsSummaryBody data={salarySettingsData} />}
+            footer={<SalarySettingsSummaryFooter data={salarySettingsData} />}
+          />
         </JustifyBetweenColumn>
         <Column margin="1rem 0 0 0" height="40px">
           <Button>Save</Button>

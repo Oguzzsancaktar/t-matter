@@ -3,6 +3,8 @@ import {
   Button,
   Checkbox,
   Column,
+  CompanyPricingSummaryBody,
+  CompanyPricingSummaryFooter,
   H1,
   InputWithIcon,
   JustifyBetweenColumn,
@@ -118,7 +120,7 @@ const CompanyPricing = () => {
       <Column height="100%">
         <H1>Summary</H1>
         <JustifyBetweenColumn height="calc(100% - 1rem - 40px - 2rem - 18px)">
-          <SummaryCard body={<SalarySettingsSummaryBody />} footer={<SalarySettingsSummaryFooter />} />
+          <SummaryCard body={<CompanyPricingSummaryBody />} footer={<CompanyPricingSummaryFooter />} />
         </JustifyBetweenColumn>
         <Column margin="1rem 0 0 0" height="40px">
           <Button>Save</Button>

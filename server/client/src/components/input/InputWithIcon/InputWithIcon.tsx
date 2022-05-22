@@ -10,7 +10,7 @@ interface Props {
   name: string
   validationError?: boolean
   value?: string
-  labelText?: string
+  labelText?: string | null
   isPasswordVisible?: boolean
 
   handleVisibility?: (isVisible: boolean) => void
