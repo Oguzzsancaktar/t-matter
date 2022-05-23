@@ -5,6 +5,8 @@ const GlobalStyle = createGlobalStyle`
    * {
   box-sizing: border-box;
   font-family: 'Satoshi-Bold';
+  margin: 0;
+  padding: 0;
 }
 
 html {

@@ -1,18 +1,18 @@
 import colors from '@constants/colors'
 import styled from 'styled-components'
-import { IContainerProps, IModalProps } from './types'
+import { IContainerProps } from './types'
 
-export const Modal = styled.div<IModalProps>`
+export const Modal = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 999;
-  display: ${({ show }) => (show ? 'flex' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
   width: 100vw;
   background: rgba(0, 0, 0, 0.5);
+  display: flex;
 `
 export const Container = styled.div<IContainerProps>`
   position: relative;

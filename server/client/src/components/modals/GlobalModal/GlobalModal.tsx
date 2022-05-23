@@ -1,30 +1,37 @@
 import React from 'react'
 import useAccessStore from '@hooks/useAccessStore'
-import { hideModal, selectIsModalOpen, selectModal } from '@store/index'
+import { closeModal, minimizeModal } from '@store/index'
 import { CloseButton, Container, MinimizeButton, Modal } from './styled'
-import { Minimize, Minus, X } from 'react-feather'
+import { Minus, X } from 'react-feather'
 import colors from '@constants/colors'
+import { IModal } from '@/models'
 
-const GlobalModal = () => {
-  const { useAppDispatch, useAppSelector } = useAccessStore()
+interface IProps {
+  modal: IModal
+}
+
+const GlobalModal: React.FC<IProps> = ({ modal }) => {
+  const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-
-  const isModalOpen = useAppSelector(selectIsModalOpen)
-  const modal = useAppSelector(selectModal)
 
   const handleModalClose = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
-    dispatch(hideModal())
+    dispatch(closeModal(modal))
+  }
+
+  const handleModalMinimize = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+    dispatch(minimizeModal(modal))
   }
 
   return (
-    <Modal show={isModalOpen}>
+    <Modal>
       <Container size={modal?.size}>
         {modal?.body}
         <CloseButton onClick={handleModalClose}>
           <X color={colors.white.light} fontWeight="600" />
         </CloseButton>
-        <MinimizeButton onClick={handleModalClose}>
+        <MinimizeButton onClick={handleModalMinimize}>
           <Minus color={colors.blue.primary} fontWeight="600" />
         </MinimizeButton>
       </Container>

@@ -1,0 +1,164 @@
+.react-dataTable {
+  border-radius: 0;
+}
+.rdt_Table .rdt_TableHead{
+  z-index: 0!important;
+}
+
+.react-dataTable .rdt_TableHead .rdt_TableHeadRow {
+  background-color: #f3f2f7;
+  border-top: 1px solid;
+  border-color: #ebe9f1;
+  min-height: 0;
+  height: 38px;
+}
+.react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol {
+  padding: 0.72rem 1.5rem;
+}
+.react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol .rdt_TableCol_Sortable {
+  color: #6e6b7b;
+  font-weight: bold;
+  font-style: 0.857rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol .rdt_TableCol_Sortable:hover {
+  opacity: 1;
+}
+.react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol .rdt_TableCol_Sortable span {
+  margin-left: 0.35rem;
+}
+.react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol:first-child .form-check {
+  transform: translateX(-10px);
+}
+.react-dataTable .rdt_TableBody .rdt_TableRow {
+  color: #6e6b7b;
+}
+.react-dataTable .rdt_TableBody .rdt_TableRow .rdt_TableCell {
+  height: 53px;
+  padding: 0.72rem 1.5rem;
+}
+.react-dataTable .rdt_TableBody .rdt_TableRow .rdt_TableCell .column-action svg {
+  stroke: #6e6b7b;
+}
+.react-dataTable .rdt_TableBody .rdt_TableRow .rdt_TableCell .column-action .dropdown-item:hover svg {
+  stroke: #7367f0;
+}
+.react-dataTable .rdt_TableBody .rdt_TableRow .rdt_TableCell .column-action .dropdown-item:active svg {
+  stroke: #fff;
+}
+.react-dataTable .react-paginate.separated-pagination .page-item:first-child .page-link,
+.react-dataTable .react-paginate.separated-pagination .page-item:last-child .page-link {
+  border-radius: 50%;
+}
+.react-dataTable.roles-table .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol:first-child .form-check {
+  transform: translateX(0);
+}
+.react-dataTable.roles-table .rdt_TableBody .rdt_TableRow .rdt_TableCell:first-child .form-check {
+  transform: translateX(10px);
+}
+
+@media (max-width: 740px) {
+  .permission-header .add-permission {
+    margin-top: 1rem !important;
+  }
+}
+
+.rdt_Pagination select {
+  min-width: 30px;
+}
+.rdt_Pagination select:focus, .rdt_Pagination select:active {
+  outline: 0;
+}
+
+.dataTable-filter {
+  max-width: 220px;
+}
+
+.dataTable-select {
+  width: 5rem;
+}
+.dataTable-select:not([multiple=multiple]) {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  background-position: calc(100% - 12px) 10px, calc(100% - 20px) 12px, 100% 0;
+  background-size: 10px 10px, 10px 10px;
+}
+
+.dark-layout .app-user-list header {
+  background-color: red;
+}
+.dark-layout .react-dataTable .hlidmt {
+  background-color: red;
+}
+.dark-layout .react-dataTable .khKjDK {
+  background-color: red;
+  color: yellow;
+}
+.dark-layout .react-dataTable .rdt_Table {
+  background: green;
+  color: yellow;
+}
+.dark-layout .react-dataTable .rdt_Table > div:first-child:not(.rdt_TableHead):not(.rdt_TableBody) {
+  color: yellow;
+  background-color: red;
+}
+.dark-layout .react-dataTable .rdt_TableHead .rdt_TableHeadRow {
+  background-color: green;
+  border-color: purple;
+}
+.dark-layout .react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol {
+  color: yellow;
+}
+.dark-layout .react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol div[role=button] {
+  color: yellow;
+}
+.dark-layout .react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol_Sortable {
+  color: peru;
+}
+.dark-layout .react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol_Sortable svg {
+  stroke: peru;
+}
+.dark-layout .react-dataTable .rdt_TableBody .expandable-content {
+  background-color: firebrick;
+  color: yellow;
+}
+.dark-layout .react-dataTable .rdt_TableBody .rdt_TableRow {
+  background-color: firebrick;
+  color: yellow;
+  border-color: purple;
+}
+.dark-layout .react-dataTable .rdt_TableBody .rdt_TableRow .rdt_TableCell {
+  color: yellow;
+}
+.dark-layout .react-dataTable .rdt_TableBody .rdt_TableRow .rdt_TableCell .column-action svg {
+  stroke: yellow;
+}
+.dark-layout .react-dataTable .rdt_TableBody .rdt_TableRow button:hover:not(:disabled) {
+  background-color: royalblue;
+}
+.dark-layout .react-dataTable .rdt_TableBody .rdt_TableRow button svg {
+  color: yellow;
+}
+.dark-layout .react-dataTable .rdt_TableBody .rdt_TableRow .permissions-actions button:hover {
+  background-color: transparent;
+}
+.dark-layout .react-dataTable .rdt_Pagination {
+  color: yellow;
+  border-color: purple;
+  background-color: firebrick;
+}
+.dark-layout .react-dataTable .rdt_Pagination svg {
+  fill: yellow;
+}
+.dark-layout .rdt_Pagination {
+  color: yellow;
+  background-color: red;
+}
+.dark-layout .rdt_Pagination button svg {
+  fill: yellow;
+}
+.dark-layout .rdt_Pagination button[disabled] svg {
+  fill: aquamarine;
+}
+

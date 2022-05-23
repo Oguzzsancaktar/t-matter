@@ -1,1 +1,8 @@
-export { default as ModalReducer, showModal, hideModal, selectIsModalOpen, selectModal } from './modalSlice'
+export {
+  default as ModalReducer,
+  selectOpenModals,
+  selectMinimizedModals,
+  openModal,
+  closeModal,
+  minimizeModal
+} from './modalSlice'

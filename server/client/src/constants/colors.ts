@@ -50,6 +50,12 @@ const colors = Object.freeze({
   },
   text: {
     primary: '#566a7f'
+  },
+  background: {
+    gray: {
+      light: '#f5f5f9',
+      dark: '#435971cc'
+    }
   }
 })
 

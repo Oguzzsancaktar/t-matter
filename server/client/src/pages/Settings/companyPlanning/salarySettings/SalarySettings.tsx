@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   Column,
@@ -8,13 +8,12 @@ import {
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
-  SalarySettingsSummaryBody,
-  SalarySettingsSummaryFooter,
   SelectInput,
   SummaryCard
 } from '@components/index'
-import { DollarSign } from 'react-feather'
+import { DollarSign, Percent } from 'react-feather'
 import { NOTIFICATION_BEFORE_AFTER, USER_ROLE_TYPES } from '@constants/statuses'
+import { SalarySettingsSummaryBody, SalarySettingsSummaryFooter } from '@/pages'
 
 const DEFAULT_HOUR_IN_YEAR: number = 1920
 const DEFAULT_INCREASE_YEAR_COUNT: number = 5
@@ -26,12 +25,12 @@ const DEFAULT_INCREASE_PERCENTAGE = 20
 
 const SalarySettings = () => {
   const [salarySettingsData, setSalarySettingsData] = useState({
-    defaultPayrollRate: 10,
-    increasedPercentage0: 10,
-    increasedPercentage1: 10,
-    increasedPercentage2: 10,
-    increasedPercentage3: 10,
-    increasedPercentage4: 10
+    defaultPayrollRate: 30,
+    increasedPercentage0: DEFAULT_INCREASE_PERCENTAGE,
+    increasedPercentage1: DEFAULT_INCREASE_PERCENTAGE,
+    increasedPercentage2: DEFAULT_INCREASE_PERCENTAGE,
+    increasedPercentage3: DEFAULT_INCREASE_PERCENTAGE,
+    increasedPercentage4: DEFAULT_INCREASE_PERCENTAGE
   })
 
   const notificationOptions = [
@@ -57,6 +56,10 @@ const SalarySettings = () => {
     console.log(e)
   }
 
+  const handleSave = () => {
+    console.log(salarySettingsData)
+  }
+
   return (
     <JustifyBetweenRow height="100%" margin="3rem 1rem" width="auto">
       <JustifyBetweenColumn height="100%">
@@ -69,7 +72,8 @@ const SalarySettings = () => {
             name="defaultPayrollRate"
             onChange={handleInputChange}
             placeholder="Default Payroll Rate"
-            type="text"
+            type="number"
+            value={salarySettingsData.defaultPayrollRate}
           />
         </Column>
 
@@ -93,6 +97,7 @@ const SalarySettings = () => {
                 placeholder="Default Payroll Rate"
                 type="number"
                 value={salarySettingsData['increasedPercentage' + index]}
+                children={<Percent size="16px" />}
               />
             </JustifyBetweenRow>
           )
@@ -141,7 +146,7 @@ const SalarySettings = () => {
           />
         </JustifyBetweenColumn>
         <Column margin="1rem 0 0 0" height="40px">
-          <Button>Save</Button>
+          <Button onClick={handleSave}>Save</Button>
         </Column>
       </JustifyCenterColumn>
     </JustifyBetweenRow>

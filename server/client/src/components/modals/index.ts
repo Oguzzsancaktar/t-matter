@@ -1,3 +1,4 @@
-export * from './GlobalModal'
-export * from './CompanyPlanningModal'
-export * from './UserPlanningModal'
+export * from './globalModal'
+export * from './companyPlanningModal'
+export * from './userPlanningModal'
+export * from './minimizedModals'

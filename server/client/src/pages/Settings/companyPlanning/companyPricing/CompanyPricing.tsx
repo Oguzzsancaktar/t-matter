@@ -3,23 +3,19 @@ import {
   Button,
   Checkbox,
   Column,
-  CompanyPricingSummaryBody,
-  CompanyPricingSummaryFooter,
   H1,
   InputWithIcon,
   JustifyBetweenColumn,
   JustifyBetweenRow,
-  JustifyCenterColumn,
   Label,
   Row,
-  SalarySettingsSummaryBody,
-  SalarySettingsSummaryFooter,
   SummaryCard
 } from '@components/index'
 import { ClockPicker } from '@components/index'
 import { Clock, DollarSign, Percent } from 'react-feather'
 import { dayOfWeek } from '@/constants/dates'
 import { ETime } from '@/models'
+import { CompanyPricingSummaryBody, CompanyPricingSummaryFooter } from '@/pages'
 
 interface IDaysIsChecked {
   Monday: boolean
@@ -109,9 +105,12 @@ const CompanyPricing = () => {
                 <Checkbox isChecked={dayIsChecked[ETime[day]]} onChange={handleCheckboxChange} />
                 <Label> {ETime[day]}</Label>
               </Row>
-
-              <ClockPicker name={day + 'Start'} />
-              <ClockPicker name={day + 'End'} />
+              <Row margin="0 0.25rem 0 0">
+                <ClockPicker name={day + 'Start'} />
+              </Row>
+              <Row margin="0 0 0 0.25rem">
+                <ClockPicker name={day + 'End'} />
+              </Row>
             </Row>
           ))}
         </JustifyBetweenColumn>

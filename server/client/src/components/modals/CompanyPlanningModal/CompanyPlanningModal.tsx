@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { CompanyPricing, JustifyBetweenColumn, JustifyCenterRow, SalarySettings } from '@components/index'
+import { JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
 import { InnerWrapper } from '@components/wrapper'
 
 import { Tab } from '@components/index'
 import styled from 'styled-components'
 import colors from '@constants/colors'
+import { CompanyPricing, SalarySettings } from '@/pages'
 
 const ModalHeader = styled.div`
   border-bottom: 1px solid ${colors.cyan.primary};

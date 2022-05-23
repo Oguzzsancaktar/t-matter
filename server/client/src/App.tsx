@@ -4,17 +4,36 @@ import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { PrivateRoute } from '@routes/PrivateRoute'
 import GlobalStyle from './styles/GlobalStyle'
-import { GlobalModal, SideBar } from '@components/index'
+import { GlobalModal, MinimizedModal, MinimizedModalsBar, SideBar } from '@components/index'
+import useAccessStore from '@/hooks/useAccessStore'
+import { selectMinimizedModals, selectOpenModals } from '@/store'
 
-const SettingsPage = lazy(() => import('./pages/SettingsPage'))
+const SettingsPage = lazy(() => import('./pages/Settings/SettingsPage'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 
 function App() {
+  const { useAppDispatch, useAppSelector } = useAccessStore()
+  const dispatch = useAppDispatch()
+
+  const openModals = useAppSelector(selectOpenModals)
+  const minimizedModals = useAppSelector(selectMinimizedModals)
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <GlobalStyle />
-      <GlobalModal />
+
+      {openModals.map((modal, index) => (
+        <GlobalModal key={index} modal={modal} />
+      ))}
+      {minimizedModals.length > 0 && (
+        <MinimizedModalsBar>
+          {minimizedModals.map((modal, index) => (
+            <MinimizedModal key={index} modal={modal} />
+          ))}
+        </MinimizedModalsBar>
+      )}
+
       <SideBar />
 
       <Routes>

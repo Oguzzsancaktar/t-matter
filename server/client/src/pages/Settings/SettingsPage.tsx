@@ -19,8 +19,17 @@ const SettingsPage = () => {
     <PageWrapper>
       <InnerWrapper>
         <WrapLayout>
-          <SettingsCard modal={{ title: 'Company Planning', size: ESize.XLarge, body: <CompanyPlanningModal /> }} />
-          <SettingsCard modal={{ title: 'User Planning', size: ESize.XLarge, body: <UserPlanningModal /> }} />
+          <SettingsCard
+            modal={{
+              id: 'companyPlanningModal',
+              title: 'Company Planning',
+              size: ESize.XLarge,
+              body: <CompanyPlanningModal />
+            }}
+          />
+          <SettingsCard
+            modal={{ id: 'userPlanningModal', title: 'User Planning', size: ESize.XLarge, body: <UserPlanningModal /> }}
+          />
         </WrapLayout>
       </InnerWrapper>
     </PageWrapper>

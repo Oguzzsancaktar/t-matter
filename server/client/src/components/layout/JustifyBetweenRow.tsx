@@ -2,7 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { IComponentProps } from '@models/index'
 
-interface IProps extends IComponentProps {}
+interface IProps extends IComponentProps {
+  children?: React.ReactNode
+  onClick?: (a?: any) => void
+}
 
 const JustifyBetweenRowStyled = styled.div<IProps>`
   margin: ${({ margin }) => margin && margin};
