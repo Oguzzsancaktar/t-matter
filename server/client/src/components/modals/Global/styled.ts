@@ -17,7 +17,8 @@ export const Modal = styled.div`
 export const Container = styled.div<IContainerProps>`
   position: relative;
   width: calc(100% - 2rem);
-  height: 70%;
+  height: fit-content;
+  min-height: ${({ size }) => (size === 'xl' ? '800' : size === 'lg' ? '700' : size === 'md' ? '900' : '100')}px;
   background-color: white;
   border-radius: 0.3rem;
   max-width: ${({ size }) =>

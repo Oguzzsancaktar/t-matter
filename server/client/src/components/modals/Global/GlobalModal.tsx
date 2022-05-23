@@ -16,7 +16,7 @@ const GlobalModal: React.FC<IProps> = ({ modal }) => {
 
   const handleModalClose = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
-    dispatch(closeModal(modal))
+    dispatch(closeModal(modal.id))
   }
 
   const handleModalMinimize = (e: React.MouseEvent<HTMLElement>) => {

@@ -32,7 +32,7 @@ const MinimizedModal: React.FC<IProps> = ({ modal }) => {
 
   const handleClose = (modal: IModal) => {
     console.log(modal)
-    dispatch(closeModal(modal))
+    dispatch(closeModal(modal.id))
   }
   return (
     <Bar width="auto">

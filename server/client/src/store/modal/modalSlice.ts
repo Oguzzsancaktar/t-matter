@@ -20,9 +20,9 @@ const modalSlice = createSlice({
       state.openModals = [...state.openModals].concat(action.payload)
       state.minimizedModals = state.minimizedModals.filter(modal => modal.id !== action.payload.id)
     },
-    closeModal(state: IModalsState, action: PayloadAction<IModal>) {
-      state.openModals = state.openModals.filter(modal => modal.id !== action.payload.id)
-      state.minimizedModals = state.minimizedModals.filter(modal => modal.id !== action.payload.id)
+    closeModal(state: IModalsState, action: PayloadAction<IModal['id']>) {
+      state.openModals = state.openModals.filter(modal => modal.id !== action.payload)
+      state.minimizedModals = state.minimizedModals.filter(modal => modal.id !== action.payload)
     },
     minimizeModal(state: IModalsState, action: PayloadAction<IModal>) {
       state.openModals = state.openModals.filter(modal => modal.id !== action.payload.id)
