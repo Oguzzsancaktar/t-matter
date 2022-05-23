@@ -1,10 +1,10 @@
 import React from 'react'
 import useAccessStore from '@hooks/useAccessStore'
 import { closeModal, minimizeModal } from '@store/index'
-import { CloseButton, Container, MinimizeButton, Modal } from './styled'
 import { Minus, X } from 'react-feather'
 import colors from '@constants/colors'
 import { IModal } from '@/models'
+import { CloseButton, Container, MinimizeButton, Modal } from './styled'
 
 interface IProps {
   modal: IModal
