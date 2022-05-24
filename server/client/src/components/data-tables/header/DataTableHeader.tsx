@@ -9,7 +9,7 @@ interface IProps {
 }
 const DataTableHeader: React.FC<IProps> = ({ handleAddNew }) => {
   return (
-    <JustifyBetweenRow>
+    <JustifyBetweenRow margin="0 0 0.5rem 0">
       <Row>
         <Row width="100px">
           <SelectInput

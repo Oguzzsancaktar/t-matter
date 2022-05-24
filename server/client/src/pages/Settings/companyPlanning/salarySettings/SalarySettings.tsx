@@ -8,6 +8,7 @@ import {
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
+  Row,
   SelectInput,
   SummaryCard
 } from '@components/index'
@@ -61,10 +62,12 @@ const SalarySettings = () => {
   }
 
   return (
-    <JustifyBetweenRow height="100%" margin="3rem 1rem" width="auto">
+    <JustifyBetweenRow height="100%" width="auto">
       <JustifyBetweenColumn height="100%">
         <Column margin="0 0 2rem 0">
-          <H1>Default</H1>
+          <Row margin="0 0 2rem 0">
+            <H1>Default</H1>
+          </Row>
           <InputWithIcon
             labelText="Default Payroll Rate"
             onBlur={() => console.log('blue')}
@@ -106,7 +109,9 @@ const SalarySettings = () => {
 
       <JustifyBetweenColumn margin="0px 3rem" height="100%">
         <Column>
-          <H1>Notifications</H1>
+          <Row margin="0 0 2rem 0">
+            <H1>Notifications</H1>
+          </Row>
           <SelectInput
             name="notificationType"
             options={notificationOptions}
@@ -139,7 +144,9 @@ const SalarySettings = () => {
 
       <JustifyCenterColumn height="100%">
         <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
-          <H1>Summary</H1>
+          <Row margin="0 0 2rem 0">
+            <H1>Summary</H1>
+          </Row>
           <SummaryCard
             body={<SalarySettingsSummaryBody data={salarySettingsData} />}
             footer={<SalarySettingsSummaryFooter data={salarySettingsData} />}

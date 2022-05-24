@@ -1,11 +1,4 @@
-import {
-  ActionButtons,
-  Column,
-  CreateRoleModal,
-  DataTableHeader,
-  JustifyBetweenRow,
-  JustifyCenterColumn
-} from '@/components'
+import { ActionButtons, CreateRoleModal, DataTableHeader, InnerWrapper } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -14,15 +7,16 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
-const UserRoleSettings = () => {
+const UserTaskCategory = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const columns = [
     {
-      name: 'Role',
-      selector: row => row.title,
-      sortable: true
+      name: 'Category',
+      selector: row => row.category,
+      sortable: true,
+      cell: data => <div>{data.category} </div>
     },
     {
       name: 'Status',
@@ -57,12 +51,12 @@ const UserRoleSettings = () => {
   const data = [
     {
       id: 1,
-      title: 'Beetlejuice',
+      category: 'User Finance',
       status: 'Active'
     },
     {
       id: 2,
-      title: 'Ghostbusters',
+      category: 'User Absent',
       status: 'Inactive'
     }
   ]
@@ -80,18 +74,11 @@ const UserRoleSettings = () => {
   }
 
   return (
-    <Column>
-      <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-      </JustifyBetweenRow>
-      <Column>
-        <DataTableHeader handleAddNew={openCreateRoleModal} />
-        <DataTable fixedHeader columns={columns} data={data} />
-      </Column>
-    </Column>
+    <InnerWrapper>
+      <DataTableHeader handleAddNew={openCreateRoleModal} />
+      <DataTable fixedHeader columns={columns} data={data} />
+    </InnerWrapper>
   )
 }
 
-export default UserRoleSettings
+export default UserTaskCategory

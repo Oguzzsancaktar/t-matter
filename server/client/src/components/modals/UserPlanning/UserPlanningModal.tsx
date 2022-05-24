@@ -1,4 +1,4 @@
-import { UserRoleSettings } from '@/pages'
+import { UserPageSettingsTab, UserRoleSettings, UserTaskSettingsTab } from '@/pages'
 import { JustifyBetweenColumn, JustifyCenterRow } from '@components/layout'
 import { Tab } from '@components/tab'
 import { InnerWrapper } from '@components/wrapper'
@@ -30,6 +30,7 @@ const CompanyPlanningModal = () => {
             />
 
             <Tab
+              margin="0 1rem 0 0rem"
               index={2}
               name="User Task Setting"
               isActive={activeTab === 'user-task-settings'}
@@ -37,6 +38,7 @@ const CompanyPlanningModal = () => {
             />
 
             <Tab
+              margin="0 1rem 0 0rem"
               index={3}
               name="User Page Settings"
               isActive={activeTab === 'user-page-settings'}
@@ -49,9 +51,9 @@ const CompanyPlanningModal = () => {
         {activeTab === 'user-role-settings' ? (
           <UserRoleSettings />
         ) : activeTab === 'user-task-settings' ? (
-          'user task settings'
+          <UserTaskSettingsTab />
         ) : (
-          'user page settings'
+          <UserPageSettingsTab />
         )}
       </ModalBody>
     </InnerWrapper>

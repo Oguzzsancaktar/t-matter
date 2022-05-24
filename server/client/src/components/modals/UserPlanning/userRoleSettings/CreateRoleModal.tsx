@@ -34,7 +34,7 @@ const CreateRoleModal = () => {
         </ModalHeader>
 
         <ModalBody>
-          <JustifyCenterColumn height="100%" margin="2rem 0">
+          <JustifyCenterColumn height="100%" padding="2rem 0">
             <InputRegular
               name="role"
               placeholder="Enter role..."

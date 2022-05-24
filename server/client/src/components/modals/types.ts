@@ -8,12 +8,14 @@ export const ModalHeader = styled.div`
   width: 100%;
 `
 
-export const ModalBody = styled.div`
-  height: fit-content;
+export const ModalBody = styled.div<{ withModalFooter?: boolean }>`
+  height: calc(${({ withModalFooter }) => (withModalFooter ? '100% - 85px - 60px' : '100% - 85px')});
   width: 100%;
+  padding: 3rem 1rem;
 `
 
 export const ModalFooter = styled.div`
   width: 100%;
   height: 60px;
+  padding: 1rem;
 `

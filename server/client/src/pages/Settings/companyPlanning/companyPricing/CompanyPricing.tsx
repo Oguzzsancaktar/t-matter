@@ -59,9 +59,11 @@ const CompanyPricing = () => {
   }
 
   return (
-    <JustifyBetweenRow height="100%" margin="3rem 1rem" width="auto">
+    <JustifyBetweenRow height="100%" width="auto">
       <Column height="100%">
-        <H1>Default</H1>
+        <Row margin="0 0 2rem 0">
+          <H1>Default</H1>
+        </Row>
 
         <JustifyBetweenColumn height="100%">
           <InputWithIcon
@@ -97,7 +99,9 @@ const CompanyPricing = () => {
       </Column>
 
       <Column height="100%" margin="0px 3rem">
-        <H1>Default</H1>
+        <Row margin="0 0 2rem 0">
+          <H1>Default</H1>
+        </Row>
         <JustifyBetweenColumn height="100%">
           {dayOfWeek.map((day, index) => (
             <Row key={index}>
@@ -117,7 +121,9 @@ const CompanyPricing = () => {
       </Column>
 
       <Column height="100%">
-        <H1>Summary</H1>
+        <Row margin="0 0 2rem 0">
+          <H1>Summary</H1>
+        </Row>
         <JustifyBetweenColumn height="calc(100% - 1rem - 40px - 2rem - 18px)">
           <SummaryCard body={<CompanyPricingSummaryBody />} footer={<CompanyPricingSummaryFooter />} />
         </JustifyBetweenColumn>

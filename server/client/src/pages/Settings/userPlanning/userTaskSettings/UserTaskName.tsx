@@ -1,11 +1,4 @@
-import {
-  ActionButtons,
-  Column,
-  CreateRoleModal,
-  DataTableHeader,
-  JustifyBetweenRow,
-  JustifyCenterColumn
-} from '@/components'
+import { ActionButtons, CreateRoleModal, DataTableHeader, InnerWrapper } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -14,13 +7,24 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
-const UserRoleSettings = () => {
+const UserTaskName = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const columns = [
     {
-      name: 'Role',
+      name: 'Task',
+      selector: row => row.task,
+      sortable: true
+    },
+    {
+      name: 'Category',
+      selector: row => row.category,
+      sortable: true,
+      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
+    },
+    {
+      name: 'Title',
       selector: row => row.title,
       sortable: true
     },
@@ -28,7 +32,7 @@ const UserRoleSettings = () => {
       name: 'Status',
       selector: row => row.status,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
+      cell: data => <div>{data.status} </div>
     },
     {
       name: 'Actions',
@@ -57,12 +61,16 @@ const UserRoleSettings = () => {
   const data = [
     {
       id: 1,
-      title: 'Beetlejuice',
+      task: 'Task 1',
+      category: 'User Finance',
+      title: 'Salary Increased',
       status: 'Active'
     },
     {
       id: 2,
-      title: 'Ghostbusters',
+      task: 'Task 2',
+      category: 'User Absent',
+      title: 'Absent Days',
       status: 'Inactive'
     }
   ]
@@ -80,18 +88,11 @@ const UserRoleSettings = () => {
   }
 
   return (
-    <Column>
-      <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-      </JustifyBetweenRow>
-      <Column>
-        <DataTableHeader handleAddNew={openCreateRoleModal} />
-        <DataTable fixedHeader columns={columns} data={data} />
-      </Column>
-    </Column>
+    <InnerWrapper>
+      <DataTableHeader handleAddNew={openCreateRoleModal} />
+      <DataTable fixedHeader columns={columns} data={data} />
+    </InnerWrapper>
   )
 }
 
-export default UserRoleSettings
+export default UserTaskName
