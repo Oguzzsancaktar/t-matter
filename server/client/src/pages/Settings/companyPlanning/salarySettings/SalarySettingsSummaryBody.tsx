@@ -1,10 +1,11 @@
+import { ISalarySettings } from '@/models'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@components/layout'
 import colors from '@constants/colors'
 import React from 'react'
 import styled from 'styled-components'
 
 interface IProps {
-  data: null | any
+  data: ISalarySettings
 }
 
 const Text = styled.h3`
@@ -20,10 +21,11 @@ const Value = styled.h3`
   border-left: 1px solid ${colors.blue.primary};
 `
 const SalarySettingsSummaryBody: React.FC<IProps> = ({ data }) => {
-  const calculatedYear0 = +data.defaultPayrollRate + +data.defaultPayrollRate * (+data.increasedPercentage0 / 100)
-  const calculatedYear1 = +calculatedYear0 + +calculatedYear0 * (+data.increasedPercentage1 / 100)
-  const calculatedYear2 = +calculatedYear1 + +calculatedYear1 * (+data.increasedPercentage2 / 100)
-  const calculatedYear3 = +calculatedYear2 + +calculatedYear2 * (+data.increasedPercentage3 / 100)
+  const calculatedYear0 =
+    +data.defaultPayrollRate + +data.defaultPayrollRate * (+data.payrollIncreases[0].increaseRate / 100)
+  const calculatedYear1 = +calculatedYear0 + +calculatedYear0 * (+data.payrollIncreases[1].increaseRate / 100)
+  const calculatedYear2 = +calculatedYear1 + +calculatedYear1 * (+data.payrollIncreases[2].increaseRate / 100)
+  const calculatedYear3 = +calculatedYear2 + +calculatedYear2 * (+data.payrollIncreases[3].increaseRate / 100)
 
   return (
     <JustifyBetweenColumn>

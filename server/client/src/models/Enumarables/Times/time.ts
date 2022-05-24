@@ -1,10 +1,6 @@
-enum ETime {
-  Monday,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
-  Sunday
+enum ETimes {
+  startTime = 540,
+  endTime = 1170
 }
-export default ETime
+
+export default ETimes
