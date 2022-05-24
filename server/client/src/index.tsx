@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import './styles/index.css'
 import './styles/vendors/react-select.css'
 import './styles/vendors/timekeeper.css'
+import './styles/vendors/react-data-table.css'
 
 ReactDOM.render(
   <React.StrictMode>

@@ -8,10 +8,10 @@ const ColumnSC = styled.div<IProps>`
   margin: ${({ margin }) => margin && margin};
   padding: ${({ padding }) => padding && padding};
   height: ${({ height }) => (height ? height : 'auto')};
-  width: 100%;
+  width: ${({ width }) => (width ? width : '100%')};
+
   display: flex;
   flex-direction: column;
-  align-items: center;
 `
 const Column: React.FC<IProps> = ({ children, ...rest }) => {
   return <ColumnSC {...rest}>{children}</ColumnSC>

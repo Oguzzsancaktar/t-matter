@@ -5,11 +5,20 @@ const GlobalStyle = createGlobalStyle`
    * {
   box-sizing: border-box;
   font-family: 'Satoshi-Bold';
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
 }
 
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
+
+  /* font-size: calc(100vw / 1920 * 10);
+
+  @media (max-height: 750px) {
+    font-size: calc(100vw / 750 * 10);
+  } */
 }
 
 body {

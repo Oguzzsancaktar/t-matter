@@ -2,32 +2,37 @@ import { IModal } from '@/models'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IRootState } from '../store'
 
-type IModalState = {
-  isModalOpen: boolean
-  modal: IModal | null
+type IModalsState = {
+  openModals: IModal[] | []
+  minimizedModals: IModal[] | []
 }
 
-const initialState: IModalState = {
-  isModalOpen: false,
-  modal: null
+const initialState: IModalsState = {
+  openModals: [],
+  minimizedModals: []
 }
 
 const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    showModal(state: IModalState, action: PayloadAction<IModal>) {
-      state.isModalOpen = true
-      state.modal = action.payload
+    openModal(state: IModalsState, action: PayloadAction<IModal>) {
+      state.openModals = [...state.openModals].concat(action.payload)
+      state.minimizedModals = state.minimizedModals.filter(modal => modal.id !== action.payload.id)
     },
-    hideModal(state: IModalState) {
-      state.isModalOpen = false
-      state.modal = null
+    closeModal(state: IModalsState, action: PayloadAction<IModal['id']>) {
+      state.openModals = state.openModals.filter(modal => modal.id !== action.payload)
+      state.minimizedModals = state.minimizedModals.filter(modal => modal.id !== action.payload)
+    },
+    minimizeModal(state: IModalsState, action: PayloadAction<IModal>) {
+      state.openModals = state.openModals.filter(modal => modal.id !== action.payload.id)
+      state.minimizedModals = [...state.minimizedModals].concat(action.payload)
     }
   }
 })
 
-export const selectIsModalOpen = (state: IRootState) => state.modal.isModalOpen
-export const selectModal = (state: IRootState) => state.modal.modal
-export const { showModal, hideModal } = modalSlice.actions
+export const selectOpenModals = (state: IRootState) => state.modal.openModals
+export const selectMinimizedModals = (state: IRootState) => state.modal.minimizedModals
+
+export const { openModal, closeModal, minimizeModal } = modalSlice.actions
 export default modalSlice.reducer

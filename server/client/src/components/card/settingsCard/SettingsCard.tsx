@@ -1,8 +1,8 @@
+import { openModal } from '@/store'
 import { Button, JustifyBetweenColumn } from '@components/index'
 import colors from '@constants/colors'
 import useAccessStore from '@hooks/useAccessStore'
 import { IModal } from '@models/index'
-import { showModal } from '@store/index'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -34,7 +34,8 @@ const SettingsCard: React.FC<IProps> = ({ children, modal, ...rest }) => {
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     dispatch(
-      showModal({
+      openModal({
+        id: modal.id,
         title: modal.title,
         body: modal.body,
         size: modal.size

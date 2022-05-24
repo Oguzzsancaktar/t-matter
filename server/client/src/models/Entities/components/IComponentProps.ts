@@ -4,4 +4,5 @@ export default interface IComponentProps {
   padding?: string
   height?: string
   width?: string
+  cursorType?: string
 }

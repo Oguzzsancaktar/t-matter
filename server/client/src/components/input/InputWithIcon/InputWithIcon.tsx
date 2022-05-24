@@ -9,7 +9,7 @@ interface Props {
   placeholder: string
   name: string
   validationError?: boolean
-  value?: string
+  value?: string | number
   labelText?: string | null
   isPasswordVisible?: boolean
 
@@ -39,7 +39,7 @@ const InputWithIcon: React.FC<Props> = ({
       {labelText && <Label>{labelText}</Label>}
       <Container validationError={validationError}>
         <Row>
-          <IconContainer>{children}</IconContainer>
+          <IconContainer validationError={validationError}>{children}</IconContainer>
           <Input validationError={validationError} type={type} {...rest} />
           {handleVisibility &&
             (isPasswordVisible ? (
