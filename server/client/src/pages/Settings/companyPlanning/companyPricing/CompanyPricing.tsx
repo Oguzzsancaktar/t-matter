@@ -14,44 +14,85 @@ import {
 import { ClockPicker } from '@components/index'
 import { Clock, DollarSign, Percent } from 'react-feather'
 import { dayOfWeek } from '@/constants/dates'
-import { ETime } from '@/models'
+import { EDays, ETimes } from '@/models'
 import { CompanyPricingSummaryBody, CompanyPricingSummaryFooter } from '@/pages'
+import moment from 'moment'
 
-interface IDaysIsChecked {
-  Monday: boolean
-  Tuesday: boolean
-  Wednesday: boolean
-  Thursday: boolean
-  Friday: boolean
-  Saturday: boolean
-  Sunday: boolean
+interface IWorkDay {
+  isChecked: boolean
+  startTime: number
+  endTime: number
+}
+
+interface IDailyWorkingHours {
+  Monday: IWorkDay
+  Tuesday: IWorkDay
+  Wednesday: IWorkDay
+  Thursday: IWorkDay
+  Friday: IWorkDay
+  Saturday: IWorkDay
+  Sunday: IWorkDay
 }
 
 const CompanyPricing = () => {
-  const [dayIsChecked, setDayIsChecked] = useState<IDaysIsChecked>({
-    Monday: true,
-    Tuesday: false,
-    Wednesday: false,
-    Thursday: false,
-    Friday: false,
-    Saturday: false,
-    Sunday: false
+  const [dailyWorkTime, setDailyWorkTime] = useState<IDailyWorkingHours>({
+    Monday: {
+      isChecked: true,
+      startTime: ETimes.startTime,
+      endTime: ETimes.endTime
+    },
+    Tuesday: {
+      isChecked: true,
+      startTime: ETimes.startTime,
+      endTime: ETimes.endTime
+    },
+    Wednesday: {
+      isChecked: true,
+      startTime: ETimes.startTime,
+      endTime: ETimes.endTime
+    },
+    Thursday: {
+      isChecked: true,
+      startTime: ETimes.startTime,
+      endTime: ETimes.endTime
+    },
+    Friday: {
+      isChecked: true,
+      startTime: ETimes.startTime,
+      endTime: ETimes.endTime
+    },
+    Saturday: {
+      isChecked: false,
+      startTime: ETimes.startTime,
+      endTime: ETimes.endTime
+    },
+    Sunday: {
+      isChecked: false,
+      startTime: ETimes.startTime,
+      endTime: ETimes.endTime
+    }
   })
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e)
-    // setDayIsChecked({ ...dayIsChecked, Monday: !dayIsChecked[ETime[day]] })
   }
 
-  const handleCheckboxClick = (day: ETime) => {
-    const selectedDay = ETime[day]
-    const newState = {
-      ...dayIsChecked,
-      [selectedDay]: !dayIsChecked[selectedDay]
-    }
+  const handleCheckboxClick = (day: EDays) => {
+    const selectedDay = EDays[day]
+    const checkStatus = dailyWorkTime[selectedDay].isChecked
+    setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], isChecked: !checkStatus } })
+  }
 
-    setDayIsChecked(newState)
-    console.log(dayIsChecked, selectedDay)
+  const onStartTimeChange = (day: EDays, value: string) => {
+    const selectedDay = EDays[day]
+    const seconds = moment(value, 'HH:mm:ss: A').diff(moment().startOf('day'), 'minutes')
+    setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], startTime: seconds } })
+  }
+
+  const onEndTimeChange = (day: EDays, value: string) => {
+    const selectedDay = EDays[day]
+    const seconds = moment(value, 'HH:mm:ss: A').diff(moment().startOf('day'), 'minutes')
+    setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], endTime: seconds } })
   }
 
   const handleInputChange = (e: any) => {
@@ -106,14 +147,14 @@ const CompanyPricing = () => {
           {dayOfWeek.map((day, index) => (
             <Row key={index}>
               <Row onClick={() => handleCheckboxClick(day)}>
-                <Checkbox isChecked={dayIsChecked[ETime[day]]} onChange={handleCheckboxChange} />
-                <Label> {ETime[day]}</Label>
+                <Checkbox isChecked={dailyWorkTime[EDays[day]].isChecked} onChange={handleCheckboxChange} />
+                <Label> {EDays[day]}</Label>
               </Row>
               <Row margin="0 0.25rem 0 0">
-                <ClockPicker name={day + 'Start'} />
+                <ClockPicker onChange={value => onStartTimeChange(day, value)} name={day + 'Start'} />
               </Row>
               <Row margin="0 0 0 0.25rem">
-                <ClockPicker name={day + 'End'} />
+                <ClockPicker onChange={value => onEndTimeChange(day, value)} name={day + 'End'} />
               </Row>
             </Row>
           ))}
