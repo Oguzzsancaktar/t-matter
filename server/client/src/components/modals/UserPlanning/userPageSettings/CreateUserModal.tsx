@@ -8,18 +8,18 @@ import { closeModal } from '@/store'
 import { InnerWrapper } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 
-const CreateRoleModal = () => {
+const CreateUserModal = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const [roleName, setRoleName] = useState('')
 
   const handleCancel = () => {
-    dispatch(closeModal('createRoleModal'))
+    dispatch(closeModal('createUserModal'))
   }
 
   const handleConfirm = () => {
-    dispatch(closeModal('createRoleModal'))
+    dispatch(closeModal('createUserModal'))
   }
   return (
     <InnerWrapper>
@@ -27,7 +27,7 @@ const CreateRoleModal = () => {
         <ModalHeader>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
-              Create User Role
+              Create User
             </H1>
           </JustifyCenterRow>
         </ModalHeader>
@@ -55,4 +55,4 @@ const CreateRoleModal = () => {
   )
 }
 
-export default CreateRoleModal
+export default CreateUserModal

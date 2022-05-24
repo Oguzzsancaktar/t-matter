@@ -1,4 +1,4 @@
-import { ActionButtons, CreateRoleModal, DataTableHeader, InnerWrapper } from '@/components'
+import { ActionButtons, CreateRoleModal, CreateTaskNameModal, DataTableHeader, InnerWrapper } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -79,9 +79,9 @@ const UserTaskName = () => {
     e.preventDefault()
     dispatch(
       openModal({
-        id: 'createRoleModal',
-        title: 'Create Role',
-        body: <CreateRoleModal />,
+        id: 'createTaskNameModal',
+        title: 'Create Task Name',
+        body: <CreateTaskNameModal />,
         size: ESize.Small
       })
     )

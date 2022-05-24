@@ -1,4 +1,4 @@
-import { ActionButtons, CreateRoleModal, DataTableHeader, InnerWrapper } from '@/components'
+import { ActionButtons, CreateRoleModal, CreateTaskCategoryModal, DataTableHeader, InnerWrapper } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -65,9 +65,9 @@ const UserTaskCategory = () => {
     e.preventDefault()
     dispatch(
       openModal({
-        id: 'createRoleModal',
-        title: 'Create Role',
-        body: <CreateRoleModal />,
+        id: 'createTaskCategoryModal',
+        title: 'Create Task Category',
+        body: <CreateTaskCategoryModal />,
         size: ESize.Small
       })
     )

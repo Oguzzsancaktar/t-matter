@@ -1,5 +1,5 @@
 export default interface IPayrolIncrease {
-  _id: string
+  _id?: string
   increaseHour: number
   increaseRate: number
 }
