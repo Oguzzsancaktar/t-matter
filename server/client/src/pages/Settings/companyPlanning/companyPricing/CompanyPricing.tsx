@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Checkbox,
@@ -17,6 +17,7 @@ import { dayOfWeek } from '@/constants/dates'
 import { EDays, ETimes } from '@/models'
 import { CompanyPricingSummaryBody, CompanyPricingSummaryFooter } from '@/pages'
 import moment from 'moment'
+import { secondsToTime } from '@/utils/timeUtils'
 
 interface IWorkDay {
   isChecked: boolean
@@ -86,18 +87,42 @@ const CompanyPricing = () => {
   const onStartTimeChange = (day: EDays, value: string) => {
     const selectedDay = EDays[day]
     const seconds = moment(value, 'HH:mm:ss: A').diff(moment().startOf('day'), 'minutes')
+    console.log('start', seconds)
+
     setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], startTime: seconds } })
   }
 
   const onEndTimeChange = (day: EDays, value: string) => {
     const selectedDay = EDays[day]
     const seconds = moment(value, 'HH:mm:ss: A').diff(moment().startOf('day'), 'minutes')
+    console.log('end', seconds)
     setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], endTime: seconds } })
   }
 
   const handleInputChange = (e: any) => {
     console.log(e)
   }
+
+  const handleSave = (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log(dailyWorkTime)
+  }
+
+  useEffect(() => {
+    let totalMinutes = 0
+    dayOfWeek.forEach(day => {
+      const startTime = dailyWorkTime[EDays[day]].startTime
+      const endTime = dailyWorkTime[EDays[day]].endTime
+      const isChecked = dailyWorkTime[EDays[day]].isChecked
+
+      if (isChecked) {
+        totalMinutes += endTime - startTime
+        console.log(111, endTime - startTime)
+      }
+    })
+
+    console.log(totalMinutes)
+  }, [dailyWorkTime])
 
   return (
     <JustifyBetweenRow height="100%" width="auto">
@@ -169,7 +194,7 @@ const CompanyPricing = () => {
           <SummaryCard body={<CompanyPricingSummaryBody />} footer={<CompanyPricingSummaryFooter />} />
         </JustifyBetweenColumn>
         <Column margin="1rem 0 0 0" height="40px">
-          <Button>Save</Button>
+          <Button onClick={handleSave}>Save</Button>
         </Column>
       </Column>
     </JustifyBetweenRow>
