@@ -2,24 +2,24 @@ import React, { useState } from 'react'
 import { ConfirmCancelButtons } from '@/components/button'
 import { InputRegular } from '@/components/input'
 import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from '@/components/layout'
-import { H1, Label } from '@/components/texts'
+import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { InnerWrapper } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 
-const CreateRoleModal = () => {
+const CreateTaskCategoryModal = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [roleName, setRoleName] = useState('')
+  const [taskCategory, setTaskCategory] = useState('')
 
   const handleCancel = () => {
-    dispatch(closeModal('createRoleModal'))
+    dispatch(closeModal('createTaskCategoryModal'))
   }
 
   const handleConfirm = () => {
-    dispatch(closeModal('createRoleModal'))
+    dispatch(closeModal('createTaskCategoryModal'))
   }
   return (
     <InnerWrapper>
@@ -27,7 +27,7 @@ const CreateRoleModal = () => {
         <ModalHeader>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
-              Create User Role
+              Create Task Category
             </H1>
           </JustifyCenterRow>
         </ModalHeader>
@@ -35,12 +35,12 @@ const CreateRoleModal = () => {
         <ModalBody>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <InputRegular
-              name="role"
-              placeholder="Enter role..."
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRoleName(e.target.value)}
-              value={roleName}
+              name="taskCategory"
+              placeholder="Enter task category..."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTaskCategory(e.target.value)}
+              value={taskCategory}
               type="text"
-              labelText="Role Name"
+              labelText="Task Category"
             />
           </JustifyCenterColumn>
         </ModalBody>
@@ -55,4 +55,4 @@ const CreateRoleModal = () => {
   )
 }
 
-export default CreateRoleModal
+export default CreateTaskCategoryModal

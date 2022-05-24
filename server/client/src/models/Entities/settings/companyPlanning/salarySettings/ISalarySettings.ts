@@ -1,7 +1,7 @@
 import IPayrolIncrease from './IPayrolIncrease'
 
 export default interface ISalarySettings {
-  id: string
+  id?: string
   defaultPayrollRate: number
   payrollIncreases: IPayrolIncrease[]
 }

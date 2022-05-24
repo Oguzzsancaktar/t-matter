@@ -37,31 +37,25 @@ const SalarySettings = () => {
     usePatchSalarySettingsMutation()
 
   const [salarySettingsStateData, setSalarySettingsStateData] = useState<ISalarySettings>({
-    id: '',
     defaultPayrollRate: DEFAULT_PAYROLL_RATE,
     payrollIncreases: [
       {
-        _id: '',
         increaseHour: DEFAULT_HOUR_IN_YEAR,
         increaseRate: DEFAULT_INCREASE_PERCENTAGE
       },
       {
-        _id: '',
         increaseHour: DEFAULT_HOUR_IN_YEAR * 2,
         increaseRate: DEFAULT_INCREASE_PERCENTAGE
       },
       {
-        _id: '',
         increaseHour: DEFAULT_HOUR_IN_YEAR * 3,
         increaseRate: DEFAULT_INCREASE_PERCENTAGE
       },
       {
-        _id: '',
         increaseHour: DEFAULT_HOUR_IN_YEAR * 4,
         increaseRate: DEFAULT_INCREASE_PERCENTAGE
       },
       {
-        _id: '',
         increaseHour: DEFAULT_HOUR_IN_YEAR * 5,
         increaseRate: DEFAULT_INCREASE_PERCENTAGE
       }
@@ -86,7 +80,6 @@ const SalarySettings = () => {
   useEffect(() => {
     if (salarySettingsData && salarySettingsData?.defaultPayrollRate && salarySettingsData?.payrollIncreases) {
       setSalarySettingsStateData({
-        id: salarySettingsData.id,
         defaultPayrollRate: salarySettingsData?.defaultPayrollRate,
         payrollIncreases: salarySettingsData?.payrollIncreases
       })
@@ -100,7 +93,6 @@ const SalarySettings = () => {
       updatedSalarySettingsData?.payrollIncreases
     ) {
       setSalarySettingsStateData({
-        id: updatedSalarySettingsData.id,
         defaultPayrollRate: updatedSalarySettingsData?.defaultPayrollRate,
         payrollIncreases: updatedSalarySettingsData?.payrollIncreases
       })
@@ -114,6 +106,7 @@ const SalarySettings = () => {
   const handlePayrollRateInputChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
     let payrollIncreasesClone = [...salarySettingsStateData.payrollIncreases]
     payrollIncreasesClone[index].increaseRate = +event.target.value
+    console.log(payrollIncreasesClone)
     setSalarySettingsStateData({ ...salarySettingsStateData, payrollIncreases: payrollIncreasesClone })
   }
 

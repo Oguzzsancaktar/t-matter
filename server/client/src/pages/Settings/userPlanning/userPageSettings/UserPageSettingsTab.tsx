@@ -2,6 +2,7 @@ import {
   ActionButtons,
   Column,
   CreateRoleModal,
+  CreateUserModal,
   DataTableHeader,
   JustifyBetweenRow,
   JustifyCenterColumn
@@ -96,9 +97,9 @@ const UserPageSettingsTab = () => {
     e.preventDefault()
     dispatch(
       openModal({
-        id: 'createRoleModal',
-        title: 'Create Role',
-        body: <CreateRoleModal />,
+        id: 'createUserModal',
+        title: 'Create User',
+        body: <CreateUserModal />,
         size: ESize.Small
       })
     )
