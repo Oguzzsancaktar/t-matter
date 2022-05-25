@@ -17,12 +17,13 @@ import { dayOfWeek } from '@/constants/dates'
 import { EDays, ETimes } from '@/models'
 import { CompanyPricingSummaryBody, CompanyPricingSummaryFooter } from '@/pages'
 import moment from 'moment'
-import { secondsToTime } from '@/utils/timeUtils'
+import { clockToSeconds, secondsToTimeString } from '@/utils/timeUtils'
+import { toastWarning } from '@/utils/toastUtil'
 
 interface IWorkDay {
   isChecked: boolean
-  startTime: number
-  endTime: number
+  startTime: string
+  endTime: string
 }
 
 interface IDailyWorkingHours {
@@ -86,17 +87,31 @@ const CompanyPricing = () => {
 
   const onStartTimeChange = (day: EDays, value: string) => {
     const selectedDay = EDays[day]
-    const seconds = moment(value, 'HH:mm:ss: A').diff(moment().startOf('day'), 'minutes')
-    console.log('start', seconds)
+    const seconds = clockToSeconds(value)
+    console.log('start time', secondsToTimeString(seconds))
 
-    setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], startTime: seconds } })
+    setDailyWorkTime({
+      ...dailyWorkTime,
+      [selectedDay]: { ...dailyWorkTime[selectedDay], startTime: secondsToTimeString(seconds) }
+    })
   }
 
   const onEndTimeChange = (day: EDays, value: string) => {
+    clockToSeconds(value)
+
     const selectedDay = EDays[day]
-    const seconds = moment(value, 'HH:mm:ss: A').diff(moment().startOf('day'), 'minutes')
-    console.log('end', seconds)
-    setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], endTime: seconds } })
+    const minutes = moment(value, 'HH:mm:ss: A').diff(moment().startOf('day'), 'minutes')
+
+    if (dailyWorkTime[selectedDay].startTime >= minutes) {
+      setDailyWorkTime({
+        ...dailyWorkTime,
+        [selectedDay]: { ...dailyWorkTime[selectedDay], endTime: dailyWorkTime[selectedDay].startTime + 1 }
+      })
+      return toastWarning("End time can't be equal or less than start time")
+    }
+
+    console.log('end', minutes)
+    setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], endTime: minutes } })
   }
 
   const handleInputChange = (e: any) => {
