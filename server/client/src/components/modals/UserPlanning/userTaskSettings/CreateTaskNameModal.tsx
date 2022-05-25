@@ -7,15 +7,15 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { InnerWrapper } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
+import { IOption } from '@/models'
 
 const CreateTaskNameModal = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const [taskData, setTaskData] = useState({
-    taskCategory: '',
-    taskTitle: '',
-    taskName: ''
+    taskCategory: { label: '', value: '' },
+    taskTitle: { label: '', value: '' }
   })
 
   const handleCancel = () => {
@@ -23,10 +23,11 @@ const CreateTaskNameModal = () => {
   }
 
   const handleConfirm = () => {
-    dispatch(closeModal('createTaskNameModal'))
+    console.log(taskData)
+    // dispatch(closeModal('createTaskNameModal'))
   }
 
-  const taskCategoryOptions = [
+  const taskCategoryOptions: IOption[] = [
     { value: '1', label: 'Task Category 1' },
     { value: '2', label: 'Task Category 2' },
     { value: '3', label: 'Task Category 3' },
@@ -34,7 +35,7 @@ const CreateTaskNameModal = () => {
     { value: '5', label: 'Task Category 5' }
   ]
 
-  const taskTitleOptions = [
+  const taskTitleOptions: IOption[] = [
     { value: '1', label: 'Task Title 1' },
     { value: '2', label: 'Task Title 2' },
     { value: '3', label: 'Task Title 3' },
@@ -42,14 +43,12 @@ const CreateTaskNameModal = () => {
     { value: '5', label: 'Task Title 5' }
   ]
 
-  const handleTaskCategoryChange = (a: any) => {
-    setTaskData({ ...taskData, taskCategory: a.value })
-    setTaskData({ ...taskData, taskName: taskData.taskCategory + ' ' + taskData.taskTitle })
+  const handleTaskCategoryChange = (option: IOption) => {
+    setTaskData({ ...taskData, taskCategory: option })
   }
 
-  const handleTaskTitleChange = (a: any) => {
-    setTaskData({ ...taskData, taskTitle: a.value })
-    setTaskData({ ...taskData, taskName: taskData.taskCategory + ' ' + taskData.taskTitle })
+  const handleTaskTitleChange = (option: IOption) => {
+    setTaskData({ ...taskData, taskTitle: option })
   }
 
   return (
@@ -86,10 +85,7 @@ const CreateTaskNameModal = () => {
             <Row>
               <InputRegular
                 name="taskName"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setTaskData({ ...taskData, taskName: e.target.value })
-                }
-                value={taskData.taskTitle}
+                value={taskData.taskCategory.label + ' / ' + taskData.taskTitle.label}
                 type="text"
                 labelText="Task Name"
                 disabled={true}

@@ -2,6 +2,7 @@ import React from 'react'
 import { Column, Row } from '@components/index'
 import Select from 'react-select'
 import styled from 'styled-components'
+import { IOption } from '@/models'
 
 interface IProps {
   labelText?: string
@@ -11,7 +12,7 @@ interface IProps {
   isClearable?: boolean
   isSearchable?: boolean
   isMulti?: boolean
-  onChange: (event: React.ChangeEvent) => void
+  onChange?: ((event: React.ChangeEvent) => void) | ((option: IOption) => void)
   name: string
   options: any[]
 }

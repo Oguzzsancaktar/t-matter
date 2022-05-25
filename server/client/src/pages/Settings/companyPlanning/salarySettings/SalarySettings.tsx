@@ -33,8 +33,10 @@ const DEFAULT_INCREASE_PERCENTAGE = 20
 
 const SalarySettings = () => {
   const { data: salarySettingsData, isLoading: isSalarySettingsDataLoading } = useGetSalarySettingsQuery()
-  const [patchSalarySettings, { data: updatedSalarySettingsData, isLoading: isUpdateLoading }] =
-    usePatchSalarySettingsMutation()
+  const [
+    patchSalarySettings,
+    { data: updatedSalarySettingsData, isLoading: isUpdateLoading, status: salarySettingUpdateStatus }
+  ] = usePatchSalarySettingsMutation()
 
   const [salarySettingsStateData, setSalarySettingsStateData] = useState<ISalarySettings>({
     defaultPayrollRate: DEFAULT_PAYROLL_RATE,
@@ -104,18 +106,22 @@ const SalarySettings = () => {
   }
 
   const handlePayrollRateInputChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    let payrollIncreasesClone = [...salarySettingsStateData.payrollIncreases]
-    payrollIncreasesClone[index].increaseRate = +event.target.value
-    console.log(payrollIncreasesClone)
-    setSalarySettingsStateData({ ...salarySettingsStateData, payrollIncreases: payrollIncreasesClone })
+    const newPayrollIncreases = salarySettingsStateData.payrollIncreases.map((payrollIncrease, i) => {
+      if (i === index) {
+        return { ...payrollIncrease, increaseRate: +event.target.value }
+      }
+      return payrollIncrease
+    })
+    setSalarySettingsStateData({ ...salarySettingsStateData, payrollIncreases: newPayrollIncreases })
   }
 
   const handleSelectChange = (e: React.ChangeEvent) => {
     console.log(e)
   }
 
-  const handleSave = () => {
-    patchSalarySettings(salarySettingsStateData)
+  const handleSave = async () => {
+    const result = await patchSalarySettings(salarySettingsStateData)
+    console.log(result)
   }
 
   return (
