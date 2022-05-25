@@ -12,7 +12,7 @@ interface IProps {
   labelText?: string | null
   disabled?: boolean
   margin?: string
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Label = styled.label`

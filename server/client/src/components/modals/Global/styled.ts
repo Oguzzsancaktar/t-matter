@@ -13,6 +13,7 @@ export const Modal = styled.div`
   width: 100vw;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
+  overflow-y: auto;
 `
 export const Container = styled.div<IContainerProps>`
   position: relative;
