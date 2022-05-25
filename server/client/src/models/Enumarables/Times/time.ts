@@ -1,6 +1,6 @@
 enum ETimes {
-  startTime = 540,
-  endTime = 1170
+  startTime = '09:00',
+  endTime = '17:00'
 }
 
 export default ETimes
