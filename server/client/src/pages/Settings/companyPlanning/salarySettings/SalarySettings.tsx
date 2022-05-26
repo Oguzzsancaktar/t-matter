@@ -226,7 +226,9 @@ const SalarySettings = () => {
               />
             </JustifyBetweenColumn>
             <Column margin="1rem 0 0 0" height="40px">
-              <Button onClick={handleSave}>Save</Button>
+              <Button disabled={isSalarySettingsDataLoading && isUpdateLoading} onClick={handleSave}>
+                Save
+              </Button>
             </Column>
           </JustifyCenterColumn>
         </>
