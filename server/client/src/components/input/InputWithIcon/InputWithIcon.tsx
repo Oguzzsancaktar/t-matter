@@ -6,15 +6,16 @@ import { Container, IconContainer, Input } from './styled'
 interface Props {
   children?: React.ReactNode
   type?: string
-  placeholder: string
+  placeholder?: string
   name: string
   validationError?: boolean
   value?: string | number
   labelText?: string | null
   isPasswordVisible?: boolean
+  disabled?: boolean
 
   handleVisibility?: (isVisible: boolean) => void
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
 }
@@ -31,6 +32,7 @@ const InputWithIcon: React.FC<Props> = ({
   type = 'text',
   isPasswordVisible,
   labelText,
+  disabled,
   handleVisibility,
   ...rest
 }) => {
@@ -39,8 +41,10 @@ const InputWithIcon: React.FC<Props> = ({
       {labelText && <Label>{labelText}</Label>}
       <Container validationError={validationError}>
         <Row>
-          <IconContainer validationError={validationError}>{children}</IconContainer>
-          <Input validationError={validationError} type={type} {...rest} />
+          <IconContainer disabled={disabled} validationError={validationError}>
+            {children}
+          </IconContainer>
+          <Input validationError={validationError} type={type} disabled={disabled} {...rest} />
           {handleVisibility &&
             (isPasswordVisible ? (
               <Eye style={{ cursor: 'pointer' }} onClick={() => handleVisibility(isPasswordVisible)} />

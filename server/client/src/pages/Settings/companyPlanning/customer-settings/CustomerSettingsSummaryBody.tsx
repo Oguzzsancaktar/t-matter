@@ -29,7 +29,7 @@ const TEMPORARY_TOTAL_EMPLOYER_ITEMS = 10
 const TEMPORARY_TOTAL_EMPLOYER_SALARY = 10000
 const TEMPORARY_TOTAL_EMPLOYER_WORKING_HOURS = 1600
 
-const CompanyPricingSummaryBody: React.FC<IProps> = ({
+const CustomerSettingsSummaryBody: React.FC<IProps> = ({
   dailyAvarageExpenceAmount,
   specifiedCompanyProfitPercentage,
   workDayInWeek,
@@ -100,4 +100,4 @@ const CompanyPricingSummaryBody: React.FC<IProps> = ({
   )
 }
 
-export default CompanyPricingSummaryBody
+export default CustomerSettingsSummaryBody

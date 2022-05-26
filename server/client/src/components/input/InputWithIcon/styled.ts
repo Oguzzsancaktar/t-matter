@@ -9,7 +9,7 @@ export const Container = styled(RowStyled)<IStyledProps>`
   transition: all 0.4s ease-in-out;
   border-radius: 0.3rem;
   font-weight: 300;
-
+  overflow: hidden;
   &:hover {
     border: 1px solid ${colors.text.primary};
   }
@@ -19,10 +19,10 @@ export const Container = styled(RowStyled)<IStyledProps>`
     color: ${colors.text.primary};
   }
 `
-export const Input = styled.input<Pick<IStyledProps, 'validationError'>>`
+export const Input = styled.input<Pick<IStyledProps, 'validationError' | 'disabled'>>`
   color: ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.dark)};
   width: 100%;
-  height: 30px;
+  height: 35px;
   background-color: transparent;
   outline: none;
   padding: 0.2rem 0.4rem;
@@ -34,15 +34,21 @@ export const Input = styled.input<Pick<IStyledProps, 'validationError'>>`
     color: ${colors.text.primary};
   }
 
+  &:disabled {
+    background-color: ${colors.gray.disabled};
+  }
+
   &::placeholder {
     color: ${colors.text.primary};
   }
 `
-export const IconContainer = styled.div<Pick<IStyledProps, 'validationError'>>`
+export const IconContainer = styled.div<Pick<IStyledProps, 'validationError' | 'disabled'>>`
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 35px;
   height: 35px;
   border-right: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.dark)};
+  background-color: ${({ disabled }) => disabled && colors.gray.disabled};
 `

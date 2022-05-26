@@ -25,7 +25,7 @@ const TEMPORARY_TOTAL_EMPLOYER_ITEMS = 10
 const TEMPORARY_TOTAL_EMPLOYER_SALARY = 10000
 const TEMPORARY_TOTAL_EMPLOYER_WORKING_HOURS = 1600
 
-const CompanyPricingSummaryFooter: React.FC<IProps> = ({
+const CustomerSettingsSummaryFooter: React.FC<IProps> = ({
   dailyAvarageExpenceAmount,
   specifiedCompanyProfitPercentage,
   workDayInWeek,
@@ -45,4 +45,4 @@ const CompanyPricingSummaryFooter: React.FC<IProps> = ({
   )
 }
 
-export default CompanyPricingSummaryFooter
+export default CustomerSettingsSummaryFooter

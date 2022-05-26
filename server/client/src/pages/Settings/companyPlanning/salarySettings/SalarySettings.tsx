@@ -130,7 +130,7 @@ const SalarySettings = () => {
         <div>Loading...</div>
       ) : (
         <>
-          <JustifyBetweenColumn height="100%">
+          <JustifyBetweenColumn height="100%" margin="0 2rem 0 0">
             <Column margin="0 0 2rem 0">
               <Row margin="0 0 2rem 0">
                 <H1>Default</H1>
@@ -175,7 +175,7 @@ const SalarySettings = () => {
               )
             })}
           </JustifyBetweenColumn>
-
+          {/* 
           <JustifyBetweenColumn margin="0px 3rem" height="100%">
             <Column>
               <Row margin="0 0 2rem 0">
@@ -209,7 +209,7 @@ const SalarySettings = () => {
                 onChange={handleSelectChange}
               />
             </JustifyBetweenRow>
-          </JustifyBetweenColumn>
+          </JustifyBetweenColumn> */}
 
           <JustifyCenterColumn height="100%">
             <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
