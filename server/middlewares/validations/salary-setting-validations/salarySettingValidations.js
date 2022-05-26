@@ -29,6 +29,7 @@ const createSalarySettingValidation = async (req, res, next) => {
 const updateSalarySettingValidation = async (req, res, next) => {
   const { body } = req
   const schema = joi.object({
+    _id: joi.string().required(),
     defaultPayrollRate: joi.number().required(),
     payrollIncreases: joi.array().items(
       joi.object({
