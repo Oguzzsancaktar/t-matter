@@ -19,8 +19,7 @@ const createSalarySetting = async (req, res) => {
 const updateSalarySetting = async (req, res) => {
   const { body } = req
   try {
-    const [salarySetting] = await dataAccess.salarySettingDataAccess.findSalarySetting()
-    const newSalarySetting = await dataAccess.salarySettingDataAccess.updateSalarySetting(salarySetting._id, body)
+    const newSalarySetting = await dataAccess.salarySettingDataAccess.updateSalarySetting(body._id, body)
     res.status(200).json(newSalarySetting)
   } catch (e) {
     console.log(e)
