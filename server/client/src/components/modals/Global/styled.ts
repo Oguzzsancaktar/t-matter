@@ -16,10 +16,11 @@ export const Modal = styled.div`
   overflow-y: auto;
 `
 export const Container = styled.div<IContainerProps>`
+  display: grid;
   position: relative;
   width: calc(100% - 2rem);
-  height: 100%;
-  max-height: ${({ size }) => (size === 'xl' ? '800' : size === 'lg' ? '700' : size === 'md' ? '900' : '500')}px;
+  height: auto;
+  /* min-height: ${({ size }) => (size === 'xl' ? '800' : size === 'lg' ? '700' : size === 'md' ? '900' : '500')}px; */
   background-color: white;
   border-radius: 0.3rem;
   max-width: ${({ size }) =>

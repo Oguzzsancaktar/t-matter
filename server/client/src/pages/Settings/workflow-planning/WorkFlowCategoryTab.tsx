@@ -1,4 +1,4 @@
-import { ActionButtons, CreateWorkflowCategoryModal, DataTableHeader, InnerWrapper } from '@/components'
+import { ActionButtons, Column, CreateWorkflowCategoryModal, DataTableHeader, InnerWrapper } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -74,10 +74,10 @@ const WorkFlowCategory = () => {
   }
 
   return (
-    <InnerWrapper>
+    <Column margin="0" width="100%">
       <DataTableHeader handleAddNew={openCreateRoleModal} />
       <DataTable fixedHeader columns={columns} data={data} />
-    </InnerWrapper>
+    </Column>
   )
 }
 

@@ -1,18 +1,45 @@
 import React, { useState } from 'react'
 import { ConfirmCancelButtons } from '@/components/button'
-import { InputRegular } from '@/components/input'
-import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from '@/components/layout'
+import { InputRegular, InputWithIcon } from '@/components/input'
+import {
+  JustifyBetweenColumn,
+  JustifyBetweenRow,
+  JustifyCenterColumn,
+  JustifyCenterRow,
+  Row
+} from '@/components/layout'
 import { H1, Label } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { InnerWrapper } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
+import { IUserCreateDTO } from '@/models'
+import { User } from 'react-feather'
 
 const CreateUserModal = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [roleName, setRoleName] = useState('')
+  const [createUserData, setCreateUserData] = useState<Omit<IUserCreateDTO, '_id'>>({
+    firstname: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    birthday: '',
+    birthplace: '',
+    country: '',
+    state: '',
+    zipcode: '',
+    address: '',
+    role: '',
+    gender: '',
+    status: '',
+    password: ''
+  })
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateUserData({ ...createUserData, [event.target.name]: event.target.value })
+  }
 
   const handleCancel = () => {
     dispatch(closeModal('createUserModal'))
@@ -33,16 +60,18 @@ const CreateUserModal = () => {
         </ModalHeader>
 
         <ModalBody>
-          <JustifyCenterColumn height="100%" padding="2rem 0">
-            <InputRegular
-              name="role"
-              placeholder="Enter role..."
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRoleName(e.target.value)}
-              value={roleName}
-              type="text"
-              labelText="Role Name"
-            />
-          </JustifyCenterColumn>
+          <JustifyBetweenColumn height="100%" padding="2rem 0">
+            <JustifyBetweenRow width="100%">
+              <InputWithIcon
+                children={<User size={16} />}
+                name="firstname"
+                placeholder="Enter firstname..."
+                onChange={handleInputChange}
+                type="text"
+                labelText="First Name"
+              />
+            </JustifyBetweenRow>
+          </JustifyBetweenColumn>
         </ModalBody>
 
         <ModalFooter>

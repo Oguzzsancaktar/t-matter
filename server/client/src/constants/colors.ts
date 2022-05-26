@@ -52,17 +52,17 @@ const colors = Object.freeze({
   },
   gray: {
     primary: '#435971',
-    light: '#43597106',
-    middle: '#4359710d',
-    dark: '#435971cc',
+    light: '#435371',
+    middle: '#475971',
+    dark: '#835971',
     disabled: '#dddddd'
   },
 
   black: {
     primary: '#233446',
     dark: '#697a8d',
-    middle: '#435971',
-    light: '#4359711a'
+    middle: '#434971',
+    light: '#436571'
   },
   text: {
     primary: '#566a7f'
@@ -70,7 +70,7 @@ const colors = Object.freeze({
   background: {
     gray: {
       light: '#f5f5f9',
-      dark: '#435971cc'
+      dark: '#433471'
     }
   }
 })

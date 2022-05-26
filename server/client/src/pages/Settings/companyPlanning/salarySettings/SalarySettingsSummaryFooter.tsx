@@ -27,7 +27,7 @@ const SalarySettingsSummaryFooter: React.FC<IProps> = ({ data }) => {
   const calculatedYear4 = +calculatedYear3 + +calculatedYear3 * (+data.payrollIncreases[4].increaseRate / 100)
   return (
     <JustifyBetweenRow>
-      <Text>5.th year increased amount</Text>
+      <Text>6.th year increased amount</Text>
       <Value>${calculatedYear4.toFixed(2)}</Value>
     </JustifyBetweenRow>
   )

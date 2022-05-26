@@ -1,5 +1,6 @@
 import {
   ActionButtons,
+  Column,
   CreateRoleModal,
   CreateTaskTitleModal,
   CreateWorkflowChecklistModal,
@@ -101,10 +102,10 @@ const WorkFlowChecklist = () => {
   }
 
   return (
-    <InnerWrapper>
+    <Column>
       <DataTableHeader handleAddNew={openCreateRoleModal} />
       <DataTable fixedHeader columns={columns} data={data} />
-    </InnerWrapper>
+    </Column>
   )
 }
 

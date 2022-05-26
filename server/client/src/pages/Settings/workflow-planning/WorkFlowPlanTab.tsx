@@ -1,4 +1,11 @@
-import { ActionButtons, CreateRoleModal, CreateTaskNameModal, DataTableHeader, InnerWrapper } from '@/components'
+import {
+  ActionButtons,
+  Column,
+  CreateRoleModal,
+  CreateTaskNameModal,
+  DataTableHeader,
+  InnerWrapper
+} from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -13,26 +20,26 @@ const WorkFlowPlan = () => {
 
   const columns = [
     {
-      name: 'Task',
-      selector: row => row.task,
+      name: 'Workkflow Name',
+      selector: row => row.workkflowName,
       sortable: true
     },
     {
-      name: 'Category',
-      selector: row => row.category,
+      name: 'Total Duration',
+      selector: row => row.totalDuration,
+      sortable: true
+    },
+    {
+      name: 'Total Price',
+      selector: row => row.totalPrice,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
-    },
-    {
-      name: 'Title',
-      selector: row => row.title,
-      sortable: true
+      cell: data => <div>${data.totalPrice} </div>
     },
     {
       name: 'Status',
       selector: row => row.status,
       sortable: true,
-      cell: data => <div>{data.status} </div>
+      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
     },
     {
       name: 'Actions',
@@ -61,16 +68,16 @@ const WorkFlowPlan = () => {
   const data = [
     {
       id: 1,
-      task: 'Task 1',
-      category: 'User Finance',
-      title: 'Salary Increased',
+      workkflowName: 'Workflow Name 1',
+      totalDuration: '01:30:00',
+      totalPrice: '150',
       status: 'Active'
     },
     {
       id: 2,
-      task: 'Task 2',
-      category: 'User Absent',
-      title: 'Absent Days',
+      workkflowName: 'Workflow Name 2',
+      totalDuration: '01:00:00',
+      totalPrice: '100',
       status: 'Inactive'
     }
   ]
@@ -88,10 +95,10 @@ const WorkFlowPlan = () => {
   }
 
   return (
-    <InnerWrapper>
+    <Column>
       <DataTableHeader handleAddNew={openCreateRoleModal} />
       <DataTable fixedHeader columns={columns} data={data} />
-    </InnerWrapper>
+    </Column>
   )
 }
 

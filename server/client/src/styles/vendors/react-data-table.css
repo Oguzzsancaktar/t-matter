@@ -34,7 +34,7 @@
 }
  .rdt_TableBody .rdt_TableRow .rdt_TableCell {
   height: 53px;
-  padding: 0.72rem 1.5rem;
+  padding: 0.5rem 1rem;
 }
  .rdt_TableBody .rdt_TableRow .rdt_TableCell .column-action svg {
   stroke: #6e6b7b;

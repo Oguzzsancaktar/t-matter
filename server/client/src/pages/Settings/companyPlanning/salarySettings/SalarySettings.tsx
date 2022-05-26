@@ -5,6 +5,7 @@ import {
   H1,
   InputRegular,
   InputWithIcon,
+  ItemContainer,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
@@ -217,19 +218,19 @@ const SalarySettings = () => {
 
           <JustifyCenterColumn height="100%">
             <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
-              <Row margin="0 0 2rem 0">
+              <ItemContainer margin="0 0 2rem 0">
                 <H1>Summary</H1>
-              </Row>
+              </ItemContainer>
               <SummaryCard
                 body={<SalarySettingsSummaryBody data={salarySettingsStateData} />}
                 footer={<SalarySettingsSummaryFooter data={salarySettingsStateData} />}
               />
             </JustifyBetweenColumn>
-            <Column margin="1rem 0 0 0" height="40px">
+            <ItemContainer margin="1rem 0 0 0" height="40px">
               <Button disabled={isSalarySettingsDataLoading && isUpdateLoading} onClick={handleSave}>
                 Save
               </Button>
-            </Column>
+            </ItemContainer>
           </JustifyCenterColumn>
         </>
       )}

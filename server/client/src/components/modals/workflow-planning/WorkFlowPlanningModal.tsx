@@ -14,7 +14,7 @@ const WorkFlowPlanningModal = () => {
         <JustifyBetweenColumn>
           <JustifyCenterRow>
             <Tab
-              margin="0 0 1rem 0rem"
+              margin="0 1rem 0 0rem"
               index={1}
               name="Workflow Category"
               isActive={activeTab === 'workflow-category'}
@@ -22,7 +22,7 @@ const WorkFlowPlanningModal = () => {
             />
 
             <Tab
-              margin="0 0 1rem 0rem"
+              margin="0 1rem 0 0rem"
               index={2}
               name="Workflow Checklist"
               isActive={activeTab === 'workflow-checklist'}
@@ -30,7 +30,7 @@ const WorkFlowPlanningModal = () => {
             />
 
             <Tab
-              margin="0 0 1rem 0rem"
+              margin="0 1rem 0 0rem"
               index={3}
               name="Workflow Plan"
               isActive={activeTab === 'workflow-plan'}

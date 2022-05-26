@@ -1,17 +1,17 @@
 export default interface IUser {
   _id: string
-  username: string
+  firstname: string
+  lastname: string
   email: string
+  phone: string
+  birthday: string
+  birthplace: string
+  country: string
+  state: string
+  zipcode: string
+  address: string
+  role: string
+  gender: string
+  status: string
   password: string
-  address?: string
-  firstname?: string
-  lastname?: string
-  phone?: string
-  birthday?: string
-  birthplace?: string
-  description?: string
-  profile_img?: string
-  cloudinary_id?: string
-  userImages?: string[]
-  permissionFlags: number
 }
