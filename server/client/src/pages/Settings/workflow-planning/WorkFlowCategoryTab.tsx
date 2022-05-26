@@ -1,12 +1,4 @@
-import {
-  ActionButtons,
-  CircleColor,
-  CreateRefferedByModal,
-  CreateRoleModal,
-  CreateTaskCategoryModal,
-  DataTableHeader,
-  InnerWrapper
-} from '@/components'
+import { ActionButtons, CreateWorkflowCategoryModal, DataTableHeader, InnerWrapper } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -15,22 +7,22 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
-const RefferedByTab = () => {
+const WorkFlowCategory = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const columns = [
     {
-      name: 'Refffered By Name',
-      selector: row => row.name,
+      name: 'Category Name',
+      selector: row => row.categoryName,
       sortable: true,
-      cell: data => <div>{data.name} </div>
+      cell: data => <div>{data.categoryName} </div>
     },
     {
-      name: 'Color',
-      selector: row => row.color,
+      name: 'Status',
+      selector: row => row.status,
       sortable: true,
-      cell: data => <CircleColor cursor="normal" color={data.color} />
+      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
     },
     {
       name: 'Actions',
@@ -59,13 +51,13 @@ const RefferedByTab = () => {
   const data = [
     {
       id: 1,
-      name: 'Youtube',
-      color: '#007bff'
+      categoryName: 'Category 1',
+      status: 'Active'
     },
     {
       id: 2,
-      name: 'Facebook',
-      color: '#6610f2'
+      categoryName: 'Category 2',
+      status: 'Inactive'
     }
   ]
 
@@ -73,9 +65,9 @@ const RefferedByTab = () => {
     e.preventDefault()
     dispatch(
       openModal({
-        id: 'createRefferedByModal',
-        title: 'Create Reffered By',
-        body: <CreateRefferedByModal />,
+        id: 'createWorkFlowCategoryModal',
+        title: 'Create Workflow Category',
+        body: <CreateWorkflowCategoryModal />,
         size: ESize.Small
       })
     )
@@ -89,4 +81,4 @@ const RefferedByTab = () => {
   )
 }
 
-export default RefferedByTab
+export default WorkFlowCategory

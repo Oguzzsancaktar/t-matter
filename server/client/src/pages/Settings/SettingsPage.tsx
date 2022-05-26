@@ -2,6 +2,7 @@ import React from 'react'
 import { CompanyPlanningModal, InnerWrapper, PageWrapper, SettingsCard, UserPlanningModal } from '@components/index'
 import { ESize } from '@models/index'
 import styled from 'styled-components'
+import WorkFlowPlanningModal from '@/components/modals/workflow-planning/WorkFlowPlanningModal'
 
 const WrapLayout = styled.div`
   width: 100%;
@@ -29,6 +30,15 @@ const SettingsPage = () => {
           />
           <SettingsCard
             modal={{ id: 'userPlanningModal', title: 'User Planning', size: ESize.XLarge, body: <UserPlanningModal /> }}
+          />
+
+          <SettingsCard
+            modal={{
+              id: 'workflowPlanningModal',
+              title: 'Workflow Planning',
+              size: ESize.XLarge,
+              body: <WorkFlowPlanningModal />
+            }}
           />
         </WrapLayout>
       </InnerWrapper>

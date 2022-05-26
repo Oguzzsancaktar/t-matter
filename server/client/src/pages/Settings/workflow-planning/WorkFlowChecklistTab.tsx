@@ -1,9 +1,8 @@
 import {
   ActionButtons,
-  CircleColor,
-  CreateRefferedByModal,
   CreateRoleModal,
-  CreateTaskCategoryModal,
+  CreateTaskTitleModal,
+  CreateWorkflowChecklistModal,
   DataTableHeader,
   InnerWrapper
 } from '@/components'
@@ -15,22 +14,36 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
-const RefferedByTab = () => {
+const WorkFlowChecklist = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const columns = [
     {
-      name: 'Refffered By Name',
-      selector: row => row.name,
-      sortable: true,
-      cell: data => <div>{data.name} </div>
+      name: 'Checklist Name',
+      selector: row => row.checklistName,
+      sortable: true
     },
     {
-      name: 'Color',
-      selector: row => row.color,
+      name: 'Checklist Point',
+      selector: row => row.point,
+      sortable: true
+    },
+    {
+      name: 'Checklist Time',
+      selector: row => row.time,
+      sortable: true
+    },
+    {
+      name: 'Checklist Duration',
+      selector: row => row.duration,
+      sortable: true
+    },
+    {
+      name: 'Status',
+      selector: row => row.status,
       sortable: true,
-      cell: data => <CircleColor cursor="normal" color={data.color} />
+      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
     },
     {
       name: 'Actions',
@@ -59,13 +72,19 @@ const RefferedByTab = () => {
   const data = [
     {
       id: 1,
-      name: 'Youtube',
-      color: '#007bff'
+      checklistName: 'Checklist 1',
+      point: 'Point 1',
+      time: 'Time 1',
+      duration: 'Duration 1',
+      status: 'Active'
     },
     {
       id: 2,
-      name: 'Facebook',
-      color: '#6610f2'
+      checklistName: 'Checklist 2',
+      point: 'Point 2',
+      time: 'Time 2',
+      duration: 'Duration 2',
+      status: 'Inactive'
     }
   ]
 
@@ -73,9 +92,9 @@ const RefferedByTab = () => {
     e.preventDefault()
     dispatch(
       openModal({
-        id: 'createRefferedByModal',
-        title: 'Create Reffered By',
-        body: <CreateRefferedByModal />,
+        id: 'createWorkflowChecklistModal',
+        title: 'Create Workflow Checklist',
+        body: <CreateWorkflowChecklistModal />,
         size: ESize.Small
       })
     )
@@ -89,4 +108,4 @@ const RefferedByTab = () => {
   )
 }
 
-export default RefferedByTab
+export default WorkFlowChecklist
