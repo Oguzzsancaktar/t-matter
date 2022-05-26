@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 interface IProps {
   color?: string
+  fontSize?: string
   children?: React.ReactNode
   cursorType?: string
   onClick?: (a?: any) => void
@@ -11,6 +12,7 @@ interface IProps {
 const LabelStyled = styled.label<IProps>`
   cursor: ${({ cursorType }) => cursorType && cursorType};
   color: ${({ color }) => (color ? color : colors.orange.primary)};
+  font-size: ${({ fontSize }) => fontSize && fontSize};
   width: 100%;
   text-align: left;
 `

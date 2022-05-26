@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import {
   Button,
   Checkbox,
+  ClockPicker12,
+  ClockPicker24,
   Column,
   H1,
   InputWithIcon,
@@ -9,139 +11,171 @@ import {
   JustifyBetweenRow,
   Label,
   Row,
+  SelectInput,
   SummaryCard
 } from '@components/index'
-import { ClockPicker } from '@components/index'
 import { Clock, DollarSign, Percent } from 'react-feather'
 import { dayOfWeek } from '@/constants/dates'
-import { EDays, ETimes } from '@/models'
+import { EDays, ETimes, IDailyWorkingHours, IOption } from '@/models'
 import { CompanyPricingSummaryBody, CompanyPricingSummaryFooter } from '@/pages'
-import moment from 'moment'
-import { clockToSeconds, secondsToTimeString } from '@/utils/timeUtils'
+import { clockToSeconds, secondsToTimeString, secondsToTimeWithDisplay, timeToSeconds } from '@/utils/timeUtils'
 import { toastWarning } from '@/utils/toastUtil'
-
-interface IWorkDay {
-  isChecked: boolean
-  startTime: string
-  endTime: string
-}
-
-interface IDailyWorkingHours {
-  Monday: IWorkDay
-  Tuesday: IWorkDay
-  Wednesday: IWorkDay
-  Thursday: IWorkDay
-  Friday: IWorkDay
-  Saturday: IWorkDay
-  Sunday: IWorkDay
-}
+import { payrollDateOptions, payrollDayOptions, payrollPeriodOptions } from '@/constants/payrollOptions'
+import colors from '@/constants/colors'
 
 const CompanyPricing = () => {
-  const [dailyWorkTime, setDailyWorkTime] = useState<IDailyWorkingHours>({
+  const [totalMinutes, setTotalMinutes] = useState(0)
+  const [payrollPeriod, setPayrollPeriod] = useState<string>('monthly')
+  const [weeklyOffTrackingTime, setWeeklyOffTrackingTime] = useState<number>(0)
+
+  const [workDayInWeek, setWorkDayInWeek] = useState<number>(0)
+
+  const [dailyAvarageExpenceAmount, setDailyAvarageExpenceAmount] = useState<number | string>('')
+  const [specifiedCompanyProfitPercentage, setSpecifiedCompanyProfitPercentage] = useState<number | string>('')
+
+  const [dailyWorkTimeData, setDailyWorkTimeData] = useState<IDailyWorkingHours>({
     Monday: {
       isChecked: true,
       startTime: ETimes.startTime,
-      endTime: ETimes.endTime
+      endTime: ETimes.endTime,
+      offTrackingTime: '00:00'
     },
     Tuesday: {
       isChecked: true,
       startTime: ETimes.startTime,
-      endTime: ETimes.endTime
+      endTime: ETimes.endTime,
+      offTrackingTime: '00:00'
     },
     Wednesday: {
       isChecked: true,
       startTime: ETimes.startTime,
-      endTime: ETimes.endTime
+      endTime: ETimes.endTime,
+      offTrackingTime: '00:00'
     },
     Thursday: {
       isChecked: true,
       startTime: ETimes.startTime,
-      endTime: ETimes.endTime
+      endTime: ETimes.endTime,
+      offTrackingTime: '00:00'
     },
     Friday: {
       isChecked: true,
       startTime: ETimes.startTime,
-      endTime: ETimes.endTime
+      endTime: ETimes.endTime,
+      offTrackingTime: '00:00'
     },
     Saturday: {
       isChecked: false,
       startTime: ETimes.startTime,
-      endTime: ETimes.endTime
+      endTime: ETimes.endTime,
+      offTrackingTime: '00:00'
     },
     Sunday: {
       isChecked: false,
       startTime: ETimes.startTime,
-      endTime: ETimes.endTime
+      endTime: ETimes.endTime,
+      offTrackingTime: '00:00'
     }
   })
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e)
-  }
-
   const handleCheckboxClick = (day: EDays) => {
     const selectedDay = EDays[day]
-    const checkStatus = dailyWorkTime[selectedDay].isChecked
-    setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], isChecked: !checkStatus } })
+    const checkStatus = dailyWorkTimeData[selectedDay].isChecked
+    setDailyWorkTimeData({
+      ...dailyWorkTimeData,
+      [selectedDay]: { ...dailyWorkTimeData[selectedDay], isChecked: !checkStatus }
+    })
   }
 
   const onStartTimeChange = (day: EDays, value: string) => {
     const selectedDay = EDays[day]
     const seconds = clockToSeconds(value)
-    console.log('start time', secondsToTimeString(seconds))
 
-    setDailyWorkTime({
-      ...dailyWorkTime,
-      [selectedDay]: { ...dailyWorkTime[selectedDay], startTime: secondsToTimeString(seconds) }
+    setDailyWorkTimeData({
+      ...dailyWorkTimeData,
+      [selectedDay]: { ...dailyWorkTimeData[selectedDay], startTime: secondsToTimeString(seconds) }
     })
   }
 
-  const onEndTimeChange = (day: EDays, value: string) => {
-    clockToSeconds(value)
-
+  const onEndTimeChange = async (day: EDays, value: string) => {
     const selectedDay = EDays[day]
-    const minutes = moment(value, 'HH:mm:ss: A').diff(moment().startOf('day'), 'minutes')
+    const seconds = clockToSeconds(value)
 
-    if (dailyWorkTime[selectedDay].startTime >= minutes) {
-      setDailyWorkTime({
-        ...dailyWorkTime,
-        [selectedDay]: { ...dailyWorkTime[selectedDay], endTime: dailyWorkTime[selectedDay].startTime + 1 }
+    if (clockToSeconds(dailyWorkTimeData[selectedDay].startTime) >= seconds) {
+      await setDailyWorkTimeData({
+        ...dailyWorkTimeData,
+        [selectedDay]: {
+          ...dailyWorkTimeData[selectedDay],
+          endTime: secondsToTimeString(clockToSeconds(dailyWorkTimeData[selectedDay].startTime) + 60)
+        }
       })
-      return toastWarning("End time can't be equal or less than start time")
+      return toastWarning("End time can't be equal or less than start time !")
     }
-
-    console.log('end', minutes)
-    setDailyWorkTime({ ...dailyWorkTime, [selectedDay]: { ...dailyWorkTime[selectedDay], endTime: minutes } })
+    setDailyWorkTimeData({
+      ...dailyWorkTimeData,
+      [selectedDay]: { ...dailyWorkTimeData[selectedDay], endTime: secondsToTimeString(seconds) }
+    })
   }
 
-  const handleInputChange = (e: any) => {
-    console.log(e)
+  const onOffTrackingTimeChange = (day: EDays, value: string) => {
+    const selectedDay = EDays[day]
+    const seconds = clockToSeconds(value)
+
+    setDailyWorkTimeData({
+      ...dailyWorkTimeData,
+      [selectedDay]: { ...dailyWorkTimeData[selectedDay], offTrackingTime: secondsToTimeString(seconds) }
+    })
+  }
+
+  const handleDailyAvarageExpenceAmountInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDailyAvarageExpenceAmount(+event.target.value)
+  }
+
+  const handleSpecifiedCompanyProfitInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSpecifiedCompanyProfitPercentage(+event.target.value)
+  }
+
+  const handlePayrollPeriodChange = (option: IOption) => {
+    setPayrollPeriod(option.value)
   }
 
   const handleSave = (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log(dailyWorkTime)
+    console.log('dailyWorkTimeData=>', dailyWorkTimeData)
+    console.log('dailyAvarageExpenceAmount=>', dailyAvarageExpenceAmount)
+    console.log('specifiedCompanyProfitPercentage=>', specifiedCompanyProfitPercentage)
   }
 
   useEffect(() => {
     let totalMinutes = 0
+    let totalWorkDayInWeek = 0
+    let totalOffTrackingTime = 0
+
     dayOfWeek.forEach(day => {
-      const startTime = dailyWorkTime[EDays[day]].startTime
-      const endTime = dailyWorkTime[EDays[day]].endTime
-      const isChecked = dailyWorkTime[EDays[day]].isChecked
+      const startTime = clockToSeconds(dailyWorkTimeData[EDays[day]].startTime)
+      const endTime = clockToSeconds(dailyWorkTimeData[EDays[day]].endTime)
+      const offTrackingTime = timeToSeconds(dailyWorkTimeData[EDays[day]].offTrackingTime.split(' ')[0])
+
+      const isChecked = dailyWorkTimeData[EDays[day]].isChecked
 
       if (isChecked) {
+        totalWorkDayInWeek++
         totalMinutes += endTime - startTime
-        console.log(111, endTime - startTime)
+        totalOffTrackingTime += offTrackingTime
+
+        if (endTime - startTime < offTrackingTime) {
+          return toastWarning("Off trackin time can't be greater than working time !")
+        }
       }
     })
-
-    console.log(totalMinutes)
-  }, [dailyWorkTime])
+    setWeeklyOffTrackingTime(totalOffTrackingTime)
+    setWorkDayInWeek(totalWorkDayInWeek)
+    setTotalMinutes(totalMinutes)
+  }, [dailyWorkTimeData])
 
   return (
     <JustifyBetweenRow height="100%" width="auto">
-      <Column height="100%">
+      <Column height="100%" width="30%">
         <Row margin="0 0 2rem 0">
           <H1>Default</H1>
         </Row>
@@ -151,16 +185,19 @@ const CompanyPricing = () => {
             placeholder="Daily Avarage Expence Amount"
             name="dailyAvarageExpenceAmount"
             labelText="Daily Avarage Expence Amount"
-            onChange={handleInputChange}
+            onChange={handleDailyAvarageExpenceAmountInputChange}
+            value={dailyAvarageExpenceAmount}
+            type="number"
           >
             <DollarSign size="16px" />
           </InputWithIcon>
           <JustifyBetweenRow>
             <InputWithIcon
-              placeholder="Daily Company Work Hours"
+              placeholder="Select Daily Company Work Hours"
               name="dailyCompanyWorkHours"
               labelText="Daily Company Work Hours"
-              onChange={handleInputChange}
+              value={secondsToTimeWithDisplay(totalMinutes / workDayInWeek)}
+              disabled={true}
             >
               <Clock size="16px" />
             </InputWithIcon>
@@ -171,7 +208,9 @@ const CompanyPricing = () => {
               placeholder="Specified Company Profit"
               name="specifiedCompanyProfit"
               labelText="Specified Company Profit"
-              onChange={handleInputChange}
+              onChange={handleSpecifiedCompanyProfitInputChange}
+              value={specifiedCompanyProfitPercentage}
+              type="number"
             >
               <Percent size="16px" />
             </InputWithIcon>
@@ -179,34 +218,115 @@ const CompanyPricing = () => {
         </JustifyBetweenColumn>
       </Column>
 
-      <Column height="100%" margin="0px 3rem">
+      <Column height="100%" margin="0px 2rem" width="40%">
         <Row margin="0 0 2rem 0">
           <H1>Default</H1>
         </Row>
         <JustifyBetweenColumn height="100%">
           {dayOfWeek.map((day, index) => (
             <Row key={index}>
-              <Row onClick={() => handleCheckboxClick(day)}>
-                <Checkbox isChecked={dailyWorkTime[EDays[day]].isChecked} onChange={handleCheckboxChange} />
-                <Label> {EDays[day]}</Label>
-              </Row>
-              <Row margin="0 0.25rem 0 0">
-                <ClockPicker onChange={value => onStartTimeChange(day, value)} name={day + 'Start'} />
-              </Row>
-              <Row margin="0 0 0 0.25rem">
-                <ClockPicker onChange={value => onEndTimeChange(day, value)} name={day + 'End'} />
-              </Row>
+              <Column height="100%">
+                {index === 0 && (
+                  <Label fontSize="12px" color={colors.black.middle}>
+                    Day
+                  </Label>
+                )}
+                <Row height="100%" onClick={() => handleCheckboxClick(day)}>
+                  <Checkbox
+                    isChecked={dailyWorkTimeData[EDays[day]].isChecked}
+                    onChange={(e: any) => console.log('checkbox changed', e)}
+                  />
+                  <Label>{EDays[day]}</Label>
+                </Row>
+              </Column>
+
+              <Column margin="0 0.25rem 0 0">
+                {index === 0 && (
+                  <Label fontSize="12px" color={colors.black.middle}>
+                    Start Time
+                  </Label>
+                )}
+                <ClockPicker12
+                  disabled={!dailyWorkTimeData[EDays[day]].isChecked}
+                  value={dailyWorkTimeData[EDays[day]].startTime}
+                  onChange={value => onStartTimeChange(day, value)}
+                  name={day + 'Start'}
+                />
+              </Column>
+              <Column margin="0 0.25rem">
+                {index === 0 && (
+                  <Label fontSize="12px" color={colors.black.middle}>
+                    End Time
+                  </Label>
+                )}
+                <ClockPicker12
+                  disabled={!dailyWorkTimeData[EDays[day]].isChecked}
+                  value={dailyWorkTimeData[EDays[day]].endTime}
+                  onChange={value => onEndTimeChange(day, value)}
+                  name={day + 'End'}
+                />
+              </Column>
+
+              <Column height="100%" margin="0 0 0 0.25rem">
+                {index === 0 && (
+                  <Label fontSize="12px" color={colors.black.middle}>
+                    Off tracking time
+                  </Label>
+                )}
+                <ClockPicker24
+                  disabled={!dailyWorkTimeData[EDays[day]].isChecked}
+                  value={dailyWorkTimeData[EDays[day]].offTrackingTime}
+                  onChange={value => onOffTrackingTimeChange(day, value)}
+                  name={day + 'offTrackingTime'}
+                />
+              </Column>
             </Row>
           ))}
         </JustifyBetweenColumn>
+
+        <JustifyBetweenRow margin="2rem 0 0 0">
+          <Row margin="0 0.25rem 0 0">
+            <SelectInput
+              labelText="Payroll Type"
+              onChange={handlePayrollPeriodChange}
+              name={'payrollPeriod'}
+              options={payrollPeriodOptions}
+            />
+          </Row>
+          <Row margin="0 0 0 0.25rem">
+            {payrollPeriod === 'weekly' ? (
+              <SelectInput labelText="Payroll Day" name={'payrollDay'} options={payrollDayOptions} />
+            ) : (
+              <SelectInput labelText="Payroll Date" name={'payrollDate'} options={payrollDateOptions} />
+            )}
+          </Row>
+        </JustifyBetweenRow>
       </Column>
 
-      <Column height="100%">
+      <Column height="100%" width="30%">
         <Row margin="0 0 2rem 0">
           <H1>Summary</H1>
         </Row>
         <JustifyBetweenColumn height="calc(100% - 1rem - 40px - 2rem - 18px)">
-          <SummaryCard body={<CompanyPricingSummaryBody />} footer={<CompanyPricingSummaryFooter />} />
+          <SummaryCard
+            body={
+              <CompanyPricingSummaryBody
+                dailyAvarageExpenceAmount={dailyAvarageExpenceAmount}
+                specifiedCompanyProfitPercentage={specifiedCompanyProfitPercentage}
+                workDayInWeek={workDayInWeek}
+                weeklyWorkTime={totalMinutes}
+                weeklyOffTrackingTime={weeklyOffTrackingTime}
+              />
+            }
+            footer={
+              <CompanyPricingSummaryFooter
+                dailyAvarageExpenceAmount={dailyAvarageExpenceAmount}
+                specifiedCompanyProfitPercentage={specifiedCompanyProfitPercentage}
+                workDayInWeek={workDayInWeek}
+                weeklyWorkTime={totalMinutes}
+              />
+            }
+          />
         </JustifyBetweenColumn>
         <Column margin="1rem 0 0 0" height="40px">
           <Button onClick={handleSave}>Save</Button>

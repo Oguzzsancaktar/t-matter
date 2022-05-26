@@ -3,7 +3,7 @@ import { JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
 import { InnerWrapper } from '@components/wrapper'
 
 import { Tab } from '@components/index'
-import { CompanyPricing, SalarySettings } from '@/pages'
+import { CompanyPricing, CustomerSettings, SalarySettings } from '@/pages'
 import { ModalBody, ModalHeader } from '../types'
 
 const CompanyPlanningModal = () => {
@@ -23,16 +23,32 @@ const CompanyPlanningModal = () => {
             />
 
             <Tab
+              margin="0 1rem 0 0rem"
               index={2}
               name="Company Pricing"
               isActive={activeTab === 'company-pricing'}
               onClick={() => setActiveTab('company-pricing')}
             />
+
+            <Tab
+              index={3}
+              name="Customer Settings"
+              isActive={activeTab === 'customer-settings'}
+              onClick={() => setActiveTab('customer-settings')}
+            />
           </JustifyCenterRow>
         </JustifyBetweenColumn>
       </ModalHeader>
 
-      <ModalBody>{activeTab === 'company-pricing' ? <CompanyPricing /> : <SalarySettings />}</ModalBody>
+      <ModalBody>
+        {activeTab === 'salary-settings' ? (
+          <SalarySettings />
+        ) : activeTab === 'company-pricing' ? (
+          <CompanyPricing />
+        ) : (
+          <CustomerSettings />
+        )}
+      </ModalBody>
     </InnerWrapper>
   )
 }

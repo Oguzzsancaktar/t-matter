@@ -11,7 +11,7 @@ interface Props {
 const Checkbox: React.FC<Props> = ({ className, isChecked, ...props }) => (
   <CheckboxContainer>
     <HiddenCheckbox checked={isChecked} {...props} />
-    <StyledCheckbox checked={isChecked}>
+    <StyledCheckbox defaultChecked={isChecked} checked={isChecked}>
       <Icon viewBox="0 0 24 24">
         <polyline points="20 6 9 17 4 12" />
       </Icon>

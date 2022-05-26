@@ -1,22 +1,27 @@
-// export const secondsToTime = second => {
-//   let d = Number(second)
-//   var h = Math.floor(d / 3600)
-//   var m = Math.floor((d % 3600) / 60)
-//   var s = Math.floor((d % 3600) % 60)
+export const secondsToTimeWithDisplay = second => {
+  let d = Number(second)
+  var h = Math.floor(d / 3600)
+  var m = Math.floor((d % 3600) / 60)
+  var s = Math.floor((d % 3600) % 60)
 
-//   var hDisplay = h > 0 ? h + (h == 1 ? ' hour, ' : ' hours, ') : ''
-//   var mDisplay = m > 0 ? m + (m == 1 ? ' minute, ' : ' minutes, ') : ''
-//   var sDisplay = s > 0 ? s + (s == 1 ? ' second' : ' seconds') : ''
-//   return hDisplay + mDisplay + sDisplay
-// }
+  var hDisplay = h > 0 ? h + (h === 1 ? ' hour ' : ' hours ') : ''
+  var mDisplay = m > 0 ? m + (m === 1 ? ' minute ' : ' minutes ') : ''
+  var sDisplay = s > 0 ? s + (s === 1 ? ' second' : ' seconds') : ''
+  return hDisplay + mDisplay + sDisplay
+}
 
 export const secondsToTimeString = (seconds: number) => {
   let d = Number(seconds)
   var h: string | number = Math.floor(d / 3600)
   var m: string | number = Math.floor((d % 3600) / 60)
   var s: string | number = Math.floor((d % 3600) % 60)
-
+  var amPm = 'am'
   let output = '--00:00:00'
+
+  if (h >= 12) {
+    amPm = 'pm'
+    h = h - 12
+  }
 
   if (s > 0) {
     if (h.toString().split('').length === 1) {
@@ -37,7 +42,7 @@ export const secondsToTimeString = (seconds: number) => {
       m = '0' + m
     }
 
-    output = h + ':' + m
+    output = h + ':' + m + ' ' + amPm
   }
   return output
 }
