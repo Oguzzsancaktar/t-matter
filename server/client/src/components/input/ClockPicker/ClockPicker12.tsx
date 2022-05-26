@@ -42,7 +42,6 @@ const ClockPicker12: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
     onChange(newTime.formatted12)
   }
 
-  console.log(time)
   return (
     <Column>
       {labelText && <Label>{labelText}</Label>}

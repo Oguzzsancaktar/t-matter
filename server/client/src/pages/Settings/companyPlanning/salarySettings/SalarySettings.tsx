@@ -20,6 +20,7 @@ import {
   usePatchSalarySettingsMutation
 } from '@/services/settings/company-panning/salarySettings'
 import { ISalarySettings } from '@/models'
+import { toastSuccess } from '@/utils/toastUtil'
 
 const DEFAULT_PAYROLL_RATE: number = 30
 const DEFAULT_HOUR_IN_YEAR: number = 1920
@@ -39,6 +40,7 @@ const SalarySettings = () => {
   ] = usePatchSalarySettingsMutation()
 
   const [salarySettingsStateData, setSalarySettingsStateData] = useState<ISalarySettings>({
+    _id: salarySettingsData?._id,
     defaultPayrollRate: DEFAULT_PAYROLL_RATE,
     payrollIncreases: [
       {
@@ -64,24 +66,25 @@ const SalarySettings = () => {
     ]
   })
 
-  const notificationOptions = [
-    { value: NOTIFICATION_BEFORE_AFTER.AFTER, label: 'After' },
-    { value: NOTIFICATION_BEFORE_AFTER.BEFORE, label: 'Before' }
-  ]
+  // const notificationOptions = [
+  //   { value: NOTIFICATION_BEFORE_AFTER.AFTER, label: 'After' },
+  //   { value: NOTIFICATION_BEFORE_AFTER.BEFORE, label: 'Before' }
+  // ]
 
-  const userTaskOptions = [
-    { value: 'task1', label: 'Task 1' },
-    { value: 'task2', label: 'Task 2' }
-  ]
+  // const userTaskOptions = [
+  //   { value: 'task1', label: 'Task 1' },
+  //   { value: 'task2', label: 'Task 2' }
+  // ]
 
-  const userRoleOptions = [
-    { value: USER_ROLE_TYPES.ADMIN, label: 'Admin' },
-    { value: USER_ROLE_TYPES.USER, label: 'User' }
-  ]
+  // const userRoleOptions = [
+  //   { value: USER_ROLE_TYPES.ADMIN, label: 'Admin' },
+  //   { value: USER_ROLE_TYPES.USER, label: 'User' }
+  // ]
 
   useEffect(() => {
     if (salarySettingsData && salarySettingsData?.defaultPayrollRate && salarySettingsData?.payrollIncreases) {
       setSalarySettingsStateData({
+        _id: salarySettingsData?._id,
         defaultPayrollRate: salarySettingsData?.defaultPayrollRate,
         payrollIncreases: salarySettingsData?.payrollIncreases
       })
@@ -95,6 +98,7 @@ const SalarySettings = () => {
       updatedSalarySettingsData?.payrollIncreases
     ) {
       setSalarySettingsStateData({
+        _id: updatedSalarySettingsData._id,
         defaultPayrollRate: updatedSalarySettingsData?.defaultPayrollRate,
         payrollIncreases: updatedSalarySettingsData?.payrollIncreases
       })
@@ -115,13 +119,13 @@ const SalarySettings = () => {
     setSalarySettingsStateData({ ...salarySettingsStateData, payrollIncreases: newPayrollIncreases })
   }
 
-  const handleSelectChange = (e: React.ChangeEvent) => {
-    console.log(e)
-  }
+  // const handleSelectChange = (e: React.ChangeEvent) => {
+  //   console.log(e)
+  // }
 
   const handleSave = async () => {
-    const result = await patchSalarySettings(salarySettingsStateData)
-    console.log(result)
+    await patchSalarySettings(salarySettingsStateData)
+    toastSuccess('Salary settings updated successfully')
   }
 
   return (
