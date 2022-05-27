@@ -12,6 +12,7 @@ interface IProps {
   isClearable?: boolean
   isSearchable?: boolean
   isMulti?: boolean
+  validationError?: boolean
   onChange?: ((event: React.ChangeEvent) => void) | ((option: IOption) => void)
   name: string
   options: any[]
@@ -23,6 +24,7 @@ const Label = styled.label`
 `
 
 const SelectInput: React.FC<IProps> = ({
+  validationError,
   selectedOption,
   isDisabled,
   isLoading,
@@ -38,7 +40,7 @@ const SelectInput: React.FC<IProps> = ({
     <Column>
       {labelText && <Label>{labelText}</Label>}
       <Select
-        className="react-basic-single"
+        className={`react-basic-single ${validationError && 'input-validation-error'}`}
         classNamePrefix="select"
         options={options}
         defaultValue={options[selectedOption || 0]}

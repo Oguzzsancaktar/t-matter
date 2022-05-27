@@ -100,7 +100,7 @@ const UserPageSettingsTab = () => {
         id: 'createUserModal',
         title: 'Create User',
         body: <CreateUserModal />,
-        size: ESize.Small
+        size: ESize.Medium
       })
     )
   }

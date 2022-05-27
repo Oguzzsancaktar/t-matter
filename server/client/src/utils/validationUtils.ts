@@ -4,9 +4,18 @@ const controlStringLength = (value: string): boolean => {
   return result
 }
 
+export const isValueNull = (value: string) => {
+  return value.toString().trim().length > 0
+}
+
 export const isUsernameValid = (username: string): boolean => {
   const result = controlStringLength(username)
   return result
+}
+
+export const isPhoneNumberValid = (phone: string) => {
+  var phoneRegex = /^\d{10}$/
+  return phone.match(phoneRegex)
 }
 
 export const isEmailValid = (email: string): boolean => {
@@ -17,6 +26,11 @@ export const isEmailValid = (email: string): boolean => {
     )
 
   return result !== null ? true : false
+}
+
+export const isZipcodeValid = (zipcode: string) => {
+  var zipRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)/
+  return zipcode.match(zipRegex)
 }
 
 export const isPasswordValid = (password: string): boolean => {
