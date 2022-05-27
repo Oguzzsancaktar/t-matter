@@ -8,10 +8,12 @@ export const ModalHeader = styled.div`
   width: 100%;
 `
 
-export const ModalBody = styled.div<{ withModalFooter?: boolean }>`
+export const ModalBody = styled.div<{ withModalFooter?: boolean; minHeight?: string }>`
   height: calc(${({ withModalFooter }) => (withModalFooter ? '100% - 85px - 60px' : '100% - 85px')});
+  min-height: calc(${({ minHeight }) => minHeight && minHeight});
+
   width: 100%;
-  padding: 3rem 1rem;
+  padding: 1rem 1rem;
 `
 
 export const ModalFooter = styled.div`

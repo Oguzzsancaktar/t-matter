@@ -5,13 +5,12 @@ import { InnerWrapper } from '@components/wrapper'
 import colors from '@constants/colors'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { ModalBody } from '../types'
 
 const ModalHeader = styled.div`
   border-bottom: 1px solid ${colors.cyan.primary};
   padding: 1rem;
 `
-
-const ModalBody = styled.div``
 
 const CompanyPlanningModal = () => {
   const [activeTab, setActiveTab] = useState('user-role-settings')
@@ -47,7 +46,7 @@ const CompanyPlanningModal = () => {
           </JustifyCenterRow>
         </JustifyBetweenColumn>
       </ModalHeader>
-      <ModalBody>
+      <ModalBody minHeight="700px">
         {activeTab === 'user-role-settings' ? (
           <UserRoleSettings />
         ) : activeTab === 'user-task-settings' ? (

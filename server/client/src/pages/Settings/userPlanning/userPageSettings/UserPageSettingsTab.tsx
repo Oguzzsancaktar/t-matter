@@ -4,6 +4,7 @@ import {
   CreateRoleModal,
   CreateUserModal,
   DataTableHeader,
+  JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn
 } from '@/components'
@@ -106,17 +107,17 @@ const UserPageSettingsTab = () => {
   }
 
   return (
-    <Column>
+    <JustifyBetweenColumn height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
       </JustifyBetweenRow>
-      <Column>
+      <Column height="calc(100% - 200px)">
         <DataTableHeader handleAddNew={openCreateRoleModal} />
         <DataTable fixedHeader columns={columns} data={data} />
       </Column>
-    </Column>
+    </JustifyBetweenColumn>
   )
 }
 

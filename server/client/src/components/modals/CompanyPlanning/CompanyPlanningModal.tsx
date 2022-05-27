@@ -40,7 +40,7 @@ const CompanyPlanningModal = () => {
         </JustifyBetweenColumn>
       </ModalHeader>
 
-      <ModalBody>
+      <ModalBody minHeight="700px">
         {activeTab === 'salary-settings' ? (
           <SalarySettings />
         ) : activeTab === 'company-pricing' ? (

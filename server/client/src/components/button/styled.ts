@@ -18,6 +18,6 @@ export const ButtonSC = styled.button<Pick<IProps, 'width' | 'height' | 'disable
 
   &:hover {
     background-color: ${({ disabled, color }) =>
-      disabled ? colors.gray.disabled : color ? color : colors.green.primary}50;
+      disabled ? colors.gray.disabled : color ? color : colors.green.primary}BB;
   }
 `

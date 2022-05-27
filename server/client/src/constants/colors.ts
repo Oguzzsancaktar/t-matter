@@ -40,26 +40,30 @@ const colors = Object.freeze({
     primary: '#71dd37'
   },
   teal: {
-    primary: '#20c997'
+    primary: '#00ADB5',
+    secondary: '#20c997'
   },
   cyan: {
     primary: '#03c3ec'
   },
   white: {
-    primary: '#fff',
+    primary: '#EEEEEE',
+    secondary: '#fff',
     light: '#fcfdfd',
     bg: '#f5f5f9'
   },
   gray: {
-    primary: '#435971',
+    primary: '#393E46',
+    secondary: '#DFDFDE',
     light: '#435371',
     middle: '#475971',
-    dark: '#835971',
+    dark: '#435971',
     disabled: '#dddddd'
   },
 
   black: {
-    primary: '#233446',
+    primary: '#222831',
+    secondary: '#233446',
     dark: '#697a8d',
     middle: '#434971',
     light: '#436571'
