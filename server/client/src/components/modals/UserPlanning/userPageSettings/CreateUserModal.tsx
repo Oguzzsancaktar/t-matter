@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { ConfirmCancelButtons } from '@/components/button'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow, Row } from '@/components/layout'
-import { H1, Label } from '@/components/texts'
+import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { InnerWrapper, ItemContainer } from '@/components'
+import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 import { IUserCreateDTO } from '@/models'
 import { Key, User } from 'react-feather'
@@ -21,6 +21,7 @@ import {
 import { toastError } from '@/utils/toastUtil'
 import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
+import moment from 'moment'
 
 const CreateUserModal = () => {
   const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
@@ -182,6 +183,10 @@ const CreateUserModal = () => {
     return true
   }
 
+  const handleBirhdayChange = (date: Date[]) => {
+    setCreateUserData({ ...createUserData, birthday: moment(date[0]).format('MM-DD-YYYY') })
+  }
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCreateUserData({ ...createUserData, [event.target.name]: event.target.value })
   }
@@ -275,15 +280,11 @@ const CreateUserModal = () => {
 
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="birthday"
-                  placeholder="Select your birthday..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
+                <DatePicker
                   labelText="Birthday"
                   validationError={birthdayError}
+                  name={'birthday'}
+                  onChange={handleBirhdayChange}
                 />
               </ItemContainer>
 

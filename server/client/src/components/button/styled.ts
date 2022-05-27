@@ -20,4 +20,9 @@ export const ButtonSC = styled.button<Pick<IProps, 'width' | 'height' | 'disable
     background-color: ${({ disabled, color }) =>
       disabled ? colors.gray.disabled : color ? color : colors.green.primary}BB;
   }
+
+  &:disabled {
+    cursor: wait;
+    background-color: ${({ disabled }) => disabled && colors.gray.disabled};
+  }
 `

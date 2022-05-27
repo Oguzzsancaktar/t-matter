@@ -1,3 +1,4 @@
+import { ItemContainer } from '@/components/item-container'
 import { Column, Row } from '@components/layout'
 import { Eye, EyeOff } from 'react-feather'
 import styled from 'styled-components'
@@ -45,12 +46,14 @@ const InputWithIcon: React.FC<Props> = ({
             {children}
           </IconContainer>
           <Input validationError={validationError} type={type} disabled={disabled} {...rest} />
-          {handleVisibility &&
-            (isPasswordVisible ? (
-              <Eye style={{ cursor: 'pointer' }} onClick={() => handleVisibility(isPasswordVisible)} />
-            ) : (
-              <EyeOff style={{ cursor: 'pointer' }} onClick={() => handleVisibility(!isPasswordVisible)} />
-            ))}
+          <ItemContainer width="30px">
+            {handleVisibility &&
+              (isPasswordVisible ? (
+                <Eye size={20} style={{ cursor: 'pointer' }} onClick={() => handleVisibility(isPasswordVisible)} />
+              ) : (
+                <EyeOff size={20} style={{ cursor: 'pointer' }} onClick={() => handleVisibility(!isPasswordVisible)} />
+              ))}
+          </ItemContainer>
         </Row>
       </Container>
     </Column>

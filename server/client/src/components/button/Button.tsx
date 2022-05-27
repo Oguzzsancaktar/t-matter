@@ -2,9 +2,9 @@ import React from 'react'
 import { ButtonSC } from './styled'
 import { IProps } from './types'
 
-const Button: React.FC<IProps> = ({ children, width, ...rest }) => {
+const Button: React.FC<IProps> = ({ children, disabled, width, ...rest }) => {
   return (
-    <ButtonSC width={width} type="submit" {...rest}>
+    <ButtonSC disabled={disabled} width={width} type="submit" {...rest}>
       {children}
     </ButtonSC>
   )
