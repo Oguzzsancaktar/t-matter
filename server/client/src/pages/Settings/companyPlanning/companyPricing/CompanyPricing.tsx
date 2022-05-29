@@ -22,6 +22,10 @@ import { clockToSeconds, secondsToTimeString, secondsToTimeWithDisplay, timeToSe
 import { toastWarning } from '@/utils/toastUtil'
 import { payrollDateOptions, payrollDayOptions, payrollPeriodOptions } from '@/constants/payrollOptions'
 import colors from '@/constants/colors'
+import {
+  useGetCompanyPricingQuery,
+  usePatchCompanyPricingMutation
+} from '@services/settings/company-panning/companyPricing'
 
 const CompanyPricing = () => {
   const [totalMinutes, setTotalMinutes] = useState(0)
@@ -29,6 +33,7 @@ const CompanyPricing = () => {
   const [weeklyOffTrackingTime, setWeeklyOffTrackingTime] = useState<number>(0)
 
   const [workDayInWeek, setWorkDayInWeek] = useState<number>(0)
+  const [payrollDay, setPayrollDay] = useState(1)
 
   const [dailyAvarageExpenceAmount, setDailyAvarageExpenceAmount] = useState<number | string>('')
   const [specifiedCompanyProfitPercentage, setSpecifiedCompanyProfitPercentage] = useState<number | string>('')
@@ -77,6 +82,9 @@ const CompanyPricing = () => {
       offTrackingTime: '00:00'
     }
   })
+
+  const { data: companyPricingData, isLoading, error } = useGetCompanyPricingQuery()
+  const [patchCompanyPricing, {}] = usePatchCompanyPricingMutation()
 
   const handleCheckboxClick = (day: EDays) => {
     const selectedDay = EDays[day]
@@ -139,11 +147,19 @@ const CompanyPricing = () => {
     setPayrollPeriod(option.value)
   }
 
-  const handleSave = (e: React.MouseEvent) => {
+  const handlePayrollDay = (option: IOption) => {
+    setPayrollDay(+option.value)
+  }
+
+  const handleSave = async (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log('dailyWorkTimeData=>', dailyWorkTimeData)
-    console.log('dailyAvarageExpenceAmount=>', dailyAvarageExpenceAmount)
-    console.log('specifiedCompanyProfitPercentage=>', specifiedCompanyProfitPercentage)
+    await patchCompanyPricing({
+      dailyAverageExpenseAmount: dailyAvarageExpenceAmount as number,
+      specifiedCompanyProfit: specifiedCompanyProfitPercentage as number,
+      payrollType: payrollPeriod === 'monthly' ? 0 : 1,
+      payrollDay,
+      workingSchedule: dailyWorkTimeData
+    })
   }
 
   useEffect(() => {
@@ -172,6 +188,16 @@ const CompanyPricing = () => {
     setWorkDayInWeek(totalWorkDayInWeek)
     setTotalMinutes(totalMinutes)
   }, [dailyWorkTimeData])
+
+  useEffect(() => {
+    if (companyPricingData) {
+      setDailyAvarageExpenceAmount(companyPricingData.dailyAverageExpenseAmount)
+      setSpecifiedCompanyProfitPercentage(companyPricingData.specifiedCompanyProfit)
+      setPayrollPeriod(companyPricingData.payrollType === 0 ? 'monthly' : 'weekly')
+      setPayrollDay(companyPricingData.payrollDay)
+      setDailyWorkTimeData(companyPricingData.workingSchedule)
+    }
+  }, [companyPricingData])
 
   return (
     <JustifyBetweenRow height="100%" width="auto">
@@ -295,9 +321,19 @@ const CompanyPricing = () => {
           </Row>
           <Row margin="0 0 0 0.25rem">
             {payrollPeriod === 'weekly' ? (
-              <SelectInput labelText="Payroll Day" name={'payrollDay'} options={payrollDayOptions} />
+              <SelectInput
+                labelText="Payroll Day"
+                name={'payrollDay'}
+                options={payrollDayOptions}
+                onChange={handlePayrollDay}
+              />
             ) : (
-              <SelectInput labelText="Payroll Date" name={'payrollDate'} options={payrollDateOptions} />
+              <SelectInput
+                labelText="Payroll Date"
+                name={'payrollDate'}
+                options={payrollDateOptions}
+                onChange={handlePayrollDay}
+              />
             )}
           </Row>
         </JustifyBetweenRow>
