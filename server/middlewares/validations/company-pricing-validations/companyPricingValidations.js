@@ -4,10 +4,10 @@ const PAYROLL = require('../../../constants/payroll')
 const DAYS = require('../../../constants/days')
 
 const workingDaySchema = joi.object().keys({
-  startTime: joi.number().min(1).max(24),
-  endTime: joi.number().min(1).max(24),
-  offTrackingTime: joi.number().min(0).max(24),
-  isWorkingDay: joi.boolean().required()
+  startTime: joi.string(),
+  endTime: joi.string(),
+  offTrackingTime: joi.string(),
+  isChecked: joi.boolean().required()
 })
 
 const workingScheduleSchema = joi.object().keys({

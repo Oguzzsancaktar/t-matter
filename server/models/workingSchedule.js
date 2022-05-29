@@ -3,22 +3,22 @@ const DAYS = require('../constants/days')
 const Schema = mongoose.Schema
 
 const defaultWorkingDay = {
-  isWorkingDay: {
+  isChecked: {
     type: Boolean,
     default: false,
     required: true
   },
   startTime: {
-    type: Number,
-    default: 9
+    type: String,
+    default: '09:00 am'
   },
   endTime: {
-    type: Number,
-    default: 17
+    type: String,
+    default: '05:00 pm'
   },
   offTrackingTime: {
-    type: Number,
-    default: 0
+    type: String,
+    default: '00:00'
   }
 }
 

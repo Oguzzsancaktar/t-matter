@@ -33,6 +33,7 @@ const updateSalarySettingValidation = async (req, res, next) => {
     defaultPayrollRate: joi.number().required(),
     payrollIncreases: joi.array().items(
       joi.object({
+        _id: joi.string(),
         increaseHour: joi.number().required(),
         increaseRate: joi.number().required()
       })
