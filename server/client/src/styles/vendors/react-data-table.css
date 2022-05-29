@@ -11,7 +11,7 @@
   height: 38px;
 }
  .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol {
-  padding: 0.72rem 1.5rem;
+  padding: 0.5rem 1rem;
 }
  .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol .rdt_TableCol_Sortable {
   color: #6e6b7b;
@@ -34,7 +34,7 @@
 }
  .rdt_TableBody .rdt_TableRow .rdt_TableCell {
   height: 53px;
-  padding: 0.72rem 1.5rem;
+  padding: 0.5rem 1rem;
 }
  .rdt_TableBody .rdt_TableRow .rdt_TableCell .column-action svg {
   stroke: #6e6b7b;

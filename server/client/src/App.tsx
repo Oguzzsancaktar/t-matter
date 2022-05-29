@@ -9,7 +9,9 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { selectMinimizedModals, selectOpenModals } from '@/store'
 
 const SettingsPage = lazy(() => import('./pages/Settings/SettingsPage'))
+
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
+const CustomersPage = lazy(() => import('./pages/CustomersPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 
 function App() {
@@ -44,6 +46,15 @@ function App() {
           element={
             <PrivateRoute>
               <SettingsPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/customers"
+          element={
+            <PrivateRoute>
+              <CustomersPage />
             </PrivateRoute>
           }
         />

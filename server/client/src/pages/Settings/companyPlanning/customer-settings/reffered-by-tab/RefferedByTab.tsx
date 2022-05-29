@@ -1,4 +1,12 @@
-import { ActionButtons, CreateRoleModal, CreateTaskCategoryModal, DataTableHeader, InnerWrapper } from '@/components'
+import {
+  ActionButtons,
+  CircleColor,
+  CreateRefferedByModal,
+  CreateRoleModal,
+  CreateTaskCategoryModal,
+  DataTableHeader,
+  InnerWrapper
+} from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -13,16 +21,16 @@ const RefferedByTab = () => {
 
   const columns = [
     {
-      name: 'Category',
-      selector: row => row.category,
+      name: 'Refffered By Name',
+      selector: row => row.name,
       sortable: true,
-      cell: data => <div>{data.category} </div>
+      cell: data => <div>{data.name} </div>
     },
     {
-      name: 'Status',
-      selector: row => row.status,
+      name: 'Color',
+      selector: row => row.color,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
+      cell: data => <CircleColor cursor="normal" color={data.color} />
     },
     {
       name: 'Actions',
@@ -51,13 +59,13 @@ const RefferedByTab = () => {
   const data = [
     {
       id: 1,
-      category: 'User Finance',
-      status: 'Active'
+      name: 'Youtube',
+      color: '#007bff'
     },
     {
       id: 2,
-      category: 'User Absent',
-      status: 'Inactive'
+      name: 'Facebook',
+      color: '#6610f2'
     }
   ]
 
@@ -65,9 +73,9 @@ const RefferedByTab = () => {
     e.preventDefault()
     dispatch(
       openModal({
-        id: 'createTaskCategoryModal',
-        title: 'Create Task Category',
-        body: <CreateTaskCategoryModal />,
+        id: 'createRefferedByModal',
+        title: 'Create Reffered By',
+        body: <CreateRefferedByModal />,
         size: ESize.Small
       })
     )

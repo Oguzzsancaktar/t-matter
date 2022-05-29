@@ -1,13 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Row } from '@components/index'
+import { ItemContainer, JustifyCenterRow, Row } from '@components/index'
 
 const SideBar = () => {
   return (
-    <Row>
-      <Link to="/">Home</Link>
-      <Link to="/settings">settings</Link>
-    </Row>
+    <JustifyCenterRow width="100wh" padding="1rem">
+      <ItemContainer padding="1rem">
+        <Link to="/">Home</Link>
+      </ItemContainer>
+      <ItemContainer padding="1rem">
+        <Link to="/settings">settings</Link>
+      </ItemContainer>
+
+      <ItemContainer padding="1rem">
+        <Link to="/customers">customers</Link>
+      </ItemContainer>
+    </JustifyCenterRow>
   )
 }
 

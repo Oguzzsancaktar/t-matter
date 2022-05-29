@@ -6,6 +6,7 @@
   font-size: 1rem!important;
 }
 
+
 .react-basic-single .select__control{
   background-color: transparent!important;
   border: 1px solid#4359711a!important;
@@ -75,3 +76,7 @@ color: #ef233b83;
 }
 
 
+
+.input-validation-error .select__control {
+  border: 1px solid #ff3e1d!important;
+}

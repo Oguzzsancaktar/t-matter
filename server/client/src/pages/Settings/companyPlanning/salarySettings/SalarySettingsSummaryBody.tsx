@@ -30,22 +30,22 @@ const SalarySettingsSummaryBody: React.FC<IProps> = ({ data }) => {
   return (
     <JustifyBetweenColumn>
       <JustifyBetweenRow>
-        <Text>1st year increased rate</Text>
+        <Text>2st year increased rate</Text>
         <Value>${calculatedYear0.toFixed(2)}</Value>
       </JustifyBetweenRow>
 
       <JustifyBetweenRow>
-        <Text>2nd year increased rate</Text>
+        <Text>3nd year increased rate</Text>
         <Value>${calculatedYear1.toFixed(2)}</Value>
       </JustifyBetweenRow>
 
       <JustifyBetweenRow>
-        <Text>3th year increased rate</Text>
+        <Text>4th year increased rate</Text>
         <Value>${calculatedYear2.toFixed(2)}</Value>
       </JustifyBetweenRow>
 
       <JustifyBetweenRow>
-        <Text>4th year increased rate</Text>
+        <Text>5th year increased rate</Text>
         <Value>${calculatedYear3.toFixed(2)}</Value>
       </JustifyBetweenRow>
     </JustifyBetweenColumn>

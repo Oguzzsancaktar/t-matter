@@ -36,7 +36,7 @@ const patchSalarySettings = (builder: IBuilder) => {
       }
     },
     invalidatesTags(result) {
-      return [{ type: SALARY_SETTINGS_TAG, id: result?.id }]
+      return [{ type: SALARY_SETTINGS_TAG, id: 'LIST' }]
     }
   })
 }

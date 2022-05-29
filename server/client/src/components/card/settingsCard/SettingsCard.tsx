@@ -1,5 +1,5 @@
 import { openModal } from '@/store'
-import { Button, JustifyBetweenColumn } from '@components/index'
+import { Button, H1, ItemContainer, JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
 import colors from '@constants/colors'
 import useAccessStore from '@hooks/useAccessStore'
 import { IModal } from '@models/index'
@@ -11,7 +11,7 @@ interface IProps {
   modal: IModal
 }
 const Card = styled.div`
-  background-color: ${colors.gray.dark};
+  background-color: ${colors.white.secondary};
   flex: 1;
   min-width: 300px;
   height: 200px;
@@ -25,6 +25,7 @@ const CardTitle = styled.h1`
   font-weight: bold;
   text-align: center;
   padding: 1rem;
+  color: ${colors.gray.light};
 `
 
 const SettingsCard: React.FC<IProps> = ({ children, modal, ...rest }) => {
@@ -47,7 +48,13 @@ const SettingsCard: React.FC<IProps> = ({ children, modal, ...rest }) => {
     <Card>
       <JustifyBetweenColumn height="100%">
         <CardTitle>{modal.title}</CardTitle>
-        <Button onClick={handleClick}>SHOW</Button>
+        <Button height="40px" color={colors.teal.primary} onClick={handleClick}>
+          <JustifyCenterRow>
+            <H1 color={colors.white.primary} textAlign="center">
+              SHOW
+            </H1>
+          </JustifyCenterRow>
+        </Button>
       </JustifyBetweenColumn>
     </Card>
   )

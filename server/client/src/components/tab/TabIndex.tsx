@@ -13,7 +13,7 @@ const IndexCircle = styled.span<Pick<IProps, 'isActive'>>`
   align-items: center;
   justify-content: center;
   color: ${colors.white.light};
-  background-color: ${({ isActive }) => (isActive ? colors.blue.primary : colors.gray.dark)};
+  background-color: ${({ isActive }) => (isActive ? colors.cyan.primary : colors.gray.secondary)};
   font-weight: 500;
   width: 30px;
   height: 30px;

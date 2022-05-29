@@ -25,6 +25,10 @@ const SalarySettingSchema = new Schema({
   },
   isNotificationForAdmin: {
     type: Boolean
+  },
+  owner: {
+    type: mongoose.Types.ObjectId,
+    ref: 'user'
   }
 })
 

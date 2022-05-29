@@ -13,7 +13,7 @@ const findSalarySettingCount = () => {
 }
 
 const findSalarySetting = () => {
-  return SalarySetting.find().select({'payrollIncreases._id': 0, _id: 0, __v: 0}).lean().exec()
+  return SalarySetting.find().select({'payrollIncreases._id': 0, __v: 0}).lean().exec()
 }
 
 module.exports = {
