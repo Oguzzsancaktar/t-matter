@@ -1,6 +1,6 @@
 const DAYS = {
   MONDAY: 'Monday',
-  TUESDAY: 'Thuesday',
+  TUESDAY: 'Tuesday',
   WEDNESDAY: 'Wednesday',
   THURSDAY: 'Thursday',
   FRIDAY: 'Friday',

@@ -42,7 +42,11 @@ const getCompanyPricing = async (req, res) => {
     if (!companyPricing) {
       return res.status(404).json(utils.errorUtils.errorInstance({ message: 'Company Pricing not found' }))
     }
-    res.status(200).json(companyPricing)
+    res.status(200).json({
+      ...companyPricing,
+      workingSchedule: { ...companyPricing.workingSchedule, _id: undefined, __v: undefined },
+      _id: undefined
+    })
   } catch (error) {
     console.log(error)
     res.status(500).json(utils.errorUtils.errorInstance({ message: 'Error while getting company pricing' }))
