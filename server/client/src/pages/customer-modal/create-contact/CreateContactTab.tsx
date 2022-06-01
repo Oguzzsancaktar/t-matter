@@ -8,37 +8,29 @@ import {
   WizzardButtons,
   WizzardNavigation
 } from '@/components'
-import ClientAddNewContactsStep from './ClientAddNewContactsStep'
-import ClientExtraInformationsStep from './ClientExtraInformationsStep'
-import ClientInformationsStep from './ClientInformationsStep'
-import ClientSearchInCompanyStep from './ClientSearchInCompanyStep'
-import { IClientCreateDTO, IContact, IContactCreateDTO, IOption } from '@/models'
+import ContactAddNewContactsStep from './ContactAddNewContactsStep'
+import ContactInformationsStep from './ContactInformationsStep'
+import ContactSearchInCompanyStep from './ContactSearchInCompanyStep'
+import { IContactCreateDTO, IOption } from '@/models'
 import { toastError, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid, isPhoneNumberValid, isZipcodeValid } from '@/utils/validationUtils'
 import moment from 'moment'
 
-const CreateClientTab = () => {
+const CreateContactTab = () => {
   const [activeWizzardStep, setActiveWizzardStep] = useState(0)
-  const [clientWizzardSteps, setClientWizzardSteps] = useState([
-    { stepName: 'Client Informations', stepIndex: 0 },
-    { stepName: 'Client Extra Informations', stepIndex: 1 },
-    { stepName: 'Search Reliable Company', stepIndex: 2 },
-    { stepName: 'Add New Contacts', stepIndex: 3 }
+  const [contactWizzardSteps, setContactWizzardSteps] = useState([
+    { stepName: 'Contact Informations', stepIndex: 0 },
+    { stepName: 'Search Reliable Company', stepIndex: 1 },
+    { stepName: 'Add New Contacts', stepIndex: 2 }
   ])
 
-  const [createClientDTO, setCreateClientDTO] = useState<Omit<IClientCreateDTO, '_id'>>({
+  const [createContactDTO, setCreateContactDTO] = useState<Omit<IContactCreateDTO, '_id'>>({
     firstname: '',
     lastname: '',
     email: '',
     phone: '',
     birthday: '',
     birthplace: '',
-    country: '',
-    city: '',
-    state: '',
-    zipcode: '',
-    address: '',
-    aSharpNumber: '',
     refferType: '',
     gender: '',
     reliableInCompany: [],
@@ -52,12 +44,6 @@ const CreateClientTab = () => {
     phoneError: false,
     birthdayError: false,
     birthplaceError: false,
-    countryError: false,
-    cityError: false,
-    stateError: false,
-    zipcodeError: false,
-    addressError: false,
-    aSharpNumberError: false,
     refferTypeError: false,
     genderError: false
   })
@@ -67,19 +53,16 @@ const CreateClientTab = () => {
   const validateFormFields = (): boolean => {
     setErrorMessage('')
 
-    if (!isValueNull(createClientDTO.firstname)) {
+    if (!isValueNull(createContactDTO.firstname)) {
       setErrorMessage('Please enter a valid first name')
-      console.log('firstname is  suanda true')
-
       setValidationErrors({ ...validationErrors, firstnameError: true })
       setActiveWizzardStep(0)
       return false
     } else {
-      console.log('firstname is  suanda false')
       setValidationErrors({ ...validationErrors, firstnameError: false })
     }
 
-    if (!isValueNull(createClientDTO.lastname)) {
+    if (!isValueNull(createContactDTO.lastname)) {
       setErrorMessage('Please enter a valid last name')
       setValidationErrors({ ...validationErrors, lastnameError: true })
       setActiveWizzardStep(0)
@@ -88,7 +71,7 @@ const CreateClientTab = () => {
       setValidationErrors({ ...validationErrors, lastnameError: false })
     }
 
-    if (!isEmailValid(createClientDTO.email)) {
+    if (!isEmailValid(createContactDTO.email)) {
       setErrorMessage('Please enter a valid email')
       setValidationErrors({ ...validationErrors, emailError: true })
       setActiveWizzardStep(0)
@@ -97,7 +80,7 @@ const CreateClientTab = () => {
       setValidationErrors({ ...validationErrors, emailError: false })
     }
 
-    if (!isPhoneNumberValid(createClientDTO.phone)) {
+    if (!isPhoneNumberValid(createContactDTO.phone)) {
       setErrorMessage('Please enter a valid phone number')
       setValidationErrors({ ...validationErrors, phoneError: true })
       setActiveWizzardStep(0)
@@ -106,7 +89,7 @@ const CreateClientTab = () => {
       setValidationErrors({ ...validationErrors, phoneError: false })
     }
 
-    if (!isValueNull(createClientDTO.birthday)) {
+    if (!isValueNull(createContactDTO.birthday)) {
       setErrorMessage('Please enter a valid birthday')
       setValidationErrors({ ...validationErrors, birthdayError: true })
       setActiveWizzardStep(0)
@@ -115,7 +98,7 @@ const CreateClientTab = () => {
       setValidationErrors({ ...validationErrors, birthdayError: false })
     }
 
-    if (!isValueNull(createClientDTO.birthplace)) {
+    if (!isValueNull(createContactDTO.birthplace)) {
       setErrorMessage('Please enter a valid birthplace')
       setValidationErrors({ ...validationErrors, birthplaceError: true })
       setActiveWizzardStep(0)
@@ -124,61 +107,7 @@ const CreateClientTab = () => {
       setValidationErrors({ ...validationErrors, birthplaceError: false })
     }
 
-    if (!isValueNull(createClientDTO.country)) {
-      setErrorMessage('Please enter a valid country')
-      setValidationErrors({ ...validationErrors, countryError: true })
-      setActiveWizzardStep(1)
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, countryError: false })
-    }
-
-    if (!isValueNull(createClientDTO.city)) {
-      setErrorMessage('Please enter a valid city')
-      setValidationErrors({ ...validationErrors, cityError: true })
-      setActiveWizzardStep(1)
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, cityError: false })
-    }
-
-    if (!isValueNull(createClientDTO.state)) {
-      setErrorMessage('Please enter a valid state')
-      setValidationErrors({ ...validationErrors, stateError: true })
-      setActiveWizzardStep(1)
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, stateError: false })
-    }
-
-    if (!isZipcodeValid(createClientDTO.zipcode)) {
-      setErrorMessage('Please enter a valid zipcode')
-      setValidationErrors({ ...validationErrors, zipcodeError: true })
-      setActiveWizzardStep(1)
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, zipcodeError: false })
-    }
-
-    if (!isValueNull(createClientDTO.address)) {
-      setErrorMessage('Please enter a valid address')
-      setValidationErrors({ ...validationErrors, addressError: true })
-      setActiveWizzardStep(1)
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, addressError: false })
-    }
-
-    if (!isValueNull(createClientDTO.aSharpNumber)) {
-      setErrorMessage('Please enter a valid A# Number')
-      setValidationErrors({ ...validationErrors, aSharpNumberError: true })
-      setActiveWizzardStep(1)
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, aSharpNumberError: false })
-    }
-
-    if (!isValueNull(createClientDTO.refferType)) {
+    if (!isValueNull(createContactDTO.refferType)) {
       setErrorMessage('Please select user refferType')
       setValidationErrors({ ...validationErrors, refferTypeError: true })
       setActiveWizzardStep(1)
@@ -187,7 +116,7 @@ const CreateClientTab = () => {
       setValidationErrors({ ...validationErrors, refferTypeError: false })
     }
 
-    if (!isValueNull(createClientDTO.gender)) {
+    if (!isValueNull(createContactDTO.gender)) {
       setErrorMessage('Please select user gender')
       setValidationErrors({ ...validationErrors, genderError: true })
       setActiveWizzardStep(1)
@@ -200,44 +129,44 @@ const CreateClientTab = () => {
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCreateClientDTO({ ...createClientDTO, [event.target.name]: event.target.value })
+    setCreateContactDTO({ ...createContactDTO, [event.target.name]: event.target.value })
   }
 
   const handleBirhdayChange = (date: Date[]) => {
-    setCreateClientDTO({ ...createClientDTO, birthday: moment(date[0]).format('MM-DD-YYYY') })
+    setCreateContactDTO({ ...createContactDTO, birthday: moment(date[0]).format('MM-DD-YYYY') })
   }
 
   const handleGenderChange = (option: IOption) => {
-    setCreateClientDTO({ ...createClientDTO, gender: option.value })
+    setCreateContactDTO({ ...createContactDTO, gender: option.value })
   }
 
   const handleRefferTypeChange = (option: IOption) => {
-    setCreateClientDTO({ ...createClientDTO, refferType: option.value })
+    setCreateContactDTO({ ...createContactDTO, refferType: option.value })
   }
 
-  const handleAddClient = (id: string) => {
-    if (createClientDTO.reliableInCompany) {
-      const isSelectedBefore = createClientDTO.reliableInCompany.find(reliableId => reliableId === id)
+  const handleAddContact = (id: string) => {
+    if (createContactDTO.reliableInCompany) {
+      const isSelectedBefore = createContactDTO.reliableInCompany.find(reliableId => reliableId === id)
       if (isSelectedBefore) {
-        toastWarning('Client is already selected')
+        toastWarning('Contact is already selected')
       } else {
-        setCreateClientDTO({ ...createClientDTO, reliableInCompany: createClientDTO.reliableInCompany?.concat(id) })
+        setCreateContactDTO({ ...createContactDTO, reliableInCompany: createContactDTO.reliableInCompany?.concat(id) })
       }
     }
   }
 
-  const handleRemoveClient = (id: string) => {
-    if (createClientDTO.reliableInCompany) {
-      setCreateClientDTO({
-        ...createClientDTO,
-        reliableInCompany: createClientDTO.reliableInCompany?.filter(reliableId => reliableId !== id)
+  const handleRemoveContact = (id: string) => {
+    if (createContactDTO.reliableInCompany) {
+      setCreateContactDTO({
+        ...createContactDTO,
+        reliableInCompany: createContactDTO.reliableInCompany?.filter(reliableId => reliableId !== id)
       })
     }
   }
 
   const handleAddNewContact = (contact: IContactCreateDTO) => {
-    if (createClientDTO.createContact) {
-      setCreateClientDTO({ ...createClientDTO, createContact: createClientDTO.createContact?.concat(contact) })
+    if (createContactDTO.createContact) {
+      setCreateContactDTO({ ...createContactDTO, createContact: createContactDTO.createContact?.concat(contact) })
     }
   }
 
@@ -245,40 +174,36 @@ const CreateClientTab = () => {
     switch (activeWizzardStep) {
       case 0:
         return (
-          <ClientInformationsStep
+          <ContactInformationsStep
             validationErrors={validationErrors}
-            createClientDTO={createClientDTO}
+            createContactDTO={createContactDTO}
             onInputChange={handleInputChange}
             onBirthdayChange={handleBirhdayChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
           />
         )
+
       case 1:
         return (
-          <ClientExtraInformationsStep
-            validationErrors={validationErrors}
-            createClientDTO={createClientDTO}
-            onInputChange={handleInputChange}
+          <ContactSearchInCompanyStep
+            reliableInCompanyList={createContactDTO.reliableInCompany || []}
+            onAdd={handleAddContact}
+            onRemove={handleRemoveContact}
           />
         )
       case 2:
         return (
-          <ClientSearchInCompanyStep
-            reliableInCompanyList={createClientDTO.reliableInCompany || []}
-            onAdd={handleAddClient}
-            onRemove={handleRemoveClient}
+          <ContactAddNewContactsStep
+            newContactList={createContactDTO.createContact || []}
+            onAdd={handleAddNewContact}
           />
-        )
-      case 3:
-        return (
-          <ClientAddNewContactsStep newContactList={createClientDTO.createContact || []} onAdd={handleAddNewContact} />
         )
       default:
         return (
-          <ClientInformationsStep
+          <ContactInformationsStep
             validationErrors={validationErrors}
-            createClientDTO={createClientDTO}
+            createContactDTO={createContactDTO}
             onInputChange={handleInputChange}
             onBirthdayChange={handleBirhdayChange}
             onGenderChange={handleGenderChange}
@@ -304,7 +229,7 @@ const CreateClientTab = () => {
   const handleSubmit = () => {
     const validationResult = validateFormFields()
     if (validationResult) {
-      console.log(createClientDTO)
+      console.log(createContactDTO)
     }
   }
 
@@ -318,7 +243,7 @@ const CreateClientTab = () => {
         <Column height="100%">
           <WizzardNavigation
             onStepChange={setActiveWizzardStep}
-            steps={clientWizzardSteps}
+            steps={contactWizzardSteps}
             activeStep={activeWizzardStep}
           />
         </Column>
@@ -332,7 +257,7 @@ const CreateClientTab = () => {
               actionNext={handleNext}
               actionPrevious={handlePrevious}
               actionSubmit={handleSubmit}
-              steps={clientWizzardSteps}
+              steps={contactWizzardSteps}
               activeStep={activeWizzardStep}
             />
           </InnerWrapper>
@@ -342,4 +267,4 @@ const CreateClientTab = () => {
   )
 }
 
-export default CreateClientTab
+export default CreateContactTab

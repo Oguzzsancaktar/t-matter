@@ -23,7 +23,7 @@ interface IProps {
   newContactList: IContactCreateDTO[]
   onAdd: (contact: IContactCreateDTO) => void
 }
-const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) => {
+const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) => {
   const [newContact, setNewContact] = useState<IContactCreateDTO>({
     firstname: '',
     lastname: '',
@@ -290,7 +290,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
               key={index}
               userName={contact.firstname + ' ' + contact.lastname}
               userEmail={contact.email}
-              userImage={'test'} // TODO: Client side image
+              userImage={'test'} // TODO: Contact side image
             />
           ))}
         </Row>
@@ -299,4 +299,4 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
   )
 }
 
-export default ClientAddNewContactsStep
+export default ContactAddNewContactsStep

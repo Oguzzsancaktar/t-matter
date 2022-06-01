@@ -2,23 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { IClientCreateDTO, IOption, IUserCreateDTO } from '@/models'
+import { IContactCreateDTO, IOption, IUserCreateDTO } from '@/models'
 import { Key, User } from 'react-feather'
 import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
 
 interface IProps {
   validationErrors: any
-  createClientDTO: Omit<IClientCreateDTO, '_id'>
+  createContactDTO: Omit<IContactCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onBirthdayChange: (date: Date[]) => void
   onGenderChange: (option: IOption) => void
   onRefferTypeChange: (option: IOption) => void
 }
 
-const ClientInformationsStep: React.FC<IProps> = ({
+const ContactInformationsStep: React.FC<IProps> = ({
   validationErrors,
-  createClientDTO,
+  createContactDTO,
   onBirthdayChange,
   onInputChange,
   onGenderChange,
@@ -39,7 +39,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 type="text"
                 labelText="First Name"
                 validationError={validationErrors.firstnameError}
-                value={createClientDTO.firstname}
+                value={createContactDTO.firstname}
               />
             </ItemContainer>
 
@@ -53,7 +53,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 type="text"
                 labelText="Last Name"
                 validationError={validationErrors.lastnameError}
-                value={createClientDTO.lastname}
+                value={createContactDTO.lastname}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -69,7 +69,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 type="email"
                 labelText="E-mail"
                 validationError={validationErrors.emailError}
-                value={createClientDTO.email}
+                value={createContactDTO.email}
               />
             </ItemContainer>
 
@@ -83,7 +83,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 type="tel"
                 labelText="Phone Number"
                 validationError={validationErrors.phoneError}
-                value={createClientDTO.phone}
+                value={createContactDTO.phone}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -108,7 +108,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 type="text"
                 labelText="Birth Location"
                 validationError={validationErrors.birthplaceError}
-                value={createClientDTO.birthplace}
+                value={createContactDTO.birthplace}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -123,7 +123,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 options={genderOptions}
                 labelText="Reffered By"
                 validationError={validationErrors.refferTypeError}
-                selectedOption={+createClientDTO.refferType}
+                selectedOption={+createContactDTO.refferType}
               />
             </ItemContainer>
 
@@ -136,7 +136,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 options={genderOptions}
                 labelText="Gender"
                 validationError={validationErrors.genderError}
-                selectedOption={+createClientDTO.gender}
+                selectedOption={+createContactDTO.gender}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -146,4 +146,4 @@ const ClientInformationsStep: React.FC<IProps> = ({
   )
 }
 
-export default ClientInformationsStep
+export default ContactInformationsStep

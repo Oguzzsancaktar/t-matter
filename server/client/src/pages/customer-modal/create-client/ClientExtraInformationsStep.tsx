@@ -18,7 +18,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({ createClientDTO, valida
   return (
     <InnerWrapper>
       <JustifyBetweenColumn height="100%">
-        <JustifyBetweenColumn height="100%" padding="2rem 0">
+        <JustifyBetweenColumn height="auto" padding="2rem 0">
           <JustifyBetweenRow>
             <ItemContainer margin="0 0.5rem 0 0 " width="calc((100% - 1rem)/2)">
               <InputWithIcon

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 interface IProps extends IComponentProps {
   borderRadius?: string
   overflow?: string
+  maxWidth?: string
 }
 
 const Item = styled.div<IProps>`
@@ -14,6 +15,8 @@ const Item = styled.div<IProps>`
   padding: ${({ padding }) => (padding ? padding : '0')};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : '0')};
   overflow: ${({ overflow }) => (overflow ? overflow : '')};
+  cursor: ${({ cursorType }) => (cursorType ? cursorType : '')};
+  max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : '')};
 `
 
 const ItemContainer: React.FC<IProps> = ({ children, ...rest }) => {

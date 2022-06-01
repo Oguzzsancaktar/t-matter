@@ -21,7 +21,7 @@ interface IProps {
   onAdd: (id: string) => void
   onRemove: (id: string) => void
 }
-const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, onAdd, onRemove }) => {
+const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, onAdd, onRemove }) => {
   // : { type: string; fullname: string; email: string; phone: string }
   const TEMPORARY_CUSTOMERS_ARR = [
     {
@@ -121,4 +121,4 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
   )
 }
 
-export default ClientSearchInCompanyStep
+export default ContactSearchInCompanyStep

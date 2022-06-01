@@ -6,13 +6,6 @@ export default interface IContact {
   phone: string
   birthday: string
   birthplace: string
-  country: string
-  city: string
-  state: string
-  zipcode: string
-  address: string
   refferType: string
   gender: string
-  status: string
-  password: string
 }
