@@ -65,135 +65,103 @@ const CreateClientTab = () => {
   const [errorMessage, setErrorMessage] = useState('')
 
   const validateFormFields = (): boolean => {
-    setErrorMessage('')
-
     if (!isValueNull(createClientDTO.firstname)) {
       setErrorMessage('Please enter a valid first name')
       console.log('firstname is  suanda true')
-
       setValidationErrors({ ...validationErrors, firstnameError: true })
       setActiveWizzardStep(0)
       return false
-    } else {
-      console.log('firstname is  suanda false')
-      setValidationErrors({ ...validationErrors, firstnameError: false })
     }
 
     if (!isValueNull(createClientDTO.lastname)) {
       setErrorMessage('Please enter a valid last name')
-      setValidationErrors({ ...validationErrors, lastnameError: true })
+
       setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, lastnameError: false })
     }
 
     if (!isEmailValid(createClientDTO.email)) {
       setErrorMessage('Please enter a valid email')
-      setValidationErrors({ ...validationErrors, emailError: true })
+
       setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, emailError: false })
     }
 
     if (!isPhoneNumberValid(createClientDTO.phone)) {
       setErrorMessage('Please enter a valid phone number')
-      setValidationErrors({ ...validationErrors, phoneError: true })
+
       setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, phoneError: false })
     }
 
     if (!isValueNull(createClientDTO.birthday)) {
       setErrorMessage('Please enter a valid birthday')
-      setValidationErrors({ ...validationErrors, birthdayError: true })
+
       setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, birthdayError: false })
     }
 
     if (!isValueNull(createClientDTO.birthplace)) {
       setErrorMessage('Please enter a valid birthplace')
-      setValidationErrors({ ...validationErrors, birthplaceError: true })
+
       setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, birthplaceError: false })
     }
 
     if (!isValueNull(createClientDTO.country)) {
       setErrorMessage('Please enter a valid country')
-      setValidationErrors({ ...validationErrors, countryError: true })
+
       setActiveWizzardStep(1)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, countryError: false })
     }
 
     if (!isValueNull(createClientDTO.city)) {
       setErrorMessage('Please enter a valid city')
-      setValidationErrors({ ...validationErrors, cityError: true })
+
       setActiveWizzardStep(1)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, cityError: false })
     }
 
     if (!isValueNull(createClientDTO.state)) {
       setErrorMessage('Please enter a valid state')
-      setValidationErrors({ ...validationErrors, stateError: true })
+
       setActiveWizzardStep(1)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, stateError: false })
     }
 
     if (!isZipcodeValid(createClientDTO.zipcode)) {
       setErrorMessage('Please enter a valid zipcode')
-      setValidationErrors({ ...validationErrors, zipcodeError: true })
+
       setActiveWizzardStep(1)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, zipcodeError: false })
     }
 
     if (!isValueNull(createClientDTO.address)) {
       setErrorMessage('Please enter a valid address')
-      setValidationErrors({ ...validationErrors, addressError: true })
+
       setActiveWizzardStep(1)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, addressError: false })
     }
 
     if (!isValueNull(createClientDTO.aSharpNumber)) {
       setErrorMessage('Please enter a valid A# Number')
-      setValidationErrors({ ...validationErrors, aSharpNumberError: true })
+
       setActiveWizzardStep(1)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, aSharpNumberError: false })
     }
 
     if (!isValueNull(createClientDTO.refferType)) {
       setErrorMessage('Please select user refferType')
-      setValidationErrors({ ...validationErrors, refferTypeError: true })
+
       setActiveWizzardStep(1)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, refferTypeError: false })
     }
 
     if (!isValueNull(createClientDTO.gender)) {
       setErrorMessage('Please select user gender')
-      setValidationErrors({ ...validationErrors, genderError: true })
+
       setActiveWizzardStep(1)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, genderError: false })
     }
 
     return true
@@ -289,7 +257,25 @@ const CreateClientTab = () => {
   }
 
   const handleNext = () => {
+    setValidationErrors({
+      firstnameError: false,
+      lastnameError: false,
+      emailError: false,
+      phoneError: false,
+      birthdayError: false,
+      birthplaceError: false,
+      countryError: false,
+      cityError: false,
+      stateError: false,
+      zipcodeError: false,
+      addressError: false,
+      aSharpNumberError: false,
+      refferTypeError: false,
+      genderError: false
+    })
+    setErrorMessage('')
     const validationResult = validateFormFields()
+
     console.log(validationResult)
     if (validationResult) {
       console.log('qwer')
@@ -302,6 +288,23 @@ const CreateClientTab = () => {
   }
 
   const handleSubmit = () => {
+    setValidationErrors({
+      firstnameError: false,
+      lastnameError: false,
+      emailError: false,
+      phoneError: false,
+      birthdayError: false,
+      birthplaceError: false,
+      countryError: false,
+      cityError: false,
+      stateError: false,
+      zipcodeError: false,
+      addressError: false,
+      aSharpNumberError: false,
+      refferTypeError: false,
+      genderError: false
+    })
+    setErrorMessage('')
     const validationResult = validateFormFields()
     if (validationResult) {
       console.log(createClientDTO)
