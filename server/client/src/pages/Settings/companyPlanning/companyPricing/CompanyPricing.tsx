@@ -18,8 +18,14 @@ import { Clock, DollarSign, Percent } from 'react-feather'
 import { dayOfWeek } from '@/constants/dates'
 import { EDays, ETimes, IDailyWorkingHours, IOption } from '@/models'
 import { CompanyPricingSummaryBody, CompanyPricingSummaryFooter } from '@/pages'
-import { clockToSeconds, secondsToTimeString, secondsToTimeWithDisplay, timeToSeconds } from '@/utils/timeUtils'
-import { toastWarning } from '@/utils/toastUtil'
+import {
+  clockToSeconds,
+  secondsToHourMin,
+  secondsToTimeString,
+  secondsToTimeWithDisplay,
+  timeToSeconds
+} from '@/utils/timeUtils'
+import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { payrollDateOptions, payrollDayOptions, payrollPeriodOptions } from '@/constants/payrollOptions'
 import colors from '@/constants/colors'
 import {
@@ -29,11 +35,12 @@ import {
 
 const CompanyPricing = () => {
   const [totalMinutes, setTotalMinutes] = useState(0)
+
   const [payrollPeriod, setPayrollPeriod] = useState<string>('monthly')
-  const [weeklyOffTrackingTime, setWeeklyOffTrackingTime] = useState<number>(0)
+  const [payrollDay, setPayrollDay] = useState(1)
 
   const [workDayInWeek, setWorkDayInWeek] = useState<number>(0)
-  const [payrollDay, setPayrollDay] = useState(1)
+  const [weeklyOffTrackingTime, setWeeklyOffTrackingTime] = useState<number>(0)
 
   const [dailyAvarageExpenceAmount, setDailyAvarageExpenceAmount] = useState<number | string>('')
   const [specifiedCompanyProfitPercentage, setSpecifiedCompanyProfitPercentage] = useState<number | string>('')
@@ -84,6 +91,7 @@ const CompanyPricing = () => {
   })
 
   const { data: companyPricingData, isLoading, error } = useGetCompanyPricingQuery()
+
   const [patchCompanyPricing, {}] = usePatchCompanyPricingMutation()
 
   const handleCheckboxClick = (day: EDays) => {
@@ -105,20 +113,10 @@ const CompanyPricing = () => {
     })
   }
 
-  const onEndTimeChange = async (day: EDays, value: string) => {
+  const onEndTimeChange = (day: EDays, value: string) => {
     const selectedDay = EDays[day]
     const seconds = clockToSeconds(value)
 
-    if (clockToSeconds(dailyWorkTimeData[selectedDay].startTime) >= seconds) {
-      await setDailyWorkTimeData({
-        ...dailyWorkTimeData,
-        [selectedDay]: {
-          ...dailyWorkTimeData[selectedDay],
-          endTime: secondsToTimeString(clockToSeconds(dailyWorkTimeData[selectedDay].startTime) + 60)
-        }
-      })
-      return toastWarning("End time can't be equal or less than start time !")
-    }
     setDailyWorkTimeData({
       ...dailyWorkTimeData,
       [selectedDay]: { ...dailyWorkTimeData[selectedDay], endTime: secondsToTimeString(seconds) }
@@ -131,7 +129,7 @@ const CompanyPricing = () => {
 
     setDailyWorkTimeData({
       ...dailyWorkTimeData,
-      [selectedDay]: { ...dailyWorkTimeData[selectedDay], offTrackingTime: secondsToTimeString(seconds) }
+      [selectedDay]: { ...dailyWorkTimeData[selectedDay], offTrackingTime: secondsToHourMin(seconds) }
     })
   }
 
@@ -145,10 +143,42 @@ const CompanyPricing = () => {
 
   const handlePayrollPeriodChange = (option: IOption) => {
     setPayrollPeriod(option.value)
+    setPayrollDay(1)
   }
 
   const handlePayrollDay = (option: IOption) => {
     setPayrollDay(+option.value)
+  }
+
+  const validateTimes = (selectedDay: string) => {
+    const startTime = clockToSeconds(dailyWorkTimeData[selectedDay].startTime)
+    const endTime = clockToSeconds(dailyWorkTimeData[selectedDay].endTime)
+    const offTrackingTime = timeToSeconds(dailyWorkTimeData[selectedDay].offTrackingTime.split(' ')[0])
+
+    // start greater than "end"
+    if (+startTime >= +endTime) {
+      setDailyWorkTimeData({
+        ...dailyWorkTimeData,
+        [selectedDay]: {
+          ...dailyWorkTimeData[selectedDay],
+          endTime: secondsToTimeString(+startTime + 60)
+        }
+      })
+      return toastWarning("End time can't be equal or less than start time !")
+    }
+
+    // offTrackingTime greater than total time
+    if (endTime - startTime < offTrackingTime) {
+      setDailyWorkTimeData({
+        ...dailyWorkTimeData,
+        [selectedDay]: {
+          ...dailyWorkTimeData[selectedDay],
+          offTrackingTime: secondsToHourMin(endTime - startTime - 60)
+        }
+      })
+
+      return toastWarning("Off trackin time can't be greater than working time !")
+    }
   }
 
   const handleSave = async (e: React.MouseEvent) => {
@@ -160,6 +190,8 @@ const CompanyPricing = () => {
       payrollDay,
       workingSchedule: dailyWorkTimeData
     })
+
+    toastSuccess('Company pricing updated successfully')
   }
 
   useEffect(() => {
@@ -168,21 +200,21 @@ const CompanyPricing = () => {
     let totalOffTrackingTime = 0
 
     dayOfWeek.forEach(day => {
-      const startTime = clockToSeconds(dailyWorkTimeData[EDays[day]].startTime)
-      const endTime = clockToSeconds(dailyWorkTimeData[EDays[day]].endTime)
-      const offTrackingTime = timeToSeconds(dailyWorkTimeData[EDays[day]].offTrackingTime.split(' ')[0])
+      const selectedDay = EDays[day]
 
-      const isChecked = dailyWorkTimeData[EDays[day]].isChecked
+      const startTime = clockToSeconds(dailyWorkTimeData[selectedDay].startTime)
+      const endTime = clockToSeconds(dailyWorkTimeData[selectedDay].endTime)
+      const offTrackingTime = timeToSeconds(dailyWorkTimeData[selectedDay].offTrackingTime.split(' ')[0])
+
+      const isChecked = dailyWorkTimeData[selectedDay].isChecked
 
       if (isChecked) {
         totalWorkDayInWeek++
         totalMinutes += endTime - startTime
         totalOffTrackingTime += offTrackingTime
-
-        if (endTime - startTime < offTrackingTime) {
-          return toastWarning("Off trackin time can't be greater than working time !")
-        }
       }
+
+      validateTimes(selectedDay)
     })
     setWeeklyOffTrackingTime(totalOffTrackingTime)
     setWorkDayInWeek(totalWorkDayInWeek)
@@ -313,6 +345,7 @@ const CompanyPricing = () => {
         <JustifyBetweenRow margin="2rem 0 0 0">
           <Row margin="0 0.25rem 0 0">
             <SelectInput
+              selectedOption={payrollPeriodOptions.findIndex(option => option.value === payrollPeriod)}
               labelText="Payroll Type"
               onChange={handlePayrollPeriodChange}
               name={'payrollPeriod'}
@@ -322,6 +355,7 @@ const CompanyPricing = () => {
           <Row margin="0 0 0 0.25rem">
             {payrollPeriod === 'weekly' ? (
               <SelectInput
+                selectedOption={payrollDayOptions.findIndex(option => option.value === payrollDay)}
                 labelText="Payroll Day"
                 name={'payrollDay'}
                 options={payrollDayOptions}
@@ -329,6 +363,7 @@ const CompanyPricing = () => {
               />
             ) : (
               <SelectInput
+                selectedOption={payrollDateOptions.findIndex(option => option.value === payrollDay)}
                 labelText="Payroll Date"
                 name={'payrollDate'}
                 options={payrollDateOptions}

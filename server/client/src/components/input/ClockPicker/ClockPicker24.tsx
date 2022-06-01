@@ -1,3 +1,4 @@
+import { ItemContainer } from '@/components/item-container'
 import { Column, Row } from '@/components/layout'
 import { Label } from '@/components/texts'
 import colors from '@/constants/colors'
@@ -31,20 +32,22 @@ const ClockPickerRelative = styled.div`
 `
 
 const ClockPicker24: React.FC<IProps> = ({ name, value = '00:00', disabled, labelText, validationError, onChange }) => {
-  const [time, setTime] = useState(value)
   const [showTime, setShowTime] = useState(false)
 
   const timePickerRef = useRef(null)
   useOutsideAlerter(timePickerRef, () => setShowTime(false))
 
   const handleChange = (newTime: any) => {
-    setTime(newTime.formatted24)
     onChange(newTime.formatted24)
   }
 
   return (
     <Column>
-      {labelText && <Label>{labelText}</Label>}
+      {labelText && (
+        <ItemContainer margin="0 0 0.4rem 0">
+          <Label color={colors.text.primary}>{labelText}</Label>{' '}
+        </ItemContainer>
+      )}
       <Row>
         <ClockPickerRelative>
           <InputWithIcon
@@ -53,7 +56,7 @@ const ClockPicker24: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
             name={name}
             placeholder="Select time"
             type="text"
-            value={time}
+            value={value}
             children={<Clock size={20} />}
             onFocus={() => setShowTime(true)}
             // onBlur={() => setShowTime(false)}
@@ -62,7 +65,7 @@ const ClockPicker24: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
           {showTime && (
             <div ref={timePickerRef}>
               <TimeKeeper
-                time={time}
+                time={value.trim()}
                 onChange={newTime => handleChange(newTime)}
                 onDoneClick={() => setShowTime(false)}
                 switchToMinuteOnHourSelect

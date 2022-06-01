@@ -1,8 +1,8 @@
 import React from 'react'
-import { Column, Row } from '@components/index'
+import { Column, ItemContainer, Label } from '@components/index'
 import Select from 'react-select'
-import styled from 'styled-components'
 import { IOption } from '@/models'
+import colors from '@/constants/colors'
 
 interface IProps {
   labelText?: string
@@ -17,11 +17,6 @@ interface IProps {
   name: string
   options: any[]
 }
-const Label = styled.label`
-  width: 100%;
-  text-align: start;
-  margin-bottom: 0.4rem;
-`
 
 const SelectInput: React.FC<IProps> = ({
   validationError,
@@ -38,12 +33,18 @@ const SelectInput: React.FC<IProps> = ({
 }) => {
   return (
     <Column>
-      {labelText && <Label>{labelText}</Label>}
+      {labelText && (
+        <ItemContainer margin="0 0 0.4rem 0">
+          {' '}
+          <Label color={colors.text.primary}>{labelText}</Label>{' '}
+        </ItemContainer>
+      )}
+
       <Select
         className={`react-basic-single ${validationError && 'input-validation-error'}`}
         classNamePrefix="select"
         options={options}
-        defaultValue={options[selectedOption || 0]}
+        defaultValue={options[selectedOption || 0] || options[0]}
         isDisabled={isDisabled}
         isLoading={isLoading}
         isClearable={isClearable}
@@ -51,6 +52,7 @@ const SelectInput: React.FC<IProps> = ({
         name={name}
         isMulti={isMulti}
         onChange={onChange}
+        value={options[selectedOption || 0] || options[0]}
       />
     </Column>
   )
