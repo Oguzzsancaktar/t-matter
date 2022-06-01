@@ -1,14 +1,14 @@
+import * as React from 'react'
 import { Column, Row } from '@/components/layout'
 import { Label } from '@/components/texts'
 import colors from '@/constants/colors'
 import { useOutsideAlerter } from '@/hooks/useOutsideAlerter'
-import { RowStyled } from '@/shared'
-import * as React from 'react'
 import { useRef, useState } from 'react'
 import { Clock } from 'react-feather'
 import TimeKeeper from 'react-timekeeper'
 import styled from 'styled-components'
 import { InputWithIcon } from '../InputWithIcon'
+import { ItemContainer } from '@/components/item-container'
 
 interface IProps {
   name: string
@@ -31,20 +31,22 @@ const ClockPickerRelative = styled.div`
 `
 
 const ClockPicker12: React.FC<IProps> = ({ name, value = '00:00', disabled, labelText, validationError, onChange }) => {
-  const [time, setTime] = useState(value)
   const [showTime, setShowTime] = useState(false)
 
   const timePickerRef = useRef(null)
   useOutsideAlerter(timePickerRef, () => setShowTime(false))
 
   const handleChange = (newTime: any) => {
-    setTime(newTime.formatted12)
     onChange(newTime.formatted12)
   }
 
   return (
     <Column>
-      {labelText && <Label>{labelText}</Label>}
+      {labelText && (
+        <ItemContainer margin="0 0 0.4rem 0">
+          <Label color={colors.text.primary}>{labelText}</Label>{' '}
+        </ItemContainer>
+      )}
       <Row>
         <ClockPickerRelative>
           <InputWithIcon
@@ -52,7 +54,7 @@ const ClockPicker12: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
             onChange={e => onChange(e.target.value)}
             name={name}
             type="text"
-            value={time}
+            value={value}
             children={<Clock size={20} />}
             onFocus={() => setShowTime(true)}
             // onBlur={() => setShowTime(false)}
@@ -61,7 +63,7 @@ const ClockPicker12: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
           {showTime && (
             <div ref={timePickerRef}>
               <TimeKeeper
-                time={time}
+                time={value}
                 onChange={newTime => handleChange(newTime)}
                 onDoneClick={() => setShowTime(false)}
                 switchToMinuteOnHourSelect

@@ -120,10 +120,6 @@ const SalarySettings = () => {
     setSalarySettingsStateData({ ...salarySettingsStateData, payrollIncreases: newPayrollIncreases })
   }
 
-  // const handleSelectChange = (e: React.ChangeEvent) => {
-  //   console.log(e)
-  // }
-
   const handleSave = async () => {
     await patchSalarySettings(salarySettingsStateData)
     toastSuccess('Salary settings updated successfully')

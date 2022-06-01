@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { JustifyBetweenColumn } from '../layout'
 import WizzardNavigationItem from './WizzardNavigationItem'
 
@@ -7,15 +7,21 @@ interface IWizzardStep {
 }
 interface IProps {
   steps: IWizzardStep[]
-  currentIndex: number
+  activeStep: number
+  onStepChange: (index: number) => void
 }
 
-const WizzardNavigation: React.FC<IProps> = ({ steps }) => {
-  const [activeIndex, setActiveIndex] = useState(0)
+const WizzardNavigation: React.FC<IProps> = ({ steps, activeStep, onStepChange }) => {
   return (
-    <JustifyBetweenColumn>
+    <JustifyBetweenColumn height="100%">
       {steps.map((step, index) => (
-        <WizzardNavigationItem stepName={step.stepName} stepIndex={index} isActive={activeIndex === index} />
+        <WizzardNavigationItem
+          stepName={step.stepName}
+          stepIndex={index}
+          isActive={activeStep === index}
+          key={index}
+          onClick={() => onStepChange(index)}
+        />
       ))}
     </JustifyBetweenColumn>
   )

@@ -1,4 +1,4 @@
-export default interface IUser {
+export default interface IClient {
   _id: string
   firstname: string
   lastname: string
@@ -11,8 +11,9 @@ export default interface IUser {
   state: string
   zipcode: string
   address: string
-  role: string
+  aSharpNumber: string
+  refferType: string
   gender: string
   status: string
-  password: string
+  reliableCustomers: string[]
 }

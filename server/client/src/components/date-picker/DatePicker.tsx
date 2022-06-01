@@ -1,17 +1,13 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import 'flatpickr/dist/themes/material_green.css'
 import '@/styles/vendors/flat-picker.css'
-
 import Flatpickr from 'react-flatpickr'
-import styled from 'styled-components'
-import { useOutsideAlerter } from '@/hooks/useOutsideAlerter'
-import { Clock, Eye, EyeOff } from 'react-feather'
-import { InputWithIcon } from '../input'
+import { Clock } from 'react-feather'
 import { Column, Row } from '../layout'
 import { Label } from '../texts'
-import { type } from 'os'
-import { Input } from '../input/InputRegular/styled'
 import { Container, IconContainer } from '../input/InputWithIcon/styled'
+import { ItemContainer } from '../item-container'
+import colors from '@/constants/colors'
 
 interface IProps {
   name: string
@@ -37,7 +33,11 @@ const DatePicker: React.FC<IProps> = ({ name, value = new Date(), disabled, labe
 
   return (
     <Column>
-      {labelText && <Label>{labelText}</Label>}
+      {labelText && (
+        <ItemContainer margin="0 0 0.4rem 0">
+          <Label color={colors.text.primary}>{labelText}</Label>{' '}
+        </ItemContainer>
+      )}
       <Row>
         <Column>
           <Container validationError={validationError}>

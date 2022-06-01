@@ -1,7 +1,8 @@
 import { ItemContainer } from '@/components/item-container'
+import { Label } from '@/components/texts'
+import colors from '@/constants/colors'
 import { Column, Row } from '@components/layout'
 import { Eye, EyeOff } from 'react-feather'
-import styled from 'styled-components'
 import { Container, IconContainer, Input } from './styled'
 
 interface Props {
@@ -21,12 +22,6 @@ interface Props {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
 }
 
-const Label = styled.label`
-  width: 100%;
-  text-align: start;
-  margin-bottom: 0.4rem;
-`
-
 const InputWithIcon: React.FC<Props> = ({
   children,
   validationError,
@@ -39,21 +34,26 @@ const InputWithIcon: React.FC<Props> = ({
 }) => {
   return (
     <Column>
-      {labelText && <Label>{labelText}</Label>}
+      {labelText && (
+        <ItemContainer margin="0 0 0.4rem 0">
+          <Label color={colors.text.primary}>{labelText}</Label>{' '}
+        </ItemContainer>
+      )}
       <Container validationError={validationError}>
         <Row>
           <IconContainer disabled={disabled} validationError={validationError}>
             {children}
           </IconContainer>
           <Input validationError={validationError} type={type} disabled={disabled} {...rest} />
-          <ItemContainer width="30px">
-            {handleVisibility &&
-              (isPasswordVisible ? (
+          {handleVisibility && (
+            <ItemContainer width="30px">
+              {isPasswordVisible ? (
                 <Eye size={20} style={{ cursor: 'pointer' }} onClick={() => handleVisibility(isPasswordVisible)} />
               ) : (
                 <EyeOff size={20} style={{ cursor: 'pointer' }} onClick={() => handleVisibility(!isPasswordVisible)} />
-              ))}
-          </ItemContainer>
+              )}
+            </ItemContainer>
+          )}
         </Row>
       </Container>
     </Column>

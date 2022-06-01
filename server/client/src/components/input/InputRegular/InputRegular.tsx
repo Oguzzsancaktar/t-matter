@@ -1,5 +1,6 @@
-import { Column, Row } from '@components/index'
 import React from 'react'
+import colors from '@/constants/colors'
+import { Column, ItemContainer, Row } from '@components/index'
 import styled from 'styled-components'
 import { Input } from './styled'
 
@@ -34,7 +35,11 @@ const InputRegular: React.FC<IProps> = ({
 }) => {
   return (
     <Column margin={margin}>
-      {labelText && <Label>{labelText}</Label>}
+      {labelText && (
+        <ItemContainer margin="0 0 0.4rem 0">
+          <Label color={colors.text.primary}>{labelText}</Label>{' '}
+        </ItemContainer>
+      )}
       <Input
         validationError={validationError}
         onChange={onChange}

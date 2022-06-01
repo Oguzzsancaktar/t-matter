@@ -1,8 +1,8 @@
 import { JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import { Tab } from '@/components/tab'
 import { InnerWrapper } from '@/components/wrapper'
-import { UserRoleSettings, UserTaskSettingsTab, UserPageSettingsTab } from '@/pages'
-import { CreateClientTab } from '@/pages/customer-modal'
+import { UserPageSettingsTab } from '@/pages'
+import { CreateClientTab, CreateContactTab } from '@/pages/customer-modal'
 import React, { useState } from 'react'
 import { ModalHeader, ModalBody } from '../types'
 
@@ -36,9 +36,9 @@ const CreateCustomerModal = () => {
         {activeTab === 'create-client' ? (
           <CreateClientTab />
         ) : activeTab === 'create-contact' ? (
-          <CreateClientTab />
+          <CreateContactTab />
         ) : (
-          <UserPageSettingsTab />
+          'Something went wrong'
         )}
       </ModalBody>
     </InnerWrapper>

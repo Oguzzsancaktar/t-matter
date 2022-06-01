@@ -40,6 +40,7 @@ const CreateUserModal = () => {
     birthday: '',
     birthplace: '',
     country: '',
+    city: '',
     state: '',
     zipcode: '',
     address: '',
@@ -56,6 +57,7 @@ const CreateUserModal = () => {
   const [birthdayError, setBirthdayError] = useState(false)
   const [birthplaceError, setBirthplaceError] = useState(false)
   const [countryError, setCountryError] = useState(false)
+  const [cityError, setCityError] = useState(false)
   const [stateError, setStateError] = useState(false)
   const [zipcodeError, setZipcodeError] = useState(false)
   const [addressError, setAddressError] = useState(false)
@@ -76,6 +78,7 @@ const CreateUserModal = () => {
     setBirthdayError(false)
     setBirthplaceError(false)
     setCountryError(false)
+    setCityError(false)
     setStateError(false)
     setZipcodeError(false)
     setAddressError(false)
@@ -124,6 +127,12 @@ const CreateUserModal = () => {
     if (!isValueNull(createUserData.country)) {
       setErrorMessage('Please enter a valid country')
       setCountryError(true)
+      return false
+    }
+
+    if (!isValueNull(createUserData.city)) {
+      setErrorMessage('Please enter a valid city')
+      setCityError(true)
       return false
     }
 
@@ -304,16 +313,33 @@ const CreateUserModal = () => {
 
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="country"
-                  placeholder="Enter country..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Country"
-                  validationError={countryError}
-                />
+                <JustifyBetweenRow>
+                  <ItemContainer margin="0 0.5rem 0 0 " width="calc((100% - 1rem)/2)">
+                    <InputWithIcon
+                      children={<User size={16} />}
+                      name="country"
+                      placeholder="Enter country..."
+                      onChange={handleInputChange}
+                      // onBlur={validateFormFields}
+                      type="text"
+                      labelText="Country"
+                      validationError={countryError}
+                    />
+                  </ItemContainer>
+
+                  <ItemContainer margin="0 0 0 0.5rem" width="calc((100% - 1rem)/2)">
+                    <InputWithIcon
+                      children={<User size={16} />}
+                      name="city"
+                      placeholder="Enter city..."
+                      onChange={handleInputChange}
+                      // onBlur={validateFormFields}
+                      type="text"
+                      labelText="City"
+                      validationError={cityError}
+                    />
+                  </ItemContainer>
+                </JustifyBetweenRow>
               </ItemContainer>
 
               <ItemContainer margin="0.5rem 0 0 0.5rem">

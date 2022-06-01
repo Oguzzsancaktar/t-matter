@@ -216,6 +216,9 @@ input:-webkit-autofill {
   -webkit-background-clip: text;
 }
 
+ul{
+  list-style: none;
+}
 
 `
 
