@@ -9,6 +9,7 @@ import {
   JustifyCenterColumn
 } from '@/components'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
+import UserReadModal from '@/components/modals/UserPlanning/userPageSettings/UserReadModal'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
 import { openModal } from '@/store'
@@ -52,9 +53,7 @@ const UserPageSettingsTab = () => {
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={function (): void {
-            throw new Error('Function not implemented.')
-          }}
+          onRead={() => handleRead(data.id)}
           onEdit={function (): void {
             throw new Error('Function not implemented.')
           }}
@@ -69,9 +68,20 @@ const UserPageSettingsTab = () => {
     }
   ]
 
+  const handleRead = (id: string) => {
+    dispatch(
+      openModal({
+        id: `userDetailModal-${id}`,
+        title: 'user modal' + id,
+        body: <UserReadModal userId={id} />,
+        size: ESize.XLarge
+      })
+    )
+  }
+
   const data = [
     {
-      id: 1,
+      id: '1',
       user: {
         name: 'User Name 1',
         photo: 'https://via.placeholder.com/150',
@@ -82,7 +92,7 @@ const UserPageSettingsTab = () => {
       status: 'Active'
     },
     {
-      id: 2,
+      id: '2',
       user: {
         name: 'User Name 2',
         photo: 'https://via.placeholder.com/150',

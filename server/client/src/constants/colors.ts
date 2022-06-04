@@ -64,9 +64,9 @@ const colors = Object.freeze({
   black: {
     primary: '#222831',
     secondary: '#233446',
-    dark: '#697a8d',
+    dark: '#436571',
     middle: '#434971',
-    light: '#436571'
+    light: '#697a8d'
   },
   text: {
     primary: '#566a7f'

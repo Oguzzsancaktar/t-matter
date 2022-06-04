@@ -13,6 +13,7 @@ const MinimizedModalsBarWrapper = styled.div`
   margin: 0.5rem;
   width: calc(100vw - 1rem);
   bottom: 0;
+  z-index: 9999;
 `
 
 const BarList = styled.ul`
