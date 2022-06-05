@@ -36,11 +36,13 @@ const updateUserValidation = async (req, res, next) => {
 }
 
 const getUserValidation = async (req, res, next) => {
-  const { body } = req
-  const schema = joi.object({})
+  const { params } = req
+  const schema = joi.object({
+    id: joi.string().required()
+  })
 
   try {
-    await schema.validateAsync(body)
+    await schema.validateAsync(params)
     next()
   } catch (error) {
     res.status(400).json(

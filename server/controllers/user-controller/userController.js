@@ -21,7 +21,7 @@ const updateUser = async (req, res) => {
 const getUser = async (req, res) => {
   const { id } = req.params
   try {
-    const user = dataAccess.userDataAccess.findUserById(id)
+    const user = await dataAccess.userDataAccess.findUserById(id)
     res.status(StatusCodes.OK).json(user)
   } catch (e) {
     console.log(e)

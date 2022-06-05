@@ -7,7 +7,7 @@ router.post('/', middlewares.validations.userValidations.createUserValidation, c
 
 router.patch('/', middlewares.validations.userValidations.updateUserValidation, controllers.userController.updateUser)
 
-router.get('/:id', middlewares.validations.userValidations.getUserValidation, controllers.userController.getUsers)
+router.get('/:id', middlewares.validations.userValidations.getUserValidation, controllers.userController.getUser)
 
 router.delete(
   '/:id',
@@ -15,6 +15,6 @@ router.delete(
   controllers.userController.removeUser
 )
 
-router.get('/', controllers.userController.getUser)
+router.get('/', controllers.userController.getUsers)
 
 module.exports = router

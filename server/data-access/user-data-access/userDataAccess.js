@@ -9,6 +9,7 @@ const findByIdAndUpdateUser = (id, data) => {
 }
 
 const findUserById = id => {
+  console.log(id)
   return User.findById(id)
 }
 
