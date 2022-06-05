@@ -3,15 +3,7 @@ const utils = require('../../../utils')
 
 const createUserValidation = async (req, res, next) => {
   const { body } = req
-  const schema = joi.object({
-    defaultPayrollRate: joi.number().required(),
-    payrollIncreases: joi.array().items(
-      joi.object({
-        increaseHour: joi.number().required(),
-        increaseRate: joi.number().required()
-      })
-    )
-  })
+  const schema = joi.object({})
 
   try {
     await schema.validateAsync(body)
@@ -28,16 +20,41 @@ const createUserValidation = async (req, res, next) => {
 
 const updateUserValidation = async (req, res, next) => {
   const { body } = req
-  const schema = joi.object({
-    _id: joi.string().required(),
-    defaultPayrollRate: joi.number().required(),
-    payrollIncreases: joi.array().items(
-      joi.object({
-        increaseHour: joi.number().required(),
-        increaseRate: joi.number().required()
+  const schema = joi.object({})
+
+  try {
+    await schema.validateAsync(body)
+    next()
+  } catch (error) {
+    res.status(400).json(
+      utils.errorUtils.errorInstance({
+        message: error.message,
+        validationError: error.details
       })
     )
-  })
+  }
+}
+
+const getUserValidation = async (req, res, next) => {
+  const { body } = req
+  const schema = joi.object({})
+
+  try {
+    await schema.validateAsync(body)
+    next()
+  } catch (error) {
+    res.status(400).json(
+      utils.errorUtils.errorInstance({
+        message: error.message,
+        validationError: error.details
+      })
+    )
+  }
+}
+
+const removeUserValidation = async (req, res, next) => {
+  const { body } = req
+  const schema = joi.object({})
 
   try {
     await schema.validateAsync(body)
@@ -54,5 +71,7 @@ const updateUserValidation = async (req, res, next) => {
 
 module.exports = {
   createUserValidation,
-  updateUserValidation
+  updateUserValidation,
+  getUserValidation,
+  removeUserValidation
 }
