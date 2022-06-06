@@ -32,7 +32,8 @@ const WorkingScheduleSchema = new Schema({
   [DAYS.SUNDAY]: { ...defaultWorkingDay, isWorkingDay: false },
   owner: {
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    required: true
   }
 })
 

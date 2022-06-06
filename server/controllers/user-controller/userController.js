@@ -3,7 +3,10 @@ const { StatusCodes } = require('http-status-codes')
 const { STATUS_TYPES } = require('../../constants/constants')
 
 const createUser = async (req, res) => {
+  const { body } = req
   try {
+    await dataAccess.userDataAccess.createUser(body)
+    res.sendStatus(StatusCodes.CREATED)
   } catch (e) {
     console.log(e)
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -11,7 +14,10 @@ const createUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
+  const { _id, ...data } = req.body
   try {
+    await dataAccess.userDataAccess.findByIdAndUpdateUser(_id, data)
+    res.sendStatus(StatusCodes.OK)
   } catch (e) {
     console.log(e)
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -22,7 +28,11 @@ const getUser = async (req, res) => {
   const { id } = req.params
   try {
     const user = await dataAccess.userDataAccess.findUserById(id)
-    res.status(StatusCodes.OK).json(user)
+    let workingSchedule = await dataAccess.workingScheduleDataAccess.findWorkingScheduleByUserId(id)
+    if (!workingSchedule) {
+      workingSchedule = await dataAccess.workingScheduleDataAccess.findCompanyWorkingSchedule()
+    }
+    res.status(StatusCodes.OK).json({ ...user, workingSchedule })
   } catch (e) {
     console.log(e)
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
