@@ -59,8 +59,28 @@ const getRoleValidation = async (req, res, next) => {
   }
 }
 
+const removeRoleValidation = async (req, res, next) => {
+  const { params } = req
+  const schema = joi.object({
+    id: joi.string().required()
+  })
+
+  try {
+    await schema.validateAsync(params)
+    next()
+  } catch (error) {
+    res.status(400).json(
+      utils.errorUtils.errorInstance({
+        message: error.message,
+        validationError: error.details
+      })
+    )
+  }
+}
+
 module.exports = {
   createRoleValidation,
   updateRoleValidation,
-  getRoleValidation
+  getRoleValidation,
+  removeRoleValidation
 }

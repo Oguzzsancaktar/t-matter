@@ -11,4 +11,10 @@ router.get('/:id', middlewares.validations.roleValidations.getRoleValidation, co
 
 router.get('/', controllers.roleController.getRoles)
 
+router.delete(
+  '/:id',
+  middlewares.validations.roleValidations.removeRoleValidation,
+  controllers.roleController.removeRole
+)
+
 module.exports = router

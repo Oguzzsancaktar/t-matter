@@ -1,6 +1,7 @@
 const dataAccess = require('../../data-access')
 const utils = require('../../utils/error-utils/errorUtils')
 const { StatusCodes } = require('http-status-codes')
+const { STATUS_TYPES } = require('../../constants/constants')
 
 const getRole = async (req, res) => {
   const { id } = req.params
@@ -45,9 +46,21 @@ const updateRole = async (req, res) => {
   }
 }
 
+const removeRole = async (req, res) => {
+  const { id } = req.params
+  try {
+    await dataAccess.roleDataAccess.findByIdAndUpdate(id, { status: STATUS_TYPES.INACTIVE })
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   getRoles,
   createRole,
   updateRole,
-  getRole
+  getRole,
+  removeRole
 }
