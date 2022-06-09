@@ -29,7 +29,7 @@ const UserModalSettingsTab = () => {
           </JustifyCenterRow>
         </JustifyBetweenColumn>
       </ModalHeader>
-      <ModalBody minHeight="700px">
+      <ModalBody>
         {activeTab === 'salary-settings' ? (
           <UserModalSalarySettingsTab />
         ) : activeTab === 'log-in-settings' ? (

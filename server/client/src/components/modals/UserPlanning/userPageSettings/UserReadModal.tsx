@@ -3,11 +3,11 @@ import { Button } from '@/components/button'
 import { ActionButtons } from '@/components/data-tables'
 import { UserImage } from '@/components/image'
 import { ItemContainer } from '@/components/item-container'
-import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow } from '@/components/layout'
+import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components/layout'
 import { H1, Label } from '@/components/texts'
 import { InnerWrapper } from '@/components/wrapper'
 import colors from '@/constants/colors'
-import { UserModalSettingsTab } from '@/pages'
+import { UserModalLogInTab, UserModalSettingsTab } from '@/pages'
 import React, { useState } from 'react'
 
 interface IProps {
@@ -17,10 +17,11 @@ interface IProps {
 const UserReadModal: React.FC<IProps> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState('log-in')
 
+  console.log(activeTab)
   const renderSwitch = () => {
     switch (activeTab) {
       case 'log-in':
-        return <UserModalSettingsTab />
+        return <UserModalLogInTab />
       case 'settings':
         return <UserModalSettingsTab />
     }
@@ -30,25 +31,33 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
     <InnerWrapper>
       <JustifyBetweenRow height="100%">
         <ItemContainer width="350px" height="100%">
-          <JustifyBetweenColumn height="100%">
-            <ItemContainer>
+          <JustifyBetweenColumn height="100%" padding="1rem 0">
+            <ItemContainer height="150px">
               <JustifyBetweenColumn>
                 <ItemContainer>
-                  <UserImage width="150px" height="150px" />
-                  <H1>User Name</H1>
+                  <JustifyCenterColumn>
+                    <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
+                    <H1 margin="0.5rem 0" textAlign="center">
+                      User Name
+                    </H1>
+                  </JustifyCenterColumn>
                 </ItemContainer>
                 <ItemContainer>
                   <JustifyCenterRow>
-                    <Badge children={<H1>User</H1>} color={colors.gray.dark} />
-                    <Badge children={<H1>Active</H1>} color={colors.green.primary} />
+                    <ItemContainer width="auto" margin="0 0.5rem 0 0">
+                      <Badge children={'User'} color={colors.gray.dark} />
+                    </ItemContainer>
+                    <ItemContainer width="auto">
+                      <Badge children={'Active'} color={colors.green.primary} />
+                    </ItemContainer>
                   </JustifyCenterRow>
                 </ItemContainer>
               </JustifyBetweenColumn>
             </ItemContainer>
 
-            <ItemContainer>
+            <ItemContainer margin="1rem 0" height="calc(100% - 1rem - 1rem - 150px - 40px)">
               <JustifyBetweenColumn>
-                <ItemContainer>
+                <ItemContainer margin="1rem 0">
                   <JustifyBetweenRow>
                     <ItemContainer width="90px" margin="0 0.5rem 0 0">
                       <H1 fontSize="13px" color={colors.black.dark}>
@@ -63,7 +72,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                   </JustifyBetweenRow>
                 </ItemContainer>
 
-                <ItemContainer>
+                <ItemContainer margin="1rem 0">
                   <JustifyBetweenRow>
                     <ItemContainer width="90px" margin="0 0.5rem 0 0">
                       <H1 fontSize="13px" color={colors.black.dark}>
@@ -77,7 +86,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                     </ItemContainer>
                   </JustifyBetweenRow>
                 </ItemContainer>
-                <ItemContainer>
+                <ItemContainer margin="1rem 0">
                   <JustifyBetweenRow>
                     <ItemContainer width="90px" margin="0 0.5rem 0 0">
                       <H1 fontSize="13px" color={colors.black.dark}>
@@ -91,7 +100,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                     </ItemContainer>
                   </JustifyBetweenRow>
                 </ItemContainer>
-                <ItemContainer>
+                <ItemContainer margin="1rem 0">
                   <JustifyBetweenRow>
                     <ItemContainer width="90px" margin="0 0.5rem 0 0">
                       <H1 fontSize="13px" color={colors.black.dark}>
@@ -105,7 +114,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                     </ItemContainer>
                   </JustifyBetweenRow>
                 </ItemContainer>
-                <ItemContainer>
+                <ItemContainer margin="1rem 0">
                   <JustifyBetweenRow>
                     <ItemContainer width="90px" margin="0 0.5rem 0 0">
                       <H1 fontSize="13px" color={colors.black.dark}>
@@ -122,35 +131,48 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
               </JustifyBetweenColumn>
             </ItemContainer>
 
-            <ItemContainer>
-              <ActionButtons
-                onRead={function (): void {
-                  throw new Error('Function not implemented.')
-                }}
-                onEdit={function (): void {
-                  throw new Error('Function not implemented.')
-                }}
-                onHistory={function (): void {
-                  throw new Error('Function not implemented.')
-                }}
-                onDelete={function (): void {
-                  throw new Error('Function not implemented.')
-                }}
-              />
+            <ItemContainer height="40px">
+              <JustifyCenterColumn>
+                <ActionButtons
+                  iconSize="30px"
+                  onRead={function (): void {
+                    throw new Error('Function not implemented.')
+                  }}
+                  onEdit={function (): void {
+                    throw new Error('Function not implemented.')
+                  }}
+                  onHistory={function (): void {
+                    throw new Error('Function not implemented.')
+                  }}
+                  onDelete={function (): void {
+                    throw new Error('Function not implemented.')
+                  }}
+                />
+              </JustifyCenterColumn>
             </ItemContainer>
           </JustifyBetweenColumn>
         </ItemContainer>
-        <ItemContainer height="100%" width="70px">
+        <ItemContainer height="100%" width="120px" padding="1rem" backgroundColor={colors.gray.primary}>
           <JustifyBetweenColumn height="100%">
             <ItemContainer height="100%" margin="0 0 1rem 0">
-              <Button onClick={() => setActiveTab('log-in')}>Log In</Button>
+              <Button color={colors.gray.secondary} onClick={() => setActiveTab('log-in')}>
+                <H1 color={colors.gray.primary} textAlign="center">
+                  Log In
+                </H1>
+              </Button>
             </ItemContainer>
             <ItemContainer height="100%" margin="0 0 0 0">
-              <Button onClick={() => setActiveTab('settings')}>Settings</Button>
+              <Button color={colors.gray.secondary} onClick={() => setActiveTab('settings')}>
+                <H1 color={colors.gray.primary} textAlign="center">
+                  Settings
+                </H1>
+              </Button>
             </ItemContainer>
           </JustifyBetweenColumn>
         </ItemContainer>
-        <ItemContainer>{renderSwitch()}</ItemContainer>
+        <ItemContainer minHeight="700px" height="inherit" width="calc(100% - 120px - 350px)">
+          {renderSwitch()}
+        </ItemContainer>
       </JustifyBetweenRow>
     </InnerWrapper>
   )

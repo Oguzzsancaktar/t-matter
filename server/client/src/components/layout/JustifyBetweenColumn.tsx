@@ -9,7 +9,6 @@ const JustifyBetweenColumnStyled = styled.div<IProps>`
   padding: ${({ padding }) => padding && padding};
   height: ${({ height }) => (height ? height : 'auto')};
   width: ${({ width }) => (width ? width : '100%')};
-  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;

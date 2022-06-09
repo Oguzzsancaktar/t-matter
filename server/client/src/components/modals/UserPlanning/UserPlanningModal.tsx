@@ -28,14 +28,6 @@ const CompanyPlanningModal = () => {
               onClick={() => setActiveTab('user-role-settings')}
             />
 
-            {/* <Tab
-              margin="0 1rem 0 0rem"
-              index={2}
-              name="User Task Setting"
-              isActive={activeTab === 'user-task-settings'}
-              onClick={() => setActiveTab('user-task-settings')}
-            /> */}
-
             <Tab
               margin="0 1rem 0 0rem"
               index={2}
