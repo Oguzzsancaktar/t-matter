@@ -1,18 +1,33 @@
-import { createApi } from '@reduxjs/toolkit/query/react'
-import { IUser, IUserCreateDTO, IUserUpdateDTO } from '@models/index'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+import { IUser, IUserCreateDTO, IUserUpdateDTO } from '@/models'
 
 const USER_REDUCER_PATH = 'userApi'
-const USER_TAG_TYPE = 'userTag'
+const USER_TAG_TYPE = 'userTag' as const
 
 type IBuilder = EndpointBuilder<IAxiosBaseQueryFn, typeof USER_TAG_TYPE, typeof USER_REDUCER_PATH>
 
+const getUsers = (builder: IBuilder) => {
+  return builder.query<IUser[], void>({
+    query() {
+      return {
+        url: `/user`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      if (!result) return [{ type: USER_TAG_TYPE, id: 'LIST' }]
+      return [...result.map(user => ({ type: USER_TAG_TYPE, id: user._id })), { type: USER_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const createUser = (builder: IBuilder) => {
-  return builder.mutation<void, IUserCreateDTO>({
+  return builder.mutation<unknown, IUserCreateDTO>({
     query(userCreateDto) {
       return {
-        url: '/users',
+        url: '/user',
         method: 'POST',
         data: userCreateDto
       }
@@ -27,7 +42,7 @@ const getUserById = (builder: IBuilder) => {
   return builder.query<IUser, IUser['_id']>({
     query(userId) {
       return {
-        url: `/users/${userId}`,
+        url: `/user/${userId}`,
         method: 'GET'
       }
     },
@@ -45,7 +60,7 @@ const updateUser = (builder: IBuilder) => {
   return builder.mutation<IUser, IUserUpdateDTO>({
     query(userUpdateDto) {
       return {
-        url: `/users/${userUpdateDto._id}`,
+        url: `/user/${userUpdateDto._id}`,
         method: 'PATCH',
         data: userUpdateDto
       }
@@ -62,11 +77,12 @@ const userApi = createApi({
   tagTypes: [USER_TAG_TYPE],
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
+    getUsers: getUsers(builder),
     createUser: createUser(builder),
     getUserById: getUserById(builder),
     updateUser: updateUser(builder)
   })
 })
 
-const { useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } = userApi
-export { userApi, useGetUserByIdQuery, useCreateUserMutation, useUpdateUserMutation }
+const { useGetUsersQuery, useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } = userApi
+export { userApi, useGetUsersQuery, useGetUserByIdQuery, useCreateUserMutation, useUpdateUserMutation }

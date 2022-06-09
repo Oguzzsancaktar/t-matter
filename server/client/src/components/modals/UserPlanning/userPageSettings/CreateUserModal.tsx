@@ -7,14 +7,13 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
-import { IUserCreateDTO } from '@/models'
+import { EGender, IUserCreateDTO } from '@/models'
 import { Key, User } from 'react-feather'
 import { useToggle } from '@/hooks/useToggle'
 import {
   isEmailValid,
   isPasswordAndConfirmMatch,
   isPasswordValid,
-  isPhoneNumberValid,
   isValueNull,
   isZipcodeValid
 } from '@/utils/validationUtils'
@@ -22,6 +21,8 @@ import { toastError } from '@/utils/toastUtil'
 import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
 import moment from 'moment'
+import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
+import { useCreateUserMutation } from '@/services/settings/user-planning/userService'
 
 const CreateUserModal = () => {
   const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
@@ -29,21 +30,24 @@ const CreateUserModal = () => {
 
   const [passwordConfirm, setPasswordConfirm] = useState('')
 
+  const [createUser, { isLoading: isUserCreateLoading }] = useCreateUserMutation()
+  const { data: roleData, isLoading: roleLoading, error: roleDataError } = useGetRolesQuery()
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [createUserData, setCreateUserData] = useState<Omit<IUserCreateDTO, '_id'>>({
-    firstname: '',
-    lastname: '',
-    email: '',
-    phone: '',
+  const [birthDate, setBirthDate] = useState('')
+  const [createUserData, setCreateUserData] = useState<IUserCreateDTO>({
+    firstname: 'oguz',
+    lastname: 'taha',
+    email: 'info@gmail.com',
+    phone: '123454235',
     birthday: '',
-    birthplace: '',
-    country: '',
-    city: '',
-    state: '',
-    zipcode: '',
-    address: '',
+    birthplace: 'tarsus',
+    country: 'tarsus',
+    city: 'mersi',
+    state: 'ista',
+    zipcode: '1234123',
+    address: 'sadfasdf',
     role: '',
     gender: '',
     status: '',
@@ -86,6 +90,7 @@ const CreateUserModal = () => {
     setGenderError(false)
     setStatusError(false)
     setPasswordError(false)
+    setPasswordMatchError(false)
     setErrorMessage('')
 
     if (!isValueNull(createUserData.firstname)) {
@@ -106,13 +111,13 @@ const CreateUserModal = () => {
       return false
     }
 
-    if (!isPhoneNumberValid(createUserData.phone)) {
+    if (!isValueNull(createUserData.phone)) {
       setErrorMessage('Please enter a valid phone number')
       setPhoneError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.birthday)) {
+    if (!isValueNull(birthDate)) {
       setErrorMessage('Please enter a valid birthday')
       setBirthdayError(true)
       return false
@@ -142,7 +147,7 @@ const CreateUserModal = () => {
       return false
     }
 
-    if (!isZipcodeValid(createUserData.zipcode)) {
+    if (!isValueNull(createUserData.zipcode)) {
       setErrorMessage('Please enter a valid zipcode')
       setZipcodeError(true)
       return false
@@ -192,8 +197,8 @@ const CreateUserModal = () => {
     return true
   }
 
-  const handleBirhdayChange = (date: Date[]) => {
-    setCreateUserData({ ...createUserData, birthday: moment(date[0]).format('MM-DD-YYYY') })
+  const handleBirhdayChange = (date: Date[], dateText) => {
+    setBirthDate(dateText)
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -204,14 +209,15 @@ const CreateUserModal = () => {
     dispatch(closeModal('createUserModal'))
   }
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const validationResult = validateFormFields()
     if (validationResult) {
-      console.log('createUserData', createUserData)
+      const result = await createUser({ ...createUserData, birthday: birthDate })
+
+      dispatch(closeModal('createUserModal'))
     } else {
       toastError(errorMessage)
     }
-    // dispatch(closeModal('createUserModal'))
   }
 
   useEffect(() => {
@@ -242,6 +248,7 @@ const CreateUserModal = () => {
                   type="text"
                   labelText="First Name"
                   validationError={firstnameError}
+                  value={createUserData.firstname}
                 />
               </ItemContainer>
 
@@ -255,6 +262,7 @@ const CreateUserModal = () => {
                   type="text"
                   labelText="Last Name"
                   validationError={lastnameError}
+                  value={createUserData.lastname}
                 />
               </ItemContainer>
             </JustifyBetweenRow>
@@ -270,6 +278,7 @@ const CreateUserModal = () => {
                   type="email"
                   labelText="E-mail"
                   validationError={emailError}
+                  value={createUserData.email}
                 />
               </ItemContainer>
 
@@ -283,6 +292,7 @@ const CreateUserModal = () => {
                   type="tel"
                   labelText="Phone Number"
                   validationError={phoneError}
+                  value={createUserData.phone}
                 />
               </ItemContainer>
             </JustifyBetweenRow>
@@ -307,6 +317,7 @@ const CreateUserModal = () => {
                   type="text"
                   labelText="Birth Location"
                   validationError={birthplaceError}
+                  value={createUserData.birthplace}
                 />
               </ItemContainer>
             </JustifyBetweenRow>
@@ -324,6 +335,7 @@ const CreateUserModal = () => {
                       type="text"
                       labelText="Country"
                       validationError={countryError}
+                      value={createUserData.country}
                     />
                   </ItemContainer>
 
@@ -337,6 +349,7 @@ const CreateUserModal = () => {
                       type="text"
                       labelText="City"
                       validationError={cityError}
+                      value={createUserData.city}
                     />
                   </ItemContainer>
                 </JustifyBetweenRow>
@@ -354,6 +367,7 @@ const CreateUserModal = () => {
                       type="text"
                       labelText="State"
                       validationError={stateError}
+                      value={createUserData.state}
                     />
                   </ItemContainer>
                   <ItemContainer margin="0 0 0 0.5rem" width="250px">
@@ -366,6 +380,7 @@ const CreateUserModal = () => {
                       type="text"
                       labelText="Zip Code"
                       validationError={zipcodeError}
+                      value={createUserData.zipcode}
                     />
                   </ItemContainer>
                 </JustifyBetweenRow>
@@ -383,6 +398,7 @@ const CreateUserModal = () => {
                   type="text"
                   labelText="Address"
                   validationError={addressError}
+                  value={createUserData.address}
                 />
               </ItemContainer>
 
@@ -392,6 +408,7 @@ const CreateUserModal = () => {
                   name="gender"
                   // placeholder="Enter birth location..."
                   onChange={option => setCreateUserData({ ...createUserData, gender: option.value })}
+                  selectedOption={+createUserData.gender}
                   options={genderOptions}
                   labelText="Gender"
                   validationError={genderError}
@@ -402,11 +419,13 @@ const CreateUserModal = () => {
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0.5rem 0.5rem 0 0">
                 <SelectInput
+                  isLoading={roleLoading}
                   children={<User size={16} />}
                   name="role"
                   // placeholder="Select your birthday..."
                   onChange={option => setCreateUserData({ ...createUserData, role: option.value })}
-                  options={genderOptions}
+                  options={(roleData || []).map(role => ({ value: role._id, label: role.name }))}
+                  selectedOption={(roleData || []).findIndex(role => role._id === createUserData.role)}
                   labelText="Role"
                   validationError={roleError}
                 />
@@ -418,6 +437,7 @@ const CreateUserModal = () => {
                   name="status"
                   // placeholder="Enter birth location..."
                   onChange={option => setCreateUserData({ ...createUserData, status: option.value })}
+                  selectedOption={(statusOptions || []).findIndex(status => status.value === +createUserData.status)}
                   options={statusOptions}
                   labelText="Status"
                   validationError={statusError}

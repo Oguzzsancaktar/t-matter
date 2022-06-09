@@ -41,10 +41,10 @@ const SelectInput: React.FC<IProps> = ({
       )}
 
       <Select
+        placeholder="Select an option"
         className={`react-basic-single ${validationError && 'input-validation-error'}`}
         classNamePrefix="select"
         options={options}
-        defaultValue={options[selectedOption || 0] || options[0]}
         isDisabled={isDisabled}
         isLoading={isLoading}
         isClearable={isClearable}
@@ -52,7 +52,8 @@ const SelectInput: React.FC<IProps> = ({
         name={name}
         isMulti={isMulti}
         onChange={onChange}
-        value={options[selectedOption || 0] || options[0]}
+        // defaultValue={options[selectedOption || 0] || options[0]}
+        value={options[selectedOption || 0] || ''}
       />
     </Column>
   )

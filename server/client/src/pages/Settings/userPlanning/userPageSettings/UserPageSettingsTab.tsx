@@ -12,6 +12,7 @@ import { Badge, RoleBadge, UserBadge } from '@/components/badge'
 import UserReadModal from '@/components/modals/UserPlanning/userPageSettings/UserReadModal'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
+import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import { openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
@@ -22,12 +23,17 @@ const UserPageSettingsTab = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
+  const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
+  console.log('usersData', usersData)
+
   const columns = [
     {
       name: 'User',
       selector: row => row.task,
       sortable: true,
-      cell: data => <UserBadge userEmail={data.user.email} userImage={data.user.photo} userName={data.user.name} />
+      cell: data => (
+        <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + data.lastname} />
+      )
     },
     {
       name: 'Role',
@@ -44,7 +50,7 @@ const UserPageSettingsTab = () => {
       name: 'Status',
       selector: row => row.status,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
+      cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
     },
     {
       name: 'Actions',
@@ -79,31 +85,6 @@ const UserPageSettingsTab = () => {
     )
   }
 
-  const data = [
-    {
-      id: '1',
-      user: {
-        name: 'User Name 1',
-        photo: 'https://via.placeholder.com/150',
-        email: 'user1@email.com'
-      },
-      role: 'Admin',
-      phone: '+(44) 545 567 56 56',
-      status: 'Active'
-    },
-    {
-      id: '2',
-      user: {
-        name: 'User Name 2',
-        photo: 'https://via.placeholder.com/150',
-        email: 'user2@email.com'
-      },
-      role: 'User',
-      phone: '+(90) 543 333 22 22',
-      status: 'Inactive'
-    }
-  ]
-
   const openCreateRoleModal = (e: React.MouseEvent) => {
     e.preventDefault()
     dispatch(
@@ -125,7 +106,7 @@ const UserPageSettingsTab = () => {
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px)">
         <DataTableHeader handleAddNew={openCreateRoleModal} />
-        <DataTable fixedHeader columns={columns} data={data} />
+        <DataTable fixedHeader columns={columns} data={usersData || []} />
       </Column>
     </JustifyBetweenColumn>
   )

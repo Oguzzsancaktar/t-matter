@@ -10,6 +10,7 @@ import {
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
+import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
 import { openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
@@ -19,17 +20,21 @@ const UserRoleSettings = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
+  const { data: roleData, isLoading: roleLoading, error: roleError } = useGetRolesQuery()
+
+  console.log(roleData)
+
   const columns = [
     {
       name: 'Role',
-      selector: row => row.title,
+      selector: row => row.name,
       sortable: true
     },
     {
       name: 'Status',
       selector: row => row.status,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
+      cell: data => <Badge color={selectColorForStatus(data.status)}>{data.status} </Badge>
     },
     {
       name: 'Actions',
@@ -55,19 +60,6 @@ const UserRoleSettings = () => {
     }
   ]
 
-  const data = [
-    {
-      id: 1,
-      title: 'Beetlejuice',
-      status: 'Active'
-    },
-    {
-      id: 2,
-      title: 'Ghostbusters',
-      status: 'Inactive'
-    }
-  ]
-
   const openCreateRoleModal = (e: React.MouseEvent) => {
     e.preventDefault()
     dispatch(
@@ -89,7 +81,7 @@ const UserRoleSettings = () => {
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px)">
         <DataTableHeader handleAddNew={openCreateRoleModal} />
-        <DataTable fixedHeader columns={columns} data={data} />
+        <DataTable fixedHeader columns={columns} data={roleData || []} />
       </Column>
     </JustifyBetweenColumn>
   )

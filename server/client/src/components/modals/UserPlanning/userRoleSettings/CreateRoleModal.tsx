@@ -7,19 +7,29 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { InnerWrapper } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
+import { useCreateRoleMutation } from '@/services/settings/user-planning/userRoleService'
+import { isValueNull } from '@/utils/validationUtils'
+import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 
 const CreateRoleModal = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const [roleName, setRoleName] = useState('')
+  const [createRole] = useCreateRoleMutation()
 
   const handleCancel = () => {
     dispatch(closeModal('createRoleModal'))
   }
 
-  const handleConfirm = () => {
-    dispatch(closeModal('createRoleModal'))
+  const handleConfirm = async () => {
+    if (isValueNull(roleName)) {
+      await createRole({ name: roleName })
+      toastSuccess('Role ' + roleName + ' created successfully')
+      dispatch(closeModal('createRoleModal'))
+    } else {
+      toastWarning('Role name is required')
+    }
   }
   return (
     <InnerWrapper>
