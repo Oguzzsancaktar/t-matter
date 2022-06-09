@@ -4,11 +4,21 @@ const createUser = data => {
   return User.create(data)
 }
 
-const updateUser = (id, data) => {
-  return User.findByIdAndUpdate(id, data, { new: true })
+const findByIdAndUpdateUser = (id, data) => {
+  return User.findByIdAndUpdate(id, data)
+}
+
+const findUserById = id => {
+  return User.findById(id).lean().exec()
+}
+
+const findUser = (query = {}) => {
+  return User.find(query).lean().exec()
 }
 
 module.exports = {
   createUser,
-  updateUser
+  findByIdAndUpdateUser,
+  findUserById,
+  findUser
 }

@@ -1,0 +1,53 @@
+const dataAccess = require('../../data-access')
+const utils = require('../../utils/error-utils/errorUtils')
+const { StatusCodes } = require('http-status-codes')
+
+const getRole = async (req, res) => {
+  const { id } = req.params
+  try {
+    const role = await dataAccess.roleDataAccess.findById(id)
+    res.status(StatusCodes.OK).json(role)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getRoles = async (req, res) => {
+  try {
+    const roles = await dataAccess.roleDataAccess.findRoles()
+    res.status(StatusCodes.OK).json(roles)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const createRole = async (req, res) => {
+  const { name } = req.body
+  try {
+    await dataAccess.roleDataAccess.createRole({ name })
+    res.sendStatus(StatusCodes.CREATED)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const updateRole = async (req, res) => {
+  const { name, id } = req.body
+  try {
+    await dataAccess.roleDataAccess.findByIdAndUpdate(id, { name })
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+module.exports = {
+  getRoles,
+  createRole,
+  updateRole,
+  getRole
+}

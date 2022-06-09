@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const { STATUSES } = require('../constants/constants')
+const { mongo } = require('mongoose')
 
 const UserSchema = new Schema({
   email: {
@@ -12,17 +13,21 @@ const UserSchema = new Schema({
     required: true,
     type: String
   },
-  firstName: {
+  firstname: {
     required: true,
     type: String
   },
-  lastName: {
+  lastname: {
     required: true,
     type: String
   },
   birthday: {
     required: true,
     type: Date
+  },
+  birthplace: {
+    required: true,
+    type: String
   },
   phone: {
     required: true,
@@ -40,11 +45,11 @@ const UserSchema = new Schema({
     required: true,
     type: String
   },
-  street: {
+  address: {
     required: true,
     type: String
   },
-  zipCode: {
+  zipcode: {
     required: true,
     type: String
   },
@@ -59,7 +64,8 @@ const UserSchema = new Schema({
   },
   role: {
     required: true,
-    type: Number
+    type: mongoose.Types.ObjectId,
+    ref: 'role'
   }
 })
 

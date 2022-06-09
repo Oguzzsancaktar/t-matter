@@ -1,17 +1,27 @@
 const joi = require('joi')
 const utils = require('../../../utils')
 
+const userValidationSchema = {
+  address: joi.string().required(),
+  birthday: joi.date().required(),
+  birthplace: joi.string().required(),
+  city: joi.string().required(),
+  country: joi.string().required(),
+  email: joi.string().required(),
+  firstname: joi.string().required(),
+  lastname: joi.string().required(),
+  gender: joi.number().required(),
+  phone: joi.string().required(),
+  role: joi.string().required(),
+  state: joi.string().required(),
+  status: joi.number().required(),
+  zipcode: joi.string().required(),
+  password: joi.string().required()
+}
+
 const createUserValidation = async (req, res, next) => {
   const { body } = req
-  const schema = joi.object({
-    defaultPayrollRate: joi.number().required(),
-    payrollIncreases: joi.array().items(
-      joi.object({
-        increaseHour: joi.number().required(),
-        increaseRate: joi.number().required()
-      })
-    )
-  })
+  const schema = joi.object({ ...userValidationSchema })
 
   try {
     await schema.validateAsync(body)
@@ -28,16 +38,7 @@ const createUserValidation = async (req, res, next) => {
 
 const updateUserValidation = async (req, res, next) => {
   const { body } = req
-  const schema = joi.object({
-    _id: joi.string().required(),
-    defaultPayrollRate: joi.number().required(),
-    payrollIncreases: joi.array().items(
-      joi.object({
-        increaseHour: joi.number().required(),
-        increaseRate: joi.number().required()
-      })
-    )
-  })
+  const schema = joi.object({ ...userValidationSchema, _id: joi.string().required() })
 
   try {
     await schema.validateAsync(body)
@@ -52,7 +53,45 @@ const updateUserValidation = async (req, res, next) => {
   }
 }
 
+const getUserValidation = async (req, res, next) => {
+  const { params } = req
+  const schema = joi.object({
+    id: joi.string().required()
+  })
+
+  try {
+    await schema.validateAsync(params)
+    next()
+  } catch (error) {
+    res.status(400).json(
+      utils.errorUtils.errorInstance({
+        message: error.message,
+        validationError: error.details
+      })
+    )
+  }
+}
+
+const removeUserValidation = async (req, res, next) => {
+  const { params } = req
+  const schema = joi.object({ id: joi.string().required() })
+
+  try {
+    await schema.validateAsync(params)
+    next()
+  } catch (error) {
+    res.status(400).json(
+      utils.errorUtils.errorInstance({
+        message: error.message,
+        validationError: error.details
+      })
+    )
+  }
+}
+
 module.exports = {
   createUserValidation,
-  updateUserValidation
+  updateUserValidation,
+  getUserValidation,
+  removeUserValidation
 }
