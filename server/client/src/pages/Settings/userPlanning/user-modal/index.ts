@@ -1,2 +1,6 @@
 export { default as UserModalSalarySettingsTab } from './UserModalSalarySettingsTab'
 export { default as UserModalLogInSettingsTab } from './UserModalLogInSettingsTab'
+export { default as UserModalLogInSettingsSummaryBody } from './UserModalLogInSettingsSummaryBody'
+export { default as UserModalLogInSettingsSummaryFooter } from './UserModalLogInSettingsSummaryFooter'
+export { default as UserModalSalarySettingsSummaryFooter } from './UserModalSalarySettingsSummaryFooter'
+export { default as UserModalSalarySettingsSummaryBody } from './UserModalSalarySettingsSummaryBody'

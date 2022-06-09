@@ -1,51 +1,130 @@
-import { InnerWrapper, JustifyBetweenColumn, JustifyCenterRow, Tab } from '@/components'
+import {
+  ActionButtons,
+  Badge,
+  Column,
+  CreateUserModal,
+  DataTableHeader,
+  InnerWrapper,
+  JustifyBetweenColumn,
+  JustifyBetweenRow,
+  JustifyCenterColumn,
+  JustifyCenterRow,
+  RoleBadge,
+  Tab,
+  UserBadge
+} from '@/components'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
+import UserReadModal from '@/components/modals/UserPlanning/userPageSettings/UserReadModal'
+import useAccessStore from '@/hooks/useAccessStore'
+import { EStatus, ESize } from '@/models'
+import { openModal } from '@/store'
+import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React, { useState } from 'react'
+import DataTable from 'react-data-table-component'
+import { UserCheck } from 'react-feather'
 import { UserRoleSettings, UserTaskSettingsTab, UserPageSettingsTab } from '../Settings'
 
 const UserModalLogInTab = () => {
-  const [activeTab, setActiveTab] = useState('user-role-settings')
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
+  const columns = [
+    {
+      name: 'Date',
+      selector: row => row.date,
+      sortable: true
+    },
+    {
+      name: 'Log In',
+      selector: row => row.logIn,
+      sortable: true
+    },
+    {
+      name: 'Log Out',
+      selector: row => row.logOut,
+      sortable: true
+    },
+    {
+      name: 'Total Time',
+      selector: row => row.status,
+      sortable: true,
+      cell: data => data.totalTime
+    },
+    {
+      name: 'Actions',
+      selector: row => row.year,
+      right: true,
+      header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
+      cell: data => (
+        <ActionButtons
+          onRead={() => handleRead(data.id)}
+          onEdit={function (): void {
+            throw new Error('Function not implemented.')
+          }}
+          onHistory={function (): void {
+            throw new Error('Function not implemented.')
+          }}
+          onDelete={function (): void {
+            throw new Error('Function not implemented.')
+          }}
+        />
+      )
+    }
+  ]
+
+  const handleRead = (id: string) => {
+    dispatch(
+      openModal({
+        id: `userDetailModal-${id}`,
+        title: 'user modal' + id,
+        body: <UserReadModal userId={id} />,
+        size: ESize.XLarge
+      })
+    )
+  }
+
+  const data = [
+    {
+      id: '1',
+      date: 'Sep/11/2022',
+      logIn: '09:00 am',
+      logOut: '05:00 pm',
+      totalTime: '10:00'
+    },
+    {
+      id: '2',
+      date: 'Sep/11/2022',
+      logIn: '09:00 am',
+      logOut: '05:00 pm',
+      totalTime: '10:00'
+    }
+  ]
+
+  const openCreateRoleModal = (e: React.MouseEvent) => {
+    e.preventDefault()
+    dispatch(
+      openModal({
+        id: 'createUserModal',
+        title: 'Create User',
+        body: <CreateUserModal />,
+        size: ESize.Medium
+      })
+    )
+  }
 
   return (
     <InnerWrapper>
-      <ModalHeader>
-        <JustifyBetweenColumn>
-          <JustifyCenterRow>
-            <Tab
-              margin="0 1rem 0 0rem"
-              index={1}
-              name="User Role Settings"
-              isActive={activeTab === 'user-role-settings'}
-              onClick={() => setActiveTab('user-role-settings')}
-            />
-
-            {/* <Tab
-              margin="0 1rem 0 0rem"
-              index={2}
-              name="User Task Setting"
-              isActive={activeTab === 'user-task-settings'}
-              onClick={() => setActiveTab('user-task-settings')}
-            /> */}
-
-            <Tab
-              margin="0 1rem 0 0rem"
-              index={2}
-              name="User Settings"
-              isActive={activeTab === 'user-page-settings'}
-              onClick={() => setActiveTab('user-page-settings')}
-            />
-          </JustifyCenterRow>
-        </JustifyBetweenColumn>
-      </ModalHeader>
-      <ModalBody minHeight="700px">
-        {activeTab === 'user-role-settings' ? (
-          <UserRoleSettings />
-        ) : activeTab === 'user-task-settings' ? (
-          <UserTaskSettingsTab />
-        ) : (
-          <UserPageSettingsTab />
-        )}
-      </ModalBody>
+      <JustifyBetweenColumn height="100%">
+        <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
+          <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+          <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+          <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        </JustifyBetweenRow>
+        <Column height="calc(100% - 200px)">
+          <DataTableHeader handleAddNew={openCreateRoleModal} />
+          <DataTable fixedHeader columns={columns} data={data} />
+        </Column>
+      </JustifyBetweenColumn>
     </InnerWrapper>
   )
 }

@@ -1,10 +1,12 @@
+import { IComponentProps } from '@models/index'
 import styled from 'styled-components'
 
-export const ImageContainer = styled.div`
+export const ImageContainer = styled.div<IComponentProps>`
   position: relative;
-  width: 100%;
-  height: 100%;
-  padding: 0.4rem;
+  width: ${({ width }) => (width ? width : '100%')};
+  height: ${({ height }) => (height ? height : '100%')};
+  margin: ${({ margin }) => (margin ? margin : '0')};
+  padding: ${({ padding }) => (padding ? padding : ' 0.4rem')};
   border-radius: 0.3rem;
   border: 1px solid red;
 `

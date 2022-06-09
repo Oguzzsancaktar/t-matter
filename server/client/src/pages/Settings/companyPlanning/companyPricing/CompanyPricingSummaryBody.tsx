@@ -46,22 +46,22 @@ const CompanyPricingSummaryBody: React.FC<IProps> = ({
     <JustifyBetweenColumn height="100%">
       <Column>
         <JustifyBetweenRow>
-          <Text>Total Employer Items</Text>
+          <Text>Total Employers</Text>
           <Value>{TEMPORARY_TOTAL_EMPLOYER_ITEMS}</Value>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>
-          <Text>Monthly Employer Total Salary</Text>
+          <Text>Monthly Employers Total Salary</Text>
           <Value>${TEMPORARY_TOTAL_EMPLOYER_SALARY}</Value>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>
-          <Text>Monthly Employer Total Working Hours</Text>
+          <Text>Monthly Employers Total Working Hours</Text>
           <Value>{TEMPORARY_TOTAL_EMPLOYER_WORKING_HOURS} hours</Value>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>
-          <Text>Employer Hourly Fee</Text>
+          <Text>Employers Hourly Fee</Text>
           <Value>${employerHourlyFee.toFixed(2)}</Value>
         </JustifyBetweenRow>
 
