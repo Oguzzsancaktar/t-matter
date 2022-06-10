@@ -36,20 +36,9 @@ const createRole = async (req, res) => {
 }
 
 const updateRole = async (req, res) => {
-  const { name, _id } = req.body
+  const { _id, ...data } = req.body
   try {
-    await dataAccess.roleDataAccess.findByIdAndUpdate(_id, { name })
-    res.sendStatus(StatusCodes.OK)
-  } catch (e) {
-    console.log(e)
-    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
-  }
-}
-
-const removeRole = async (req, res) => {
-  const { id } = req.params
-  try {
-    await dataAccess.roleDataAccess.findByIdAndUpdate(id, { status: STATUS_TYPES.INACTIVE })
+    await dataAccess.roleDataAccess.findByIdAndUpdate(_id ? _id : req.params.id, data)
     res.sendStatus(StatusCodes.OK)
   } catch (e) {
     console.log(e)
@@ -61,6 +50,5 @@ module.exports = {
   getRoles,
   createRole,
   updateRole,
-  getRole,
-  removeRole
+  getRole
 }

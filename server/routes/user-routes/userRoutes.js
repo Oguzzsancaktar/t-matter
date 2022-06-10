@@ -9,10 +9,10 @@ router.patch('/', middlewares.validations.userValidations.updateUserValidation, 
 
 router.get('/:id', middlewares.validations.userValidations.getUserValidation, controllers.userController.getUser)
 
-router.delete(
-  '/:id',
-  middlewares.validations.userValidations.removeUserValidation,
-  controllers.userController.removeUser
+router.patch(
+  '/:id/status',
+  middlewares.validations.userValidations.statusUpdateUserValidation,
+  controllers.userController.updateUser
 )
 
 router.get('/', controllers.userController.getUsers)

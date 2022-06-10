@@ -72,12 +72,13 @@ const getUserValidation = async (req, res, next) => {
   }
 }
 
-const removeUserValidation = async (req, res, next) => {
-  const { params } = req
-  const schema = joi.object({ id: joi.string().required() })
+const statusUpdateUserValidation = async (req, res, next) => {
+  const { id } = req.params
+  const { status } = req.body
+  const schema = joi.object({ id: joi.string().required(), status: joi.number().required() })
 
   try {
-    await schema.validateAsync(params)
+    await schema.validateAsync({ id, status })
     next()
   } catch (error) {
     res.status(400).json(
@@ -93,5 +94,5 @@ module.exports = {
   createUserValidation,
   updateUserValidation,
   getUserValidation,
-  removeUserValidation
+  statusUpdateUserValidation
 }

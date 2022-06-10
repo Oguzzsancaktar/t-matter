@@ -16,7 +16,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const { _id, ...data } = req.body
   try {
-    await dataAccess.userDataAccess.findByIdAndUpdateUser(_id, data)
+    await dataAccess.userDataAccess.findByIdAndUpdateUser(_id ? _id : req.params.id, data)
     res.sendStatus(StatusCodes.OK)
   } catch (e) {
     console.log(e)
