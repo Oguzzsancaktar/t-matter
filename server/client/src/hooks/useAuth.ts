@@ -1,8 +1,8 @@
 import { selectAccessToken, selectUserId, logout as handleLogout } from '@store/auth/authSlice'
 import useAccessStore from '@hooks/useAccessStore'
 import { useEffect, useMemo } from 'react'
-import { useGetUserByIdQuery } from '@services/userService'
 import { useLoginMutation } from '@services/authService'
+import { useGetUserByIdQuery } from '@/services/settings/user-planning/userService'
 
 export const useAuth = () => {
   const { useAppDispatch, useAppSelector } = useAccessStore()

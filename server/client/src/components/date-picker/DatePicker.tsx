@@ -15,7 +15,7 @@ interface IProps {
   validationError?: boolean
   value?: Date
   disabled?: boolean
-  onChange: (value: Date[]) => void
+  onChange: (value: Date[], dateText: string) => void
 }
 
 export interface IStyledProps {
@@ -23,12 +23,12 @@ export interface IStyledProps {
   disabled?: boolean
 }
 
-const DatePicker: React.FC<IProps> = ({ name, value = new Date(), disabled, labelText, validationError, onChange }) => {
+const DatePicker: React.FC<IProps> = ({ name, value = '', disabled, labelText, validationError, onChange }) => {
   const [date, setDate] = useState(value)
 
-  const handleDateChange = (date: Date[]) => {
+  const handleDateChange = (date: Date[], dateText) => {
     setDate(date[0])
-    onChange(date)
+    onChange(date, dateText)
   }
 
   return (
@@ -53,6 +53,7 @@ const DatePicker: React.FC<IProps> = ({ name, value = new Date(), disabled, labe
                 disabled={disabled}
                 value={date}
                 onChange={handleDateChange}
+                placeholder="Select bithday"
               />
             </Row>
           </Container>

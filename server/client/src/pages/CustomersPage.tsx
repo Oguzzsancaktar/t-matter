@@ -8,7 +8,8 @@ import {
   ActionButtons,
   CreateRoleModal,
   PageWrapper,
-  CreateCustomerModal
+  CreateCustomerModal,
+  ReadCustomerModal
 } from '@/components'
 import DataTable from 'react-data-table-component'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
@@ -51,7 +52,7 @@ const CustomersPage = () => {
       name: 'Status',
       selector: row => row.status,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
+      cell: data => <Badge color={selectColorForStatus(data.status)}>{data.status} </Badge>
     },
     {
       name: 'Actions',
@@ -60,9 +61,7 @@ const CustomersPage = () => {
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={function (): void {
-            throw new Error('Function not implemented.')
-          }}
+          onRead={() => handleRead(data.id)}
           onEdit={function (): void {
             throw new Error('Function not implemented.')
           }}
@@ -121,6 +120,18 @@ const CustomersPage = () => {
       })
     )
   }
+
+  const handleRead = (id: string) => {
+    dispatch(
+      openModal({
+        id: `customerDetailModal-${id}`,
+        title: 'Customer modal' + id,
+        body: <ReadCustomerModal userId={id} />,
+        size: ESize.XLarge
+      })
+    )
+  }
+
   return (
     <PageWrapper>
       <JustifyBetweenColumn height="100%">

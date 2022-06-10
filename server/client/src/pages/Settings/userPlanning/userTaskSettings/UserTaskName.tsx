@@ -21,7 +21,7 @@ const UserTaskName = () => {
       name: 'Category',
       selector: row => row.category,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(EStatus[data.status])}>{data.status} </Badge>
+      cell: data => <Badge color={selectColorForStatus(data.status)}>{data.status} </Badge>
     },
     {
       name: 'Title',

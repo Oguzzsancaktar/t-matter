@@ -4,8 +4,8 @@ const findRoles = () => {
   return Role.find().lean().exec()
 }
 
-const findByIdAndUpdate = (id, data) => {
-  return Role.findByIdAndUpdate(id, data)
+const findByIdAndUpdate = (_id, data) => {
+  return Role.findByIdAndUpdate(_id, data)
 }
 
 const findById = id => {

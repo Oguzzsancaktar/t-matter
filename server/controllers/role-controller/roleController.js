@@ -36,9 +36,9 @@ const createRole = async (req, res) => {
 }
 
 const updateRole = async (req, res) => {
-  const { name, id } = req.body
+  const { name, _id } = req.body
   try {
-    await dataAccess.roleDataAccess.findByIdAndUpdate(id, { name })
+    await dataAccess.roleDataAccess.findByIdAndUpdate(_id, { name })
     res.sendStatus(StatusCodes.OK)
   } catch (e) {
     console.log(e)

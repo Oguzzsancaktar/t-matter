@@ -2,21 +2,25 @@ import React, { useState } from 'react'
 import { ConfirmCancelButtons } from '@/components/button'
 import { InputRegular } from '@/components/input'
 import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from '@/components/layout'
-import { H1, Label } from '@/components/texts'
+import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { InnerWrapper } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
-import { useCreateRoleMutation } from '@/services/settings/user-planning/userRoleService'
+import { usePatchRoleMutation } from '@/services/settings/user-planning/userRoleService'
 import { isValueNull } from '@/utils/validationUtils'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
+import { IRole } from '@/models'
 
-const CreateRoleModal = () => {
+interface IProps {
+  role: IRole
+}
+const UpdateRoleModal: React.FC<IProps> = ({ role }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [roleName, setRoleName] = useState('')
-  const [createRole] = useCreateRoleMutation()
+  const [roleName, setRoleName] = useState(role.name)
+  const [patchRole] = usePatchRoleMutation()
 
   const handleCancel = () => {
     dispatch(closeModal('createRoleModal'))
@@ -24,9 +28,9 @@ const CreateRoleModal = () => {
 
   const handleConfirm = async () => {
     if (isValueNull(roleName)) {
-      await createRole({ name: roleName })
-      toastSuccess('Role ' + roleName + ' created successfully')
-      dispatch(closeModal('createRoleModal'))
+      await patchRole({ _id: role._id, name: roleName })
+      toastSuccess('Role ' + roleName + ' updated successfully')
+      dispatch(closeModal(`updateRoleModal-${role._id}`))
     } else {
       toastWarning('Role name is required')
     }
@@ -65,4 +69,4 @@ const CreateRoleModal = () => {
   )
 }
 
-export default CreateRoleModal
+export default UpdateRoleModal

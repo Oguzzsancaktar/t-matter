@@ -1,4 +1,4 @@
-import { userApi } from '@services/userService'
+import { userApi } from '@/services/settings/user-planning/userService'
 import { authApi } from '@services/authService'
 import { IUser } from '@models/index'
 import { createSlice } from '@reduxjs/toolkit'

@@ -24,7 +24,7 @@ import moment from 'moment'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
 import { useCreateUserMutation } from '@/services/settings/user-planning/userService'
 
-const CreateUserModal = () => {
+const UpdateUserModal = () => {
   const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
   const [isPasswordConfirmVisible, togglePasswordConfirmVisibility] = useToggle(false)
 
@@ -491,4 +491,4 @@ const CreateUserModal = () => {
   )
 }
 
-export default CreateUserModal
+export default UpdateUserModal
