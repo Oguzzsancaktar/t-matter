@@ -1,7 +1,7 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { ICompanyPricingPatchDTO, ICompanyPricing, IRole, ICreateRoleDTO } from '@/models'
+import { IRole, ICreateRoleDTO, IUpdateRoleDTO } from '@/models'
 
 const USER_ROLE_API_REDUCER_PATH = 'userRoleApi'
 const USER_ROLE_TAG = 'userRoleTag'
@@ -13,6 +13,20 @@ const getRoles = (builder: IBuilder) => {
     query() {
       return {
         url: '/role',
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: USER_ROLE_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getRoleById = (builder: IBuilder) => {
+  return builder.query<IRole, IRole['_id']>({
+    query(id) {
+      return {
+        url: `/role/${id}`,
         method: 'GET'
       }
     },
@@ -38,7 +52,22 @@ const createRole = (builder: IBuilder) => {
 }
 
 const patchRole = (builder: IBuilder) => {
-  return builder.mutation<ICompanyPricing, ICompanyPricingPatchDTO>({
+  return builder.mutation<IRole, IUpdateRoleDTO>({
+    query(dto) {
+      return {
+        url: '/role',
+        method: 'PATCH',
+        data: dto
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: USER_ROLE_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const inactivateRole = (builder: IBuilder) => {
+  return builder.mutation<IRole, IUpdateRoleDTO>({
     query(dto) {
       return {
         url: '/role',
@@ -58,10 +87,11 @@ const userRoleApi = createApi({
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
     getRoles: getRoles(builder),
+    getRoleById: getRoleById(builder),
     patchRole: patchRole(builder),
     createRole: createRole(builder)
   })
 })
 
-const { useGetRolesQuery, usePatchRoleMutation, useCreateRoleMutation } = userRoleApi
-export { userRoleApi, useGetRolesQuery, usePatchRoleMutation, useCreateRoleMutation }
+const { useGetRolesQuery, useGetRoleByIdQuery, usePatchRoleMutation, useCreateRoleMutation } = userRoleApi
+export { userRoleApi, useGetRolesQuery, useGetRoleByIdQuery, usePatchRoleMutation, useCreateRoleMutation }

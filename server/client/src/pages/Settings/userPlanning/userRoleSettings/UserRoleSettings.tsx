@@ -1,18 +1,22 @@
 import {
   ActionButtons,
   Column,
+  ConfirmModal,
   CreateRoleModal,
   DataTableHeader,
   JustifyBetweenColumn,
   JustifyBetweenRow,
-  JustifyCenterColumn
+  JustifyCenterColumn,
+  ReadRoleModal,
+  UpdateRoleModal
 } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ESize, EStatus } from '@/models'
+import { ESize, EStatus, IRole } from '@/models'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
-import { openModal } from '@/store'
+import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
+import { toastSuccess } from '@/utils/toastUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
@@ -34,31 +38,73 @@ const UserRoleSettings = () => {
       name: 'Status',
       selector: row => row.status,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(data.status)}>{data.status} </Badge>
+      cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
     },
     {
       name: 'Actions',
-      selector: row => row.year,
       right: true,
-      header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-          onEdit={function (): void {
-            throw new Error('Function not implemented.')
-          }}
+          onRead={() => handleRead(data)}
+          onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
           }}
-          onDelete={function (): void {
-            throw new Error('Function not implemented.')
-          }}
+          onDelete={() => handleDelete(data)}
         />
       )
     }
   ]
+
+  const handleRead = (role: IRole) => {
+    dispatch(
+      openModal({
+        id: `readRoleModal-${role._id}`,
+        title: 'Create Role',
+        body: <ReadRoleModal role={role} />,
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleEdit = (role: IRole) => {
+    dispatch(
+      openModal({
+        id: `updateRoleModal-${role._id}`,
+        title: 'Update Role',
+        body: <UpdateRoleModal role={role} />,
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleCloseDeleteModal = (_id: IRole['_id']) => {
+    console.log(_id)
+    dispatch(closeModal(`deleteRoleModal-${_id}`))
+  }
+
+  const handleOnConfirm = async (role: IRole) => {
+    // await patchRole({ _id: role._id, name: role.name })
+    toastSuccess('Role ' + role.name + ' updated successfully')
+    handleCloseDeleteModal(role._id)
+  }
+
+  const handleDelete = (role: IRole) => {
+    dispatch(
+      openModal({
+        id: `deleteRoleModal-${role._id}`,
+        title: `Are you sure to inactivate ${role.name}?`,
+        body: (
+          <ConfirmModal
+            title={`Are you sure to inactivate ${role.name}?`}
+            onCancel={() => handleCloseDeleteModal(role._id)}
+            onConfirm={() => handleOnConfirm(role)}
+          />
+        ),
+        size: ESize.Small
+      })
+    )
+  }
 
   const openCreateRoleModal = (e: React.MouseEvent) => {
     e.preventDefault()

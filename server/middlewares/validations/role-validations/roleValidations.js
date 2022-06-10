@@ -24,7 +24,7 @@ const updateRoleValidation = async (req, res, next) => {
   const { body } = req
   const schema = joi.object({
     name: joi.string().required(),
-    id: joi.string().required()
+    _id: joi.string().required()
   })
 
   try {
