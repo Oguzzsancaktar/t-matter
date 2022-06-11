@@ -87,7 +87,13 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
         <SearchBar />
       </ItemContainer>
       <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px - 40px)" margin="0.5rem 0">
-        <DataTable columns={columns} data={TEMPORARY_CUSTOMERS_ARR} />
+        <DataTable
+          style={{ height: 'calc(100% - 56px)' }}
+          pagination={true}
+          paginationPerPage={5}
+          columns={columns}
+          data={TEMPORARY_CUSTOMERS_ARR}
+        />
       </ItemContainer>
       <ItemContainer height="40px">
         <Row>

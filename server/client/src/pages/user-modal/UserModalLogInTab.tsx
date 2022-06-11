@@ -9,12 +9,13 @@ import {
   JustifyBetweenRow,
   JustifyCenterColumn,
   JustifyCenterRow,
+  ReadUserModal,
   RoleBadge,
   Tab,
   UserBadge
 } from '@/components'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
-import UserReadModal from '@/components/modals/UserPlanning/userPageSettings/UserReadModal'
+import UserReadModal from '@/components/modals/UserPlanning/userPageSettings/ReadUserModal'
 import useAccessStore from '@/hooks/useAccessStore'
 import { EStatus, ESize } from '@/models'
 import { openModal } from '@/store'
@@ -57,7 +58,7 @@ const UserModalLogInTab = () => {
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={() => handleRead(data.id)}
+          onRead={() => console.log('not implemented')}
           onEdit={function (): void {
             throw new Error('Function not implemented.')
           }}
@@ -71,17 +72,6 @@ const UserModalLogInTab = () => {
       )
     }
   ]
-
-  const handleRead = (id: string) => {
-    dispatch(
-      openModal({
-        id: `userDetailModal-${id}`,
-        title: 'user modal' + id,
-        body: <UserReadModal userId={id} />,
-        size: ESize.XLarge
-      })
-    )
-  }
 
   const data = [
     {

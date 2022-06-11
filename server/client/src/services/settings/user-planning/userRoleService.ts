@@ -52,7 +52,7 @@ const createRole = (builder: IBuilder) => {
 }
 
 const patchRole = (builder: IBuilder) => {
-  return builder.mutation<IRole, IUpdateRoleDTO>({
+  return builder.mutation<IRole, Omit<IUpdateRoleDTO, 'status'>>({
     query(dto) {
       return {
         url: '/role',
@@ -66,13 +66,13 @@ const patchRole = (builder: IBuilder) => {
   })
 }
 
-const inactivateRole = (builder: IBuilder) => {
-  return builder.mutation<IRole, IUpdateRoleDTO>({
+const updateRoleStatus = (builder: IBuilder) => {
+  return builder.mutation<any, Omit<IUpdateRoleDTO, 'name'>>({
     query(dto) {
       return {
-        url: '/role',
+        url: `/role/${dto._id}/status`,
         method: 'PATCH',
-        data: dto
+        data: { status: dto.status }
       }
     },
     invalidatesTags(result) {
@@ -89,9 +89,23 @@ const userRoleApi = createApi({
     getRoles: getRoles(builder),
     getRoleById: getRoleById(builder),
     patchRole: patchRole(builder),
+    updateRoleStatus: updateRoleStatus(builder),
     createRole: createRole(builder)
   })
 })
 
-const { useGetRolesQuery, useGetRoleByIdQuery, usePatchRoleMutation, useCreateRoleMutation } = userRoleApi
-export { userRoleApi, useGetRolesQuery, useGetRoleByIdQuery, usePatchRoleMutation, useCreateRoleMutation }
+const {
+  useGetRolesQuery,
+  useGetRoleByIdQuery,
+  usePatchRoleMutation,
+  useUpdateRoleStatusMutation,
+  useCreateRoleMutation
+} = userRoleApi
+export {
+  userRoleApi,
+  useGetRolesQuery,
+  useGetRoleByIdQuery,
+  usePatchRoleMutation,
+  useUpdateRoleStatusMutation,
+  useCreateRoleMutation
+}

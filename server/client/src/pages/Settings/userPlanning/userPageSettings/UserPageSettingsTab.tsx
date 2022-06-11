@@ -1,20 +1,22 @@
 import {
   ActionButtons,
   Column,
-  CreateRoleModal,
+  ConfirmModal,
   CreateUserModal,
   DataTableHeader,
   JustifyBetweenColumn,
   JustifyBetweenRow,
-  JustifyCenterColumn
+  JustifyCenterColumn,
+  ReadUserModal,
+  UpdateUserModal
 } from '@/components'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
-import UserReadModal from '@/components/modals/UserPlanning/userPageSettings/UserReadModal'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ESize, EStatus } from '@/models'
-import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
-import { openModal } from '@/store'
+import { ESize, EStatus, IUser } from '@/models'
+import { useGetUsersQuery, useUpdateUserStatusMutation } from '@/services/settings/user-planning/userService'
+import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
+import { toastSuccess, toastError } from '@/utils/toastUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 import { UserCheck } from 'react-feather'
@@ -22,9 +24,9 @@ import { UserCheck } from 'react-feather'
 const UserPageSettingsTab = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+  const [updateUserStatus] = useUpdateUserStatusMutation()
 
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
-  console.log('usersData', usersData)
 
   const columns = [
     {
@@ -32,7 +34,7 @@ const UserPageSettingsTab = () => {
       selector: row => row.task,
       sortable: true,
       cell: data => (
-        <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + data.lastname} />
+        <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
       )
     },
     {
@@ -59,33 +61,96 @@ const UserPageSettingsTab = () => {
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={() => handleRead(data.id)}
-          onEdit={function (): void {
-            throw new Error('Function not implemented.')
-          }}
+          status={data.status}
+          onRead={() => handleRead(data)}
+          onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
           }}
-          onDelete={function (): void {
-            throw new Error('Function not implemented.')
-          }}
+          onDelete={() => handleDelete(data)}
+          onReactive={() => handleReactive(data)}
         />
       )
     }
   ]
 
-  const handleRead = (id: string) => {
+  const handleRead = (user: IUser) => {
     dispatch(
       openModal({
-        id: `userDetailModal-${id}`,
-        title: 'user modal' + id,
-        body: <UserReadModal userId={id} />,
+        id: `userDetailModal-${user._id}`,
+        title: 'User / ' + user.firstname + ' ' + user.lastname,
+        body: <ReadUserModal userId={user._id} />,
         size: ESize.XLarge
       })
     )
   }
 
-  const openCreateRoleModal = (e: React.MouseEvent) => {
+  const handleEdit = (user: IUser) => {
+    dispatch(
+      openModal({
+        id: `updateUserModal-${user._id}`,
+        title: 'Update User / ' + user.firstname + ' ' + user.lastname,
+        body: <UpdateUserModal user={user} />,
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleDelete = (user: IUser) => {
+    dispatch(
+      openModal({
+        id: `deleteUserModal-${user._id}`,
+        title: `Are you sure to inactivate ${user.firstname + ' ' + user.lastname}?`,
+        body: (
+          <ConfirmModal
+            modalId={`deleteUserModal-${user._id}`}
+            title={`Are you sure to inactivate ${user.firstname + ' ' + user.lastname}?`}
+            onConfirm={() => handleOnConfirmDelete(user)}
+          />
+        ),
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleReactive = (user: IUser) => {
+    dispatch(
+      openModal({
+        id: `reactiveUserModal-${user._id}`,
+        title: `Are you sure to reactivate ${user.firstname + ' ' + user.lastname}?`,
+        body: (
+          <ConfirmModal
+            modalId={`reactiveUserModal-${user._id}`}
+            title={`Are you sure to reactivate ${user.firstname + ' ' + user.lastname}?`}
+            onConfirm={() => handleOnConfirmReactive(user)}
+          />
+        ),
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleOnConfirmDelete = async (user: IUser) => {
+    try {
+      await updateUserStatus({ _id: user._id, status: EStatus.Inactive.toString() })
+      toastSuccess('User ' + user.firstname + ' ' + user.lastname + ' inactivated successfully')
+      dispatch(closeModal(`deleteUserModal-${user._id}`))
+    } catch (error) {
+      toastError('Error inactivating user')
+    }
+  }
+
+  const handleOnConfirmReactive = async (user: IUser) => {
+    try {
+      await updateUserStatus({ _id: user._id, status: EStatus.Active.toString() })
+      toastSuccess('User ' + user.firstname + ' ' + user.lastname + ' reactivated successfully')
+      dispatch(closeModal(`reactiveUserModal-${user._id}`))
+    } catch (error) {
+      toastError('Error reactivating user')
+    }
+  }
+
+  const openCreateUserModal = (e: React.MouseEvent) => {
     e.preventDefault()
     dispatch(
       openModal({
@@ -105,7 +170,7 @@ const UserPageSettingsTab = () => {
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px)">
-        <DataTableHeader handleAddNew={openCreateRoleModal} />
+        <DataTableHeader handleAddNew={openCreateUserModal} />
         <DataTable fixedHeader columns={columns} data={usersData || []} />
       </Column>
     </JustifyBetweenColumn>
