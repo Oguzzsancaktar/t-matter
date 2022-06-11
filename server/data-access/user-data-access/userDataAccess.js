@@ -8,12 +8,12 @@ const findByIdAndUpdateUser = (id, data) => {
   return User.findByIdAndUpdate(id, data)
 }
 
-const findUserById = id => {
-  return User.findById(id).lean().exec()
+const findUserById = (id, populate = '') => {
+  return User.findById(id).populate(populate).lean().exec()
 }
 
-const findUser = (query = {}) => {
-  return User.find(query).lean().exec()
+const findUser = (query = {}, populate = '') => {
+  return User.find(query).populate(populate).lean().exec()
 }
 
 module.exports = {
