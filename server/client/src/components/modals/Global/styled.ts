@@ -24,7 +24,7 @@ export const Container = styled.div<IContainerProps>`
   background-color: white;
   border-radius: 0.3rem;
   max-width: ${({ size }) =>
-    size === 'xl' ? '1600' : size === 'lg' ? '1200' : size === 'md' ? '900' : size === 'sm' ? '600' : '100'}px;
+    size === 'xl' ? '2000' : size === 'lg' ? '1200' : size === 'md' ? '900' : size === 'sm' ? '600' : '100'}px;
 `
 
 export const CloseButton = styled.button`

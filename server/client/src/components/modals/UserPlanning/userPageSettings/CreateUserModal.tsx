@@ -323,23 +323,25 @@ const CreateUserModal = () => {
             </JustifyBetweenRow>
 
             <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <JustifyBetweenRow>
-                  <ItemContainer margin="0 0.5rem 0 0 " width="calc((100% - 1rem)/2)">
-                    <InputWithIcon
-                      children={<User size={16} />}
-                      name="country"
-                      placeholder="Enter country..."
-                      onChange={handleInputChange}
-                      // onBlur={validateFormFields}
-                      type="text"
-                      labelText="Country"
-                      validationError={countryError}
-                      value={createUserData.country}
-                    />
-                  </ItemContainer>
+              <ItemContainer margin="0.5rem 0 0 0 ">
+                <InputWithIcon
+                  children={<User size={16} />}
+                  name="address"
+                  placeholder="Enter your address..."
+                  onChange={handleInputChange}
+                  // onBlur={validateFormFields}
+                  type="text"
+                  labelText="Address"
+                  validationError={addressError}
+                  value={createUserData.address}
+                />
+              </ItemContainer>
+            </JustifyBetweenRow>
 
-                  <ItemContainer margin="0 0 0 0.5rem" width="calc((100% - 1rem)/2)">
+            <JustifyBetweenRow width="100%">
+              <ItemContainer margin="0.5rem 0 0 0">
+                <JustifyBetweenRow>
+                  <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
                       children={<User size={16} />}
                       name="city"
@@ -360,14 +362,14 @@ const CreateUserModal = () => {
                   <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
                       children={<User size={16} />}
-                      name="state"
-                      placeholder="Enter state..."
+                      name="country"
+                      placeholder="Enter country..."
                       onChange={handleInputChange}
                       // onBlur={validateFormFields}
                       type="text"
-                      labelText="State"
-                      validationError={stateError}
-                      value={createUserData.state}
+                      labelText="Country"
+                      validationError={countryError}
+                      value={createUserData.country}
                     />
                   </ItemContainer>
                   <ItemContainer margin="0 0 0 0.5rem" width="250px">
@@ -389,17 +391,19 @@ const CreateUserModal = () => {
 
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0.5rem 0.5rem 0 0 ">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="address"
-                  placeholder="Enter your address..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Address"
-                  validationError={addressError}
-                  value={createUserData.address}
-                />
+                <ItemContainer>
+                  <InputWithIcon
+                    children={<User size={16} />}
+                    name="state"
+                    placeholder="Enter state..."
+                    onChange={handleInputChange}
+                    // onBlur={validateFormFields}
+                    type="text"
+                    labelText="State"
+                    validationError={stateError}
+                    value={createUserData.state}
+                  />
+                </ItemContainer>
               </ItemContainer>
 
               <ItemContainer margin="0.5rem 0 0 0.5rem ">

@@ -303,23 +303,25 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
             </JustifyBetweenRow>
 
             <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <JustifyBetweenRow>
-                  <ItemContainer margin="0 0.5rem 0 0 " width="calc((100% - 1rem)/2)">
-                    <InputWithIcon
-                      children={<User size={16} />}
-                      name="country"
-                      placeholder="Enter country..."
-                      onChange={handleInputChange}
-                      // onBlur={validateFormFields}
-                      type="text"
-                      labelText="Country"
-                      validationError={countryError}
-                      value={updateUserData.country}
-                    />
-                  </ItemContainer>
+              <ItemContainer margin="0.5rem 0 0 0 ">
+                <InputWithIcon
+                  children={<User size={16} />}
+                  name="address"
+                  placeholder="Enter your address..."
+                  onChange={handleInputChange}
+                  // onBlur={validateFormFields}
+                  type="text"
+                  labelText="Address"
+                  validationError={addressError}
+                  value={updateUserData.address}
+                />
+              </ItemContainer>
+            </JustifyBetweenRow>
 
-                  <ItemContainer margin="0 0 0 0.5rem" width="calc((100% - 1rem)/2)">
+            <JustifyBetweenRow width="100%">
+              <ItemContainer margin="0.5rem 0 0 0">
+                <JustifyBetweenRow>
+                  <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
                       children={<User size={16} />}
                       name="city"
@@ -340,14 +342,14 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
                       children={<User size={16} />}
-                      name="state"
-                      placeholder="Enter state..."
+                      name="country"
+                      placeholder="Enter country..."
                       onChange={handleInputChange}
                       // onBlur={validateFormFields}
                       type="text"
-                      labelText="State"
-                      validationError={stateError}
-                      value={updateUserData.state}
+                      labelText="Country"
+                      validationError={countryError}
+                      value={updateUserData.country}
                     />
                   </ItemContainer>
                   <ItemContainer margin="0 0 0 0.5rem" width="250px">
@@ -369,17 +371,19 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
 
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0.5rem 0.5rem 0 0 ">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="address"
-                  placeholder="Enter your address..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Address"
-                  validationError={addressError}
-                  value={updateUserData.address}
-                />
+                <ItemContainer>
+                  <InputWithIcon
+                    children={<User size={16} />}
+                    name="state"
+                    placeholder="Enter state..."
+                    onChange={handleInputChange}
+                    // onBlur={validateFormFields}
+                    type="text"
+                    labelText="State"
+                    validationError={stateError}
+                    value={updateUserData.state}
+                  />
+                </ItemContainer>
               </ItemContainer>
 
               <ItemContainer margin="0.5rem 0 0 0.5rem ">
