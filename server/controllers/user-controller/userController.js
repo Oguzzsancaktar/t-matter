@@ -27,7 +27,7 @@ const updateUser = async (req, res) => {
 const getUser = async (req, res) => {
   const { id } = req.params
   try {
-    const user = await dataAccess.userDataAccess.findUserById(id)
+    const user = await dataAccess.userDataAccess.findUserById(id, 'role')
     let workingSchedule = await dataAccess.workingScheduleDataAccess.findWorkingScheduleByUserId(id)
     if (!workingSchedule) {
       workingSchedule = await dataAccess.workingScheduleDataAccess.findCompanyWorkingSchedule()
@@ -52,7 +52,7 @@ const removeUser = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const users = await dataAccess.userDataAccess.findUser()
+    const users = await dataAccess.userDataAccess.findUser({}, 'role')
     res.status(StatusCodes.OK).json(users)
   } catch (e) {
     console.log(e)
