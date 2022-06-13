@@ -1,3 +1,4 @@
+import { IRole } from '@/models'
 export default interface IUser {
   _id: string
   firstname: string
@@ -11,7 +12,7 @@ export default interface IUser {
   state: string
   zipcode: string
   address: string
-  role: string
+  role: IRole
   gender: string
   status: string
   password: string

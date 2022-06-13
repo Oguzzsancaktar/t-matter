@@ -19,23 +19,25 @@ const ConfirmModal: React.FC<IProps> = ({ title, onConfirm, modalId }) => {
   }
 
   return (
-    <InnerWrapper>
-      <JustifyBetweenColumn height="100%">
-        <ModalHeader>
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
               {title}
             </H1>
           </JustifyCenterRow>
-        </ModalHeader>
+        </InnerWrapper>
+      </ModalHeader>
 
-        <ModalBody>
+      <ModalBody>
+        <InnerWrapper>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <ConfirmCancelButtons onConfirm={onConfirm} onCancel={handleCloseReactiveModal} />
           </JustifyCenterColumn>
-        </ModalBody>
-      </JustifyBetweenColumn>
-    </InnerWrapper>
+        </InnerWrapper>
+      </ModalBody>
+    </JustifyBetweenColumn>
   )
 }
 

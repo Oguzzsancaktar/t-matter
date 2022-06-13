@@ -18,7 +18,7 @@ export const Modal = styled.div`
 export const Container = styled.div<IContainerProps>`
   display: grid;
   position: relative;
-  width: calc(100% - 2rem);
+  width: calc(100% - 4rem);
   height: auto;
   /* min-height: ${({ size }) => (size === 'xl' ? '800' : size === 'lg' ? '700' : size === 'md' ? '900' : '500')}px; */
   background-color: white;

@@ -1,2 +1,5 @@
-import { IUser } from '@models/index'
-export default interface IUserUpdateDTO extends IUser {}
+import { IUser, IUserCreateDTO } from '@/models'
+export default interface IUserUpdateDTO extends Omit<IUser, 'role'> {
+  _id: string
+  role: string
+}

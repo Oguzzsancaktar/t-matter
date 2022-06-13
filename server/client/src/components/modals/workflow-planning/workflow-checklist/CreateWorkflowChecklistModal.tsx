@@ -37,17 +37,19 @@ const CreateWorkflowChecklistModal = () => {
     dispatch(closeModal('createWorkflowChecklistModal'))
   }
   return (
-    <InnerWrapper>
-      <JustifyBetweenColumn height="100%">
-        <ModalHeader>
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
               Create Workflow Checklist
             </H1>
           </JustifyCenterRow>
-        </ModalHeader>
+        </InnerWrapper>
+      </ModalHeader>
 
-        <ModalBody>
+      <ModalBody>
+        <InnerWrapper>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <ItemContainer margin="1rem 0">
               <InputWithIcon
@@ -96,15 +98,17 @@ const CreateWorkflowChecklistModal = () => {
               />
             </ItemContainer>
           </JustifyCenterColumn>
-        </ModalBody>
+        </InnerWrapper>
+      </ModalBody>
 
-        <ModalFooter>
+      <ModalFooter>
+        <InnerWrapper>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </ModalFooter>
-      </JustifyBetweenColumn>
-    </InnerWrapper>
+        </InnerWrapper>
+      </ModalFooter>
+    </JustifyBetweenColumn>
   )
 }
 

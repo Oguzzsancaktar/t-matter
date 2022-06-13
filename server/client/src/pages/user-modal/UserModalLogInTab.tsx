@@ -111,7 +111,7 @@ const UserModalLogInTab = () => {
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px)">
-          <DataTableHeader handleAddNew={openCreateRoleModal} />
+          <DataTableHeader handleAddNew={() => console.log('not implemented')} />
           <DataTable fixedHeader columns={columns} data={data} />
         </Column>
       </JustifyBetweenColumn>

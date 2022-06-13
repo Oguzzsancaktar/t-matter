@@ -12,17 +12,19 @@ interface IProps {
 
 const ReadRoleModal: React.FC<IProps> = ({ role }) => {
   return (
-    <InnerWrapper>
-      <JustifyBetweenColumn height="100%">
-        <ModalHeader>
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
               Read User Role
             </H1>
           </JustifyCenterRow>
-        </ModalHeader>
+        </InnerWrapper>
+      </ModalHeader>
 
-        <ModalBody>
+      <ModalBody>
+        <InnerWrapper>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <Row margin="0 0 1rem 0">
               <H1>Role Name: </H1>
@@ -33,9 +35,9 @@ const ReadRoleModal: React.FC<IProps> = ({ role }) => {
               <Badge color={selectColorForStatus(+role.status)}>{EStatus[role.status]} </Badge>
             </Row>
           </JustifyCenterColumn>
-        </ModalBody>
-      </JustifyBetweenColumn>
-    </InnerWrapper>
+        </InnerWrapper>
+      </ModalBody>
+    </JustifyBetweenColumn>
   )
 }
 

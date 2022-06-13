@@ -27,7 +27,7 @@ const UserPageSettingsTab = () => {
   const [updateUserStatus] = useUpdateUserStatusMutation()
 
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
-
+  console.log(usersData)
   const columns = [
     {
       name: 'User',
@@ -41,7 +41,7 @@ const UserPageSettingsTab = () => {
       name: 'Role',
       selector: row => row.role,
       sortable: true,
-      cell: data => <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.role} />
+      cell: data => <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.role.name} />
     },
     {
       name: 'Phone',

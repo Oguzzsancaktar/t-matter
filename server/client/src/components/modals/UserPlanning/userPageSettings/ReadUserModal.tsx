@@ -141,13 +141,10 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                   <ItemContainer>
                     <JustifyCenterRow>
                       <ItemContainer width="auto" margin="0 0.5rem 0 0">
-                        <Badge children={'User'} color={colors.gray.dark} />
+                        <Badge children={userData.role.name} color={colors.gray.dark} />
                       </ItemContainer>
                       <ItemContainer width="auto">
-                        <Badge
-                          children={EStatus[userData.status]}
-                          color={selectColorForStatus(EStatus[userData.status])}
-                        />
+                        <Badge children={EStatus[userData.status]} color={selectColorForStatus(+userData.status)} />
                       </ItemContainer>
                     </JustifyCenterRow>
                   </ItemContainer>
@@ -165,7 +162,15 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                       </ItemContainer>
                       <ItemContainer width="calc(100% - 90px - 0.5rem)">
                         <H1 fontSize="12px" color={colors.black.light}>
-                          {userData.address}
+                          {userData.address +
+                            ' ' +
+                            userData.city +
+                            ' ' +
+                            userData.state +
+                            ' ' +
+                            userData.country +
+                            ' ' +
+                            userData.zipcode}
                         </H1>
                       </ItemContainer>
                     </JustifyBetweenRow>

@@ -8,9 +8,8 @@ import { closeModal } from '@/store'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 import { IUser, IUserUpdateDTO } from '@/models'
-import { Key, User } from 'react-feather'
-import { useToggle } from '@/hooks/useToggle'
-import { isEmailValid, isPasswordAndConfirmMatch, isPasswordValid, isValueNull } from '@/utils/validationUtils'
+import { User } from 'react-feather'
+import { isEmailValid, isValueNull } from '@/utils/validationUtils'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
@@ -22,11 +21,6 @@ interface IProps {
 }
 
 const UpdateUserModal: React.FC<IProps> = ({ user }) => {
-  const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
-  const [isPasswordConfirmVisible, togglePasswordConfirmVisibility] = useToggle(false)
-
-  const [passwordConfirm, setPasswordConfirm] = useState('')
-
   const [updateUser, { isLoading: isUserUpdateLoading }] = useUpdateUserMutation()
   const { data: roleData, isLoading: roleLoading, error: roleDataError } = useGetRolesQuery()
   const { useAppDispatch } = useAccessStore()
@@ -46,7 +40,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
     state: user.state,
     zipcode: user.zipcode,
     address: user.address,
-    role: user.role,
+    role: user.role._id,
     gender: user.gender,
     status: user.status
   })
@@ -205,17 +199,19 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
   }, [errorMessage])
 
   return (
-    <InnerWrapper>
-      <JustifyBetweenColumn height="100%">
-        <ModalHeader>
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
               Update User ({user.firstname + ' ' + user.lastname})
             </H1>
           </JustifyCenterRow>
-        </ModalHeader>
+        </InnerWrapper>
+      </ModalHeader>
 
-        <ModalBody>
+      <ModalBody>
+        <InnerWrapper>
           <JustifyBetweenColumn height="100%" padding="2rem 0">
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0 0.5rem 0 0">
@@ -429,15 +425,17 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
               </ItemContainer>
             </JustifyBetweenRow>
           </JustifyBetweenColumn>
-        </ModalBody>
+        </InnerWrapper>
+      </ModalBody>
 
-        <ModalFooter>
+      <ModalFooter>
+        <InnerWrapper>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </ModalFooter>
-      </JustifyBetweenColumn>
-    </InnerWrapper>
+        </InnerWrapper>
+      </ModalFooter>
+    </JustifyBetweenColumn>
   )
 }
 
