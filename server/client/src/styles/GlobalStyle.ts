@@ -1,3 +1,4 @@
+import colors from '@/constants/colors'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
@@ -220,6 +221,20 @@ ul{
   list-style: none;
 }
 
+::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px !important;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 10px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px !important;
+  -webkit-box-shadow: inset 0 0 6px ${colors.blue.primary} !important;
+}
 `
 
 export default GlobalStyle

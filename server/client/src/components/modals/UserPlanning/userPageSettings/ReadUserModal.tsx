@@ -1,494 +1,283 @@
-import React, { useEffect, useState } from 'react'
-import { ConfirmCancelButtons } from '@/components/button'
-import { InputWithIcon, SelectInput } from '@/components/input'
-import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow, Row } from '@/components/layout'
-import { H1 } from '@/components/texts'
+import { Badge } from '@/components/badge'
+import { Button } from '@/components/button'
+import { ActionButtons } from '@/components/data-tables'
+import { UserImage } from '@/components/image'
+import { ItemContainer } from '@/components/item-container'
+import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components/layout'
+import { H1, Label } from '@/components/texts'
+import { InnerWrapper } from '@/components/wrapper'
+import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
-import { closeModal } from '@/store'
-import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { ModalBody, ModalFooter, ModalHeader } from '../../types'
-import { EGender, IUserCreateDTO } from '@/models'
-import { Key, User } from 'react-feather'
-import { useToggle } from '@/hooks/useToggle'
-import {
-  isEmailValid,
-  isPasswordAndConfirmMatch,
-  isPasswordValid,
-  isValueNull,
-  isZipcodeValid
-} from '@/utils/validationUtils'
-import { toastError } from '@/utils/toastUtil'
-import { genderOptions } from '@/constants/genders'
-import { statusOptions } from '@/constants/statuses'
-import moment from 'moment'
-import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
-import { useCreateUserMutation } from '@/services/settings/user-planning/userService'
+import { ESize, EStatus, IUser } from '@/models'
+import { UserModalLogInTab, UserModalSettingsTab } from '@/pages'
+import { useGetUserByIdQuery, useUpdateUserStatusMutation } from '@/services/settings/user-planning/userService'
+import { openModal, closeModal } from '@/store'
+import { selectColorForStatus } from '@/utils/statusColorUtil'
+import { toastSuccess, toastError } from '@/utils/toastUtil'
+import React, { useState } from 'react'
+import { ReadUserModal } from '.'
+import { ConfirmModal } from '../../general'
+import UpdateUserModal from './UpdateUserModal'
 
-const CreateUserModal = () => {
-  const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
-  const [isPasswordConfirmVisible, togglePasswordConfirmVisibility] = useToggle(false)
+interface IProps {
+  userId: IUser['_id']
+}
 
-  const [passwordConfirm, setPasswordConfirm] = useState('')
+const UserReadModal: React.FC<IProps> = ({ userId }) => {
+  const [updateUserStatus] = useUpdateUserStatusMutation()
+  const { data: userData, isLoading: isUserDataLoading, isError: isUserDataError } = useGetUserByIdQuery(userId)
 
-  const [createUser, { isLoading: isUserCreateLoading }] = useCreateUserMutation()
-  const { data: roleData, isLoading: roleLoading, error: roleDataError } = useGetRolesQuery()
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [birthDate, setBirthDate] = useState('')
-  const [createUserData, setCreateUserData] = useState<IUserCreateDTO>({
-    firstname: 'oguz',
-    lastname: 'taha',
-    email: 'info@gmail.com',
-    phone: '123454235',
-    birthday: '',
-    birthplace: 'tarsus',
-    country: 'tarsus',
-    city: 'mersi',
-    state: 'ista',
-    zipcode: '1234123',
-    address: 'sadfasdf',
-    role: '',
-    gender: '',
-    status: '',
-    password: ''
-  })
+  const [activeTab, setActiveTab] = useState('log-in')
 
-  const [firstnameError, setFirstnameError] = useState(false)
-  const [lastnameError, setLastnameError] = useState(false)
-  const [emailError, setEmailError] = useState(false)
-  const [phoneError, setPhoneError] = useState(false)
-  const [birthdayError, setBirthdayError] = useState(false)
-  const [birthplaceError, setBirthplaceError] = useState(false)
-  const [countryError, setCountryError] = useState(false)
-  const [cityError, setCityError] = useState(false)
-  const [stateError, setStateError] = useState(false)
-  const [zipcodeError, setZipcodeError] = useState(false)
-  const [addressError, setAddressError] = useState(false)
-  const [roleError, setRoleError] = useState(false)
-  const [genderError, setGenderError] = useState(false)
-  const [statusError, setStatusError] = useState(false)
-  const [passwordError, setPasswordError] = useState(false)
-  const [passwordConfirmError, setPasswordConfirmError] = useState(false)
-  const [passwordMatchError, setPasswordMatchError] = useState(false)
-
-  const [errorMessage, setErrorMessage] = useState('')
-
-  const validateFormFields = (): boolean => {
-    setFirstnameError(false)
-    setLastnameError(false)
-    setEmailError(false)
-    setPhoneError(false)
-    setBirthdayError(false)
-    setBirthplaceError(false)
-    setCountryError(false)
-    setCityError(false)
-    setStateError(false)
-    setZipcodeError(false)
-    setAddressError(false)
-    setRoleError(false)
-    setGenderError(false)
-    setStatusError(false)
-    setPasswordError(false)
-    setPasswordMatchError(false)
-    setErrorMessage('')
-
-    if (!isValueNull(createUserData.firstname)) {
-      setErrorMessage('Please enter a valid first name')
-      setFirstnameError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.lastname)) {
-      setErrorMessage('Please enter a valid last name')
-      setLastnameError(true)
-      return false
-    }
-
-    if (!isEmailValid(createUserData.email)) {
-      setErrorMessage('Please enter a valid email')
-      setEmailError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.phone)) {
-      setErrorMessage('Please enter a valid phone number')
-      setPhoneError(true)
-      return false
-    }
-
-    if (!isValueNull(birthDate)) {
-      setErrorMessage('Please enter a valid birthday')
-      setBirthdayError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.birthplace)) {
-      setErrorMessage('Please enter a valid birthplace')
-      setBirthplaceError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.country)) {
-      setErrorMessage('Please enter a valid country')
-      setCountryError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.city)) {
-      setErrorMessage('Please enter a valid city')
-      setCityError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.state)) {
-      setErrorMessage('Please enter a valid state')
-      setStateError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.zipcode)) {
-      setErrorMessage('Please enter a valid zipcode')
-      setZipcodeError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.address)) {
-      setErrorMessage('Please enter a valid address')
-      setAddressError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.role)) {
-      setErrorMessage('Please select user role')
-      setRoleError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.gender)) {
-      setErrorMessage('Please select user gender')
-      setGenderError(true)
-      return false
-    }
-
-    if (!isValueNull(createUserData.status)) {
-      setErrorMessage('Please select user status')
-      setStatusError(true)
-      return false
-    }
-
-    if (!isPasswordValid(createUserData.password)) {
-      setErrorMessage('Password must be at least 6 characters long')
-      setPasswordError(true)
-      return false
-    }
-
-    if (!isPasswordAndConfirmMatch(createUserData.password, passwordConfirm)) {
-      setErrorMessage('Password confirm must be at least 6 characters long')
-      setPasswordConfirmError(true)
-      return false
-    }
-    if (!isPasswordValid(passwordConfirm)) {
-      setErrorMessage('Password and confirm password do not match')
-      setPasswordMatchError(true)
-      return false
-    }
-
-    return true
-  }
-
-  const handleBirhdayChange = (date: Date[], dateText) => {
-    setBirthDate(dateText)
-  }
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCreateUserData({ ...createUserData, [event.target.name]: event.target.value })
-  }
-
-  const handleCancel = () => {
-    dispatch(closeModal('createUserModal'))
-  }
-
-  const handleConfirm = async () => {
-    const validationResult = validateFormFields()
-    if (validationResult) {
-      const result = await createUser({ ...createUserData, birthday: birthDate })
-
-      dispatch(closeModal('createUserModal'))
-    } else {
-      toastError(errorMessage)
+  const renderSwitch = () => {
+    switch (activeTab) {
+      case 'log-in':
+        return <UserModalLogInTab />
+      case 'settings':
+        return <UserModalSettingsTab />
     }
   }
 
-  useEffect(() => {
-    toastError(errorMessage)
-  }, [errorMessage])
+  const handleRead = (user: IUser) => {
+    dispatch(
+      openModal({
+        id: `userDetailModal-${user._id}`,
+        title: 'User / ' + user.firstname + ' ' + user.lastname,
+        body: <ReadUserModal userId={user._id} />,
+        size: ESize.XLarge
+      })
+    )
+  }
+
+  const handleEdit = (user: IUser) => {
+    dispatch(
+      openModal({
+        id: `updateUserModal-${user._id}`,
+        title: 'Update User / ' + user.firstname + ' ' + user.lastname,
+        body: <UpdateUserModal user={user} />,
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleDelete = (user: IUser) => {
+    dispatch(
+      openModal({
+        id: `deleteUserModal-${user._id}`,
+        title: `Are you sure to inactivate ${user.firstname + ' ' + user.lastname}?`,
+        body: (
+          <ConfirmModal
+            modalId={`deleteUserModal-${user._id}`}
+            title={`Are you sure to inactivate ${user.firstname + ' ' + user.lastname}?`}
+            onConfirm={() => handleOnConfirmDelete(user)}
+          />
+        ),
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleReactive = (user: IUser) => {
+    dispatch(
+      openModal({
+        id: `reactiveUserModal-${user._id}`,
+        title: `Are you sure to reactivate ${user.firstname + ' ' + user.lastname}?`,
+        body: (
+          <ConfirmModal
+            modalId={`reactiveUserModal-${user._id}`}
+            title={`Are you sure to reactivate ${user.firstname + ' ' + user.lastname}?`}
+            onConfirm={() => handleOnConfirmReactive(user)}
+          />
+        ),
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleOnConfirmDelete = async (user: IUser) => {
+    try {
+      await updateUserStatus({ _id: user._id, status: EStatus.Inactive.toString() })
+      toastSuccess('User ' + user.firstname + ' ' + user.lastname + ' inactivated successfully')
+      dispatch(closeModal(`deleteUserModal-${user._id}`))
+    } catch (error) {
+      toastError('Error inactivating user')
+    }
+  }
+
+  const handleOnConfirmReactive = async (user: IUser) => {
+    try {
+      await updateUserStatus({ _id: user._id, status: EStatus.Active.toString() })
+      toastSuccess('User ' + user.firstname + ' ' + user.lastname + ' reactivated successfully')
+      dispatch(closeModal(`reactiveUserModal-${user._id}`))
+    } catch (error) {
+      toastError('Error reactivating user')
+    }
+  }
+  if (userData) {
+    console.log(selectColorForStatus(EStatus[userData.status]))
+  }
 
   return (
     <InnerWrapper>
-      <JustifyBetweenColumn height="100%">
-        <ModalHeader>
-          <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
-              Create User
-            </H1>
-          </JustifyCenterRow>
-        </ModalHeader>
-
-        <ModalBody>
-          <JustifyBetweenColumn height="100%" padding="2rem 0">
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0 0.5rem 0 0">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="firstname"
-                  placeholder="Enter first name..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="First Name"
-                  validationError={firstnameError}
-                  value={createUserData.firstname}
-                />
+      <JustifyBetweenRow height="100%">
+        <ItemContainer width="350px" height="100%">
+          {isUserDataLoading || !userData || isUserDataError ? (
+            <div>Loading...</div>
+          ) : (
+            <JustifyBetweenColumn height="100%" padding="1rem 0">
+              <ItemContainer height="150px">
+                <JustifyBetweenColumn>
+                  <ItemContainer>
+                    <JustifyCenterColumn>
+                      <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
+                      <H1 margin="0.5rem 0" textAlign="center">
+                        {userData.firstname + ' ' + userData.lastname}
+                      </H1>
+                    </JustifyCenterColumn>
+                  </ItemContainer>
+                  <ItemContainer>
+                    <JustifyCenterRow>
+                      <ItemContainer width="auto" margin="0 0.5rem 0 0">
+                        <Badge children={userData.role.name} color={colors.gray.dark} />
+                      </ItemContainer>
+                      <ItemContainer width="auto">
+                        <Badge children={EStatus[userData.status]} color={selectColorForStatus(+userData.status)} />
+                      </ItemContainer>
+                    </JustifyCenterRow>
+                  </ItemContainer>
+                </JustifyBetweenColumn>
               </ItemContainer>
 
-              <ItemContainer margin="0 0 0 0.5rem">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="lastname"
-                  placeholder="Enter last name..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Last Name"
-                  validationError={lastnameError}
-                  value={createUserData.lastname}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
-
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="email"
-                  placeholder="Enter email address..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="email"
-                  labelText="E-mail"
-                  validationError={emailError}
-                  value={createUserData.email}
-                />
-              </ItemContainer>
-
-              <ItemContainer margin="0.5rem 0 0 0.5rem">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="phone"
-                  placeholder="Enter phone number..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="tel"
-                  labelText="Phone Number"
-                  validationError={phoneError}
-                  value={createUserData.phone}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
-
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <DatePicker
-                  labelText="Birthday"
-                  validationError={birthdayError}
-                  name={'birthday'}
-                  onChange={handleBirhdayChange}
-                />
-              </ItemContainer>
-
-              <ItemContainer margin="0.5rem 0 0 0.5rem">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="birthplace"
-                  placeholder="Enter birth location..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Birth Location"
-                  validationError={birthplaceError}
-                  value={createUserData.birthplace}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
-
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <JustifyBetweenRow>
-                  <ItemContainer margin="0 0.5rem 0 0 " width="calc((100% - 1rem)/2)">
-                    <InputWithIcon
-                      children={<User size={16} />}
-                      name="country"
-                      placeholder="Enter country..."
-                      onChange={handleInputChange}
-                      // onBlur={validateFormFields}
-                      type="text"
-                      labelText="Country"
-                      validationError={countryError}
-                      value={createUserData.country}
-                    />
+              <ItemContainer margin="1rem 0" height="calc(100% - 1rem - 1rem - 150px - 40px)">
+                <JustifyBetweenColumn>
+                  <ItemContainer margin="1rem 0">
+                    <JustifyBetweenRow>
+                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
+                        <H1 fontSize="13px" color={colors.black.dark}>
+                          Address
+                        </H1>
+                      </ItemContainer>
+                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
+                        <H1 fontSize="12px" color={colors.black.light}>
+                          {userData.address +
+                            ' ' +
+                            userData.city +
+                            ' ' +
+                            userData.state +
+                            ' ' +
+                            userData.country +
+                            ' ' +
+                            userData.zipcode}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyBetweenRow>
                   </ItemContainer>
 
-                  <ItemContainer margin="0 0 0 0.5rem" width="calc((100% - 1rem)/2)">
-                    <InputWithIcon
-                      children={<User size={16} />}
-                      name="city"
-                      placeholder="Enter city..."
-                      onChange={handleInputChange}
-                      // onBlur={validateFormFields}
-                      type="text"
-                      labelText="City"
-                      validationError={cityError}
-                      value={createUserData.city}
-                    />
+                  <ItemContainer margin="1rem 0">
+                    <JustifyBetweenRow>
+                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
+                        <H1 fontSize="13px" color={colors.black.dark}>
+                          Email
+                        </H1>
+                      </ItemContainer>
+                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
+                        <H1 fontSize="12px" color={colors.black.light}>
+                          {userData.email}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyBetweenRow>
                   </ItemContainer>
-                </JustifyBetweenRow>
-              </ItemContainer>
-
-              <ItemContainer margin="0.5rem 0 0 0.5rem">
-                <JustifyBetweenRow>
-                  <ItemContainer margin="0 0.5rem 0 0 ">
-                    <InputWithIcon
-                      children={<User size={16} />}
-                      name="state"
-                      placeholder="Enter state..."
-                      onChange={handleInputChange}
-                      // onBlur={validateFormFields}
-                      type="text"
-                      labelText="State"
-                      validationError={stateError}
-                      value={createUserData.state}
-                    />
+                  <ItemContainer margin="1rem 0">
+                    <JustifyBetweenRow>
+                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
+                        <H1 fontSize="13px" color={colors.black.dark}>
+                          Contact
+                        </H1>
+                      </ItemContainer>
+                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
+                        <H1 fontSize="12px" color={colors.black.light}>
+                          {userData.phone}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyBetweenRow>
                   </ItemContainer>
-                  <ItemContainer margin="0 0 0 0.5rem" width="250px">
-                    <InputWithIcon
-                      children={<User size={16} />}
-                      name="zipcode"
-                      placeholder="Enter zip code..."
-                      onChange={handleInputChange}
-                      // onBlur={validateFormFields}
-                      type="text"
-                      labelText="Zip Code"
-                      validationError={zipcodeError}
-                      value={createUserData.zipcode}
-                    />
+                  <ItemContainer margin="1rem 0">
+                    <JustifyBetweenRow>
+                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
+                        <H1 fontSize="13px" color={colors.black.dark}>
+                          Birthday
+                        </H1>
+                      </ItemContainer>
+                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
+                        <H1 fontSize="12px" color={colors.black.light}>
+                          {userData.birthday}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyBetweenRow>
                   </ItemContainer>
-                </JustifyBetweenRow>
-              </ItemContainer>
-            </JustifyBetweenRow>
-
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0 ">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="address"
-                  placeholder="Enter your address..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Address"
-                  validationError={addressError}
-                  value={createUserData.address}
-                />
+                  <ItemContainer margin="1rem 0">
+                    <JustifyBetweenRow>
+                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
+                        <H1 fontSize="13px" color={colors.black.dark}>
+                          Birth Location
+                        </H1>
+                      </ItemContainer>
+                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
+                        <H1 fontSize="12px" color={colors.black.light}>
+                          {userData.birthplace}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyBetweenRow>
+                  </ItemContainer>
+                </JustifyBetweenColumn>
               </ItemContainer>
 
-              <ItemContainer margin="0.5rem 0 0 0.5rem ">
-                <SelectInput
-                  children={<User size={16} />}
-                  name="gender"
-                  // placeholder="Enter birth location..."
-                  onChange={option => setCreateUserData({ ...createUserData, gender: option.value })}
-                  selectedOption={+createUserData.gender}
-                  options={genderOptions}
-                  labelText="Gender"
-                  validationError={genderError}
-                />
+              <ItemContainer height="40px">
+                <JustifyCenterColumn>
+                  <ActionButtons
+                    iconSize="30px"
+                    status={userData.status}
+                    onRead={() => handleRead(userData!)}
+                    onEdit={() => handleEdit(userData!)}
+                    onHistory={function (): void {
+                      throw new Error('Function not implemented.')
+                    }}
+                    onDelete={() => handleDelete(userData!)}
+                    onReactive={() => handleReactive(userData!)}
+                  />
+                </JustifyCenterColumn>
               </ItemContainer>
-            </JustifyBetweenRow>
+            </JustifyBetweenColumn>
+          )}
+        </ItemContainer>
 
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <SelectInput
-                  isLoading={roleLoading}
-                  children={<User size={16} />}
-                  name="role"
-                  // placeholder="Select your birthday..."
-                  onChange={option => setCreateUserData({ ...createUserData, role: option.value })}
-                  options={(roleData || []).map(role => ({ value: role._id, label: role.name }))}
-                  selectedOption={(roleData || []).findIndex(role => role._id === createUserData.role)}
-                  labelText="Role"
-                  validationError={roleError}
-                />
-              </ItemContainer>
-
-              <ItemContainer margin="0.5rem 0 0 0.5rem">
-                <SelectInput
-                  children={<User size={16} />}
-                  name="status"
-                  // placeholder="Enter birth location..."
-                  onChange={option => setCreateUserData({ ...createUserData, status: option.value })}
-                  selectedOption={(statusOptions || []).findIndex(status => status.value === +createUserData.status)}
-                  options={statusOptions}
-                  labelText="Status"
-                  validationError={statusError}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
-
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <InputWithIcon
-                  children={<Key size={16} />}
-                  labelText="Password"
-                  validationError={passwordError}
-                  // onBlur={validateFormFields}
-                  onChange={handleInputChange}
-                  name="password"
-                  placeholder="Password"
-                  value={createUserData.password}
-                  handleVisibility={togglePasswordVisibility}
-                  isPasswordVisible={isPasswordVisible || passwordMatchError}
-                  type={isPasswordVisible ? 'text' : 'password'}
-                />
-              </ItemContainer>
-
-              <ItemContainer margin="0.5rem 0 0 0.5rem">
-                <InputWithIcon
-                  name="passwordConfirm"
-                  placeholder="Confirm your password..."
-                  labelText="Confirm Password"
-                  children={<Key size={16} />}
-                  validationError={passwordConfirmError || passwordMatchError}
-                  // onBlur={validateFormFields}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value)}
-                  value={passwordConfirm}
-                  handleVisibility={togglePasswordConfirmVisibility}
-                  isPasswordVisible={isPasswordConfirmVisible}
-                  type={isPasswordConfirmVisible ? 'text' : 'password'}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
+        <ItemContainer height="100%" width="120px" padding="1rem" backgroundColor={colors.gray.primary}>
+          <JustifyBetweenColumn height="100%">
+            <ItemContainer height="100%" margin="0 0 1rem 0">
+              <Button color={colors.gray.secondary} onClick={() => setActiveTab('log-in')}>
+                <H1 color={colors.gray.primary} textAlign="center">
+                  Log In
+                </H1>
+              </Button>
+            </ItemContainer>
+            <ItemContainer height="100%" margin="0 0 0 0">
+              <Button color={colors.gray.secondary} onClick={() => setActiveTab('settings')}>
+                <H1 color={colors.gray.primary} textAlign="center">
+                  Settings
+                </H1>
+              </Button>
+            </ItemContainer>
           </JustifyBetweenColumn>
-        </ModalBody>
-
-        <ModalFooter>
-          <Row>
-            <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
-          </Row>
-        </ModalFooter>
-      </JustifyBetweenColumn>
+        </ItemContainer>
+        <ItemContainer minHeight="700px" height="inherit" width="calc(100% - 120px - 350px)">
+          {renderSwitch()}
+        </ItemContainer>
+      </JustifyBetweenRow>
     </InnerWrapper>
   )
 }
 
-export default CreateUserModal
+export default UserReadModal

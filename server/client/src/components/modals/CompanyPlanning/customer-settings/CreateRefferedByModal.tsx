@@ -27,17 +27,19 @@ const CreateRefferedByModal = () => {
     dispatch(closeModal('createRefferedByModal'))
   }
   return (
-    <InnerWrapper>
-      <JustifyBetweenColumn height="100%">
-        <ModalHeader>
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
               Create Reffered By
             </H1>
           </JustifyCenterRow>
-        </ModalHeader>
+        </InnerWrapper>
+      </ModalHeader>
 
-        <ModalBody>
+      <ModalBody>
+        <InnerWrapper>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <Row>
               <InputRegular
@@ -53,15 +55,17 @@ const CreateRefferedByModal = () => {
               <ColorSelect labelText="Select Reffered Type Color" value={selectedColor} onClick={handleColorSelect} />
             </Row>
           </JustifyCenterColumn>
-        </ModalBody>
+        </InnerWrapper>
+      </ModalBody>
 
-        <ModalFooter>
+      <ModalFooter>
+        <InnerWrapper>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </ModalFooter>
-      </JustifyBetweenColumn>
-    </InnerWrapper>
+        </InnerWrapper>
+      </ModalFooter>
+    </JustifyBetweenColumn>
   )
 }
 

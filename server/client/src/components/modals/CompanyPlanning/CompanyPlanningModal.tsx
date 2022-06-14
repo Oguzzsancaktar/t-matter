@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
+import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
 import { InnerWrapper } from '@components/wrapper'
 
 import { Tab } from '@components/index'
@@ -10,46 +10,50 @@ const CompanyPlanningModal = () => {
   const [activeTab, setActiveTab] = useState('salary-settings')
 
   return (
-    <InnerWrapper>
+    <Column>
       <ModalHeader>
-        <JustifyBetweenColumn>
-          <JustifyCenterRow>
-            <Tab
-              margin="0 1rem 0 0rem"
-              index={1}
-              name="Salary Settings"
-              isActive={activeTab === 'salary-settings'}
-              onClick={() => setActiveTab('salary-settings')}
-            />
+        <InnerWrapper>
+          <JustifyBetweenColumn>
+            <JustifyCenterRow>
+              <Tab
+                margin="0 1rem 0 0rem"
+                index={1}
+                name="Salary Settings"
+                isActive={activeTab === 'salary-settings'}
+                onClick={() => setActiveTab('salary-settings')}
+              />
 
-            <Tab
-              margin="0 1rem 0 0rem"
-              index={2}
-              name="Company Pricing"
-              isActive={activeTab === 'company-pricing'}
-              onClick={() => setActiveTab('company-pricing')}
-            />
+              <Tab
+                margin="0 1rem 0 0rem"
+                index={2}
+                name="Company Pricing"
+                isActive={activeTab === 'company-pricing'}
+                onClick={() => setActiveTab('company-pricing')}
+              />
 
-            <Tab
-              index={3}
-              name="Customer Settings"
-              isActive={activeTab === 'customer-settings'}
-              onClick={() => setActiveTab('customer-settings')}
-            />
-          </JustifyCenterRow>
-        </JustifyBetweenColumn>
+              <Tab
+                index={3}
+                name="Customer Settings"
+                isActive={activeTab === 'customer-settings'}
+                onClick={() => setActiveTab('customer-settings')}
+              />
+            </JustifyCenterRow>
+          </JustifyBetweenColumn>
+        </InnerWrapper>
       </ModalHeader>
 
       <ModalBody minHeight="700px">
-        {activeTab === 'salary-settings' ? (
-          <SalarySettings />
-        ) : activeTab === 'company-pricing' ? (
-          <CompanyPricing />
-        ) : (
-          <CustomerSettings />
-        )}
+        <InnerWrapper>
+          {activeTab === 'salary-settings' ? (
+            <SalarySettings />
+          ) : activeTab === 'company-pricing' ? (
+            <CompanyPricing />
+          ) : (
+            <CustomerSettings />
+          )}
+        </InnerWrapper>
       </ModalBody>
-    </InnerWrapper>
+    </Column>
   )
 }
 

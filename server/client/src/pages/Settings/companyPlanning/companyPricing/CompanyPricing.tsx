@@ -31,7 +31,7 @@ import colors from '@/constants/colors'
 import {
   useGetCompanyPricingQuery,
   usePatchCompanyPricingMutation
-} from '@services/settings/company-panning/companyPricing'
+} from '@/services/settings/company-planning/companyPricing'
 
 const CompanyPricing = () => {
   const [totalMinutes, setTotalMinutes] = useState(0)

@@ -2,6 +2,7 @@ import colors, { colorOptions } from '@/constants/colors'
 import { IComponentProps } from '@/models'
 import React from 'react'
 import styled from 'styled-components'
+import { ItemContainer } from '../item-container'
 import { Column, JustifyBetweenRow } from '../layout'
 import { H1, Label } from '../texts'
 import CircleColor from './CircleColor'
@@ -23,7 +24,11 @@ const ColorSelectContainer = styled(JustifyBetweenRow)<Pick<IProps, 'validationE
 const ColorSelect: React.FC<IProps> = ({ margin, labelText, onClick, value, validationError }) => {
   return (
     <Column margin={margin}>
-      {labelText && <H1 margin=" 0 0 0.5rem 0">{labelText}</H1>}
+      {labelText && (
+        <ItemContainer margin="0 0 0.4rem 0">
+          <Label color={colors.text.primary}>{labelText}</Label>{' '}
+        </ItemContainer>
+      )}
       <ColorSelectContainer validationError={validationError}>
         {colorOptions.map((color, index) => (
           <CircleColor onClick={() => onClick(color)} isSelected={color === value} key={index} color={color} />

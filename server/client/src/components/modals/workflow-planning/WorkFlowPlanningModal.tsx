@@ -9,47 +9,51 @@ const WorkFlowPlanningModal = () => {
   const [activeTab, setActiveTab] = useState('workflow-category')
 
   return (
-    <InnerWrapper>
+    <Column>
       <ModalHeader>
-        <JustifyBetweenColumn>
-          <JustifyCenterRow>
-            <Tab
-              margin="0 1rem 0 0rem"
-              index={1}
-              name="Workflow Category"
-              isActive={activeTab === 'workflow-category'}
-              onClick={() => setActiveTab('workflow-category')}
-            />
+        <InnerWrapper>
+          <JustifyBetweenColumn>
+            <JustifyCenterRow>
+              <Tab
+                margin="0 1rem 0 0rem"
+                index={1}
+                name="Workflow Category"
+                isActive={activeTab === 'workflow-category'}
+                onClick={() => setActiveTab('workflow-category')}
+              />
 
-            <Tab
-              margin="0 1rem 0 0rem"
-              index={2}
-              name="Workflow Checklist"
-              isActive={activeTab === 'workflow-checklist'}
-              onClick={() => setActiveTab('workflow-checklist')}
-            />
+              <Tab
+                margin="0 1rem 0 0rem"
+                index={2}
+                name="Workflow Checklist"
+                isActive={activeTab === 'workflow-checklist'}
+                onClick={() => setActiveTab('workflow-checklist')}
+              />
 
-            <Tab
-              margin="0 1rem 0 0rem"
-              index={3}
-              name="Workflow Plan"
-              isActive={activeTab === 'workflow-plan'}
-              onClick={() => setActiveTab('workflow-plan')}
-            />
-          </JustifyCenterRow>
-        </JustifyBetweenColumn>
+              <Tab
+                margin="0 1rem 0 0rem"
+                index={3}
+                name="Workflow Plan"
+                isActive={activeTab === 'workflow-plan'}
+                onClick={() => setActiveTab('workflow-plan')}
+              />
+            </JustifyCenterRow>
+          </JustifyBetweenColumn>
+        </InnerWrapper>
       </ModalHeader>
 
       <ModalBody>
-        {activeTab === 'workflow-category' ? (
-          <WorkFlowCategoryTab />
-        ) : activeTab === 'workflow-checklist' ? (
-          <WorkFlowChecklistTab />
-        ) : (
-          <WorkFlowPlanTab />
-        )}
+        <InnerWrapper>
+          {activeTab === 'workflow-category' ? (
+            <WorkFlowCategoryTab />
+          ) : activeTab === 'workflow-checklist' ? (
+            <WorkFlowChecklistTab />
+          ) : (
+            <WorkFlowPlanTab />
+          )}
+        </InnerWrapper>
       </ModalBody>
-    </InnerWrapper>
+    </Column>
   )
 }
 

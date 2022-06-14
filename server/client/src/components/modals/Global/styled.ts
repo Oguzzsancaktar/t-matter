@@ -18,13 +18,13 @@ export const Modal = styled.div`
 export const Container = styled.div<IContainerProps>`
   display: grid;
   position: relative;
-  width: calc(100% - 2rem);
+  width: calc(100% - 4rem);
   height: auto;
   /* min-height: ${({ size }) => (size === 'xl' ? '800' : size === 'lg' ? '700' : size === 'md' ? '900' : '500')}px; */
   background-color: white;
   border-radius: 0.3rem;
   max-width: ${({ size }) =>
-    size === 'xl' ? '1600' : size === 'lg' ? '1200' : size === 'md' ? '900' : size === 'sm' ? '600' : '100'}px;
+    size === 'xl' ? '2000' : size === 'lg' ? '1200' : size === 'md' ? '900' : size === 'sm' ? '600' : '100'}px;
 `
 
 export const CloseButton = styled.button`

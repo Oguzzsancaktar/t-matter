@@ -52,17 +52,19 @@ const CreateTaskNameModal = () => {
   }
 
   return (
-    <InnerWrapper>
-      <JustifyBetweenColumn height="100%">
-        <ModalHeader>
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
               Create User Task Name
             </H1>
           </JustifyCenterRow>
-        </ModalHeader>
+        </InnerWrapper>
+      </ModalHeader>
 
-        <ModalBody>
+      <ModalBody>
+        <InnerWrapper>
           <JustifyBetweenColumn height="100%" padding="2rem 0">
             <Row>
               <SelectInput
@@ -92,15 +94,17 @@ const CreateTaskNameModal = () => {
               />
             </Row>
           </JustifyBetweenColumn>
-        </ModalBody>
+        </InnerWrapper>
+      </ModalBody>
 
-        <ModalFooter>
+      <ModalFooter>
+        <InnerWrapper>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </ModalFooter>
-      </JustifyBetweenColumn>
-    </InnerWrapper>
+        </InnerWrapper>
+      </ModalFooter>
+    </JustifyBetweenColumn>
   )
 }
 

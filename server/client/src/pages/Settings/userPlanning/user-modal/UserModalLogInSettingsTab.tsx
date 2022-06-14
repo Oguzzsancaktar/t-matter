@@ -26,7 +26,7 @@ import {
 import {
   useGetCompanyPricingQuery,
   usePatchCompanyPricingMutation
-} from '@/services/settings/company-panning/companyPricing'
+} from '@/services/settings/company-planning/companyPricing'
 import {
   clockToSeconds,
   secondsToTimeString,

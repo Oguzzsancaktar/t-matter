@@ -57,10 +57,10 @@ const getUserById = (builder: IBuilder) => {
 }
 
 const updateUser = (builder: IBuilder) => {
-  return builder.mutation<IUser, IUserUpdateDTO>({
+  return builder.mutation<IUser, Omit<IUserUpdateDTO, 'password'>>({
     query(userUpdateDto) {
       return {
-        url: `/user/${userUpdateDto._id}`,
+        url: `/user`,
         method: 'PATCH',
         data: userUpdateDto
       }
@@ -68,6 +68,21 @@ const updateUser = (builder: IBuilder) => {
     invalidatesTags(result) {
       if (!result) return [{ type: USER_TAG_TYPE, id: 'LIST' }]
       return [{ type: USER_TAG_TYPE, id: result._id }]
+    }
+  })
+}
+
+const updateUserStatus = (builder: IBuilder) => {
+  return builder.mutation<any, Pick<IUserUpdateDTO, '_id' | 'status'>>({
+    query(dto) {
+      return {
+        url: `/user/${dto._id}/status`,
+        method: 'PATCH',
+        data: { status: dto.status }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: USER_TAG_TYPE, id: 'LIST' }]
     }
   })
 }
@@ -80,9 +95,23 @@ const userApi = createApi({
     getUsers: getUsers(builder),
     createUser: createUser(builder),
     getUserById: getUserById(builder),
-    updateUser: updateUser(builder)
+    updateUser: updateUser(builder),
+    updateUserStatus: updateUserStatus(builder)
   })
 })
 
-const { useGetUsersQuery, useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } = userApi
-export { userApi, useGetUsersQuery, useGetUserByIdQuery, useCreateUserMutation, useUpdateUserMutation }
+const {
+  useGetUsersQuery,
+  useCreateUserMutation,
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+  useUpdateUserStatusMutation
+} = userApi
+export {
+  userApi,
+  useGetUsersQuery,
+  useGetUserByIdQuery,
+  useCreateUserMutation,
+  useUpdateUserMutation,
+  useUpdateUserStatusMutation
+}

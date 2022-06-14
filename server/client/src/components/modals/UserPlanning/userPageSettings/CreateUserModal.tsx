@@ -7,20 +7,13 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
-import { EGender, IUserCreateDTO } from '@/models'
+import { IUserCreateDTO } from '@/models'
 import { Key, User } from 'react-feather'
 import { useToggle } from '@/hooks/useToggle'
-import {
-  isEmailValid,
-  isPasswordAndConfirmMatch,
-  isPasswordValid,
-  isValueNull,
-  isZipcodeValid
-} from '@/utils/validationUtils'
+import { isEmailValid, isPasswordAndConfirmMatch, isPasswordValid, isValueNull } from '@/utils/validationUtils'
 import { toastError } from '@/utils/toastUtil'
 import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
-import moment from 'moment'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
 import { useCreateUserMutation } from '@/services/settings/user-planning/userService'
 
@@ -37,17 +30,17 @@ const CreateUserModal = () => {
 
   const [birthDate, setBirthDate] = useState('')
   const [createUserData, setCreateUserData] = useState<IUserCreateDTO>({
-    firstname: 'oguz',
-    lastname: 'taha',
-    email: 'info@gmail.com',
-    phone: '123454235',
+    firstname: '',
+    lastname: '',
+    email: '',
+    phone: '',
     birthday: '',
-    birthplace: 'tarsus',
-    country: 'tarsus',
-    city: 'mersi',
-    state: 'ista',
-    zipcode: '1234123',
-    address: 'sadfasdf',
+    birthplace: '',
+    country: '',
+    city: '',
+    state: '',
+    zipcode: '',
+    address: '',
     role: '',
     gender: '',
     status: '',
@@ -225,17 +218,19 @@ const CreateUserModal = () => {
   }, [errorMessage])
 
   return (
-    <InnerWrapper>
-      <JustifyBetweenColumn height="100%">
-        <ModalHeader>
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
               Create User
             </H1>
           </JustifyCenterRow>
-        </ModalHeader>
+        </InnerWrapper>
+      </ModalHeader>
 
-        <ModalBody>
+      <ModalBody>
+        <InnerWrapper>
           <JustifyBetweenColumn height="100%" padding="2rem 0">
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0 0.5rem 0 0">
@@ -323,23 +318,25 @@ const CreateUserModal = () => {
             </JustifyBetweenRow>
 
             <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <JustifyBetweenRow>
-                  <ItemContainer margin="0 0.5rem 0 0 " width="calc((100% - 1rem)/2)">
-                    <InputWithIcon
-                      children={<User size={16} />}
-                      name="country"
-                      placeholder="Enter country..."
-                      onChange={handleInputChange}
-                      // onBlur={validateFormFields}
-                      type="text"
-                      labelText="Country"
-                      validationError={countryError}
-                      value={createUserData.country}
-                    />
-                  </ItemContainer>
+              <ItemContainer margin="0.5rem 0 0 0 ">
+                <InputWithIcon
+                  children={<User size={16} />}
+                  name="address"
+                  placeholder="Enter your address..."
+                  onChange={handleInputChange}
+                  // onBlur={validateFormFields}
+                  type="text"
+                  labelText="Address"
+                  validationError={addressError}
+                  value={createUserData.address}
+                />
+              </ItemContainer>
+            </JustifyBetweenRow>
 
-                  <ItemContainer margin="0 0 0 0.5rem" width="calc((100% - 1rem)/2)">
+            <JustifyBetweenRow width="100%">
+              <ItemContainer margin="0.5rem 0 0 0">
+                <JustifyBetweenRow>
+                  <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
                       children={<User size={16} />}
                       name="city"
@@ -360,14 +357,14 @@ const CreateUserModal = () => {
                   <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
                       children={<User size={16} />}
-                      name="state"
-                      placeholder="Enter state..."
+                      name="country"
+                      placeholder="Enter country..."
                       onChange={handleInputChange}
                       // onBlur={validateFormFields}
                       type="text"
-                      labelText="State"
-                      validationError={stateError}
-                      value={createUserData.state}
+                      labelText="Country"
+                      validationError={countryError}
+                      value={createUserData.country}
                     />
                   </ItemContainer>
                   <ItemContainer margin="0 0 0 0.5rem" width="250px">
@@ -389,17 +386,19 @@ const CreateUserModal = () => {
 
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0.5rem 0.5rem 0 0 ">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="address"
-                  placeholder="Enter your address..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Address"
-                  validationError={addressError}
-                  value={createUserData.address}
-                />
+                <ItemContainer>
+                  <InputWithIcon
+                    children={<User size={16} />}
+                    name="state"
+                    placeholder="Enter state..."
+                    onChange={handleInputChange}
+                    // onBlur={validateFormFields}
+                    type="text"
+                    labelText="State"
+                    validationError={stateError}
+                    value={createUserData.state}
+                  />
+                </ItemContainer>
               </ItemContainer>
 
               <ItemContainer margin="0.5rem 0 0 0.5rem ">
@@ -479,15 +478,17 @@ const CreateUserModal = () => {
               </ItemContainer>
             </JustifyBetweenRow>
           </JustifyBetweenColumn>
-        </ModalBody>
+        </InnerWrapper>
+      </ModalBody>
 
-        <ModalFooter>
+      <ModalFooter>
+        <InnerWrapper>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </ModalFooter>
-      </JustifyBetweenColumn>
-    </InnerWrapper>
+        </InnerWrapper>
+      </ModalFooter>
+    </JustifyBetweenColumn>
   )
 }
 

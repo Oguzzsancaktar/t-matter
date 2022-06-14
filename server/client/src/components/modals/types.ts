@@ -4,8 +4,9 @@ import styled from 'styled-components'
 export const ModalHeader = styled.div`
   border-bottom: 1px solid ${colors.cyan.primary};
   padding: 1rem;
-  height: 85px;
+  /* height: 85px; */
   width: 100%;
+  background-color: ${colors.black.light};
 `
 
 export const ModalBody = styled.div<{ withModalFooter?: boolean; minHeight?: string }>`

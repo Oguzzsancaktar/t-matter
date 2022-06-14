@@ -1,7 +1,7 @@
 import colors from '@/constants/colors'
 import { EStatus } from '@/models'
 
-export const selectColorForStatus = (status: EStatus) => {
+export const selectColorForStatus = (status: number) => {
   let color = colors.white.bg
 
   if (status === EStatus.Active) {

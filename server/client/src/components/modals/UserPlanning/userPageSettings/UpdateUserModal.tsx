@@ -7,51 +7,42 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
-import { EGender, IUserCreateDTO } from '@/models'
-import { Key, User } from 'react-feather'
-import { useToggle } from '@/hooks/useToggle'
-import {
-  isEmailValid,
-  isPasswordAndConfirmMatch,
-  isPasswordValid,
-  isValueNull,
-  isZipcodeValid
-} from '@/utils/validationUtils'
-import { toastError } from '@/utils/toastUtil'
+import { IUser, IUserUpdateDTO } from '@/models'
+import { User } from 'react-feather'
+import { isEmailValid, isValueNull } from '@/utils/validationUtils'
+import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
-import moment from 'moment'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
-import { useCreateUserMutation } from '@/services/settings/user-planning/userService'
+import { useUpdateUserMutation } from '@/services/settings/user-planning/userService'
 
-const UpdateUserModal = () => {
-  const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
-  const [isPasswordConfirmVisible, togglePasswordConfirmVisibility] = useToggle(false)
+interface IProps {
+  user: IUser
+}
 
-  const [passwordConfirm, setPasswordConfirm] = useState('')
-
-  const [createUser, { isLoading: isUserCreateLoading }] = useCreateUserMutation()
+const UpdateUserModal: React.FC<IProps> = ({ user }) => {
+  const [updateUser, { isLoading: isUserUpdateLoading }] = useUpdateUserMutation()
   const { data: roleData, isLoading: roleLoading, error: roleDataError } = useGetRolesQuery()
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [birthDate, setBirthDate] = useState('')
-  const [createUserData, setCreateUserData] = useState<IUserCreateDTO>({
-    firstname: 'oguz',
-    lastname: 'taha',
-    email: 'info@gmail.com',
-    phone: '123454235',
-    birthday: '',
-    birthplace: 'tarsus',
-    country: 'tarsus',
-    city: 'mersi',
-    state: 'ista',
-    zipcode: '1234123',
-    address: 'sadfasdf',
-    role: '',
-    gender: '',
-    status: '',
-    password: ''
+  const [birthDate, setBirthDate] = useState(user.birthday || '')
+  const [updateUserData, setUpdateUserData] = useState<Omit<IUserUpdateDTO, 'password'>>({
+    _id: user._id,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    email: user.email,
+    phone: user.phone,
+    birthday: user.birthday,
+    birthplace: user.birthplace,
+    country: user.country,
+    city: user.city,
+    state: user.state,
+    zipcode: user.zipcode,
+    address: user.address,
+    role: user.role._id,
+    gender: user.gender,
+    status: user.status
   })
 
   const [firstnameError, setFirstnameError] = useState(false)
@@ -68,9 +59,6 @@ const UpdateUserModal = () => {
   const [roleError, setRoleError] = useState(false)
   const [genderError, setGenderError] = useState(false)
   const [statusError, setStatusError] = useState(false)
-  const [passwordError, setPasswordError] = useState(false)
-  const [passwordConfirmError, setPasswordConfirmError] = useState(false)
-  const [passwordMatchError, setPasswordMatchError] = useState(false)
 
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -89,108 +77,89 @@ const UpdateUserModal = () => {
     setRoleError(false)
     setGenderError(false)
     setStatusError(false)
-    setPasswordError(false)
-    setPasswordMatchError(false)
     setErrorMessage('')
 
-    if (!isValueNull(createUserData.firstname)) {
+    if (!isValueNull(updateUserData.firstname || '')) {
       setErrorMessage('Please enter a valid first name')
       setFirstnameError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.lastname)) {
+    if (!isValueNull(updateUserData.lastname || '')) {
       setErrorMessage('Please enter a valid last name')
       setLastnameError(true)
       return false
     }
 
-    if (!isEmailValid(createUserData.email)) {
+    if (!isEmailValid(updateUserData.email || '')) {
       setErrorMessage('Please enter a valid email')
       setEmailError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.phone)) {
+    if (!isValueNull(updateUserData.phone || '')) {
       setErrorMessage('Please enter a valid phone number')
       setPhoneError(true)
       return false
     }
 
-    if (!isValueNull(birthDate)) {
+    if (!isValueNull(birthDate || '')) {
       setErrorMessage('Please enter a valid birthday')
       setBirthdayError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.birthplace)) {
+    if (!isValueNull(updateUserData.birthplace || '')) {
       setErrorMessage('Please enter a valid birthplace')
       setBirthplaceError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.country)) {
+    if (!isValueNull(updateUserData.country || '')) {
       setErrorMessage('Please enter a valid country')
       setCountryError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.city)) {
+    if (!isValueNull(updateUserData.city || '')) {
       setErrorMessage('Please enter a valid city')
       setCityError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.state)) {
+    if (!isValueNull(updateUserData.state || '')) {
       setErrorMessage('Please enter a valid state')
       setStateError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.zipcode)) {
+    if (!isValueNull(updateUserData.zipcode || '')) {
       setErrorMessage('Please enter a valid zipcode')
       setZipcodeError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.address)) {
+    if (!isValueNull(updateUserData.address || '')) {
       setErrorMessage('Please enter a valid address')
       setAddressError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.role)) {
+    if (!isValueNull(updateUserData.role || '')) {
       setErrorMessage('Please select user role')
       setRoleError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.gender)) {
+    if (!isValueNull(updateUserData.gender || '')) {
       setErrorMessage('Please select user gender')
       setGenderError(true)
       return false
     }
 
-    if (!isValueNull(createUserData.status)) {
+    if (!isValueNull(updateUserData.status || '')) {
       setErrorMessage('Please select user status')
       setStatusError(true)
-      return false
-    }
-
-    if (!isPasswordValid(createUserData.password)) {
-      setErrorMessage('Password must be at least 6 characters long')
-      setPasswordError(true)
-      return false
-    }
-
-    if (!isPasswordAndConfirmMatch(createUserData.password, passwordConfirm)) {
-      setErrorMessage('Password confirm must be at least 6 characters long')
-      setPasswordConfirmError(true)
-      return false
-    }
-    if (!isPasswordValid(passwordConfirm)) {
-      setErrorMessage('Password and confirm password do not match')
-      setPasswordMatchError(true)
       return false
     }
 
@@ -202,19 +171,24 @@ const UpdateUserModal = () => {
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCreateUserData({ ...createUserData, [event.target.name]: event.target.value })
+    setUpdateUserData({ ...updateUserData, [event.target.name]: event.target.value })
   }
 
   const handleCancel = () => {
-    dispatch(closeModal('createUserModal'))
+    dispatch(closeModal(`updateUserModal-${user._id}`))
   }
 
   const handleConfirm = async () => {
     const validationResult = validateFormFields()
     if (validationResult) {
-      const result = await createUser({ ...createUserData, birthday: birthDate })
-
-      dispatch(closeModal('createUserModal'))
+      try {
+        await updateUser({ ...updateUserData, _id: user._id, birthday: birthDate })
+        dispatch(closeModal('createUserModal'))
+        toastSuccess(`User ${user.firstname + ' ' + user.lastname} updated successfully`)
+        dispatch(closeModal(`updateUserModal-${user._id}`))
+      } catch (error) {
+        console.log(error)
+      }
     } else {
       toastError(errorMessage)
     }
@@ -225,17 +199,19 @@ const UpdateUserModal = () => {
   }, [errorMessage])
 
   return (
-    <InnerWrapper>
-      <JustifyBetweenColumn height="100%">
-        <ModalHeader>
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
-              Create User
+              Update User ({user.firstname + ' ' + user.lastname})
             </H1>
           </JustifyCenterRow>
-        </ModalHeader>
+        </InnerWrapper>
+      </ModalHeader>
 
-        <ModalBody>
+      <ModalBody>
+        <InnerWrapper>
           <JustifyBetweenColumn height="100%" padding="2rem 0">
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0 0.5rem 0 0">
@@ -248,7 +224,7 @@ const UpdateUserModal = () => {
                   type="text"
                   labelText="First Name"
                   validationError={firstnameError}
-                  value={createUserData.firstname}
+                  value={updateUserData.firstname}
                 />
               </ItemContainer>
 
@@ -262,7 +238,7 @@ const UpdateUserModal = () => {
                   type="text"
                   labelText="Last Name"
                   validationError={lastnameError}
-                  value={createUserData.lastname}
+                  value={updateUserData.lastname}
                 />
               </ItemContainer>
             </JustifyBetweenRow>
@@ -278,7 +254,7 @@ const UpdateUserModal = () => {
                   type="email"
                   labelText="E-mail"
                   validationError={emailError}
-                  value={createUserData.email}
+                  value={updateUserData.email}
                 />
               </ItemContainer>
 
@@ -292,7 +268,7 @@ const UpdateUserModal = () => {
                   type="tel"
                   labelText="Phone Number"
                   validationError={phoneError}
-                  value={createUserData.phone}
+                  value={updateUserData.phone}
                 />
               </ItemContainer>
             </JustifyBetweenRow>
@@ -317,29 +293,31 @@ const UpdateUserModal = () => {
                   type="text"
                   labelText="Birth Location"
                   validationError={birthplaceError}
-                  value={createUserData.birthplace}
+                  value={updateUserData.birthplace}
                 />
               </ItemContainer>
             </JustifyBetweenRow>
 
             <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <JustifyBetweenRow>
-                  <ItemContainer margin="0 0.5rem 0 0 " width="calc((100% - 1rem)/2)">
-                    <InputWithIcon
-                      children={<User size={16} />}
-                      name="country"
-                      placeholder="Enter country..."
-                      onChange={handleInputChange}
-                      // onBlur={validateFormFields}
-                      type="text"
-                      labelText="Country"
-                      validationError={countryError}
-                      value={createUserData.country}
-                    />
-                  </ItemContainer>
+              <ItemContainer margin="0.5rem 0 0 0 ">
+                <InputWithIcon
+                  children={<User size={16} />}
+                  name="address"
+                  placeholder="Enter your address..."
+                  onChange={handleInputChange}
+                  // onBlur={validateFormFields}
+                  type="text"
+                  labelText="Address"
+                  validationError={addressError}
+                  value={updateUserData.address}
+                />
+              </ItemContainer>
+            </JustifyBetweenRow>
 
-                  <ItemContainer margin="0 0 0 0.5rem" width="calc((100% - 1rem)/2)">
+            <JustifyBetweenRow width="100%">
+              <ItemContainer margin="0.5rem 0 0 0">
+                <JustifyBetweenRow>
+                  <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
                       children={<User size={16} />}
                       name="city"
@@ -349,7 +327,7 @@ const UpdateUserModal = () => {
                       type="text"
                       labelText="City"
                       validationError={cityError}
-                      value={createUserData.city}
+                      value={updateUserData.city}
                     />
                   </ItemContainer>
                 </JustifyBetweenRow>
@@ -360,14 +338,14 @@ const UpdateUserModal = () => {
                   <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
                       children={<User size={16} />}
-                      name="state"
-                      placeholder="Enter state..."
+                      name="country"
+                      placeholder="Enter country..."
                       onChange={handleInputChange}
                       // onBlur={validateFormFields}
                       type="text"
-                      labelText="State"
-                      validationError={stateError}
-                      value={createUserData.state}
+                      labelText="Country"
+                      validationError={countryError}
+                      value={updateUserData.country}
                     />
                   </ItemContainer>
                   <ItemContainer margin="0 0 0 0.5rem" width="250px">
@@ -380,7 +358,7 @@ const UpdateUserModal = () => {
                       type="text"
                       labelText="Zip Code"
                       validationError={zipcodeError}
-                      value={createUserData.zipcode}
+                      value={updateUserData.zipcode}
                     />
                   </ItemContainer>
                 </JustifyBetweenRow>
@@ -389,17 +367,19 @@ const UpdateUserModal = () => {
 
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0.5rem 0.5rem 0 0 ">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="address"
-                  placeholder="Enter your address..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Address"
-                  validationError={addressError}
-                  value={createUserData.address}
-                />
+                <ItemContainer>
+                  <InputWithIcon
+                    children={<User size={16} />}
+                    name="state"
+                    placeholder="Enter state..."
+                    onChange={handleInputChange}
+                    // onBlur={validateFormFields}
+                    type="text"
+                    labelText="State"
+                    validationError={stateError}
+                    value={updateUserData.state}
+                  />
+                </ItemContainer>
               </ItemContainer>
 
               <ItemContainer margin="0.5rem 0 0 0.5rem ">
@@ -407,8 +387,8 @@ const UpdateUserModal = () => {
                   children={<User size={16} />}
                   name="gender"
                   // placeholder="Enter birth location..."
-                  onChange={option => setCreateUserData({ ...createUserData, gender: option.value })}
-                  selectedOption={+createUserData.gender}
+                  onChange={option => setUpdateUserData({ ...updateUserData, gender: option.value })}
+                  selectedOption={+updateUserData.gender}
                   options={genderOptions}
                   labelText="Gender"
                   validationError={genderError}
@@ -423,9 +403,9 @@ const UpdateUserModal = () => {
                   children={<User size={16} />}
                   name="role"
                   // placeholder="Select your birthday..."
-                  onChange={option => setCreateUserData({ ...createUserData, role: option.value })}
+                  onChange={option => setUpdateUserData({ ...updateUserData, role: option.value })}
                   options={(roleData || []).map(role => ({ value: role._id, label: role.name }))}
-                  selectedOption={(roleData || []).findIndex(role => role._id === createUserData.role)}
+                  selectedOption={(roleData || []).findIndex(role => role._id === updateUserData.role)}
                   labelText="Role"
                   validationError={roleError}
                 />
@@ -436,58 +416,26 @@ const UpdateUserModal = () => {
                   children={<User size={16} />}
                   name="status"
                   // placeholder="Enter birth location..."
-                  onChange={option => setCreateUserData({ ...createUserData, status: option.value })}
-                  selectedOption={(statusOptions || []).findIndex(status => status.value === +createUserData.status)}
+                  onChange={option => setUpdateUserData({ ...updateUserData, status: option.value })}
+                  selectedOption={(statusOptions || []).findIndex(status => status.value === +updateUserData.status)}
                   options={statusOptions}
                   labelText="Status"
                   validationError={statusError}
                 />
               </ItemContainer>
             </JustifyBetweenRow>
-
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <InputWithIcon
-                  children={<Key size={16} />}
-                  labelText="Password"
-                  validationError={passwordError}
-                  // onBlur={validateFormFields}
-                  onChange={handleInputChange}
-                  name="password"
-                  placeholder="Password"
-                  value={createUserData.password}
-                  handleVisibility={togglePasswordVisibility}
-                  isPasswordVisible={isPasswordVisible || passwordMatchError}
-                  type={isPasswordVisible ? 'text' : 'password'}
-                />
-              </ItemContainer>
-
-              <ItemContainer margin="0.5rem 0 0 0.5rem">
-                <InputWithIcon
-                  name="passwordConfirm"
-                  placeholder="Confirm your password..."
-                  labelText="Confirm Password"
-                  children={<Key size={16} />}
-                  validationError={passwordConfirmError || passwordMatchError}
-                  // onBlur={validateFormFields}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value)}
-                  value={passwordConfirm}
-                  handleVisibility={togglePasswordConfirmVisibility}
-                  isPasswordVisible={isPasswordConfirmVisible}
-                  type={isPasswordConfirmVisible ? 'text' : 'password'}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
           </JustifyBetweenColumn>
-        </ModalBody>
+        </InnerWrapper>
+      </ModalBody>
 
-        <ModalFooter>
+      <ModalFooter>
+        <InnerWrapper>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </ModalFooter>
-      </JustifyBetweenColumn>
-    </InnerWrapper>
+        </InnerWrapper>
+      </ModalFooter>
+    </JustifyBetweenColumn>
   )
 }
 

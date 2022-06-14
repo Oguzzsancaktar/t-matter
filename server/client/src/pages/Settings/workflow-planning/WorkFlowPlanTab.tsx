@@ -1,11 +1,4 @@
-import {
-  ActionButtons,
-  Column,
-  CreateRoleModal,
-  CreateTaskNameModal,
-  DataTableHeader,
-  InnerWrapper
-} from '@/components'
+import { ActionButtons, Column, CreateTaskNameModal, CreateWorkflowPlanModal, DataTableHeader } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -39,7 +32,7 @@ const WorkFlowPlan = () => {
       name: 'Status',
       selector: row => row.status,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(data.status)}>{data.status} </Badge>
+      cell: data => <Badge color={selectColorForStatus(+EStatus[data.status])}>{data.status} </Badge>
     },
     {
       name: 'Actions',
@@ -86,10 +79,10 @@ const WorkFlowPlan = () => {
     e.preventDefault()
     dispatch(
       openModal({
-        id: 'createTaskNameModal',
-        title: 'Create Task Name',
-        body: <CreateTaskNameModal />,
-        size: ESize.Small
+        id: 'createWorkflowPlanModal',
+        title: 'Create Workflow Plan',
+        body: <CreateWorkflowPlanModal />,
+        size: ESize.XLarge
       })
     )
   }

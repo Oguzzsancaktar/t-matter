@@ -1,16 +1,5 @@
-export default interface IUserUpdateDTO {
+import { IUser, IUserCreateDTO } from '@/models'
+export default interface IUserUpdateDTO extends Omit<IUser, 'role'> {
   _id: string
-  username?: string
-  email?: string
-  password?: string
-  address?: string
-  firstname?: string
-  lastname?: string
-  phone?: string
-  birthday?: string
-  birthplace?: string
-  description?: string
-  profile_img?: string
-  cloudinary_id?: string
-  userImages?: string[]
+  role: string
 }

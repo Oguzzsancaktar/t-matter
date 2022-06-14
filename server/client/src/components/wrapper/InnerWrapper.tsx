@@ -7,7 +7,7 @@ interface IProps extends IComponentProps {}
 const Wrapper = styled.div`
   height: 100%;
   width: calc(100% - 2rem);
-  max-width: 1600px;
+  max-width: 2000px;
   margin: auto;
 `
 const InnerWrapper: React.FC<IProps> = ({ children, ...rest }) => {

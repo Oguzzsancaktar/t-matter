@@ -4,6 +4,7 @@ import {
   ConfirmModal,
   CreateRoleModal,
   DataTableHeader,
+  ItemContainer,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
@@ -13,20 +14,18 @@ import {
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IRole } from '@/models'
-import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
+import { useGetRolesQuery, useUpdateRoleStatusMutation } from '@/services/settings/user-planning/userRoleService'
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
-import { toastSuccess } from '@/utils/toastUtil'
+import { toastError, toastSuccess } from '@/utils/toastUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
 const UserRoleSettings = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-
   const { data: roleData, isLoading: roleLoading, error: roleError } = useGetRolesQuery()
-
-  console.log(roleData)
+  const [updateRoleStatus] = useUpdateRoleStatusMutation()
 
   const columns = [
     {
@@ -45,12 +44,14 @@ const UserRoleSettings = () => {
       right: true,
       cell: data => (
         <ActionButtons
+          status={data.status}
           onRead={() => handleRead(data)}
           onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
           }}
           onDelete={() => handleDelete(data)}
+          onReactive={() => handleReactive(data)}
         />
       )
     }
@@ -78,17 +79,6 @@ const UserRoleSettings = () => {
     )
   }
 
-  const handleCloseDeleteModal = (_id: IRole['_id']) => {
-    console.log(_id)
-    dispatch(closeModal(`deleteRoleModal-${_id}`))
-  }
-
-  const handleOnConfirm = async (role: IRole) => {
-    // await patchRole({ _id: role._id, name: role.name })
-    toastSuccess('Role ' + role.name + ' updated successfully')
-    handleCloseDeleteModal(role._id)
-  }
-
   const handleDelete = (role: IRole) => {
     dispatch(
       openModal({
@@ -96,14 +86,51 @@ const UserRoleSettings = () => {
         title: `Are you sure to inactivate ${role.name}?`,
         body: (
           <ConfirmModal
+            modalId={`deleteRoleModal-${role._id}`}
             title={`Are you sure to inactivate ${role.name}?`}
-            onCancel={() => handleCloseDeleteModal(role._id)}
-            onConfirm={() => handleOnConfirm(role)}
+            onConfirm={() => handleOnConfirmDelete(role)}
           />
         ),
         size: ESize.Small
       })
     )
+  }
+
+  const handleReactive = (role: IRole) => {
+    dispatch(
+      openModal({
+        id: `reactiveRoleModal-${role._id}`,
+        title: `Are you sure to reactivate ${role.name}?`,
+        body: (
+          <ConfirmModal
+            modalId={`reactiveRoleModal-${role._id}`}
+            title={`Are you sure to reactivate ${role.name}?`}
+            onConfirm={() => handleOnConfirmReactive(role)}
+          />
+        ),
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleOnConfirmDelete = async (role: IRole) => {
+    try {
+      await updateRoleStatus({ _id: role._id, status: EStatus.Inactive.toString() })
+      toastSuccess('Role ' + role.name + ' inactivated successfully')
+      dispatch(closeModal(`deleteRoleModal-${role._id}`))
+    } catch (error) {
+      toastError('Error inactivating role')
+    }
+  }
+
+  const handleOnConfirmReactive = async (role: IRole) => {
+    try {
+      await updateRoleStatus({ _id: role._id, status: EStatus.Active.toString() })
+      toastSuccess('Role ' + role.name + ' reactivated successfully')
+      dispatch(closeModal(`reactiveRoleModal-${role._id}`))
+    } catch (error) {
+      toastError('Error reactivating role')
+    }
   }
 
   const openCreateRoleModal = (e: React.MouseEvent) => {
@@ -127,7 +154,16 @@ const UserRoleSettings = () => {
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px)">
         <DataTableHeader handleAddNew={openCreateRoleModal} />
-        <DataTable fixedHeader columns={columns} data={roleData || []} />
+        <ItemContainer height="calc(100% - 0.4rem - 38px)" minHeight="370px">
+          <DataTable
+            style={{ height: 'calc(100% - 56px)' }}
+            pagination={true}
+            paginationPerPage={5}
+            fixedHeader
+            columns={columns}
+            data={roleData || []}
+          />
+        </ItemContainer>
       </Column>
     </JustifyBetweenColumn>
   )

@@ -1,4 +1,5 @@
 import { IDailyWorkingHours } from '@/models'
+import { SummaryCardText, SummaryCardValue } from '@/shared'
 import { secondsToTimeWithDisplay } from '@/utils/timeUtils'
 import { Column, JustifyBetweenColumn, JustifyBetweenRow } from '@components/layout'
 import colors from '@constants/colors'
@@ -12,18 +13,6 @@ interface IProps {
   weeklyWorkTime: number
   weeklyOffTrackingTime: number
 }
-
-const Text = styled.h3`
-  font-size: 0.7rem;
-  padding: 0.5rem 0;
-`
-const Value = styled.h3`
-  padding: 0.5rem 0;
-  font-size: 0.7rem;
-  width: 80px;
-  text-align: center;
-  border-left: 1px solid ${colors.blue.primary};
-`
 
 const TEMPORARY_TOTAL_EMPLOYER_ITEMS = 10
 const TEMPORARY_TOTAL_EMPLOYER_SALARY = 10000
@@ -46,54 +35,54 @@ const CompanyPricingSummaryBody: React.FC<IProps> = ({
     <JustifyBetweenColumn height="100%">
       <Column>
         <JustifyBetweenRow>
-          <Text>Total Employers</Text>
-          <Value>{TEMPORARY_TOTAL_EMPLOYER_ITEMS}</Value>
+          <SummaryCardText>Total Employers</SummaryCardText>
+          <SummaryCardValue>{TEMPORARY_TOTAL_EMPLOYER_ITEMS}</SummaryCardValue>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>
-          <Text>Monthly Employers Total Salary</Text>
-          <Value>${TEMPORARY_TOTAL_EMPLOYER_SALARY}</Value>
+          <SummaryCardText>Monthly Employers Total Salary</SummaryCardText>
+          <SummaryCardValue>${TEMPORARY_TOTAL_EMPLOYER_SALARY}</SummaryCardValue>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>
-          <Text>Monthly Employers Total Working Hours</Text>
-          <Value>{TEMPORARY_TOTAL_EMPLOYER_WORKING_HOURS} hours</Value>
+          <SummaryCardText>Monthly Employers Total Working Hours</SummaryCardText>
+          <SummaryCardValue>{TEMPORARY_TOTAL_EMPLOYER_WORKING_HOURS} hours</SummaryCardValue>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>
-          <Text>Employers Hourly Fee</Text>
-          <Value>${employerHourlyFee.toFixed(2)}</Value>
+          <SummaryCardText>Employers Hourly Fee</SummaryCardText>
+          <SummaryCardValue>${employerHourlyFee.toFixed(2)}</SummaryCardValue>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>
-          <Text>Company Expense Hourly Fee</Text>
-          <Value>${companyExpenseHourlyFee.toFixed(2)}</Value>
+          <SummaryCardText>Company Expense Hourly Fee</SummaryCardText>
+          <SummaryCardValue>${companyExpenseHourlyFee.toFixed(2)}</SummaryCardValue>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>
-          <Text>Specified Hourly Profit Amount</Text>
-          <Value>${specifiedCompanyHourlyProfit.toFixed(2)}</Value>
+          <SummaryCardText>Specified Hourly Profit Amount</SummaryCardText>
+          <SummaryCardValue>${specifiedCompanyHourlyProfit.toFixed(2)}</SummaryCardValue>
         </JustifyBetweenRow>
       </Column>
 
       <Column>
         <JustifyBetweenRow>
-          <Text>Work Day In Week</Text>
-          <Value>{workDayInWeek} days</Value>
+          <SummaryCardText>Work Day In Week</SummaryCardText>
+          <SummaryCardValue>{workDayInWeek} days</SummaryCardValue>
         </JustifyBetweenRow>
         <JustifyBetweenRow>
-          <Text>Weekly Company Work Hours</Text>
-          <Value>{secondsToTimeWithDisplay(weeklyWorkTime)}</Value>
-        </JustifyBetweenRow>
-
-        <JustifyBetweenRow>
-          <Text>Weekly Company Off Time</Text>
-          <Value>{secondsToTimeWithDisplay(weeklyOffTrackingTime) || '-'}</Value>
+          <SummaryCardText>Weekly Company Work Hours</SummaryCardText>
+          <SummaryCardValue>{secondsToTimeWithDisplay(weeklyWorkTime)}</SummaryCardValue>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>
-          <Text>Weekly Company Tracking Time</Text>
-          <Value>{secondsToTimeWithDisplay(weeklyWorkTime - weeklyOffTrackingTime)}</Value>
+          <SummaryCardText>Weekly Company Off Time</SummaryCardText>
+          <SummaryCardValue>{secondsToTimeWithDisplay(weeklyOffTrackingTime) || '-'}</SummaryCardValue>
+        </JustifyBetweenRow>
+
+        <JustifyBetweenRow>
+          <SummaryCardText>Weekly Company Tracking Time</SummaryCardText>
+          <SummaryCardValue>{secondsToTimeWithDisplay(weeklyWorkTime - weeklyOffTrackingTime)}</SummaryCardValue>
         </JustifyBetweenRow>
       </Column>
     </JustifyBetweenColumn>
