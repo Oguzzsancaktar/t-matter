@@ -3,11 +3,13 @@ const salarySettingController = require('./salary-setting-controller/salarySetti
 const companyPricingController = require('./company-pricing-controller/companyPricingController')
 const roleController = require('./role-controller/roleController')
 const userController = require('./user-controller/userController')
+const workflowController = require('./workflow-controller/workflowController')
 
 module.exports = {
   salarySettingController,
   authController,
   companyPricingController,
   roleController,
-  userController
+  userController,
+  workflowController
 }

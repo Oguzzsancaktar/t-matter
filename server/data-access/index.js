@@ -4,6 +4,7 @@ const companyPricingDataAccess = require('./company-pricing-data-access/companyP
 const workingScheduleDataAccess = require('./working-schedule-data-access/workingScheduleDataAccess')
 const roleDataAccess = require('./role-data-access/roleDataAccess')
 const userDataAccess = require('./user-data-access/userDataAccess')
+const workflowDataAccess = require('./workflow-data-access/workflowDataAccess')
 
 module.exports = {
   authDataAccess,
@@ -11,5 +12,6 @@ module.exports = {
   companyPricingDataAccess,
   workingScheduleDataAccess,
   roleDataAccess,
-  userDataAccess
+  userDataAccess,
+  workflowDataAccess
 }

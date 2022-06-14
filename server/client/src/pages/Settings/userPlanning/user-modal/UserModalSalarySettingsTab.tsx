@@ -10,21 +10,15 @@ import {
   JustifyBetweenRow,
   JustifyCenterColumn,
   Row,
-  SelectInput,
   SummaryCard
 } from '@components/index'
 import { DollarSign, Percent } from 'react-feather'
-import { NOTIFICATION_BEFORE_AFTER, USER_ROLE_TYPES } from '@constants/statuses'
-import {
-  SalarySettingsSummaryBody,
-  SalarySettingsSummaryFooter,
-  UserModalSalarySettingsSummaryBody,
-  UserModalSalarySettingsSummaryFooter
-} from '@/pages'
+
+import { UserModalSalarySettingsSummaryBody, UserModalSalarySettingsSummaryFooter } from '@/pages'
 import {
   useGetSalarySettingsQuery,
   usePatchSalarySettingsMutation
-} from '@/services/settings/company-panning/salarySettings'
+} from '@/services/settings/company-planning/salarySettings'
 import { ISalarySettings } from '@/models'
 import { toastSuccess } from '@/utils/toastUtil'
 
