@@ -5,6 +5,7 @@ const workingScheduleDataAccess = require('./working-schedule-data-access/workin
 const roleDataAccess = require('./role-data-access/roleDataAccess')
 const userDataAccess = require('./user-data-access/userDataAccess')
 const workflowDataAccess = require('./workflow-data-access/workflowDataAccess')
+const timeLogDataAccess = require('./time-log-data-access/timeLogDataAccess')
 
 module.exports = {
   authDataAccess,
@@ -13,5 +14,6 @@ module.exports = {
   workingScheduleDataAccess,
   roleDataAccess,
   userDataAccess,
-  workflowDataAccess
+  workflowDataAccess,
+  timeLogDataAccess
 }

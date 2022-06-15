@@ -13,7 +13,7 @@ const findUserById = (id, populate = '') => {
 }
 
 const findUser = (query = {}, populate = '') => {
-  return User.find(query).populate(populate).lean().exec()
+  return User.find(query).populate(populate).sort({ createdAt: -1 }).lean().exec()
 }
 
 module.exports = {

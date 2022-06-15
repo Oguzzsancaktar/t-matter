@@ -1,7 +1,7 @@
 const Role = require('../../models/role')
 
 const findRoles = () => {
-  return Role.find().lean().exec()
+  return Role.find().sort({ createdAt: -1 }).lean().exec()
 }
 
 const findByIdAndUpdate = (_id, data) => {

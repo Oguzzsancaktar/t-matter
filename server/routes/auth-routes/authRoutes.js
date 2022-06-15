@@ -14,4 +14,6 @@ router.post(
   controllers.authController.registerController
 )
 
+router.delete('/logout', middlewares.authMiddlewares.checkAuth, controllers.authController.logoutController)
+
 module.exports = router
