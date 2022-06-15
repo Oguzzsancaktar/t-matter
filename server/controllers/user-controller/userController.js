@@ -1,10 +1,12 @@
 const dataAccess = require('../../data-access')
 const { StatusCodes } = require('http-status-codes')
 const { STATUS_TYPES } = require('../../constants/constants')
+const utils = require('../../utils')
 
 const createUser = async (req, res) => {
   const { body } = req
   try {
+    body.password = await utils.authUtils.hashPassword({ plainTextPassword: body.password })
     await dataAccess.userDataAccess.createUser(body)
     res.sendStatus(StatusCodes.CREATED)
   } catch (e) {

@@ -13,11 +13,11 @@ const roleSchema = new Schema({
   },
   permissions: {
     type: Object,
-    defaultValue: { [ROLE_PERMISSIONS.ALL]: true }
+    default: { [ROLE_PERMISSIONS.ALL]: true }
   },
   status: {
     type: Number,
-    defaultValue: STATUS_TYPES.ACTIVE
+    default: STATUS_TYPES.ACTIVE
   }
 })
 

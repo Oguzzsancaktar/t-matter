@@ -15,8 +15,8 @@ const userValidationSchema = {
   role: joi.string().required(),
   state: joi.string().required(),
   status: joi.number().required(),
-  zipcode: joi.string().required()
-  // password: joi.string().required() TODO => User pass admin dahil göremez, password için ayrı endpoint yazılacak
+  zipcode: joi.string().required(),
+  password: joi.string().required()
 }
 
 const createUserValidation = async (req, res, next) => {

@@ -60,7 +60,7 @@ const UserSchema = new Schema({
   status: {
     required: true,
     type: Number,
-    defaultValue: STATUSES.ACTIVE
+    default: STATUSES.ACTIVE
   },
   role: {
     required: true,
