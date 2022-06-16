@@ -53,8 +53,9 @@ const removeUser = async (req, res) => {
 }
 
 const getUsers = async (req, res) => {
+  const { search, size, status } = req.query
   try {
-    const users = await dataAccess.userDataAccess.findUser({}, 'role')
+    const users = await dataAccess.userDataAccess.findUserWithFiltersAndPopulate({ search, size, status })
     res.status(StatusCodes.OK).json(users)
   } catch (e) {
     console.log(e)
