@@ -2,6 +2,7 @@ const dataAccess = require('../../data-access')
 const utils = require('../../utils')
 const constants = require('../../constants')
 const { AUTH_COOKIE_OPTIONS } = require('../../constants/constants')
+const { LOG_TYPES } = require('../../constants/log')
 
 const loginController = async (req, res) => {
   const { body } = req
@@ -21,6 +22,8 @@ const loginController = async (req, res) => {
     userId: user._id.toString(),
     role: user.role
   })
+
+  await dataAccess.timeLogDataAccess.createTimeLog({ logType: LOG_TYPES.LOGIN, owner: user._id })
 
   res.cookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_ACCESS_KEY, accessToken, AUTH_COOKIE_OPTIONS)
   res.cookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_REFRESH_KEY, refreshToken, AUTH_COOKIE_OPTIONS)
@@ -48,7 +51,20 @@ const registerController = async (req, res) => {
   }
 }
 
+const logoutController = async (req, res) => {
+  try {
+    res.clearCookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_ACCESS_KEY)
+    res.clearCookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_REFRESH_KEY)
+    await dataAccess.timeLogDataAccess.createTimeLog({ logType: LOG_TYPES.LOGOUT, owner: req.user._id })
+    res.send({ message: 'Logout successful' })
+  } catch (e) {
+    console.log(e)
+    res.status(500).json(utils.errorUtils.errorInstance({ message: 'Error logging out' }))
+  }
+}
+
 module.exports = {
   loginController,
-  registerController
+  registerController,
+  logoutController
 }

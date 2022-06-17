@@ -1,10 +1,12 @@
 const dataAccess = require('../../data-access')
 const { StatusCodes } = require('http-status-codes')
 const { STATUS_TYPES } = require('../../constants/constants')
+const utils = require('../../utils')
 
 const createUser = async (req, res) => {
   const { body } = req
   try {
+    body.password = await utils.authUtils.hashPassword({ plainTextPassword: body.password })
     await dataAccess.userDataAccess.createUser(body)
     res.sendStatus(StatusCodes.CREATED)
   } catch (e) {
@@ -51,8 +53,9 @@ const removeUser = async (req, res) => {
 }
 
 const getUsers = async (req, res) => {
+  const { search, size, status } = req.query
   try {
-    const users = await dataAccess.userDataAccess.findUser({}, 'role')
+    const users = await dataAccess.userDataAccess.findUserWithFiltersAndPopulate({ search, size, status })
     res.status(StatusCodes.OK).json(users)
   } catch (e) {
     console.log(e)

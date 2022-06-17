@@ -1,7 +1,6 @@
 const dataAccess = require('../../data-access')
 const utils = require('../../utils/error-utils/errorUtils')
 const { StatusCodes } = require('http-status-codes')
-const { STATUS_TYPES } = require('../../constants/constants')
 
 const getRole = async (req, res) => {
   const { id } = req.params
@@ -15,8 +14,9 @@ const getRole = async (req, res) => {
 }
 
 const getRoles = async (req, res) => {
+  const { search, size, status } = req.query
   try {
-    const roles = await dataAccess.roleDataAccess.findRoles()
+    const roles = await dataAccess.roleDataAccess.findRoleWithFilters({ search, size, status })
     res.status(StatusCodes.OK).json(roles)
   } catch (e) {
     console.log(e)

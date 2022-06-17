@@ -1,7 +1,24 @@
 const Role = require('../../models/role')
 
-const findRoles = () => {
-  return Role.find().lean().exec()
+const findRoles = (query = {}) => {
+  return Role.find(query).sort({ createdAt: -1 }).lean().exec()
+}
+
+const findRoleWithFilters = ({ search, size, status }) => {
+  const pipeline = []
+  const match = { $match: {} }
+  if (search) {
+    match.$match.name = { $regex: search, $options: 'i' }
+  }
+  if (status) {
+    match.$match.status = { $eq: +status }
+  }
+  pipeline.push(match)
+  pipeline.push({ $sort: { createdAt: -1 } })
+  if (size) {
+    pipeline.push({ $limit: +size })
+  }
+  return Role.aggregate(pipeline).exec()
 }
 
 const findByIdAndUpdate = (_id, data) => {
@@ -20,5 +37,6 @@ module.exports = {
   findRoles,
   findByIdAndUpdate,
   findById,
-  createRole
+  createRole,
+  findRoleWithFilters
 }

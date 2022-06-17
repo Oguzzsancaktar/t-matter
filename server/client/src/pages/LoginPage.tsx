@@ -21,8 +21,8 @@ const rotate = keyframes`
 const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
-  background: ${colors.green.primary};
-  background: linear-gradient(-45deg, ${colors.black.light} 0%, ${colors.black.primary} 100%);
+  // background: ${colors.green.primary};
+  // background: linear-gradient(-45deg, ${colors.black.light} 0%, ${colors.black.primary} 100%);
   background-size: 150% 150%;
   animation: ${rotate} 10s ease-in-out infinite;
 `

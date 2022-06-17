@@ -7,6 +7,7 @@ import GlobalStyle from './styles/GlobalStyle'
 import { GlobalModal, MinimizedModal, MinimizedModalsBar, SideBar } from '@components/index'
 import useAccessStore from '@/hooks/useAccessStore'
 import { selectMinimizedModals, selectOpenModals } from '@/store'
+import { useAuth } from '@hooks/useAuth'
 
 const SettingsPage = lazy(() => import('./pages/Settings/SettingsPage'))
 
@@ -17,7 +18,7 @@ const LoginPage = lazy(() => import('./pages/LoginPage'))
 function App() {
   const { useAppDispatch, useAppSelector } = useAccessStore()
   const dispatch = useAppDispatch()
-
+  const { loggedUser } = useAuth()
   const openModals = useAppSelector(selectOpenModals)
   const minimizedModals = useAppSelector(selectMinimizedModals)
 
@@ -36,7 +37,7 @@ function App() {
         </MinimizedModalsBar>
       )}
 
-      <SideBar />
+      {loggedUser.accessToken && <SideBar />}
 
       <Routes>
         <Route path="/login" element={<LoginPage />} />
