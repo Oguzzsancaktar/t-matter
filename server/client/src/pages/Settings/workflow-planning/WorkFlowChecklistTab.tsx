@@ -1,43 +1,39 @@
-import {
-  ActionButtons,
-  Column,
-  CreateRoleModal,
-  CreateTaskTitleModal,
-  CreateWorkflowChecklistModal,
-  DataTableHeader,
-  InnerWrapper
-} from '@/components'
+import { ActionButtons, Column, CreateWorkflowChecklistModal, DataTableHeader } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
+import { useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
 import { openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
+import { secondsToHourMin } from '@/utils/timeUtils'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
-const WorkFlowChecklist = () => {
+const WorkflowChecklist = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
 
   const columns = [
     {
       name: 'Checklist Name',
-      selector: row => row.checklistName,
+      selector: row => row.name,
       sortable: true
     },
     {
       name: 'Checklist Point',
-      selector: row => row.point,
-      sortable: true
-    },
-    {
-      name: 'Checklist Time',
-      selector: row => row.time,
+      selector: row => row.point + 'point',
       sortable: true
     },
     {
       name: 'Checklist Duration',
-      selector: row => row.duration,
+      selector: row => secondsToHourMin(row.duration),
+      sortable: true
+    },
+    {
+      name: 'Checklist Price',
+      selector: row => row.price + '$',
       sortable: true
     },
     {
@@ -70,25 +66,6 @@ const WorkFlowChecklist = () => {
     }
   ]
 
-  const data = [
-    {
-      id: 1,
-      checklistName: 'Checklist 1',
-      point: 'Point 1',
-      time: 'Time 1',
-      duration: 'Duration 1',
-      status: 'Active'
-    },
-    {
-      id: 2,
-      checklistName: 'Checklist 2',
-      point: 'Point 2',
-      time: 'Time 2',
-      duration: 'Duration 2',
-      status: 'Inactive'
-    }
-  ]
-
   const openCreateRoleModal = (e: React.MouseEvent) => {
     e.preventDefault()
     dispatch(
@@ -104,9 +81,9 @@ const WorkFlowChecklist = () => {
   return (
     <Column>
       <DataTableHeader handleAddNew={openCreateRoleModal} />
-      <DataTable fixedHeader columns={columns} data={data} />
+      <DataTable fixedHeader columns={columns} data={checklistsData || []} />
     </Column>
   )
 }
 
-export default WorkFlowChecklist
+export default WorkflowChecklist

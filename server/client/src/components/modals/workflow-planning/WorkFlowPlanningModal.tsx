@@ -1,11 +1,11 @@
 import { Column, JustifyBetweenColumn, JustifyCenterRow, Row } from '@/components/layout'
 import { Tab } from '@/components/tab'
 import { InnerWrapper } from '@/components/wrapper'
-import { WorkFlowCategoryTab, WorkFlowChecklistTab, WorkFlowPlanTab } from '@/pages'
+import { WorkflowCategoryTab, WorkflowChecklistTab, WorkflowPlanTab } from '@/pages'
 import React, { useState } from 'react'
 import { ModalBody, ModalHeader } from '../types'
 
-const WorkFlowPlanningModal = () => {
+const WorkflowPlanningModal = () => {
   const [activeTab, setActiveTab] = useState('workflow-category')
 
   return (
@@ -45,11 +45,11 @@ const WorkFlowPlanningModal = () => {
       <ModalBody>
         <InnerWrapper>
           {activeTab === 'workflow-category' ? (
-            <WorkFlowCategoryTab />
+            <WorkflowCategoryTab />
           ) : activeTab === 'workflow-checklist' ? (
-            <WorkFlowChecklistTab />
+            <WorkflowChecklistTab />
           ) : (
-            <WorkFlowPlanTab />
+            <WorkflowPlanTab />
           )}
         </InnerWrapper>
       </ModalBody>
@@ -57,4 +57,4 @@ const WorkFlowPlanningModal = () => {
   )
 }
 
-export default WorkFlowPlanningModal
+export default WorkflowPlanningModal

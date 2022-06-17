@@ -3,7 +3,7 @@ import { salarySettingsApi } from '@/services/settings/company-planning/salarySe
 import { companyPricingApi } from '@/services/settings/company-planning/companyPricing'
 import { userApi } from '@/services/settings/user-planning/userService'
 import { authApi } from '@services/authService'
-import { workflowApi } from '@services/settings/workflow-planning/workflowPlanService'
+import { workflowApi } from '@/services/settings/workflow-planning/workflowService'
 
 const StoreMiddlewares = [
   authApi.middleware,

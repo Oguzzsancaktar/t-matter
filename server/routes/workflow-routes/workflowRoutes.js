@@ -10,24 +10,27 @@ router.post(
 )
 
 router.get('/category', controllers.workflowController.getWorkflowCategories)
-// router.post(
-//   '/',
-//   middlewares.validations.workflowValidations.createUserValidation,
-//   controllers.workflowController.createUser
-// )
+router.get('/category/:id', controllers.workflowController.getWorkflowCategoryById)
 
-// router.patch(
-//   '/',
-//   middlewares.validations.workflowValidations.updateUserValidation,
-//   controllers.workflowController.updateUser
-// )
+router.patch(
+  '/category/:id',
+  middlewares.validations.workflowValidations.updateWorkflowCategoryValidation,
+  controllers.workflowController.updateCategory
+)
 
-// router.patch(
-//   '/:id/status',
-//   middlewares.validations.workflowValidations.statusUpdateUserValidation,
-//   controllers.workflowController.updateUser
-// )
+router.patch(
+  '/category/:id/status',
+  middlewares.validations.generalValidations.statusUpdateValidation,
+  controllers.workflowController.updateCategory
+)
 
-// router.get('/', controllers.workflowController.getUsers)
+// Chekclist
+router.post(
+  '/checklist',
+  middlewares.validations.workflowValidations.createWorkflowChecklistValidation,
+  controllers.workflowController.createWorkflowChecklist
+)
+
+router.get('/checklist', controllers.workflowController.getWorkflowChecklists)
 
 module.exports = router

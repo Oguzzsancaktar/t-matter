@@ -7,7 +7,7 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
-const WorkFlowPlan = () => {
+const WorkflowPlan = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -95,4 +95,4 @@ const WorkFlowPlan = () => {
   )
 }
 
-export default WorkFlowPlan
+export default WorkflowPlan

@@ -6,7 +6,7 @@ import { userApi } from '@/services/settings/user-planning/userService'
 import { companyPricingApi } from '@/services/settings/company-planning/companyPricing'
 import { salarySettingsApi } from '@/services/settings/company-planning/salarySettings'
 import { userRoleApi } from '@/services/settings/user-planning/userRoleService'
-import { workflowApi } from '@/services/settings/workflow-planning/workflowPlanService'
+import { workflowApi } from '@/services/settings/workflow-planning/workflowService'
 
 const rootReducer = combineReducers({
   auth: AuthReducer,
