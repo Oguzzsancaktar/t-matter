@@ -25,7 +25,6 @@ const WorkflowCategory = () => {
   const dispatch = useAppDispatch()
 
   const [updateCategoryStatus] = useUpdateCategoryStatusMutation()
-
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery()
 
   const columns = [

@@ -4,7 +4,7 @@ import { Row } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
 import { ModalBody } from '../../types'
 import { SummaryCard } from '@/components/card'
-import WorkflowPlanStepNavigation from '@/pages/Settings/workflow-planning/WorkflowPlanStepNavigation'
+import WorkflowPlanStepNavigation from '@/pages/Settings/workflow-planning/plan/WorkflowPlanStepNavigation'
 import { ITask, IWorkflowCreateDTO } from '@/models'
 import { STATUS_TYPES } from '@/constants/statuses'
 

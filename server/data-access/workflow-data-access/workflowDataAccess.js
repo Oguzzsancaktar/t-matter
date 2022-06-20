@@ -17,6 +17,7 @@ const findByIdAndUpdateWorkflowCategory = (id, data) => {
   return WorkflowCategory.findByIdAndUpdate(id, data)
 }
 
+// Checklist
 const createWorkflowChecklist = data => {
   return WorkflowChecklist.create(data)
 }
@@ -25,11 +26,22 @@ const getWorkflowChecklists = (query = {}, populate = '') => {
   return WorkflowChecklist.find(query).populate(populate).lean().exec()
 }
 
+const findWorkflowChecklistById = (id, populate = '') => {
+  return WorkflowChecklist.findById(id).populate(populate).lean().exec()
+}
+
+const findByIdAndUpdateWorkflowChecklist = (id, data) => {
+  return WorkflowChecklist.findByIdAndUpdate(id, data)
+}
+
 module.exports = {
   createWorkflowCategory,
   getWorkflowCategories,
   findWorkflowCategoryById,
   findByIdAndUpdateWorkflowCategory,
+
   createWorkflowChecklist,
-  getWorkflowChecklists
+  getWorkflowChecklists,
+  findWorkflowChecklistById,
+  findByIdAndUpdateWorkflowChecklist
 }

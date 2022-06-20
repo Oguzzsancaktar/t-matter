@@ -15,13 +15,13 @@ const userValidationSchema = {
   role: joi.string().required(),
   state: joi.string().required(),
   status: joi.number().required(),
-  zipcode: joi.string().required(),
-  password: joi.string().required()
+  zipcode: joi.string().required()
+  // password: joi.string().required(), --- password is not required for update
 }
 
 const createUserValidation = async (req, res, next) => {
   const { body } = req
-  const schema = joi.object({ ...userValidationSchema })
+  const schema = joi.object({ ...userValidationSchema, password: joi.string().required() })
 
   try {
     await schema.validateAsync(body)

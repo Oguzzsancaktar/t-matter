@@ -32,5 +32,18 @@ router.post(
 )
 
 router.get('/checklist', controllers.workflowController.getWorkflowChecklists)
+router.get('/checklist/:id', controllers.workflowController.getWorkflowChecklistById)
+
+router.patch(
+  '/checklist/:id',
+  middlewares.validations.workflowValidations.updateWorkflowChecklistValidation,
+  controllers.workflowController.updateChecklist
+)
+
+router.patch(
+  '/checklist/:id/status',
+  middlewares.validations.generalValidations.statusUpdateValidation,
+  controllers.workflowController.updateChecklist
+)
 
 module.exports = router

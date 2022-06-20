@@ -6,7 +6,8 @@ import {
   ITaskCategoryCreate,
   ITaskCategoryUpdateDTO,
   ITaskChecklist,
-  ITaskChecklistCreateDTO
+  ITaskChecklistCreateDTO,
+  ITaskChecklistUpdateDTO
 } from '@/models'
 
 const WORKFLOW_API_REDUCER_PATH = 'workflowApi'
@@ -117,6 +118,50 @@ const getChecklists = (builder: IBuilder) => {
   })
 }
 
+const getChecklistById = (builder: IBuilder) => {
+  return builder.query<ITaskChecklist, ITaskChecklist['_id']>({
+    query(id) {
+      return {
+        url: `/workflow/checklist/${id}`,
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const patchWorkflowChecklist = (builder: IBuilder) => {
+  return builder.mutation<ITaskChecklist, Omit<ITaskChecklistUpdateDTO, 'status'>>({
+    query(dto) {
+      return {
+        url: `/workflow/checklist/${dto._id}`,
+        method: 'PATCH',
+        data: { name: dto.name }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const updateChecklistStatus = (builder: IBuilder) => {
+  return builder.mutation<any, Pick<ITaskChecklistUpdateDTO, '_id' | 'status'>>({
+    query(dto) {
+      return {
+        url: `/workflow/checklist/${dto._id}/status`,
+        method: 'PATCH',
+        data: { status: dto.status }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
 const workflowApi = createApi({
   reducerPath: WORKFLOW_API_REDUCER_PATH,
   tagTypes: [WORKFLOW_TAG],
@@ -127,8 +172,12 @@ const workflowApi = createApi({
     getCategoryById: getCategoryById(builder),
     patchWorkflowCategory: patchWorkflowCategory(builder),
     updateCategoryStatus: updateCategoryStatus(builder),
+
     createChecklist: createChecklist(builder),
-    getChecklists: getChecklists(builder)
+    getChecklists: getChecklists(builder),
+    getChecklistById: getChecklistById(builder),
+    patchWorkflowChecklist: patchWorkflowChecklist(builder),
+    updateChecklistStatus: updateChecklistStatus(builder)
   })
 })
 
@@ -138,9 +187,14 @@ const {
   usePatchWorkflowCategoryMutation,
   useUpdateCategoryStatusMutation,
   useCreateCategoryMutation,
+
   useGetChecklistsQuery,
-  useCreateChecklistMutation
+  useCreateChecklistMutation,
+  useGetChecklistByIdQuery,
+  usePatchWorkflowChecklistMutation,
+  useUpdateChecklistStatusMutation
 } = workflowApi
+
 export {
   workflowApi,
   useGetCategoriesQuery,
@@ -149,5 +203,8 @@ export {
   useUpdateCategoryStatusMutation,
   useCreateCategoryMutation,
   useGetChecklistsQuery,
-  useCreateChecklistMutation
+  useCreateChecklistMutation,
+  useGetChecklistByIdQuery,
+  usePatchWorkflowChecklistMutation,
+  useUpdateChecklistStatusMutation
 }
