@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Column, Row } from '@/components/layout'
 import { Label } from '@/components/texts'
 import colors from '@/constants/colors'
-import { useOutsideAlerter } from '@/hooks/useOutsideAlerter'
+import { useOutsideTrigger } from '@/hooks/useOutsideTrigger'
 import { useRef, useState } from 'react'
 import { Clock } from 'react-feather'
 import TimeKeeper from 'react-timekeeper'
@@ -34,7 +34,7 @@ const ClockPicker12: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
   const [showTime, setShowTime] = useState(false)
 
   const timePickerRef = useRef(null)
-  useOutsideAlerter(timePickerRef, () => setShowTime(false))
+  useOutsideTrigger(timePickerRef, () => setShowTime(false))
 
   const handleChange = (newTime: any) => {
     onChange(newTime.formatted12)
@@ -50,14 +50,14 @@ const ClockPicker12: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
       <Row>
         <ClockPickerRelative>
           <InputWithIcon
-            disabled={disabled}
-            onChange={e => onChange(e.target.value)}
             name={name}
-            type="text"
             value={value}
+            type="text"
+            validationError={validationError}
+            disabled={disabled}
             children={<Clock size={20} />}
+            onChange={e => onChange(e.target.value)}
             onFocus={() => setShowTime(true)}
-            // onBlur={() => setShowTime(false)}
           />
 
           {showTime && (

@@ -1,12 +1,4 @@
-import {
-  ActionButtons,
-  Column,
-  CreateRoleModal,
-  CreateTaskTitleModal,
-  CreateWorkflowChecklistModal,
-  DataTableHeader,
-  InnerWrapper
-} from '@/components'
+import { ActionButtons, Column, CreateTaskNameModal, CreateWorkflowPlanModal, DataTableHeader } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -15,30 +7,26 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
-const WorkFlowChecklist = () => {
+const WorkflowPlan = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const columns = [
     {
-      name: 'Checklist Name',
-      selector: row => row.checklistName,
+      name: 'Workkflow Name',
+      selector: row => row.workkflowName,
       sortable: true
     },
     {
-      name: 'Checklist Point',
-      selector: row => row.point,
+      name: 'Total Duration',
+      selector: row => row.totalDuration,
       sortable: true
     },
     {
-      name: 'Checklist Time',
-      selector: row => row.time,
-      sortable: true
-    },
-    {
-      name: 'Checklist Duration',
-      selector: row => row.duration,
-      sortable: true
+      name: 'Total Price',
+      selector: row => row.totalPrice,
+      sortable: true,
+      cell: data => <div>${data.totalPrice} </div>
     },
     {
       name: 'Status',
@@ -73,18 +61,16 @@ const WorkFlowChecklist = () => {
   const data = [
     {
       id: 1,
-      checklistName: 'Checklist 1',
-      point: 'Point 1',
-      time: 'Time 1',
-      duration: 'Duration 1',
+      workkflowName: 'Workflow Name 1',
+      totalDuration: '01:30:00',
+      totalPrice: '150',
       status: 'Active'
     },
     {
       id: 2,
-      checklistName: 'Checklist 2',
-      point: 'Point 2',
-      time: 'Time 2',
-      duration: 'Duration 2',
+      workkflowName: 'Workflow Name 2',
+      totalDuration: '01:00:00',
+      totalPrice: '100',
       status: 'Inactive'
     }
   ]
@@ -93,10 +79,10 @@ const WorkFlowChecklist = () => {
     e.preventDefault()
     dispatch(
       openModal({
-        id: 'createWorkflowChecklistModal',
-        title: 'Create Workflow Checklist',
-        body: <CreateWorkflowChecklistModal />,
-        size: ESize.Small
+        id: 'createWorkflowPlanModal',
+        title: 'Create Workflow Plan',
+        body: <CreateWorkflowPlanModal />,
+        size: ESize.XLarge
       })
     )
   }
@@ -109,4 +95,4 @@ const WorkFlowChecklist = () => {
   )
 }
 
-export default WorkFlowChecklist
+export default WorkflowPlan

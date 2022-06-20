@@ -2,7 +2,7 @@ import { ItemContainer } from '@/components/item-container'
 import { Column, Row } from '@/components/layout'
 import { Label } from '@/components/texts'
 import colors from '@/constants/colors'
-import { useOutsideAlerter } from '@/hooks/useOutsideAlerter'
+import { useOutsideTrigger } from '@/hooks/useOutsideTrigger'
 import { RowStyled } from '@/shared'
 import * as React from 'react'
 import { useRef, useState } from 'react'
@@ -35,7 +35,7 @@ const ClockPicker24: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
   const [showTime, setShowTime] = useState(false)
 
   const timePickerRef = useRef(null)
-  useOutsideAlerter(timePickerRef, () => setShowTime(false))
+  useOutsideTrigger(timePickerRef, () => setShowTime(false))
 
   const handleChange = (newTime: any) => {
     onChange(newTime.formatted24)
@@ -51,15 +51,14 @@ const ClockPicker24: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
       <Row>
         <ClockPickerRelative>
           <InputWithIcon
-            disabled={disabled}
-            onChange={e => onChange(e.target.value)}
             name={name}
-            placeholder="Select time"
-            type="text"
             value={value}
+            type="text"
+            validationError={validationError}
+            disabled={disabled}
             children={<Clock size={20} />}
+            onChange={e => onChange(e.target.value)}
             onFocus={() => setShowTime(true)}
-            // onBlur={() => setShowTime(false)}
           />
 
           {showTime && (

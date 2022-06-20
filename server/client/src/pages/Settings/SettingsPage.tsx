@@ -1,8 +1,14 @@
 import React from 'react'
-import { CompanyPlanningModal, InnerWrapper, PageWrapper, SettingsCard, UserPlanningModal } from '@components/index'
+import {
+  CompanyPlanningModal,
+  InnerWrapper,
+  PageWrapper,
+  SettingsCard,
+  UserPlanningModal,
+  WorkflowPlanningModal
+} from '@components/index'
 import { ESize } from '@models/index'
 import styled from 'styled-components'
-import WorkFlowPlanningModal from '@/components/modals/workflow-planning/WorkFlowPlanningModal'
 
 const WrapLayout = styled.div`
   width: 100%;
@@ -37,7 +43,7 @@ const SettingsPage = () => {
               id: 'workflowPlanningModal',
               title: 'Workflow Planning',
               size: ESize.XLarge,
-              body: <WorkFlowPlanningModal />
+              body: <WorkflowPlanningModal />
             }}
           />
         </WrapLayout>

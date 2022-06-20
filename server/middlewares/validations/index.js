@@ -4,6 +4,7 @@ const companyPricingValidations = require('./company-pricing-validations/company
 const userValidations = require('./user-validations/userValidations')
 const roleValidations = require('./role-validations/roleValidations')
 const workflowValidations = require('./workflow-validations/workflowValidations')
+const generalValidations = require('./common/generalValidations')
 
 module.exports = {
   authValidations,
@@ -11,5 +12,6 @@ module.exports = {
   companyPricingValidations,
   userValidations,
   roleValidations,
-  workflowValidations
+  workflowValidations,
+  generalValidations
 }

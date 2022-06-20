@@ -10,7 +10,7 @@ import {
 } from '@/components'
 import React from 'react'
 
-const WorkFlowPlanForm = () => {
+const WorkflowPlanForm = () => {
   return (
     <ItemContainer height="100%" padding="0 1rem">
       <JustifyBetweenColumn height="100%">
@@ -74,4 +74,4 @@ const WorkFlowPlanForm = () => {
   )
 }
 
-export default WorkFlowPlanForm
+export default WorkflowPlanForm

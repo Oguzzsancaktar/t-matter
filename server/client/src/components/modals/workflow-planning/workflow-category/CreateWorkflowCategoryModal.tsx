@@ -4,7 +4,7 @@ import { JustifyBetweenColumn, JustifyCenterRow, JustifyCenterColumn, Row } from
 import { H1 } from '@/components/texts'
 import { InnerWrapper } from '@/components/wrapper'
 import useAccessStore from '@/hooks/useAccessStore'
-import { useCreateCategoryMutation } from '@/services/settings/workflow-planning/workflowPlanService'
+import { useCreateCategoryMutation } from '@/services/settings/workflow-planning/workflowService'
 import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'

@@ -4,4 +4,5 @@ export default interface ITaskChecklist {
   duration: number
   point: number
   price: number
+  status: number
 }

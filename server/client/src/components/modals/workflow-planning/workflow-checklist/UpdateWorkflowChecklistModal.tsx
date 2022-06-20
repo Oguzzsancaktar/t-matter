@@ -19,18 +19,21 @@ import { DollarSign, MousePointer, Terminal } from 'react-feather'
 import { ModalHeader, ModalBody, ModalFooter } from '../../types'
 import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
-import { useCreateChecklistMutation } from '@/services/settings/workflow-planning/workflowService'
-import { ITaskChecklistCreateDTO } from '@/models'
+import { usePatchWorkflowChecklistMutation } from '@/services/settings/workflow-planning/workflowService'
+import { ITaskChecklist, ITaskChecklistCreateDTO } from '@/models'
 
-const CreateWorkflowChecklistModal = () => {
+interface IProps {
+  checklist: ITaskChecklist
+}
+const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const [workflowChecklist, setWorkflowChecklist] = useState<ITaskChecklistCreateDTO>({
-    name: '',
-    point: 0,
-    duration: 0,
-    price: 0
+    name: checklist.name,
+    point: checklist.point,
+    duration: checklist.duration,
+    price: checklist.price
   })
 
   const initialErrorsState = {
@@ -41,10 +44,7 @@ const CreateWorkflowChecklistModal = () => {
   }
   const [validationErrors, setValidationErrors] = useState({ ...initialErrorsState })
 
-  const [
-    createChecklist,
-    { data: createChecklistData, isLoading: createChecklistLoading, error: createChecklistError }
-  ] = useCreateChecklistMutation()
+  const [patchWorkflowChecklist] = usePatchWorkflowChecklistMutation()
 
   const validateInputValues = () => {
     if (!isValueNull(workflowChecklist.name)) {
@@ -97,9 +97,9 @@ const CreateWorkflowChecklistModal = () => {
 
     try {
       if (validateInputValues()) {
-        await createChecklist(workflowChecklist)
-        toastSuccess(`Workflow checklist ${workflowChecklist.name} created successfully`)
-        dispatch(closeModal('createWorkflowChecklistModal'))
+        await patchWorkflowChecklist({ ...workflowChecklist, _id: checklist._id })
+        toastSuccess('Checklist ' + checklist.name + ' updated successfully')
+        dispatch(closeModal(`updateWorkflowChecklistModal-${checklist._id}`))
       } else {
         console.log(workflowChecklist, validationErrors)
       }
@@ -109,7 +109,7 @@ const CreateWorkflowChecklistModal = () => {
   }
 
   const handleCancel = () => {
-    dispatch(closeModal('createWorkflowChecklistModal'))
+    dispatch(closeModal(`updateWorkflowChecklistModal-${checklist._id}`))
   }
 
   return (
@@ -188,4 +188,4 @@ const CreateWorkflowChecklistModal = () => {
   )
 }
 
-export default CreateWorkflowChecklistModal
+export default UpdateWorkflowChecklistModal

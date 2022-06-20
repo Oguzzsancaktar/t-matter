@@ -8,6 +8,10 @@ export const isValueNull = (value: string) => {
   return value.toString().trim().length > 0
 }
 
+export const isValueBiggerThanZero = (value: number) => {
+  return +value > 0
+}
+
 export const isUsernameValid = (username: string): boolean => {
   const result = controlStringLength(username)
   return result
