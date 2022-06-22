@@ -308,7 +308,9 @@ const UserModalLogInSettingsTab = () => {
         <JustifyBetweenRow margin="2rem 0 0 0">
           <Row margin="0 0.25rem 0 0">
             <SelectInput
-              selectedOption={payrollPeriodOptions.findIndex(option => option.value === payrollPeriod)}
+              selectedOption={payrollPeriodOptions.filter(
+                option => option.value === payrollPeriodOptions[payrollPeriod].value
+              )}
               labelText="Payroll Type"
               onChange={handlePayrollPeriodChange}
               name={'payrollPeriod'}
@@ -318,7 +320,9 @@ const UserModalLogInSettingsTab = () => {
           <Row margin="0 0 0 0.25rem">
             {payrollPeriod === 'weekly' ? (
               <SelectInput
-                selectedOption={payrollDayOptions.findIndex(option => option.value === payrollDay)}
+                selectedOption={payrollDayOptions.filter(
+                  option => option.value === payrollDayOptions[payrollDay].value
+                )}
                 labelText="Payroll Day"
                 name={'payrollDay'}
                 options={payrollDayOptions}
@@ -326,7 +330,9 @@ const UserModalLogInSettingsTab = () => {
               />
             ) : (
               <SelectInput
-                selectedOption={payrollDateOptions.findIndex(option => option.value === payrollDay)}
+                selectedOption={payrollDateOptions.filter(
+                  option => option.value === payrollDateOptions[payrollDay].value
+                )}
                 labelText="Payroll Date"
                 name={'payrollDate'}
                 options={payrollDateOptions}

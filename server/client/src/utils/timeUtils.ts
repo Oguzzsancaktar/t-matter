@@ -10,7 +10,7 @@ export const secondsToTimeWithDisplay = second => {
   return hDisplay + mDisplay + sDisplay
 }
 
-export const secondsToHourMin = (seconds: number) => {
+export const secondsToHourMin = (seconds: number, showSecond: boolean = false) => {
   let d = Number(seconds)
   var h: string | number = Math.floor(d / 3600)
   var m: string | number = Math.floor((d % 3600) / 60)
@@ -24,7 +24,15 @@ export const secondsToHourMin = (seconds: number) => {
     m = '0' + m
   }
 
-  output = h + ':' + m + ' '
+  if (s.toString().split('').length === 1) {
+    s = '0' + s
+  }
+
+  if (showSecond) {
+    output = h + ':' + m + ':' + s
+  } else {
+    output = h + ':' + m + ' '
+  }
 
   return output
 }

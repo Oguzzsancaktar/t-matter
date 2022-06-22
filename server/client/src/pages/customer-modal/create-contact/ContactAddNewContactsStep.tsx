@@ -12,7 +12,7 @@ import {
 } from '@/components'
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
-import { IContact, IContactCreateDTO, IOption } from '@/models'
+import { EGender, IContact, IContactCreateDTO, IOption } from '@/models'
 import { toastError } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid, isPhoneNumberValid, isZipcodeValid } from '@/utils/validationUtils'
 import moment from 'moment'
@@ -262,7 +262,7 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
                   options={genderOptions}
                   labelText="Contact Reffered By"
                   validationError={validationErrors.refferTypeError}
-                  selectedOption={+newContact.refferType}
+                  selectedOption={[{ value: newContact.refferType, label: newContact.refferType }]}
                 />
               </ItemContainer>
 
@@ -275,7 +275,7 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
                   options={genderOptions}
                   labelText="Contact Gender"
                   validationError={validationErrors.genderError}
-                  selectedOption={+newContact.gender}
+                  selectedOption={[{ value: EGender[newContact.gender], label: newContact.gender }]}
                 />
               </ItemContainer>
             </JustifyBetweenRow>

@@ -22,7 +22,7 @@ const IndexCircle = styled.span<Pick<IProps, 'isActive'>>`
   transition: background 0.4s ease-in-out;
 `
 const TabIndex: React.FC<IProps> = ({ index, isActive }) => {
-  return <IndexCircle isActive={isActive}>{index}</IndexCircle>
+  return <IndexCircle isActive={isActive}>{index + 1}</IndexCircle>
 }
 
 export default TabIndex

@@ -1,6 +1,6 @@
 enum EGender {
-  Female,
-  Male
+  FEMALE = 'Female',
+  MALE = 'Male'
 }
 
 export default EGender

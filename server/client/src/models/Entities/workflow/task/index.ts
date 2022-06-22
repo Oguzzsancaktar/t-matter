@@ -1,4 +1,5 @@
 export type { default as ITask } from './ITask'
+export type { default as ITaskCreateDTO } from './ITaskCreateDTO'
 
 export type { default as ITaskCategory } from './ITaskCategory'
 export type { default as ITaskCategoryCreate } from './ITaskCategoryCreateDTO'

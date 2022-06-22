@@ -6,6 +6,7 @@ const roleDataAccess = require('./role-data-access/roleDataAccess')
 const userDataAccess = require('./user-data-access/userDataAccess')
 const workflowDataAccess = require('./workflow-data-access/workflowDataAccess')
 const timeLogDataAccess = require('./time-log-data-access/timeLogDataAccess')
+const locationDataAccess = require('./dynamic-variables-data-access/locationDataAccess')
 
 module.exports = {
   authDataAccess,
@@ -15,5 +16,6 @@ module.exports = {
   roleDataAccess,
   userDataAccess,
   workflowDataAccess,
-  timeLogDataAccess
+  timeLogDataAccess,
+  locationDataAccess
 }

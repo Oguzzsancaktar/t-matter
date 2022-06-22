@@ -6,14 +6,14 @@ import colors from '@/constants/colors'
 
 interface IProps {
   labelText?: string
-  selectedOption?: number
+  selectedOption?: IOption[] | null
   isDisabled?: boolean
   isLoading?: boolean
   isClearable?: boolean
   isSearchable?: boolean
   isMulti?: boolean
   validationError?: boolean
-  onChange?: ((event: React.ChangeEvent) => void) | ((option: IOption) => void)
+  onChange: ((event: React.ChangeEvent) => void) | ((option: IOption) => void) | any
   name: string
   options: any[]
 }
@@ -31,11 +31,14 @@ const SelectInput: React.FC<IProps> = ({
   onChange,
   options
 }) => {
+  const selectedValues = selectedOption?.map(
+    op => options?.find(option => option.value === op.value) || (isMulti ? [] : { label: 'Select Option', value: '' })
+  )
+
   return (
     <Column>
       {labelText && (
         <ItemContainer margin="0 0 0.4rem 0">
-          {' '}
           <Label color={colors.text.primary}>{labelText}</Label>{' '}
         </ItemContainer>
       )}
@@ -52,8 +55,8 @@ const SelectInput: React.FC<IProps> = ({
         name={name}
         isMulti={isMulti}
         onChange={onChange}
-        // defaultValue={options[selectedOption || 0] || options[0]}
-        value={options[selectedOption || 0] || ''}
+        defaultValue={selectedValues}
+        value={selectedValues?.length === 1 ? selectedValues[0] : selectedValues}
       />
     </Column>
   )

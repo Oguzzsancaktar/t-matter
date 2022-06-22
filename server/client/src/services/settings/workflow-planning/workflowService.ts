@@ -7,7 +7,9 @@ import {
   ITaskCategoryUpdateDTO,
   ITaskChecklist,
   ITaskChecklistCreateDTO,
-  ITaskChecklistUpdateDTO
+  ITaskChecklistUpdateDTO,
+  IWorkflow,
+  IWorkflowCreateDTO
 } from '@/models'
 
 const WORKFLOW_API_REDUCER_PATH = 'workflowApi'
@@ -162,6 +164,80 @@ const updateChecklistStatus = (builder: IBuilder) => {
   })
 }
 
+// Workflow Plan
+const createPlan = (builder: IBuilder) => {
+  return builder.mutation<string, IWorkflowCreateDTO>({
+    query(dto) {
+      return {
+        url: '/workflow/plan',
+        method: 'POST',
+        data: dto
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getPlans = (builder: IBuilder) => {
+  return builder.query<IWorkflow[], void>({
+    query() {
+      return {
+        url: '/workflow/plan',
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getPlanById = (builder: IBuilder) => {
+  return builder.query<IWorkflow, IWorkflow['_id']>({
+    query(id) {
+      return {
+        url: `/workflow/plan/${id}`,
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const patchWorkflowPlan = (builder: IBuilder) => {
+  return builder.mutation<IWorkflow, Omit<IWorkflow, 'status'>>({
+    query(dto) {
+      return {
+        url: `/workflow/plan/${dto._id}`,
+        method: 'PATCH',
+        data: { name: dto.name }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const updatePlanStatus = (builder: IBuilder) => {
+  return builder.mutation<any, Pick<IWorkflow, '_id' | 'status'>>({
+    query(dto) {
+      return {
+        url: `/workflow/plan/${dto._id}/status`,
+        method: 'PATCH',
+        data: { status: dto.status }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
 const workflowApi = createApi({
   reducerPath: WORKFLOW_API_REDUCER_PATH,
   tagTypes: [WORKFLOW_TAG],
@@ -177,7 +253,13 @@ const workflowApi = createApi({
     getChecklists: getChecklists(builder),
     getChecklistById: getChecklistById(builder),
     patchWorkflowChecklist: patchWorkflowChecklist(builder),
-    updateChecklistStatus: updateChecklistStatus(builder)
+    updateChecklistStatus: updateChecklistStatus(builder),
+
+    createPlan: createPlan(builder),
+    getPlans: getPlans(builder),
+    getPlanById: getPlanById(builder),
+    patchWorkflowPlan: patchWorkflowPlan(builder),
+    updatePlanStatus: updatePlanStatus(builder)
   })
 })
 
@@ -192,7 +274,13 @@ const {
   useCreateChecklistMutation,
   useGetChecklistByIdQuery,
   usePatchWorkflowChecklistMutation,
-  useUpdateChecklistStatusMutation
+  useUpdateChecklistStatusMutation,
+
+  useGetPlansQuery,
+  useCreatePlanMutation,
+  useGetPlanByIdQuery,
+  usePatchWorkflowPlanMutation,
+  useUpdatePlanStatusMutation
 } = workflowApi
 
 export {
@@ -206,5 +294,10 @@ export {
   useCreateChecklistMutation,
   useGetChecklistByIdQuery,
   usePatchWorkflowChecklistMutation,
-  useUpdateChecklistStatusMutation
+  useUpdateChecklistStatusMutation,
+  useGetPlansQuery,
+  useCreatePlanMutation,
+  useGetPlanByIdQuery,
+  usePatchWorkflowPlanMutation,
+  useUpdatePlanStatusMutation
 }
