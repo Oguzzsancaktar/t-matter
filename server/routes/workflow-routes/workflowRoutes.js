@@ -46,4 +46,26 @@ router.patch(
   controllers.workflowController.updateChecklist
 )
 
+// Plan
+router.post(
+  '/plan',
+  middlewares.validations.workflowValidations.createWorkflowPlanValidation,
+  controllers.workflowController.createWorkflowPlan
+)
+
+router.get('/plan', controllers.workflowController.getWorkflowPlans)
+router.get('/plan/:id', controllers.workflowController.getWorkflowPlanById)
+
+router.patch(
+  '/plan/:id',
+  middlewares.validations.workflowValidations.updateWorkflowPlanValidation,
+  controllers.workflowController.updatePlan
+)
+
+router.patch(
+  '/plan/:id/status',
+  middlewares.validations.generalValidations.statusUpdateValidation,
+  controllers.workflowController.updatePlan
+)
+
 module.exports = router

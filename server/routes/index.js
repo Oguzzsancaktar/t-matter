@@ -8,6 +8,7 @@ const companyPricingRoutes = require('./company-pricing-routes/companyPricingRou
 const roleRoutes = require('./role-routes/roleRoutes')
 const userRoutes = require('./user-routes/userRoutes')
 const workflowRoutes = require('./workflow-routes/workflowRoutes')
+const dynamicVariableRoutes = require('./dynamic-variable-routes/dynamicVariableRoutes')
 
 router.get('/hello', (req, res) => {
   res.send('hello')
@@ -20,5 +21,6 @@ router.use('/role', roleRoutes)
 router.use('/user', userRoutes)
 
 router.use('/workflow', workflowRoutes)
+router.use('/dynamic-variables', dynamicVariableRoutes)
 
 module.exports = router

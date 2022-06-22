@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { IClientCreateDTO, IOption, IUserCreateDTO } from '@/models'
+import { EGender, IClientCreateDTO, IOption, IUserCreateDTO } from '@/models'
 import { Key, User } from 'react-feather'
 import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
@@ -123,7 +123,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 options={genderOptions}
                 labelText="Reffered By"
                 validationError={validationErrors.refferTypeError}
-                selectedOption={+createClientDTO.refferType}
+                selectedOption={[{ value: createClientDTO.refferType, label: createClientDTO.refferType }]}
               />
             </ItemContainer>
 
@@ -136,7 +136,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 options={genderOptions}
                 labelText="Gender"
                 validationError={validationErrors.genderError}
-                selectedOption={+createClientDTO.gender}
+                selectedOption={[{ value: EGender[createClientDTO.gender], label: createClientDTO.gender }]}
               />
             </ItemContainer>
           </JustifyBetweenRow>

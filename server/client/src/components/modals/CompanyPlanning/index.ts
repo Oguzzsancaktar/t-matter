@@ -1,2 +1,2 @@
 export { default as CompanyPlanningModal } from './CompanyPlanningModal'
-export * from './customer-settings'
+export * from './dynamic-variables'

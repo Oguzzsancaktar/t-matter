@@ -16,7 +16,7 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
 
-const RelationTypeTab = () => {
+const LocationsTab = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -104,4 +104,4 @@ const RelationTypeTab = () => {
   )
 }
 
-export default RelationTypeTab
+export default LocationsTab

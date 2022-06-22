@@ -111,6 +111,61 @@ const removeChecklist = async (req, res) => {
   }
 }
 
+// Plan
+const createWorkflowPlan = async (req, res) => {
+  const { body } = req
+  try {
+    await dataAccess.workflowDataAccess.createWorkflowPlan(body)
+    res.sendStatus(StatusCodes.CREATED)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getWorkflowPlans = async (req, res) => {
+  try {
+    const checklists = await dataAccess.workflowDataAccess.getWorkflowPlans({}, '')
+    res.status(StatusCodes.OK).json(checklists)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getWorkflowPlanById = async (req, res) => {
+  const { id } = req.params
+  try {
+    const checklist = await dataAccess.workflowDataAccess.findWorkflowPlanById(id, '')
+    res.status(StatusCodes.OK).json(checklist)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const updatePlan = async (req, res) => {
+  const { _id, ...data } = req.body
+  try {
+    await dataAccess.workflowDataAccess.findByIdAndUpdateWorkflowPlan(_id ? _id : req.params.id, data)
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const removePlan = async (req, res) => {
+  const { id } = req.params
+  try {
+    await dataAccess.workflowDataAccess.findByIdAndUpdateWorkflowPlan(id, { status: STATUS_TYPES.INACTIVE })
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createWorkflowCategory,
   getWorkflowCategories,
@@ -122,5 +177,11 @@ module.exports = {
   getWorkflowChecklists,
   getWorkflowChecklistById,
   updateChecklist,
-  removeChecklist
+  removeChecklist,
+
+  createWorkflowPlan,
+  getWorkflowPlans,
+  getWorkflowPlanById,
+  updatePlan,
+  removePlan
 }

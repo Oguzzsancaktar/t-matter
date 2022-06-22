@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Column, Row, Tab } from '@components/index'
-import { ClientTypeTab, RefferedByTab, RelationTypeTab } from '@/pages'
+import { ClientTypeTab, LocationsTab, RefferedByTab, RelationTypeTab } from '@/pages'
 
 const CustomerSettings = () => {
   const [activeTab, setActiveTab] = useState('reffered-by')
@@ -11,24 +11,31 @@ const CustomerSettings = () => {
         <Column width="200px">
           <Tab
             margin="0 0 1rem 0rem"
-            index={1}
+            index={0}
             name="Reffered By"
             isActive={activeTab === 'reffered-by'}
             onClick={() => setActiveTab('reffered-by')}
           />
           <Tab
             margin="0 0 1rem 0rem"
-            index={2}
+            index={1}
             name="Relation Type"
             isActive={activeTab === 'relation-type'}
             onClick={() => setActiveTab('relation-type')}
           />
           <Tab
             margin="0 0 1rem 0rem"
-            index={3}
+            index={2}
             name="Client Type"
             isActive={activeTab === 'client-type'}
             onClick={() => setActiveTab('client-type')}
+          />
+          <Tab
+            margin="0 0 1rem 0rem"
+            index={3}
+            name="Locations"
+            isActive={activeTab === 'locations'}
+            onClick={() => setActiveTab('locations')}
           />
         </Column>
 
@@ -39,6 +46,8 @@ const CustomerSettings = () => {
             <ClientTypeTab />
           ) : activeTab === 'relation-type' ? (
             <RelationTypeTab />
+          ) : activeTab === 'locations' ? (
+            <LocationsTab />
           ) : (
             ''
           )}

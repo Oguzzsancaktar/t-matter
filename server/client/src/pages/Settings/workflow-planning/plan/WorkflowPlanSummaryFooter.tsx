@@ -1,9 +1,11 @@
-import React from 'react'
-import { JustifyBetweenRow } from '@components/layout'
+import React, { useEffect } from 'react'
+import { Column, JustifyBetweenRow } from '@components/layout'
 import styled from 'styled-components'
 import colors from '@constants/colors'
-
-interface IProps {}
+import { Button } from '@/components'
+import { ITaskChecklist } from '@/models'
+import { useGetChecklistByIdQuery, useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
+import { secondsToHourMin } from '@/utils/timeUtils'
 
 const Text = styled.h3`
   font-size: 0.8rem;
@@ -15,11 +17,38 @@ const Value = styled.h3`
   border-left: 1px solid ${colors.blue.primary};
 `
 
-const WorkflowPlanSummaryFooter: React.FC<IProps> = ({}) => {
+interface IProps {
+  checklistIdArr: Pick<ITaskChecklist, '_id'>[]
+}
+
+const WorkflowPlanSummaryFooter: React.FC<IProps> = ({ checklistIdArr }) => {
+  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
+
+  const calculateStepTotals = () => {
+    let totalDuration = 0
+    let totalPrice = 0
+
+    if (checklistsData) {
+      checklistIdArr.forEach(({ _id }) => {
+        const checklistDetail = checklistsData.find(checklist => checklist._id === _id)
+        if (checklistDetail) {
+          totalDuration += checklistDetail?.duration
+          totalPrice += checklistDetail?.price
+        }
+      })
+    }
+
+    return {
+      totalDuration,
+      totalPrice
+    }
+  }
+
   return (
     <JustifyBetweenRow>
-      <Text>Hourly Commpany Fee</Text>
-      <Value>${(100).toFixed(2)}</Value>
+      <Text>Totals</Text>
+      <Value>${calculateStepTotals().totalPrice.toFixed(2)}</Value>
+      <Value>{secondsToHourMin(calculateStepTotals().totalDuration, true)}</Value>
     </JustifyBetweenRow>
   )
 }

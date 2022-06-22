@@ -1,5 +1,6 @@
 const WorkflowCategory = require('../../models/workflow-models/workflowCategory')
 const WorkflowChecklist = require('../../models/workflow-models/workflowChecklist')
+const WorkflowPlan = require('../../models/workflow-models/workflowPlan')
 
 const createWorkflowCategory = data => {
   return WorkflowCategory.create(data)
@@ -34,6 +35,23 @@ const findByIdAndUpdateWorkflowChecklist = (id, data) => {
   return WorkflowChecklist.findByIdAndUpdate(id, data)
 }
 
+// Plan
+const createWorkflowPlan = data => {
+  return WorkflowPlan.create(data)
+}
+
+const getWorkflowPlans = (query = {}, populate = '') => {
+  return WorkflowPlan.find(query).populate(populate).lean().exec()
+}
+
+const findWorkflowPlanById = (id, populate = '') => {
+  return WorkflowPlan.findById(id).populate(populate).lean().exec()
+}
+
+const findByIdAndUpdateWorkflowPlan = (id, data) => {
+  return WorkflowPlan.findByIdAndUpdate(id, data)
+}
+
 module.exports = {
   createWorkflowCategory,
   getWorkflowCategories,
@@ -43,5 +61,10 @@ module.exports = {
   createWorkflowChecklist,
   getWorkflowChecklists,
   findWorkflowChecklistById,
-  findByIdAndUpdateWorkflowChecklist
+  findByIdAndUpdateWorkflowChecklist,
+
+  createWorkflowPlan,
+  getWorkflowPlans,
+  findWorkflowPlanById,
+  findByIdAndUpdateWorkflowPlan
 }

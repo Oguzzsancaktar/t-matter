@@ -9,12 +9,14 @@ interface IProps {
   onStepChange: (step: number) => void
   onWfNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   addNewStep: () => void
+  workflowNameValidation: boolean
 }
 const WorkflowStepList = styled.ul``
 
 const WorkflowPlanStepNavigation: React.FC<IProps> = ({
   data,
   activeStep,
+  workflowNameValidation,
   addNewStep,
   onStepChange,
   onWfNameChange
@@ -24,21 +26,22 @@ const WorkflowPlanStepNavigation: React.FC<IProps> = ({
       <Column height="100%">
         <ItemContainer>
           <InputRegular
-            type={''}
-            name={'workflowName'}
+            type={'text'}
+            name={'name'}
             onChange={onWfNameChange}
             placeholder="Enter Workflow Name"
             labelText="Workflow Name"
+            validationError={workflowNameValidation}
           />
         </ItemContainer>
 
         <ItemContainer margin="1rem 0" height="calc(100% - 60px - 34px - 1rem)">
           <WorkflowStepList>
             <ItemContainer>
-              {data.workflowSteps.map((step, index) => (
+              {data.steps.map((step, index) => (
                 <Tab
                   key={index}
-                  name={data.workflowName + '/' + data.workflowSteps[index].category.name}
+                  name={data.name + '/' + data.steps[index].category.name}
                   index={index}
                   isActive={index === activeStep}
                   onClick={() => onStepChange(index)}

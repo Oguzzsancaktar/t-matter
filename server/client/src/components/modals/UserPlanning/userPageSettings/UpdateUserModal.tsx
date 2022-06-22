@@ -7,7 +7,7 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
-import { IUser, IUserUpdateDTO } from '@/models'
+import { EGender, EStatus, IUser, IUserUpdateDTO } from '@/models'
 import { User } from 'react-feather'
 import { isEmailValid, isValueNull } from '@/utils/validationUtils'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
@@ -388,7 +388,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="gender"
                   // placeholder="Enter birth location..."
                   onChange={option => setUpdateUserData({ ...updateUserData, gender: option.value })}
-                  selectedOption={+updateUserData.gender}
+                  selectedOption={[{ label: EGender[+updateUserData.gender], value: updateUserData.gender }]}
                   options={genderOptions}
                   labelText="Gender"
                   validationError={genderError}
@@ -405,7 +405,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   // placeholder="Select your birthday..."
                   onChange={option => setUpdateUserData({ ...updateUserData, role: option.value })}
                   options={(roleData || []).map(role => ({ value: role._id, label: role.name }))}
-                  selectedOption={(roleData || []).findIndex(role => role._id === updateUserData.role)}
+                  selectedOption={[{ label: updateUserData.role, value: updateUserData.role }]}
                   labelText="Role"
                   validationError={roleError}
                 />
@@ -417,7 +417,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="status"
                   // placeholder="Enter birth location..."
                   onChange={option => setUpdateUserData({ ...updateUserData, status: option.value })}
-                  selectedOption={(statusOptions || []).findIndex(status => status.value === +updateUserData.status)}
+                  selectedOption={[{ label: EStatus[+updateUserData.status], value: updateUserData.status }]}
                   options={statusOptions}
                   labelText="Status"
                   validationError={statusError}

@@ -4,13 +4,14 @@ import { ItemContainer } from '@/components'
 import { SummaryCardTitle } from '@/shared'
 import styled from 'styled-components'
 import SummaryChecklistItem from './SummaryChecklistItem'
+import { ITaskChecklist } from '@/models'
 
-interface IProps {}
-
-const tempArr = ['Checklist', 'Price', 'Time']
+interface IProps {
+  checklistData: Pick<ITaskChecklist, '_id'>[]
+}
 
 const ChecklistList = styled.ul``
-const WorkflowPlanSummaryBody: React.FC<IProps> = ({}) => {
+const WorkflowPlanSummaryBody: React.FC<IProps> = ({ checklistData }) => {
   return (
     <ItemContainer>
       <JustifyBetweenColumn height="100%">
@@ -30,8 +31,8 @@ const WorkflowPlanSummaryBody: React.FC<IProps> = ({}) => {
 
         <ItemContainer>
           <ChecklistList>
-            {tempArr.map((item, index) => (
-              <SummaryChecklistItem key={index} />
+            {checklistData.map((item, index) => (
+              <SummaryChecklistItem key={index} checklistItem={item} />
             ))}
           </ChecklistList>
         </ItemContainer>

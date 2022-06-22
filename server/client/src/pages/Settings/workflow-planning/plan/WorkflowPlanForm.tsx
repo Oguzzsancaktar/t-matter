@@ -1,31 +1,119 @@
+import React from 'react'
+
 import {
   ColorSelect,
-  InnerWrapper,
-  InputWithIcon,
   InputWithText,
   ItemContainer,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   SelectInput
 } from '@/components'
-import React from 'react'
+import { ILocation, IOption, ITaskCategory, ITaskChecklist, ITaskCreateDTO, IUser, IWorkflowCreateDTO } from '@/models'
+import { useGetCategoriesQuery, useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
+import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
+import CLIENT_TASK_TABS_ARR from '@/constants/clientTaskTabs'
+import { useGetLocationsQuery } from '@/services/settings/company-planning/dynamicVariableService'
 
-const WorkflowPlanForm = () => {
+interface IProps {
+  data: ITaskCreateDTO
+  activeStep: number
+  onDataChange: (ITaskCreateDTO) => void
+}
+const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) => {
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery()
+  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
+  const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
+  const { data: locationsData, isLoading: locationsDataIsLoading } = useGetLocationsQuery()
+
+  const handleCategoryChange = (option: IOption) => {
+    const dataInstance = { ...data }
+    dataInstance.category = {
+      _id: option.value,
+      name: option.label
+    }
+    onDataChange(dataInstance)
+  }
+
+  const handleLocationChange = (option: IOption) => {
+    const dataInstance = { ...data }
+    dataInstance.location = {
+      _id: option.value,
+      name: option.label
+    }
+    onDataChange(dataInstance)
+  }
+
+  const handleUserChange = (option: IOption) => {
+    const dataInstance = { ...data }
+    dataInstance.responsibleUser = {
+      _id: option.value,
+      firstname: option.label,
+      lastname: option.label
+    }
+    onDataChange(dataInstance)
+  }
+
+  const handleTabChange = (options: IOption[]) => {
+    const dataInstance = { ...data }
+
+    dataInstance.tabs = options.map((option: IOption) => option.value)
+    onDataChange(dataInstance)
+  }
+
+  const handleChecklistChange = (options: IOption[]) => {
+    const dataInstance = { ...data }
+    dataInstance.checklistItems = options.map((option: IOption) => ({
+      _id: option.value,
+      name: option.label
+    }))
+    onDataChange(dataInstance)
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const dataInstance = { ...data }
+    dataInstance[event.target.name] = +event.target.value
+    onDataChange(dataInstance)
+  }
+
+  const handleColorChange = (color: string) => {
+    const dataInstance = { ...data }
+    dataInstance.stepColor = color
+    onDataChange(dataInstance)
+  }
+
   return (
     <ItemContainer height="100%" padding="0 1rem">
       <JustifyBetweenColumn height="100%">
         <ItemContainer>
           <JustifyBetweenRow>
             <ItemContainer width="calc((100% - 1rem)/2)">
-              <SelectInput name={''} labelText="Workflow Category" options={[]} />
+              <SelectInput
+                name={'stepCategory'}
+                labelText="Workflow Category"
+                selectedOption={[
+                  {
+                    value: data.category._id,
+                    label: data.category.name
+                  }
+                ]}
+                options={(categoriesData || []).map((category: ITaskCategory) => ({
+                  label: category.name,
+                  value: category._id
+                }))}
+                onChange={handleCategoryChange}
+                isLoading={isCategoriesLoading}
+              />
             </ItemContainer>
 
             <ItemContainer width="calc((100% - 1rem)/2)">
               <InputWithText
-                name={''}
+                name={'expireDuration'}
                 labelText="Task Expire Duration"
                 placeholder="Task Expire Duration"
                 children="Days"
+                onChange={handleInputChange}
+                type="number"
+                value={data.expireDuration || ''}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -34,40 +122,94 @@ const WorkflowPlanForm = () => {
         <ItemContainer>
           <JustifyBetweenRow>
             <ItemContainer width="calc((100% - 1rem)/2)">
-              <SelectInput name={''} labelText="Task Location" options={[]} />
+              <SelectInput
+                name={'locations'}
+                labelText="Task Location"
+                selectedOption={[
+                  {
+                    value: data.location._id,
+                    label: data.location.name
+                  }
+                ]}
+                options={(locationsData || []).map((location: ILocation) => ({
+                  label: location.name,
+                  value: location._id
+                }))}
+                onChange={handleLocationChange}
+                isLoading={locationsDataIsLoading}
+              />
             </ItemContainer>
 
             <ItemContainer width="calc((100% - 1rem)/2)">
               <InputWithText
-                name={''}
+                name={'postponeTime'}
                 labelText="Task Postpone Time"
                 placeholder="Task Postpone Time"
                 children="Times"
+                onChange={handleInputChange}
+                type="number"
+                value={data.postponeTime || ''}
               />
             </ItemContainer>
           </JustifyBetweenRow>
         </ItemContainer>
 
         <ItemContainer>
-          <SelectInput name={''} labelText="Responsible User" options={[]} />
-        </ItemContainer>
-
-        <ItemContainer>
-          <SelectInput name={''} labelText="Task Tabs" isMulti={true} options={[]} />
-        </ItemContainer>
-
-        <ItemContainer>
-          <SelectInput name={''} labelText="Checklist Items" isMulti={true} options={[]} />
-        </ItemContainer>
-
-        <ItemContainer>
-          <ColorSelect
-            labelText="Task Step Color"
-            value={''}
-            onClick={function (color: string): void {
-              throw new Error('Function not implemented.')
-            }}
+          <SelectInput
+            name={'responsibleUser'}
+            labelText="Responsible User"
+            selectedOption={[
+              {
+                value: data.responsibleUser._id,
+                label: data.responsibleUser.firstname + ' ' + data.responsibleUser.lastname
+              }
+            ]}
+            options={(usersData || []).map((user: IUser) => ({
+              label: user.firstname + ' ' + user.lastname,
+              value: user._id
+            }))}
+            onChange={handleUserChange}
+            isLoading={isUsersDataLoading}
           />
+        </ItemContainer>
+
+        <ItemContainer>
+          <SelectInput
+            name={'stepTabs'}
+            labelText="Task Tabs"
+            selectedOption={data.tabs.map((tabName: string) => ({
+              label: tabName,
+              value: tabName
+            }))}
+            isMulti={true}
+            options={(CLIENT_TASK_TABS_ARR || []).map((tab: string) => ({
+              label: tab,
+              value: tab
+            }))}
+            onChange={handleTabChange}
+          />
+        </ItemContainer>
+
+        <ItemContainer>
+          <SelectInput
+            name={'stepChecklists'}
+            labelText="Checklist Items"
+            isMulti={true}
+            isLoading={isChecklistsLoading}
+            selectedOption={data.checklistItems.map(checklist => ({
+              label: checklist.name,
+              value: checklist._id
+            }))}
+            options={(checklistsData || []).map((checklist: ITaskChecklist) => ({
+              label: checklist.name,
+              value: checklist._id
+            }))}
+            onChange={handleChecklistChange}
+          />
+        </ItemContainer>
+
+        <ItemContainer>
+          <ColorSelect labelText="Task Step Color" value={data.stepColor} onClick={handleColorChange} />
         </ItemContainer>
       </JustifyBetweenColumn>
     </ItemContainer>

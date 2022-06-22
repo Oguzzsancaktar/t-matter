@@ -1,9 +1,9 @@
-import ITask from './task/ITask'
-
+import { ITaskCreateDTO } from '@/models'
 export default interface IWorkflow {
   _id: string
-  workflowName: string
-  workflowTotalDuration: number
-  workflowTotalPrice: number
-  workflowSteps: ITask[]
+  name: string
+  duration: number
+  price: number
+  steps: ITaskCreateDTO[]
+  status?: number
 }
