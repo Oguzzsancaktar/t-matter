@@ -1,14 +1,15 @@
-import * as React from 'react'
+import { ItemContainer } from '@/components/item-container'
 import { Column, Row } from '@/components/layout'
 import { Label } from '@/components/texts'
 import colors from '@/constants/colors'
 import { useOutsideTrigger } from '@/hooks/useOutsideTrigger'
+import { RowStyled } from '@/shared'
+import * as React from 'react'
 import { useRef, useState } from 'react'
 import { Clock } from 'react-feather'
 import TimeKeeper from 'react-timekeeper'
 import styled from 'styled-components'
-import { InputWithIcon } from '../InputWithIcon'
-import { ItemContainer } from '@/components/item-container'
+import { InputWithIcon } from '../input-with-icon'
 
 interface IProps {
   name: string
@@ -30,14 +31,14 @@ const ClockPickerRelative = styled.div`
   height: 100%;
 `
 
-const ClockPicker12: React.FC<IProps> = ({ name, value = '00:00', disabled, labelText, validationError, onChange }) => {
+const ClockPicker24: React.FC<IProps> = ({ name, value = '00:00', disabled, labelText, validationError, onChange }) => {
   const [showTime, setShowTime] = useState(false)
 
   const timePickerRef = useRef(null)
   useOutsideTrigger(timePickerRef, () => setShowTime(false))
 
   const handleChange = (newTime: any) => {
-    onChange(newTime.formatted12)
+    onChange(newTime.formatted24)
   }
 
   return (
@@ -63,11 +64,11 @@ const ClockPicker12: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
           {showTime && (
             <div ref={timePickerRef}>
               <TimeKeeper
-                time={value}
+                time={value.trim()}
                 onChange={newTime => handleChange(newTime)}
                 onDoneClick={() => setShowTime(false)}
                 switchToMinuteOnHourSelect
-                // hour24Mode={true}
+                hour24Mode={true}
               />
             </div>
           )}
@@ -77,4 +78,4 @@ const ClockPicker12: React.FC<IProps> = ({ name, value = '00:00', disabled, labe
   )
 }
 
-export default ClockPicker12
+export default ClockPicker24

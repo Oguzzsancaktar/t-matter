@@ -4,40 +4,26 @@ import {
   Row,
   H1,
   JustifyBetweenColumn,
-  InputWithIcon,
   Label,
   Checkbox,
-  ClockPicker12,
-  ClockPicker24,
   SelectInput,
   SummaryCard,
-  Button
+  Button,
+  ClockPicker12,
+  ClockPicker24
 } from '@/components'
 import colors from '@/constants/colors'
 import { dayOfWeek } from '@/constants/dates'
 import { payrollPeriodOptions, payrollDayOptions, payrollDateOptions } from '@/constants/payrollOptions'
 import { IDailyWorkingHours, ETimes, EDays, IOption } from '@/models'
-import {
-  UserModalLogInSettingsSummaryBody,
-  UserModalLogInSettingsSummaryFooter,
-  UserModalSalarySettingsSummaryBody,
-  UserModalSalarySettingsSummaryFooter
-} from '@/pages'
+import { UserModalLogInSettingsSummaryBody, UserModalLogInSettingsSummaryFooter } from '@/pages'
 import {
   useGetCompanyPricingQuery,
   usePatchCompanyPricingMutation
 } from '@/services/settings/company-planning/companyPricing'
-import {
-  clockToSeconds,
-  secondsToTimeString,
-  secondsToHourMin,
-  timeToSeconds,
-  secondsToTimeWithDisplay
-} from '@/utils/timeUtils'
+import { clockToSeconds, secondsToTimeString, secondsToHourMin, timeToSeconds } from '@/utils/timeUtils'
 import { toastWarning, toastSuccess } from '@/utils/toastUtil'
 import React, { useEffect, useState } from 'react'
-import { DollarSign, Clock, Percent } from 'react-feather'
-import { CompanyPricingSummaryBody, CompanyPricingSummaryFooter } from '../../companyPlanning'
 
 const UserModalLogInSettingsTab = () => {
   const [totalMinutes, setTotalMinutes] = useState(0)

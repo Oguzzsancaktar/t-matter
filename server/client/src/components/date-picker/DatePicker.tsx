@@ -5,7 +5,7 @@ import Flatpickr from 'react-flatpickr'
 import { Clock } from 'react-feather'
 import { Column, Row } from '../layout'
 import { Label } from '../texts'
-import { Container, IconContainer } from '../input/InputWithIcon/styled'
+import { Container, IconContainer } from '../input/input-with-icon/styled'
 import { ItemContainer } from '../item-container'
 import colors from '@/constants/colors'
 
