@@ -50,6 +50,7 @@ const UserPageSettingsTab = () => {
     },
     {
       name: 'Status',
+      right: true,
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
@@ -80,7 +81,8 @@ const UserPageSettingsTab = () => {
         id: `userDetailModal-${user._id}`,
         title: 'User / ' + user.firstname + ' ' + user.lastname,
         body: <ReadUserModal userId={user._id} />,
-        size: ESize.XLarge
+        size: ESize.XLarge,
+        backgroundColor: 'transparent'
       })
     )
   }

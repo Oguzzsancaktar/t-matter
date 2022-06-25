@@ -1,4 +1,5 @@
 import { ISalarySettings } from '@/models'
+import { SummaryCardText, SummaryCardValue } from '@/shared'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@components/layout'
 import colors from '@constants/colors'
 import React from 'react'
@@ -8,18 +9,6 @@ interface IProps {
   data: ISalarySettings
 }
 
-const Text = styled.h3`
-  font-size: 0.8rem;
-  padding: 1rem 0;
-`
-const Value = styled.h3`
-  padding: 1rem 0;
-
-  font-size: 0.8rem;
-  width: 80px;
-  text-align: center;
-  border-left: 1px solid ${colors.blue.primary};
-`
 const SalarySettingsSummaryBody: React.FC<IProps> = ({ data }) => {
   const calculatedYear0 =
     +data.defaultPayrollRate + +data.defaultPayrollRate * (+data.payrollIncreases[0].increaseRate / 100)
@@ -30,23 +19,23 @@ const SalarySettingsSummaryBody: React.FC<IProps> = ({ data }) => {
   return (
     <JustifyBetweenColumn>
       <JustifyBetweenRow>
-        <Text>2st year increased rate</Text>
-        <Value>${calculatedYear0.toFixed(2)}</Value>
+        <SummaryCardText>2st year increased rate</SummaryCardText>
+        <SummaryCardValue>${calculatedYear0.toFixed(2)}</SummaryCardValue>
       </JustifyBetweenRow>
 
       <JustifyBetweenRow>
-        <Text>3nd year increased rate</Text>
-        <Value>${calculatedYear1.toFixed(2)}</Value>
+        <SummaryCardText>3nd year increased rate</SummaryCardText>
+        <SummaryCardValue>${calculatedYear1.toFixed(2)}</SummaryCardValue>
       </JustifyBetweenRow>
 
       <JustifyBetweenRow>
-        <Text>4th year increased rate</Text>
-        <Value>${calculatedYear2.toFixed(2)}</Value>
+        <SummaryCardText>4th year increased rate</SummaryCardText>
+        <SummaryCardValue>${calculatedYear2.toFixed(2)}</SummaryCardValue>
       </JustifyBetweenRow>
 
       <JustifyBetweenRow>
-        <Text>5th year increased rate</Text>
-        <Value>${calculatedYear3.toFixed(2)}</Value>
+        <SummaryCardText>5th year increased rate</SummaryCardText>
+        <SummaryCardValue>${calculatedYear3.toFixed(2)}</SummaryCardValue>
       </JustifyBetweenRow>
     </JustifyBetweenColumn>
   )

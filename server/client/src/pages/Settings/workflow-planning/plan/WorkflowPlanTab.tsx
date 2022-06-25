@@ -45,10 +45,11 @@ const WorkflowPlan = () => {
       name: 'Total Price',
       selector: row => row.price,
       sortable: true,
-      cell: data => <div>${data.price} </div>
+      cell: data => <div>${data.price.toFixed(2)} </div>
     },
     {
       name: 'Status',
+      right: true,
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>

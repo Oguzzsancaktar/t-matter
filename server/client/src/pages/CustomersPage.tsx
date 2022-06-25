@@ -50,9 +50,10 @@ const CustomersPage = () => {
     },
     {
       name: 'Status',
+      right: true,
       selector: row => row.status,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(data.status)}>{data.status} </Badge>
+      cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
     },
     {
       name: 'Actions',
@@ -90,7 +91,7 @@ const CustomersPage = () => {
       },
       role: 'Client',
       phone: '+(44) 545 567 56 56',
-      status: 'Active'
+      status: 1
     },
     {
       id: 2,
@@ -105,7 +106,7 @@ const CustomersPage = () => {
       },
       role: 'Contact',
       phone: '+(90) 543 333 22 22',
-      status: 'Inactive'
+      status: 0
     }
   ]
 

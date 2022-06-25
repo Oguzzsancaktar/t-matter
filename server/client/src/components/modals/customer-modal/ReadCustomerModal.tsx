@@ -34,21 +34,21 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
   }
 
   return (
-    <InnerWrapper>
+    <ItemContainer borderRadius="0.3rem" overflow="hidden" backgroundColor="transparent">
       <JustifyBetweenRow height="100%">
-        <ItemContainer width="350px" height="100%">
-          <JustifyBetweenColumn height="100%" padding="1rem 0">
+        <ItemContainer width="350px" height="100%" backgroundColor={colors.white.secondary}>
+          <JustifyBetweenColumn height="100%" padding="1rem">
             <ItemContainer height="150px">
               <JustifyBetweenColumn>
                 <ItemContainer>
                   <JustifyCenterColumn>
                     <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
-                    <H1 margin="0.5rem 0" textAlign="center">
+                    <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
                       Customer Name
                     </H1>
                   </JustifyCenterColumn>
                 </ItemContainer>
-                <ItemContainer>
+                <ItemContainer borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
                   <JustifyCenterRow>
                     <ItemContainer width="auto" margin="0 0.5rem 0 0">
                       <Badge children={'Customer Type'} color={colors.gray.dark} />
@@ -200,11 +200,17 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             </ItemContainer>
           </JustifyBetweenColumn>
         </ItemContainer>
-        <ItemContainer minHeight="700px" height="inherit" width="calc(100% - 120px - 350px)">
+        <ItemContainer
+          minHeight="700px"
+          height="inherit"
+          width="calc(100% - 120px - 350px - 2rem)"
+          backgroundColor={colors.white.secondary}
+          padding="1rem 0"
+        >
           {renderSwitch()}
         </ItemContainer>
       </JustifyBetweenRow>
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

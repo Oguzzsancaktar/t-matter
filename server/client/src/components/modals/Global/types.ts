@@ -6,4 +6,5 @@ export type IModalProps = {
 
 export type IContainerProps = {
   size?: ESize
+  backgroundColor?: string
 }

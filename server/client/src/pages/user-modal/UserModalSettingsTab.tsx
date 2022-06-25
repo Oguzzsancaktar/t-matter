@@ -14,7 +14,7 @@ const UserModalSettingsTab = () => {
             <JustifyCenterRow>
               <Tab
                 margin="0 1rem 0 0rem"
-                index={1}
+                index={0}
                 name="Salary Settings"
                 isActive={activeTab === 'salary-settings'}
                 onClick={() => setActiveTab('salary-settings')}
@@ -22,7 +22,7 @@ const UserModalSettingsTab = () => {
 
               <Tab
                 margin="0 1rem 0 0rem"
-                index={2}
+                index={1}
                 name="Log In Settings"
                 isActive={activeTab === 'log-in-settings'}
                 onClick={() => setActiveTab('log-in-settings')}

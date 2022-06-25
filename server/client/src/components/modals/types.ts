@@ -12,7 +12,8 @@ export const ModalHeader = styled.div`
 export const ModalBody = styled.div<{ withModalFooter?: boolean; minHeight?: string }>`
   height: calc(${({ withModalFooter }) => (withModalFooter ? '100% - 85px - 60px' : '100% - 85px')});
   min-height: calc(${({ minHeight }) => minHeight && minHeight});
-
+  max-height: 850px;
+  overflow-y: auto;
   width: 100%;
   padding: 1rem 1rem;
 `

@@ -30,6 +30,7 @@ const UserTaskName = () => {
     },
     {
       name: 'Status',
+      right: true,
       selector: row => row.status,
       sortable: true,
       cell: data => <div>{data.status} </div>

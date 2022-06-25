@@ -20,6 +20,7 @@ const ClientTypeTab = () => {
     },
     {
       name: 'Status',
+      right: true,
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{data.status} </Badge>

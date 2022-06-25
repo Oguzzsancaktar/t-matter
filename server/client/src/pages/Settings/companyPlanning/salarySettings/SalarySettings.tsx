@@ -22,6 +22,7 @@ import {
 } from '@/services/settings/company-planning/salarySettings'
 import { ISalarySettings } from '@/models'
 import { toastSuccess } from '@/utils/toastUtil'
+import colors from '@/constants/colors'
 
 const DEFAULT_PAYROLL_RATE: number = 30
 const DEFAULT_HOUR_IN_YEAR: number = 1920
@@ -133,8 +134,10 @@ const SalarySettings = () => {
         <>
           <JustifyBetweenColumn height="100%" margin="0 2rem 0 0">
             <Column margin="0 0 2rem 0">
-              <Row margin="0 0 2rem 0">
-                <H1>Default</H1>
+              <Row margin="0 0 1rem 0">
+                <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
+                  Default
+                </H1>
               </Row>
               <InputWithIcon
                 labelText="Default Payroll Rate"
@@ -214,8 +217,10 @@ const SalarySettings = () => {
 
           <JustifyCenterColumn height="100%">
             <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
-              <ItemContainer margin="0 0 2rem 0">
-                <H1>Summary</H1>
+              <ItemContainer margin="0 0 1rem 0">
+                <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
+                  Summary
+                </H1>
               </ItemContainer>
               <SummaryCard
                 body={<SalarySettingsSummaryBody data={salarySettingsStateData} />}

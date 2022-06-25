@@ -63,28 +63,8 @@ const CreateWorkflowPlanModal = () => {
     checklistItemsError: false,
     stepColorError: false
   }
-  const [errorStep, setErrorStep] = useState(0)
   const [validationError, setValidationErrors] = useState({ ...initialErrors })
   const [validationErrorMessage, setValidationErrorMessage] = useState<string>('')
-
-  const calculateWorkflowTotals = () => {
-    let totalPrice = 0
-    let totalDuration = 0
-
-    createWorkflowData.steps.forEach(task => {
-      task.checklistItems.forEach(item => {
-        if (!isChecklistsLoading && checklistsData) {
-          const checklistDetail = checklistsData.find(chck => chck._id === item._id)
-          if (checklistDetail) {
-            totalPrice += checklistDetail.price
-            totalDuration += checklistDetail.duration
-          }
-        }
-      })
-    })
-
-    setCreateWorkflowData({ ...createWorkflowData, price: totalPrice, duration: totalDuration })
-  }
 
   const handleWorkflowNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCreateWorkflowData({ ...createWorkflowData, name: event.target.value })
@@ -96,7 +76,7 @@ const CreateWorkflowPlanModal = () => {
       steps: [...createWorkflowData.steps, initialTask]
     })
 
-    setActiveStep(createWorkflowData.steps.length)
+    handleStepChange(createWorkflowData.steps.length)
   }
 
   const handleDataChange = (taskStep: ITaskCreateDTO) => {
@@ -110,39 +90,130 @@ const CreateWorkflowPlanModal = () => {
   }
 
   const validateFieldValues = () => {
+    let result = true
     if (!isValueNull(createWorkflowData.name)) {
       setValidationErrors({ ...initialErrors, nameError: true })
       setValidationErrorMessage('Please enter valid workflow name')
-      return false
+      return (result = false)
     }
 
-    // createWorkflowData.steps
-    // if (!isValueNull()) {
-    //   setValidationErrors({ ...initialErrors, nameError: true })
-    //   setValidationErrorMessage('Please enter valid workflow name')
-    //   return false
-    // }
+    if (!isValueBiggerThanZero(createWorkflowData.duration)) {
+      setValidationErrors({ ...initialErrors, checklistItemsError: true })
+      setValidationErrorMessage('Workflow duration cant be zero please select checklist items')
+      return (result = false)
+    }
+
+    createWorkflowData.steps.forEach((task, index) => {
+      if (task.category._id === '-1') {
+        setActiveStep(index)
+        setValidationErrors({ ...initialErrors, categoryError: true })
+        setValidationErrorMessage('Please enter valid task category')
+        return (result = false)
+      }
+
+      if (!isValueBiggerThanZero(+(task.expireDuration ?? 0))) {
+        setActiveStep(index)
+        setValidationErrors({ ...initialErrors, expireDurationError: true })
+        setValidationErrorMessage('Please enter valid task expire duration')
+        return (result = false)
+      }
+
+      if (task.location._id === '-1') {
+        setActiveStep(index)
+        setValidationErrors({ ...initialErrors, locationError: true })
+        setValidationErrorMessage('Please enter valid task location')
+        return (result = false)
+      }
+
+      if (!isValueBiggerThanZero(+(task.postponeTime ?? 0))) {
+        setActiveStep(index)
+        setValidationErrors({ ...initialErrors, postponeTimeError: true })
+        setValidationErrorMessage('Please enter valid task postpone duration')
+        return (result = false)
+      }
+
+      if (task.responsibleUser._id === '-1') {
+        setActiveStep(index)
+        setValidationErrors({ ...initialErrors, responsibleUserError: true })
+        setValidationErrorMessage('Please select task responsible user')
+        return (result = false)
+      }
+
+      if (task.tabs.length === 0) {
+        setActiveStep(index)
+        setValidationErrors({ ...initialErrors, tabsError: true })
+        setValidationErrorMessage('Please select at leasst 1 tab')
+        return (result = false)
+      }
+
+      if (task.checklistItems.length === 0) {
+        setActiveStep(index)
+        setValidationErrors({ ...initialErrors, checklistItemsError: true })
+        setValidationErrorMessage('Please select at leasst 1 checklist')
+        return (result = false)
+      }
+
+      if (!isValueNull(task.stepColor)) {
+        setActiveStep(index)
+        setValidationErrors({ ...initialErrors, stepColorError: true })
+        setValidationErrorMessage('Please select task color')
+        return (result = false)
+      }
+    })
 
     if (!isValueNull(createWorkflowData.duration.toString()) && !isValueBiggerThanZero(createWorkflowData.duration)) {
       setValidationErrors({ ...initialErrors, durationError: true })
       setValidationErrorMessage('Workflow duration error')
-      return false
+      return (result = false)
     }
 
     if (!isValueNull(createWorkflowData.price.toString()) && !isValueBiggerThanZero(createWorkflowData.price)) {
       setValidationErrors({ ...initialErrors, priceError: true })
       setValidationErrorMessage('Workflow price error')
-      return false
+      return (result = false)
     }
 
-    return true
+    return result
+  }
+
+  const calculateWorkflowTotals = () => {
+    const dataInstance: IWorkflowCreateDTO = { ...createWorkflowData }
+    let totalDuration = 0
+    let totalPrice = 0
+
+    dataInstance.steps.forEach(task => {
+      task.checklistItems.forEach(checklist => {
+        totalDuration += checklist.duration
+        totalPrice += checklist.price
+      })
+    })
+
+    dataInstance.duration = totalDuration
+    dataInstance.price = totalPrice
+
+    setCreateWorkflowData(dataInstance)
+  }
+
+  const handleStepRemove = (index: number) => {
+    let dataInstance = [...createWorkflowData.steps]
+
+    if (dataInstance.length > 1) {
+      dataInstance = dataInstance.filter((step, i) => i !== index)
+
+      handleStepChange(0)
+
+      setCreateWorkflowData({
+        ...createWorkflowData,
+        steps: [...dataInstance]
+      })
+    } else {
+      toastError('Workflows need to has 1 step at least!')
+    }
   }
 
   const handleSubmit = async () => {
     setValidationErrors({ ...initialErrors })
-
     const validationResult = validateFieldValues()
-    calculateWorkflowTotals()
     if (validationResult) {
       try {
         await createPlan(createWorkflowData)
@@ -153,6 +224,16 @@ const CreateWorkflowPlanModal = () => {
       }
     }
   }
+
+  const handleStepChange = (index: number) => {
+    setValidationErrors({ ...initialErrors })
+    const validationResult = validateFieldValues()
+    setActiveStep(index)
+  }
+
+  useEffect(() => {
+    calculateWorkflowTotals()
+  }, [createWorkflowData.steps])
 
   useEffect(() => {
     toastError(validationErrorMessage)
@@ -166,7 +247,8 @@ const CreateWorkflowPlanModal = () => {
             data={createWorkflowData}
             activeStep={activeStep}
             addNewStep={handleNewStep}
-            onStepChange={setActiveStep}
+            onStepChange={handleStepChange}
+            onStepRemove={handleStepRemove}
             onWfNameChange={handleWorkflowNameChange}
             workflowNameValidation={validationError.nameError}
           />
@@ -178,6 +260,7 @@ const CreateWorkflowPlanModal = () => {
               <WorkflowPlanForm
                 activeStep={activeStep}
                 onDataChange={handleDataChange}
+                errors={validationError}
                 data={createWorkflowData.steps[activeStep]}
               />
             </ItemContainer>

@@ -36,6 +36,7 @@ const WorkflowCategory = () => {
     },
     {
       name: 'Status',
+      right: true,
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
@@ -158,6 +159,7 @@ const WorkflowCategory = () => {
           fixedHeader
           columns={columns}
           data={categoriesData || []}
+          noDataComponent={"sdgasdfsdfg"}
         />
       )}
     </Column>
