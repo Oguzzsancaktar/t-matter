@@ -5,7 +5,7 @@ const createTimeLog = data => {
 }
 
 const getLogsByUserId = userId => {
-  return TimeLog.find({ userId }).populate('owner').lean().exec()
+  return TimeLog.find({ owner: userId }).populate('owner').lean().exec()
 }
 
 module.exports = {

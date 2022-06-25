@@ -5,8 +5,8 @@ const { StatusCodes } = require('http-status-codes')
 const getUserTimeLogs = async (req, res) => {
   const { userId } = req.params
   try {
-    await dataAccess.timeLogDataAccess.getLogsByUserId(userId)
-    res.status(StatusCodes.OK)
+    const timeLogs = await dataAccess.timeLogDataAccess.getLogsByUserId(userId)
+    res.status(StatusCodes.OK).send(timeLogs)
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
   }
