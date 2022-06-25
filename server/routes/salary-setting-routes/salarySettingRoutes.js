@@ -9,12 +9,6 @@ router.post(
   controllers.salarySettingController.createSalarySetting
 )
 
-router.post(
-  '/:userId',
-  middlewares.validations.salarySettingValidations.createSalarySettingValidation,
-  controllers.salarySettingController.createSalarySetting
-)
-
 router.patch(
   '/',
   middlewares.validations.salarySettingValidations.updateSalarySettingValidation,
