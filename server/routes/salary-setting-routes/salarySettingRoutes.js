@@ -9,6 +9,12 @@ router.post(
   controllers.salarySettingController.createSalarySetting
 )
 
+router.post(
+  '/:userId',
+  middlewares.validations.salarySettingValidations.createSalarySettingValidation,
+  controllers.salarySettingController.createSalarySetting
+)
+
 router.patch(
   '/',
   middlewares.validations.salarySettingValidations.updateSalarySettingValidation,
@@ -16,5 +22,11 @@ router.patch(
 )
 
 router.get('/', controllers.salarySettingController.getSalarySetting)
+
+router.get(
+  '/:userId',
+  middlewares.validations.salarySettingValidations.getUserSalarySettingValidation,
+  controllers.salarySettingController.getSalarySetting
+)
 
 module.exports = router

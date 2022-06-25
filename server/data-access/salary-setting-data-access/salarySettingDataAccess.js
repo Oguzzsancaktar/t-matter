@@ -8,17 +8,25 @@ const updateSalarySetting = (id, data) => {
   return SalarySetting.findByIdAndUpdate(id, data, { new: true })
 }
 
-const findSalarySettingCount = () => {
-  return SalarySetting.countDocuments()
+const findDefaultSalarySettingCount = () => {
+  return SalarySetting.find({ owner: { $exists: false } }).countDocuments()
 }
 
-const findSalarySetting = () => {
-  return SalarySetting.find().select({'payrollIncreases._id': 0, __v: 0}).lean().exec()
+const findDefaultSalarySetting = () => {
+  return SalarySetting.findOne({ owner: { $exists: false } })
+    .select({ 'payrollIncreases._id': 0, __v: 0 })
+    .lean()
+    .exec()
+}
+
+const findSalarySettingByUserId = userId => {
+  return SalarySetting.findOne({ owner: userId }).select({ 'payrollIncreases._id': 0, __v: 0 }).lean().exec()
 }
 
 module.exports = {
   createSalarySetting,
   updateSalarySetting,
-  findSalarySettingCount,
-  findSalarySetting
+  findDefaultSalarySettingCount,
+  findDefaultSalarySetting,
+  findSalarySettingByUserId
 }

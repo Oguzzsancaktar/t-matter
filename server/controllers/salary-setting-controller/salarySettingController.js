@@ -2,13 +2,17 @@ const dataAccess = require('../../data-access')
 const utils = require('../../utils')
 
 const createSalarySetting = async (req, res) => {
+  const { userId } = req.params
   const { body } = req
+
   try {
-    const count = await dataAccess.salarySettingDataAccess.findSalarySettingCount()
-    if (count) {
-      return res.status(400).json(utils.errorUtils.errorInstance({ message: 'You can not create second setting!' }))
+    if (!userId) {
+      const count = await dataAccess.salarySettingDataAccess.findDefaultSalarySettingCount()
+      if (count) {
+        return res.status(400).json(utils.errorUtils.errorInstance({ message: 'You can not create second setting!' }))
+      }
     }
-    await dataAccess.salarySettingDataAccess.createSalarySetting(body)
+    await dataAccess.salarySettingDataAccess.createSalarySetting(userId ? { ...body, owner: userId } : body)
     res.sendStatus(201)
   } catch (e) {
     console.log(e)
@@ -28,8 +32,12 @@ const updateSalarySetting = async (req, res) => {
 }
 
 const getSalarySetting = async (req, res) => {
+  const { userId } = req.params
   try {
-    const [salarySetting] = await dataAccess.salarySettingDataAccess.findSalarySetting()
+    let salarySetting = await dataAccess.salarySettingDataAccess.findSalarySettingByUserId(userId)
+    if (!salarySetting) {
+      salarySetting = await dataAccess.salarySettingDataAccess.findDefaultSalarySetting()
+    }
     if (!salarySetting) {
       res.status(404).json(utils.errorUtils.errorInstance({ message: 'Salary setting not found!' }))
       return
