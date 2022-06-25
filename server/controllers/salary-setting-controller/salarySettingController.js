@@ -1,18 +1,41 @@
 const dataAccess = require('../../data-access')
 const utils = require('../../utils')
+const { StatusCodes } = require('http-status-codes')
 
 const createSalarySetting = async (req, res) => {
   const { body } = req
+
   try {
-    const count = await dataAccess.salarySettingDataAccess.findSalarySettingCount()
+    const count = await dataAccess.salarySettingDataAccess.findDefaultSalarySettingCount()
     if (count) {
-      return res.status(400).json(utils.errorUtils.errorInstance({ message: 'You can not create second setting!' }))
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json(utils.errorUtils.errorInstance({ message: 'You can not create second setting!' }))
     }
     await dataAccess.salarySettingDataAccess.createSalarySetting(body)
-    res.sendStatus(201)
+    res.sendStatus(StatusCodes.CREATED)
   } catch (e) {
     console.log(e)
-    res.status(500).json(utils.errorUtils.errorInstance({ message: 'Creation not saved!' }))
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(utils.errorUtils.errorInstance({ message: 'Creation not saved!' }))
+  }
+}
+
+const patchUserSalarySetting = async (req, res) => {
+  const { userId } = req.params
+  const { body } = req
+  const userSalarySetting = await dataAccess.salarySettingDataAccess.findUserSalarySetting(userId)
+  if (!userSalarySetting) {
+    await dataAccess.salarySettingDataAccess.createSalarySetting({ ...body, owner: userId })
+    return res.sendStatus(StatusCodes.CREATED)
+  }
+  await dataAccess.salarySettingDataAccess.updateSalarySetting(userSalarySetting._id, body)
+  res.sendStatus(StatusCodes.OK)
+  try {
+  } catch (e) {
+    console.log(e)
+    res.status(500).json(utils.errorUtils.errorInstance({ message: 'Creation not saved for user' }))
   }
 }
 
@@ -20,29 +43,38 @@ const updateSalarySetting = async (req, res) => {
   const { body } = req
   try {
     const newSalarySetting = await dataAccess.salarySettingDataAccess.updateSalarySetting(body._id, body)
-    res.status(200).json(newSalarySetting)
+    res.status(StatusCodes.OK).json(newSalarySetting)
   } catch (e) {
     console.log(e)
-    res.status(500).json(utils.errorUtils.errorInstance({ message: 'Creation not saved!' }))
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(utils.errorUtils.errorInstance({ message: 'Creation not saved!' }))
   }
 }
 
 const getSalarySetting = async (req, res) => {
+  const { userId } = req.params
   try {
-    const [salarySetting] = await dataAccess.salarySettingDataAccess.findSalarySetting()
+    let salarySetting = await dataAccess.salarySettingDataAccess.findSalarySettingByUserId(userId)
     if (!salarySetting) {
-      res.status(404).json(utils.errorUtils.errorInstance({ message: 'Salary setting not found!' }))
+      salarySetting = await dataAccess.salarySettingDataAccess.findDefaultSalarySetting()
+    }
+    if (!salarySetting) {
+      res.status(StatusCodes.NOT_FOUND).json(utils.errorUtils.errorInstance({ message: 'Salary setting not found!' }))
       return
     }
     res.status(200).json(salarySetting)
   } catch (e) {
     console.log(e)
-    res.status(500).json(utils.errorUtils.errorInstance({ message: 'internal server error' }))
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(utils.errorUtils.errorInstance({ message: 'internal server error' }))
   }
 }
 
 module.exports = {
   createSalarySetting,
   getSalarySetting,
-  updateSalarySetting
+  updateSalarySetting,
+  patchUserSalarySetting
 }
