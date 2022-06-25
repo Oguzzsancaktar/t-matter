@@ -5,6 +5,7 @@ const roleController = require('./role-controller/roleController')
 const userController = require('./user-controller/userController')
 const workflowController = require('./workflow-controller/workflowController')
 const dynamicVariableController = require('./dynamic-variables-controller/dynamicVariablesController')
+const timeLogController = require('./time-log-controller/timeLogController')
 
 module.exports = {
   salarySettingController,
@@ -13,5 +14,6 @@ module.exports = {
   roleController,
   userController,
   workflowController,
-  dynamicVariableController
+  dynamicVariableController,
+  timeLogController
 }

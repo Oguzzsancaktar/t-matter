@@ -9,6 +9,7 @@ const roleRoutes = require('./role-routes/roleRoutes')
 const userRoutes = require('./user-routes/userRoutes')
 const workflowRoutes = require('./workflow-routes/workflowRoutes')
 const dynamicVariableRoutes = require('./dynamic-variable-routes/dynamicVariableRoutes')
+const timeLogRoutes = require('./time-log-routes/timeLogRoutes')
 
 router.get('/hello', (req, res) => {
   res.send('hello')
@@ -19,7 +20,7 @@ router.use('/salarySetting', salarySettingRoutes)
 router.use('/companyPricing', companyPricingRoutes)
 router.use('/role', roleRoutes)
 router.use('/user', userRoutes)
-
+router.use('/time-log', timeLogRoutes)
 router.use('/workflow', workflowRoutes)
 router.use('/dynamic-variables', dynamicVariableRoutes)
 

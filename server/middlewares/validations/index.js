@@ -6,6 +6,7 @@ const roleValidations = require('./role-validations/roleValidations')
 const workflowValidations = require('./workflow-validations/workflowValidations')
 const generalValidations = require('./common/generalValidations')
 const dynamicVariableValidations = require('./dynamic-variable-validations/dynamicVariableValidations')
+const timeLogValidations = require('./time-log-validations/timeLogValidations')
 
 module.exports = {
   authValidations,
@@ -15,5 +16,6 @@ module.exports = {
   roleValidations,
   workflowValidations,
   generalValidations,
-  dynamicVariableValidations
+  dynamicVariableValidations,
+  timeLogValidations
 }
