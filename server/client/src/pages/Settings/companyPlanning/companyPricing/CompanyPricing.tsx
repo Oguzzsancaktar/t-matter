@@ -234,8 +234,10 @@ const CompanyPricing = () => {
   return (
     <JustifyBetweenRow height="100%" width="auto">
       <Column height="100%" width="30%">
-        <Row margin="0 0 2rem 0">
-          <H1>Default</H1>
+        <Row margin="0 0 1rem 0">
+          <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
+            Default
+          </H1>
         </Row>
 
         <JustifyBetweenColumn height="100%">
@@ -277,15 +279,17 @@ const CompanyPricing = () => {
       </Column>
 
       <Column height="100%" margin="0px 2rem" width="40%">
-        <Row margin="0 0 2rem 0">
-          <H1>Default</H1>
+        <Row margin="0 0 1rem 0">
+          <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
+            Default
+          </H1>
         </Row>
         <JustifyBetweenColumn height="100%">
           {dayOfWeek.map((day, index) => (
             <Row key={index}>
               <Column height="100%">
                 {index === 0 && (
-                  <Label fontSize="12px" color={colors.black.middle}>
+                  <Label fontSize="1rem" color={colors.text.primary}>
                     Day
                   </Label>
                 )}
@@ -300,7 +304,7 @@ const CompanyPricing = () => {
 
               <Column margin="0 0.25rem 0 0">
                 {index === 0 && (
-                  <Label fontSize="12px" color={colors.black.middle}>
+                  <Label fontSize="1rem" color={colors.text.primary}>
                     Start Time
                   </Label>
                 )}
@@ -313,7 +317,7 @@ const CompanyPricing = () => {
               </Column>
               <Column margin="0 0.25rem">
                 {index === 0 && (
-                  <Label fontSize="12px" color={colors.black.middle}>
+                  <Label fontSize="1rem" color={colors.text.primary}>
                     End Time
                   </Label>
                 )}
@@ -327,7 +331,7 @@ const CompanyPricing = () => {
 
               <Column height="100%" margin="0 0 0 0.25rem">
                 {index === 0 && (
-                  <Label fontSize="12px" color={colors.black.middle}>
+                  <Label fontSize="1rem" color={colors.text.primary}>
                     Off tracking time
                   </Label>
                 )}
@@ -379,10 +383,12 @@ const CompanyPricing = () => {
       </Column>
 
       <Column height="100%" width="30%">
-        <Row margin="0 0 2rem 0">
-          <H1>Summary</H1>
+        <Row margin="0 0 1rem 0">
+          <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
+            Summary
+          </H1>
         </Row>
-        <JustifyBetweenColumn height="calc(100% - 1rem - 40px - 2rem - 18px)">
+        <JustifyBetweenColumn height="100%">
           <SummaryCard
             body={
               <CompanyPricingSummaryBody

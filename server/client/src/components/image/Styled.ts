@@ -1,3 +1,4 @@
+import colors from '@/constants/colors'
 import { IComponentProps } from '@models/index'
 import styled from 'styled-components'
 
@@ -8,7 +9,7 @@ export const ImageContainer = styled.div<IComponentProps>`
   margin: ${({ margin }) => (margin ? margin : '0')};
   padding: ${({ padding }) => (padding ? padding : ' 0.4rem')};
   border-radius: 0.3rem;
-  border: 1px solid red;
+  border: 1px solid ${colors.white.primary};
 `
 
 export const RemoveButton = styled.button`

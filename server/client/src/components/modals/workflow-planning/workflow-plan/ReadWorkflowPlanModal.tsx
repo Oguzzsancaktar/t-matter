@@ -1,171 +1,146 @@
 import React, { useEffect, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
-import { Column, Row } from '@/components/layout'
+import { Column, JustifyBetweenRow, Row } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
 import { ModalBody } from '../../types'
-import { SummaryCard } from '@/components/card'
+import { InfoCard, SummaryCard } from '@/components/card'
 import WorkflowPlanStepNavigation from '@/pages/Settings/workflow-planning/plan/WorkflowPlanStepNavigation'
-import { ITaskCreateDTO, IWorkflow, IWorkflowCreateDTO } from '@/models'
+import { EStatus, ITaskCreateDTO, IWorkflow } from '@/models'
 import { Button } from '@/components/button'
 import colors from '@/constants/colors'
-import { useCreatePlanMutation } from '@/services/settings/workflow-planning/workflowService'
+import {
+  usePatchWorkflowPlanMutation,
+  useGetChecklistsQuery
+} from '@/services/settings/workflow-planning/workflowService'
 import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import useAccessStore from '@/hooks/useAccessStore'
-import { isValueNull } from '@/utils/validationUtils'
+import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
+import { H1 } from '@/components/texts'
+import { Badge } from '@/components/badge'
+import { selectColorForStatus } from '@/utils/statusColorUtil'
 
 interface IProps {
   workflow: IWorkflow
 }
 
 const ReadWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
-  const { useAppDispatch } = useAccessStore()
-  const dispatch = useAppDispatch()
+  // const calculateWorkflowTotals = () => {
+  //   const dataInstance: IWorkflowReadDTO = { ...readWorkflowData }
+  //   let totalDuration = 0
+  //   let totalPrice = 0
 
-  const [activeStep, setActiveStep] = useState<number>(0)
-  const [createPlan] = useCreatePlanMutation()
+  //   console.log(dataInstance.steps)
+  //   dataInstance.steps.forEach(task => {
+  //     console.log(task)
+  //     task.checklistItems.forEach(checklist => {
+  //       totalDuration += checklist.duration
+  //       totalPrice += checklist.price
+  //     })
+  //   })
 
-  const initialTask: ITaskCreateDTO = {
-    expireDuration: 0,
-    postponeTime: 0,
-    category: {
-      _id: '-1',
-      name: 'Select Value'
-    },
-    location: {
-      _id: '-1',
-      name: 'Select Value'
-    },
-    responsibleUser: {
-      _id: '-1',
-      firstname: 'First Name',
-      lastname: 'Last Name'
-    },
-    tabs: [],
-    checklistItems: [],
-    stepColor: ''
-  }
+  //   dataInstance.duration = totalDuration
+  //   dataInstance.price = totalPrice
 
-  const [createWorkflowData, setCreateWorkflowData] = useState<IWorkflowCreateDTO>({
-    name: '',
-    steps: [{ ...initialTask }],
-    duration: 0,
-    price: 0
-  })
-
-  const initialErrors = {
-    nameError: false,
-    durationError: false,
-    priceError: false,
-    expireDurationError: false,
-    postponeTimeError: false,
-    categoryError: false,
-    locationError: false,
-    responsibleUserError: false,
-    tabsError: false,
-    checklistItemsError: false,
-    stepColorError: false
-  }
-  const [errorStep, setErrorStep] = useState(0)
-  const [validationError, setValidationErrors] = useState({ ...initialErrors })
-  const [validationErrorMessage, setValidationErrorMessage] = useState<string>('')
-
-  const handleWorkflowNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCreateWorkflowData({ ...createWorkflowData, name: event.target.value })
-  }
-
-  const handleNewStep = () => {
-    setCreateWorkflowData({
-      ...createWorkflowData,
-      steps: [...createWorkflowData.steps, initialTask]
-    })
-
-    setActiveStep(createWorkflowData.steps.length)
-  }
-
-  const handleDataChange = (taskStep: ITaskCreateDTO) => {
-    const stepsInstance = [...createWorkflowData.steps]
-    stepsInstance[activeStep] = taskStep
-    const updatedData = {
-      ...createWorkflowData,
-      steps: stepsInstance
-    }
-    setCreateWorkflowData(updatedData)
-  }
-
-  const validateFieldValues = () => {
-    if (!isValueNull(createWorkflowData.name)) {
-      setValidationErrors({ ...initialErrors, nameError: true })
-      setValidationErrorMessage('Please enter valid workflow name')
-      return false
-    }
-
-    return true
-  }
-
-  const handleSubmit = async () => {
-    const validationResult = validateFieldValues()
-
-    if (validationResult) {
-      try {
-        await createPlan(createWorkflowData)
-        toastSuccess(`Workflow plan ${createWorkflowData.name} created successfully`)
-        dispatch(closeModal('createWorkflowPlanModal'))
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  }
-
-  useEffect(() => {
-    toastError(validationErrorMessage)
-  }, [validationErrorMessage])
+  //   setReadWorkflowData(dataInstance)
+  // }
 
   return (
     <ModalBody minHeight="700px">
-      <Row height="100%">
-        <ItemContainer height="100%" width="300px">
-          <WorkflowPlanStepNavigation
-            data={createWorkflowData}
-            activeStep={activeStep}
-            addNewStep={handleNewStep}
-            onStepChange={setActiveStep}
-            onWfNameChange={handleWorkflowNameChange}
-            workflowNameValidation={validationError.nameError}
-          />
+      <Column>
+        <ItemContainer margin="0 0 1rem 0">
+          <InfoCard>
+            <ItemContainer margin="0 0 1rem 0">
+              <JustifyBetweenRow>
+                <H1>Workflow Name</H1>
+                <H1>{workflow.name}</H1>
+              </JustifyBetweenRow>
+            </ItemContainer>
+
+            <ItemContainer margin="0 0 1rem 0">
+              <JustifyBetweenRow>
+                <H1>Workflow Duration</H1>
+                <H1>{workflow.duration}</H1>
+              </JustifyBetweenRow>
+            </ItemContainer>
+
+            <ItemContainer margin="0 0 1rem 0">
+              <JustifyBetweenRow>
+                <H1>Workflow Price</H1>
+                <H1>{workflow.price}</H1>
+              </JustifyBetweenRow>
+            </ItemContainer>
+
+            <ItemContainer margin="0 0 1rem 0">
+              <JustifyBetweenRow>
+                <H1>Workflow Status</H1>
+                <Badge color={selectColorForStatus(workflow.status || 0)}>{EStatus[workflow.status || 0]}</Badge>
+              </JustifyBetweenRow>
+            </ItemContainer>
+          </InfoCard>
         </ItemContainer>
 
-        <ItemContainer height="100%" width="calc(100% - 300px)">
-          <Row height="100%">
-            <ItemContainer height="100%" width="calc(100% - 350px)">
-              <WorkflowPlanForm
-                activeStep={activeStep}
-                onDataChange={handleDataChange}
-                data={createWorkflowData.steps[activeStep]}
-              />
-            </ItemContainer>
-            <ItemContainer height="100%" width="350px">
-              <Column height="100%">
+        {workflow.steps.map(step => (
+          <ItemContainer margin="0 0 1rem 0 " height="100%" width="100%">
+            <InfoCard>
+              <Column>
+                <ItemContainer margin="0 0 1rem 0">
+                  <JustifyBetweenRow>
+                    <H1>Task Category</H1>
+                    <H1>{step.category.name}</H1>
+                  </JustifyBetweenRow>
+                </ItemContainer>
+                <ItemContainer margin="0 0 1rem 0">
+                  <JustifyBetweenRow>
+                    <H1>Task Expire Duration</H1>
+                    <H1>{step.expireDuration}</H1>
+                  </JustifyBetweenRow>
+                </ItemContainer>
+                <ItemContainer margin="0 0 1rem 0">
+                  <JustifyBetweenRow>
+                    <H1>Task Location</H1>
+                    <H1>{step.location.name}</H1>
+                  </JustifyBetweenRow>
+                </ItemContainer>
+                <ItemContainer margin="0 0 1rem 0">
+                  <JustifyBetweenRow>
+                    <H1>Task Postpone Time</H1>
+                    <H1>{step.postponeTime}</H1>
+                  </JustifyBetweenRow>
+                </ItemContainer>
+                <ItemContainer margin="0 0 1rem 0">
+                  <JustifyBetweenRow>
+                    <H1>Task Responsible User</H1>
+                    <H1>{step.responsibleUser.firstname + ' ' + step.responsibleUser.lastname}</H1>
+                  </JustifyBetweenRow>
+                </ItemContainer>
+                <ItemContainer margin="0 0 1rem 0">
+                  <JustifyBetweenRow>
+                    <H1>Task Color</H1>
+                    <H1>{step.stepColor}</H1>
+                  </JustifyBetweenRow>
+                </ItemContainer>
+                <ItemContainer margin="0 0 1rem 0">
+                  <JustifyBetweenRow>
+                    <H1>Task Tabs</H1>
+                    {step.tabs.map(tab => (
+                      <Badge color={colors.blue.primary}>
+                        <H1>{tab}</H1>
+                      </Badge>
+                    ))}
+                  </JustifyBetweenRow>
+                </ItemContainer>
                 <ItemContainer height="calc(100% - 35px - 0.5rem)">
                   <SummaryCard
-                    body={
-                      <WorkflowPlanSummaryBody checklistData={createWorkflowData.steps[activeStep].checklistItems} />
-                    }
-                    footer={
-                      <WorkflowPlanSummaryFooter checklistIdArr={createWorkflowData.steps[activeStep].checklistItems} />
-                    }
+                    body={<WorkflowPlanSummaryBody checklistData={step.checklistItems} />}
+                    footer={<WorkflowPlanSummaryFooter checklistIdArr={step.checklistItems} />}
                   />
                 </ItemContainer>
-                <ItemContainer height="35px" margin="0.5rem 0 0 0">
-                  <Button onClick={handleSubmit} color={colors.blue.primary}>
-                    Submit
-                  </Button>
-                </ItemContainer>
               </Column>
-            </ItemContainer>
-          </Row>
-        </ItemContainer>
-      </Row>
+            </InfoCard>
+          </ItemContainer>
+        ))}
+      </Column>
     </ModalBody>
   )
 }

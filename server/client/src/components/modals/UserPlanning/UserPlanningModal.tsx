@@ -16,7 +16,7 @@ const CompanyPlanningModal = () => {
             <JustifyCenterRow>
               <Tab
                 margin="0 1rem 0 0rem"
-                index={1}
+                index={0}
                 name="User Role Settings"
                 isActive={activeTab === 'user-role-settings'}
                 onClick={() => setActiveTab('user-role-settings')}
@@ -24,7 +24,7 @@ const CompanyPlanningModal = () => {
 
               <Tab
                 margin="0 1rem 0 0rem"
-                index={2}
+                index={1}
                 name="User Settings"
                 isActive={activeTab === 'user-page-settings'}
                 onClick={() => setActiveTab('user-page-settings')}

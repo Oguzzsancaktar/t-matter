@@ -6,9 +6,9 @@ const CustomerSettings = () => {
   const [activeTab, setActiveTab] = useState('reffered-by')
 
   return (
-    <Column>
-      <Row>
-        <Column width="200px">
+    <Column height="100%">
+      <Row height="100%">
+        <Column height="100%" width="200px">
           <Tab
             margin="0 0 1rem 0rem"
             index={0}
@@ -39,7 +39,7 @@ const CustomerSettings = () => {
           />
         </Column>
 
-        <Column>
+        <Column height="100%">
           {activeTab === 'reffered-by' ? (
             <RefferedByTab />
           ) : activeTab === 'client-type' ? (

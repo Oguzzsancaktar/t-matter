@@ -3,11 +3,13 @@ import { JustifyBetweenRow, Row } from '@/components/layout'
 import { InputRegular, SelectInput } from '@/components/input'
 import { Button } from '@/components/button'
 import { Upload } from 'react-feather'
+import { IOption } from '@/models'
 
 interface IProps {
+  status?: IOption
   handleAddNew?: (a?: any, b?: any) => void
 }
-const DataTableHeader: React.FC<IProps> = ({ handleAddNew }) => {
+const DataTableHeader: React.FC<IProps> = ({ status, handleAddNew }) => {
   return (
     <JustifyBetweenRow margin="0 0 0.5rem 0">
       <Row>
@@ -28,7 +30,9 @@ const DataTableHeader: React.FC<IProps> = ({ handleAddNew }) => {
           <SelectInput
             name="status"
             onChange={() => console.log('onchange triggerd')}
+            selectedOption={[status || { value: 'all', label: 'All' }]}
             options={[
+              { value: 'all', label: 'All' },
               { value: 'active', label: 'Active' },
               { value: 'inactive', label: 'Inactive' }
             ]}

@@ -1,6 +1,6 @@
 import React from 'react'
 import colors from '@/constants/colors'
-import { Column, ItemContainer, Row } from '@components/index'
+import { Column, ItemContainer, Label, Row } from '@components/index'
 import styled from 'styled-components'
 import { Input } from './styled'
 
@@ -15,12 +15,6 @@ interface IProps {
   margin?: string
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
-
-const Label = styled.label`
-  width: 100%;
-  text-align: start;
-  margin-bottom: 0.4rem;
-`
 
 const InputRegular: React.FC<IProps> = ({
   placeholder,

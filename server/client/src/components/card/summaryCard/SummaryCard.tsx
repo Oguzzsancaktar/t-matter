@@ -20,6 +20,7 @@ const SummaryCardBody = styled.div`
   background-color: ${colors.white.bg};
   margin: 1rem;
   padding: 1rem;
+  color: ${colors.gray.light};
 `
 
 const SummaryCardFooter = styled.div`
@@ -29,6 +30,7 @@ const SummaryCardFooter = styled.div`
   padding: 0 2rem;
   width: 100%;
   height: 50px;
+  color: ${colors.gray.light};
 `
 
 const SummaryCard: React.FC<IProps> = ({ body, footer }) => {

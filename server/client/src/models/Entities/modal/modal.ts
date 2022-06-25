@@ -4,4 +4,5 @@ export default interface IModal {
   title: string | React.ReactNode
   body: React.ReactNode | string
   size: ESize
+  backgroundColor?: string
 }

@@ -214,7 +214,7 @@ const patchWorkflowPlan = (builder: IBuilder) => {
       return {
         url: `/workflow/plan/${dto._id}`,
         method: 'PATCH',
-        data: { name: dto.name }
+        data: { name: dto.name, duration: dto.duration, price: dto.price, steps: dto.steps }
       }
     },
     invalidatesTags(result) {

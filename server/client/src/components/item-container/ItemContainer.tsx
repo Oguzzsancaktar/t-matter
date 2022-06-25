@@ -8,6 +8,10 @@ interface IProps extends IComponentProps {
   overflow?: string
   maxWidth?: string
   minHeight?: string
+  borderTop?: string
+  borderRight?: string
+  borderBottom?: string
+  borderLeft?: string
 }
 
 const Item = styled.div<IProps>`
@@ -21,6 +25,10 @@ const Item = styled.div<IProps>`
   cursor: ${({ cursorType }) => (cursorType ? cursorType : '')};
   max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : '')};
   min-height: ${({ minHeight }) => (minHeight ? minHeight : '')};
+  border-top: ${({ borderTop }) => (borderTop ? borderTop : '')};
+  border-right: ${({ borderRight }) => (borderRight ? borderRight : '')};
+  border-bottom: ${({ borderBottom }) => (borderBottom ? borderBottom : '')};
+  border-left: ${({ borderLeft }) => (borderLeft ? borderLeft : '')};
 `
 
 const ItemContainer: React.FC<IProps> = ({ children, ...rest }) => {

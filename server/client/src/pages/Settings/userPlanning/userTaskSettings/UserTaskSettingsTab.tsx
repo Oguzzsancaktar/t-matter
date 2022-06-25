@@ -18,7 +18,7 @@ const UserTaskSettingsTab = () => {
         <Column width="200px">
           <Tab
             margin="0 0 1rem 0rem"
-            index={1}
+            index={0}
             name="Task Category"
             isActive={activeTab === 'task-category'}
             onClick={() => setActiveTab('task-category')}
@@ -26,7 +26,7 @@ const UserTaskSettingsTab = () => {
 
           <Tab
             margin="0 0 1rem 0rem"
-            index={2}
+            index={1}
             name="Task Title"
             isActive={activeTab === 'task-title'}
             onClick={() => setActiveTab('task-title')}
@@ -34,7 +34,7 @@ const UserTaskSettingsTab = () => {
 
           <Tab
             margin="0 0 1rem 0rem"
-            index={3}
+            index={2}
             name="Task Name"
             isActive={activeTab === 'task-name'}
             onClick={() => setActiveTab('task-name')}

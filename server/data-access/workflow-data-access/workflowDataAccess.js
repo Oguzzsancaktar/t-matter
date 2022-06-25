@@ -7,7 +7,7 @@ const createWorkflowCategory = data => {
 }
 
 const getWorkflowCategories = (query = {}, populate = '') => {
-  return WorkflowCategory.find(query).populate(populate).lean().exec()
+  return WorkflowCategory.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
 }
 
 const findWorkflowCategoryById = (id, populate = '') => {
@@ -24,7 +24,7 @@ const createWorkflowChecklist = data => {
 }
 
 const getWorkflowChecklists = (query = {}, populate = '') => {
-  return WorkflowChecklist.find(query).populate(populate).lean().exec()
+  return WorkflowChecklist.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
 }
 
 const findWorkflowChecklistById = (id, populate = '') => {
@@ -41,7 +41,7 @@ const createWorkflowPlan = data => {
 }
 
 const getWorkflowPlans = (query = {}, populate = '') => {
-  return WorkflowPlan.find(query).populate(populate).lean().exec()
+  return WorkflowPlan.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
 }
 
 const findWorkflowPlanById = (id, populate = '') => {

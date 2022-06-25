@@ -21,7 +21,7 @@ export const Container = styled.div<IContainerProps>`
   width: calc(100% - 4rem);
   height: auto;
   /* min-height: ${({ size }) => (size === 'xl' ? '800' : size === 'lg' ? '700' : size === 'md' ? '900' : '500')}px; */
-  background-color: white;
+  background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
   border-radius: 0.3rem;
   max-width: ${({ size }) =>
     size === 'xl' ? '2000' : size === 'lg' ? '1200' : size === 'md' ? '900' : size === 'sm' ? '600' : '100'}px;

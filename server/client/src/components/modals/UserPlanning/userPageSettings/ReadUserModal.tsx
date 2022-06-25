@@ -121,24 +121,24 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
   }
 
   return (
-    <InnerWrapper>
+    <ItemContainer borderRadius="0.3rem" overflow="hidden" backgroundColor="transparent">
       <JustifyBetweenRow height="100%">
-        <ItemContainer width="350px" height="100%">
+        <ItemContainer width="350px" height="100%" backgroundColor={colors.white.secondary}>
           {isUserDataLoading || !userData || isUserDataError ? (
             <div>Loading...</div>
           ) : (
-            <JustifyBetweenColumn height="100%" padding="1rem 0">
+            <JustifyBetweenColumn height="100%" padding="1rem">
               <ItemContainer height="150px">
                 <JustifyBetweenColumn>
                   <ItemContainer>
                     <JustifyCenterColumn>
                       <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
-                      <H1 margin="0.5rem 0" textAlign="center">
+                      <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
                         {userData.firstname + ' ' + userData.lastname}
                       </H1>
                     </JustifyCenterColumn>
                   </ItemContainer>
-                  <ItemContainer>
+                  <ItemContainer borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
                     <JustifyCenterRow>
                       <ItemContainer width="auto" margin="0 0.5rem 0 0">
                         <Badge children={userData.role.name} color={colors.gray.dark} />
@@ -151,7 +151,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                 </JustifyBetweenColumn>
               </ItemContainer>
 
-              <ItemContainer margin="1rem 0" height="calc(100% - 1rem - 1rem - 150px - 40px)">
+              <ItemContainer padding="1rem 0" height="calc(100% - 1rem - 1rem - 150px - 40px - 1rem)">
                 <JustifyBetweenColumn>
                   <ItemContainer margin="1rem 0">
                     <JustifyBetweenRow>
@@ -235,10 +235,12 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                 </JustifyBetweenColumn>
               </ItemContainer>
 
-              <ItemContainer height="40px">
-                <JustifyCenterColumn>
+              <ItemContainer height="40px" borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
+                <JustifyCenterColumn width="100%">
                   <ActionButtons
+                    rowWidth="100%"
                     iconSize="30px"
+                    buttonWidth="100%"
                     status={userData.status}
                     onRead={() => handleRead(userData!)}
                     onEdit={() => handleEdit(userData!)}
@@ -254,7 +256,13 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
           )}
         </ItemContainer>
 
-        <ItemContainer height="100%" width="120px" padding="1rem" backgroundColor={colors.gray.primary}>
+        <ItemContainer
+          height="100%"
+          width="120px"
+          padding="1rem"
+          borderRadius="0.3rem"
+          backgroundColor={colors.white.secondary}
+        >
           <JustifyBetweenColumn height="100%">
             <ItemContainer height="100%" margin="0 0 1rem 0">
               <Button color={colors.gray.secondary} onClick={() => setActiveTab('log-in')}>
@@ -272,11 +280,17 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             </ItemContainer>
           </JustifyBetweenColumn>
         </ItemContainer>
-        <ItemContainer minHeight="700px" height="inherit" width="calc(100% - 120px - 350px)">
+        <ItemContainer
+          minHeight="700px"
+          height="inherit"
+          width="calc(100% - 120px - 350px - 2rem)"
+          backgroundColor={colors.white.secondary}
+          padding="1rem 0"
+        >
           {renderSwitch()}
         </ItemContainer>
       </JustifyBetweenRow>
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

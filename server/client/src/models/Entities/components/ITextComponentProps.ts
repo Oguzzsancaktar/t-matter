@@ -3,6 +3,7 @@ export default interface ITextComponentProps {
   color?: string
   textAlign?: string
   fontSize?: string
+  fontWeight?: string
   margin?: string
   padding?: string
   height?: string

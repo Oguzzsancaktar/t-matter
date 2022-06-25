@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   ColorSelect,
@@ -17,9 +17,10 @@ import { useGetLocationsQuery } from '@/services/settings/company-planning/dynam
 interface IProps {
   data: ITaskCreateDTO
   activeStep: number
+  errors: any
   onDataChange: (ITaskCreateDTO) => void
 }
-const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) => {
+const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery()
   const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
@@ -62,10 +63,17 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) 
 
   const handleChecklistChange = (options: IOption[]) => {
     const dataInstance = { ...data }
-    dataInstance.checklistItems = options.map((option: IOption) => ({
-      _id: option.value,
-      name: option.label
-    }))
+    const checklistIdArr = options.map(option => option.value)
+    let selectedChecklists: ITaskChecklist[] = []
+
+    if (checklistsData) {
+      checklistIdArr.forEach(id => {
+        const checklistDetail: ITaskChecklist[] = checklistsData.filter(checklist => checklist._id === id)
+        selectedChecklists = selectedChecklists.concat(checklistDetail)
+      })
+    }
+
+    dataInstance.checklistItems = selectedChecklists
     onDataChange(dataInstance)
   }
 
@@ -102,6 +110,7 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) 
                 }))}
                 onChange={handleCategoryChange}
                 isLoading={isCategoriesLoading}
+                validationError={errors.categoryError}
               />
             </ItemContainer>
 
@@ -114,6 +123,7 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) 
                 onChange={handleInputChange}
                 type="number"
                 value={data.expireDuration || ''}
+                validationError={errors.expireDurationError}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -137,6 +147,7 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) 
                 }))}
                 onChange={handleLocationChange}
                 isLoading={locationsDataIsLoading}
+                validationError={errors.locationError}
               />
             </ItemContainer>
 
@@ -149,6 +160,7 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) 
                 onChange={handleInputChange}
                 type="number"
                 value={data.postponeTime || ''}
+                validationError={errors.postponeTimeError}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -170,6 +182,7 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) 
             }))}
             onChange={handleUserChange}
             isLoading={isUsersDataLoading}
+            validationError={errors.responsibleUserError}
           />
         </ItemContainer>
 
@@ -187,6 +200,7 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) 
               value: tab
             }))}
             onChange={handleTabChange}
+            validationError={errors.tabsError}
           />
         </ItemContainer>
 
@@ -205,11 +219,17 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, activeStep, onDataChange }) 
               value: checklist._id
             }))}
             onChange={handleChecklistChange}
+            validationError={errors.checklistItemsError}
           />
         </ItemContainer>
 
         <ItemContainer>
-          <ColorSelect labelText="Task Step Color" value={data.stepColor} onClick={handleColorChange} />
+          <ColorSelect
+            labelText="Task Step Color"
+            value={data.stepColor}
+            onClick={handleColorChange}
+            validationError={errors.stepColorError}
+          />
         </ItemContainer>
       </JustifyBetweenColumn>
     </ItemContainer>

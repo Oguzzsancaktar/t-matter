@@ -26,7 +26,7 @@ const GlobalModal: React.FC<IProps> = ({ modal }) => {
 
   return (
     <Modal>
-      <Container size={modal?.size}>
+      <Container backgroundColor={modal.backgroundColor} size={modal?.size}>
         {modal?.body}
         <CloseButton onClick={handleModalClose}>
           <X color={colors.white.light} fontWeight="600" />
