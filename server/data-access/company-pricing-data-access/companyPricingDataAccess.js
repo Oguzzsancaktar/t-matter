@@ -30,7 +30,7 @@ const getPopulatedCompanyPricing = async () => {
 }
 
 const getCompanyPricing = () => {
-  return CompanyPricing.find().lean().exec()
+  return CompanyPricing.findOne()
 }
 
 module.exports = {

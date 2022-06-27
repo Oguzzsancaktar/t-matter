@@ -1,4 +1,5 @@
 const User = require('../../models/user')
+const { STATUS_TYPES } = require('../../constants/constants')
 
 const createUser = data => {
   return User.create(data)
@@ -41,10 +42,18 @@ const findUserWithFiltersAndPopulate = ({ search, size, status }) => {
   return User.aggregate(pipeline).exec()
 }
 
+const findUsersAndPopulateSalarySetting = () => {
+  return User.aggregate([
+    { $match: {} },
+    { $lookup: { from: 'salarysettings', localField: '_id', foreignField: 'owner', as: 'salarySetting' } }
+  ]).exec()
+}
+
 module.exports = {
   createUser,
   findByIdAndUpdateUser,
   findUserById,
   findUser,
-  findUserWithFiltersAndPopulate
+  findUserWithFiltersAndPopulate,
+  findUsersAndPopulateSalarySetting
 }

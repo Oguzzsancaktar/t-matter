@@ -1,5 +1,6 @@
 const dataAccess = require('../../data-access')
 const utils = require('../../utils')
+const calculateHourlyCompanyFee = require('../../helpers/calculateHourlyCompanyFee')
 
 const createCompanyPricing = async (req, res) => {
   const { body } = req
@@ -42,10 +43,12 @@ const getCompanyPricing = async (req, res) => {
     if (!companyPricing) {
       return res.status(404).json(utils.errorUtils.errorInstance({ message: 'Company Pricing not found' }))
     }
+    const summary = await calculateHourlyCompanyFee(companyPricing)
     res.status(200).json({
       ...companyPricing,
       workingSchedule: { ...companyPricing.workingSchedule, _id: undefined, __v: undefined },
-      _id: undefined
+      _id: undefined,
+      summary
     })
   } catch (error) {
     console.log(error)
@@ -53,8 +56,23 @@ const getCompanyPricing = async (req, res) => {
   }
 }
 
+const getCompanySummary = async (req, res) => {
+  try {
+    const companyPricing = await dataAccess.companyPricingDataAccess.getCompanyPricing()
+    if (!companyPricing) {
+      return res.status(404).json(utils.errorUtils.errorInstance({ message: 'Company Pricing not found' }))
+    }
+    const summary = await calculateHourlyCompanyFee(companyPricing)
+    res.status(200).json(summary)
+  } catch (e) {
+    console.log(e)
+    res.status(500).json(utils.errorUtils.errorInstance({ message: 'Error while getting company summary' }))
+  }
+}
+
 module.exports = {
   createCompanyPricing,
   updateCompanyPricing,
-  getCompanyPricing
+  getCompanyPricing,
+  getCompanySummary
 }

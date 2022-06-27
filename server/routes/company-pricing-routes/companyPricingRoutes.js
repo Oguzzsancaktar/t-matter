@@ -5,6 +5,8 @@ const controllers = require('../../controllers')
 
 router.get('/', controllers.companyPricingController.getCompanyPricing)
 
+router.get('/summary', controllers.companyPricingController.getCompanySummary)
+
 router.patch(
   '/',
   middlewares.validations.companyPricingValidations.updateCompanyPricing,
