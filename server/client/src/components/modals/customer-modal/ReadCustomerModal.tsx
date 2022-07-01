@@ -7,14 +7,14 @@ import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, JustifyCe
 import { H1, Label } from '@/components/texts'
 import { InnerWrapper } from '@/components/wrapper'
 import colors from '@/constants/colors'
-import { UserModalLogInTab, UserModalSettingsTab } from '@/pages'
+import { CustomerModalWorkflowTab, UserModalLogInTab, UserModalSettingsTab } from '@/pages'
 import React, { useState } from 'react'
 
 interface IProps {
-  userId: string
+  customerId: string
 }
 
-const UserReadModal: React.FC<IProps> = ({ userId }) => {
+const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
   const [activeTab, setActiveTab] = useState('activity')
 
   console.log(activeTab)
@@ -25,7 +25,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
       case 'calendar':
         return 'Calendar'
       case 'workflow':
-        return 'Workflow'
+        return <CustomerModalWorkflowTab customerId={customerId} />
       case 'file':
         return 'File'
       case 'Finance':
@@ -214,4 +214,4 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
   )
 }
 
-export default UserReadModal
+export default CustomerReadModal

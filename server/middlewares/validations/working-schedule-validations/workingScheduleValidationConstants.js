@@ -1,5 +1,6 @@
 const joi = require('joi')
 const DAYS = require('../../../constants/days')
+const PAYROLL = require('../../../constants/payroll')
 
 const workingDaySchema = joi.object().keys({
   startTime: joi.string(),

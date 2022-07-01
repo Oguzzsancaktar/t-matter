@@ -407,7 +407,7 @@ const CreateUserModal = () => {
                   name="gender"
                   // placeholder="Enter birth location..."
                   onChange={option => setCreateUserData({ ...createUserData, gender: option.value })}
-                  selectedOption={[{ label: EGender[+createUserData.gender], value: createUserData.gender }]}
+                  selectedOption={[{ label: EGender[createUserData.gender], value: createUserData.gender }]}
                   options={genderOptions}
                   labelText="Gender"
                   validationError={genderError}

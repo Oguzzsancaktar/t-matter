@@ -1,9 +1,13 @@
 import { Column, InnerWrapper, JustifyBetweenColumn, JustifyCenterRow, Tab } from '@/components'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
+import { IUser } from '@/models'
 import React, { useState } from 'react'
-import { UserModalSalarySettingsTab, UserModalLogInSettingsTab } from '../Settings'
+import { UserModalSalarySettingsTab, UserModalWorkingScheduleSettingsTab } from '../Settings'
 
-const UserModalSettingsTab = () => {
+interface IProps {
+  userId: IUser['_id']
+}
+const UserModalSettingsTab: React.FC<IProps> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState('salary-settings')
 
   return (
@@ -23,9 +27,9 @@ const UserModalSettingsTab = () => {
               <Tab
                 margin="0 1rem 0 0rem"
                 index={1}
-                name="Log In Settings"
-                isActive={activeTab === 'log-in-settings'}
-                onClick={() => setActiveTab('log-in-settings')}
+                name="Working Schedule Settings"
+                isActive={activeTab === 'working-schedule-settings'}
+                onClick={() => setActiveTab('working-schedule-settings')}
               />
             </JustifyCenterRow>
           </JustifyBetweenColumn>
@@ -34,9 +38,9 @@ const UserModalSettingsTab = () => {
       <ModalBody>
         <InnerWrapper>
           {activeTab === 'salary-settings' ? (
-            <UserModalSalarySettingsTab />
-          ) : activeTab === 'log-in-settings' ? (
-            <UserModalLogInSettingsTab />
+            <UserModalSalarySettingsTab userId={userId} />
+          ) : activeTab === 'working-schedule-settings' ? (
+            <UserModalWorkingScheduleSettingsTab userId={userId} />
           ) : (
             'hata'
           )}

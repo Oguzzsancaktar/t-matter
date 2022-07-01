@@ -19,7 +19,7 @@ import { SalarySettingsSummaryBody, SalarySettingsSummaryFooter } from '@/pages'
 import {
   useGetSalarySettingsQuery,
   usePatchSalarySettingsMutation
-} from '@/services/settings/company-planning/salarySettings'
+} from '@/services/settings/company-planning/salarySettingsService'
 import { ISalarySettings } from '@/models'
 import { toastSuccess } from '@/utils/toastUtil'
 import colors from '@/constants/colors'

@@ -40,7 +40,10 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
     state: user.state,
     zipcode: user.zipcode,
     address: user.address,
-    role: user.role._id,
+    role: {
+      _id: user.role[0]._id,
+      name: user.role[0].name
+    },
     gender: user.gender,
     status: user.status
   })
@@ -145,13 +148,13 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
       return false
     }
 
-    if (!isValueNull(updateUserData.role || '')) {
+    if (!isValueNull(updateUserData.role._id || '')) {
       setErrorMessage('Please select user role')
       setRoleError(true)
       return false
     }
 
-    if (!isValueNull(updateUserData.gender || '')) {
+    if (!isValueNull(updateUserData.gender.toString() || '')) {
       setErrorMessage('Please select user gender')
       setGenderError(true)
       return false
@@ -405,7 +408,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   // placeholder="Select your birthday..."
                   onChange={option => setUpdateUserData({ ...updateUserData, role: option.value })}
                   options={(roleData || []).map(role => ({ value: role._id, label: role.name }))}
-                  selectedOption={[{ label: updateUserData.role, value: updateUserData.role }]}
+                  selectedOption={[{ label: updateUserData.role.name, value: updateUserData.role._id }]}
                   labelText="Role"
                   validationError={roleError}
                 />

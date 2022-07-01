@@ -26,17 +26,18 @@ import {
   timeToSeconds
 } from '@/utils/timeUtils'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
-import { payrollDateOptions, payrollDayOptions, payrollPeriodOptions } from '@/constants/payrollOptions'
+import { payrollDateOptions, payrollDayOptions, payrollTypeOptions } from '@/constants/payrollOptions'
 import colors from '@/constants/colors'
 import {
   useGetCompanyPricingQuery,
   usePatchCompanyPricingMutation
-} from '@/services/settings/company-planning/companyPricing'
+} from '@/services/settings/company-planning/companyPricingService'
+import initialworkingSchedule from '@/constants/workingSchedule'
 
 const CompanyPricing = () => {
   const [totalMinutes, setTotalMinutes] = useState(0)
 
-  const [payrollPeriod, setPayrollPeriod] = useState<string>('monthly')
+  const [payrollType, setPayrollPeriod] = useState<string>('monthly')
   const [payrollDay, setPayrollDay] = useState(1)
 
   const [workDayInWeek, setWorkDayInWeek] = useState<number>(0)
@@ -46,48 +47,7 @@ const CompanyPricing = () => {
   const [specifiedCompanyProfitPercentage, setSpecifiedCompanyProfitPercentage] = useState<number | string>('')
 
   const [dailyWorkTimeData, setDailyWorkTimeData] = useState<IDailyWorkingHours>({
-    Monday: {
-      isChecked: true,
-      startTime: ETimes.startTime,
-      endTime: ETimes.endTime,
-      offTrackingTime: '00:00'
-    },
-    Tuesday: {
-      isChecked: true,
-      startTime: ETimes.startTime,
-      endTime: ETimes.endTime,
-      offTrackingTime: '00:00'
-    },
-    Wednesday: {
-      isChecked: true,
-      startTime: ETimes.startTime,
-      endTime: ETimes.endTime,
-      offTrackingTime: '00:00'
-    },
-    Thursday: {
-      isChecked: true,
-      startTime: ETimes.startTime,
-      endTime: ETimes.endTime,
-      offTrackingTime: '00:00'
-    },
-    Friday: {
-      isChecked: true,
-      startTime: ETimes.startTime,
-      endTime: ETimes.endTime,
-      offTrackingTime: '00:00'
-    },
-    Saturday: {
-      isChecked: false,
-      startTime: ETimes.startTime,
-      endTime: ETimes.endTime,
-      offTrackingTime: '00:00'
-    },
-    Sunday: {
-      isChecked: false,
-      startTime: ETimes.startTime,
-      endTime: ETimes.endTime,
-      offTrackingTime: '00:00'
-    }
+    ...initialworkingSchedule
   })
 
   const { data: companyPricingData, isLoading, error } = useGetCompanyPricingQuery()
@@ -186,7 +146,7 @@ const CompanyPricing = () => {
     await patchCompanyPricing({
       dailyAverageExpenseAmount: dailyAvarageExpenceAmount as number,
       specifiedCompanyProfit: specifiedCompanyProfitPercentage as number,
-      payrollType: payrollPeriod === 'monthly' ? 0 : 1,
+      payrollType: payrollType === 'monthly' ? 0 : 1,
       payrollDay,
       workingSchedule: dailyWorkTimeData
     })
@@ -349,15 +309,15 @@ const CompanyPricing = () => {
         <JustifyBetweenRow margin="2rem 0 0 0">
           <Row margin="0 0.25rem 0 0">
             <SelectInput
-              selectedOption={payrollPeriodOptions.filter(option => option.value === payrollPeriod)}
+              selectedOption={payrollTypeOptions.filter(option => option.value === payrollType)}
               labelText="Payroll Type"
               onChange={handlePayrollPeriodChange}
-              name={'payrollPeriod'}
-              options={payrollPeriodOptions}
+              name={'payrollType'}
+              options={payrollTypeOptions}
             />
           </Row>
           <Row margin="0 0 0 0.25rem">
-            {payrollPeriod === 'weekly' ? (
+            {payrollType === 'weekly' ? (
               <SelectInput
                 selectedOption={payrollDayOptions.filter(
                   option => option.value === payrollDayOptions[payrollDay].value

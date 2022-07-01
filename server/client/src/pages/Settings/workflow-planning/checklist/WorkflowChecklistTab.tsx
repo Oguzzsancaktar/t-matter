@@ -46,7 +46,7 @@ const WorkflowChecklist = () => {
     },
     {
       name: 'Checklist Price',
-      selector: row => row.price + '$',
+      selector: row => row.price.toFixed(2) + '$',
       sortable: true
     },
     {

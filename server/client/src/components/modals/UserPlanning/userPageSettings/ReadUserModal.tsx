@@ -35,9 +35,9 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
   const renderSwitch = () => {
     switch (activeTab) {
       case 'log-in':
-        return <UserModalLogInTab />
+        return <UserModalLogInTab userId={userId} />
       case 'settings':
-        return <UserModalSettingsTab />
+        return <UserModalSettingsTab userId={userId} />
     }
   }
 
@@ -123,7 +123,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
   return (
     <ItemContainer borderRadius="0.3rem" overflow="hidden" backgroundColor="transparent">
       <JustifyBetweenRow height="100%">
-        <ItemContainer width="350px" height="100%" backgroundColor={colors.white.secondary}>
+        <ItemContainer width="350px" height="100%" backgroundColor={colors.white.secondary} borderRadius="0.3rem">
           {isUserDataLoading || !userData || isUserDataError ? (
             <div>Loading...</div>
           ) : (
@@ -255,7 +255,6 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             </JustifyBetweenColumn>
           )}
         </ItemContainer>
-
         <ItemContainer
           height="100%"
           width="120px"
@@ -264,7 +263,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
           backgroundColor={colors.white.secondary}
         >
           <JustifyBetweenColumn height="100%">
-            <ItemContainer height="100%" margin="0 0 1rem 0">
+            <ItemContainer height="100%" margin="0 0 0.25rem 0">
               <Button color={colors.gray.secondary} onClick={() => setActiveTab('log-in')}>
                 <H1 color={colors.gray.primary} textAlign="center">
                   Log In
@@ -283,9 +282,10 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
         <ItemContainer
           minHeight="700px"
           height="inherit"
-          width="calc(100% - 120px - 350px - 2rem)"
+          width="calc(100% - 120px - 350px - 0.5rem)"
           backgroundColor={colors.white.secondary}
           padding="1rem 0"
+          borderRadius="0.3rem"
         >
           {renderSwitch()}
         </ItemContainer>

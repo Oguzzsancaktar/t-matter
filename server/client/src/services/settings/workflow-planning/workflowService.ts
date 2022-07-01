@@ -140,7 +140,7 @@ const patchWorkflowChecklist = (builder: IBuilder) => {
       return {
         url: `/workflow/checklist/${dto._id}`,
         method: 'PATCH',
-        data: { name: dto.name }
+        data: { name: dto.name, duration: dto.duration, point: dto.point }
       }
     },
     invalidatesTags(result) {

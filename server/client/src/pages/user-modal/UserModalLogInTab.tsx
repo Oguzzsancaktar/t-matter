@@ -1,33 +1,32 @@
 import {
   ActionButtons,
-  Badge,
   Column,
   CreateUserModal,
   DataTableHeader,
   InnerWrapper,
   JustifyBetweenColumn,
   JustifyBetweenRow,
-  JustifyCenterColumn,
-  JustifyCenterRow,
-  ReadUserModal,
-  RoleBadge,
-  Tab,
-  UserBadge
+  JustifyCenterColumn
 } from '@/components'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
 import UserReadModal from '@/components/modals/UserPlanning/userPageSettings/ReadUserModal'
 import useAccessStore from '@/hooks/useAccessStore'
 import { EStatus, ESize } from '@/models'
+import { useGetUserLogsByIdQuery } from '@/services/userLogService'
 import { openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
-import { UserCheck } from 'react-feather'
-import { UserRoleSettings, UserTaskSettingsTab, UserPageSettingsTab } from '../Settings'
 
-const UserModalLogInTab = () => {
+interface IProps {
+  userId: string
+}
+
+const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const { data: logsData, isLoading: isLogsLoading } = useGetUserLogsByIdQuery(userId)
 
   const columns = [
     {
@@ -89,6 +88,8 @@ const UserModalLogInTab = () => {
       totalTime: '10:00'
     }
   ]
+
+  useEffect(() => {}, [logsData, isLogsLoading])
 
   const openCreateRoleModal = (e: React.MouseEvent) => {
     e.preventDefault()

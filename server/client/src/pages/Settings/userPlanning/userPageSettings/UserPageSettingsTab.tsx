@@ -37,6 +37,7 @@ const UserPageSettingsTab = () => {
         <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
       )
     },
+
     {
       name: 'Role',
       selector: row => row.role,

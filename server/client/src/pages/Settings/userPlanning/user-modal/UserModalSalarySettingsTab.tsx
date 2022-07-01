@@ -16,10 +16,10 @@ import { DollarSign, Percent } from 'react-feather'
 
 import { UserModalSalarySettingsSummaryBody, UserModalSalarySettingsSummaryFooter } from '@/pages'
 import {
-  useGetSalarySettingsQuery,
-  usePatchSalarySettingsMutation
-} from '@/services/settings/company-planning/salarySettings'
-import { ISalarySettings } from '@/models'
+  useGetUserSalarySettingsQuery,
+  usePatchUserSalarySettingsMutation
+} from '@/services/settings/company-planning/salarySettingsService'
+import { ISalarySettings, IUser } from '@/models'
 import { toastSuccess } from '@/utils/toastUtil'
 
 const DEFAULT_PAYROLL_RATE: number = 30
@@ -32,15 +32,18 @@ const DEFAULT_TEMPORARY_ARR: any[] = Array.apply(null, Array(DEFAULT_INCREASE_YE
 
 const DEFAULT_INCREASE_PERCENTAGE = 20
 
-const UserModalSalarySettingsTab = () => {
-  const { data: salarySettingsData, isLoading: isSalarySettingsDataLoading } = useGetSalarySettingsQuery()
+interface IProps {
+  userId: IUser['_id']
+}
+const UserModalSalarySettingsTab: React.FC<IProps> = ({ userId }) => {
   const [
-    patchSalarySettings,
-    { data: updatedSalarySettingsData, isLoading: isUpdateLoading, status: salarySettingUpdateStatus }
-  ] = usePatchSalarySettingsMutation()
+    patchUserSalarySettings,
+    { data: updatedUserSalarySettingsData, isLoading: isUpdateLoading, status: salarySettingUpdateStatus }
+  ] = usePatchUserSalarySettingsMutation()
+
+  const { isLoading: isUserSalarySettingsLoading, data: userSalarySettingsData } = useGetUserSalarySettingsQuery(userId)
 
   const [salarySettingsStateData, setSalarySettingsStateData] = useState<ISalarySettings>({
-    _id: salarySettingsData?._id,
     defaultPayrollRate: DEFAULT_PAYROLL_RATE,
     payrollIncreases: [
       {
@@ -66,44 +69,33 @@ const UserModalSalarySettingsTab = () => {
     ]
   })
 
-  // const notificationOptions = [
-  //   { value: NOTIFICATION_BEFORE_AFTER.AFTER, label: 'After' },
-  //   { value: NOTIFICATION_BEFORE_AFTER.BEFORE, label: 'Before' }
-  // ]
-
-  // const userTaskOptions = [
-  //   { value: 'task1', label: 'Task 1' },
-  //   { value: 'task2', label: 'Task 2' }
-  // ]
-
-  // const userRoleOptions = [
-  //   { value: USER_ROLE_TYPES.ADMIN, label: 'Admin' },
-  //   { value: USER_ROLE_TYPES.USER, label: 'User' }
-  // ]
-
   useEffect(() => {
-    if (salarySettingsData && salarySettingsData?.defaultPayrollRate && salarySettingsData?.payrollIncreases) {
+    if (
+      userSalarySettingsData &&
+      userSalarySettingsData?.defaultPayrollRate &&
+      userSalarySettingsData?.payrollIncreases
+    ) {
       setSalarySettingsStateData({
-        _id: salarySettingsData?._id,
-        defaultPayrollRate: salarySettingsData?.defaultPayrollRate,
-        payrollIncreases: salarySettingsData?.payrollIncreases
+        _id: userSalarySettingsData?._id,
+        defaultPayrollRate: userSalarySettingsData?.defaultPayrollRate,
+        payrollIncreases: userSalarySettingsData?.payrollIncreases
       })
     }
-  }, [salarySettingsData])
+  }, [userSalarySettingsData])
 
   useEffect(() => {
     if (
-      updatedSalarySettingsData &&
-      updatedSalarySettingsData?.defaultPayrollRate &&
-      updatedSalarySettingsData?.payrollIncreases
+      updatedUserSalarySettingsData &&
+      updatedUserSalarySettingsData?.defaultPayrollRate &&
+      updatedUserSalarySettingsData?.payrollIncreases
     ) {
       setSalarySettingsStateData({
-        _id: updatedSalarySettingsData._id,
-        defaultPayrollRate: updatedSalarySettingsData?.defaultPayrollRate,
-        payrollIncreases: updatedSalarySettingsData?.payrollIncreases
+        _id: updatedUserSalarySettingsData._id,
+        defaultPayrollRate: updatedUserSalarySettingsData?.defaultPayrollRate,
+        payrollIncreases: updatedUserSalarySettingsData?.payrollIncreases
       })
     }
-  }, [updatedSalarySettingsData])
+  }, [updatedUserSalarySettingsData])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSalarySettingsStateData({ ...salarySettingsStateData, [event.target.name]: event.target.value })
@@ -120,13 +112,13 @@ const UserModalSalarySettingsTab = () => {
   }
 
   const handleSave = async () => {
-    await patchSalarySettings(salarySettingsStateData)
+    await patchUserSalarySettings({ ...salarySettingsStateData, userId })
     toastSuccess('Salary settings updated successfully')
   }
 
   return (
     <JustifyBetweenRow height="100%" width="auto">
-      {isSalarySettingsDataLoading && isUpdateLoading && salarySettingsStateData ? (
+      {isUserSalarySettingsLoading && isUpdateLoading && salarySettingsStateData ? (
         <div>Loading...</div>
       ) : (
         <>
@@ -187,7 +179,7 @@ const UserModalSalarySettingsTab = () => {
               />
             </JustifyBetweenColumn>
             <ItemContainer margin="1rem 0 0 0" height="40px">
-              <Button disabled={isSalarySettingsDataLoading || isUpdateLoading} onClick={handleSave}>
+              <Button disabled={isUserSalarySettingsLoading || isUpdateLoading} onClick={handleSave}>
                 Save
               </Button>
             </ItemContainer>

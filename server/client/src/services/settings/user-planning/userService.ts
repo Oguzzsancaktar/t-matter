@@ -62,7 +62,7 @@ const updateUser = (builder: IBuilder) => {
       return {
         url: `/user`,
         method: 'PATCH',
-        data: userUpdateDto
+        data: { ...userUpdateDto, role: userUpdateDto.role._id }
       }
     },
     invalidatesTags(result) {

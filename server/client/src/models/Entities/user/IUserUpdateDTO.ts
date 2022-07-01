@@ -1,5 +1,4 @@
-import { IUser, IUserCreateDTO } from '@/models'
+import { IRole, IUser } from '@/models'
 export default interface IUserUpdateDTO extends Omit<IUser, 'role'> {
-  _id: string
-  role: string
+  role: Omit<IRole, 'status'>
 }

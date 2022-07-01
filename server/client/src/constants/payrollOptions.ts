@@ -1,7 +1,7 @@
 import { dayOfWeek, dayOfMonth } from '@/constants/dates'
 import { EDays, IOption } from '@/models'
 
-export const payrollPeriodOptions = [
+export const payrollTypeOptions = [
   { label: 'Monthly', value: 'monthly' },
   { label: 'Weekly', value: 'weekly' }
 ]

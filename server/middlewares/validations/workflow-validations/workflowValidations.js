@@ -8,8 +8,8 @@ const workflowCategoryValidationSchema = {
 const workflowChecklistValidationSchema = {
   name: joi.string().required(),
   point: joi.number().required(),
-  duration: joi.number().required(),
-  price: joi.number().required()
+  duration: joi.number().required()
+  // price: joi.number().required()
 }
 
 const workflowPlanValidationSchema = {
@@ -54,6 +54,7 @@ const updateWorkflowCategoryValidation = async (req, res, next) => {
   }
 }
 
+// checklist
 const createWorkflowChecklistValidation = async (req, res, next) => {
   const { body } = req
   const schema = joi.object({ ...workflowChecklistValidationSchema })
