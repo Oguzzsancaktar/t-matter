@@ -43,7 +43,7 @@ const getCompanyPricing = async (req, res) => {
     if (!companyPricing) {
       return res.status(404).json(utils.errorUtils.errorInstance({ message: 'Company Pricing not found' }))
     }
-    const summary = await calculateHourlyCompanyFee(companyPricing)
+    const summary = await calculateHourlyCompanyFee()
     res.status(200).json({
       ...companyPricing,
       workingSchedule: { ...companyPricing.workingSchedule, _id: undefined, __v: undefined },
@@ -62,7 +62,7 @@ const getCompanySummary = async (req, res) => {
     if (!companyPricing) {
       return res.status(404).json(utils.errorUtils.errorInstance({ message: 'Company Pricing not found' }))
     }
-    const summary = await calculateHourlyCompanyFee(companyPricing)
+    const summary = await calculateHourlyCompanyFee()
     res.status(200).json(summary)
   } catch (e) {
     console.log(e)

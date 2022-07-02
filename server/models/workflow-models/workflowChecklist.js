@@ -16,10 +16,6 @@ const workflowChecklistSchema = new Schema(
       required: true,
       type: Number
     },
-    price: {
-      required: true,
-      type: Number
-    },
     status: {
       type: Number,
       default: STATUS_TYPES.ACTIVE

@@ -1,9 +1,10 @@
-const dataAccess = require('../data-access')
+const calculateHourlyCompanyFee = () => {
+  const dataAccess = require('../data-access')
 
-const calculateHourlyCompanyFee = companyPricing => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { dailyAverageExpenseAmount, specifiedCompanyProfit } = companyPricing
+      const { dailyAverageExpenseAmount, specifiedCompanyProfit } =
+        await dataAccess.companyPricingDataAccess.getCompanyPricing()
       const activeUsers = await dataAccess.userDataAccess.findUsersAndPopulateSalarySetting()
       const defaultSalarySetting = await dataAccess.salarySettingDataAccess.findDefaultSalarySetting()
       let employerHourlyFee = 0
