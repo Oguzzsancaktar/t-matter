@@ -13,6 +13,7 @@ import {
 } from '@/components'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
 import UserReadModal from '@/components/modals/UserPlanning/userPageSettings/ReadUserModal'
+import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { EStatus, ESize } from '@/models'
 import { useGetUserLogsByIdQuery } from '@/services/userLogService'
@@ -104,7 +105,8 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
         id: 'customerTaksModal' + workflowId,
         title: 'Customer Task',
         body: <CustomerTaskModal workflowId={workflowId} />,
-        size: ESize.XLarge
+        size: ESize.XLarge,
+        backgroundColor: colors.gray.light
       })
     )
   }

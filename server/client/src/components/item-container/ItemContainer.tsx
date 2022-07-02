@@ -12,6 +12,7 @@ interface IProps extends IComponentProps {
   borderRight?: string
   borderBottom?: string
   borderLeft?: string
+  onClick?: (e: React.MouseEvent) => void
 }
 
 const Item = styled.div<IProps>`
