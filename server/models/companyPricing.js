@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const PAYROLL = require("../constants/payroll");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const PAYROLL = require('../constants/payroll')
+const Schema = mongoose.Schema
 
 const CompanyPricingSchema = new Schema({
   dailyAverageExpenseAmount: {
@@ -13,18 +13,8 @@ const CompanyPricingSchema = new Schema({
   },
   workingSchedule: {
     type: mongoose.Types.ObjectId,
-    ref: 'WorkingSchedule',
-  },
-  payrollType: {
-    type: Number,
-    required: true,
-    default: PAYROLL.MONTHLY
-  },
-  payrollDay: {
-    type: Number,
-    required: true,
-    default: 1
-  },
+    ref: 'WorkingSchedule'
+  }
 })
 
 module.exports = CompanyPricing = mongoose.model('companyPricing', CompanyPricingSchema)
