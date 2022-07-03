@@ -43,7 +43,7 @@ const patchUserCompanyPricing = (builder: IBuilder) => {
       return {
         url: `/working-schedule/${dto.userId}`,
         method: 'PATCH',
-        data: { ...dto.workingSchedule }
+        data: { workingSchedule: dto.workingSchedule, payrollType: dto.payrollType, payrollDay: dto.payrollDay }
       }
     },
     invalidatesTags(result) {

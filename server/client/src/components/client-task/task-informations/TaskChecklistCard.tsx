@@ -3,11 +3,10 @@ import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenColumn, JustifyBetweenRow, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import { ITaskChecklist } from '@/models'
-import SummaryChecklistItem from '@/pages/Settings/workflow-planning/plan/SummaryChecklistItem'
+import SummaryChecklistItem from '@/pages/settings/workflow-planning/plan/SummaryChecklistItem'
 import { SummaryCardTitle } from '@/shared'
 import React from 'react'
 import styled from 'styled-components'
-
 
 interface IProps {
   checklistData: Pick<ITaskChecklist, '_id'>[]

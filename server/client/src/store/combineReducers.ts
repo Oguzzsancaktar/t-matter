@@ -7,7 +7,7 @@ import { companyPricingApi } from '@/services/settings/company-planning/companyP
 import { salarySettingsApi } from '@/services/settings/company-planning/salarySettingsService'
 import { userRoleApi } from '@/services/settings/user-planning/userRoleService'
 import { workflowApi } from '@/services/settings/workflow-planning/workflowService'
-import { locationApi } from '@/services/settings/company-planning/dynamicVariableService'
+import { dynamicVariablesApi } from '@/services/settings/company-planning/dynamicVariableService'
 import { logsApi } from '@/services/userLogService'
 
 const rootReducer = combineReducers({
@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
   [companyPricingApi.reducerPath]: companyPricingApi.reducer,
   [userRoleApi.reducerPath]: userRoleApi.reducer,
   [workflowApi.reducerPath]: workflowApi.reducer,
-  [locationApi.reducerPath]: locationApi.reducer,
+  [dynamicVariablesApi.reducerPath]: dynamicVariablesApi.reducer,
   [logsApi.reducerPath]: logsApi.reducer
 })
 

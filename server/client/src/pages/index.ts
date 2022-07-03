@@ -5,5 +5,4 @@ export { default as CustomersPage } from './CustomersPage'
 export * from './customer-modal'
 export * from './user-modal'
 
-export * from './CustomersPage'
-export * from './Settings'
+export * from './settings'

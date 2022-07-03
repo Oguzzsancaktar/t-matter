@@ -1,5 +1,5 @@
-export { default as InputRegular } from './Input-regular/InputRegular'
-export { default as InputWithText } from './Input-with-text/InputWithText'
+export { default as InputRegular } from './input-regular/InputRegular'
+export { default as InputWithText } from './input-with-text/InputWithText'
 export { default as InputCheckbox } from '../image/InputCheckbox'
 
 export * from './input-with-icon/index'

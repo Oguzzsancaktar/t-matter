@@ -2,7 +2,7 @@ import { Column, InnerWrapper, JustifyBetweenColumn, JustifyCenterRow, Tab } fro
 import { ModalHeader, ModalBody } from '@/components/modals/types'
 import { IUser } from '@/models'
 import React, { useState } from 'react'
-import { UserModalSalarySettingsTab, UserModalWorkingScheduleSettingsTab } from '../Settings'
+import { UserModalSalarySettingsTab, UserModalWorkingScheduleSettingsTab } from '../settings'
 
 interface IProps {
   userId: IUser['_id']

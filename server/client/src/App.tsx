@@ -9,7 +9,7 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { selectMinimizedModals, selectOpenModals } from '@/store'
 import { useAuth } from '@hooks/useAuth'
 
-const SettingsPage = lazy(() => import('./pages/Settings/SettingsPage'))
+const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const CustomersPage = lazy(() => import('./pages/CustomersPage'))

@@ -1,5 +1,7 @@
 const Location = require('../../models/dynamic-variables/location')
+const RefferedBy = require('../../models/dynamic-variables/refferedBy')
 
+// Location
 const createLocation = data => {
   return Location.create(data)
 }

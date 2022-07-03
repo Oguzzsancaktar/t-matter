@@ -12,7 +12,7 @@ import {
   UserBadge
 } from '@/components'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
-import UserReadModal from '@/components/modals/UserPlanning/userPageSettings/ReadUserModal'
+import UserReadModal from '@/components/modals/user-planning/userPageSettings/ReadUserModal'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { EStatus, ESize } from '@/models'

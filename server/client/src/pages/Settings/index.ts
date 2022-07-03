@@ -1,4 +1,4 @@
 export { default as SettingsPage } from './SettingsPage'
-export * from './userPlanning'
-export * from './companyPlanning'
+export * from './user-planning'
+export * from './company-planning'
 export * from './workflow-planning'

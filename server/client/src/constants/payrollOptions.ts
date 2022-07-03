@@ -2,8 +2,8 @@ import { dayOfWeek, dayOfMonth } from '@/constants/dates'
 import { EDays, IOption } from '@/models'
 
 export const payrollTypeOptions = [
-  { label: 'Monthly', value: 'monthly' },
-  { label: 'Weekly', value: 'weekly' }
+  { label: 'Monthly', value: '0' },
+  { label: 'Weekly', value: '1' }
 ]
 
 export const payrollDateOptions: IOption[] = Object.values(dayOfMonth).map(value => ({

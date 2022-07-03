@@ -23,7 +23,7 @@ router.use('/role', roleRoutes)
 router.use('/user', userRoutes)
 router.use('/time-log', timeLogRoutes)
 router.use('/workflow', workflowRoutes)
-router.use('/dynamic-variables', dynamicVariableRoutes)
 router.use('/working-schedule', workingScheduleRoutes)
+router.use('/dynamic-variables', dynamicVariableRoutes)
 
 module.exports = router
