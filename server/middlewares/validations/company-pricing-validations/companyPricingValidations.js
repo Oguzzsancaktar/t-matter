@@ -1,7 +1,7 @@
 const joi = require('joi')
 const utils = require('../../../utils')
 const PAYROLL = require('../../../constants/payroll')
-const validations = require('../index')
+const { workingScheduleValidationConstants } = require('../working-schedule-validations/index')
 
 const customPayrollDayValidation = (value, helpers, body) => {
   if (body.payrollType === PAYROLL.MONTHLY) {
@@ -23,7 +23,7 @@ const createCompanyPricing = async (req, res, next) => {
     specifiedCompanyProfit: joi.number().required(),
     payrollType: joi.number().min(PAYROLL.MONTHLY).max(PAYROLL.WEEKLY).required(),
     payrollDay: joi.number().custom((value, helpers) => customPayrollDayValidation(value, helpers, body)),
-    workingSchedule: validations.workingScheduleValidations.workingScheduleValidationConstants.workingScheduleSchema
+    workingSchedule: workingScheduleValidationConstants.workingScheduleSchema
   })
 
   try {
@@ -41,7 +41,7 @@ const updateCompanyPricing = async (req, res, next) => {
     specifiedCompanyProfit: joi.number().required(),
     payrollType: joi.number().min(PAYROLL.MONTHLY).max(PAYROLL.WEEKLY).required(),
     payrollDay: joi.number().custom((value, helpers) => customPayrollDayValidation(value, helpers, body)),
-    workingSchedule: validations.workingScheduleValidations.workingScheduleValidationConstants.workingScheduleSchema
+    workingSchedule: workingScheduleValidationConstants.workingScheduleSchema
   })
 
   try {

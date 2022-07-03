@@ -22,7 +22,7 @@ const createCompanyPricing = async (req, res) => {
 const updateCompanyPricing = async (req, res) => {
   const { body } = req
   try {
-    const [companyPricing] = await dataAccess.companyPricingDataAccess.getCompanyPricing()
+    const companyPricing = await dataAccess.companyPricingDataAccess.getCompanyPricing()
     const workingSchedule = await dataAccess.workingScheduleDataAccess.updateWorkingSchedule(
       companyPricing.workingSchedule,
       body.workingSchedule
