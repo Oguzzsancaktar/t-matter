@@ -9,11 +9,13 @@ const updateWorkingSchedule = (id, data) => {
 }
 
 const findWorkingScheduleByUserId = owner => {
-  return WorkingSchedule.findOne({ owner })
+  return WorkingSchedule.findOne({ owner }).lean().exec()
 }
 
 const findCompanyWorkingSchedule = () => {
   return WorkingSchedule.findOne({ owner: { $exists: false } })
+    .lean()
+    .exec()
 }
 
 module.exports = {

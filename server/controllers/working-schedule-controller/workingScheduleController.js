@@ -6,10 +6,14 @@ const getUserWorkingSchedule = async (req, res) => {
   const { userId } = req.params
   try {
     let workingSchedule = await dataAccess.workingScheduleDataAccess.findWorkingScheduleByUserId(userId)
+    let salarySetting = await dataAccess.salarySettingDataAccess.findSalarySettingByUserId(userId)
+    if (!salarySetting) {
+      salarySetting = await dataAccess.salarySettingDataAccess.findDefaultSalarySetting()
+    }
     if (!workingSchedule) {
       workingSchedule = await dataAccess.workingScheduleDataAccess.findCompanyWorkingSchedule()
     }
-    res.status(StatusCodes.OK).json(workingSchedule)
+    res.status(StatusCodes.OK).json({ ...workingSchedule, ...salarySetting })
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
   }
