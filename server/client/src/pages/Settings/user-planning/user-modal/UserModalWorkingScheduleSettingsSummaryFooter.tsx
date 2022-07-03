@@ -6,6 +6,7 @@ import colors from '@constants/colors'
 interface IProps {
   workDayInWeek: number
   weeklyWorkTime: number
+  userDefaultPayrollRate: number
 }
 
 const Text = styled.h3`
@@ -18,16 +19,11 @@ const Value = styled.h3`
   border-left: 1px solid ${colors.blue.primary};
 `
 
-const TEMPORARY_TOTAL_EMPLOYER_SALARY = 10000
-const TEMPORARY_TOTAL_EMPLOYER_WORKING_HOURS = 1600
-
-const UserModalworkingScheduleSettingsSummaryFooter: React.FC<IProps> = ({ workDayInWeek, weeklyWorkTime }) => {
-  const employerHourlyFee = TEMPORARY_TOTAL_EMPLOYER_SALARY / TEMPORARY_TOTAL_EMPLOYER_WORKING_HOURS
-
+const UserModalworkingScheduleSettingsSummaryFooter: React.FC<IProps> = ({ userDefaultPayrollRate }) => {
   return (
     <JustifyBetweenRow>
       <Text>Hourly Employer Fee</Text>
-      <Value>${employerHourlyFee.toFixed(2)}</Value>
+      <Value>${userDefaultPayrollRate.toFixed(2)}</Value>
     </JustifyBetweenRow>
   )
 }

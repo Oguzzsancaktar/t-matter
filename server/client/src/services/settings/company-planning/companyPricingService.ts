@@ -38,7 +38,7 @@ const patchCompanyPricing = (builder: IBuilder) => {
 }
 
 const patchUserCompanyPricing = (builder: IBuilder) => {
-  return builder.mutation<IUserCompanyPricing, IUserCompanyPricing>({
+  return builder.mutation<IUserCompanyPricing, Omit<IUserCompanyPricing, 'defaultPayrollRate'>>({
     query(dto) {
       return {
         url: `/working-schedule/${dto.userId}`,

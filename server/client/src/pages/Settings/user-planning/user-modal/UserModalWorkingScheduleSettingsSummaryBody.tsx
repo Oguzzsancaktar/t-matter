@@ -8,6 +8,7 @@ interface IProps {
   workDayInWeek: number
   weeklyWorkTime: number
   weeklyOffTrackingTime: number
+  userDefaultPayrollRate: number
 }
 
 const Text = styled.h3`
@@ -22,17 +23,14 @@ const Value = styled.h3`
   border-left: 1px solid ${colors.blue.primary};
 `
 
-const TEMPORARY_HOURLY_FEE = 10
-
 const UserModalworkingScheduleSummaryBody: React.FC<IProps> = ({
   workDayInWeek,
   weeklyWorkTime,
-  weeklyOffTrackingTime
+  weeklyOffTrackingTime,
+  userDefaultPayrollRate
 }) => {
-  const monthlyEmployerWorkHours = weeklyWorkTime * 4
-  const monthlyEmployerSalary = TEMPORARY_HOURLY_FEE * monthlyEmployerWorkHours
-
-  console.log(workDayInWeek, weeklyWorkTime / 60 / 60, weeklyOffTrackingTime)
+  const monthlyEmployerWorkHours = (weeklyWorkTime * 4) / 3600
+  const monthlyEmployerSalary = userDefaultPayrollRate * monthlyEmployerWorkHours
 
   return (
     <JustifyBetweenColumn height="100%">
@@ -44,12 +42,7 @@ const UserModalworkingScheduleSummaryBody: React.FC<IProps> = ({
 
         <JustifyBetweenRow>
           <Text>Monthly Employer Total Working Hours</Text>
-          <Value>{secondsToTimeWithDisplay(monthlyEmployerWorkHours)}</Value>
-        </JustifyBetweenRow>
-
-        <JustifyBetweenRow>
-          <Text>Employer Hourly Fee</Text>
-          <Value>${TEMPORARY_HOURLY_FEE.toFixed(2)}</Value>
+          <Value>{secondsToTimeWithDisplay(weeklyWorkTime * 4)}</Value>
         </JustifyBetweenRow>
       </Column>
 

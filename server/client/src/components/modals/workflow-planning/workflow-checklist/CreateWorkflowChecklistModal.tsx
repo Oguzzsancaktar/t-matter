@@ -29,8 +29,7 @@ const CreateWorkflowChecklistModal = () => {
   const [workflowChecklist, setWorkflowChecklist] = useState<ITaskChecklistCreateDTO>({
     name: '',
     point: 0,
-    duration: 0,
-    price: 0
+    duration: 0
   })
 
   const initialErrorsState = {
@@ -41,10 +40,9 @@ const CreateWorkflowChecklistModal = () => {
   }
   const [validationErrors, setValidationErrors] = useState({ ...initialErrorsState })
 
-  const [
-    createChecklist,
-    { data: createChecklistData, isLoading: createChecklistLoading, error: createChecklistError }
-  ] = useCreateChecklistMutation()
+  const [createChecklist] = useCreateChecklistMutation()
+
+  const [checklistPrice, setChecklistPrice] = useState(0)
 
   const validateInputValues = () => {
     if (!isValueNull(workflowChecklist.name)) {
@@ -65,12 +63,6 @@ const CreateWorkflowChecklistModal = () => {
       return false
     }
 
-    if (!isValueBiggerThanZero(workflowChecklist.price)) {
-      toastError('Please enter a price value for the checklist')
-      setValidationErrors({ ...initialErrorsState, priceError: true })
-      return false
-    }
-
     return true
   }
 
@@ -80,13 +72,12 @@ const CreateWorkflowChecklistModal = () => {
       ? setWorkflowChecklist({ ...workflowChecklist, point: Number(value) })
       : name === 'duration'
       ? setWorkflowChecklist({ ...workflowChecklist, duration: Number(value) })
-      : name === 'price'
-      ? setWorkflowChecklist({ ...workflowChecklist, price: Number(value) })
       : setWorkflowChecklist({ ...workflowChecklist, name: value })
   }
 
   const handleDurationChange = (durationSecond: number) => {
-    setWorkflowChecklist({ ...workflowChecklist, duration: durationSecond, price: (10 * durationSecond) / 3600 })
+    setWorkflowChecklist({ ...workflowChecklist, duration: durationSecond })
+    setChecklistPrice(durationSecond * workflowChecklist.point)
   }
 
   const resetValidationErrors = () => {
@@ -166,7 +157,7 @@ const CreateWorkflowChecklistModal = () => {
                 disabled={true}
                 name="price"
                 placeholder="0"
-                value={workflowChecklist.price}
+                value={checklistPrice}
                 onChange={handleInputChange}
                 type="number"
                 validationError={validationErrors.priceError}

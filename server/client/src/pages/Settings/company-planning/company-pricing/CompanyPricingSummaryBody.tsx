@@ -10,6 +10,7 @@ interface IProps {
   weeklyWorkTime: number
   weeklyOffTrackingTime: number
   summary: ICompanyPricing['summary']
+  dailyAvarageExpenceAmount: number
 }
 
 const CompanyPricingSummaryBody: React.FC<IProps> = ({
@@ -17,10 +18,13 @@ const CompanyPricingSummaryBody: React.FC<IProps> = ({
   workDayInWeek,
   weeklyWorkTime,
   weeklyOffTrackingTime,
-  summary
+  summary,
+  dailyAvarageExpenceAmount
 }) => {
+  const dailyWorkingHours = weeklyWorkTime / workDayInWeek / 60 / 60
+  const companyExpenseHourlyFee = +dailyAvarageExpenceAmount / dailyWorkingHours
   const specifiedCompanyHourlyProfit =
-    ((summary.employerHourlyFee + summary.hourlyCompanyFee) * +specifiedCompanyProfitPercentage) / 100
+    ((summary.employerHourlyFee + companyExpenseHourlyFee) * +specifiedCompanyProfitPercentage) / 100
 
   return (
     <JustifyBetweenColumn height="100%">

@@ -43,13 +43,13 @@ const CompanyPricing = () => {
   const [workDayInWeek, setWorkDayInWeek] = useState<number>(0)
   const [weeklyOffTrackingTime, setWeeklyOffTrackingTime] = useState<number>(0)
 
-  const [dailyAvarageExpenceAmount, setDailyAvarageExpenceAmount] = useState<number | string>('')
+  const [dailyAvarageExpenceAmount, setDailyAvarageExpenceAmount] = useState<number>(0)
   const [companyPricingSummary, setCompanyPricingSummary] = useState<ICompanyPricing['summary']>({
     employerCount: 0,
     employerHourlyFee: 0,
     hourlyCompanyFee: 0
   })
-  const [specifiedCompanyProfitPercentage, setSpecifiedCompanyProfitPercentage] = useState<number | string>('')
+  const [specifiedCompanyProfitPercentage, setSpecifiedCompanyProfitPercentage] = useState<number>(0)
 
   const [dailyWorkTimeData, setDailyWorkTimeData] = useState<IDailyWorkingHours>({
     ...initialWorkingHours
@@ -112,6 +112,7 @@ const CompanyPricing = () => {
   }
 
   const handlePayrollDay = (option: IOption) => {
+    console.log(+option.value)
     setPayrollDay(+option.value)
   }
 
@@ -329,7 +330,7 @@ const CompanyPricing = () => {
             {payrollType === 1 ? (
               <SelectInput
                 selectedOption={payrollDayOptions.filter(
-                  option => option.value === payrollDayOptions[payrollDay].value
+                  option => +option.value === +payrollDayOptions[payrollDay].value - 1
                 )}
                 labelText="Payroll Day"
                 name={'payrollDay'}
@@ -339,7 +340,7 @@ const CompanyPricing = () => {
             ) : (
               <SelectInput
                 selectedOption={payrollDateOptions.filter(
-                  option => option.value === payrollDateOptions[payrollDay].value
+                  option => +option.value === +payrollDateOptions[payrollDay].value - 1
                 )}
                 labelText="Payroll Date"
                 name={'payrollDate'}
@@ -361,6 +362,7 @@ const CompanyPricing = () => {
           <SummaryCard
             body={
               <CompanyPricingSummaryBody
+                dailyAvarageExpenceAmount={dailyAvarageExpenceAmount}
                 summary={companyPricingSummary}
                 specifiedCompanyProfitPercentage={specifiedCompanyProfitPercentage}
                 workDayInWeek={workDayInWeek}
@@ -370,8 +372,11 @@ const CompanyPricing = () => {
             }
             footer={
               <CompanyPricingSummaryFooter
+                dailyAvarageExpenceAmount={dailyAvarageExpenceAmount}
                 summary={companyPricingSummary}
                 specifiedCompanyProfitPercentage={specifiedCompanyProfitPercentage}
+                workDayInWeek={workDayInWeek}
+                weeklyWorkTime={totalMinutes}
               />
             }
           />

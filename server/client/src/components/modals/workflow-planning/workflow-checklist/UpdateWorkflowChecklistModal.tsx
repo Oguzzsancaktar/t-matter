@@ -20,7 +20,7 @@ import { ModalHeader, ModalBody, ModalFooter } from '../../types'
 import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { usePatchWorkflowChecklistMutation } from '@/services/settings/workflow-planning/workflowService'
-import { ITaskChecklist, ITaskChecklistCreateDTO } from '@/models'
+import { ITaskChecklist, ITaskChecklistUpdateDTO } from '@/models'
 
 interface IProps {
   checklist: ITaskChecklist
@@ -29,11 +29,14 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [workflowChecklist, setWorkflowChecklist] = useState<ITaskChecklistCreateDTO>({
+  const [checklistPrice, setChecklistPrice] = useState(0)
+
+  const [workflowChecklist, setWorkflowChecklist] = useState<
+    Pick<ITaskChecklistUpdateDTO, 'name' | 'point' | 'duration'>
+  >({
     name: checklist.name,
     point: checklist.point,
-    duration: checklist.duration,
-    price: checklist.price
+    duration: checklist.duration
   })
 
   const initialErrorsState = {
@@ -65,12 +68,6 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
       return false
     }
 
-    if (!isValueBiggerThanZero(workflowChecklist.price)) {
-      toastError('Please enter a price value for the checklist')
-      setValidationErrors({ ...initialErrorsState, priceError: true })
-      return false
-    }
-
     return true
   }
 
@@ -80,13 +77,12 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
       ? setWorkflowChecklist({ ...workflowChecklist, point: Number(value) })
       : name === 'duration'
       ? setWorkflowChecklist({ ...workflowChecklist, duration: Number(value) })
-      : name === 'price'
-      ? setWorkflowChecklist({ ...workflowChecklist, price: Number(value) })
       : setWorkflowChecklist({ ...workflowChecklist, name: value })
   }
 
   const handleDurationChange = (durationSecond: number) => {
-    setWorkflowChecklist({ ...workflowChecklist, duration: durationSecond, price: (10 * durationSecond) / 3600 })
+    setWorkflowChecklist({ ...workflowChecklist, duration: durationSecond })
+    setChecklistPrice(durationSecond * workflowChecklist.point)
   }
 
   const resetValidationErrors = () => {
@@ -118,7 +114,7 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
         <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center">
-              Create Workflow Checklist
+              Update Workflow Checklist
             </H1>
           </JustifyCenterRow>
         </InnerWrapper>
@@ -166,7 +162,7 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
                 disabled={true}
                 name="price"
                 placeholder="0"
-                value={workflowChecklist.price}
+                value={checklistPrice}
                 onChange={handleInputChange}
                 type="number"
                 validationError={validationErrors.priceError}

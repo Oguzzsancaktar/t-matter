@@ -42,6 +42,8 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
   const [workDayInWeek, setWorkDayInWeek] = useState<number>(0)
   const [weeklyOffTrackingTime, setWeeklyOffTrackingTime] = useState<number>(0)
 
+  const [userDefaultPayrollRate, setUserDefaultPayrollRate] = useState<number>(0)
+
   const [dailyWorkTimeData, setDailyWorkTimeData] = useState<IDailyWorkingHours>({ ...initialWorkingHours })
 
   const { data: userDailyWorkingHourData, isLoading: userDailyWorkingHourIsLoading } =
@@ -169,6 +171,7 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
     if (userDailyWorkingHourData && !userDailyWorkingHourIsLoading) {
       setPayrollDay(userDailyWorkingHourData.payrollDay)
       setDailyWorkTimeData(userDailyWorkingHourData.workingSchedule)
+      setUserDefaultPayrollRate(userDailyWorkingHourData.defaultPayrollRate)
     }
   }, [userDailyWorkingHourData, userDailyWorkingHourIsLoading])
 
@@ -289,12 +292,14 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
                   workDayInWeek={workDayInWeek}
                   weeklyWorkTime={totalSeconds}
                   weeklyOffTrackingTime={weeklyOffTrackingTime}
+                  userDefaultPayrollRate={userDefaultPayrollRate}
                 />
               }
               footer={
                 <UserModalWorkingScheduleSettingsSummaryFooter
                   workDayInWeek={workDayInWeek}
                   weeklyWorkTime={totalSeconds}
+                  userDefaultPayrollRate={userDefaultPayrollRate}
                 />
               }
             />

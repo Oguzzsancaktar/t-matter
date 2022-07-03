@@ -5,8 +5,11 @@ import colors from '@constants/colors'
 import { ICompanyPricing } from '@/models'
 
 interface IProps {
-  specifiedCompanyProfitPercentage: number | string
+  specifiedCompanyProfitPercentage: number
   summary: ICompanyPricing['summary']
+  dailyAvarageExpenceAmount: number
+  workDayInWeek: number
+  weeklyWorkTime: number
 }
 
 const Text = styled.h3`
@@ -19,9 +22,18 @@ const Value = styled.h3`
   border-left: 1px solid ${colors.blue.primary};
 `
 
-const CompanyPricingSummaryFooter: React.FC<IProps> = ({ specifiedCompanyProfitPercentage, summary }) => {
+const CompanyPricingSummaryFooter: React.FC<IProps> = ({
+  specifiedCompanyProfitPercentage,
+  summary,
+  dailyAvarageExpenceAmount,
+  workDayInWeek,
+  weeklyWorkTime
+}) => {
+  const dailyWorkingHours = weeklyWorkTime / workDayInWeek / 60 / 60
+  const companyExpenseHourlyFee = +dailyAvarageExpenceAmount / dailyWorkingHours
+
   const specifiedCompanyHourlyProfit =
-    ((summary.employerHourlyFee + summary.hourlyCompanyFee) * +specifiedCompanyProfitPercentage) / 100
+    ((summary.employerHourlyFee + companyExpenseHourlyFee) * +specifiedCompanyProfitPercentage) / 100
 
   return (
     <JustifyBetweenRow>
