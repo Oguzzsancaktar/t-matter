@@ -13,8 +13,6 @@ const workflowChecklistValidationSchema = {
 
 const workflowPlanValidationSchema = {
   name: joi.string().required(),
-  duration: joi.number().required(),
-  price: joi.number().required(),
   steps: joi.array().min(1).required()
 }
 
