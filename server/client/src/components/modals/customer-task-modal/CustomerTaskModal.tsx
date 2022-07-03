@@ -98,7 +98,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ workflowId }) => {
           </ItemContainer>
 
           <ItemContainer width="400px" height="100%" padding="0 2rem" backgroundColor={colors.white.primary}>
-            <TaskInformations activeStep={activeStep} workflowData={TEMP_WORKFLOW} />
+            <TaskInformations  activeStep={activeStep} workflowData={TEMP_WORKFLOW} />
           </ItemContainer>
 
           <ItemContainer

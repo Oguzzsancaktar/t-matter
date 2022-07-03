@@ -16,7 +16,7 @@ import {
 } from '@components/index'
 import { Clock, DollarSign, Percent } from 'react-feather'
 import { dayOfWeek } from '@/constants/dates'
-import { EDays, ETimes, IDailyWorkingHours, IOption } from '@/models'
+import { EDays, IDailyWorkingHours, IOption } from '@/models'
 import { CompanyPricingSummaryBody, CompanyPricingSummaryFooter } from '@/pages'
 import {
   clockToSeconds,
@@ -32,7 +32,7 @@ import {
   useGetCompanyPricingQuery,
   usePatchCompanyPricingMutation
 } from '@/services/settings/company-planning/companyPricingService'
-import initialworkingSchedule from '@/constants/workingSchedule'
+import initialWorkingSchedule from '@/constants/workingSchedule'
 
 const CompanyPricing = () => {
   const [totalMinutes, setTotalMinutes] = useState(0)
@@ -47,7 +47,7 @@ const CompanyPricing = () => {
   const [specifiedCompanyProfitPercentage, setSpecifiedCompanyProfitPercentage] = useState<number | string>('')
 
   const [dailyWorkTimeData, setDailyWorkTimeData] = useState<IDailyWorkingHours>({
-    ...initialworkingSchedule
+    ...initialWorkingSchedule
   })
 
   const { data: companyPricingData, isLoading, error } = useGetCompanyPricingQuery()
@@ -185,13 +185,17 @@ const CompanyPricing = () => {
     if (companyPricingData) {
       setDailyAvarageExpenceAmount(companyPricingData.dailyAverageExpenseAmount)
       setSpecifiedCompanyProfitPercentage(companyPricingData.specifiedCompanyProfit)
-      setPayrollPeriod(companyPricingData.payrollType === 0 ? 'monthly' : 'weekly')
-      setPayrollDay(companyPricingData.payrollDay)
-      setDailyWorkTimeData(companyPricingData.workingSchedule)
+      setPayrollPeriod(companyPricingData.workingSchedule.payrollType === 0 ? 'monthly' : 'weekly')
+      setPayrollDay(companyPricingData.workingSchedule.payrollDay)
+      setDailyWorkTimeData(companyPricingData.workingSchedule.workingSchedule)
+
+    console.log('companyPricingData', companyPricingData)
+
     }
   }, [companyPricingData])
 
   return (
+
     <JustifyBetweenRow height="100%" width="auto">
       <Column height="100%" width="30%">
         <Row margin="0 0 1rem 0">
