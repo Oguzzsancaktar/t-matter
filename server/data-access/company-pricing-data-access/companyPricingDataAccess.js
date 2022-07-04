@@ -22,9 +22,7 @@ const getPopulatedCompanyPricing = async () => {
       }
     },
     {
-      $unwind: {
-        path: '$workingSchedule'
-      }
+      $unwind: '$workingSchedule'
     }
   ]).exec()
 }
