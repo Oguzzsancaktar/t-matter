@@ -1,4 +1,3 @@
-const { clockToSeconds } = require('../utils/date-utils/dateUtils')
 const calculateHourlyCompanyFee = () => {
   const { clockToSeconds, secondsToTimeWithDisplay } = require('../utils/date-utils/dateUtils')
   const dataAccess = require('../data-access')
