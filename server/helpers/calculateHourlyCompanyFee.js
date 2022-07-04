@@ -5,7 +5,7 @@ const calculateHourlyCompanyFee = () => {
     try {
       const { dailyAverageExpenseAmount, specifiedCompanyProfit } =
         await dataAccess.companyPricingDataAccess.getCompanyPricing()
-      const activeUsers = await dataAccess.userDataAccess.findUsersAndPopulateSalarySetting()
+      const activeUsers = await dataAccess.userDataAccess.findActiveUsersAndPopulateSalarySetting()
       const defaultSalarySetting = await dataAccess.salarySettingDataAccess.findDefaultSalarySetting()
       let employerHourlyFee = 0
       for (const user of activeUsers) {

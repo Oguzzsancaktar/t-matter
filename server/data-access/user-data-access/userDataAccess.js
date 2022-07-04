@@ -42,9 +42,9 @@ const findUserWithFiltersAndPopulate = ({ search, size, status }) => {
   return User.aggregate(pipeline).exec()
 }
 
-const findUsersAndPopulateSalarySetting = () => {
+const findActiveUsersAndPopulateSalarySetting = () => {
   return User.aggregate([
-    { $match: {} },
+    { $match: { status: { $eq: { status: STATUS_TYPES.ACTIVE } } } },
     { $lookup: { from: 'salarysettings', localField: '_id', foreignField: 'owner', as: 'salarySetting' } }
   ]).exec()
 }
@@ -55,5 +55,5 @@ module.exports = {
   findUserById,
   findUser,
   findUserWithFiltersAndPopulate,
-  findUsersAndPopulateSalarySetting
+  findActiveUsersAndPopulateSalarySetting
 }
