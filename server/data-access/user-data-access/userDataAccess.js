@@ -44,7 +44,7 @@ const findUserWithFiltersAndPopulate = ({ search, size, status }) => {
 
 const findActiveUsersAndPopulateSalarySetting = () => {
   return User.aggregate([
-    { $match: { status: { $eq: { status: STATUS_TYPES.ACTIVE } } } },
+    { $match: { status: { $eq: STATUS_TYPES.ACTIVE } } },
     { $lookup: { from: 'salarysettings', localField: '_id', foreignField: 'owner', as: 'salarySetting' } }
   ]).exec()
 }
