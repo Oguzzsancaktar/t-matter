@@ -14,7 +14,7 @@ const SummaryChecklistItem: React.FC<IProps> = ({ checklistItem }) => {
     isLoading: checklistDetailDataIsLoading,
     isError: checklistDetailDataIsError
   } = useGetChecklistByIdQuery(checklistItem._id)
-
+  console.log('1234', checklistDetailData)
   return (
     <>
       {!checklistDetailDataIsLoading && !checklistDetailDataIsError && checklistDetailData ? (
@@ -23,7 +23,7 @@ const SummaryChecklistItem: React.FC<IProps> = ({ checklistItem }) => {
           <ItemContainer width="auto" maxWidth="120px">
             <Row>
               <ItemContainer margin="0 0.5rem 0 0" width="auto">
-                <SummaryCardValue>{checklistDetailData?.price.toFixed(2)}$</SummaryCardValue>
+                <SummaryCardValue>{(checklistDetailData?.price || 0).toFixed(2)}$</SummaryCardValue>
               </ItemContainer>
               <SummaryCardValue>{secondsToHourMin(checklistDetailData?.duration, true)}</SummaryCardValue>
             </Row>
