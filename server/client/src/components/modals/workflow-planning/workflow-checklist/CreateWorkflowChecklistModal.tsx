@@ -21,8 +21,11 @@ import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { useCreateChecklistMutation } from '@/services/settings/workflow-planning/workflowService'
 import { ITaskChecklistCreateDTO } from '@/models'
+import { useGetCompanyPricingQuery } from '@/services/settings/company-planning/companyPricingService'
 
 const CreateWorkflowChecklistModal = () => {
+  const { data: companyPricingData, isLoading: isCompanyPricingDataLoading, error } = useGetCompanyPricingQuery()
+  
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -77,7 +80,12 @@ const CreateWorkflowChecklistModal = () => {
 
   const handleDurationChange = (durationSecond: number) => {
     setWorkflowChecklist({ ...workflowChecklist, duration: durationSecond })
-    setChecklistPrice(durationSecond * workflowChecklist.point)
+
+    
+    if (!isCompanyPricingDataLoading || companyPricingData) {
+      setChecklistPrice(durationSecond / 60 / 60 * (companyPricingData?.summary.hourlyCompanyFee || -1 ) )
+    }
+
   }
 
   const resetValidationErrors = () => {

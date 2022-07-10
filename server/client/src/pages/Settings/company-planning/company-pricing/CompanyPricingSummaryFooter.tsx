@@ -38,7 +38,7 @@ const CompanyPricingSummaryFooter: React.FC<IProps> = ({
   return (
     <JustifyBetweenRow>
       <Text>Hourly Commpany Fee</Text>
-      <Value>${(summary.employerHourlyFee + summary.hourlyCompanyFee + specifiedCompanyHourlyProfit).toFixed(2)}</Value>
+      <Value>${(summary.employerHourlyFee + companyExpenseHourlyFee + specifiedCompanyHourlyProfit).toFixed(2)}</Value>
     </JustifyBetweenRow>
   )
 }

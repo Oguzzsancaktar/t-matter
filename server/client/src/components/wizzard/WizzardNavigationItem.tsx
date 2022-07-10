@@ -26,7 +26,7 @@ const WizzardNavigationItemContainer = styled.div<Pick<IProps, 'isActive'>>`
 const WizzardNavigationItem: React.FC<IProps> = ({ isActive, stepName, stepIndex, onClick }) => {
   return (
     <WizzardNavigationItemContainer isActive={isActive} onClick={onClick}>
-      <TabIndex index={stepIndex + 1} isActive={isActive} />
+      <TabIndex index={stepIndex} isActive={isActive} />
       <H1 margin="1rem 0 0 0" textAlign="center" color={isActive ? colors.white.bg : colors.black.primary}>
         {stepName}
       </H1>

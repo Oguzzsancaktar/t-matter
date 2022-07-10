@@ -2,6 +2,7 @@ const authValidations = require('./auth-validations/authValidations')
 const salarySettingValidations = require('./salary-setting-validations/salarySettingValidations')
 const companyPricingValidations = require('./company-pricing-validations/companyPricingValidations')
 const userValidations = require('./user-validations/userValidations')
+const customerValidations = require('./customer-validations/customerValidations')
 const roleValidations = require('./role-validations/roleValidations')
 const workflowValidations = require('./workflow-validations/workflowValidations')
 const generalValidations = require('./common/generalValidations')
@@ -19,5 +20,6 @@ module.exports = {
   generalValidations,
   dynamicVariableValidations,
   timeLogValidations,
-  workingScheduleValidations
+  workingScheduleValidations,
+  customerValidations
 }

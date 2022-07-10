@@ -46,8 +46,7 @@ const CreateWorkflowPlanModal = () => {
   const [createWorkflowData, setCreateWorkflowData] = useState<IWorkflowCreateDTO>({
     name: '',
     steps: [{ ...initialTask }],
-    duration: 0,
-    price: 0
+  
   })
 
   const initialErrors = {
@@ -94,12 +93,6 @@ const CreateWorkflowPlanModal = () => {
     if (!isValueNull(createWorkflowData.name)) {
       setValidationErrors({ ...initialErrors, nameError: true })
       setValidationErrorMessage('Please enter valid workflow name')
-      return (result = false)
-    }
-
-    if (!isValueBiggerThanZero(createWorkflowData.duration)) {
-      setValidationErrors({ ...initialErrors, checklistItemsError: true })
-      setValidationErrorMessage('Workflow duration cant be zero please select checklist items')
       return (result = false)
     }
 
@@ -161,38 +154,9 @@ const CreateWorkflowPlanModal = () => {
       }
     })
 
-    if (!isValueNull(createWorkflowData.duration.toString()) && !isValueBiggerThanZero(createWorkflowData.duration)) {
-      setValidationErrors({ ...initialErrors, durationError: true })
-      setValidationErrorMessage('Workflow duration error')
-      return (result = false)
-    }
-
-    if (!isValueNull(createWorkflowData.price.toString()) && !isValueBiggerThanZero(createWorkflowData.price)) {
-      setValidationErrors({ ...initialErrors, priceError: true })
-      setValidationErrorMessage('Workflow price error')
-      return (result = false)
-    }
-
     return result
   }
 
-  const calculateWorkflowTotals = () => {
-    const dataInstance: IWorkflowCreateDTO = { ...createWorkflowData }
-    let totalDuration = 0
-    let totalPrice = 0
-
-    dataInstance.steps.forEach(task => {
-      task.checklistItems.forEach(checklist => {
-        totalDuration += checklist.duration
-        totalPrice += checklist.price
-      })
-    })
-
-    dataInstance.duration = totalDuration
-    dataInstance.price = totalPrice
-
-    setCreateWorkflowData(dataInstance)
-  }
 
   const handleStepRemove = (index: number) => {
     let dataInstance = [...createWorkflowData.steps]
@@ -231,9 +195,6 @@ const CreateWorkflowPlanModal = () => {
     setActiveStep(index)
   }
 
-  useEffect(() => {
-    calculateWorkflowTotals()
-  }, [createWorkflowData.steps])
 
   useEffect(() => {
     toastError(validationErrorMessage)

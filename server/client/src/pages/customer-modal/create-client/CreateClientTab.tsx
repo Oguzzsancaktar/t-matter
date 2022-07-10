@@ -26,12 +26,12 @@ const CreateClientTab = () => {
     { stepName: 'Add New Contacts', stepIndex: 3 }
   ])
 
-  const [createClientDTO, setCreateClientDTO] = useState<Omit<IClientCreateDTO, '_id'>>({
+  const [birthday, setBirthday] = useState('')
+  const [createClientDTO, setCreateClientDTO] = useState<Omit<IClientCreateDTO, '_id' | 'birthday'>>({
     firstname: '',
     lastname: '',
     email: '',
     phone: '',
-    birthday: '',
     birthplace: '',
     country: '',
     city: '',
@@ -40,7 +40,7 @@ const CreateClientTab = () => {
     address: '',
     aSharpNumber: '',
     refferType: '',
-    gender: '',
+    gender: 0,
     reliableInCompany: [],
     createContact: []
   })
@@ -87,16 +87,15 @@ const CreateClientTab = () => {
       return false
     }
 
-    if (!isPhoneNumberValid(createClientDTO.phone)) {
+    if (!isValueNull(createClientDTO.phone)) {
       setErrorMessage('Please enter a valid phone number')
 
       setActiveWizzardStep(0)
       return false
     }
 
-    if (!isValueNull(createClientDTO.birthday)) {
+    if (!isValueNull(birthday)) {
       setErrorMessage('Please enter a valid birthday')
-
       setActiveWizzardStep(0)
       return false
     }
@@ -157,9 +156,8 @@ const CreateClientTab = () => {
       return false
     }
 
-    if (!isValueNull(createClientDTO.gender)) {
+    if (!isValueNull(createClientDTO.gender.toString())) {
       setErrorMessage('Please select user gender')
-
       setActiveWizzardStep(1)
       return false
     }
@@ -172,11 +170,12 @@ const CreateClientTab = () => {
   }
 
   const handleBirhdayChange = (date: Date[]) => {
-    setCreateClientDTO({ ...createClientDTO, birthday: moment(date[0]).format('MM-DD-YYYY') })
+    setBirthday(moment(date[0]).format('MM-DD-YYYY'))
   }
 
   const handleGenderChange = (option: IOption) => {
-    setCreateClientDTO({ ...createClientDTO, gender: option.value })
+    console.log(option)
+    setCreateClientDTO({ ...createClientDTO, gender: +option.value })
   }
 
   const handleRefferTypeChange = (option: IOption) => {
@@ -215,7 +214,7 @@ const CreateClientTab = () => {
         return (
           <ClientInformationsStep
             validationErrors={validationErrors}
-            createClientDTO={createClientDTO}
+            createClientDTO={{ ...createClientDTO, birthday }}
             onInputChange={handleInputChange}
             onBirthdayChange={handleBirhdayChange}
             onGenderChange={handleGenderChange}
@@ -226,7 +225,7 @@ const CreateClientTab = () => {
         return (
           <ClientExtraInformationsStep
             validationErrors={validationErrors}
-            createClientDTO={createClientDTO}
+            createClientDTO={{ ...createClientDTO, birthday }}
             onInputChange={handleInputChange}
           />
         )
@@ -246,7 +245,7 @@ const CreateClientTab = () => {
         return (
           <ClientInformationsStep
             validationErrors={validationErrors}
-            createClientDTO={createClientDTO}
+            createClientDTO={{ ...createClientDTO, birthday }}
             onInputChange={handleInputChange}
             onBirthdayChange={handleBirhdayChange}
             onGenderChange={handleGenderChange}
@@ -278,7 +277,6 @@ const CreateClientTab = () => {
 
     console.log(validationResult)
     if (validationResult) {
-      console.log('qwer')
       setActiveWizzardStep(activeWizzardStep + 1)
     }
   }
@@ -307,7 +305,7 @@ const CreateClientTab = () => {
     setErrorMessage('')
     const validationResult = validateFormFields()
     if (validationResult) {
-      console.log(createClientDTO)
+      console.log({ ...createClientDTO, birthday })
     }
   }
 
@@ -326,7 +324,7 @@ const CreateClientTab = () => {
           />
         </Column>
       </ItemContainer>
-      <JustifyBetweenColumn width="calc(100% - 200px )" height="100%">
+      <JustifyBetweenColumn width="calc(100% - 200px)" height="100%">
         <ItemContainer height="calc(100% - 35px - 1rem)">{renderSwitch()}</ItemContainer>
 
         <ItemContainer width="100%" height="35px" margin="1rem 0 0 0 ">

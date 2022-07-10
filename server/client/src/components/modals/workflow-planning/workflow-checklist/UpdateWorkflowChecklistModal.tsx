@@ -21,15 +21,18 @@ import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { usePatchWorkflowChecklistMutation } from '@/services/settings/workflow-planning/workflowService'
 import { ITaskChecklist, ITaskChecklistUpdateDTO } from '@/models'
+import { useGetCompanyPricingQuery } from '@/services/settings/company-planning/companyPricingService'
 
 interface IProps {
   checklist: ITaskChecklist
 }
 const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
+  const { data: companyPricingData, isLoading: isCompanyPricingDataLoading, error } = useGetCompanyPricingQuery()
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [checklistPrice, setChecklistPrice] = useState(0)
+  const [checklistPrice, setChecklistPrice] = useState(checklist.price)
 
   const [workflowChecklist, setWorkflowChecklist] = useState<
     Pick<ITaskChecklistUpdateDTO, 'name' | 'point' | 'duration'>
@@ -82,7 +85,10 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
 
   const handleDurationChange = (durationSecond: number) => {
     setWorkflowChecklist({ ...workflowChecklist, duration: durationSecond })
-    setChecklistPrice(durationSecond * workflowChecklist.point)
+    // do
+    if (!isCompanyPricingDataLoading || companyPricingData) {
+      setChecklistPrice((durationSecond / 60 / 60) * (companyPricingData?.summary.hourlyCompanyFee || -1))
+    }
   }
 
   const resetValidationErrors = () => {

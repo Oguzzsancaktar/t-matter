@@ -6,7 +6,9 @@ import { IUser, IUserCreateDTO, IUserUpdateDTO } from '@/models'
 const USER_REDUCER_PATH = 'userApi'
 const USER_TAG_TYPE = 'userTag' as const
 
-type IBuilder = EndpointBuilder<IAxiosBaseQueryFn, typeof USER_TAG_TYPE, typeof USER_REDUCER_PATH>
+const COMPANY_PRICING_TAG = 'companyPricingTag'
+
+type IBuilder = EndpointBuilder<IAxiosBaseQueryFn, typeof USER_TAG_TYPE | typeof COMPANY_PRICING_TAG, typeof USER_REDUCER_PATH>
 
 const getUsers = (builder: IBuilder) => {
   return builder.query<IUser[], void>({
@@ -33,7 +35,10 @@ const createUser = (builder: IBuilder) => {
       }
     },
     invalidatesTags() {
-      return [{ type: USER_TAG_TYPE, id: 'LIST' }]
+      return [
+        { type: USER_TAG_TYPE, id: 'LIST' },
+        { type: COMPANY_PRICING_TAG, id: 'LIST' }
+      ]
     }
   })
 }
@@ -89,7 +94,7 @@ const updateUserStatus = (builder: IBuilder) => {
 
 const userApi = createApi({
   reducerPath: USER_REDUCER_PATH,
-  tagTypes: [USER_TAG_TYPE],
+  tagTypes: [USER_TAG_TYPE, COMPANY_PRICING_TAG],
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
     getUsers: getUsers(builder),

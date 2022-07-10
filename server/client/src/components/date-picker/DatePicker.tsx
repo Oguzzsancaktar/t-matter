@@ -27,7 +27,7 @@ const DatePicker: React.FC<IProps> = ({ name, value = '', disabled, labelText, v
   const [date, setDate] = useState(value)
 
   const handleDateChange = (date: Date[], dateText) => {
-    setDate(date[0])
+    // setDate(date[0])
     onChange(date, dateText)
   }
 
@@ -53,7 +53,7 @@ const DatePicker: React.FC<IProps> = ({ name, value = '', disabled, labelText, v
                 disabled={disabled}
                 value={date}
                 onChange={handleDateChange}
-                placeholder="Select bithday"
+                placeholder="Select birhday"
               />
             </Row>
           </Container>

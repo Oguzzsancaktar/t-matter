@@ -37,8 +37,11 @@ const getWorkflowChecklists = async (query = {}, populate = '') => {
   ])
 }
 
-const findWorkflowChecklistById = (id, populate = '') => {
-  return WorkflowChecklist.findById(id).populate(populate).lean().exec()
+const findWorkflowChecklistById = async (id, populate = '') => {
+  const checklist = await WorkflowChecklist.findById(id).populate(populate).lean().exec()
+  const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
+  checklist.price = (checklist.duration * hourlyCompanyFee) / 3600
+  return checklist
 }
 
 const findByIdAndUpdateWorkflowChecklist = (id, data) => {
@@ -50,8 +53,21 @@ const createWorkflowPlan = data => {
   return WorkflowPlan.create(data)
 }
 
-const getWorkflowPlans = (query = {}, populate = '') => {
-  return WorkflowPlan.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
+const getWorkflowPlans = async (query = {}, populate = '') => {
+  const workflowPlans = await WorkflowPlan.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
+  const workflowPlanArr = []
+
+  if (workflowPlans) {
+    workflowPlans.map(plan => {
+      let planTotalDuration = 0
+      let planTotalPrice = 0
+
+      plan.steps.map(task => {
+        task.checklistItems
+      })
+    })
+  }
+  return workflowPlans
 }
 
 const findWorkflowPlanById = (id, populate = '') => {

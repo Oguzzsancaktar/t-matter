@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { EGender, IClientCreateDTO, IOption, IUserCreateDTO } from '@/models'
+import { EGender, IClientCreateDTO, IOption } from '@/models'
 import { Key, User } from 'react-feather'
 import { genderOptions } from '@/constants/genders'
-import { statusOptions } from '@/constants/statuses'
 
 interface IProps {
   validationErrors: any
@@ -136,7 +135,9 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 options={genderOptions}
                 labelText="Gender"
                 validationError={validationErrors.genderError}
-                selectedOption={[{ value: EGender[createClientDTO.gender], label: createClientDTO.gender }]}
+                selectedOption={[
+                  { value: createClientDTO.gender.toString(), label: EGender[createClientDTO.gender.toString()] }
+                ]}
               />
             </ItemContainer>
           </JustifyBetweenRow>

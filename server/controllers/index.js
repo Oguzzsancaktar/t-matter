@@ -3,6 +3,7 @@ const salarySettingController = require('./salary-setting-controller/salarySetti
 const companyPricingController = require('./company-pricing-controller/companyPricingController')
 const roleController = require('./role-controller/roleController')
 const userController = require('./user-controller/userController')
+const customerController = require('./customer-controller/customerController')
 const workflowController = require('./workflow-controller/workflowController')
 const dynamicVariableController = require('./dynamic-variables-controller/dynamicVariablesController')
 const timeLogController = require('./time-log-controller/timeLogController')
@@ -17,5 +18,6 @@ module.exports = {
   workflowController,
   dynamicVariableController,
   timeLogController,
-  workingScheduleController
+  workingScheduleController,
+  customerController
 }

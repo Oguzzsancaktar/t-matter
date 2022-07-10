@@ -51,7 +51,7 @@ const CompanyPricingSummaryBody: React.FC<IProps> = ({
 
         <JustifyBetweenRow>
           <SummaryCardText>Company Expense Hourly Fee</SummaryCardText>
-          <SummaryCardValue>${summary.hourlyCompanyFee.toFixed(2)}</SummaryCardValue>
+          <SummaryCardValue>${companyExpenseHourlyFee.toFixed(2)}</SummaryCardValue>
         </JustifyBetweenRow>
 
         <JustifyBetweenRow>

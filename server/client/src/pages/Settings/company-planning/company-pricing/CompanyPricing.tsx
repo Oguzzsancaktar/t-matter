@@ -33,8 +33,13 @@ import {
   usePatchCompanyPricingMutation
 } from '@/services/settings/company-planning/companyPricingService'
 import initialWorkingHours from '@/constants/workingHours'
+import { workflowApi } from '@/services/settings/workflow-planning/workflowService'
+import useAccessStore from '@/hooks/useAccessStore'
 
 const CompanyPricing = () => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   const [totalMinutes, setTotalMinutes] = useState(0)
 
   const [payrollType, setPayrollType] = useState<number>(0)
@@ -149,15 +154,18 @@ const CompanyPricing = () => {
 
   const handleSave = async (e: React.MouseEvent) => {
     e.preventDefault()
-    await patchCompanyPricing({
-      dailyAverageExpenseAmount: dailyAvarageExpenceAmount as number,
-      specifiedCompanyProfit: specifiedCompanyProfitPercentage as number,
-      workingSchedule: {
-        payrollType,
-        payrollDay,
-        workingSchedule: dailyWorkTimeData
-      }
-    })
+    try {
+      await patchCompanyPricing({
+        dailyAverageExpenseAmount: dailyAvarageExpenceAmount as number,
+        specifiedCompanyProfit: specifiedCompanyProfitPercentage as number,
+        workingSchedule: {
+          payrollType,
+          payrollDay,
+          workingSchedule: dailyWorkTimeData
+        }
+      })
+      dispatch(workflowApi.util.resetApiState())
+    } catch (error) {}
 
     toastSuccess('Company pricing updated successfully')
   }

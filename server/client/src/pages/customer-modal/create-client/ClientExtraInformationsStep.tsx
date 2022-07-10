@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { InputWithIcon, SelectInput } from '@/components/input'
+import React from 'react'
+import { InputWithIcon } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
-import { closeModal } from '@/store'
-import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { IClientCreateDTO, IUserCreateDTO } from '@/models'
-import { Key, User } from 'react-feather'
 
-import { genderOptions } from '@/constants/genders'
-import { statusOptions } from '@/constants/statuses'
+import { InnerWrapper, ItemContainer } from '@/components'
+import { IClientCreateDTO } from '@/models'
+import { Key, User } from 'react-feather'
 
 interface IProps {
   validationErrors: any
@@ -20,7 +17,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({ createClientDTO, valida
       <JustifyBetweenColumn height="100%">
         <JustifyBetweenColumn height="auto" padding="2rem 0">
           <JustifyBetweenRow>
-            <ItemContainer margin="0 0.5rem 0 0 " width="calc((100% - 1rem)/2)">
+            <ItemContainer margin="0 0.5rem 0 0" width="calc((100% - 1rem)/2)">
               <InputWithIcon
                 children={<User size={16} />}
                 name="country"
@@ -60,6 +57,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({ createClientDTO, valida
                 type="text"
                 labelText="State"
                 validationError={validationErrors.stateError}
+                value={createClientDTO.state}
               />
             </ItemContainer>
             <ItemContainer margin="0.5rem 0 0 0.5rem">
@@ -72,6 +70,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({ createClientDTO, valida
                 type="text"
                 labelText="Zip Code"
                 validationError={validationErrors.zipcodeError}
+                value={createClientDTO.zipcode}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -87,6 +86,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({ createClientDTO, valida
                 type="text"
                 labelText="Address"
                 validationError={validationErrors.addressError}
+                value={createClientDTO.address}
               />
             </ItemContainer>
 
@@ -100,6 +100,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({ createClientDTO, valida
                 type="text"
                 labelText="A# Number"
                 validationError={validationErrors.aSharpNumberError}
+                value={createClientDTO.aSharpNumber}
               />
             </ItemContainer>
           </JustifyBetweenRow>

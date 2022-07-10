@@ -16,6 +16,7 @@ import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
 import { useCreateUserMutation } from '@/services/settings/user-planning/userService'
+import { companyPricingApi } from '@/services/settings/company-planning/companyPricingService'
 
 const CreateUserModal = () => {
   const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
@@ -204,12 +205,14 @@ const CreateUserModal = () => {
 
   const handleConfirm = async () => {
     const validationResult = validateFormFields()
-    if (validationResult) {
-      const result = await createUser({ ...createUserData, birthday: birthDate })
-
-      dispatch(closeModal('createUserModal'))
-    } else {
-      toastError(errorMessage)
+    try {
+      if (validationResult) {
+        await createUser({ ...createUserData, birthday: birthDate })
+        dispatch(companyPricingApi.util.resetApiState())
+        dispatch(closeModal('createUserModal'))
+      }
+    } catch (error) {
+      toastError('!!! Error creating user !!!')
     }
   }
 

@@ -13,7 +13,7 @@ export default interface IClient {
   address: string
   aSharpNumber: string
   refferType: string
-  gender: string
+  gender: number
   status: string
   reliableCustomers: string[]
 }
