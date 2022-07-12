@@ -29,19 +29,21 @@ const getLogsByUserId = async userId => {
     const isLogoutAfterLogin =
       logouts.length > 0 && logouts[logouts.length - 1].createdAt > logins[logins.length - 1].createdAt
     if (!isLogoutAfterLogin) {
-      return { date: _id, totalTime: 0, login: logins[0].createdAt, logout: null }
+      acc.push({ date: _id, totalTime: 0, login: logins[0].createdAt, logout: null })
+      return acc
     }
 
     const totalTime = logins.reduce((acc, curr, i) => {
       return acc + moment(moment(logouts[i]?.createdAt)).diff(curr.createdAt, 'seconds')
     }, 0)
 
-    return {
+    acc.push({
       date: _id,
       totalTime,
       login: logins[0].createdAt,
       logout: logouts[logouts.length - 1].createdAt
-    }
+    })
+    return acc
   }, [])
 }
 
