@@ -11,7 +11,7 @@ import {
 import ContactAddNewContactsStep from './ContactAddNewContactsStep'
 import ContactInformationsStep from './ContactInformationsStep'
 import ContactSearchInCompanyStep from './ContactSearchInCompanyStep'
-import { IContactCreateDTO, IOption } from '@/models'
+import { ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
 import { toastError, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid, isPhoneNumberValid, isZipcodeValid } from '@/utils/validationUtils'
 import moment from 'moment'
@@ -20,21 +20,21 @@ const CreateContactTab = () => {
   const [activeWizzardStep, setActiveWizzardStep] = useState(0)
   const [contactWizzardSteps, setContactWizzardSteps] = useState([
     { stepName: 'Contact Informations', stepIndex: 0 },
-    { stepName: 'Search Reliable Company', stepIndex: 1 },
+    { stepName: 'Search Relative', stepIndex: 1 },
     { stepName: 'Add New Contacts', stepIndex: 2 }
   ])
 
-  const [createContactDTO, setCreateContactDTO] = useState<Omit<IContactCreateDTO, '_id'>>({
+  const [createContactDTO, setCreateContactDTO] = useState<Omit<ICustomerCreateDTO, '_id'>>({
+    aSharpNumber: '',
+    customerType: 0,
     firstname: '',
     lastname: '',
     email: '',
     phone: '',
     birthday: '',
     birthplace: '',
-    refferType: '',
-    gender: '',
-    reliableInCompany: [],
-    createContact: []
+    refferedBy: '',
+    gender: 0
   })
 
   const [validationErrors, setValidationErrors] = useState({
@@ -44,7 +44,7 @@ const CreateContactTab = () => {
     phoneError: false,
     birthdayError: false,
     birthplaceError: false,
-    refferTypeError: false,
+    refferedByError: false,
     genderError: false
   })
 
@@ -107,16 +107,16 @@ const CreateContactTab = () => {
       setValidationErrors({ ...validationErrors, birthplaceError: false })
     }
 
-    if (!isValueNull(createContactDTO.refferType)) {
-      setErrorMessage('Please select user refferType')
-      setValidationErrors({ ...validationErrors, refferTypeError: true })
+    if (!isValueNull(createContactDTO.refferedBy)) {
+      setErrorMessage('Please select user refferedBy')
+      setValidationErrors({ ...validationErrors, refferedByError: true })
       setActiveWizzardStep(1)
       return false
     } else {
-      setValidationErrors({ ...validationErrors, refferTypeError: false })
+      setValidationErrors({ ...validationErrors, refferedByError: false })
     }
 
-    if (!isValueNull(createContactDTO.gender)) {
+    if (!isValueNull(createContactDTO.gender.toString())) {
       setErrorMessage('Please select user gender')
       setValidationErrors({ ...validationErrors, genderError: true })
       setActiveWizzardStep(1)
@@ -137,11 +137,11 @@ const CreateContactTab = () => {
   }
 
   const handleGenderChange = (option: IOption) => {
-    setCreateContactDTO({ ...createContactDTO, gender: option.value })
+    setCreateContactDTO({ ...createContactDTO, gender: +option.value })
   }
 
   const handleRefferTypeChange = (option: IOption) => {
-    setCreateContactDTO({ ...createContactDTO, refferType: option.value })
+    setCreateContactDTO({ ...createContactDTO, refferedBy: option.value })
   }
 
   const handleAddContact = (id: string) => {
@@ -164,7 +164,7 @@ const CreateContactTab = () => {
     }
   }
 
-  const handleAddNewContact = (contact: IContactCreateDTO) => {
+  const handleAddNewContact = (contact: ICustomerAddNew) => {
     if (createContactDTO.createContact) {
       setCreateContactDTO({ ...createContactDTO, createContact: createContactDTO.createContact?.concat(contact) })
     }

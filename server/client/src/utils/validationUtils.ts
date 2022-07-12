@@ -4,8 +4,12 @@ const controlStringLength = (value: string): boolean => {
   return result
 }
 
-export const isValueNull = (value: string) => {
-  return value.toString().trim().length > 0
+export const isValueNull = (value: string | undefined) => {
+  if (value) {
+    return value.toString().trim().length > 0
+  } else {
+    return false
+  }
 }
 
 export const isValueBiggerThanZero = (value: number) => {

@@ -9,6 +9,7 @@ import { userRoleApi } from '@/services/settings/user-planning/userRoleService'
 import { workflowApi } from '@/services/settings/workflow-planning/workflowService'
 import { dynamicVariablesApi } from '@/services/settings/company-planning/dynamicVariableService'
 import { logsApi } from '@/services/userLogService'
+import { customerApi } from '@/services/customers/customerService'
 
 const rootReducer = combineReducers({
   auth: AuthReducer,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   [userRoleApi.reducerPath]: userRoleApi.reducer,
   [workflowApi.reducerPath]: workflowApi.reducer,
   [dynamicVariablesApi.reducerPath]: dynamicVariablesApi.reducer,
-  [logsApi.reducerPath]: logsApi.reducer
+  [logsApi.reducerPath]: logsApi.reducer,
+  [customerApi.reducerPath]: customerApi.reducer
 })
 
 export default rootReducer

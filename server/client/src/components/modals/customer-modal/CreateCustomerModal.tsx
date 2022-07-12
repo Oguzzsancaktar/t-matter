@@ -18,17 +18,17 @@ const CreateCustomerModal = () => {
               <Tab
                 margin="0 1rem 0 0rem"
                 index={0}
-                name="Create Client"
-                isActive={activeTab === 'create-client'}
-                onClick={() => setActiveTab('create-client')}
+                name="Create Contact"
+                isActive={activeTab === 'create-contact'}
+                onClick={() => setActiveTab('create-contact')}
               />
 
               <Tab
                 margin="0 1rem 0 0rem"
                 index={1}
-                name="Create Contact"
-                isActive={activeTab === 'create-contact'}
-                onClick={() => setActiveTab('create-contact')}
+                name="Create Client"
+                isActive={activeTab === 'create-client'}
+                onClick={() => setActiveTab('create-client')}
               />
             </JustifyCenterRow>
           </JustifyBetweenColumn>

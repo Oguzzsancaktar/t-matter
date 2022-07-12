@@ -12,22 +12,25 @@ import ClientAddNewContactsStep from './ClientAddNewContactsStep'
 import ClientExtraInformationsStep from './ClientExtraInformationsStep'
 import ClientInformationsStep from './ClientInformationsStep'
 import ClientSearchInCompanyStep from './ClientSearchInCompanyStep'
-import { IClientCreateDTO, IContact, IContactCreateDTO, IOption } from '@/models'
+import { ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
 import { toastError, toastWarning } from '@/utils/toastUtil'
-import { isValueNull, isEmailValid, isPhoneNumberValid, isZipcodeValid } from '@/utils/validationUtils'
+import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import moment from 'moment'
+import { useCreateCustomerMutation } from '@/services/customers/customerService'
 
 const CreateClientTab = () => {
+  const [createCustomer] = useCreateCustomerMutation()
   const [activeWizzardStep, setActiveWizzardStep] = useState(0)
   const [clientWizzardSteps, setClientWizzardSteps] = useState([
     { stepName: 'Client Informations', stepIndex: 0 },
-    { stepName: 'Client Extra Informations', stepIndex: 1 },
-    { stepName: 'Search Reliable Company', stepIndex: 2 },
+    { stepName: 'Detailed Informations', stepIndex: 1 },
+    { stepName: 'Search Relative', stepIndex: 2 },
     { stepName: 'Add New Contacts', stepIndex: 3 }
   ])
 
   const [birthday, setBirthday] = useState('')
-  const [createClientDTO, setCreateClientDTO] = useState<Omit<IClientCreateDTO, '_id' | 'birthday'>>({
+  const [createClientDTO, setCreateClientDTO] = useState<Omit<ICustomerCreateDTO, '_id' | 'birthday'>>({
+    customerType: 0,
     firstname: '',
     lastname: '',
     email: '',
@@ -39,7 +42,7 @@ const CreateClientTab = () => {
     zipcode: '',
     address: '',
     aSharpNumber: '',
-    refferType: '',
+    refferedBy: '',
     gender: 0,
     reliableInCompany: [],
     createContact: []
@@ -58,7 +61,7 @@ const CreateClientTab = () => {
     zipcodeError: false,
     addressError: false,
     aSharpNumberError: false,
-    refferTypeError: false,
+    refferedByError: false,
     genderError: false
   })
 
@@ -128,7 +131,7 @@ const CreateClientTab = () => {
       return false
     }
 
-    if (!isZipcodeValid(createClientDTO.zipcode)) {
+    if (!isValueNull(createClientDTO.zipcode)) {
       setErrorMessage('Please enter a valid zipcode')
 
       setActiveWizzardStep(1)
@@ -149,8 +152,8 @@ const CreateClientTab = () => {
       return false
     }
 
-    if (!isValueNull(createClientDTO.refferType)) {
-      setErrorMessage('Please select user refferType')
+    if (!isValueNull(createClientDTO.refferedBy)) {
+      setErrorMessage('Please select user refferedBy')
 
       setActiveWizzardStep(1)
       return false
@@ -161,7 +164,7 @@ const CreateClientTab = () => {
       setActiveWizzardStep(1)
       return false
     }
-
+    // ad soyad telefon email refered contect todo client job ekle kutu açtır sor user birhday tipi düzelt // user inner modal ÇM kALDIR VE EDİTE
     return true
   }
 
@@ -179,7 +182,7 @@ const CreateClientTab = () => {
   }
 
   const handleRefferTypeChange = (option: IOption) => {
-    setCreateClientDTO({ ...createClientDTO, refferType: option.value })
+    setCreateClientDTO({ ...createClientDTO, refferedBy: option.value })
   }
 
   const handleAddClient = (id: string) => {
@@ -202,7 +205,7 @@ const CreateClientTab = () => {
     }
   }
 
-  const handleAddNewContact = (contact: IContactCreateDTO) => {
+  const handleAddNewContact = (contact: ICustomerAddNew) => {
     if (createClientDTO.createContact) {
       setCreateClientDTO({ ...createClientDTO, createContact: createClientDTO.createContact?.concat(contact) })
     }
@@ -269,13 +272,12 @@ const CreateClientTab = () => {
       zipcodeError: false,
       addressError: false,
       aSharpNumberError: false,
-      refferTypeError: false,
+      refferedByError: false,
       genderError: false
     })
     setErrorMessage('')
     const validationResult = validateFormFields()
 
-    console.log(validationResult)
     if (validationResult) {
       setActiveWizzardStep(activeWizzardStep + 1)
     }
@@ -285,7 +287,7 @@ const CreateClientTab = () => {
     setActiveWizzardStep(activeWizzardStep - 1)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setValidationErrors({
       firstnameError: false,
       lastnameError: false,
@@ -299,13 +301,17 @@ const CreateClientTab = () => {
       zipcodeError: false,
       addressError: false,
       aSharpNumberError: false,
-      refferTypeError: false,
+      refferedByError: false,
       genderError: false
     })
     setErrorMessage('')
     const validationResult = validateFormFields()
-    if (validationResult) {
-      console.log({ ...createClientDTO, birthday })
+    try {
+      if (validationResult) {
+        createCustomer({ ...createClientDTO, birthday })
+      }
+    } catch (error) {
+      toastError('error.message')
     }
   }
 

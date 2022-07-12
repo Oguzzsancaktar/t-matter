@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { EGender, IContactCreateDTO, IOption, IUserCreateDTO } from '@/models'
+import { EGender, ICustomerAddNew, IOption } from '@/models'
 import { Key, User } from 'react-feather'
 import { genderOptions } from '@/constants/genders'
-import { statusOptions } from '@/constants/statuses'
 
 interface IProps {
   validationErrors: any
-  createContactDTO: Omit<IContactCreateDTO, '_id'>
+  createContactDTO: Omit<ICustomerAddNew, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onBirthdayChange: (date: Date[]) => void
   onGenderChange: (option: IOption) => void
@@ -117,13 +116,13 @@ const ContactInformationsStep: React.FC<IProps> = ({
             <ItemContainer margin="0.5rem 0.5rem 0 0 ">
               <SelectInput
                 children={<User size={16} />}
-                name="refferType"
+                name="refferedBy"
                 // placeholder="Enter birth location..."
                 onChange={(option: IOption) => onRefferTypeChange(option)}
                 options={genderOptions}
                 labelText="Reffered By"
-                validationError={validationErrors.refferTypeError}
-                selectedOption={[{ value: createContactDTO.refferType, label: createContactDTO.refferType }]}
+                validationError={validationErrors.refferedByError}
+                selectedOption={[{ value: createContactDTO.refferedBy, label: createContactDTO.refferedBy }]}
               />
             </ItemContainer>
 
@@ -136,7 +135,9 @@ const ContactInformationsStep: React.FC<IProps> = ({
                 options={genderOptions}
                 labelText="Gender"
                 validationError={validationErrors.genderError}
-                selectedOption={[{ value: EGender[createContactDTO.gender], label: createContactDTO.gender }]}
+                selectedOption={[
+                  { value: EGender[createContactDTO.gender], label: createContactDTO.gender.toString() }
+                ]}
               />
             </ItemContainer>
           </JustifyBetweenRow>

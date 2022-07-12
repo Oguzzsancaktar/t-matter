@@ -7,6 +7,7 @@ import { authApi } from '@services/authService'
 import { workflowApi } from '@/services/settings/workflow-planning/workflowService'
 import { dynamicVariablesApi } from '@/services/settings/company-planning/dynamicVariableService'
 import { logsApi } from '@/services/userLogService'
+import { customerApi } from '@/services/customers/customerService'
 
 const StoreMiddlewares = [
   authApi.middleware,
@@ -16,7 +17,8 @@ const StoreMiddlewares = [
   userRoleApi.middleware,
   workflowApi.middleware,
   dynamicVariablesApi.middleware,
-  logsApi.middleware
+  logsApi.middleware,
+  customerApi.middleware
 ]
 
 export default StoreMiddlewares

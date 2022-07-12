@@ -1,11 +1,11 @@
-export default interface IContact {
-  _id: string
+export default interface ICustomerAddNew {
+  customerType: number
   firstname: string
   lastname: string
   email: string
   phone: string
   birthday: string
   birthplace: string
-  refferType: string
-  gender: string
+  refferedBy: string
+  gender: number
 }

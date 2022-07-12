@@ -6,7 +6,6 @@ import {
   Column,
   DataTableHeader,
   ActionButtons,
-  CreateRoleModal,
   PageWrapper,
   CreateCustomerModal,
   ReadCustomerModal
@@ -18,8 +17,11 @@ import { EStatus, ESize } from '@/models'
 import { openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { UserCheck } from 'react-feather'
+import { useGetCustomersQuery } from '@/services/customers/customerService'
 
 const CustomersPage = () => {
+  const { data: customersData, isLoading: customersIsLoading } = useGetCustomersQuery()
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
   const columns = [
@@ -28,14 +30,14 @@ const CustomersPage = () => {
       selector: row => row.task,
       sortable: true,
       cell: data => (
-        <UserBadge userEmail={data.customer.email} userImage={data.customer.photo} userName={data.customer.name} />
+        <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
       )
     },
     {
       name: 'Type',
-      selector: row => row.role,
+      selector: row => row.customerType,
       sortable: true,
-      cell: data => <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.role} />
+      cell: data => <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.customerType} />
     },
     {
       name: 'Phone',
@@ -77,39 +79,6 @@ const CustomersPage = () => {
     }
   ]
 
-  const data = [
-    {
-      id: 1,
-      customer: {
-        name: 'User Name 1',
-        photo: 'https://via.placeholder.com/150',
-        email: 'user1@email.com'
-      },
-      refferedBy: {
-        name: 'Facebook',
-        color: '#6898ff'
-      },
-      role: 'Client',
-      phone: '+(44) 545 567 56 56',
-      status: 1
-    },
-    {
-      id: 2,
-      customer: {
-        name: 'User Name 2',
-        photo: 'https://via.placeholder.com/150',
-        email: 'user2@email.com'
-      },
-      refferedBy: {
-        name: 'Youtube',
-        color: '#ff0000'
-      },
-      role: 'Contact',
-      phone: '+(90) 543 333 22 22',
-      status: 0
-    }
-  ]
-
   const openCreateRoleModal = (e: React.MouseEvent) => {
     e.preventDefault()
     dispatch(
@@ -143,7 +112,7 @@ const CustomersPage = () => {
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px)">
           <DataTableHeader handleAddNew={openCreateRoleModal} />
-          <DataTable fixedHeader columns={columns} data={data} />
+          <DataTable fixedHeader columns={columns} data={customersData || []} />
         </Column>
       </JustifyBetweenColumn>
     </PageWrapper>

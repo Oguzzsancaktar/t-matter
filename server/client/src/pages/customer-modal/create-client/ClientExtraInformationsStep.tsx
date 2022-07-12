@@ -3,12 +3,12 @@ import { InputWithIcon } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 
 import { InnerWrapper, ItemContainer } from '@/components'
-import { IClientCreateDTO } from '@/models'
-import { Key, User } from 'react-feather'
+import { ICustomerCreateDTO } from '@/models'
+import { User } from 'react-feather'
 
 interface IProps {
   validationErrors: any
-  createClientDTO: Omit<IClientCreateDTO, '_id'>
+  createClientDTO: Omit<ICustomerCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 const ClientExtraInformationsStep: React.FC<IProps> = ({ createClientDTO, validationErrors, onInputChange }) => {

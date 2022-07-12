@@ -6,7 +6,6 @@ const utils = require('../../utils')
 const createCustomer = async (req, res) => {
   const { body } = req
   try {
-    body.password = await utils.authUtils.hashPassword({ plainTextPassword: body.password })
     await dataAccess.customerDataAccess.createCustomer(body)
     res.sendStatus(StatusCodes.CREATED)
   } catch (e) {
@@ -29,12 +28,8 @@ const updateCustomer = async (req, res) => {
 const getCustomer = async (req, res) => {
   const { id } = req.params
   try {
-    const customer = await dataAccess.customerDataAccess.findCustomerById(id, 'role')
-    let workingSchedule = await dataAccess.workingScheduleDataAccess.findWorkingScheduleByCustomerId(id)
-    if (!workingSchedule) {
-      workingSchedule = await dataAccess.workingScheduleDataAccess.findCompanyWorkingSchedule()
-    }
-    res.status(StatusCodes.OK).json({ ...customer, workingSchedule })
+    const customer = await dataAccess.customerDataAccess.findCustomerById(id, 'refferedBy')
+    res.status(StatusCodes.OK).json(customer)
   } catch (e) {
     console.log(e)
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)

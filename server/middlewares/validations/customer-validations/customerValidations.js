@@ -2,26 +2,29 @@ const joi = require('joi')
 const utils = require('../../../utils')
 
 const customerValidationSchema = {
-  address: joi.string().required(),
-  birthday: joi.date().required(),
-  birthplace: joi.string().required(),
-  city: joi.string().required(),
-  country: joi.string().required(),
-  email: joi.string().required(),
+  aSharpNumber: joi.string(),
+  country: joi.string(),
+  city: joi.string(),
+  state: joi.string(),
+  address: joi.string(),
+  zipcode: joi.string(),
+
+  customerType: joi.number(),
   firstname: joi.string().required(),
   lastname: joi.string().required(),
-  gender: joi.number().required(),
+  email: joi.string().required(),
   phone: joi.string().required(),
-  role: joi.string().required(),
-  state: joi.string().required(),
-  status: joi.number().required(),
-  zipcode: joi.string().required()
-  // password: joi.string().required(), --- password is not required for update
+  birthday: joi.date().required(),
+  birthplace: joi.string().required(),
+  refferedBy: joi.string().required(),
+  gender: joi.number().required(),
+  reliableInCompany: joi.array(),
+  createContact: joi.array()
 }
 
 const createCustomerValidation = async (req, res, next) => {
   const { body } = req
-  const schema = joi.object({ ...customerValidationSchema, password: joi.string().required() })
+  const schema = joi.object({ ...customerValidationSchema })
 
   try {
     await schema.validateAsync(body)

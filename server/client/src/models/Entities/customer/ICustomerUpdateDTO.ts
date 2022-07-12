@@ -1,4 +1,4 @@
-export default interface IContactCreateDTO {
+export default interface ICustomerUpdateDTO {
   _id: string
   username?: string
   email?: string

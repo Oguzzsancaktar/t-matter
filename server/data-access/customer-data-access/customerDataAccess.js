@@ -29,10 +29,10 @@ const findCustomerWithFiltersAndPopulate = ({ search, size, status }) => {
   pipeline.push(match)
   pipeline.push({
     $lookup: {
-      from: 'roles',
-      localField: 'role',
+      from: 'refferedBies',
+      localField: 'refferedBy',
       foreignField: '_id',
-      as: 'role'
+      as: 'refferedBy'
     }
   })
   pipeline.push({ $sort: { createdAt: -1 } })

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { EGender, IClientCreateDTO, IOption } from '@/models'
+import { EGender, ICustomerCreateDTO, IOption, IRefferedBy } from '@/models'
 import { Key, User } from 'react-feather'
 import { genderOptions } from '@/constants/genders'
+import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 
 interface IProps {
   validationErrors: any
-  createClientDTO: Omit<IClientCreateDTO, '_id'>
+  createClientDTO: Omit<ICustomerCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onBirthdayChange: (date: Date[]) => void
   onGenderChange: (option: IOption) => void
@@ -23,6 +24,8 @@ const ClientInformationsStep: React.FC<IProps> = ({
   onGenderChange,
   onRefferTypeChange
 }) => {
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+
   return (
     <InnerWrapper>
       <JustifyBetweenColumn height="100%">
@@ -116,13 +119,17 @@ const ClientInformationsStep: React.FC<IProps> = ({
             <ItemContainer margin="0.5rem 0.5rem 0 0 ">
               <SelectInput
                 children={<User size={16} />}
-                name="refferType"
+                name="refferedBy"
                 // placeholder="Enter birth location..."
                 onChange={(option: IOption) => onRefferTypeChange(option)}
-                options={genderOptions}
+                options={(refferedByData || []).map((refferedBy: IRefferedBy) => ({
+                  label: refferedBy.name,
+                  value: refferedBy._id
+                }))}
+                isLoading={refferedByDataIsLoading}
                 labelText="Reffered By"
-                validationError={validationErrors.refferTypeError}
-                selectedOption={[{ value: createClientDTO.refferType, label: createClientDTO.refferType }]}
+                validationError={validationErrors.refferedByError}
+                selectedOption={[{ value: createClientDTO.refferedBy, label: createClientDTO.refferedBy }]}
               />
             </ItemContainer>
 

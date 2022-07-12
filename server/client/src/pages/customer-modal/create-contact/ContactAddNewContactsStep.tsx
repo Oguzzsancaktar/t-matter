@@ -12,27 +12,29 @@ import {
 } from '@/components'
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
-import { EGender, IContact, IContactCreateDTO, IOption } from '@/models'
+import { EGender, ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
 import { toastError } from '@/utils/toastUtil'
-import { isValueNull, isEmailValid, isPhoneNumberValid, isZipcodeValid } from '@/utils/validationUtils'
+import { isValueNull, isEmailValid, isPhoneNumberValid } from '@/utils/validationUtils'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { User } from 'react-feather'
 
 interface IProps {
-  newContactList: IContactCreateDTO[]
-  onAdd: (contact: IContactCreateDTO) => void
+  newContactList: ICustomerCreateDTO[]
+  onAdd: (contact: ICustomerAddNew) => void
 }
 const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) => {
-  const [newContact, setNewContact] = useState<IContactCreateDTO>({
+  const [newContact, setNewContact] = useState<ICustomerCreateDTO>({
+    aSharpNumber: '',
+    customerType: 0,
     firstname: '',
     lastname: '',
     email: '',
     phone: '',
     birthday: '',
     birthplace: '',
-    refferType: '',
-    gender: ''
+    refferedBy: '',
+    gender: 0
   })
 
   const [validationErrors, setValidationErrors] = useState({
@@ -42,7 +44,7 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
     phoneError: false,
     birthdayError: false,
     birthplaceError: false,
-    refferTypeError: false,
+    refferedByError: false,
     genderError: false
   })
 
@@ -99,15 +101,15 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
       setValidationErrors({ ...validationErrors, birthplaceError: false })
     }
 
-    if (!isValueNull(newContact.refferType)) {
-      setErrorMessage('Please select user refferType')
-      setValidationErrors({ ...validationErrors, refferTypeError: true })
+    if (!isValueNull(newContact.refferedBy)) {
+      setErrorMessage('Please select user refferedBy')
+      setValidationErrors({ ...validationErrors, refferedByError: true })
       return false
     } else {
-      setValidationErrors({ ...validationErrors, refferTypeError: false })
+      setValidationErrors({ ...validationErrors, refferedByError: false })
     }
 
-    if (!isValueNull(newContact.gender)) {
+    if (!isValueNull(newContact.gender.toString())) {
       setErrorMessage('Please select user gender')
       setValidationErrors({ ...validationErrors, genderError: true })
       return false
@@ -127,11 +129,11 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
   }
 
   const handleGenderChange = (option: IOption) => {
-    setNewContact({ ...newContact, gender: option.value })
+    setNewContact({ ...newContact, gender: +option.value })
   }
 
   const handleRefferTypeChange = (option: IOption) => {
-    setNewContact({ ...newContact, refferType: option.value })
+    setNewContact({ ...newContact, refferedBy: option.value })
   }
 
   const handleOnAdd = (e: React.MouseEvent) => {
@@ -140,14 +142,16 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
     if (validationResult) {
       onAdd(newContact)
       setNewContact({
+        aSharpNumber: '',
+        customerType: 0,
         firstname: '',
         lastname: '',
         email: '',
         phone: '',
         birthday: '',
         birthplace: '',
-        refferType: '',
-        gender: ''
+        refferedBy: '',
+        gender: 0
       })
     }
   }
@@ -256,13 +260,13 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
               <ItemContainer margin="0.5rem 0.5rem 0 0 ">
                 <SelectInput
                   children={<User size={16} />}
-                  name="refferType"
+                  name="refferedBy"
                   // placeholder="Enter birth location..."
                   onChange={(option: IOption) => handleRefferTypeChange(option)}
                   options={genderOptions}
                   labelText="Contact Reffered By"
-                  validationError={validationErrors.refferTypeError}
-                  selectedOption={[{ value: newContact.refferType, label: newContact.refferType }]}
+                  validationError={validationErrors.refferedByError}
+                  selectedOption={[{ value: newContact.refferedBy, label: newContact.refferedBy }]}
                 />
               </ItemContainer>
 
@@ -275,7 +279,7 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
                   options={genderOptions}
                   labelText="Contact Gender"
                   validationError={validationErrors.genderError}
-                  selectedOption={[{ value: EGender[newContact.gender], label: newContact.gender }]}
+                  selectedOption={[{ value: EGender[newContact.gender], label: newContact.gender.toString() }]}
                 />
               </ItemContainer>
             </JustifyBetweenRow>

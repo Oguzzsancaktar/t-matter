@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
-const { STATUSES } = require('../constants/constants')
+const { STATUS_TYPES } = require('../constants/constants')
 const { mongo } = require('mongoose')
 
 const CustomerSchema = new Schema(
@@ -60,22 +60,21 @@ const CustomerSchema = new Schema(
       required: true,
       type: String
     },
-    refferType: {
+    refferedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'relativeType'
+      ref: 'refferedBy',
+      required: false
     },
     gender: {
       required: true,
       type: Number
     },
 
-    reliableInCompany: [],
-    createContact: [],
+    reliableCustomers: [],
 
     status: {
-      required: true,
       type: Number,
-      default: STATUSES.ACTIVE
+      default: STATUS_TYPES.ACTIVE
     }
   },
   { timestamps: true }
