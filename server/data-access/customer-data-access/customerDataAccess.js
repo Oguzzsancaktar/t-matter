@@ -27,14 +27,21 @@ const findCustomerWithFiltersAndPopulate = ({ search, size, status }) => {
     match.$match.status = { $eq: +status }
   }
   pipeline.push(match)
-  pipeline.push({
-    $lookup: {
-      from: 'refferedBies',
-      localField: 'refferedBy',
-      foreignField: '_id',
-      as: 'refferedBy'
+  pipeline.push(
+    {
+      $lookup: {
+        from: 'refferedbies',
+        localField: 'refferedBy',
+        foreignField: '_id',
+        as: 'refferedBy'
+      }
+    },
+    {
+      $unwind: {
+        path: '$refferedBy'
+      }
     }
-  })
+  )
   pipeline.push({ $sort: { createdAt: -1 } })
   if (size) {
     pipeline.push({ $limit: +size })
