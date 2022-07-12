@@ -20,15 +20,27 @@ const login = (builder: IBuilder) => {
   })
 }
 
+const logout = (builder: IBuilder) => {
+  return builder.mutation<void, void>({
+    query() {
+      return {
+        url: '/auth/logout',
+        method: 'DELETE'
+      }
+    }
+  })
+}
+
 const authApi = createApi({
   reducerPath: AUTH_API_REDUCER_PATH,
   tagTypes: [AUTH_TAG],
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
-    login: login(builder)
+    login: login(builder),
+    logout: logout(builder)
   })
 })
 
-const { useLoginMutation } = authApi
+const { useLoginMutation, useLogoutMutation } = authApi
 
-export { authApi, useLoginMutation }
+export { authApi, useLoginMutation, useLogoutMutation }

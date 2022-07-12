@@ -1,7 +1,7 @@
 import { selectAccessToken, selectUserId, logout as handleLogout } from '@store/auth/authSlice'
 import useAccessStore from '@hooks/useAccessStore'
 import { useEffect, useMemo } from 'react'
-import { useLoginMutation } from '@services/authService'
+import { useLoginMutation, useLogoutMutation } from '@services/authService'
 import { useGetUserByIdQuery } from '@/services/settings/user-planning/userService'
 
 export const useAuth = () => {
@@ -25,6 +25,8 @@ export const useAuth = () => {
     skip: !userId
   })
 
+  const [logoutMutation, { isLoading: isLoadingLogout }] = useLogoutMutation()
+
   const [login, { isError: isLoginRejected, isSuccess: isLoginSuccessfull }] = useLoginMutation()
 
   useEffect(() => {
@@ -36,6 +38,7 @@ export const useAuth = () => {
   const logout = () => {
     localStorage.clear()
     dispatch(handleLogout())
+    logoutMutation().unwrap()
     window.location.href = '/'
   }
 
