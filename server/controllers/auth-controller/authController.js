@@ -55,7 +55,7 @@ const logoutController = async (req, res) => {
   try {
     res.clearCookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_ACCESS_KEY)
     res.clearCookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_REFRESH_KEY)
-    await dataAccess.timeLogDataAccess.createTimeLog({ logType: LOG_TYPES.LOGOUT, owner: req.user._id })
+    await dataAccess.timeLogDataAccess.createTimeLog({ logType: LOG_TYPES.LOGOUT, owner: req.user.userId })
     res.send({ message: 'Logout successful' })
   } catch (e) {
     console.log(e)
