@@ -55,17 +55,21 @@ const createWorkflowPlan = data => {
 
 const getWorkflowPlans = async (query = {}, populate = '') => {
   const workflowPlans = await WorkflowPlan.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
-  const workflowPlanArr = []
+  const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
 
   if (workflowPlans) {
-    workflowPlans.map(plan => {
-      let planTotalDuration = 0
-      let planTotalPrice = 0
-
-      plan.steps.map(task => {
-        task.checklistItems
-      })
-    })
+    for (let x = 0; x < workflowPlans.length; x++) {
+      const workflowPlan = workflowPlans[x]
+      workflowPlans[x].price = 0
+      for(let i = 0; i < workflowPlan.steps.length; i++) {
+        const steps = workflowPlan.steps[i]
+        for (let y = 0; y < steps.checklistItems.length; y++) {
+          const checklistItem = steps.checklistItems[y]
+          workflowPlans[x].steps[i].checklistItems[y] = await WorkflowChecklist.findById(checklistItem).lean().exec()
+          workflowPlans[x].price += (workflowPlans[x].steps[i].checklistItems[y].duration / 3600) * hourlyCompanyFee
+        }
+      }
+    }
   }
   return workflowPlans
 }
