@@ -3,14 +3,18 @@ import { Search } from 'react-feather'
 import styled from 'styled-components'
 import { InputWithIcon } from '../input'
 
+interface IProps {
+  onSeach: (value: string) => void
+}
+
 const SearchBarContainer = styled.div``
 const SearchResultList = styled.ul``
 const SearchResultListItem = styled.li``
 
-const SearchBar = () => {
+const SearchBar: React.FC<IProps> = ({ onSeach }) => {
   return (
     <SearchBarContainer>
-      <InputWithIcon children={<Search />} name="searchBar" />
+      <InputWithIcon onChange={event => onSeach(event.target.value)} children={<Search />} name="searchBar" />
     </SearchBarContainer>
   )
 }

@@ -23,6 +23,7 @@ interface IProps {
 const UpdateUserModal: React.FC<IProps> = ({ user }) => {
   const [updateUser, { isLoading: isUserUpdateLoading }] = useUpdateUserMutation()
   const { data: roleData, isLoading: roleLoading, error: roleDataError } = useGetRolesQuery()
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -41,8 +42,8 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
     zipcode: user.zipcode,
     address: user.address,
     role: {
-      _id: user.role[0]._id,
-      name: user.role[0].name
+      _id: user.role._id,
+      name: user.role.name
     },
     gender: user.gender,
     status: user.status
@@ -160,7 +161,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
       return false
     }
 
-    if (!isValueNull(updateUserData.status || '')) {
+    if (!isValueNull(updateUserData.status.toString() || '')) {
       setErrorMessage('Please select user status')
       setStatusError(true)
       return false
@@ -420,7 +421,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="status"
                   // placeholder="Enter birth location..."
                   onChange={option => setUpdateUserData({ ...updateUserData, status: option.value })}
-                  selectedOption={[{ label: EStatus[+updateUserData.status], value: updateUserData.status }]}
+                  selectedOption={[{ label: EStatus[+updateUserData.status], value: updateUserData.status.toString() }]}
                   options={statusOptions}
                   labelText="Status"
                   validationError={statusError}

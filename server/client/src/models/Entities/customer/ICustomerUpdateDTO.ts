@@ -13,4 +13,5 @@ export default interface ICustomerUpdateDTO {
   profile_img?: string
   cloudinary_id?: string
   userImages?: string[]
+  status: number
 }

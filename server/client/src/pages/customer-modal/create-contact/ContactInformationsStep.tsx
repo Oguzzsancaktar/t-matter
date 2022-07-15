@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { EGender, ICustomerAddNew, IOption } from '@/models'
+import { EGender, ICustomerAddNew, ICustomerCreateDTO, IOption, IRefferedBy } from '@/models'
 import { Key, User } from 'react-feather'
 import { genderOptions } from '@/constants/genders'
+import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 
 interface IProps {
   validationErrors: any
-  createContactDTO: Omit<ICustomerAddNew, '_id'>
+  createContactDTO: Omit<ICustomerCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onBirthdayChange: (date: Date[]) => void
   onGenderChange: (option: IOption) => void
   onRefferTypeChange: (option: IOption) => void
 }
@@ -18,11 +18,12 @@ interface IProps {
 const ContactInformationsStep: React.FC<IProps> = ({
   validationErrors,
   createContactDTO,
-  onBirthdayChange,
   onInputChange,
   onGenderChange,
   onRefferTypeChange
 }) => {
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+
   return (
     <InnerWrapper>
       <JustifyBetweenColumn height="100%">
@@ -88,38 +89,17 @@ const ContactInformationsStep: React.FC<IProps> = ({
           </JustifyBetweenRow>
 
           <JustifyBetweenRow width="100%">
-            <ItemContainer margin="0.5rem 0.5rem 0 0">
-              <DatePicker
-                labelText="Birthday"
-                validationError={validationErrors.birthdayError}
-                name={'birthday'}
-                onChange={(date: Date[]) => onBirthdayChange(date)}
-              />
-            </ItemContainer>
-
-            <ItemContainer margin="0.5rem 0 0 0.5rem">
-              <InputWithIcon
-                children={<User size={16} />}
-                name="birthplace"
-                placeholder="Enter birth location..."
-                onChange={onInputChange}
-                // onBlur={validateFormFields}
-                type="text"
-                labelText="Birth Location"
-                validationError={validationErrors.birthplaceError}
-                value={createContactDTO.birthplace}
-              />
-            </ItemContainer>
-          </JustifyBetweenRow>
-
-          <JustifyBetweenRow width="100%">
             <ItemContainer margin="0.5rem 0.5rem 0 0 ">
               <SelectInput
                 children={<User size={16} />}
                 name="refferedBy"
                 // placeholder="Enter birth location..."
                 onChange={(option: IOption) => onRefferTypeChange(option)}
-                options={genderOptions}
+                options={(refferedByData || []).map((refferedBy: IRefferedBy) => ({
+                  label: refferedBy.name,
+                  value: refferedBy._id
+                }))}
+                isLoading={refferedByDataIsLoading}
                 labelText="Reffered By"
                 validationError={validationErrors.refferedByError}
                 selectedOption={[{ value: createContactDTO.refferedBy, label: createContactDTO.refferedBy }]}
@@ -136,7 +116,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
                 labelText="Gender"
                 validationError={validationErrors.genderError}
                 selectedOption={[
-                  { value: EGender[createContactDTO.gender], label: createContactDTO.gender.toString() }
+                  { value: createContactDTO.gender.toString(), label: EGender[createContactDTO.gender.toString()] }
                 ]}
               />
             </ItemContainer>

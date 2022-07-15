@@ -4,8 +4,6 @@ export default interface ICustomerAddNew {
   lastname: string
   email: string
   phone: string
-  birthday: string
-  birthplace: string
   refferedBy: string
   gender: number
 }

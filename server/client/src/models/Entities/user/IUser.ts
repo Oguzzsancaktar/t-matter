@@ -14,6 +14,6 @@ export default interface IUser {
   address: string
   role: IRole
   gender: string
-  status: string
   password: string
+  status: number
 }

@@ -44,7 +44,7 @@ const CreateUserModal = () => {
     address: '',
     role: '',
     gender: '',
-    status: '',
+    status: 0,
     password: ''
   })
 
@@ -165,7 +165,7 @@ const CreateUserModal = () => {
       return false
     }
 
-    if (!isValueNull(createUserData.status)) {
+    if (!isValueNull(createUserData.status.toString())) {
       setErrorMessage('Please select user status')
       setStatusError(true)
       return false
@@ -438,7 +438,7 @@ const CreateUserModal = () => {
                   children={<User size={16} />}
                   name="status"
                   onChange={option => setCreateUserData({ ...createUserData, status: option.value })}
-                  selectedOption={[{ label: EStatus[+createUserData.status], value: createUserData.status }]}
+                  selectedOption={[{ label: EStatus[+createUserData.status], value: createUserData.status.toString() }]}
                   options={statusOptions}
                   labelText="Status"
                   validationError={statusError}

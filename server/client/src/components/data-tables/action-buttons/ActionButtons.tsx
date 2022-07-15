@@ -9,10 +9,10 @@ interface IProps {
   status?: string
   buttonWidth?: string
   rowWidth?: string
-  onRead: () => void
-  onEdit: () => void
-  onHistory: () => void
-  onDelete: () => void
+  onRead?: () => void
+  onEdit?: () => void
+  onHistory?: () => void
+  onDelete?: () => void
   onReactive?: () => void
 }
 
@@ -29,14 +29,17 @@ const ActionButtons: React.FC<IProps> = ({
 }) => {
   return (
     <Row width={rowWidth ? rowWidth : 'auto'}>
-      <IconButton
-        onClick={onRead}
-        bgColor={colors.background.gray.light}
-        width={buttonWidth || iconSize}
-        height={iconSize}
-        margin="0 .2rem 0 0"
-        children={<Eye size={'16px'} color={colors.text.primary} />}
-      />
+      {onRead && (
+        <IconButton
+          onClick={onRead}
+          bgColor={colors.background.gray.light}
+          width={buttonWidth || iconSize}
+          height={iconSize}
+          margin="0 .2rem 0 0"
+          children={<Eye size={'16px'} color={colors.text.primary} />}
+        />
+      )}
+
       <IconButton
         onClick={onEdit}
         bgColor={colors.background.gray.light}

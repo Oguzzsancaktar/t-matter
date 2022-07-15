@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 import { ModalHeader, ModalBody } from '../types'
 
 const CreateCustomerModal = () => {
-  const [activeTab, setActiveTab] = useState('create-client')
+  const [activeTab, setActiveTab] = useState('create-contact')
 
   return (
     <Column>

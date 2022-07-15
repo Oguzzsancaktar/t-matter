@@ -2,7 +2,7 @@ import React from 'react'
 import { InputWithIcon } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 
-import { InnerWrapper, ItemContainer } from '@/components'
+import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
 import { ICustomerCreateDTO } from '@/models'
 import { User } from 'react-feather'
 
@@ -10,12 +10,43 @@ interface IProps {
   validationErrors: any
   createClientDTO: Omit<ICustomerCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onBirthdayChange: (date: Date[]) => void
 }
-const ClientExtraInformationsStep: React.FC<IProps> = ({ createClientDTO, validationErrors, onInputChange }) => {
+const ClientExtraInformationsStep: React.FC<IProps> = ({
+  createClientDTO,
+  validationErrors,
+  onInputChange,
+  onBirthdayChange
+}) => {
   return (
     <InnerWrapper>
       <JustifyBetweenColumn height="100%">
         <JustifyBetweenColumn height="auto" padding="2rem 0">
+          <JustifyBetweenRow width="100%">
+            <ItemContainer margin="0.5rem 0.5rem 0 0">
+              <DatePicker
+                labelText="Birthday"
+                validationError={validationErrors.birthdayError}
+                name={'birthday'}
+                onChange={(date: Date[]) => onBirthdayChange(date)}
+              />
+            </ItemContainer>
+
+            <ItemContainer margin="0.5rem 0 0 0.5rem">
+              <InputWithIcon
+                children={<User size={16} />}
+                name="birthplace"
+                placeholder="Enter birth location..."
+                onChange={onInputChange}
+                // onBlur={validateFormFields}
+                type="text"
+                labelText="Birth Location"
+                validationError={validationErrors.birthplaceError}
+                value={createClientDTO.birthplace}
+              />
+            </ItemContainer>
+          </JustifyBetweenRow>
+
           <JustifyBetweenRow>
             <ItemContainer margin="0 0.5rem 0 0" width="calc((100% - 1rem)/2)">
               <InputWithIcon

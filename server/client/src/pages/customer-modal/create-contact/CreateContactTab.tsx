@@ -11,12 +11,19 @@ import {
 import ContactAddNewContactsStep from './ContactAddNewContactsStep'
 import ContactInformationsStep from './ContactInformationsStep'
 import ContactSearchInCompanyStep from './ContactSearchInCompanyStep'
-import { ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
-import { toastError, toastWarning } from '@/utils/toastUtil'
-import { isValueNull, isEmailValid, isPhoneNumberValid, isZipcodeValid } from '@/utils/validationUtils'
+import { ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
+import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
+import { isValueNull, isEmailValid, isPhoneNumberValid } from '@/utils/validationUtils'
 import moment from 'moment'
+import { useCreateCustomerMutation } from '@/services/customers/customerService'
+import useAccessStore from '@/hooks/useAccessStore'
+import { closeModal } from '@/store'
 
 const CreateContactTab = () => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+  const [createCustomer] = useCreateCustomerMutation()
+
   const [activeWizzardStep, setActiveWizzardStep] = useState(0)
   const [contactWizzardSteps, setContactWizzardSteps] = useState([
     { stepName: 'Contact Informations', stepIndex: 0 },
@@ -24,15 +31,12 @@ const CreateContactTab = () => {
     { stepName: 'Add New Contacts', stepIndex: 2 }
   ])
 
-  const [createContactDTO, setCreateContactDTO] = useState<Omit<ICustomerCreateDTO, '_id'>>({
-    aSharpNumber: '',
-    customerType: 0,
+  const [createContactDTO, setCreateContactDTO] = useState<Omit<ICustomerCreateDTO, '_id' | 'birthday'>>({
+    customerType: 1,
     firstname: '',
     lastname: '',
     email: '',
     phone: '',
-    birthday: '',
-    birthplace: '',
     refferedBy: '',
     gender: 0
   })
@@ -42,8 +46,6 @@ const CreateContactTab = () => {
     lastnameError: false,
     emailError: false,
     phoneError: false,
-    birthdayError: false,
-    birthplaceError: false,
     refferedByError: false,
     genderError: false
   })
@@ -58,8 +60,6 @@ const CreateContactTab = () => {
       setValidationErrors({ ...validationErrors, firstnameError: true })
       setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, firstnameError: false })
     }
 
     if (!isValueNull(createContactDTO.lastname)) {
@@ -67,8 +67,6 @@ const CreateContactTab = () => {
       setValidationErrors({ ...validationErrors, lastnameError: true })
       setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, lastnameError: false })
     }
 
     if (!isEmailValid(createContactDTO.email)) {
@@ -76,53 +74,25 @@ const CreateContactTab = () => {
       setValidationErrors({ ...validationErrors, emailError: true })
       setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, emailError: false })
     }
 
-    if (!isPhoneNumberValid(createContactDTO.phone)) {
+    if (!isValueNull(createContactDTO.phone.toString())) {
       setErrorMessage('Please enter a valid phone number')
       setValidationErrors({ ...validationErrors, phoneError: true })
       setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, phoneError: false })
-    }
-
-    if (!isValueNull(createContactDTO.birthday)) {
-      setErrorMessage('Please enter a valid birthday')
-      setValidationErrors({ ...validationErrors, birthdayError: true })
-      setActiveWizzardStep(0)
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, birthdayError: false })
-    }
-
-    if (!isValueNull(createContactDTO.birthplace)) {
-      setErrorMessage('Please enter a valid birthplace')
-      setValidationErrors({ ...validationErrors, birthplaceError: true })
-      setActiveWizzardStep(0)
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, birthplaceError: false })
     }
 
     if (!isValueNull(createContactDTO.refferedBy)) {
       setErrorMessage('Please select user refferedBy')
-      setValidationErrors({ ...validationErrors, refferedByError: true })
-      setActiveWizzardStep(1)
+      setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, refferedByError: false })
     }
 
     if (!isValueNull(createContactDTO.gender.toString())) {
       setErrorMessage('Please select user gender')
-      setValidationErrors({ ...validationErrors, genderError: true })
-      setActiveWizzardStep(1)
+      setActiveWizzardStep(0)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, genderError: false })
     }
 
     return true
@@ -130,10 +100,6 @@ const CreateContactTab = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCreateContactDTO({ ...createContactDTO, [event.target.name]: event.target.value })
-  }
-
-  const handleBirhdayChange = (date: Date[]) => {
-    setCreateContactDTO({ ...createContactDTO, birthday: moment(date[0]).format('MM-DD-YYYY') })
   }
 
   const handleGenderChange = (option: IOption) => {
@@ -144,22 +110,25 @@ const CreateContactTab = () => {
     setCreateContactDTO({ ...createContactDTO, refferedBy: option.value })
   }
 
-  const handleAddContact = (id: string) => {
+  const handleAddReliable = (customer: ICustomer) => {
     if (createContactDTO.reliableInCompany) {
-      const isSelectedBefore = createContactDTO.reliableInCompany.find(reliableId => reliableId === id)
+      const isSelectedBefore = createContactDTO.reliableInCompany.find(reliable => reliable._id === customer._id)
       if (isSelectedBefore) {
         toastWarning('Contact is already selected')
       } else {
-        setCreateContactDTO({ ...createContactDTO, reliableInCompany: createContactDTO.reliableInCompany?.concat(id) })
+        setCreateContactDTO({
+          ...createContactDTO,
+          reliableInCompany: createContactDTO.reliableInCompany?.concat(customer)
+        })
       }
     }
   }
 
-  const handleRemoveContact = (id: string) => {
+  const handleRemoveReliable = (customer: ICustomer) => {
     if (createContactDTO.reliableInCompany) {
       setCreateContactDTO({
         ...createContactDTO,
-        reliableInCompany: createContactDTO.reliableInCompany?.filter(reliableId => reliableId !== id)
+        reliableInCompany: createContactDTO.reliableInCompany?.filter(reliable => reliable._id !== customer._id)
       })
     }
   }
@@ -176,9 +145,8 @@ const CreateContactTab = () => {
         return (
           <ContactInformationsStep
             validationErrors={validationErrors}
-            createContactDTO={createContactDTO}
+            createContactDTO={{ ...createContactDTO }}
             onInputChange={handleInputChange}
-            onBirthdayChange={handleBirhdayChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
           />
@@ -188,8 +156,8 @@ const CreateContactTab = () => {
         return (
           <ContactSearchInCompanyStep
             reliableInCompanyList={createContactDTO.reliableInCompany || []}
-            onAdd={handleAddContact}
-            onRemove={handleRemoveContact}
+            onAdd={handleAddReliable}
+            onRemove={handleRemoveReliable}
           />
         )
       case 2:
@@ -203,9 +171,8 @@ const CreateContactTab = () => {
         return (
           <ContactInformationsStep
             validationErrors={validationErrors}
-            createContactDTO={createContactDTO}
+            createContactDTO={{ ...createContactDTO }}
             onInputChange={handleInputChange}
-            onBirthdayChange={handleBirhdayChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
           />
@@ -214,10 +181,18 @@ const CreateContactTab = () => {
   }
 
   const handleNext = () => {
+    setValidationErrors({
+      firstnameError: false,
+      lastnameError: false,
+      emailError: false,
+      phoneError: false,
+      refferedByError: false,
+      genderError: false
+    })
+    setErrorMessage('')
     const validationResult = validateFormFields()
     console.log(validationResult)
     if (validationResult) {
-      console.log('qwer')
       setActiveWizzardStep(activeWizzardStep + 1)
     }
   }
@@ -226,10 +201,27 @@ const CreateContactTab = () => {
     setActiveWizzardStep(activeWizzardStep - 1)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setValidationErrors({
+      firstnameError: false,
+      lastnameError: false,
+      emailError: false,
+      phoneError: false,
+      refferedByError: false,
+      genderError: false
+    })
+    setErrorMessage('')
     const validationResult = validateFormFields()
-    if (validationResult) {
-      console.log(createContactDTO)
+    try {
+      if (validationResult) {
+        await createCustomer({ ...createContactDTO })
+        dispatch(closeModal('createCustomerModal'))
+        toastSuccess(
+          'Contact ' + createContactDTO.firstname + ' ' + createContactDTO.lastname + ' created successfully'
+        )
+      }
+    } catch (error) {
+      toastError('error.message')
     }
   }
 

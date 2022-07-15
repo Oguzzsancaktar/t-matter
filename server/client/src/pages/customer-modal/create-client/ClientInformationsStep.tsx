@@ -11,7 +11,6 @@ interface IProps {
   validationErrors: any
   createClientDTO: Omit<ICustomerCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onBirthdayChange: (date: Date[]) => void
   onGenderChange: (option: IOption) => void
   onRefferTypeChange: (option: IOption) => void
 }
@@ -19,7 +18,6 @@ interface IProps {
 const ClientInformationsStep: React.FC<IProps> = ({
   validationErrors,
   createClientDTO,
-  onBirthdayChange,
   onInputChange,
   onGenderChange,
   onRefferTypeChange
@@ -86,31 +84,6 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 labelText="Phone Number"
                 validationError={validationErrors.phoneError}
                 value={createClientDTO.phone}
-              />
-            </ItemContainer>
-          </JustifyBetweenRow>
-
-          <JustifyBetweenRow width="100%">
-            <ItemContainer margin="0.5rem 0.5rem 0 0">
-              <DatePicker
-                labelText="Birthday"
-                validationError={validationErrors.birthdayError}
-                name={'birthday'}
-                onChange={(date: Date[]) => onBirthdayChange(date)}
-              />
-            </ItemContainer>
-
-            <ItemContainer margin="0.5rem 0 0 0.5rem">
-              <InputWithIcon
-                children={<User size={16} />}
-                name="birthplace"
-                placeholder="Enter birth location..."
-                onChange={onInputChange}
-                // onBlur={validateFormFields}
-                type="text"
-                labelText="Birth Location"
-                validationError={validationErrors.birthplaceError}
-                value={createClientDTO.birthplace}
               />
             </ItemContainer>
           </JustifyBetweenRow>

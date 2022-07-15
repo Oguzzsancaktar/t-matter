@@ -8,18 +8,21 @@ import {
   ActionButtons,
   PageWrapper,
   CreateCustomerModal,
-  ReadCustomerModal
+  ReadCustomerModal,
+  ConfirmModal
 } from '@/components'
 import DataTable from 'react-data-table-component'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
-import { EStatus, ESize } from '@/models'
-import { openModal } from '@/store'
+import { EStatus, ESize, ECustomerType, ICustomer } from '@/models'
+import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { UserCheck } from 'react-feather'
-import { useGetCustomersQuery } from '@/services/customers/customerService'
+import { useGetCustomersQuery, useUpdateCustomerStatusMutation } from '@/services/customers/customerService'
+import { toastSuccess, toastError } from '@/utils/toastUtil'
 
 const CustomersPage = () => {
+  const [updateCustomerStatus] = useUpdateCustomerStatusMutation()
   const { data: customersData, isLoading: customersIsLoading } = useGetCustomersQuery()
 
   const { useAppDispatch } = useAccessStore()
@@ -37,7 +40,9 @@ const CustomersPage = () => {
       name: 'Type',
       selector: row => row.customerType,
       sortable: true,
-      cell: data => <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.customerType} />
+      cell: data => (
+        <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={ECustomerType[data.customerType]} />
+      )
     },
     {
       name: 'Phone',
@@ -64,14 +69,15 @@ const CustomersPage = () => {
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={() => handleRead(data.id)}
-          onEdit={function (): void {
-            throw new Error('Function not implemented.')
-          }}
+          status={data.status}
+          onRead={() => handleRead(data)}
+          // onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
           }}
-          onDelete={function (): void {
+          onDelete={() => handleDelete(data)}
+          onReactive={() => handleReactive(data)}
+          onEdit={function (): void {
             throw new Error('Function not implemented.')
           }}
         />
@@ -79,7 +85,84 @@ const CustomersPage = () => {
     }
   ]
 
-  const openCreateRoleModal = (e: React.MouseEvent) => {
+  const handleRead = (customer: ICustomer) => {
+    dispatch(
+      openModal({
+        id: `customerDetailModal-${customer._id}`,
+        title: 'Customer / ' + customer.firstname + ' ' + customer.lastname,
+        body: <ReadCustomerModal customer={customer} />,
+        size: ESize.XLarge,
+        backgroundColor: 'transparent'
+      })
+    )
+  }
+
+  // const handleEdit = (customer: ICustomer) => {
+  //   dispatch(
+  //     openModal({
+  //       id: `updateCustomerModal-${customer._id}`,
+  //       title: 'Update Customer / ' + customer.firstname + ' ' + customer.lastname,
+  //       body: <UpdateCustomerModal customer={customer} />,
+  //       size: ESize.Small
+  //     })
+  //   )
+  // }
+
+  const handleDelete = (customer: ICustomer) => {
+    dispatch(
+      openModal({
+        id: `deleteCustomerModal-${customer._id}`,
+        title: `Are you sure to inactivate ${customer.firstname + ' ' + customer.lastname}?`,
+        body: (
+          <ConfirmModal
+            modalId={`deleteCustomerModal-${customer._id}`}
+            title={`Are you sure to inactivate ${customer.firstname + ' ' + customer.lastname}?`}
+            onConfirm={() => handleOnConfirmDelete(customer)}
+          />
+        ),
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleReactive = (customer: ICustomer) => {
+    dispatch(
+      openModal({
+        id: `reactiveCustomerModal-${customer._id}`,
+        title: `Are you sure to reactivate ${customer.firstname + ' ' + customer.lastname}?`,
+        body: (
+          <ConfirmModal
+            modalId={`reactiveCustomerModal-${customer._id}`}
+            title={`Are you sure to reactivate ${customer.firstname + ' ' + customer.lastname}?`}
+            onConfirm={() => handleOnConfirmReactive(customer)}
+          />
+        ),
+        size: ESize.Small
+      })
+    )
+  }
+
+  const handleOnConfirmDelete = async (customer: ICustomer) => {
+    try {
+      await updateCustomerStatus({ _id: customer._id, status: EStatus.Inactive })
+      toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' inactivated successfully')
+      dispatch(closeModal(`deleteCustomerModal-${customer._id}`))
+    } catch (error) {
+      toastError('Error inactivating customer')
+    }
+  }
+
+  const handleOnConfirmReactive = async (customer: ICustomer) => {
+    try {
+      await updateCustomerStatus({ _id: customer._id, status: EStatus.Active })
+      toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' reactivated successfully')
+      dispatch(closeModal(`reactiveCustomerModal-${customer._id}`))
+    } catch (error) {
+      toastError('Error reactivating customer')
+    }
+  }
+
+  const openCreateCustomerModal = (e: React.MouseEvent) => {
     e.preventDefault()
     dispatch(
       openModal({
@@ -87,17 +170,6 @@ const CustomersPage = () => {
         title: 'Create Customer',
         body: <CreateCustomerModal />,
         size: ESize.Large
-      })
-    )
-  }
-
-  const handleRead = (id: string) => {
-    dispatch(
-      openModal({
-        id: `customerDetailModal-${id}`,
-        title: 'Customer modal' + id,
-        body: <ReadCustomerModal customerId={id} />,
-        size: ESize.XLarge
       })
     )
   }
@@ -111,7 +183,7 @@ const CustomersPage = () => {
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px)">
-          <DataTableHeader handleAddNew={openCreateRoleModal} />
+          <DataTableHeader handleAddNew={openCreateCustomerModal} />
           <DataTable fixedHeader columns={columns} data={customersData || []} />
         </Column>
       </JustifyBetweenColumn>

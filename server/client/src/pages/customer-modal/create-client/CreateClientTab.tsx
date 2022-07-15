@@ -12,7 +12,7 @@ import ClientAddNewContactsStep from './ClientAddNewContactsStep'
 import ClientExtraInformationsStep from './ClientExtraInformationsStep'
 import ClientInformationsStep from './ClientInformationsStep'
 import ClientSearchInCompanyStep from './ClientSearchInCompanyStep'
-import { ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
+import { ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
 import { toastError, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import moment from 'moment'
@@ -70,7 +70,6 @@ const CreateClientTab = () => {
   const validateFormFields = (): boolean => {
     if (!isValueNull(createClientDTO.firstname)) {
       setErrorMessage('Please enter a valid first name')
-      console.log('firstname is  suanda true')
       setValidationErrors({ ...validationErrors, firstnameError: true })
       setActiveWizzardStep(0)
       return false
@@ -78,6 +77,7 @@ const CreateClientTab = () => {
 
     if (!isValueNull(createClientDTO.lastname)) {
       setErrorMessage('Please enter a valid last name')
+      setValidationErrors({ ...validationErrors, lastnameError: true })
 
       setActiveWizzardStep(0)
       return false
@@ -85,6 +85,7 @@ const CreateClientTab = () => {
 
     if (!isEmailValid(createClientDTO.email)) {
       setErrorMessage('Please enter a valid email')
+      setValidationErrors({ ...validationErrors, emailError: true })
 
       setActiveWizzardStep(0)
       return false
@@ -92,19 +93,21 @@ const CreateClientTab = () => {
 
     if (!isValueNull(createClientDTO.phone)) {
       setErrorMessage('Please enter a valid phone number')
-
+      setValidationErrors({ ...validationErrors, phoneError: true })
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(birthday)) {
       setErrorMessage('Please enter a valid birthday')
+      setValidationErrors({ ...validationErrors, birthdayError: true })
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createClientDTO.birthplace)) {
       setErrorMessage('Please enter a valid birthplace')
+      setValidationErrors({ ...validationErrors, birthplaceError: true })
 
       setActiveWizzardStep(0)
       return false
@@ -112,6 +115,7 @@ const CreateClientTab = () => {
 
     if (!isValueNull(createClientDTO.country)) {
       setErrorMessage('Please enter a valid country')
+      setValidationErrors({ ...validationErrors, countryError: true })
 
       setActiveWizzardStep(1)
       return false
@@ -119,6 +123,7 @@ const CreateClientTab = () => {
 
     if (!isValueNull(createClientDTO.city)) {
       setErrorMessage('Please enter a valid city')
+      setValidationErrors({ ...validationErrors, cityError: true })
 
       setActiveWizzardStep(1)
       return false
@@ -126,6 +131,7 @@ const CreateClientTab = () => {
 
     if (!isValueNull(createClientDTO.state)) {
       setErrorMessage('Please enter a valid state')
+      setValidationErrors({ ...validationErrors, stateError: true })
 
       setActiveWizzardStep(1)
       return false
@@ -133,6 +139,7 @@ const CreateClientTab = () => {
 
     if (!isValueNull(createClientDTO.zipcode)) {
       setErrorMessage('Please enter a valid zipcode')
+      setValidationErrors({ ...validationErrors, zipcodeError: true })
 
       setActiveWizzardStep(1)
       return false
@@ -140,6 +147,7 @@ const CreateClientTab = () => {
 
     if (!isValueNull(createClientDTO.address)) {
       setErrorMessage('Please enter a valid address')
+      setValidationErrors({ ...validationErrors, addressError: true })
 
       setActiveWizzardStep(1)
       return false
@@ -147,6 +155,7 @@ const CreateClientTab = () => {
 
     if (!isValueNull(createClientDTO.aSharpNumber)) {
       setErrorMessage('Please enter a valid A# Number')
+      setValidationErrors({ ...validationErrors, aSharpNumberError: true })
 
       setActiveWizzardStep(1)
       return false
@@ -154,17 +163,19 @@ const CreateClientTab = () => {
 
     if (!isValueNull(createClientDTO.refferedBy)) {
       setErrorMessage('Please select user refferedBy')
-
+      setValidationErrors({ ...validationErrors, refferedByError: true })
       setActiveWizzardStep(1)
       return false
     }
 
     if (!isValueNull(createClientDTO.gender.toString())) {
       setErrorMessage('Please select user gender')
+      setValidationErrors({ ...validationErrors, genderError: true })
+
       setActiveWizzardStep(1)
       return false
     }
-    // ad soyad telefon email refered contect todo client job ekle kutu açtır sor user birhday tipi düzelt // user inner modal ÇM kALDIR VE EDİTE
+    // client job ekle  kutu açtır sor
     return true
   }
 
@@ -185,22 +196,25 @@ const CreateClientTab = () => {
     setCreateClientDTO({ ...createClientDTO, refferedBy: option.value })
   }
 
-  const handleAddClient = (id: string) => {
+  const handleAddReliable = (customer: ICustomer) => {
     if (createClientDTO.reliableInCompany) {
-      const isSelectedBefore = createClientDTO.reliableInCompany.find(reliableId => reliableId === id)
+      const isSelectedBefore = createClientDTO.reliableInCompany.find(reliable => reliable._id === customer._id)
       if (isSelectedBefore) {
         toastWarning('Client is already selected')
       } else {
-        setCreateClientDTO({ ...createClientDTO, reliableInCompany: createClientDTO.reliableInCompany?.concat(id) })
+        setCreateClientDTO({
+          ...createClientDTO,
+          reliableInCompany: createClientDTO.reliableInCompany?.concat(customer)
+        })
       }
     }
   }
 
-  const handleRemoveClient = (id: string) => {
+  const handleRemoveClient = (customer: ICustomer) => {
     if (createClientDTO.reliableInCompany) {
       setCreateClientDTO({
         ...createClientDTO,
-        reliableInCompany: createClientDTO.reliableInCompany?.filter(reliableId => reliableId !== id)
+        reliableInCompany: createClientDTO.reliableInCompany?.filter(reliable => reliable._id !== customer._id)
       })
     }
   }
@@ -219,7 +233,6 @@ const CreateClientTab = () => {
             validationErrors={validationErrors}
             createClientDTO={{ ...createClientDTO, birthday }}
             onInputChange={handleInputChange}
-            onBirthdayChange={handleBirhdayChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
           />
@@ -227,6 +240,7 @@ const CreateClientTab = () => {
       case 1:
         return (
           <ClientExtraInformationsStep
+            onBirthdayChange={handleBirhdayChange}
             validationErrors={validationErrors}
             createClientDTO={{ ...createClientDTO, birthday }}
             onInputChange={handleInputChange}
@@ -236,7 +250,7 @@ const CreateClientTab = () => {
         return (
           <ClientSearchInCompanyStep
             reliableInCompanyList={createClientDTO.reliableInCompany || []}
-            onAdd={handleAddClient}
+            onAdd={handleAddReliable}
             onRemove={handleRemoveClient}
           />
         )
@@ -250,7 +264,6 @@ const CreateClientTab = () => {
             validationErrors={validationErrors}
             createClientDTO={{ ...createClientDTO, birthday }}
             onInputChange={handleInputChange}
-            onBirthdayChange={handleBirhdayChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
           />

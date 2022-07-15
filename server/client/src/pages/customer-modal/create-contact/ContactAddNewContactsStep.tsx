@@ -20,11 +20,11 @@ import React, { useEffect, useState } from 'react'
 import { User } from 'react-feather'
 
 interface IProps {
-  newContactList: ICustomerCreateDTO[]
+  newContactList: Omit<ICustomerCreateDTO, '_id'>[]
   onAdd: (contact: ICustomerAddNew) => void
 }
 const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) => {
-  const [newContact, setNewContact] = useState<ICustomerCreateDTO>({
+  const [newContact, setNewContact] = useState<Omit<ICustomerCreateDTO, '_id'>>({
     aSharpNumber: '',
     customerType: 0,
     firstname: '',
@@ -227,31 +227,6 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
                   labelText="Contact Phone Number"
                   validationError={validationErrors.phoneError}
                   value={newContact.phone}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
-
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <DatePicker
-                  labelText="Contact Birthday"
-                  validationError={validationErrors.birthdayError}
-                  name={'birthday'}
-                  onChange={(date: Date[]) => handleBirhdayChange(date)}
-                />
-              </ItemContainer>
-
-              <ItemContainer margin="0.5rem 0 0 0.5rem">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="birthplace"
-                  placeholder="Enter birth location..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Contact Birth Location"
-                  validationError={validationErrors.birthplaceError}
-                  value={newContact.birthplace}
                 />
               </ItemContainer>
             </JustifyBetweenRow>

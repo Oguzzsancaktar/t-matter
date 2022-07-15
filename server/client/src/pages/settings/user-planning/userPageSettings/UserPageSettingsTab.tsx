@@ -135,7 +135,7 @@ const UserPageSettingsTab = () => {
 
   const handleOnConfirmDelete = async (user: IUser) => {
     try {
-      await updateUserStatus({ _id: user._id, status: EStatus.Inactive.toString() })
+      await updateUserStatus({ _id: user._id, status: EStatus.Inactive })
       toastSuccess('User ' + user.firstname + ' ' + user.lastname + ' inactivated successfully')
       dispatch(closeModal(`deleteUserModal-${user._id}`))
     } catch (error) {
@@ -145,7 +145,7 @@ const UserPageSettingsTab = () => {
 
   const handleOnConfirmReactive = async (user: IUser) => {
     try {
-      await updateUserStatus({ _id: user._id, status: EStatus.Active.toString() })
+      await updateUserStatus({ _id: user._id, status: EStatus.Active })
       toastSuccess('User ' + user.firstname + ' ' + user.lastname + ' reactivated successfully')
       dispatch(closeModal(`reactiveUserModal-${user._id}`))
     } catch (error) {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Badge,
   Button,
@@ -15,40 +15,17 @@ import {
 import DataTable from 'react-data-table-component'
 import { Plus, UserCheck, X } from 'react-feather'
 import colors from '@/constants/colors'
+import { useGetCustomersQuery } from '@/services/customers/customerService'
+import { ICustomer } from '@/models'
 
 interface IProps {
-  reliableInCompanyList: string[]
-  onAdd: (id: string) => void
-  onRemove: (id: string) => void
+  reliableInCompanyList: ICustomer[]
+  onAdd: (id: ICustomer) => void
+  onRemove: (id: ICustomer) => void
 }
 const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, onAdd, onRemove }) => {
-  // : { type: string; fullname: string; email: string; phone: string }
-  const TEMPORARY_CUSTOMERS_ARR = [
-    {
-      id: '1',
-      type: 'client',
-      photo: 'https://source.unsplash.com/user/c_v_r/100x100',
-      fullname: 'John Doe',
-      email: 'jhon@doe.com',
-      phone: '90999999999'
-    },
-    {
-      id: '2',
-      type: 'contact',
-      photo: 'https://source.unsplash.com/user/c_v_r/100x100',
-      fullname: 'Ali Keskin',
-      email: 'ali@keskin.com',
-      phone: '90888888889'
-    },
-    {
-      id: '3',
-      type: 'contact',
-      photo: 'https://source.unsplash.com/user/c_v_r/100x100',
-      fullname: 'Taha sancaktar',
-      email: 'taha@sancaktar.com',
-      phone: '90777777777'
-    }
-  ]
+  const [searchQuery, setSearchQuery] = useState('')
+  const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(searchQuery)
 
   const columns = [
     {
@@ -81,10 +58,14 @@ const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, o
     }
   ]
 
+  const handleSearch = (value: string) => {
+    setSearchQuery(value)
+  }
+
   return (
     <InnerWrapper height="100%">
       <ItemContainer height="35px">
-        <SearchBar />
+        <SearchBar onSeach={handleSearch} />
       </ItemContainer>
       <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px - 40px)" margin="0.5rem 0">
         <DataTable
@@ -92,35 +73,29 @@ const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, o
           pagination={true}
           paginationPerPage={5}
           columns={columns}
-          data={TEMPORARY_CUSTOMERS_ARR}
+          data={filteredCustomers || []}
         />
       </ItemContainer>
       <ItemContainer height="40px">
         <Row>
-          {reliableInCompanyList.map((id, index) => {
-            const reliable = TEMPORARY_CUSTOMERS_ARR.find(c => c.id === id)
-
-            return (
-              reliable && (
-                <ItemContainer key={index} maxWidth="250px" margin="0 1rem 0 0">
-                  <JustifyBetweenRow>
-                    <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
-                      <UserBadge userEmail={reliable.email} userImage={reliable.photo} userName={reliable.fullname} />
-                    </ItemContainer>
-                    <Button
-                      color={colors.red.primary}
-                      width="30px"
-                      height="30px"
-                      padding="0"
-                      onClick={() => onRemove(id)}
-                    >
-                      <X size={16} />
-                    </Button>
-                  </JustifyBetweenRow>
+          {reliableInCompanyList.map((reliable, index) => (
+            <ItemContainer key={index} maxWidth="250px" margin="0 1rem 0 0">
+              <JustifyBetweenRow>
+                <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
+                  <UserBadge userEmail={reliable.email} userImage={'reliable.photo'} userName={reliable.firstname} />
                 </ItemContainer>
-              )
-            )
-          })}
+                <Button
+                  color={colors.red.primary}
+                  width="30px"
+                  height="30px"
+                  padding="0"
+                  onClick={() => onRemove(reliable)}
+                >
+                  <X size={16} />
+                </Button>
+              </JustifyBetweenRow>
+            </ItemContainer>
+          ))}
         </Row>
       </ItemContainer>
     </InnerWrapper>

@@ -12,7 +12,7 @@ import {
 } from '@/components'
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
-import { EGender, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
+import { EGender, ICustomerAddNew, IOption } from '@/models'
 import { toastError } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid, isPhoneNumberValid } from '@/utils/validationUtils'
 import moment from 'moment'
@@ -30,8 +30,6 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
     lastname: '',
     email: '',
     phone: '',
-    birthday: '',
-    birthplace: '',
     refferedBy: '',
     gender: 0
   })
@@ -41,8 +39,6 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
     lastnameError: false,
     emailError: false,
     phoneError: false,
-    birthdayError: false,
-    birthplaceError: false,
     refferedByError: false,
     genderError: false
   })
@@ -84,22 +80,6 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
       setValidationErrors({ ...validationErrors, phoneError: false })
     }
 
-    if (!isValueNull(newContact.birthday)) {
-      setErrorMessage('Please enter a valid birthday')
-      setValidationErrors({ ...validationErrors, birthdayError: true })
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, birthdayError: false })
-    }
-
-    if (!isValueNull(newContact.birthplace)) {
-      setErrorMessage('Please enter a valid birthplace')
-      setValidationErrors({ ...validationErrors, birthplaceError: true })
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, birthplaceError: false })
-    }
-
     if (!isValueNull(newContact.refferedBy)) {
       setErrorMessage('Please select user refferedBy')
       setValidationErrors({ ...validationErrors, refferedByError: true })
@@ -123,10 +103,6 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
     setNewContact({ ...newContact, [event.target.name]: event.target.value })
   }
 
-  const handleBirhdayChange = (date: Date[]) => {
-    setNewContact({ ...newContact, birthday: moment(date[0]).format('MM-DD-YYYY') })
-  }
-
   const handleGenderChange = (option: IOption) => {
     setNewContact({ ...newContact, gender: +option.value })
   }
@@ -146,8 +122,6 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
         lastname: '',
         email: '',
         phone: '',
-        birthday: '',
-        birthplace: '',
         refferedBy: '',
         gender: 0
       })
@@ -225,31 +199,6 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
                   labelText="Contact Phone Number"
                   validationError={validationErrors.phoneError}
                   value={newContact.phone}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
-
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <DatePicker
-                  labelText="Contact Birthday"
-                  validationError={validationErrors.birthdayError}
-                  name={'birthday'}
-                  onChange={(date: Date[]) => handleBirhdayChange(date)}
-                />
-              </ItemContainer>
-
-              <ItemContainer margin="0.5rem 0 0 0.5rem">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="birthplace"
-                  placeholder="Enter birth location..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Contact Birth Location"
-                  validationError={validationErrors.birthplaceError}
-                  value={newContact.birthplace}
                 />
               </ItemContainer>
             </JustifyBetweenRow>

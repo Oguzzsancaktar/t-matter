@@ -29,7 +29,14 @@ const CustomerSchema = new Schema(
       required: false,
       type: String
     },
-
+    birthday: {
+      required: false,
+      type: Date
+    },
+    birthplace: {
+      required: false,
+      type: String
+    },
     // ortak
     customerType: {
       default: 0,
@@ -52,14 +59,7 @@ const CustomerSchema = new Schema(
       required: true,
       type: String
     },
-    birthday: {
-      required: true,
-      type: Date
-    },
-    birthplace: {
-      required: true,
-      type: String
-    },
+
     refferedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'refferedBy',

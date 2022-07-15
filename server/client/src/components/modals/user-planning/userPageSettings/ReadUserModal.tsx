@@ -14,6 +14,7 @@ import { useGetUserByIdQuery, useUpdateUserStatusMutation } from '@/services/set
 import { openModal, closeModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
+import moment from 'moment'
 import React, { useState } from 'react'
 import { ReadUserModal } from '.'
 import { ConfirmModal } from '../../general'
@@ -41,18 +42,8 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
     }
   }
 
-  const handleRead = (user: IUser) => {
-    dispatch(
-      openModal({
-        id: `userDetailModal-${user._id}`,
-        title: 'User / ' + user.firstname + ' ' + user.lastname,
-        body: <ReadUserModal userId={user._id} />,
-        size: ESize.XLarge
-      })
-    )
-  }
-
   const handleEdit = (user: IUser) => {
+    console.log(user._id)
     dispatch(
       openModal({
         id: `updateUserModal-${user._id}`,
@@ -99,7 +90,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
 
   const handleOnConfirmDelete = async (user: IUser) => {
     try {
-      await updateUserStatus({ _id: user._id, status: EStatus.Inactive.toString() })
+      await updateUserStatus({ _id: user._id, status: EStatus.Inactive })
       toastSuccess('User ' + user.firstname + ' ' + user.lastname + ' inactivated successfully')
       dispatch(closeModal(`deleteUserModal-${user._id}`))
     } catch (error) {
@@ -109,15 +100,12 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
 
   const handleOnConfirmReactive = async (user: IUser) => {
     try {
-      await updateUserStatus({ _id: user._id, status: EStatus.Active.toString() })
+      await updateUserStatus({ _id: user._id, status: EStatus.Active })
       toastSuccess('User ' + user.firstname + ' ' + user.lastname + ' reactivated successfully')
       dispatch(closeModal(`reactiveUserModal-${user._id}`))
     } catch (error) {
       toastError('Error reactivating user')
     }
-  }
-  if (userData) {
-    console.log(selectColorForStatus(EStatus[userData.status]))
   }
 
   return (
@@ -213,7 +201,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                       </ItemContainer>
                       <ItemContainer width="calc(100% - 90px - 0.5rem)">
                         <H1 fontSize="12px" color={colors.black.light}>
-                          {userData.birthday}
+                          {moment(userData.birthday).format('MMMM-DD-YYYY')}
                         </H1>
                       </ItemContainer>
                     </JustifyBetweenRow>
@@ -241,9 +229,8 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                     rowWidth="100%"
                     iconSize="30px"
                     buttonWidth="100%"
-                    status={userData.status}
-                    onRead={() => handleRead(userData!)}
-                    onEdit={() => handleEdit(userData!)}
+                    status={userData.status.toString()}
+                    onEdit={() => handleEdit(userData)}
                     onHistory={function (): void {
                       throw new Error('Function not implemented.')
                     }}
