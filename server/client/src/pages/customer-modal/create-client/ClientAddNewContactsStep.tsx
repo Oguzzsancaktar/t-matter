@@ -12,7 +12,8 @@ import {
 } from '@/components'
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
-import { EGender, ICustomerAddNew, IOption } from '@/models'
+import { EGender, ICustomerAddNew, IOption, IRefferedBy } from '@/models'
+import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 import { toastError } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid, isPhoneNumberValid } from '@/utils/validationUtils'
 import moment from 'moment'
@@ -24,6 +25,8 @@ interface IProps {
   onAdd: (contact: ICustomerAddNew) => void
 }
 const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) => {
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+
   const [newContact, setNewContact] = useState<ICustomerAddNew>({
     customerType: 0,
     firstname: '',
@@ -72,7 +75,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
       setValidationErrors({ ...validationErrors, emailError: false })
     }
 
-    if (!isPhoneNumberValid(newContact.phone)) {
+    if (!isValueNull(newContact.phone)) {
       setErrorMessage('Please enter a valid phone number')
       setValidationErrors({ ...validationErrors, phoneError: true })
       return false
@@ -210,8 +213,12 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
                   name="refferedBy"
                   // placeholder="Enter birth location..."
                   onChange={(option: IOption) => handleRefferTypeChange(option)}
-                  options={genderOptions}
-                  labelText="Contact Reffered By"
+                  options={(refferedByData || []).map((refferedBy: IRefferedBy) => ({
+                    label: refferedBy.name,
+                    value: refferedBy._id
+                  }))}
+                  isLoading={refferedByDataIsLoading}
+                  labelText="Reffered By"
                   validationError={validationErrors.refferedByError}
                   selectedOption={[{ value: newContact.refferedBy, label: newContact.refferedBy }]}
                 />
@@ -226,7 +233,9 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
                   options={genderOptions}
                   labelText="Contact Gender"
                   validationError={validationErrors.genderError}
-                  selectedOption={[{ value: EGender[newContact.gender], label: newContact.gender.toString() }]}
+                  selectedOption={[
+                    { value: newContact.gender.toString(), label: EGender[newContact.gender.toString()] }
+                  ]}
                 />
               </ItemContainer>
             </JustifyBetweenRow>
@@ -240,7 +249,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
             <UserBadge
               key={index}
               userName={contact.firstname + ' ' + contact.lastname}
-              userEmail={contact.email}
+              userEmail={contact.relativeType?.relateTo || ''}
               userImage={'test'} // TODO: Client side image
             />
           ))}

@@ -21,9 +21,10 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal, openModal } from '@/store'
 
 const CreateContactTab = () => {
+  const [createCustomer] = useCreateCustomerMutation()
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-  const [createCustomer] = useCreateCustomerMutation()
 
   const [activeWizzardStep, setActiveWizzardStep] = useState(0)
   const [contactWizzardSteps, setContactWizzardSteps] = useState([
@@ -54,6 +55,47 @@ const CreateContactTab = () => {
   })
 
   const [errorMessage, setErrorMessage] = useState('')
+
+  const renderSwitch = () => {
+    switch (activeWizzardStep) {
+      case 0:
+        return (
+          <ContactInformationsStep
+            validationErrors={validationErrors}
+            createContactDTO={{ ...createContactDTO }}
+            onInputChange={handleInputChange}
+            onGenderChange={handleGenderChange}
+            onRefferTypeChange={handleRefferTypeChange}
+          />
+        )
+
+      case 1:
+        return (
+          <ContactSearchInCompanyStep
+            reliableInCompanyList={createContactDTO.reliableInCompany || []}
+            onAdd={handleAddReliable}
+            onRemove={handleRemoveReliable}
+          />
+        )
+      case 2:
+        return (
+          <ContactAddNewContactsStep
+            newContactList={createContactDTO.createContact || []}
+            onAdd={handleAddNewContact}
+          />
+        )
+      default:
+        return (
+          <ContactInformationsStep
+            validationErrors={validationErrors}
+            createContactDTO={{ ...createContactDTO }}
+            onInputChange={handleInputChange}
+            onGenderChange={handleGenderChange}
+            onRefferTypeChange={handleRefferTypeChange}
+          />
+        )
+    }
+  }
 
   const validateFormFields = (): boolean => {
     setErrorMessage('')
@@ -113,22 +155,6 @@ const CreateContactTab = () => {
     setCreateContactDTO({ ...createContactDTO, refferedBy: option.value })
   }
 
-  const handleConfirmAddReliable = (customer: ICustomer, relativeType?: IRelativeType) => {
-    setCreateContactDTO({
-      ...createContactDTO,
-      reliableInCompany: createContactDTO.reliableInCompany?.concat({ ...customer, relativeType: relativeType })
-    })
-    dispatch(closeModal(`addRelateByModal-${customer._id}`))
-  }
-
-  const handleConfirmAddContact = (customer: ICustomerAddNew, relativeType?: IRelativeType) => {
-    setCreateContactDTO({
-      ...createContactDTO,
-      createContact: createContactDTO.createContact?.concat({ ...customer, relativeType: relativeType })
-    })
-    dispatch(closeModal(`addRelateByModal-${customer.email}`))
-  }
-
   const handleAddReliable = (customer: ICustomer) => {
     if (createContactDTO.reliableInCompany) {
       const isSelectedBefore = createContactDTO.reliableInCompany.find(reliable => reliable._id === customer._id)
@@ -146,7 +172,7 @@ const CreateContactTab = () => {
                 onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
               />
             ),
-            size: ESize.XLarge
+            size: ESize.Medium
           })
         )
       }
@@ -178,45 +204,20 @@ const CreateContactTab = () => {
     }
   }
 
-  const renderSwitch = () => {
-    switch (activeWizzardStep) {
-      case 0:
-        return (
-          <ContactInformationsStep
-            validationErrors={validationErrors}
-            createContactDTO={{ ...createContactDTO }}
-            onInputChange={handleInputChange}
-            onGenderChange={handleGenderChange}
-            onRefferTypeChange={handleRefferTypeChange}
-          />
-        )
+  const handleConfirmAddReliable = (customer: ICustomer, relativeType?: IRelativeType) => {
+    setCreateContactDTO({
+      ...createContactDTO,
+      reliableInCompany: createContactDTO.reliableInCompany?.concat({ ...customer, relativeType: relativeType })
+    })
+    dispatch(closeModal(`addRelateByModal-${customer._id}`))
+  }
 
-      case 1:
-        return (
-          <ContactSearchInCompanyStep
-            reliableInCompanyList={createContactDTO.reliableInCompany || []}
-            onAdd={handleAddReliable}
-            onRemove={handleRemoveReliable}
-          />
-        )
-      case 2:
-        return (
-          <ContactAddNewContactsStep
-            newContactList={createContactDTO.createContact || []}
-            onAdd={handleAddNewContact}
-          />
-        )
-      default:
-        return (
-          <ContactInformationsStep
-            validationErrors={validationErrors}
-            createContactDTO={{ ...createContactDTO }}
-            onInputChange={handleInputChange}
-            onGenderChange={handleGenderChange}
-            onRefferTypeChange={handleRefferTypeChange}
-          />
-        )
-    }
+  const handleConfirmAddContact = (customer: ICustomerAddNew, relativeType?: IRelativeType) => {
+    setCreateContactDTO({
+      ...createContactDTO,
+      createContact: createContactDTO.createContact?.concat({ ...customer, relativeType: relativeType })
+    })
+    dispatch(closeModal(`addRelateByModal-${customer.email}`))
   }
 
   const handleNext = () => {

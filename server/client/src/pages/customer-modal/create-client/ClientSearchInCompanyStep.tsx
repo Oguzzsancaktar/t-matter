@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
-  Badge,
   Button,
-  H1,
   InnerWrapper,
   ItemContainer,
   JustifyBetweenRow,
@@ -16,7 +14,7 @@ import DataTable from 'react-data-table-component'
 import { Plus, UserCheck, X } from 'react-feather'
 import colors from '@/constants/colors'
 import { useGetCustomersQuery } from '@/services/customers/customerService'
-import { ICustomer } from '@/models'
+import { ECustomerType, ICustomer } from '@/models'
 
 interface IProps {
   reliableInCompanyList: ICustomer[]
@@ -31,13 +29,17 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
     {
       name: 'Customer',
       sortable: true,
-      cell: data => <UserBadge userEmail={data.email} userImage={data.photo} userName={data.fullname} />
+      cell: data => (
+        <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
+      )
     },
     {
       name: 'Type',
       selector: row => row.type,
       sortable: true,
-      cell: data => <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.type} />
+      cell: data => (
+        <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={ECustomerType[data.customerType]} />
+      )
     },
     {
       name: 'Phone',
@@ -49,11 +51,11 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
       selector: row => row.year,
       right: true,
       cell: data => (
-        <JustifyCenterRow>
-          <ItemContainer cursorType="pointer">
+        <ItemContainer cursorType="pointer" width="auto">
+          <JustifyCenterRow>
             <Plus size={16} onClick={() => onAdd(data)} />
-          </ItemContainer>
-        </JustifyCenterRow>
+          </JustifyCenterRow>
+        </ItemContainer>
       )
     }
   ]
@@ -82,7 +84,11 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
             <ItemContainer key={index} maxWidth="250px" margin="0 1rem 0 0">
               <JustifyBetweenRow>
                 <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
-                  <UserBadge userEmail={reliable.email} userImage={'reliable.photo'} userName={reliable.firstname} />
+                  <UserBadge
+                    userEmail={reliable.relativeType?.relateTo || ''}
+                    userImage={'reliable.photo'}
+                    userName={reliable.firstname + ' ' + reliable.lastname}
+                  />
                 </ItemContainer>
                 <Button
                   color={colors.red.primary}

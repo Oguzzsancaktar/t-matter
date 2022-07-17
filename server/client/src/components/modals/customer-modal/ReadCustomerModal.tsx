@@ -4,11 +4,12 @@ import { ActionButtons } from '@/components/data-tables'
 import { UserImage } from '@/components/image'
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components/layout'
-import { H1, Label } from '@/components/texts'
-import { InnerWrapper } from '@/components/wrapper'
+import ReliableSlider from '@/components/slider/ReliableSlider'
+import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import { ECustomerType, EStatus, ICustomer } from '@/models'
-import { CustomerModalWorkflowTab, UserModalLogInTab, UserModalSettingsTab } from '@/pages'
+import { CustomerModalWorkflowTab } from '@/pages'
+import { useGetCustomerByIdQuery } from '@/services/customers/customerService'
 import moment from 'moment'
 import React, { useState } from 'react'
 
@@ -17,9 +18,11 @@ interface IProps {
 }
 
 const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
-  const [activeTab, setActiveTab] = useState('activity')
+  const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customer._id)
 
-  console.log(activeTab)
+  const [activeTab, setActiveTab] = useState('activity')
+  const [activeSliderIndex, setActiveSliderIndex] = useState(0)
+
   const renderSwitch = () => {
     switch (activeTab) {
       case 'activity':
@@ -33,6 +36,10 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
       case 'Finance':
         return 'Finance'
     }
+  }
+
+  const handleActiveStep = (index: number) => {
+    setActiveSliderIndex(index)
   }
 
   return (
@@ -147,6 +154,14 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
                   </JustifyBetweenRow>
                 </ItemContainer>
               </JustifyBetweenColumn>
+            </ItemContainer>
+
+            <ItemContainer margin="1rem 0">
+              <ReliableSlider
+                activeIndex={activeSliderIndex}
+                customerId={customer._id}
+                onActiveStepChange={handleActiveStep}
+              />
             </ItemContainer>
 
             <ItemContainer height="40px" borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">

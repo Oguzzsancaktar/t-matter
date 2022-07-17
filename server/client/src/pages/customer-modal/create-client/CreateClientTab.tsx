@@ -4,6 +4,7 @@ import {
   InnerWrapper,
   ItemContainer,
   JustifyBetweenColumn,
+  RelateByModal,
   Row,
   WizzardButtons,
   WizzardNavigation
@@ -12,13 +13,17 @@ import ClientAddNewContactsStep from './ClientAddNewContactsStep'
 import ClientExtraInformationsStep from './ClientExtraInformationsStep'
 import ClientInformationsStep from './ClientInformationsStep'
 import ClientSearchInCompanyStep from './ClientSearchInCompanyStep'
-import { ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
+import { ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
 import { toastError, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import moment from 'moment'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
+import useAccessStore from '@/hooks/useAccessStore'
+import { closeModal, openModal } from '@/store'
 
 const CreateClientTab = () => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
   const [createCustomer] = useCreateCustomerMutation()
   const [activeWizzardStep, setActiveWizzardStep] = useState(0)
   const [clientWizzardSteps, setClientWizzardSteps] = useState([
@@ -67,6 +72,52 @@ const CreateClientTab = () => {
 
   const [errorMessage, setErrorMessage] = useState('')
 
+  const renderSwitch = () => {
+    switch (activeWizzardStep) {
+      case 0:
+        return (
+          <ClientInformationsStep
+            validationErrors={validationErrors}
+            createClientDTO={{ ...createClientDTO, birthday }}
+            onInputChange={handleInputChange}
+            onGenderChange={handleGenderChange}
+            onRefferTypeChange={handleRefferTypeChange}
+          />
+        )
+      case 1:
+        return (
+          <ClientExtraInformationsStep
+            onBirthdayChange={handleBirhdayChange}
+            validationErrors={validationErrors}
+            createClientDTO={{ ...createClientDTO, birthday }}
+            onInputChange={handleInputChange}
+          />
+        )
+      case 2:
+        return (
+          <ClientSearchInCompanyStep
+            reliableInCompanyList={createClientDTO.reliableInCompany || []}
+            onAdd={handleAddReliable}
+            onRemove={handleRemoveClient}
+          />
+        )
+      case 3:
+        return (
+          <ClientAddNewContactsStep newContactList={createClientDTO.createContact || []} onAdd={handleAddNewContact} />
+        )
+      default:
+        return (
+          <ClientInformationsStep
+            validationErrors={validationErrors}
+            createClientDTO={{ ...createClientDTO, birthday }}
+            onInputChange={handleInputChange}
+            onGenderChange={handleGenderChange}
+            onRefferTypeChange={handleRefferTypeChange}
+          />
+        )
+    }
+  }
+
   const validateFormFields = (): boolean => {
     if (!isValueNull(createClientDTO.firstname)) {
       setErrorMessage('Please enter a valid first name')
@@ -101,7 +152,7 @@ const CreateClientTab = () => {
     if (!isValueNull(birthday)) {
       setErrorMessage('Please enter a valid birthday')
       setValidationErrors({ ...validationErrors, birthdayError: true })
-      setActiveWizzardStep(0)
+      setActiveWizzardStep(1)
       return false
     }
 
@@ -109,7 +160,7 @@ const CreateClientTab = () => {
       setErrorMessage('Please enter a valid birthplace')
       setValidationErrors({ ...validationErrors, birthplaceError: true })
 
-      setActiveWizzardStep(0)
+      setActiveWizzardStep(1)
       return false
     }
 
@@ -202,10 +253,20 @@ const CreateClientTab = () => {
       if (isSelectedBefore) {
         toastWarning('Client is already selected')
       } else {
-        setCreateClientDTO({
-          ...createClientDTO,
-          reliableInCompany: createClientDTO.reliableInCompany?.concat(customer)
-        })
+        dispatch(
+          openModal({
+            id: `addRelateByModal-${customer._id}`,
+            title: `Are you sure to inactivate ${customer.firstname}?`,
+            body: (
+              <RelateByModal
+                modalId={`addRelateByModal-${customer._id}`}
+                title={`Choose relate by for ${customer.firstname} ${customer.lastname} ?`}
+                onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
+              />
+            ),
+            size: ESize.Medium
+          })
+        )
       }
     }
   }
@@ -219,56 +280,39 @@ const CreateClientTab = () => {
     }
   }
 
-  const handleAddNewContact = (contact: ICustomerAddNew) => {
+  const handleAddNewContact = (customer: ICustomerAddNew) => {
     if (createClientDTO.createContact) {
-      setCreateClientDTO({ ...createClientDTO, createContact: createClientDTO.createContact?.concat(contact) })
+      dispatch(
+        openModal({
+          id: `addRelateByModal-${customer.email}`,
+          title: `Are you sure to inactivate ${customer.firstname}?`,
+          body: (
+            <RelateByModal
+              modalId={`addRelateByModal-${customer.email}`}
+              title={`Choose relate by for ${customer.firstname} ${customer.lastname} ?`}
+              onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
+            />
+          ),
+          size: ESize.XLarge
+        })
+      )
     }
   }
 
-  const renderSwitch = () => {
-    switch (activeWizzardStep) {
-      case 0:
-        return (
-          <ClientInformationsStep
-            validationErrors={validationErrors}
-            createClientDTO={{ ...createClientDTO, birthday }}
-            onInputChange={handleInputChange}
-            onGenderChange={handleGenderChange}
-            onRefferTypeChange={handleRefferTypeChange}
-          />
-        )
-      case 1:
-        return (
-          <ClientExtraInformationsStep
-            onBirthdayChange={handleBirhdayChange}
-            validationErrors={validationErrors}
-            createClientDTO={{ ...createClientDTO, birthday }}
-            onInputChange={handleInputChange}
-          />
-        )
-      case 2:
-        return (
-          <ClientSearchInCompanyStep
-            reliableInCompanyList={createClientDTO.reliableInCompany || []}
-            onAdd={handleAddReliable}
-            onRemove={handleRemoveClient}
-          />
-        )
-      case 3:
-        return (
-          <ClientAddNewContactsStep newContactList={createClientDTO.createContact || []} onAdd={handleAddNewContact} />
-        )
-      default:
-        return (
-          <ClientInformationsStep
-            validationErrors={validationErrors}
-            createClientDTO={{ ...createClientDTO, birthday }}
-            onInputChange={handleInputChange}
-            onGenderChange={handleGenderChange}
-            onRefferTypeChange={handleRefferTypeChange}
-          />
-        )
-    }
+  const handleConfirmAddReliable = (customer: ICustomer, relativeType?: IRelativeType) => {
+    setCreateClientDTO({
+      ...createClientDTO,
+      reliableInCompany: createClientDTO.reliableInCompany?.concat({ ...customer, relativeType: relativeType })
+    })
+    dispatch(closeModal(`addRelateByModal-${customer._id}`))
+  }
+
+  const handleConfirmAddContact = (customer: ICustomerAddNew, relativeType?: IRelativeType) => {
+    setCreateClientDTO({
+      ...createClientDTO,
+      createContact: createClientDTO.createContact?.concat({ ...customer, relativeType: relativeType })
+    })
+    dispatch(closeModal(`addRelateByModal-${customer.email}`))
   }
 
   const handleNext = () => {
@@ -321,7 +365,8 @@ const CreateClientTab = () => {
     const validationResult = validateFormFields()
     try {
       if (validationResult) {
-        createCustomer({ ...createClientDTO, birthday })
+        await createCustomer({ ...createClientDTO, birthday })
+        dispatch(closeModal('createCustomerModal'))
       }
     } catch (error) {
       toastError('error.message')

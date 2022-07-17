@@ -90,6 +90,24 @@ const updateCustomerStatus = (builder: IBuilder) => {
   })
 }
 
+const getCustomerReliables = (builder: IBuilder) => {
+  return builder.query<ICustomer[], ICustomer['_id']>({
+    query(id) {
+      return {
+        url: `/customer/reliables/${id}`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      if (!result) return [{ type: CUSTOMER_TAG_TYPE, id: 'LIST' }]
+      return [
+        ...result.map(customer => ({ type: CUSTOMER_TAG_TYPE, id: customer._id })),
+        { type: CUSTOMER_TAG_TYPE, id: 'LIST' }
+      ]
+    }
+  })
+}
+
 const customerApi = createApi({
   reducerPath: CUSTOMER_REDUCER_PATH,
   tagTypes: [CUSTOMER_TAG_TYPE],
@@ -99,7 +117,8 @@ const customerApi = createApi({
     createCustomer: createCustomer(builder),
     getCustomerById: getCustomerById(builder),
     updateCustomer: updateCustomer(builder),
-    updateCustomerStatus: updateCustomerStatus(builder)
+    updateCustomerStatus: updateCustomerStatus(builder),
+    getCustomerReliables: getCustomerReliables(builder)
   })
 })
 
@@ -108,7 +127,8 @@ const {
   useCreateCustomerMutation,
   useGetCustomerByIdQuery,
   useUpdateCustomerMutation,
-  useUpdateCustomerStatusMutation
+  useUpdateCustomerStatusMutation,
+  useGetCustomerReliablesQuery
 } = customerApi
 export {
   customerApi,
@@ -116,5 +136,6 @@ export {
   useGetCustomerByIdQuery,
   useCreateCustomerMutation,
   useUpdateCustomerMutation,
-  useUpdateCustomerStatusMutation
+  useUpdateCustomerStatusMutation,
+  useGetCustomerReliablesQuery
 }

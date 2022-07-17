@@ -27,6 +27,12 @@ router.patch(
   controllers.customerController.updateCustomer
 )
 
+router.get(
+  '/reliables/:id',
+  middlewares.validations.customerValidations.getCustomerValidation,
+  controllers.customerController.getCustomerReliablesWithId
+)
+
 router.get('/', controllers.customerController.getCustomers)
 
 module.exports = router

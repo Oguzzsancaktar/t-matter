@@ -83,7 +83,7 @@ const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px)">
-          <DataTableHeader handleAddNew={() => console.log('not implemented')} />
+          <DataTableHeader handleAddNew={() => console.log('not implemented')} showAddNew={false} />
           <DataTable
             fixedHeader
             columns={columns}

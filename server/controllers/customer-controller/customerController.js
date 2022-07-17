@@ -15,9 +15,8 @@ const createCustomer = async (req, res) => {
     }
 
     for (let index = 0; index < body.createContact.length; index++) {
-      const contactId = await Customer.create(body.createContact[index])
-      console.log(contactId)
-      reliableCustomers.push(contactId)
+      const contact = await Customer.create(body.createContact[index])
+      reliableCustomers.push(contact._id)
     }
 
     body.reliableCustomers = reliableCustomers
@@ -73,10 +72,34 @@ const getCustomers = async (req, res) => {
   }
 }
 
+const getCustomerReliablesWithId = async (req, res) => {
+  const { id } = req.params
+  let reliableCustomerArr = []
+
+  try {
+    const customer = await dataAccess.customerDataAccess.findCustomerById(id)
+    if (customer) {
+      for (let i = 0; i < customer.reliableCustomers.length; i++) {
+        const reliableCustomer = await dataAccess.customerDataAccess.findCustomerById(
+          customer.reliableCustomers[i],
+          'refferedBy'
+        )
+        reliableCustomerArr.push(reliableCustomer)
+      }
+    }
+
+    res.status(StatusCodes.OK).json(reliableCustomerArr)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createCustomer,
   getCustomers,
   removeCustomer,
   getCustomer,
-  updateCustomer
+  updateCustomer,
+  getCustomerReliablesWithId
 }
