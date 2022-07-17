@@ -18,7 +18,7 @@ const getUserLogsById = (builder: IBuilder) => {
     },
     providesTags(results) {
       if (results) {
-        return [...results.map(log => ({ type: 'logsTag' as const, id: log._id })), { type: LOGS_TAG, id: 'LIST' }]
+        return [...results.map(log => ({ type: 'logsTag' as const, id: log.date })), { type: LOGS_TAG, id: 'LIST' }]
       }
       return [{ type: LOGS_TAG, id: 'LIST' }]
     }

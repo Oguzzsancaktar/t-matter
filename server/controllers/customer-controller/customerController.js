@@ -2,10 +2,25 @@ const dataAccess = require('../../data-access')
 const { StatusCodes } = require('http-status-codes')
 const { STATUS_TYPES } = require('../../constants/constants')
 const utils = require('../../utils')
+const Customer = require('../../models/customer')
 
 const createCustomer = async (req, res) => {
   const { body } = req
   try {
+    let reliableCustomers = []
+
+    for (let index = 0; index < body.reliableInCompany.length; index++) {
+      const reliableId = body.reliableInCompany[index]._id
+      reliableCustomers.push(reliableId)
+    }
+
+    for (let index = 0; index < body.createContact.length; index++) {
+      const contactId = await Customer.create(body.createContact[index])
+      console.log(contactId)
+      reliableCustomers.push(contactId)
+    }
+
+    body.reliableCustomers = reliableCustomers
     await dataAccess.customerDataAccess.createCustomer(body)
     res.sendStatus(StatusCodes.CREATED)
   } catch (e) {

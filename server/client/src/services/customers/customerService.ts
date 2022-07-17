@@ -10,7 +10,7 @@ type IBuilder = EndpointBuilder<IAxiosBaseQueryFn, typeof CUSTOMER_TAG_TYPE, typ
 
 const getCustomers = (builder: IBuilder) => {
   return builder.query<ICustomer[], string | void>({
-    query(query) {
+    query(query = '') {
       return {
         url: `/customer?search=${query}`,
         method: 'GET'

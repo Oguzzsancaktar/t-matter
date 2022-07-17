@@ -2,6 +2,9 @@ const WorkflowCategory = require('../../models/workflow-models/workflowCategory'
 const WorkflowChecklist = require('../../models/workflow-models/workflowChecklist')
 const WorkflowPlan = require('../../models/workflow-models/workflowPlan')
 const calculateHourlyCompanyFee = require('../../helpers/calculateHourlyCompanyFee')
+const mongoose = require('mongoose')
+const Location = require('../../models/dynamic-variables/location')
+const User = require('../../models/user')
 
 const createWorkflowCategory = data => {
   return WorkflowCategory.create(data)
@@ -61,12 +64,14 @@ const getWorkflowPlans = async (query = {}, populate = '') => {
     for (let x = 0; x < workflowPlans.length; x++) {
       const workflowPlan = workflowPlans[x]
       workflowPlans[x].price = 0
-      for(let i = 0; i < workflowPlan.steps.length; i++) {
+      workflowPlans[x].duration = 0
+      for (let i = 0; i < workflowPlan.steps.length; i++) {
         const steps = workflowPlan.steps[i]
         for (let y = 0; y < steps.checklistItems.length; y++) {
           const checklistItem = steps.checklistItems[y]
           workflowPlans[x].steps[i].checklistItems[y] = await WorkflowChecklist.findById(checklistItem).lean().exec()
           workflowPlans[x].price += (workflowPlans[x].steps[i].checklistItems[y].duration / 3600) * hourlyCompanyFee
+          workflowPlans[x].duration += workflowPlans[x].steps[i].checklistItems[y].duration
         }
       }
     }
@@ -74,10 +79,25 @@ const getWorkflowPlans = async (query = {}, populate = '') => {
   return workflowPlans
 }
 
-const findWorkflowPlanById = (id, populate = '') => {
-  return WorkflowPlan.findById(id).populate(populate).lean().exec()
-}
+const findWorkflowPlanById = async (id, populate = 'steps.responsibleUser') => {
+  const workflowPlan = await WorkflowPlan.findById(id).lean().exec()
 
+  console.log(workflowPlan)
+
+  if (workflowPlan) {
+    for (let x = 0; x < workflowPlan.steps.length; x++) {
+      const step = workflowPlan.steps[x]
+      const stepCategory = await WorkflowCategory.findById(step.category).lean().exec()
+      const stepLocation = await Location.findById(step.location).lean().exec()
+      const stepUser = await User.findById(step.responsibleUser).lean().exec()
+
+      workflowPlan.steps[x].category = stepCategory
+      workflowPlan.steps[x].location = stepLocation
+      workflowPlan.steps[x].responsibleUser = stepUser
+    }
+  }
+  return workflowPlan
+}
 const findByIdAndUpdateWorkflowPlan = (id, data) => {
   return WorkflowPlan.findByIdAndUpdate(id, data)
 }

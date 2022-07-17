@@ -10,7 +10,8 @@ import { Button } from '@/components/button'
 import colors from '@/constants/colors'
 import {
   usePatchWorkflowPlanMutation,
-  useGetChecklistsQuery
+  useGetChecklistsQuery,
+  useGetPlanByIdQuery
 } from '@/services/settings/workflow-planning/workflowService'
 import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
@@ -24,6 +25,8 @@ interface IProps {
 const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const { data: workflowData, isLoading: workflowIsLoading } = useGetPlanByIdQuery(workflow._id)
   const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
 
   const [activeStep, setActiveStep] = useState<number>(0)
@@ -51,11 +54,11 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   }
 
   const [updateWorkflowData, setUpdateWorkflowData] = useState<IWorkflowUpdateDTO>({
-    _id: workflow._id,
-    name: workflow.name,
-    steps: workflow.steps,
-    duration: workflow.duration,
-    price: workflow.price
+    _id: workflowData?._id || workflow._id,
+    name: workflowData?.name || workflow.name,
+    steps: workflowData?.steps || workflow.steps,
+    duration: workflowData?.duration || workflow.duration,
+    price: workflowData?.price || workflow.price
   })
 
   console.log(updateWorkflowData)
@@ -243,6 +246,15 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
     const validationResult = validateFieldValues()
     setActiveStep(index)
   }
+
+  useEffect(() => {
+    if (workflowData) {
+      setUpdateWorkflowData({
+        ...workflowData,
+        steps: [...workflowData.steps]
+      })
+    }
+  }, [workflowData, workflowIsLoading])
 
   useEffect(() => {
     calculateWorkflowTotals()

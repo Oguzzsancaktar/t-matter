@@ -20,12 +20,15 @@ const findCustomer = (query = {}, populate = '') => {
 const findCustomerWithFiltersAndPopulate = ({ search, size, status }) => {
   const pipeline = []
   const match = { $match: {} }
-  if (search) {
-    // match.$match.firstname = { $regex: search, $options: 'i' }
-    // match.$match.lastname = { $regex: search, $options: 'i' }
-    match.$match.phone = { $regex: search, $options: 'i' }
-    // match.$match.email = { $regex: search, $options: 'i' }
+  if (search && search !== 'undefined') {
+    match.$match.$or = [
+      { firstname: { $regex: search, $options: 'i' } },
+      { lastname: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } },
+      { phone: { $regex: search, $options: 'i' } }
+    ]
   }
+
   if (status) {
     match.$match.status = { $eq: +status }
   }

@@ -23,6 +23,7 @@ const workflowPlanStep = new Schema({
   postponeTime: {
     type: Number
   },
+  tabs: [],
   responsibleUser: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users'

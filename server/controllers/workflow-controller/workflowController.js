@@ -125,8 +125,8 @@ const createWorkflowPlan = async (req, res) => {
 
 const getWorkflowPlans = async (req, res) => {
   try {
-    const checklists = await dataAccess.workflowDataAccess.getWorkflowPlans({}, '')
-    res.status(StatusCodes.OK).json(checklists)
+    const workflowPlans = await dataAccess.workflowDataAccess.getWorkflowPlans({}, '')
+    res.status(StatusCodes.OK).json(workflowPlans)
   } catch (e) {
     console.log(e)
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -136,8 +136,8 @@ const getWorkflowPlans = async (req, res) => {
 const getWorkflowPlanById = async (req, res) => {
   const { id } = req.params
   try {
-    const checklist = await dataAccess.workflowDataAccess.findWorkflowPlanById(id, '')
-    res.status(StatusCodes.OK).json(checklist)
+    const workflowPlan = await dataAccess.workflowDataAccess.findWorkflowPlanById(id, '')
+    res.status(StatusCodes.OK).json(workflowPlan)
   } catch (e) {
     console.log(e)
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)

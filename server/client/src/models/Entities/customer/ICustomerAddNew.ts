@@ -1,3 +1,5 @@
+import { IRelativeType } from '@/models'
+
 export default interface ICustomerAddNew {
   customerType: number
   firstname: string
@@ -6,4 +8,5 @@ export default interface ICustomerAddNew {
   phone: string
   refferedBy: string
   gender: number
+  relativeType?: IRelativeType
 }

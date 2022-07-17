@@ -45,8 +45,7 @@ const CreateWorkflowPlanModal = () => {
 
   const [createWorkflowData, setCreateWorkflowData] = useState<IWorkflowCreateDTO>({
     name: '',
-    steps: [{ ...initialTask }],
-  
+    steps: [{ ...initialTask }]
   })
 
   const initialErrors = {
@@ -157,7 +156,6 @@ const CreateWorkflowPlanModal = () => {
     return result
   }
 
-
   const handleStepRemove = (index: number) => {
     let dataInstance = [...createWorkflowData.steps]
 
@@ -194,7 +192,6 @@ const CreateWorkflowPlanModal = () => {
     const validationResult = validateFieldValues()
     setActiveStep(index)
   }
-
 
   useEffect(() => {
     toastError(validationErrorMessage)

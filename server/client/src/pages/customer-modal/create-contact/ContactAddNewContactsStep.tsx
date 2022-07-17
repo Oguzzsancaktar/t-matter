@@ -4,7 +4,6 @@ import {
   JustifyBetweenRow,
   ItemContainer,
   InputWithIcon,
-  DatePicker,
   Row,
   SelectInput,
   UserBadge,
@@ -12,7 +11,8 @@ import {
 } from '@/components'
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
-import { EGender, ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
+import { EGender, ICustomerAddNew, ICustomerCreateDTO, IOption, IRefferedBy } from '@/models'
+import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 import { toastError } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid, isPhoneNumberValid } from '@/utils/validationUtils'
 import moment from 'moment'
@@ -24,15 +24,14 @@ interface IProps {
   onAdd: (contact: ICustomerAddNew) => void
 }
 const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) => {
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+
   const [newContact, setNewContact] = useState<Omit<ICustomerCreateDTO, '_id'>>({
-    aSharpNumber: '',
     customerType: 0,
     firstname: '',
     lastname: '',
     email: '',
     phone: '',
-    birthday: '',
-    birthplace: '',
     refferedBy: '',
     gender: 0
   })
@@ -42,8 +41,6 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
     lastnameError: false,
     emailError: false,
     phoneError: false,
-    birthdayError: false,
-    birthplaceError: false,
     refferedByError: false,
     genderError: false
   })
@@ -77,28 +74,12 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
       setValidationErrors({ ...validationErrors, emailError: false })
     }
 
-    if (!isPhoneNumberValid(newContact.phone)) {
+    if (!isValueNull(newContact.phone)) {
       setErrorMessage('Please enter a valid phone number')
       setValidationErrors({ ...validationErrors, phoneError: true })
       return false
     } else {
       setValidationErrors({ ...validationErrors, phoneError: false })
-    }
-
-    if (!isValueNull(newContact.birthday)) {
-      setErrorMessage('Please enter a valid birthday')
-      setValidationErrors({ ...validationErrors, birthdayError: true })
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, birthdayError: false })
-    }
-
-    if (!isValueNull(newContact.birthplace)) {
-      setErrorMessage('Please enter a valid birthplace')
-      setValidationErrors({ ...validationErrors, birthplaceError: true })
-      return false
-    } else {
-      setValidationErrors({ ...validationErrors, birthplaceError: false })
     }
 
     if (!isValueNull(newContact.refferedBy)) {
@@ -142,14 +123,11 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
     if (validationResult) {
       onAdd(newContact)
       setNewContact({
-        aSharpNumber: '',
         customerType: 0,
         firstname: '',
         lastname: '',
         email: '',
         phone: '',
-        birthday: '',
-        birthplace: '',
         refferedBy: '',
         gender: 0
       })
@@ -238,8 +216,12 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
                   name="refferedBy"
                   // placeholder="Enter birth location..."
                   onChange={(option: IOption) => handleRefferTypeChange(option)}
-                  options={genderOptions}
-                  labelText="Contact Reffered By"
+                  options={(refferedByData || []).map((refferedBy: IRefferedBy) => ({
+                    label: refferedBy.name,
+                    value: refferedBy._id
+                  }))}
+                  isLoading={refferedByDataIsLoading}
+                  labelText="Reffered By"
                   validationError={validationErrors.refferedByError}
                   selectedOption={[{ value: newContact.refferedBy, label: newContact.refferedBy }]}
                 />
@@ -254,7 +236,9 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
                   options={genderOptions}
                   labelText="Contact Gender"
                   validationError={validationErrors.genderError}
-                  selectedOption={[{ value: EGender[newContact.gender], label: newContact.gender.toString() }]}
+                  selectedOption={[
+                    { value: newContact.gender.toString(), label: EGender[newContact.gender.toString()] }
+                  ]}
                 />
               </ItemContainer>
             </JustifyBetweenRow>
@@ -268,7 +252,7 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) 
             <UserBadge
               key={index}
               userName={contact.firstname + ' ' + contact.lastname}
-              userEmail={contact.email}
+              userEmail={contact.relativeType?.relateTo || ''}
               userImage={'test'} // TODO: Contact side image
             />
           ))}

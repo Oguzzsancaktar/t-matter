@@ -4,6 +4,7 @@ import {
   InnerWrapper,
   ItemContainer,
   JustifyBetweenColumn,
+  RelateByModal,
   Row,
   WizzardButtons,
   WizzardNavigation
@@ -11,13 +12,13 @@ import {
 import ContactAddNewContactsStep from './ContactAddNewContactsStep'
 import ContactInformationsStep from './ContactInformationsStep'
 import ContactSearchInCompanyStep from './ContactSearchInCompanyStep'
-import { ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption } from '@/models'
+import { ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
 import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid, isPhoneNumberValid } from '@/utils/validationUtils'
 import moment from 'moment'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
 import useAccessStore from '@/hooks/useAccessStore'
-import { closeModal } from '@/store'
+import { closeModal, openModal } from '@/store'
 
 const CreateContactTab = () => {
   const { useAppDispatch } = useAccessStore()
@@ -38,7 +39,9 @@ const CreateContactTab = () => {
     email: '',
     phone: '',
     refferedBy: '',
-    gender: 0
+    gender: 0,
+    reliableInCompany: [],
+    createContact: []
   })
 
   const [validationErrors, setValidationErrors] = useState({
@@ -110,32 +113,68 @@ const CreateContactTab = () => {
     setCreateContactDTO({ ...createContactDTO, refferedBy: option.value })
   }
 
+  const handleConfirmAddReliable = (customer: ICustomer, relativeType?: IRelativeType) => {
+    setCreateContactDTO({
+      ...createContactDTO,
+      reliableInCompany: createContactDTO.reliableInCompany?.concat({ ...customer, relativeType: relativeType })
+    })
+    dispatch(closeModal(`addRelateByModal-${customer._id}`))
+  }
+
+  const handleConfirmAddContact = (customer: ICustomerAddNew, relativeType?: IRelativeType) => {
+    setCreateContactDTO({
+      ...createContactDTO,
+      createContact: createContactDTO.createContact?.concat({ ...customer, relativeType: relativeType })
+    })
+    dispatch(closeModal(`addRelateByModal-${customer.email}`))
+  }
+
   const handleAddReliable = (customer: ICustomer) => {
     if (createContactDTO.reliableInCompany) {
       const isSelectedBefore = createContactDTO.reliableInCompany.find(reliable => reliable._id === customer._id)
       if (isSelectedBefore) {
         toastWarning('Contact is already selected')
       } else {
-        setCreateContactDTO({
-          ...createContactDTO,
-          reliableInCompany: createContactDTO.reliableInCompany?.concat(customer)
-        })
+        dispatch(
+          openModal({
+            id: `addRelateByModal-${customer._id}`,
+            title: `Are you sure to inactivate ${customer.firstname}?`,
+            body: (
+              <RelateByModal
+                modalId={`addRelateByModal-${customer._id}`}
+                title={`Choose relate by for ${customer.firstname} ${customer.lastname} ?`}
+                onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
+              />
+            ),
+            size: ESize.XLarge
+          })
+        )
       }
     }
   }
 
   const handleRemoveReliable = (customer: ICustomer) => {
     if (createContactDTO.reliableInCompany) {
-      setCreateContactDTO({
-        ...createContactDTO,
-        reliableInCompany: createContactDTO.reliableInCompany?.filter(reliable => reliable._id !== customer._id)
-      })
+      setCreateContactDTO({ ...createContactDTO, createContact: createContactDTO.createContact?.concat(customer) })
     }
   }
 
-  const handleAddNewContact = (contact: ICustomerAddNew) => {
+  const handleAddNewContact = (customer: ICustomerAddNew) => {
     if (createContactDTO.createContact) {
-      setCreateContactDTO({ ...createContactDTO, createContact: createContactDTO.createContact?.concat(contact) })
+      dispatch(
+        openModal({
+          id: `addRelateByModal-${customer.email}`,
+          title: `Are you sure to inactivate ${customer.firstname}?`,
+          body: (
+            <RelateByModal
+              modalId={`addRelateByModal-${customer.email}`}
+              title={`Choose relate by for ${customer.firstname} ${customer.lastname} ?`}
+              onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
+            />
+          ),
+          size: ESize.XLarge
+        })
+      )
     }
   }
 

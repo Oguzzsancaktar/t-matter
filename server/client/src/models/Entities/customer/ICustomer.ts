@@ -1,3 +1,4 @@
+import { IRelativeType } from '@/models'
 export default interface ICustomer {
   _id: string
   aSharpNumber?: string
@@ -18,4 +19,5 @@ export default interface ICustomer {
   gender: number
   reliableCustomers: string[]
   status: number
+  relativeType?: IRelativeType
 }
