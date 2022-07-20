@@ -58,6 +58,7 @@ const createWorkflowPlan = data => {
 
 const getWorkflowPlans = async (query = {}, populate = '') => {
   const workflowPlans = await WorkflowPlan.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
+
   const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
 
   if (workflowPlans) {
@@ -81,8 +82,6 @@ const getWorkflowPlans = async (query = {}, populate = '') => {
 
 const findWorkflowPlanById = async (id, populate = 'steps.responsibleUser') => {
   const workflowPlan = await WorkflowPlan.findById(id).lean().exec()
-
-  console.log(workflowPlan)
 
   if (workflowPlan) {
     for (let x = 0; x < workflowPlan.steps.length; x++) {

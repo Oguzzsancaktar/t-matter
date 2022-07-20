@@ -33,6 +33,6 @@ export const STATUSES = [STATUS_TYPES.ACTIVE, STATUS_TYPES.INACTIVE]
 export const GENDERS = [GENDER_TYPES.FEMALE, GENDER_TYPES.MALE, GENDER_TYPES.OTHER]
 
 export const statusOptions = [
-  { label: 'Inactive', value: EStatus.Inactive },
-  { label: 'Active', value: EStatus.Active }
+  { label: 'Inactive', value: '0' },
+  { label: 'Active', value: '1' }
 ]

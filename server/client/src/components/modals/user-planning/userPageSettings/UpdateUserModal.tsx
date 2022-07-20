@@ -42,12 +42,14 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
     zipcode: user.zipcode,
     address: user.address,
     role: {
-      _id: user.role._id,
-      name: user.role.name
+      _id: user.role[0]._id,
+      name: user.role[0].name
     },
     gender: user.gender,
     status: user.status
   })
+
+  console.log('user', user, EStatus[updateUserData.status.toString()], updateUserData.gender)
 
   const [firstnameError, setFirstnameError] = useState(false)
   const [lastnameError, setLastnameError] = useState(false)
@@ -392,7 +394,9 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="gender"
                   // placeholder="Enter birth location..."
                   onChange={option => setUpdateUserData({ ...updateUserData, gender: option.value })}
-                  selectedOption={[{ label: EGender[+updateUserData.gender], value: updateUserData.gender }]}
+                  selectedOption={[
+                    { value: updateUserData.gender.toString(), label: EGender[updateUserData.gender.toString()] }
+                  ]}
                   options={genderOptions}
                   labelText="Gender"
                   validationError={genderError}
@@ -407,7 +411,9 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   children={<User size={16} />}
                   name="role"
                   // placeholder="Select your birthday..."
-                  onChange={option => setUpdateUserData({ ...updateUserData, role: option.value })}
+                  onChange={option =>
+                    setUpdateUserData({ ...updateUserData, role: { _id: option.value, name: option.label } })
+                  }
                   options={(roleData || []).map(role => ({ value: role._id, label: role.name }))}
                   selectedOption={[{ label: updateUserData.role.name, value: updateUserData.role._id }]}
                   labelText="Role"
@@ -421,7 +427,12 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="status"
                   // placeholder="Enter birth location..."
                   onChange={option => setUpdateUserData({ ...updateUserData, status: option.value })}
-                  selectedOption={[{ label: EStatus[+updateUserData.status], value: updateUserData.status.toString() }]}
+                  selectedOption={[
+                    {
+                      value: updateUserData.status.toString(),
+                      label: EStatus[updateUserData.status.toString()]
+                    }
+                  ]}
                   options={statusOptions}
                   labelText="Status"
                   validationError={statusError}

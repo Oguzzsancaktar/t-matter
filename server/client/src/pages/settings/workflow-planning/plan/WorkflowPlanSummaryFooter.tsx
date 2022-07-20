@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import colors from '@constants/colors'
 import { Button } from '@/components'
 import { ITaskChecklist } from '@/models'
-import { useGetChecklistByIdQuery, useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
+import { useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
 import { secondsToHourMin } from '@/utils/timeUtils'
 
 const Text = styled.h3`

@@ -209,12 +209,12 @@ const getPlanById = (builder: IBuilder) => {
 }
 
 const patchWorkflowPlan = (builder: IBuilder) => {
-  return builder.mutation<IWorkflow, Omit<IWorkflow, 'status' | 'price'>>({
+  return builder.mutation<IWorkflow, Omit<IWorkflow, 'status' | 'price' | 'duration' | 'price'>>({
     query(dto) {
       return {
         url: `/workflow/plan/${dto._id}`,
         method: 'PATCH',
-        data: { name: dto.name, duration: dto.duration, steps: dto.steps }
+        data: { name: dto.name, steps: dto.steps }
       }
     },
     invalidatesTags(result) {

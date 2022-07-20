@@ -26,6 +26,8 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
   const { data: locationsData, isLoading: locationsDataIsLoading } = useGetLocationsQuery()
 
+  console.log('checklistsData', data.checklistItems)
+
   const handleCategoryChange = (option: IOption) => {
     const dataInstance = { ...data }
     dataInstance.category = {

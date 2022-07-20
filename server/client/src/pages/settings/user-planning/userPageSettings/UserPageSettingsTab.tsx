@@ -27,7 +27,7 @@ const UserPageSettingsTab = () => {
   const [updateUserStatus] = useUpdateUserStatusMutation()
 
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
-  console.log(usersData)
+
   const columns = [
     {
       name: 'User',

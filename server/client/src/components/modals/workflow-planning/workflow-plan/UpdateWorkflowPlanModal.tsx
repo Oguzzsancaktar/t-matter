@@ -10,7 +10,6 @@ import { Button } from '@/components/button'
 import colors from '@/constants/colors'
 import {
   usePatchWorkflowPlanMutation,
-  useGetChecklistsQuery,
   useGetPlanByIdQuery
 } from '@/services/settings/workflow-planning/workflowService'
 import { closeModal } from '@/store'
@@ -27,7 +26,6 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   const dispatch = useAppDispatch()
 
   const { data: workflowData, isLoading: workflowIsLoading } = useGetPlanByIdQuery(workflow._id)
-  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
 
   const [activeStep, setActiveStep] = useState<number>(0)
   const [updatePlan] = usePatchWorkflowPlanMutation()
@@ -56,17 +54,11 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   const [updateWorkflowData, setUpdateWorkflowData] = useState<IWorkflowUpdateDTO>({
     _id: workflowData?._id || workflow._id,
     name: workflowData?.name || workflow.name,
-    steps: workflowData?.steps || workflow.steps,
-    duration: workflowData?.duration || workflow.duration,
-    price: workflowData?.price || workflow.price
+    steps: workflowData?.steps || workflow.steps
   })
-
-  console.log(updateWorkflowData)
 
   const initialErrors = {
     nameError: false,
-    durationError: false,
-    priceError: false,
     expireDurationError: false,
     postponeTimeError: false,
     categoryError: false,
@@ -107,12 +99,6 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
     if (!isValueNull(updateWorkflowData.name)) {
       setValidationErrors({ ...initialErrors, nameError: true })
       setValidationErrorMessage('Please enter valid workflow name')
-      return (result = false)
-    }
-
-    if (!isValueBiggerThanZero(updateWorkflowData.duration)) {
-      setValidationErrors({ ...initialErrors, checklistItemsError: true })
-      setValidationErrorMessage('Workflow duration cant be zero please select checklist items')
       return (result = false)
     }
 
@@ -174,39 +160,7 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
       }
     })
 
-    if (!isValueNull(updateWorkflowData.duration.toString()) && !isValueBiggerThanZero(updateWorkflowData.duration)) {
-      setValidationErrors({ ...initialErrors, durationError: true })
-      setValidationErrorMessage('Workflow duration error')
-      return (result = false)
-    }
-
-    if (!isValueNull(updateWorkflowData.price.toString()) && !isValueBiggerThanZero(updateWorkflowData.price)) {
-      setValidationErrors({ ...initialErrors, priceError: true })
-      setValidationErrorMessage('Workflow price error')
-      return (result = false)
-    }
-
     return result
-  }
-
-  const calculateWorkflowTotals = () => {
-    const dataInstance: IWorkflowUpdateDTO = { ...updateWorkflowData }
-    let totalDuration = 0
-    let totalPrice = 0
-
-    console.log(dataInstance.steps)
-    dataInstance.steps.forEach(task => {
-      console.log(task)
-      task.checklistItems.forEach(checklist => {
-        totalDuration += checklist.duration
-        totalPrice += checklist.price
-      })
-    })
-
-    dataInstance.duration = totalDuration
-    dataInstance.price = totalPrice
-
-    setUpdateWorkflowData(dataInstance)
   }
 
   const handleStepRemove = (index: number) => {
@@ -248,17 +202,15 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   }
 
   useEffect(() => {
+    console.log('workflowData', workflowData, updateWorkflowData)
+
     if (workflowData) {
       setUpdateWorkflowData({
-        ...workflowData,
-        steps: [...workflowData.steps]
+        ...workflowData
+        // steps: [...workflowData.steps]
       })
     }
   }, [workflowData, workflowIsLoading])
-
-  useEffect(() => {
-    calculateWorkflowTotals()
-  }, [updateWorkflowData.steps])
 
   useEffect(() => {
     toastError(validationErrorMessage)

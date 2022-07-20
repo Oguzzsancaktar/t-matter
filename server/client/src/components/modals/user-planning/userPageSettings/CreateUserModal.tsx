@@ -43,7 +43,7 @@ const CreateUserModal = () => {
     zipcode: '',
     address: '',
     role: '',
-    gender: '',
+    gender: 0,
     status: 0,
     password: ''
   })
@@ -159,7 +159,7 @@ const CreateUserModal = () => {
       return false
     }
 
-    if (!isValueNull(createUserData.gender)) {
+    if (!isValueNull(createUserData.gender.toString())) {
       setErrorMessage('Please select user gender')
       setGenderError(true)
       return false
@@ -410,7 +410,7 @@ const CreateUserModal = () => {
                   name="gender"
                   // placeholder="Enter birth location..."
                   onChange={option => setCreateUserData({ ...createUserData, gender: option.value })}
-                  selectedOption={[{ label: EGender[createUserData.gender], value: createUserData.gender }]}
+                  selectedOption={[{ label: EGender[createUserData.gender], value: createUserData.gender.toString() }]}
                   options={genderOptions}
                   labelText="Gender"
                   validationError={genderError}

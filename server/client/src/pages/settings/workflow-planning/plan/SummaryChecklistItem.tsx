@@ -14,6 +14,7 @@ const SummaryChecklistItem: React.FC<IProps> = ({ checklistItem }) => {
     isLoading: checklistDetailDataIsLoading,
     isError: checklistDetailDataIsError
   } = useGetChecklistByIdQuery(checklistItem._id)
+
   return (
     <>
       {!checklistDetailDataIsLoading && !checklistDetailDataIsError && checklistDetailData ? (

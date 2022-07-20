@@ -6,12 +6,12 @@ const workflowPlanStep = new Schema({
   checklistItems: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'workflowchecklists'
+      ref: 'workflowChecklists'
     }
   ],
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'workflowcategories'
+    ref: 'workflowCategories'
   },
   expireDuration: {
     type: Number

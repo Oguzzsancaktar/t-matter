@@ -13,7 +13,7 @@ export default interface IUser {
   zipcode: string
   address: string
   role: IRole
-  gender: string
+  gender: number
   password: string
   status: number
 }
