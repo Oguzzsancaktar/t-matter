@@ -25,23 +25,18 @@ const getLogsByUserId = async userId => {
     const logouts = logs.filter(log => log.logType === LOG_TYPES.LOGOUT).sort((a, b) => a.createdAt - b.createdAt)
     const logins = logs.filter(log => log.logType === LOG_TYPES.LOGIN).sort((a, b) => a.createdAt - b.createdAt)
 
-    // if logouts are not empty and last logout is after last login
-    const isLogoutAfterLogin =
-      logouts.length > 0 && logouts[logouts.length - 1].createdAt > logins[logins.length - 1].createdAt
-    if (!isLogoutAfterLogin) {
-      acc.push({ date: _id, totalTime: 0, login: logins[0].createdAt, logout: null })
-      return acc
-    }
-
     const totalTime = logins.reduce((acc, curr, i) => {
-      return acc + moment(moment(logouts[i]?.createdAt)).diff(curr.createdAt, 'seconds')
+      if(logouts[i]) {
+        return acc + moment(moment(logouts[i].createdAt)).diff(curr.createdAt, 'seconds')
+      }
+      return acc
     }, 0)
 
     acc.push({
       date: _id,
       totalTime: totalTime / 60 / 60,
       login: logins[0].createdAt,
-      logout: logouts[logouts.length - 1].createdAt
+      logout: logouts[logouts.length - 1] ? logouts[logouts.length - 1].createdAt : logins[logins.length - 1].createdAt
     })
     return acc
   }, [])

@@ -90,6 +90,12 @@ const findWorkflowPlanById = async (id, populate = 'steps.responsibleUser') => {
       const stepLocation = await Location.findById(step.location).lean().exec()
       const stepUser = await User.findById(step.responsibleUser).lean().exec()
 
+      for (let i = 0; i < step.checklistItems.length; i++) {
+        const checklistItemId = step.checklistItems[i]
+        const checklistItem = await WorkflowChecklist.findById(checklistItemId).lean().exec()
+        workflowPlan.steps[x].checklistItems[i] = checklistItem
+      }
+
       workflowPlan.steps[x].category = stepCategory
       workflowPlan.steps[x].location = stepLocation
       workflowPlan.steps[x].responsibleUser = stepUser
