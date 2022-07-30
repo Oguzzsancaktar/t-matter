@@ -94,8 +94,8 @@ const getTasks = async (req, res) => {
         $match: {
           customer: mongoose.Types.ObjectId(customerId)
         }
-      }
-      // ...taskPopulatePipe
+      },
+      ...taskPopulatePipe
     ])
 
     res.status(200).json(tasks)
@@ -113,8 +113,8 @@ const getTask = async (req, res) => {
         $match: {
           _id: mongoose.Types.ObjectId(taskId)
         }
-      }
-      // ...taskPopulatePipe
+      },
+      ...taskPopulatePipe
     ])
     res.status(200).json(task)
   } catch (error) {
