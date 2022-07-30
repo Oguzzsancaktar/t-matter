@@ -4,71 +4,67 @@ import { TaskEventSection, TaskInformations, TaskWizzardNavigation } from '@/com
 import React, { useState } from 'react'
 import { ModalBody, ModalHeader } from '../types'
 import colors from '@/constants/colors'
+import { ITaskControlStep } from '@/models'
 
-const TEMP_WORKFLOW = [
+const TEMP_WORKFLOW: ITaskControlStep[] = [
   {
+    startDate: Date.now().toString(),
     expireDuration: 10,
-    postponeTime: 5,
-    category: 'category name',
-    location: 'location name',
-    responsibleUser: 'responsivle name',
-    tabs: ['note', 'tab 2', 'tab 3'],
-    checklistItems: [
-      {
-        name: 'checklist 1',
-        duration: 20,
-        point: 100,
-        price: 200
-      },
-      {
-        name: 'checklist 2',
-        duration: 540,
-        point: 30,
-        price: 100
+
+    postponeCount: 5,
+    postponeTime: 1,
+
+    totalDuration: 36000,
+    usedTime: 3600,
+
+    name: 'workflowname/categry',
+    tabs: ['Tab1', 'Tab2'],
+    stepStatus: 0,
+
+    location: {
+      _id: 'locationid',
+      name: 'locationname',
+      status: 0
+    },
+
+    responsibleUser: {
+      _id: '62d59ecbe78c2ffdc376e876',
+      email: 'Arif@gmail.com',
+      password: '$2b$10$XApQoQzEQzHIFD7o/y4vyesT6EP6mDrHlo1q1KMLctOLk4Rb90CSC',
+      firstname: 'Arif',
+      lastname: 'Arslanturk',
+      birthday: '2010-07-13T00:00:00.000Z',
+      birthplace: 'Turkiye',
+      phone: '2014565854',
+      country: 'United States',
+      city: 'Wayne',
+      state: 'NJ',
+      address: '456 Newyork Ave',
+      zipcode: '07470',
+      gender: 1,
+      status: 1,
+      role: {
+        _id: '62a202816a02eaaf91429429',
+        name: 'Paralegal',
+        status: 1
       }
-    ]
-  },
-  {
-    expireDuration: 5,
-    postponeTime: 51,
-    category: 'category name 2',
-    location: 'location name 2',
-    responsibleUser: 'responsivle name 2',
-    tabs: ['note', 'tab 2'],
+    },
     checklistItems: [
       {
-        name: 'checklist 2-2',
-        duration: 10,
-        point: 10,
-        price: 20
+        name: 'I - 589 Package Process',
+        point: 60,
+        duration: 3600,
+        status: 1,
+        price: 694.0142857142857,
+        isCompleted: false
       },
       {
-        name: 'checklist 2-3',
-        duration: 54,
-        point: 1,
-        price: 10
-      }
-    ]
-  },
-  {
-    expireDuration: 50,
-    postponeTime: 3,
-    category: 'category name 3',
-    location: 'location name 3',
-    responsibleUser: 'responsivle name3',
-    tabs: ['note'],
-    checklistItems: [
-      {
-        name: 'checklist 3-1',
-        duration: 99,
-        point: 88,
-        price: 300
-      },
-      {
-        name: 'checklist 3-2',
-        duration: 70,
-        point: 30,
-        price: 55
+        name: 'I - 589 Package Process',
+        point: 60,
+        duration: 3600,
+        status: 1,
+        price: 694.0142857142857,
+        isCompleted: true
       }
     ]
   }
@@ -98,7 +94,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ workflowId }) => {
           </ItemContainer>
 
           <ItemContainer width="400px" height="100%" padding="0 2rem" backgroundColor={colors.white.primary}>
-            <TaskInformations  activeStep={activeStep} workflowData={TEMP_WORKFLOW} />
+            <TaskInformations activeStep={activeStep} workflowData={TEMP_WORKFLOW} />
           </ItemContainer>
 
           <ItemContainer

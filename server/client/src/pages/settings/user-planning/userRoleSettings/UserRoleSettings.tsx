@@ -116,7 +116,7 @@ const UserRoleSettings = () => {
 
   const handleOnConfirmDelete = async (role: IRole) => {
     try {
-      await updateRoleStatus({ _id: role._id, status: EStatus.Inactive.toString() })
+      await updateRoleStatus({ _id: role._id, status: EStatus.Inactive })
       toastSuccess('Role ' + role.name + ' inactivated successfully')
       dispatch(closeModal(`deleteRoleModal-${role._id}`))
     } catch (error) {
@@ -126,7 +126,7 @@ const UserRoleSettings = () => {
 
   const handleOnConfirmReactive = async (role: IRole) => {
     try {
-      await updateRoleStatus({ _id: role._id, status: EStatus.Active.toString() })
+      await updateRoleStatus({ _id: role._id, status: EStatus.Active })
       toastSuccess('Role ' + role.name + ' reactivated successfully')
       dispatch(closeModal(`reactiveRoleModal-${role._id}`))
     } catch (error) {

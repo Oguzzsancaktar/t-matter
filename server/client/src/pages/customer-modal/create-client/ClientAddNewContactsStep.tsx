@@ -28,12 +28,18 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
 
   const [newContact, setNewContact] = useState<ICustomerAddNew>({
+    _id: '',
     customerType: 0,
     firstname: '',
     lastname: '',
     email: '',
     phone: '',
-    refferedBy: '',
+    refferedBy: {
+      _id: '',
+      name: '',
+      status: 0,
+      color: '#f2f200'
+    },
     gender: 0
   })
 
@@ -83,7 +89,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
       setValidationErrors({ ...validationErrors, phoneError: false })
     }
 
-    if (!isValueNull(newContact.refferedBy)) {
+    if (!isValueNull(newContact.refferedBy._id)) {
       setErrorMessage('Please select user refferedBy')
       setValidationErrors({ ...validationErrors, refferedByError: true })
       return false
@@ -111,7 +117,10 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
   }
 
   const handleRefferTypeChange = (option: IOption) => {
-    setNewContact({ ...newContact, refferedBy: option.value })
+    const refBy = refferedByData?.find(rb => rb._id === option.value)
+    if (refBy) {
+      setNewContact({ ...newContact, refferedBy: refBy })
+    }
   }
 
   const handleOnAdd = (e: React.MouseEvent) => {
@@ -120,12 +129,18 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
     if (validationResult) {
       onAdd(newContact)
       setNewContact({
+        _id: '',
         customerType: 0,
         firstname: '',
         lastname: '',
         email: '',
         phone: '',
-        refferedBy: '',
+        refferedBy: {
+          _id: '',
+          name: '',
+          status: 0,
+          color: '#f2f200'
+        },
         gender: 0
       })
     }
@@ -220,7 +235,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
                   isLoading={refferedByDataIsLoading}
                   labelText="Reffered By"
                   validationError={validationErrors.refferedByError}
-                  selectedOption={[{ value: newContact.refferedBy, label: newContact.refferedBy }]}
+                  selectedOption={[{ value: newContact.refferedBy._id, label: newContact.refferedBy.name }]}
                 />
               </ItemContainer>
 

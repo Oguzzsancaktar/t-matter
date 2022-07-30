@@ -18,7 +18,7 @@ import { ModalHeader, ModalBody } from '../types'
 
 interface IProps {
   title: string
-  onConfirm: (relativeType?: IRelativeType) => void
+  onConfirm: (relativeType: IRelativeType) => void
   modalId: string
 }
 const RelateByModal: React.FC<IProps> = ({ title, onConfirm, modalId }) => {

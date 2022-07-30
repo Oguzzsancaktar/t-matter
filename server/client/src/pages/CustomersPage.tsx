@@ -9,7 +9,8 @@ import {
   PageWrapper,
   CreateCustomerModal,
   ReadCustomerModal,
-  ConfirmModal
+  ConfirmModal,
+  UpdateCustomerModal
 } from '@/components'
 import DataTable from 'react-data-table-component'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
@@ -71,15 +72,12 @@ const CustomersPage = () => {
         <ActionButtons
           status={data.status}
           onRead={() => handleRead(data)}
-          // onEdit={() => handleEdit(data)}
+          onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
           }}
           onDelete={() => handleDelete(data)}
           onReactive={() => handleReactive(data)}
-          onEdit={function (): void {
-            throw new Error('Function not implemented.')
-          }}
         />
       )
     }
@@ -90,23 +88,23 @@ const CustomersPage = () => {
       openModal({
         id: `customerDetailModal-${customer._id}`,
         title: 'Customer / ' + customer.firstname + ' ' + customer.lastname,
-        body: <ReadCustomerModal customer={customer} />,
+        body: <ReadCustomerModal customerId={customer._id} />,
         size: ESize.XLarge,
         backgroundColor: 'transparent'
       })
     )
   }
 
-  // const handleEdit = (customer: ICustomer) => {
-  //   dispatch(
-  //     openModal({
-  //       id: `updateCustomerModal-${customer._id}`,
-  //       title: 'Update Customer / ' + customer.firstname + ' ' + customer.lastname,
-  //       body: <UpdateCustomerModal customer={customer} />,
-  //       size: ESize.Small
-  //     })
-  //   )
-  // }
+  const handleEdit = (customer: ICustomer) => {
+    dispatch(
+      openModal({
+        id: `updateCustomerModal-${customer._id}`,
+        title: 'Update Customer / ' + customer.firstname + ' ' + customer.lastname,
+        body: <UpdateCustomerModal customerId={customer._id} />,
+        size: ESize.XLarge
+      })
+    )
+  }
 
   const handleDelete = (customer: ICustomer) => {
     dispatch(

@@ -1,4 +1,4 @@
-import { IRelativeType } from '@/models'
+import { IRefferedBy, IRelativeType, IReliableCustomer } from '@/models'
 export default interface ICustomer {
   _id: string
   aSharpNumber?: string
@@ -15,9 +15,9 @@ export default interface ICustomer {
   lastname: string
   email: string
   phone: string
-  refferedBy: string
+  refferedBy: IRefferedBy
   gender: number
-  reliableCustomers: string[]
   status: number
   relativeType?: IRelativeType
+  reliableCustomers: IReliableCustomer[]
 }

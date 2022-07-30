@@ -11,7 +11,13 @@ const createCustomer = async (req, res) => {
 
     for (let index = 0; index < body.reliableInCompany.length; index++) {
       const reliableId = body.reliableInCompany[index]._id
-      reliableCustomers.push(reliableId)
+
+      const relativeType = {
+        id: body.reliableInCompany[index].relativeType._id,
+        fromOrTo: body.reliableInCompany[index].relativeType.fromOrTo
+      }
+
+      reliableCustomers.push({ reliableId, relativeType })
     }
 
     for (let index = 0; index < body.createContact.length; index++) {
@@ -81,7 +87,7 @@ const getCustomerReliablesWithId = async (req, res) => {
     if (customer) {
       for (let i = 0; i < customer.reliableCustomers.length; i++) {
         const reliableCustomer = await dataAccess.customerDataAccess.findCustomerById(
-          customer.reliableCustomers[i],
+          customer.reliableCustomers[i].reliableId,
           'refferedBy'
         )
         reliableCustomerArr.push(reliableCustomer)

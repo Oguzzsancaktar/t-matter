@@ -14,12 +14,13 @@ import moment from 'moment'
 import React, { useState } from 'react'
 
 interface IProps {
-  customer: ICustomer
+  customerId: ICustomer['_id']
 }
 
-const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
-  const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customer._id)
+const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
+  const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customerId)
 
+  console.log('customerDatacustomerDatacustomerDatacustomerData', customerData)
   const [activeTab, setActiveTab] = useState('activity')
   const [activeSliderIndex, setActiveSliderIndex] = useState(0)
 
@@ -30,7 +31,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
       case 'calendar':
         return 'Calendar'
       case 'workflow':
-        return <CustomerModalWorkflowTab customerId={customer._id} />
+        return <CustomerModalWorkflowTab customerId={customerId} />
       case 'file':
         return 'File'
       case 'Finance':
@@ -42,148 +43,157 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
     setActiveSliderIndex(index)
   }
 
+  console.log('customerData', customerData)
+
   return (
     <ItemContainer borderRadius="0.3rem" overflow="hidden" backgroundColor="transparent">
       <JustifyBetweenRow height="100%">
         <ItemContainer width="350px" height="100%" backgroundColor={colors.white.secondary} borderRadius="0.3rem">
-          <JustifyBetweenColumn height="100%" padding="1rem">
-            <ItemContainer height="150px">
-              <JustifyBetweenColumn>
-                <ItemContainer>
-                  <JustifyCenterColumn>
-                    <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
-                    <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
-                      {customer.firstname + ' ' + customer.lastname}
-                    </H1>
-                  </JustifyCenterColumn>
-                </ItemContainer>
-                <ItemContainer borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
-                  <JustifyCenterRow>
-                    <ItemContainer width="auto" margin="0 0.5rem 0 0">
-                      <Badge children={ECustomerType[customer.customerType]} color={colors.gray.dark} />
-                    </ItemContainer>
-                    <ItemContainer width="auto">
-                      <Badge children={EStatus[customer.status]} color={colors.green.primary} />
-                    </ItemContainer>
-                  </JustifyCenterRow>
-                </ItemContainer>
-              </JustifyBetweenColumn>
-            </ItemContainer>
+          {customerData && !customerIsLoading && (
+            <JustifyBetweenColumn height="100%" padding="1rem">
+              <ItemContainer height="150px">
+                <JustifyBetweenColumn>
+                  <ItemContainer>
+                    <JustifyCenterColumn>
+                      <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
+                      <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
+                        {customerData?.firstname + ' ' + customerData?.lastname}
+                      </H1>
+                    </JustifyCenterColumn>
+                  </ItemContainer>
+                  <ItemContainer borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
+                    <JustifyCenterRow>
+                      <ItemContainer width="auto" margin="0 0.5rem 0 0">
+                        <Badge children={ECustomerType[customerData?.customerType]} color={colors.gray.dark} />
+                      </ItemContainer>
+                      <ItemContainer width="auto">
+                        <Badge children={EStatus[customerData?.status]} color={colors.green.primary} />
+                      </ItemContainer>
+                    </JustifyCenterRow>
+                  </ItemContainer>
+                </JustifyBetweenColumn>
+              </ItemContainer>
 
-            <ItemContainer padding="1rem 0" height="calc(100% - 1rem - 1rem - 150px - 40px - 1rem)">
-              <JustifyBetweenColumn>
-                {customer.customerType === 0 && (
+              <ItemContainer padding="1rem 0" height="calc(100% - 1rem - 1rem - 150px - 40px - 1rem)">
+                <JustifyBetweenColumn>
+                  {customerData?.customerType === 0 && (
+                    <ItemContainer margin="1rem 0">
+                      <JustifyBetweenRow>
+                        <ItemContainer width="90px" margin="0 0.5rem 0 0">
+                          <H1 fontSize="13px" color={colors.black.dark}>
+                            Address
+                          </H1>
+                        </ItemContainer>
+                        <ItemContainer width="calc(100% - 90px - 0.5rem)">
+                          <H1 fontSize="12px" color={colors.black.light}>
+                            {customerData?.address +
+                              ' ' +
+                              customerData?.city +
+                              ' ' +
+                              customerData?.state +
+                              ' ' +
+                              customerData?.country +
+                              ' ' +
+                              customerData?.zipcode}
+                          </H1>
+                        </ItemContainer>
+                      </JustifyBetweenRow>
+                    </ItemContainer>
+                  )}
                   <ItemContainer margin="1rem 0">
                     <JustifyBetweenRow>
                       <ItemContainer width="90px" margin="0 0.5rem 0 0">
                         <H1 fontSize="13px" color={colors.black.dark}>
-                          Address
+                          Email
                         </H1>
                       </ItemContainer>
                       <ItemContainer width="calc(100% - 90px - 0.5rem)">
                         <H1 fontSize="12px" color={colors.black.light}>
-                          {customer.address +
-                            ' ' +
-                            customer.city +
-                            ' ' +
-                            customer.state +
-                            ' ' +
-                            customer.country +
-                            ' ' +
-                            customer.zipcode}
+                          {customerData?.email}
                         </H1>
                       </ItemContainer>
                     </JustifyBetweenRow>
                   </ItemContainer>
-                )}
+                  <ItemContainer margin="1rem 0">
+                    <JustifyBetweenRow>
+                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
+                        <H1 fontSize="13px" color={colors.black.dark}>
+                          Contact
+                        </H1>
+                      </ItemContainer>
+                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
+                        <H1 fontSize="12px" color={colors.black.light}>
+                          {customerData?.phone}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyBetweenRow>
+                  </ItemContainer>
+                  {customerData.birthday && (
+                    <ItemContainer margin="1rem 0">
+                      <JustifyBetweenRow>
+                        <ItemContainer width="90px" margin="0 0.5rem 0 0">
+                          <H1 fontSize="13px" color={colors.black.dark}>
+                            Birthday
+                          </H1>
+                        </ItemContainer>
+                        <ItemContainer width="calc(100% - 90px - 0.5rem)">
+                          <H1 fontSize="12px" color={colors.black.light}>
+                            {moment(customerData?.birthday).format('MMMM-DD-YYYY')}
+                          </H1>
+                        </ItemContainer>
+                      </JustifyBetweenRow>
+                    </ItemContainer>
+                  )}
 
-                <ItemContainer margin="1rem 0">
-                  <JustifyBetweenRow>
-                    <ItemContainer width="90px" margin="0 0.5rem 0 0">
-                      <H1 fontSize="13px" color={colors.black.dark}>
-                        Email
-                      </H1>
+                  {customerData.birthplace && (
+                    <ItemContainer margin="1rem 0">
+                      <JustifyBetweenRow>
+                        <ItemContainer width="90px" margin="0 0.5rem 0 0">
+                          <H1 fontSize="13px" color={colors.black.dark}>
+                            Birth Location
+                          </H1>
+                        </ItemContainer>
+                        <ItemContainer width="calc(100% - 90px - 0.5rem)">
+                          <H1 fontSize="12px" color={colors.black.light}>
+                            {customerData?.birthplace}
+                          </H1>
+                        </ItemContainer>
+                      </JustifyBetweenRow>
                     </ItemContainer>
-                    <ItemContainer width="calc(100% - 90px - 0.5rem)">
-                      <H1 fontSize="12px" color={colors.black.light}>
-                        {customer.email}
-                      </H1>
-                    </ItemContainer>
-                  </JustifyBetweenRow>
-                </ItemContainer>
-                <ItemContainer margin="1rem 0">
-                  <JustifyBetweenRow>
-                    <ItemContainer width="90px" margin="0 0.5rem 0 0">
-                      <H1 fontSize="13px" color={colors.black.dark}>
-                        Contact
-                      </H1>
-                    </ItemContainer>
-                    <ItemContainer width="calc(100% - 90px - 0.5rem)">
-                      <H1 fontSize="12px" color={colors.black.light}>
-                        {customer.phone}
-                      </H1>
-                    </ItemContainer>
-                  </JustifyBetweenRow>
-                </ItemContainer>
-                <ItemContainer margin="1rem 0">
-                  <JustifyBetweenRow>
-                    <ItemContainer width="90px" margin="0 0.5rem 0 0">
-                      <H1 fontSize="13px" color={colors.black.dark}>
-                        Birthday
-                      </H1>
-                    </ItemContainer>
-                    <ItemContainer width="calc(100% - 90px - 0.5rem)">
-                      <H1 fontSize="12px" color={colors.black.light}>
-                        {moment(customer.birthday).format('MMMM-DD-YYYY')}
-                      </H1>
-                    </ItemContainer>
-                  </JustifyBetweenRow>
-                </ItemContainer>
-                <ItemContainer margin="1rem 0">
-                  <JustifyBetweenRow>
-                    <ItemContainer width="90px" margin="0 0.5rem 0 0">
-                      <H1 fontSize="13px" color={colors.black.dark}>
-                        Birth Location
-                      </H1>
-                    </ItemContainer>
-                    <ItemContainer width="calc(100% - 90px - 0.5rem)">
-                      <H1 fontSize="12px" color={colors.black.light}>
-                        {customer.birthplace}
-                      </H1>
-                    </ItemContainer>
-                  </JustifyBetweenRow>
-                </ItemContainer>
-              </JustifyBetweenColumn>
-            </ItemContainer>
+                  )}
+                </JustifyBetweenColumn>
+              </ItemContainer>
 
-            <ItemContainer margin="1rem 0">
-              <ReliableSlider
-                activeIndex={activeSliderIndex}
-                customerId={customer._id}
-                onActiveStepChange={handleActiveStep}
-              />
-            </ItemContainer>
-
-            <ItemContainer height="40px" borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
-              <JustifyCenterColumn width="100%">
-                <ActionButtons
-                  rowWidth="100%"
-                  iconSize="30px"
-                  buttonWidth="100%"
-                  onEdit={function (): void {
-                    throw new Error('Function not implemented.')
-                  }}
-                  onHistory={function (): void {
-                    throw new Error('Function not implemented.')
-                  }}
-                  onDelete={function (): void {
-                    throw new Error('Function not implemented.')
-                  }}
+              <ItemContainer margin="1rem 0">
+                <ReliableSlider
+                  activeIndex={activeSliderIndex}
+                  customerId={customerData?._id}
+                  onActiveStepChange={handleActiveStep}
                 />
-              </JustifyCenterColumn>
-            </ItemContainer>
-          </JustifyBetweenColumn>
+              </ItemContainer>
+
+              <ItemContainer height="40px" borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
+                <JustifyCenterColumn width="100%">
+                  <ActionButtons
+                    rowWidth="100%"
+                    iconSize="30px"
+                    buttonWidth="100%"
+                    onEdit={function (): void {
+                      throw new Error('Function not implemented.')
+                    }}
+                    onHistory={function (): void {
+                      throw new Error('Function not implemented.')
+                    }}
+                    onDelete={function (): void {
+                      throw new Error('Function not implemented.')
+                    }}
+                  />
+                </JustifyCenterColumn>
+              </ItemContainer>
+            </JustifyBetweenColumn>
+          )}
         </ItemContainer>
+
         <ItemContainer height="100%" width="120px" padding="1rem" backgroundColor={colors.gray.primary}>
           <JustifyBetweenColumn height="100%">
             <ItemContainer height="100%" margin="0 0 1rem 0">

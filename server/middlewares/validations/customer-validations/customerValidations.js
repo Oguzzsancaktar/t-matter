@@ -16,7 +16,7 @@ const customerValidationSchema = {
   lastname: joi.string().required(),
   email: joi.string().required(),
   phone: joi.string().required(),
-  refferedBy: joi.string().required(),
+  refferedBy: joi.object().required(),
   gender: joi.number().required(),
   reliableInCompany: joi.array(),
   createContact: joi.array()

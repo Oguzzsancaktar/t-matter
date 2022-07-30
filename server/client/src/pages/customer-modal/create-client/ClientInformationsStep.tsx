@@ -102,7 +102,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
                 isLoading={refferedByDataIsLoading}
                 labelText="Reffered By"
                 validationError={validationErrors.refferedByError}
-                selectedOption={[{ value: createClientDTO.refferedBy, label: createClientDTO.refferedBy }]}
+                selectedOption={[{ value: createClientDTO.refferedBy._id, label: createClientDTO.refferedBy.name }]}
               />
             </ItemContainer>
 

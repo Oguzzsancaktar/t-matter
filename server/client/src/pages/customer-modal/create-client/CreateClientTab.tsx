@@ -20,8 +20,11 @@ import moment from 'moment'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal, openModal } from '@/store'
+import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 
 const CreateClientTab = () => {
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
   const [createCustomer] = useCreateCustomerMutation()
@@ -47,7 +50,12 @@ const CreateClientTab = () => {
     zipcode: '',
     address: '',
     aSharpNumber: '',
-    refferedBy: '',
+    refferedBy: {
+      _id: '',
+      name: '',
+      status: 0,
+      color: '#f2f200'
+    },
     gender: 0,
     reliableInCompany: [],
     createContact: []
@@ -212,7 +220,7 @@ const CreateClientTab = () => {
       return false
     }
 
-    if (!isValueNull(createClientDTO.refferedBy)) {
+    if (!isValueNull(createClientDTO.refferedBy._id)) {
       setErrorMessage('Please select user refferedBy')
       setValidationErrors({ ...validationErrors, refferedByError: true })
       setActiveWizzardStep(1)
@@ -244,7 +252,10 @@ const CreateClientTab = () => {
   }
 
   const handleRefferTypeChange = (option: IOption) => {
-    setCreateClientDTO({ ...createClientDTO, refferedBy: option.value })
+    const refBy = refferedByData?.find(rb => rb._id === option.value)
+    if (refBy) {
+      setCreateClientDTO({ ...createClientDTO, refferedBy: refBy })
+    }
   }
 
   const handleAddReliable = (customer: ICustomer) => {
@@ -275,7 +286,7 @@ const CreateClientTab = () => {
     if (createClientDTO.reliableInCompany) {
       setCreateClientDTO({
         ...createClientDTO,
-        reliableInCompany: createClientDTO.reliableInCompany?.filter(reliable => reliable._id !== customer._id)
+        reliableInCompany: createClientDTO.reliableInCompany.filter(reliable => reliable._id !== customer._id)
       })
     }
   }
@@ -307,10 +318,13 @@ const CreateClientTab = () => {
     dispatch(closeModal(`addRelateByModal-${customer._id}`))
   }
 
-  const handleConfirmAddContact = (customer: ICustomerAddNew, relativeType?: IRelativeType) => {
+  const handleConfirmAddContact = (customer: ICustomerAddNew, relativeType: IRelativeType) => {
     setCreateClientDTO({
       ...createClientDTO,
-      createContact: createClientDTO.createContact?.concat({ ...customer, relativeType: relativeType })
+      createContact: createClientDTO.createContact?.concat({
+        ...customer,
+        relativeType: { ...relativeType, fromOrTo: 1 }
+      })
     })
     dispatch(closeModal(`addRelateByModal-${customer.email}`))
   }
@@ -366,6 +380,7 @@ const CreateClientTab = () => {
     try {
       if (validationResult) {
         await createCustomer({ ...createClientDTO, birthday })
+
         dispatch(closeModal('createCustomerModal'))
       }
     } catch (error) {

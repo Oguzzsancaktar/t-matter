@@ -1,23 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { InputWithIcon, SelectInput } from '@/components/input'
-import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
-import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { EGender, ICustomerAddNew, ICustomerCreateDTO, IOption, IRefferedBy } from '@/models'
-import { Key, User } from 'react-feather'
+import React from 'react'
+import {
+  Column,
+  InputWithIcon,
+  ItemContainer,
+  JustifyBetweenColumn,
+  JustifyBetweenRow,
+  SelectInput
+} from '@/components'
 import { genderOptions } from '@/constants/genders'
+import { IOption, IRefferedBy, EGender, ICustomerCreateDTO } from '@/models'
+import { User } from 'react-feather'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 
 interface IProps {
   validationErrors: any
-  createContactDTO: Omit<ICustomerCreateDTO, '_id'>
+  updateContactDTO: Omit<ICustomerCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onGenderChange: (option: IOption) => void
   onRefferTypeChange: (option: IOption) => void
 }
 
-const ContactInformationsStep: React.FC<IProps> = ({
+const UpdateCustomerInfo: React.FC<IProps> = ({
   validationErrors,
-  createContactDTO,
+  updateContactDTO,
   onInputChange,
   onGenderChange,
   onRefferTypeChange
@@ -25,7 +30,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
 
   return (
-    <InnerWrapper>
+    <ItemContainer>
       <JustifyBetweenColumn height="100%">
         <JustifyBetweenColumn height="auto" padding="2rem 0">
           <JustifyBetweenRow width="100%">
@@ -39,7 +44,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
                 type="text"
                 labelText="First Name"
                 validationError={validationErrors.firstnameError}
-                value={createContactDTO.firstname}
+                value={updateContactDTO.firstname}
               />
             </ItemContainer>
 
@@ -53,7 +58,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
                 type="text"
                 labelText="Last Name"
                 validationError={validationErrors.lastnameError}
-                value={createContactDTO.lastname}
+                value={updateContactDTO.lastname}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -69,7 +74,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
                 type="email"
                 labelText="E-mail"
                 validationError={validationErrors.emailError}
-                value={createContactDTO.email}
+                value={updateContactDTO.email}
               />
             </ItemContainer>
 
@@ -83,7 +88,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
                 type="tel"
                 labelText="Phone Number"
                 validationError={validationErrors.phoneError}
-                value={createContactDTO.phone}
+                value={updateContactDTO.phone}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -102,7 +107,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
                 isLoading={refferedByDataIsLoading}
                 labelText="Reffered By"
                 validationError={validationErrors.refferedByError}
-                selectedOption={[{ value: createContactDTO.refferedBy._id, label: createContactDTO.refferedBy.name }]}
+                selectedOption={[{ value: updateContactDTO.refferedBy._id, label: updateContactDTO.refferedBy.name }]}
               />
             </ItemContainer>
 
@@ -116,15 +121,14 @@ const ContactInformationsStep: React.FC<IProps> = ({
                 labelText="Gender"
                 validationError={validationErrors.genderError}
                 selectedOption={[
-                  { value: createContactDTO.gender.toString(), label: EGender[createContactDTO.gender.toString()] }
+                  { value: updateContactDTO.gender.toString(), label: EGender[updateContactDTO.gender.toString()] }
                 ]}
               />
             </ItemContainer>
           </JustifyBetweenRow>
         </JustifyBetweenColumn>
       </JustifyBetweenColumn>
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
-
-export default ContactInformationsStep
+export default UpdateCustomerInfo
