@@ -28,7 +28,7 @@ const createTask = (builder: IBuilder) => {
   })
 }
 
-const getTaskByCustomerId = (builder: IBuilder) => {
+const getTasksByCustomerId = (builder: IBuilder) => {
   return builder.query<ICustomerTask[], ICustomer['_id']>({
     query(customerId) {
       return {
@@ -83,14 +83,14 @@ const taskApi = createApi({
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
     createTask: createTask(builder),
-    getTaskByCustomerId: getTaskByCustomerId(builder),
+    getTasksByCustomerId: getTasksByCustomerId(builder),
     getTaskByTaskId: getTaskByTaskId(builder)
     // updateTask: updateTask(builder),
   })
 })
 
 const {
-  useGetTaskByCustomerIdQuery,
+  useGetTasksByCustomerIdQuery,
   useCreateTaskMutation,
   useGetTaskByTaskIdQuery
   // useUpdateTaskMutation,
@@ -98,7 +98,7 @@ const {
 export {
   taskApi,
   useCreateTaskMutation,
-  useGetTaskByCustomerIdQuery,
+  useGetTasksByCustomerIdQuery,
   useGetTaskByTaskIdQuery
   // useUpdateTaskMutation,
 }

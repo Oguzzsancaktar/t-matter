@@ -1,8 +1,6 @@
 import {
   ActionButtons,
-  Badge,
   Column,
-  CreateUserModal,
   CustomerTaskModal,
   DataTableHeader,
   InnerWrapper,
@@ -10,17 +8,14 @@ import {
   JustifyBetweenRow,
   JustifyCenterColumn,
   SelectTaskWorkflowModal,
-  UserBadge
+  TaskProgress
 } from '@/components'
-import { ModalHeader, ModalBody } from '@/components/modals/types'
-import UserReadModal from '@/components/modals/user-planning/userPageSettings/ReadUserModal'
+import { TaskActiveStepUser } from '@/components/client-task/task-active-step-user'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
-import { EStatus, ESize } from '@/models'
-import { useCreateTaskMutation, useGetTaskByCustomerIdQuery } from '@/services/customers/taskService'
-import { useGetUserLogsByIdQuery } from '@/services/userLogService'
+import { EStatus, ESize, ETaskStatus } from '@/models'
+import { useCreateTaskMutation, useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
 import { openModal } from '@/store'
-import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 
@@ -29,13 +24,10 @@ interface IProps {
 }
 
 const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
-  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTaskByCustomerIdQuery(customerId)
-
-  console.log(customerTasksData)
+  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery(customerId)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-
   const columns = [
     {
       name: 'Start Date',
@@ -46,6 +38,18 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
       name: 'Workflow Name',
       selector: row => row.name,
       sortable: true
+    },
+    {
+      name: 'Steps',
+      selector: row => row.name,
+      sortable: true,
+      cell: data => <TaskProgress taskSteps={data.steps} />
+    },
+    {
+      name: 'User',
+      selector: row => row.steps,
+      sortable: true,
+      cell: data => <TaskActiveStepUser taskSteps={data.steps} />
     },
 
     {
@@ -70,23 +74,6 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
     }
   ]
 
-  const data = [
-    {
-      id: '1',
-      date: 'Sep/11/2022',
-      logIn: '09:00 am',
-      logOut: '05:00 pm',
-      totalTime: '10:00'
-    },
-    {
-      id: '2',
-      date: 'Sep/11/2022',
-      logIn: '09:00 am',
-      logOut: '05:00 pm',
-      totalTime: '10:00'
-    }
-  ]
-
   const openCustomerTaskModal = workflowId => {
     dispatch(
       openModal({
@@ -102,7 +89,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
   const openSelectTaskWorkflowModal = () => {
     dispatch(
       openModal({
-        id: 'selectTaskWorkflowModal' + customerId,
+        id: 'selectTaskWorkflowModal-' + customerId,
         title: 'Customer Task',
         body: <SelectTaskWorkflowModal customerId={customerId} />,
         size: ESize.XLarge,

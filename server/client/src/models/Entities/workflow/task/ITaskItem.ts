@@ -1,5 +1,4 @@
 import { ILocation, ITaskChecklist, IUser } from '@models/index'
-import ITab from '../ITab'
 import ITaskCategory from './ITaskCategory'
 
 export default interface ITaskItem {

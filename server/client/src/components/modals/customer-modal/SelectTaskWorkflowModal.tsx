@@ -12,7 +12,7 @@ import { Row, Column } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
 import { ModalBody } from '../types'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ICustomerTask, ITaskCreateDTO, IWorkflowUpdateDTO } from '@/models'
+import { ETaskStatus, ICustomerTask, ITaskCreateDTO, IWorkflowUpdateDTO } from '@/models'
 import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { isValueNull, isValueBiggerThanZero } from '@/utils/validationUtils'
@@ -158,18 +158,21 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customerId }) => {
             startDate: Date.now().toString(),
             endDate: moment(Date.now()).add(7, 'days').toString(),
             stepColor: step.stepColor,
-            stepStatus: 3,
+            stepStatus: ETaskStatus.NOT_STARTED,
             expireDuration: step.expireDuration,
             passedTime: 0,
             postponeTime: step.postponeTime,
             usedPostpone: 0,
-            checklistItems: step.checklistItems
+            checklistItems: step.checklistItems.map(item => ({
+              ...item,
+              isChecked: false
+            }))
           })
         }
 
         await createTask(task)
         toastSuccess(`User tasl ${updateWorkflowData.name} created successfully`)
-        dispatch(closeModal(`updateWorkflowPlanModal-${workflowData?._id}`))
+        dispatch(closeModal(`selectTaskWorkflowModal-${customerId}`))
       } catch (error) {
         console.log(error)
       }

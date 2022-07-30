@@ -25,14 +25,15 @@ import { useGetCompanyPricingQuery } from '@/services/settings/company-planning/
 
 const CreateWorkflowChecklistModal = () => {
   const { data: companyPricingData, isLoading: isCompanyPricingDataLoading, error } = useGetCompanyPricingQuery()
-  
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const [workflowChecklist, setWorkflowChecklist] = useState<ITaskChecklistCreateDTO>({
     name: '',
     point: 0,
-    duration: 0
+    duration: 0,
+    isCompleted: false
   })
 
   const initialErrorsState = {
@@ -81,11 +82,9 @@ const CreateWorkflowChecklistModal = () => {
   const handleDurationChange = (durationSecond: number) => {
     setWorkflowChecklist({ ...workflowChecklist, duration: durationSecond })
 
-    
     if (!isCompanyPricingDataLoading || companyPricingData) {
-      setChecklistPrice(durationSecond / 60 / 60 * (companyPricingData?.summary.hourlyCompanyFee || -1 ) )
+      setChecklistPrice((durationSecond / 60 / 60) * (companyPricingData?.summary.hourlyCompanyFee || -1))
     }
-
   }
 
   const resetValidationErrors = () => {

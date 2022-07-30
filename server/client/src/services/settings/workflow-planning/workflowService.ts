@@ -135,7 +135,7 @@ const getChecklistById = (builder: IBuilder) => {
 }
 
 const patchWorkflowChecklist = (builder: IBuilder) => {
-  return builder.mutation<ITaskChecklist, Omit<ITaskChecklistUpdateDTO, 'status'>>({
+  return builder.mutation<ITaskChecklist, Omit<ITaskChecklistUpdateDTO, 'status' | 'isCompleted'>>({
     query(dto) {
       return {
         url: `/workflow/checklist/${dto._id}`,
