@@ -1,4 +1,4 @@
-import { UserBadge } from '@/components'
+import {Baloon, UserBadge} from '@/components'
 import { useAuth } from '@hooks/useAuth'
 import React from 'react'
 
@@ -16,7 +16,10 @@ const DashboardPage: React.FC = () => {
           userEmail={loggedUser.user?.email}
         />
       )}
-
+      <Baloon content={'selam'} title={'naber'} date={new Date()} links={[{
+        text: 'important notes',
+        url: 'https://google.com'
+      }]}/>
       <button onClick={handleLogout}>Logout</button>
     </div>
   )
