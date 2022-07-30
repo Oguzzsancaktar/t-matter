@@ -43,6 +43,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
     setActiveSliderIndex(index)
   }
 
+  // @ts-ignore
   return (
     <ItemContainer borderRadius="0.3rem" overflow="hidden" backgroundColor="transparent">
       <JustifyBetweenRow height="100%">
@@ -164,6 +165,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
 
               <ItemContainer margin="1rem 0">
                 <ReliableSlider
+                  reliableCustomers={customerData.reliableCustomers}
                   activeIndex={activeSliderIndex}
                   customerId={customerData?._id}
                   onActiveStepChange={handleActiveStep}
