@@ -12,7 +12,7 @@ const TEMP_WORKFLOW: ITaskControlStep[] = [
     expireDuration: 10,
 
     postponeCount: 5,
-    postponeTime: 1,
+    postponeTime: 0,
 
     totalDuration: 36000,
     usedTime: 3600,

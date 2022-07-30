@@ -9,6 +9,7 @@ import {
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
+  SelectTaskWorkflowModal,
   UserBadge
 } from '@/components'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
@@ -99,12 +100,25 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
       totalTime: '10:00'
     }
   ]
+
   const openCustomerTaskModal = workflowId => {
     dispatch(
       openModal({
         id: 'customerTaksModal' + workflowId,
         title: 'Customer Task',
         body: <CustomerTaskModal workflowId={workflowId} />,
+        size: ESize.XLarge,
+        backgroundColor: colors.gray.light
+      })
+    )
+  }
+
+  const openSelectTaskWorkflowModal = () => {
+    dispatch(
+      openModal({
+        id: 'selectTaskWorkflowModal' + customerId,
+        title: 'Customer Task',
+        body: <SelectTaskWorkflowModal />,
         size: ESize.XLarge,
         backgroundColor: colors.gray.light
       })
@@ -120,7 +134,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px)">
-          <DataTableHeader handleAddNew={() => console.log('not implemented')} />
+          <DataTableHeader handleAddNew={() => openSelectTaskWorkflowModal()} />
           <DataTable fixedHeader columns={columns} data={data} />
         </Column>
       </JustifyBetweenColumn>

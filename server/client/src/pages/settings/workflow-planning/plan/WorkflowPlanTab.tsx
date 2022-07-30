@@ -9,6 +9,7 @@ import {
   UpdateWorkflowPlanModal
 } from '@/components'
 import { Badge } from '@/components/badge'
+import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IWorkflow } from '@/models'
 import {
@@ -155,9 +156,10 @@ const WorkflowPlan = () => {
     dispatch(
       openModal({
         id: 'createWorkflowPlanModal',
-        title: 'Create Workflow Plan',
+        title: 'Create Customer Task ',
         body: <CreateWorkflowPlanModal />,
-        size: ESize.XLarge
+        size: ESize.XLarge,
+        backgroundColor: '#fff'
       })
     )
   }
