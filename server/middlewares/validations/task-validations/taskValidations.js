@@ -1,21 +1,17 @@
 const joi = require('joi')
 const validateAsync = require('../validateAsync')
-const {userValidationSchema} = require("../user-validations/userValidations");
 
 const categorySchema = joi.object({
-  name: joi.string().required(),
-  updatedAt: joi.date().required(),
   _id: joi.string(),
-  status: joi.number()
-})
+}).options({allowUnknown: true})
 
 const locationSchema = joi.object({
-  name: joi.string().required(),
-  status: joi.number(),
-  _id: joi.string(),
-})
+  _id: joi.string().required(),
+}).options({allowUnknown: true})
 
-const responsibleUserSchema = joi.object(userValidationSchema)
+const responsibleUserSchema = joi.object({
+  _id: joi.string().required(),
+}).options({allowUnknown: true})
 
 const checklistItemSchema = joi.object({
   createdAt: joi.date(),
@@ -23,9 +19,9 @@ const checklistItemSchema = joi.object({
   name: joi.string().required(),
   status: joi.number(),
   _id: joi.string(),
-  points: joi.number().required(),
+  point: joi.number().required(),
   updatedAt: joi.date(),
-})
+}).options({allowUnknown: true})
 
 const createTaskValidation = async (req, res, next) => {
   const schema = joi.object({
@@ -46,7 +42,7 @@ const createTaskValidation = async (req, res, next) => {
     })),
     updatedAt: joi.string(),
     _id: joi.string(),
-  })
+  }).options({allowUnknown: true})
 
   await validateAsync({ schema, data: {...req.body, customerId: req.params.customerId} }, req, res, next)
 }
