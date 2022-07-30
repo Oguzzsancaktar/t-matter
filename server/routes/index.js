@@ -12,6 +12,7 @@ const workflowRoutes = require('./workflow-routes/workflowRoutes')
 const dynamicVariableRoutes = require('./dynamic-variable-routes/dynamicVariableRoutes')
 const timeLogRoutes = require('./time-log-routes/timeLogRoutes')
 const workingScheduleRoutes = require('./working-schedule-routes/workingScheduleRoutes')
+const taskRoutes = require('./task-routes/taskRoutes')
 
 router.get('/hello', (req, res) => {
   res.send('hello')
@@ -27,5 +28,6 @@ router.use('/time-log', timeLogRoutes)
 router.use('/workflow', workflowRoutes)
 router.use('/working-schedule', workingScheduleRoutes)
 router.use('/dynamic-variables', dynamicVariableRoutes)
+router.use('/task', taskRoutes)
 
 module.exports = router

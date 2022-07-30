@@ -2,9 +2,21 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const taskSchema = new Schema({
-  title: {
+  startDate: {
+    required: true,
+    type: Date,
+  },
+  name: {
     required: true,
     type: String
+  },
+  steps: [{
+    type: Object,
+    required: true,
+  }],
+  customer: {
+    type: Schema.Types.ObjectId,
+    ref: 'customers',
   }
 })
 

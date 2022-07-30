@@ -8,6 +8,7 @@ const workflowController = require('./workflow-controller/workflowController')
 const dynamicVariableController = require('./dynamic-variables-controller/dynamicVariablesController')
 const timeLogController = require('./time-log-controller/timeLogController')
 const workingScheduleController = require('./working-schedule-controller/workingScheduleController')
+const taskController = require('./task-controller/taskController')
 
 module.exports = {
   salarySettingController,
@@ -19,5 +20,6 @@ module.exports = {
   dynamicVariableController,
   timeLogController,
   workingScheduleController,
-  customerController
+  customerController,
+  taskController
 }

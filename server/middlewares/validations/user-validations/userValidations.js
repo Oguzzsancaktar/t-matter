@@ -15,8 +15,10 @@ const userValidationSchema = {
   role: joi.string().required(),
   state: joi.string().required(),
   status: joi.number().required(),
-  zipcode: joi.string().required()
-  // password: joi.string().required(), --- password is not required for update
+  zipcode: joi.string().required(),
+  password: joi.string(),
+  createdAt: joi.date(),
+  _id: joi.string(),
 }
 
 const createUserValidation = async (req, res, next) => {
@@ -94,5 +96,6 @@ module.exports = {
   createUserValidation,
   updateUserValidation,
   getUserValidation,
-  statusUpdateUserValidation
+  statusUpdateUserValidation,
+  userValidationSchema
 }
