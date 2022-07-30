@@ -3,6 +3,7 @@ const { StatusCodes } = require('http-status-codes')
 const { STATUS_TYPES } = require('../../constants/constants')
 const utils = require('../../utils')
 const Customer = require('../../models/customer')
+const mongoose = require('mongoose')
 
 const createCustomer = async (req, res) => {
   const { body } = req
@@ -11,22 +12,44 @@ const createCustomer = async (req, res) => {
 
     for (let index = 0; index < body.reliableInCompany.length; index++) {
       const reliableId = body.reliableInCompany[index]._id
-
       const relativeType = {
-        id: body.reliableInCompany[index].relativeType._id,
-        fromOrTo: body.reliableInCompany[index].relativeType.fromOrTo
+        relativeTypeId: mongoose.Types.ObjectId(body.reliableInCompany[index].relativeType._id),
+        fromOrTo: 0
       }
 
-      reliableCustomers.push({ reliableId, relativeType })
+      reliableCustomers.push({ reliableId: mongoose.Types.ObjectId(reliableId), relativeType })
     }
 
     for (let index = 0; index < body.createContact.length; index++) {
+      delete body.createContact[index]._id
       const contact = await Customer.create(body.createContact[index])
-      reliableCustomers.push(contact._id)
+      reliableCustomers.push({
+        reliableId: mongoose.Types.ObjectId(contact._id),
+        relativeType: {
+          fromOrTo: 0,
+          relativeTypeId: mongoose.Types.ObjectId(body.createContact[index].relativeType._id)
+        }
+      })
     }
 
     body.reliableCustomers = reliableCustomers
-    await dataAccess.customerDataAccess.createCustomer(body)
+    const createdCustomer = await dataAccess.customerDataAccess.createCustomer(body)
+
+    for (let index = 0; index < body.reliableCustomers.length; index++) {
+      const customerId = body.reliableCustomers[index].reliableId
+      const relativeTypeId = body.reliableCustomers[index].relativeType.relativeTypeId
+      await dataAccess.customerDataAccess.findByIdAndUpdateCustomer(customerId, {
+        $push: {
+          reliableCustomers: {
+            reliableId: mongoose.Types.ObjectId(createdCustomer._id),
+            relativeType: {
+              relativeTypeId: mongoose.Types.ObjectId(relativeTypeId),
+              fromOrTo: 1
+            }
+          }
+        }
+      })
+    }
     res.sendStatus(StatusCodes.CREATED)
   } catch (e) {
     console.log(e)
