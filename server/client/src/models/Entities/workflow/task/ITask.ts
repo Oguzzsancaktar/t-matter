@@ -4,8 +4,8 @@ import ITaskCategory from './ITaskCategory'
 
 export default interface ITask {
   _id: string
-  expireDuration: number | null
-  postponeTime: number | null
+  expireDuration: number
+  postponeTime: number
   category: Pick<ITaskCategory, '_id' | 'name'>
   location: Pick<ILocation, '_id' | 'name'>
   responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname'>

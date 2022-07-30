@@ -17,6 +17,7 @@ import UserReadModal from '@/components/modals/user-planning/userPageSettings/Re
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { EStatus, ESize } from '@/models'
+import { useCreateTaskMutation, useGetTaskByCustomerIdQuery } from '@/services/customers/taskService'
 import { useGetUserLogsByIdQuery } from '@/services/userLogService'
 import { openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
@@ -28,40 +29,25 @@ interface IProps {
 }
 
 const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
+  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTaskByCustomerIdQuery(customerId)
+
+  console.log(customerTasksData)
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const columns = [
     {
-      name: 'Date',
-      selector: row => row.date,
+      name: 'Start Date',
+      selector: row => row.startDate,
       sortable: true
     },
     {
       name: 'Workflow Name',
-      selector: row => row.logIn,
+      selector: row => row.name,
       sortable: true
     },
-    {
-      name: 'Steps',
-      selector: row => row.logOut,
-      sortable: true
-    },
-    {
-      name: 'Reliable User',
-      selector: row => row.status,
-      sortable: true,
-      cell: data => (
-        <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
-      )
-    },
-    {
-      name: 'Status',
-      right: true,
-      selector: row => row.status,
-      sortable: true,
-      cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
-    },
+
     {
       name: 'Actions',
       selector: row => row.year,
@@ -106,7 +92,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
       openModal({
         id: 'customerTaksModal' + workflowId,
         title: 'Customer Task',
-        body: <CustomerTaskModal workflowId={workflowId} />,
+        body: <CustomerTaskModal taskId={workflowId} />,
         size: ESize.XLarge,
         backgroundColor: colors.gray.light
       })
@@ -118,7 +104,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
       openModal({
         id: 'selectTaskWorkflowModal' + customerId,
         title: 'Customer Task',
-        body: <SelectTaskWorkflowModal />,
+        body: <SelectTaskWorkflowModal customerId={customerId} />,
         size: ESize.XLarge,
         backgroundColor: colors.gray.light
       })
@@ -135,7 +121,9 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px)">
           <DataTableHeader handleAddNew={() => openSelectTaskWorkflowModal()} />
-          <DataTable fixedHeader columns={columns} data={data} />
+          {!customerTasksIsLoading && customerTasksData && (
+            <DataTable fixedHeader columns={columns} data={customerTasksData || []} />
+          )}
         </Column>
       </JustifyBetweenColumn>
     </InnerWrapper>

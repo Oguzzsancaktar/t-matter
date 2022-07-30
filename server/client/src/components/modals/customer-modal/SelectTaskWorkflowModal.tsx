@@ -12,22 +12,28 @@ import { Row, Column } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
 import { ModalBody } from '../types'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ITaskCreateDTO, IWorkflowUpdateDTO } from '@/models'
+import { ICustomerTask, ITaskCreateDTO, IWorkflowUpdateDTO } from '@/models'
 import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { isValueNull, isValueBiggerThanZero } from '@/utils/validationUtils'
 import colors from '@/constants/colors'
+import { useCreateTaskMutation } from '@/services/customers/taskService'
+import moment from 'moment'
 
-const SelectTaskWorkflowModal = () => {
+interface IProps {
+  customerId: string
+}
+
+const SelectTaskWorkflowModal: React.FC<IProps> = ({ customerId }) => {
   const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery()
+
+  const [createTask, { isLoading: createTaskIsLoading }] = useCreateTaskMutation()
 
   const [selectedWorkflowPlan, setSelectedWorkflowPlan] = useState('')
   const { data: workflowData, isLoading: workflowIsLoading } = useGetPlanByIdQuery(selectedWorkflowPlan)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-
-  const [updatePlan] = usePatchWorkflowPlanMutation()
 
   const [updateWorkflowData, setUpdateWorkflowData] = useState<IWorkflowUpdateDTO>({
     _id: workflowData?._id || '',
@@ -49,9 +55,11 @@ const SelectTaskWorkflowModal = () => {
   const [validationError, setValidationErrors] = useState({ ...initialErrors })
   const [validationErrorMessage, setValidationErrorMessage] = useState<string>('')
 
-  const handleDataChange = (taskStep: ITaskCreateDTO, stepIndex) => {
+  const handleDataChange = (taskStep: ITaskCreateDTO, stepIndex: number) => {
     const stepsInstance = [...updateWorkflowData.steps]
+
     stepsInstance[stepIndex] = taskStep
+
     const updatedData = {
       ...updateWorkflowData,
       steps: stepsInstance
@@ -132,9 +140,35 @@ const SelectTaskWorkflowModal = () => {
     const validationResult = validateFieldValues()
     if (validationResult) {
       try {
-        console.log('xxxxxx======= ', updateWorkflowData)
-        await updatePlan(updateWorkflowData)
-        toastSuccess(`Workflow plan ${updateWorkflowData.name} updated successfully`)
+        const task: ICustomerTask = {
+          customerId,
+          startDate: Date.now().toString(),
+          name: updateWorkflowData.name,
+          steps: []
+        }
+
+        for (let index = 0; index < updateWorkflowData.steps.length; index++) {
+          const step = updateWorkflowData.steps[index]
+
+          task.steps.push({
+            category: step.category,
+            location: step.location,
+            tabs: step.tabs,
+            responsibleUser: step.responsibleUser,
+            startDate: Date.now().toString(),
+            endDate: moment(Date.now()).add(7, 'days').toString(),
+            stepColor: step.stepColor,
+            stepStatus: 3,
+            expireDuration: step.expireDuration,
+            passedTime: 0,
+            postponeTime: step.postponeTime,
+            usedPostpone: 0,
+            checklistItems: step.checklistItems
+          })
+        }
+
+        await createTask(task)
+        toastSuccess(`User tasl ${updateWorkflowData.name} created successfully`)
         dispatch(closeModal(`updateWorkflowPlanModal-${workflowData?._id}`))
       } catch (error) {
         console.log(error)
@@ -143,7 +177,6 @@ const SelectTaskWorkflowModal = () => {
   }
 
   useEffect(() => {
-    console.log('1234', workflowData)
     if (workflowData) {
       setUpdateWorkflowData({
         ...workflowData,

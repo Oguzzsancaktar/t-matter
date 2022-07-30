@@ -1,13 +1,14 @@
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn } from '@/components/layout'
 import colors from '@/constants/colors'
+import { ICustomerTask } from '@/models'
 import React from 'react'
 import styled from 'styled-components'
 import { workerData } from 'worker_threads'
 import { TaskChecklistCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, TaskUserCard } from '.'
 
 interface IProps {
-  workflowData: any
+  taskData: ICustomerTask
   activeStep: number
 }
 
@@ -21,7 +22,7 @@ const InformationCard = styled(ItemContainer)`
     margin-top: 0;
   }
 `
-const TaskInformations: React.FC<IProps> = ({ workflowData, activeStep }) => {
+const TaskInformations: React.FC<IProps> = ({ taskData, activeStep }) => {
   return (
     <ItemContainer height="100%">
       <JustifyBetweenColumn height="100%">
@@ -42,7 +43,7 @@ const TaskInformations: React.FC<IProps> = ({ workflowData, activeStep }) => {
         </InformationCard>
 
         <InformationCard height="calc(100% - 100px - 80px - 80px - 80px - 6rem)">
-          <TaskChecklistCard checklistData={workflowData[activeStep].checklistItems} />
+          <TaskChecklistCard checklistData={taskData[activeStep].checklistItems} />
         </InformationCard>
       </JustifyBetweenColumn>
     </ItemContainer>

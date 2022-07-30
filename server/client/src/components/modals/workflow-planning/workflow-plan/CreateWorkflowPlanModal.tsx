@@ -23,8 +23,8 @@ const CreateWorkflowPlanModal = () => {
   const [createPlan] = useCreatePlanMutation()
 
   const initialTask: ITaskCreateDTO = {
-    expireDuration: null,
-    postponeTime: null,
+    expireDuration: 0,
+    postponeTime: 0,
     category: {
       _id: '-1',
       name: 'Select Value'

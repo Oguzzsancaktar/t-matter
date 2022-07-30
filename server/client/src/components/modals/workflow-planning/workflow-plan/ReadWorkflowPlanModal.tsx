@@ -6,16 +6,8 @@ import { ModalBody } from '../../types'
 import { InfoCard, SummaryCard } from '@/components/card'
 import WorkflowPlanStepNavigation from '@/pages/settings/workflow-planning/plan/WorkflowPlanStepNavigation'
 import { EStatus, ITaskCreateDTO, IWorkflow } from '@/models'
-import { Button } from '@/components/button'
 import colors from '@/constants/colors'
-import {
-  usePatchWorkflowPlanMutation,
-  useGetChecklistsQuery
-} from '@/services/settings/workflow-planning/workflowService'
-import { closeModal } from '@/store'
-import { toastError, toastSuccess } from '@/utils/toastUtil'
-import useAccessStore from '@/hooks/useAccessStore'
-import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
+
 import { H1 } from '@/components/texts'
 import { Badge } from '@/components/badge'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
@@ -25,26 +17,6 @@ interface IProps {
 }
 
 const ReadWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
-  // const calculateWorkflowTotals = () => {
-  //   const dataInstance: IWorkflowReadDTO = { ...readWorkflowData }
-  //   let totalDuration = 0
-  //   let totalPrice = 0
-
-  //   console.log(dataInstance.steps)
-  //   dataInstance.steps.forEach(task => {
-  //     console.log(task)
-  //     task.checklistItems.forEach(checklist => {
-  //       totalDuration += checklist.duration
-  //       totalPrice += checklist.price
-  //     })
-  //   })
-
-  //   dataInstance.duration = totalDuration
-  //   dataInstance.price = totalPrice
-
-  //   setReadWorkflowData(dataInstance)
-  // }
-
   return (
     <ModalBody minHeight="700px">
       <Column>
