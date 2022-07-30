@@ -10,11 +10,11 @@ const createTask = async (req, res) => {
       startDate: new Date(),
       name: body.name,
       steps: body.steps.map(step => ({
+        ...step,
         category: step.category._id,
         location: step.location._id,
         responsibleUser: step.responsibleUser._id,
         startDate: new Date(),
-        ...step
       })),
       customer: customerId
     }
