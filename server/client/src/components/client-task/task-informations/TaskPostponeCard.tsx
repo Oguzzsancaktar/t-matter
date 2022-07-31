@@ -11,14 +11,9 @@ import Flatpickr from 'react-flatpickr'
 
 interface IProps {
   taskActiveStep: ITaskItem
+  onPostponeChange: (value: Date[], dateText: string) => void
 }
-const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep }) => {
-  const percentage = taskActiveStep?.usedPostpone / taskActiveStep?.postponeTime
-
-  const [postponeDate, setPostponeDate] = useState(taskActiveStep?.postponedDate)
-
-  const handlePostpone = () => {}
-
+const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }) => {
   return (
     <ItemContainer>
       <Column>
@@ -32,8 +27,8 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep }) => {
                     enableTime: false,
                     dateFormat: 'M/d/Y'
                   }}
-                  value={postponeDate}
-                  onChange={handlePostpone}
+                  value={taskActiveStep.postponedDate}
+                  onChange={onPostponeChange}
                   placeholder="Postpone Task"
                 />
               </H1>
@@ -46,7 +41,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep }) => {
         <ItemContainer>
           <ProgressBar
             completionColor={colors.blue.primary}
-            completionPercentage={percentage}
+            completionPercentage={taskActiveStep?.usedPostpone / taskActiveStep?.postponeTime}
             startLabel="Postponed"
             endLabel="Remaining"
           />

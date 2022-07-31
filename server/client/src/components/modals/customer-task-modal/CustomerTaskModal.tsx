@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { ModalHeader } from '../types'
 import colors from '@/constants/colors'
 import { useGetTaskByTaskIdQuery } from '@/services/customers/taskService'
-import { ETaskStatus, ICustomerTask, ITaskChecklist } from '@/models'
+import { ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
 import Swal from 'sweetalert2'
 
 interface IProps {
@@ -19,6 +19,62 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
 
   const handleStepChange = (step: number) => {
     setActiveStep(step)
+  }
+
+  const handlePostponeChange = (value: Date[], dateText: string) => {
+    if (updatedTaskData) {
+      Swal.fire({
+        title: 'Enter your postpone message',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Postponed',
+        showLoaderOnConfirm: true,
+        preConfirm: login => {
+          return login
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then(result => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            title: `Task Postponed`,
+            text: result.value
+          })
+
+          setUpdatedTaskData({
+            ...updatedTaskData,
+            steps: updatedTaskData.steps.map((step, index) => {
+              if (index === activeStep) {
+                return { ...step, postponedDate: dateText, usedPostpone: step.usedPostpone + 1 }
+              }
+              return step
+            })
+          })
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Cancelled'
+          })
+        }
+      })
+    }
+  }
+
+  const handleResponsibleChange = (responsible: IUser) => {
+    if (updatedTaskData) {
+      setUpdatedTaskData({
+        ...updatedTaskData,
+        steps: updatedTaskData.steps.map((step, index) => {
+          if (index === activeStep) {
+            return { ...step, responsibleUser: responsible }
+          }
+          return step
+        })
+      })
+    }
   }
 
   const handleCheckboxClick = (checklistItem: ITaskChecklist) => {
@@ -176,6 +232,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
                     activeStep={activeStep}
                     taskData={updatedTaskData}
                     handleCheckboxClick={handleCheckboxClick}
+                    handleResponsibleChange={handleResponsibleChange}
+                    handlePostponeChange={handlePostponeChange}
                   />
                 </ItemContainer>
 

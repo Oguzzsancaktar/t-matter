@@ -4,21 +4,22 @@ import { JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/comp
 import { H1 } from '@/components/texts'
 import { UserSelect } from '@/components/user-select'
 import colors from '@/constants/colors'
-import { ETaskStatus, ITaskItem } from '@/models'
+import { ETaskStatus, ITaskItem, IUser } from '@/models'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 
 interface IProps {
   taskActiveStep: ITaskItem
+  onResponsibleChange: (responsible: IUser) => void
 }
-const TaskUserCard: React.FC<IProps> = ({ taskActiveStep }) => {
+const TaskUserCard: React.FC<IProps> = ({ taskActiveStep, onResponsibleChange }) => {
   return (
     <ItemContainer>
       <JustifyBetweenRow>
         <ItemContainer>
           <JustifyCenterColumn>
             <ItemContainer>
-              <UserSelect selectedUser={taskActiveStep?.responsibleUser} />
+              <UserSelect selectedUser={taskActiveStep?.responsibleUser} onResponsibleChange={onResponsibleChange} />
             </ItemContainer>
 
             <ItemContainer>

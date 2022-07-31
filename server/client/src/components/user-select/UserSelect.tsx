@@ -11,6 +11,7 @@ import { H1 } from '../texts'
 
 interface IProps {
   selectedUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
+  onResponsibleChange: (responsible: IUser) => void
 }
 
 const RelativeContainer = styled.div`
@@ -39,12 +40,17 @@ const UserListItem = styled.li`
   }
 `
 
-const UserSelect: React.FC<IProps> = ({ selectedUser }) => {
+const UserSelect: React.FC<IProps> = ({ selectedUser, onResponsibleChange }) => {
   const [showUserList, setShowUserList] = useState<boolean>(false)
   const { data: userListData, isLoading: userListIsLoading } = useGetUsersQuery()
 
   const handleUserList = () => {
     setShowUserList(!showUserList)
+  }
+
+  const handleUserClick = (user: IUser) => {
+    onResponsibleChange(user)
+    setShowUserList(false)
   }
 
   return (
@@ -58,7 +64,7 @@ const UserSelect: React.FC<IProps> = ({ selectedUser }) => {
         {showUserList && !userListIsLoading && userListData && (
           <UserList>
             {userListData?.map((user, index: number) => (
-              <UserListItem key={index}>
+              <UserListItem key={index} onClick={() => handleUserClick(user)}>
                 <Row>
                   <ItemContainer width="30px">
                     <UserImage src="" width="30px" height="30px" />

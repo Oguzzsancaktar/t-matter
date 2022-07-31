@@ -2,7 +2,7 @@ import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn } from '@/components/layout'
 import colors from '@/constants/colors'
 
-import { ETaskStatus, ICustomerTask, ITaskChecklist } from '@/models'
+import { ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { TaskChecklistCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, TaskUserCard } from '.'
@@ -11,6 +11,8 @@ interface IProps {
   taskData: ICustomerTask
   activeStep: number
   handleCheckboxClick: (checklistItem: ITaskChecklist) => void
+  handleResponsibleChange: (responsible: IUser) => void
+  handlePostponeChange: (value: Date[], dateText: string) => void
 }
 
 const InformationCard = styled(ItemContainer)`
@@ -23,14 +25,20 @@ const InformationCard = styled(ItemContainer)`
     margin-top: 0;
   }
 `
-const TaskInformations: React.FC<IProps> = ({ taskData, activeStep, handleCheckboxClick }) => {
+const TaskInformations: React.FC<IProps> = ({
+  taskData,
+  activeStep,
+  handleCheckboxClick,
+  handleResponsibleChange,
+  handlePostponeChange
+}) => {
   console.log(taskData.steps[activeStep], activeStep)
   return (
     <ItemContainer height="100%">
       {taskData && taskData.steps[activeStep] ? (
         <JustifyBetweenColumn height="100%">
           <InformationCard height="100px">
-            <TaskUserCard taskActiveStep={taskData.steps[activeStep]} />
+            <TaskUserCard taskActiveStep={taskData.steps[activeStep]} onResponsibleChange={handleResponsibleChange} />
           </InformationCard>
 
           <InformationCard height="80px">
@@ -38,7 +46,7 @@ const TaskInformations: React.FC<IProps> = ({ taskData, activeStep, handleCheckb
           </InformationCard>
 
           <InformationCard height="80px">
-            <TaskPostponeCard taskActiveStep={taskData.steps[activeStep]} />
+            <TaskPostponeCard taskActiveStep={taskData.steps[activeStep]} onPostponeChange={handlePostponeChange} />
           </InformationCard>
 
           <InformationCard height="80px">
