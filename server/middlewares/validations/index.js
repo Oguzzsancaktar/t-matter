@@ -10,6 +10,7 @@ const dynamicVariableValidations = require('./dynamic-variable-validations/dynam
 const timeLogValidations = require('./time-log-validations/timeLogValidations')
 const workingScheduleValidations = require('./working-schedule-validations')
 const taskValidations = require('./task-validations/taskValidations')
+const activityValidations = require('./activity-validations/activityValidations')
 
 module.exports = {
   authValidations,
@@ -23,5 +24,6 @@ module.exports = {
   timeLogValidations,
   workingScheduleValidations,
   customerValidations,
+  activityValidations,
   taskValidations
 }

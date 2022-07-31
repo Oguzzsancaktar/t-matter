@@ -17,4 +17,6 @@ router.get(
 
 router.get('/:taskId', middlewares.validations.taskValidations.getTaskValidation, controllers.taskController.getTask)
 
+router.put('/:taskId', controllers.taskController.updateTask)
+
 module.exports = router

@@ -8,7 +8,7 @@ import ReliableSlider from '@/components/slider/ReliableSlider'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import { ECustomerType, EStatus, ICustomer } from '@/models'
-import { CustomerModalWorkflowTab } from '@/pages'
+import { CustomerModalActivityTab, CustomerModalWorkflowTab } from '@/pages'
 import { useGetCustomerByIdQuery } from '@/services/customers/customerService'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
@@ -27,7 +27,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
   const renderSwitch = () => {
     switch (activeTab) {
       case 'activity':
-        return 'Activity'
+        return <CustomerModalActivityTab customerId={customerId} />
       case 'calendar':
         return 'Calendar'
       case 'workflow':
