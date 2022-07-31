@@ -1,7 +1,8 @@
 import React from 'react'
 import { ICustomer } from '@/models'
-import { Baloon, InnerWrapper, JustifyCenterColumn } from '@/components'
+import { InnerWrapper, JustifyCenterColumn } from '@/components'
 import { useGetActivitiesQuery } from '@services/activityService'
+import ActivityItem from '@components/activity/ActivityItem'
 
 interface IProps {
   customerId: ICustomer['_id']
@@ -16,11 +17,11 @@ const CustomerModalActivityTab: React.FC<IProps> = ({ customerId }) => {
 
   return (
     <InnerWrapper>
-      {data?.map(activity => (
-        <JustifyCenterColumn width="100%" margin="0 0 16px 0">
-          <Baloon title={activity.title} content={activity.content} date={activity.createdAt} />
-        </JustifyCenterColumn>
-      ))}
+      <JustifyCenterColumn>
+        {data?.map(activity => (
+          <ActivityItem activity={activity} />
+        ))}
+      </JustifyCenterColumn>
     </InnerWrapper>
   )
 }

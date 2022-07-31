@@ -1,14 +1,26 @@
-import {Baloon, UserBadge} from '@/components'
+import { Baloon, UserBadge } from '@/components'
 import { useAuth } from '@hooks/useAuth'
 import React from 'react'
+import { useGetActivitiesQuery } from '@services/activityService'
+import ActivityItem from '@components/activity/ActivityItem'
 
 const DashboardPage: React.FC = () => {
   const { loggedUser, logout } = useAuth()
+  const { data, isLoading } = useGetActivitiesQuery({})
+
   const handleLogout = () => {
     logout()
   }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div>
+      {data?.map(activity => (
+        <ActivityItem activity={activity} />
+      ))}
       {loggedUser.user && (
         <UserBadge
           userImage={'https://source.unsplash.com/user/c_v_r/100x100'}
@@ -16,10 +28,6 @@ const DashboardPage: React.FC = () => {
           userEmail={loggedUser.user?.email}
         />
       )}
-      <Baloon content={'selam'} title={'naber'} date={new Date()} links={[{
-        text: 'important notes',
-        url: 'https://google.com'
-      }]}/>
       <button onClick={handleLogout}>Logout</button>
     </div>
   )
