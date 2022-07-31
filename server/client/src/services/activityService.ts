@@ -21,7 +21,7 @@ const createActivity = (builder: IBuilder) => {
 }
 
 const getActivities = (builder: IBuilder) => {
-  return builder.query<IActivity, { customer?: ICustomer['_id']; task?: ITask['_id'] }>({
+  return builder.query<IActivity[], { customer?: ICustomer['_id']; task?: ITask['_id'] }>({
     query(params) {
       return {
         url: '/activity',
