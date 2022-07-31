@@ -12,6 +12,7 @@ const locationDataAccess = require('./dynamic-variables-data-access/locationData
 const refferedByDataAccess = require('./dynamic-variables-data-access/refferedBy')
 const relativeTypeDataAccess = require('./dynamic-variables-data-access/relativeType')
 const taskDataAccess = require('./task-data-access/taskDataAccess')
+const activityDataAccess = require('./activity-data-access/activityDataAccess')
 
 module.exports = {
   authDataAccess,
@@ -26,5 +27,6 @@ module.exports = {
   refferedByDataAccess,
   relativeTypeDataAccess,
   customerDataAccess,
-  taskDataAccess
+  taskDataAccess,
+  activityDataAccess
 }
