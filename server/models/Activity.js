@@ -27,6 +27,20 @@ const activitySchema = new Schema(
     content: {
       type: String,
       required: true
+    },
+    links: {
+      type: [
+        {
+          url: {
+            type: String,
+            required: true
+          },
+          text: {
+            type: String,
+            required: true
+          }
+        }
+      ]
     }
   },
   { timestamps: true }

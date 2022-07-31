@@ -9,4 +9,10 @@ export default interface IActivity {
   owner: IUser
   createdAt: Date
   updatedAt: Date
+  links?: [
+    {
+      url: string
+      text: string
+    }
+  ]
 }
