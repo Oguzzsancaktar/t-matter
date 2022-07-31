@@ -122,8 +122,20 @@ const getTask = async (req, res) => {
   }
 }
 
+const updateTask = async (req, res) => {
+  const { taskId } = req.params
+  const { body } = req
+  try {
+    const task = await Task.findByIdAndUpdate(taskId, body, { new: true })
+    res.status(200).json(task)
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
-  getTask
+  getTask,
+  updateTask
 }
