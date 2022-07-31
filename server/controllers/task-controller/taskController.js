@@ -39,19 +39,7 @@ const getTasks = async (req, res) => {
 const getTask = async (req, res) => {
   const { taskId } = req.params
   try {
-<<<<<<< HEAD
-    const task = await Task.aggregate([
-      {
-        $match: {
-          _id: mongoose.Types.ObjectId(taskId)
-        }
-      },
-      ...taskPopulatePipe
-    ])
-
-    res.status(200).json(task[0])
-=======
-    const task = await dataAccess.taskDataAccess.getTaskById(taskId)
+    const [task] = await dataAccess.taskDataAccess.getTaskById(taskId)
     res.status(200).json(task)
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
@@ -64,7 +52,6 @@ const updateTask = async (req, res) => {
   try {
     const task = await dataAccess.taskDataAccess.updateTaskById(taskId, body)
     res.status(200).json(task)
->>>>>>> 97318631a037808dd2e67299d7f62f3dabc342ea
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
   }
