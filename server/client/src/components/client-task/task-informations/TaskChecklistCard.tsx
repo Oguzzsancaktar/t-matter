@@ -9,7 +9,7 @@ import TaskChecklistItem from './TaskChecklistItem'
 
 interface IProps {
   checklistData: ITaskChecklist[]
-  handleCheckboxClick: (checklistItem: ITaskChecklist) => void
+  handleCheckboxClick: (checklistItem: ITaskChecklist, index: number) => void
 }
 
 const ChecklistList = styled.ul``
@@ -36,7 +36,11 @@ const TaskChecklistCard: React.FC<IProps> = ({ checklistData, handleCheckboxClic
           <ItemContainer>
             <ChecklistList>
               {checklistData?.map((item, index) => (
-                <TaskChecklistItem key={index} checklistItem={item} onCheckboxClick={handleCheckboxClick} />
+                <TaskChecklistItem
+                  key={index}
+                  checklistItem={item}
+                  onCheckboxClick={item => handleCheckboxClick(item, index)}
+                />
               ))}
             </ChecklistList>
           </ItemContainer>

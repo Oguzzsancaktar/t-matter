@@ -10,7 +10,7 @@ import { TaskChecklistCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, T
 interface IProps {
   taskData: ICustomerTask
   activeStep: number
-  handleCheckboxClick: (checklistItem: ITaskChecklist) => void
+  handleCheckboxClick: (checklistItem: ITaskChecklist, index: number) => void
   handleResponsibleChange: (responsible: IUser) => void
   handlePostponeChange: (value: Date[], dateText: string) => void
 }

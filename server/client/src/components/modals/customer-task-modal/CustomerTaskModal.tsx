@@ -1,7 +1,7 @@
 import { ItemContainer } from '@/components/item-container'
 import { Row } from '@/components/layout'
 import { TaskEventSection, TaskInformations, TaskWizzardNavigation } from '@/components'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ModalHeader } from '../types'
 import colors from '@/constants/colors'
 import { useGetTaskByTaskIdQuery } from '@/services/customers/taskService'
@@ -16,6 +16,11 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
 
   const [activeStep, setActiveStep] = useState<number>(0)
   const [updatedTaskData, setUpdatedTaskData] = useState<ICustomerTask>()
+
+  const isTaskNotStarted = useMemo(
+    () => taskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length === taskData?.steps.length,
+    [taskData]
+  )
 
   const handleStepChange = (step: number) => {
     setActiveStep(step)
@@ -77,7 +82,25 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
     }
   }
 
-  const handleCheckboxClick = (checklistItem: ITaskChecklist) => {
+  const handleAllChecklistCheck = (tempUpdatedTaskData, index: number) => {
+    const tempChecklist = JSON.parse(JSON.stringify(tempUpdatedTaskData.steps[activeStep].checklistItems))
+    tempChecklist.pop()
+    if (
+      (tempChecklist.length === index && tempChecklist.every(checklist => checklist.isChecked)) ||
+      tempChecklist.length === 0
+    ) {
+      console.log('selam')
+      tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Completed
+      if (tempUpdatedTaskData.steps[activeStep + 1]) {
+        tempUpdatedTaskData.steps[activeStep + 1].stepStatus = ETaskStatus.Progress
+        setActiveStep(activeStep + 1)
+      }
+      console.log('selam 2', tempUpdatedTaskData.steps[activeStep].stepStatus)
+      setUpdatedTaskData({ ...tempUpdatedTaskData })
+    }
+  }
+
+  const handleCheckboxClick = (checklistItem: ITaskChecklist, index: number) => {
     if (!checklistItem.isChecked && updatedTaskData) {
       Swal.fire({
         title: 'Enter your complete message',
@@ -99,27 +122,10 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
             title: `Checklist Completed`,
             text: result.value
           })
-
-          setUpdatedTaskData({
-            ...updatedTaskData,
-            steps: updatedTaskData.steps.map((item, index) => {
-              if (index === activeStep) {
-                return {
-                  ...item,
-                  checklistItems: item.checklistItems.map(ci => {
-                    if (ci._id === checklistItem._id) {
-                      return {
-                        ...ci,
-                        isChecked: !ci.isChecked
-                      }
-                    }
-                    return ci
-                  })
-                }
-              }
-              return item
-            })
-          })
+          const tempUpdatedTaskData = JSON.parse(JSON.stringify(updatedTaskData))
+          tempUpdatedTaskData.steps[activeStep].checklistItems[index].isChecked = true
+          handleAllChecklistCheck(tempUpdatedTaskData, index)
+          setUpdatedTaskData(tempUpdatedTaskData)
         } else {
           Swal.fire({
             icon: 'error',
@@ -130,86 +136,28 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
     }
   }
 
-  const controlStepStatus = () => {
-    let isStepCompleted = false
-
-    updatedTaskData?.steps.map((step, index) => {
-      const isAllChecklistsCompleted = step.checklistItems.find(item => item.isChecked === false)
-
-      if (!isAllChecklistsCompleted) {
-        setUpdatedTaskData({
-          ...updatedTaskData,
-          steps: updatedTaskData.steps.map((item, i) => {
-            if (index === activeStep) {
-              isStepCompleted = true
-              return {
-                ...item,
-                stepStatus: ETaskStatus.Completed
-              }
-            }
-            return item
-          })
-        })
-      }
-    })
-
-    return isStepCompleted
-  }
-
   useEffect(() => {
-    const isStepCompleted = controlStepStatus()
-    if (isStepCompleted && updatedTaskData) {
-      setUpdatedTaskData({
-        ...updatedTaskData,
-        steps: updatedTaskData.steps.map((item, index) => {
-          if (updatedTaskData.steps.length > activeStep + 1 && index === activeStep + 1) {
-            setActiveStep(activeStep + 1)
-            return {
-              ...item,
-              stepStatus: ETaskStatus.Progress
-            }
-          }
-          return item
-        })
+    if (taskData && isTaskNotStarted) {
+      setUpdatedTaskData(taskData)
+      Swal.fire({
+        icon: 'question',
+        title: 'Do you want to start this task now?',
+        showCancelButton: true,
+        confirmButtonColor: colors.blue.primary,
+        cancelButtonColor: colors.red.primary,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then(result => {
+        if (result.isConfirmed) {
+          console.log('start task')
+          const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
+          tempUpdatedTaskData.steps[0].stepStatus = ETaskStatus.Progress
+          setUpdatedTaskData(tempUpdatedTaskData)
+          setActiveStep(0)
+        }
       })
     }
-  }, [updatedTaskData?.steps[activeStep]?.checklistItems])
-
-  useEffect(() => {
-    if (taskData && !taskIsLoading) {
-      if (taskData.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length === taskData.steps.length) {
-        Swal.fire({
-          icon: 'question',
-          title: 'Do you want to start this task now?',
-          showCancelButton: true,
-          confirmButtonColor: colors.blue.primary,
-          cancelButtonColor: colors.red.primary,
-          confirmButtonText: 'Yes',
-          cancelButtonText: 'No'
-        }).then(result => {
-          if (result.isConfirmed) {
-            setUpdatedTaskData({
-              ...taskData,
-              steps: taskData.steps.map((step, index) => {
-                if (index === 0) {
-                  console.log('step', step)
-                  return {
-                    ...step,
-                    stepStatus: ETaskStatus.Progress
-                  }
-                }
-                return step
-              })
-            })
-            setActiveStep(0)
-          } else {
-            setUpdatedTaskData(taskData)
-            setActiveStep(taskData.steps.findIndex(step => step.stepStatus === ETaskStatus.Progress))
-          }
-        })
-      }
-    }
-  }, [taskData, taskIsLoading])
+  }, [taskData])
 
   return (
     <ItemContainer minHeight="750px">
