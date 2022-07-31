@@ -24,5 +24,6 @@ module.exports = {
   timeLogValidations,
   workingScheduleValidations,
   customerValidations,
-  activityValidations
+  activityValidations,
+  taskValidations
 }

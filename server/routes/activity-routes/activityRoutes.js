@@ -1,6 +1,7 @@
-const router = require('express').Router()
+const express = require('express')
+const router = express.Router()
 const controller = require('../../controllers')
-const validations = require('../../middlewares/validations')
+const middlewares = require('../../middlewares')
 
 router.get('/', (req, res) => {
   const { customer, task } = req.query
@@ -13,4 +14,10 @@ router.get('/', (req, res) => {
   return controller.activityController.getAllActivity(req, res)
 })
 
-router.post('/', validations.activityValidations.activityCreateValidation, controller.activityController.createActivity)
+router.post(
+  '/',
+  middlewares.validations.activityValidations.activityCreateValidation,
+  controller.activityController.createActivity
+)
+
+module.exports = router
