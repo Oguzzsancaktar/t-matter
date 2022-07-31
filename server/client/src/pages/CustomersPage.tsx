@@ -21,6 +21,7 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { UserCheck } from 'react-feather'
 import { useGetCustomersQuery, useUpdateCustomerStatusMutation } from '@/services/customers/customerService'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
+import ReactTooltip from 'react-tooltip'
 
 const CustomersPage = () => {
   const [updateCustomerStatus] = useUpdateCustomerStatusMutation()

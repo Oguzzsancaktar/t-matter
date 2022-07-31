@@ -6,7 +6,7 @@ export default interface ITaskItem {
   category: Omit<ITaskCategory, 'status'>
   location: Omit<ILocation, 'status'>
   tabs: string[]
-  responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname'>
+  responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
   startDate: string
   endDate: string
   stepColor: string
@@ -17,6 +17,7 @@ export default interface ITaskItem {
 
   postponeTime: number
   usedPostpone: number
+  postponedDate: string
 
   checklistItems: ITaskChecklist[]
 }

@@ -116,7 +116,8 @@ const getTask = async (req, res) => {
       },
       ...taskPopulatePipe
     ])
-    res.status(200).json(task)
+
+    res.status(200).json(task[0])
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
   }

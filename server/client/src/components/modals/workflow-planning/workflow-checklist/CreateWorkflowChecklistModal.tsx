@@ -24,7 +24,7 @@ import { ITaskChecklistCreateDTO } from '@/models'
 import { useGetCompanyPricingQuery } from '@/services/settings/company-planning/companyPricingService'
 
 const CreateWorkflowChecklistModal = () => {
-  const { data: companyPricingData, isLoading: isCompanyPricingDataLoading, error } = useGetCompanyPricingQuery()
+  const { data: companyPricingData, isLoading: isCompanyPricingDataLoading } = useGetCompanyPricingQuery()
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -33,7 +33,7 @@ const CreateWorkflowChecklistModal = () => {
     name: '',
     point: 0,
     duration: 0,
-    isCompleted: false
+    isChecked: false
   })
 
   const initialErrorsState = {

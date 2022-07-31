@@ -4,29 +4,36 @@ import { JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/comp
 import { H1 } from '@/components/texts'
 import { UserSelect } from '@/components/user-select'
 import colors from '@/constants/colors'
+import { ETaskStatus, ITaskItem } from '@/models'
+import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 
-interface IProps {}
-const TaskUserCard: React.FC<IProps> = () => {
+interface IProps {
+  taskActiveStep: ITaskItem
+}
+const TaskUserCard: React.FC<IProps> = ({ taskActiveStep }) => {
   return (
     <ItemContainer>
       <JustifyBetweenRow>
         <ItemContainer>
           <JustifyCenterColumn>
             <ItemContainer>
-              <UserSelect />
+              <UserSelect selectedUser={taskActiveStep?.responsibleUser} />
             </ItemContainer>
 
             <ItemContainer>
               <JustifyCenterRow>
-                <Badge children={'pending'} color={colors.blue.primary} />
+                <Badge
+                  children={Object.values(ETaskStatus)[taskActiveStep?.stepStatus]?.toString().replace('_', ' ')}
+                  color={selectColorForStatus(taskActiveStep?.stepStatus)}
+                />
               </JustifyCenterRow>
             </ItemContainer>
           </JustifyCenterColumn>
         </ItemContainer>
 
         <ItemContainer>
-          <H1>Task Name</H1>
+          <H1>{taskActiveStep?.category.name}</H1>
         </ItemContainer>
       </JustifyBetweenRow>
     </ItemContainer>

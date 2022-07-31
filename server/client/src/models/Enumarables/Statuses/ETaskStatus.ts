@@ -1,7 +1,8 @@
 enum ETaskStatus {
-  CANCELED = 0,
-  COMPLETED = 1,
-  NOT_STARTED = 2,
-  PROGRESS = 3
+  Canceled = 0,
+  Completed = 1,
+  Not_Started = 2,
+  Progress = 3
 }
+
 export default ETaskStatus

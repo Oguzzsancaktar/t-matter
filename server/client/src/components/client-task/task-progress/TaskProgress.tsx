@@ -1,5 +1,6 @@
 import { ItemContainer } from '@/components/item-container'
 import { ProgressBar } from '@/components/progress-bar'
+import colors from '@/constants/colors'
 import { ETaskStatus, ITaskItem } from '@/models'
 import React, { useEffect, useState } from 'react'
 
@@ -20,16 +21,16 @@ const TaskProgress: React.FC<IProps> = ({ taskSteps }) => {
   useEffect(() => {
     const stepStatuses = taskSteps.reduce(
       (acc, step) => {
-        if (step.stepStatus === ETaskStatus.CANCELED) {
+        if (step.stepStatus === ETaskStatus.Canceled) {
           acc.canceled++
         }
-        if (step.stepStatus === ETaskStatus.COMPLETED) {
+        if (step.stepStatus === ETaskStatus.Completed) {
           acc.completed++
         }
-        if (step.stepStatus === ETaskStatus.NOT_STARTED) {
+        if (step.stepStatus === ETaskStatus.Not_Started) {
           acc.notStarted++
         }
-        if (step.stepStatus === ETaskStatus.PROGRESS) {
+        if (step.stepStatus === ETaskStatus.Progress) {
           acc.progress++
         }
         return acc
@@ -40,7 +41,7 @@ const TaskProgress: React.FC<IProps> = ({ taskSteps }) => {
   }, [taskSteps])
 
   useEffect(() => {
-    const activeStep = taskSteps.findIndex(step => step.stepStatus === ETaskStatus.PROGRESS)
+    const activeStep = taskSteps.findIndex(step => step.stepStatus === ETaskStatus.Progress)
     if (activeStep && activeStep !== -1) {
       setActiveStep(activeStep)
     }
@@ -48,7 +49,7 @@ const TaskProgress: React.FC<IProps> = ({ taskSteps }) => {
 
   return (
     <ItemContainer>
-      <ProgressBar></ProgressBar>
+      <ProgressBar completionPercentage={0} completionColor={colors.blue.primary}></ProgressBar>
     </ItemContainer>
   )
 }

@@ -8,6 +8,7 @@ import { GlobalModal, MinimizedModal, MinimizedModalsBar, SideBar } from '@compo
 import useAccessStore from '@/hooks/useAccessStore'
 import { selectMinimizedModals, selectOpenModals } from '@/store'
 import { useAuth } from '@hooks/useAuth'
+import ReactTooltip from 'react-tooltip'
 
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
@@ -25,6 +26,7 @@ function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <GlobalStyle />
+      <ReactTooltip className="tooltip-z-index" />
 
       {openModals.map((modal, index) => (
         <GlobalModal key={index} modal={modal} />

@@ -11,7 +11,8 @@ import { ECustomerType, EStatus, ICustomer } from '@/models'
 import { CustomerModalWorkflowTab } from '@/pages'
 import { useGetCustomerByIdQuery } from '@/services/customers/customerService'
 import moment from 'moment'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import ReactTooltip from 'react-tooltip'
 
 interface IProps {
   customerId: ICustomer['_id']
@@ -20,7 +21,6 @@ interface IProps {
 const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
   const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customerId)
 
-  console.log('customerDatacustomerDatacustomerDatacustomerData', customerData)
   const [activeTab, setActiveTab] = useState('activity')
   const [activeSliderIndex, setActiveSliderIndex] = useState(0)
 
@@ -43,7 +43,6 @@ const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
     setActiveSliderIndex(index)
   }
 
-  // @ts-ignore
   return (
     <ItemContainer borderRadius="0.3rem" overflow="hidden" backgroundColor="transparent">
       <JustifyBetweenRow height="100%">

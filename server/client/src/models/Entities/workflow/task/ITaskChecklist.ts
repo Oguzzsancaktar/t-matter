@@ -5,5 +5,5 @@ export default interface ITaskChecklist {
   point: number
   price: number
   status: number
-  isCompleted: boolean
+  isChecked: boolean
 }

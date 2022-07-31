@@ -1,20 +1,20 @@
 import { InfoCard } from '@/components/card'
 import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenColumn, JustifyBetweenRow, Row } from '@/components/layout'
-import { H1 } from '@/components/texts'
 import { ITaskChecklist } from '@/models'
-import SummaryChecklistItem from '@/pages/settings/workflow-planning/plan/SummaryChecklistItem'
 import { SummaryCardTitle } from '@/shared'
 import React from 'react'
 import styled from 'styled-components'
+import TaskChecklistItem from './TaskChecklistItem'
 
 interface IProps {
-  checklistData: Pick<ITaskChecklist, '_id'>[]
+  checklistData: ITaskChecklist[]
+  handleCheckboxClick: (checklistItem: ITaskChecklist) => void
 }
 
 const ChecklistList = styled.ul``
 
-const TaskChecklistCard: React.FC<IProps> = ({ checklistData }) => {
+const TaskChecklistCard: React.FC<IProps> = ({ checklistData, handleCheckboxClick }) => {
   return (
     <ItemContainer height="100%">
       <ItemContainer>
@@ -35,8 +35,8 @@ const TaskChecklistCard: React.FC<IProps> = ({ checklistData }) => {
 
           <ItemContainer>
             <ChecklistList>
-              {checklistData.map((item, index) => (
-                <SummaryChecklistItem key={index} checklistItem={item} />
+              {checklistData?.map((item, index) => (
+                <TaskChecklistItem key={index} checklistItem={item} onCheckboxClick={handleCheckboxClick} />
               ))}
             </ChecklistList>
           </ItemContainer>

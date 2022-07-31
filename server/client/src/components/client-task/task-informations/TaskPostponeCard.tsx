@@ -1,12 +1,24 @@
-import { ProgressBar } from '@/components'
+import { DatePicker, ProgressBar } from '@/components'
 import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenRow, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
-import React from 'react'
+import colors from '@/constants/colors'
+import { ITaskItem } from '@/models'
+import moment from 'moment'
+import React, { useState } from 'react'
 import { Calendar, ExternalLink } from 'react-feather'
+import Flatpickr from 'react-flatpickr'
 
-interface IProps {}
-const TaskPostponeCard: React.FC<IProps> = () => {
+interface IProps {
+  taskActiveStep: ITaskItem
+}
+const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep }) => {
+  const percentage = taskActiveStep?.usedPostpone / taskActiveStep?.postponeTime
+
+  const [postponeDate, setPostponeDate] = useState(taskActiveStep?.postponedDate)
+
+  const handlePostpone = () => {}
+
   return (
     <ItemContainer>
       <Column>
@@ -14,13 +26,30 @@ const TaskPostponeCard: React.FC<IProps> = () => {
           <JustifyBetweenRow>
             <Row>
               <ExternalLink size={20} />
-              <H1 width="auto">14/11/2022</H1>
+              <H1 width="auto">
+                <Flatpickr
+                  options={{
+                    enableTime: false,
+                    dateFormat: 'M/d/Y'
+                  }}
+                  value={postponeDate}
+                  onChange={handlePostpone}
+                  placeholder="Postpone Task"
+                />
+              </H1>
             </Row>
-            <H1 width="auto">4/1</H1>
+            <H1 width="80px">
+              {taskActiveStep?.usedPostpone} / {taskActiveStep?.postponeTime}
+            </H1>
           </JustifyBetweenRow>
         </ItemContainer>
         <ItemContainer>
-          <ProgressBar startLabel="Postponed" endLabel="Remaining" />
+          <ProgressBar
+            completionColor={colors.blue.primary}
+            completionPercentage={percentage}
+            startLabel="Postponed"
+            endLabel="Remaining"
+          />
         </ItemContainer>
       </Column>
     </ItemContainer>

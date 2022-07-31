@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ItemContainer, JustifyCenterRow, Row } from '@components/index'
+import { ItemContainer, JustifyCenterRow } from '@components/index'
 
 const SideBar = () => {
   return (

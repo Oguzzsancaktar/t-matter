@@ -2,13 +2,16 @@ import colors from '@/constants/colors'
 import { IUser } from '@/models'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import React, { useState } from 'react'
+import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import { UserImage } from '../image'
 import { ItemContainer } from '../item-container'
 import { JustifyCenterRow, Row } from '../layout'
 import { H1 } from '../texts'
 
-interface IProps {}
+interface IProps {
+  selectedUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
+}
 
 const RelativeContainer = styled.div`
   position: relative;
@@ -36,7 +39,7 @@ const UserListItem = styled.li`
   }
 `
 
-const UserSelect: React.FC<IProps> = () => {
+const UserSelect: React.FC<IProps> = ({ selectedUser }) => {
   const [showUserList, setShowUserList] = useState<boolean>(false)
   const { data: userListData, isLoading: userListIsLoading } = useGetUsersQuery()
 
@@ -44,13 +47,11 @@ const UserSelect: React.FC<IProps> = () => {
     setShowUserList(!showUserList)
   }
 
-  console.log(userListData)
-
   return (
     <ItemContainer>
       <RelativeContainer>
-        <ItemContainer onClick={handleUserList}>
-          <JustifyCenterRow>
+        <ItemContainer onClick={handleUserList} cursorType="pointer">
+          <JustifyCenterRow data-tip={selectedUser?.firstname + ' ' + selectedUser?.lastname}>
             <UserImage src="" width="40px" height="40px" />
           </JustifyCenterRow>
         </ItemContainer>
@@ -63,7 +64,7 @@ const UserSelect: React.FC<IProps> = () => {
                     <UserImage src="" width="30px" height="30px" />
                   </ItemContainer>
                   <ItemContainer>
-                    <H1>{user.firstname + ' ' + user.lastname}</H1>
+                    <H1>{user?.firstname + ' ' + user?.lastname}</H1>
                   </ItemContainer>
                 </Row>
               </UserListItem>
@@ -71,6 +72,7 @@ const UserSelect: React.FC<IProps> = () => {
           </UserList>
         )}
       </RelativeContainer>
+      <ReactTooltip className="tooltip-z-index" />
     </ItemContainer>
   )
 }

@@ -1,15 +1,16 @@
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn } from '@/components/layout'
 import colors from '@/constants/colors'
-import { ICustomerTask } from '@/models'
-import React from 'react'
+
+import { ETaskStatus, ICustomerTask, ITaskChecklist } from '@/models'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { workerData } from 'worker_threads'
 import { TaskChecklistCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, TaskUserCard } from '.'
 
 interface IProps {
   taskData: ICustomerTask
   activeStep: number
+  handleCheckboxClick: (checklistItem: ITaskChecklist) => void
 }
 
 const InformationCard = styled(ItemContainer)`
@@ -22,30 +23,38 @@ const InformationCard = styled(ItemContainer)`
     margin-top: 0;
   }
 `
-const TaskInformations: React.FC<IProps> = ({ taskData, activeStep }) => {
+const TaskInformations: React.FC<IProps> = ({ taskData, activeStep, handleCheckboxClick }) => {
+  console.log(taskData.steps[activeStep], activeStep)
   return (
     <ItemContainer height="100%">
-      <JustifyBetweenColumn height="100%">
-        <InformationCard height="100px">
-          <TaskUserCard />
-        </InformationCard>
+      {taskData && taskData.steps[activeStep] ? (
+        <JustifyBetweenColumn height="100%">
+          <InformationCard height="100px">
+            <TaskUserCard taskActiveStep={taskData.steps[activeStep]} />
+          </InformationCard>
 
-        <InformationCard height="80px">
-          <TaskDeadlineCard />
-        </InformationCard>
+          <InformationCard height="80px">
+            <TaskDeadlineCard taskActiveStep={taskData.steps[activeStep]} />
+          </InformationCard>
 
-        <InformationCard height="80px">
-          <TaskPostponeCard />
-        </InformationCard>
+          <InformationCard height="80px">
+            <TaskPostponeCard taskActiveStep={taskData.steps[activeStep]} />
+          </InformationCard>
 
-        <InformationCard height="80px">
-          <TaskTimerCard />
-        </InformationCard>
+          <InformationCard height="80px">
+            <TaskTimerCard taskActiveStep={taskData.steps[activeStep]} />
+          </InformationCard>
 
-        <InformationCard height="calc(100% - 100px - 80px - 80px - 80px - 6rem)">
-          <TaskChecklistCard checklistData={taskData[activeStep].checklistItems} />
-        </InformationCard>
-      </JustifyBetweenColumn>
+          <InformationCard height="calc(100% - 100px - 80px - 80px - 80px - 6rem)">
+            <TaskChecklistCard
+              handleCheckboxClick={handleCheckboxClick}
+              checklistData={taskData.steps[activeStep]?.checklistItems}
+            />
+          </InformationCard>
+        </JustifyBetweenColumn>
+      ) : (
+        <div>Loading</div>
+      )}
     </ItemContainer>
   )
 }

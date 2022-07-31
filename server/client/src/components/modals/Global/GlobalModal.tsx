@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import useAccessStore from '@hooks/useAccessStore'
 import { closeModal, minimizeModal } from '@store/index'
 import { Minus, X } from 'react-feather'
 import colors from '@constants/colors'
 import { IModal } from '@/models'
 import { CloseButton, Container, MinimizeButton, Modal } from './styled'
+import ReactTooltip from 'react-tooltip'
 
 interface IProps {
   modal: IModal
@@ -24,6 +25,10 @@ const GlobalModal: React.FC<IProps> = ({ modal }) => {
     dispatch(minimizeModal(modal))
   }
 
+  useEffect(() => {
+    ReactTooltip.rebuild()
+  }, [modal])
+
   return (
     <Modal>
       <Container backgroundColor={modal.backgroundColor} size={modal?.size}>
@@ -35,6 +40,7 @@ const GlobalModal: React.FC<IProps> = ({ modal }) => {
           <Minus color={colors.blue.primary} fontWeight="600" />
         </MinimizeButton>
       </Container>
+      <ReactTooltip className="tooltip-z-index" />
     </Modal>
   )
 }

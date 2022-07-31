@@ -1,5 +1,5 @@
 import colors from '@/constants/colors'
-import { EStatus } from '@/models'
+import { EStatus, ETaskStatus } from '@/models'
 
 export const selectColorForStatus = (status: number) => {
   let color = colors.white.bg
@@ -10,6 +10,22 @@ export const selectColorForStatus = (status: number) => {
 
   if (status === EStatus.Inactive) {
     return (color = colors.gray.primary)
+  }
+
+  if (status === ETaskStatus.Completed) {
+    return (color = colors.green.primary)
+  }
+
+  if (status === ETaskStatus.Canceled) {
+    return (color = colors.red.primary)
+  }
+
+  if (status === ETaskStatus.Not_Started) {
+    return (color = colors.gray.primary)
+  }
+
+  if (status === ETaskStatus.Progress) {
+    return (color = colors.blue.primary)
   }
 
   return color

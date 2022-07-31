@@ -8,6 +8,8 @@ import { H1 } from '../texts'
 interface IProps {
   startLabel?: string
   endLabel?: string
+  completionPercentage: number
+  completionColor: string
 }
 
 interface IStyledProps {
@@ -32,13 +34,13 @@ const ProgressBarCompletion = styled.div<IStyledProps>`
   left: 0;
 `
 
-const ProgressBar: React.FC<IProps> = ({ startLabel, endLabel }) => {
+const ProgressBar: React.FC<IProps> = ({ startLabel, endLabel, completionPercentage, completionColor }) => {
   return (
     <ItemContainer>
       <Column>
         <ItemContainer>
           <ProgressBarContainer>
-            <ProgressBarCompletion completionPercentage={20} completionColor={colors.blue.primary} />
+            <ProgressBarCompletion completionPercentage={completionPercentage} completionColor={completionColor} />
           </ProgressBarContainer>
         </ItemContainer>
         <ItemContainer>

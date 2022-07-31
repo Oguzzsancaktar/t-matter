@@ -5,6 +5,7 @@ import { useGetCustomerReliablesQuery } from '@/services/customers/customerServi
 import { openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
+import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import { Badge } from '../badge'
 import { ItemContainer } from '../item-container'

@@ -1,5 +1,6 @@
 import { IModal } from '@/models'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import ReactTooltip from 'react-tooltip'
 import { IRootState } from '../store'
 
 type IModalsState = {

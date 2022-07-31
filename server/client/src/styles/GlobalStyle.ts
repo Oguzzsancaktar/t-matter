@@ -10,6 +10,9 @@ const GlobalStyle = createGlobalStyle`
   padding: 0;
   font-size: 16px;
 }
+.tooltip-z-index{
+  z-index: 999999999999999!important;
+}
 
 html {
   line-height: 1.15;

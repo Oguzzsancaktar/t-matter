@@ -59,7 +59,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={() => openCustomerTaskModal(data.id)}
+          onRead={() => openCustomerTaskModal(data._id)}
           onEdit={function (): void {
             throw new Error('Function not implemented.')
           }}
@@ -74,12 +74,13 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
     }
   ]
 
-  const openCustomerTaskModal = workflowId => {
+  const openCustomerTaskModal = taskId => {
+    console.log('taskId', taskId)
     dispatch(
       openModal({
-        id: 'customerTaksModal' + workflowId,
+        id: 'customerTaksModal' + taskId,
         title: 'Customer Task',
-        body: <CustomerTaskModal taskId={workflowId} />,
+        body: <CustomerTaskModal taskId={taskId} />,
         size: ESize.XLarge,
         backgroundColor: colors.gray.light
       })

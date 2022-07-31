@@ -158,11 +158,12 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customerId }) => {
             startDate: Date.now().toString(),
             endDate: moment(Date.now()).add(7, 'days').toString(),
             stepColor: step.stepColor,
-            stepStatus: ETaskStatus.NOT_STARTED,
+            stepStatus: ETaskStatus.Not_Started,
             expireDuration: step.expireDuration,
             passedTime: 0,
             postponeTime: step.postponeTime,
             usedPostpone: 0,
+            postponedDate: '',
             checklistItems: step.checklistItems.map(item => ({
               ...item,
               isChecked: false

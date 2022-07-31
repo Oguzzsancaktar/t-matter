@@ -11,7 +11,7 @@ const TaskActiveStepUser: React.FC<IProps> = ({ taskSteps }) => {
   const [activeStep, setActiveStep] = useState(0)
 
   useEffect(() => {
-    const activeStep = taskSteps.findIndex(step => step.stepStatus === ETaskStatus.PROGRESS)
+    const activeStep = taskSteps.findIndex(step => step.stepStatus === ETaskStatus.Progress)
     if (activeStep && activeStep !== -1) {
       setActiveStep(activeStep)
     }
