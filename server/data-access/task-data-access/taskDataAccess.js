@@ -14,7 +14,7 @@ const taskPopulatePipe = [
     }
   },
   {
-    $unwind: '$steps.category'
+    $unwind: { path: '$steps.category', preserveNullAndEmptyArrays: true }
   },
   {
     $lookup: {
@@ -25,7 +25,7 @@ const taskPopulatePipe = [
     }
   },
   {
-    $unwind: '$steps.responsibleUser'
+    $unwind: { path: '$steps.responsibleUser', preserveNullAndEmptyArrays: true }
   },
   {
     $lookup: {
@@ -36,7 +36,7 @@ const taskPopulatePipe = [
     }
   },
   {
-    $unwind: '$steps.location'
+    $unwind: { path: '$steps.location', preserveNullAndEmptyArrays: true }
   },
   {
     $lookup: {
@@ -47,7 +47,7 @@ const taskPopulatePipe = [
     }
   },
   {
-    $unwind: '$customer'
+    $unwind: { path: '$customer', preserveNullAndEmptyArrays: true }
   },
   {
     $group: {

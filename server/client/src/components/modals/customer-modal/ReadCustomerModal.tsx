@@ -163,12 +163,15 @@ const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
               </ItemContainer>
 
               <ItemContainer margin="1rem 0">
-                <ReliableSlider
-                  reliableCustomers={customerData.reliableCustomers}
-                  activeIndex={activeSliderIndex}
-                  customerId={customerData?._id}
-                  onActiveStepChange={handleActiveStep}
-                />
+                {customerData.reliableCustomers.length > 0 &&
+                  !!customerData.reliableCustomers[0].relativeType.fromOrTo && (
+                    <ReliableSlider
+                      reliableCustomers={customerData.reliableCustomers}
+                      activeIndex={activeSliderIndex}
+                      customerId={customerData?._id}
+                      onActiveStepChange={handleActiveStep}
+                    />
+                  )}
               </ItemContainer>
 
               <ItemContainer height="40px" borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
