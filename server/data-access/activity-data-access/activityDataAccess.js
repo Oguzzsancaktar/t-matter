@@ -50,7 +50,7 @@ const getTaskActivity = ({ task, step }) => {
     task: mongoose.Types.ObjectId(task)
   }
   if (step) {
-    obj.step = { $eq: step }
+    obj.step = { $eq: +step }
   }
   return Activity.aggregate([
     {
