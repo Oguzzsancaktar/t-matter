@@ -16,7 +16,13 @@ const ActivityItem: React.FC<IProps> = ({ activity }) => {
         src="https://via.placeholder.com/150"
         data-tip={activity.owner.firstname + ' ' + activity.owner.lastname}
       />
-      <Baloon title={activity.title} content={activity.content} date={activity.createdAt} links={activity.links} />
+      <Baloon
+        type={activity.type}
+        title={activity.title}
+        content={activity.content}
+        date={activity.createdAt}
+        links={activity.links}
+      />
     </JustifyCenterRow>
   )
 }

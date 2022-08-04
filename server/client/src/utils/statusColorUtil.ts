@@ -1,5 +1,5 @@
 import colors from '@/constants/colors'
-import { EStatus, ETaskStatus } from '@/models'
+import { EActivity, EStatus, ETaskStatus } from '@/models'
 
 export const selectColorForStatus = (status: number) => {
   let color = colors.white.bg
@@ -48,6 +48,40 @@ export const selectColorForTaskStatus = (status: number) => {
 
   if (status === ETaskStatus.Progress) {
     return (color = colors.blue.primary)
+  }
+
+  return color
+}
+
+export const selectColorForActivityType = (status: number) => {
+  let color = colors.white.bg
+
+  if (status === EActivity.NORMAL_NOTE) {
+    return (color = colors.indigo.primary)
+  }
+
+  if (status === EActivity.TASK_CANCELED) {
+    return (color = colors.red.primary)
+  }
+
+  if (status === EActivity.TASK_CHECKLIST_CHECKED) {
+    return (color = colors.teal.primary)
+  }
+
+  if (status === EActivity.TASK_FINISHED) {
+    return (color = colors.green.primary)
+  }
+
+  if (status === EActivity.TASK_POSTPONED) {
+    return (color = colors.orange.primary)
+  }
+
+  if (status === EActivity.TASK_RESPONSIBLE_CHANGED) {
+    return (color = colors.purple.primary)
+  }
+
+  if (status === EActivity.TASK_STARTED) {
+    return (color = colors.pink.primary)
   }
 
   return color
