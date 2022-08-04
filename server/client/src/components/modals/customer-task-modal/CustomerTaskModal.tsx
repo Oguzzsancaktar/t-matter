@@ -1,7 +1,7 @@
 import { ItemContainer } from '@/components/item-container'
 import { Row } from '@/components/layout'
 import { TaskEventSection, TaskInformations, TaskWizzardNavigation } from '@/components'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ModalHeader } from '../types'
 import colors from '@/constants/colors'
 import { useGetTaskByTaskIdQuery, useUpdateTaskMutation } from '@/services/customers/taskService'
@@ -9,6 +9,8 @@ import { EActivity, ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/
 import Swal from 'sweetalert2'
 import { useAuth } from '@/hooks/useAuth'
 import { useCreateActivityMutation } from '@/services/activityService'
+import useAccessStore from '@hooks/useAccessStore'
+import { setModalOnClose } from '@/store'
 
 interface IProps {
   taskId: string
@@ -23,6 +25,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
 
   const [activeStep, setActiveStep] = useState<number>(0)
   const [updatedTaskData, setUpdatedTaskData] = useState<ICustomerTask>()
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
 
   const isTaskNotStarted = useMemo(
     () =>
@@ -30,6 +34,12 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
       updatedTaskData?.steps.length,
     [updatedTaskData]
   )
+
+  const updateTaskData = useCallback(async () => {
+    if (updatedTaskData) {
+      updateTask(updatedTaskData)
+    }
+  }, [updatedTaskData])
 
   const handleTaskTimerChange = (timerValue: number) => {
     console.log(timerValue)
@@ -289,6 +299,10 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
       }
     })
   }
+
+  useEffect(() => {
+    dispatch(setModalOnClose({ modalId: 'customerTaksModal' + taskId, onClose: updateTaskData }))
+  }, [updateTaskData])
 
   useEffect(() => {
     if (

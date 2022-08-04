@@ -5,5 +5,5 @@ export default interface IModal {
   body: React.ReactNode | string
   size: ESize
   backgroundColor?: string
-  onCloseModal?: () => void
+  onClose?: () => void
 }

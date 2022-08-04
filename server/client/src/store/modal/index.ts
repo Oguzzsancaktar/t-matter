@@ -4,5 +4,6 @@ export {
   selectMinimizedModals,
   openModal,
   closeModal,
-  minimizeModal
+  minimizeModal,
+  setModalOnClose
 } from './modalSlice'
