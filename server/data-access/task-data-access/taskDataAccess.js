@@ -72,10 +72,13 @@ const getCustomerTasks = customerId => {
         customer: mongoose.Types.ObjectId(customerId)
       }
     },
-    ...taskPopulatePipe
-  ])
-    .sort({ createdAt: -1 })
-    .exec()
+    ...taskPopulatePipe,
+    {
+      $sort: {
+        createdAt: -1
+      }
+    }
+  ]).exec()
 }
 
 const getTaskById = taskId => {
