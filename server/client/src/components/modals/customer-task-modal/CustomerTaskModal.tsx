@@ -294,7 +294,9 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
     } else {
       if (taskData) {
         const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
-        const currentStep = tempUpdatedTaskData.steps.find(step => step.stepStatus === ETaskStatus.Progress)
+        const currentStep: number = tempUpdatedTaskData.steps.findIndex(
+          step => step.stepStatus === ETaskStatus.Progress
+        )
         setUpdatedTaskData(tempUpdatedTaskData)
         if (currentStep) {
           setActiveStep(currentStep)
