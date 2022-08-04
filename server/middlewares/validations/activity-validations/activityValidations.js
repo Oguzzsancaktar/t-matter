@@ -9,7 +9,8 @@ const activityCreateValidation = async (req, res, next) => {
     type: joi.number().required(),
     title: joi.string().required(),
     content: joi.string(),
-    links: joi.array().items(joi.object({ url: joi.string().required(), text: joi.string().required() }))
+    links: joi.array().items(joi.object({ url: joi.string().required(), text: joi.string().required() })),
+    step: joi.number()
   })
 
   await validateAsync({ schema: activityCreateSchema, data: req.body }, req, res, next)
