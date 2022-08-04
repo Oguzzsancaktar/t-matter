@@ -23,12 +23,14 @@ const findCustomerById = async (id, populate = '') => {
     },
     {
       $unwind: {
-        path: '$refferedBy'
+        path: '$refferedBy',
+        preserveNullAndEmptyArrays: true
       }
     },
     {
       $unwind: {
-        path: '$reliableCustomers'
+        path: '$reliableCustomers',
+        preserveNullAndEmptyArrays: true
       }
     },
     {
@@ -49,12 +51,14 @@ const findCustomerById = async (id, populate = '') => {
     },
     {
       $unwind: {
-        path: '$reliableCustomers.reliable'
+        path: '$reliableCustomers.reliable',
+        preserveNullAndEmptyArrays: true
       }
     },
     {
       $unwind: {
-        path: '$reliableCustomers.relativeType.relativeType'
+        path: '$reliableCustomers.relativeType.relativeType',
+        preserveNullAndEmptyArrays: true
       }
     },
     {
@@ -107,7 +111,8 @@ const findCustomerWithFiltersAndPopulate = ({ search, size, status }) => {
     },
     {
       $unwind: {
-        path: '$refferedBy'
+        path: '$refferedBy',
+        preserveNullAndEmptyArrays: true
       }
     }
   )

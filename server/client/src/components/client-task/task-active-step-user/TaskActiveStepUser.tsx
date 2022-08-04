@@ -17,7 +17,7 @@ const TaskActiveStepUser: React.FC<IProps> = ({ taskSteps }) => {
     }
   }, [taskSteps])
 
-  return <ItemContainer>{taskSteps[activeStep].responsibleUser.firstname}</ItemContainer>
+  return <ItemContainer>{taskSteps[activeStep]?.responsibleUser?.firstname}</ItemContainer>
 }
 
 export default TaskActiveStepUser

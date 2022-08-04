@@ -2,7 +2,7 @@ import { ICustomer } from '@models/index'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { ICustomerTask, ITask, ITaskCreateDTO } from '@/models'
+import { ICustomerTask, ITask } from '@/models'
 
 const TASK_REDUCER_PATH = 'taskApi'
 const TASK_TAG_TYPE = 'taskTag' as const
@@ -61,21 +61,29 @@ const getTaskByTaskId = (builder: IBuilder) => {
   })
 }
 
-// const updateTask = (builder: IBuilder) => {
-//   return builder.mutation<ITask, ITaskUpdateDTO>({
-//     query(taskUpdateDto) {
-//       return {
-//         url: `/task`,
-//         method: 'PATCH',
-//         data: { ...taskUpdateDto, role: taskUpdateDto._id }
-//       }
-//     },
-//     invalidatesTags(result) {
-//       if (!result) return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
-//       return [{ type: TASK_TAG_TYPE, id: result._id }]
-//     }
-//   })
-// }
+const updateTask = (builder: IBuilder) => {
+  return builder.mutation<ICustomerTask, ICustomerTask>({
+    query(taskUpdateDto) {
+      return {
+        url: `/task/${taskUpdateDto._id}`,
+        method: 'PUT',
+        data: {
+          ...taskUpdateDto,
+          steps: taskUpdateDto.steps.map(step => ({
+            ...step,
+            responsibleUser: step.responsibleUser._id,
+            category: step.category._id,
+            location: step.location._id
+          }))
+        }
+      }
+    },
+    invalidatesTags(result) {
+      if (!result) return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+      return [{ type: TASK_TAG_TYPE, id: result._id }]
+    }
+  })
+}
 
 const taskApi = createApi({
   reducerPath: TASK_REDUCER_PATH,
@@ -84,21 +92,10 @@ const taskApi = createApi({
   endpoints: builder => ({
     createTask: createTask(builder),
     getTasksByCustomerId: getTasksByCustomerId(builder),
-    getTaskByTaskId: getTaskByTaskId(builder)
-    // updateTask: updateTask(builder),
+    getTaskByTaskId: getTaskByTaskId(builder),
+    updateTask: updateTask(builder)
   })
 })
 
-const {
-  useGetTasksByCustomerIdQuery,
-  useCreateTaskMutation,
-  useGetTaskByTaskIdQuery
-  // useUpdateTaskMutation,
-} = taskApi
-export {
-  taskApi,
-  useCreateTaskMutation,
-  useGetTasksByCustomerIdQuery,
-  useGetTaskByTaskIdQuery
-  // useUpdateTaskMutation,
-}
+const { useGetTasksByCustomerIdQuery, useCreateTaskMutation, useGetTaskByTaskIdQuery, useUpdateTaskMutation } = taskApi
+export { taskApi, useCreateTaskMutation, useGetTasksByCustomerIdQuery, useGetTaskByTaskIdQuery, useUpdateTaskMutation }

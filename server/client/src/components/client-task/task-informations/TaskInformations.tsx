@@ -9,6 +9,7 @@ import { TaskChecklistCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, T
 
 interface IProps {
   taskData: ICustomerTask
+  isTaskNotStarted: boolean
   activeStep: number
   handleCheckboxClick: (checklistItem: ITaskChecklist, index: number) => void
   handleResponsibleChange: (responsible: IUser) => void
@@ -28,11 +29,11 @@ const InformationCard = styled(ItemContainer)`
 const TaskInformations: React.FC<IProps> = ({
   taskData,
   activeStep,
+  isTaskNotStarted,
   handleCheckboxClick,
   handleResponsibleChange,
   handlePostponeChange
 }) => {
-  console.log(taskData.steps[activeStep], activeStep)
   return (
     <ItemContainer height="100%">
       {taskData && taskData.steps[activeStep] ? (
@@ -50,7 +51,7 @@ const TaskInformations: React.FC<IProps> = ({
           </InformationCard>
 
           <InformationCard height="80px">
-            <TaskTimerCard taskActiveStep={taskData.steps[activeStep]} />
+            <TaskTimerCard taskActiveStep={taskData.steps[activeStep]} isTaskNotStarted={isTaskNotStarted} />
           </InformationCard>
 
           <InformationCard height="calc(100% - 100px - 80px - 80px - 80px - 6rem)">

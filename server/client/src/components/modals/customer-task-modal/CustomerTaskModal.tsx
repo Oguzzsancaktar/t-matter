@@ -4,22 +4,28 @@ import { TaskEventSection, TaskInformations, TaskWizzardNavigation } from '@/com
 import React, { useEffect, useMemo, useState } from 'react'
 import { ModalHeader } from '../types'
 import colors from '@/constants/colors'
-import { useGetTaskByTaskIdQuery } from '@/services/customers/taskService'
+import { useGetTaskByTaskIdQuery, useUpdateTaskMutation } from '@/services/customers/taskService'
 import { ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
 import Swal from 'sweetalert2'
+import { useAuth } from '@/hooks/useAuth'
 
 interface IProps {
   taskId: string
 }
 const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
+  const { loggedUser } = useAuth()
+  const [updateTask] = useUpdateTaskMutation()
+
   const { data: taskData, isLoading: taskIsLoading } = useGetTaskByTaskIdQuery(taskId)
 
   const [activeStep, setActiveStep] = useState<number>(0)
   const [updatedTaskData, setUpdatedTaskData] = useState<ICustomerTask>()
 
   const isTaskNotStarted = useMemo(
-    () => taskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length === taskData?.steps.length,
-    [taskData]
+    () =>
+      updatedTaskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length ===
+      updatedTaskData?.steps.length,
+    [updatedTaskData]
   )
 
   const handleStepChange = (step: number) => {
@@ -42,22 +48,29 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
         },
         allowOutsideClick: () => !Swal.isLoading()
       }).then(result => {
+        const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+
         if (result.isConfirmed) {
           Swal.fire({
             icon: 'success',
             title: `Task Postponed`,
             text: result.value
           })
+          console.log(
+            'tempUpdatedTaskData.steps[activeStep].usedPostpone2222',
+            tempUpdatedTaskData.steps[activeStep].usedPostpone,
+            updatedTaskData.steps[activeStep].usedPostpone
+          )
 
-          setUpdatedTaskData({
-            ...updatedTaskData,
-            steps: updatedTaskData.steps.map((step, index) => {
-              if (index === activeStep) {
-                return { ...step, postponedDate: dateText, usedPostpone: step.usedPostpone + 1 }
-              }
-              return step
-            })
-          })
+          tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
+          tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
+
+          console.log(
+            'tempUpdatedTaskData.steps[activeStep].usedPostpone4444',
+            tempUpdatedTaskData.steps[activeStep].usedPostpone
+          )
+          updateTask(tempUpdatedTaskData)
+          setUpdatedTaskData({ ...tempUpdatedTaskData })
         } else {
           Swal.fire({
             icon: 'error',
@@ -89,13 +102,11 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
       (tempChecklist.length === index && tempChecklist.every(checklist => checklist.isChecked)) ||
       tempChecklist.length === 0
     ) {
-      console.log('selam')
       tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Completed
       if (tempUpdatedTaskData.steps[activeStep + 1]) {
         tempUpdatedTaskData.steps[activeStep + 1].stepStatus = ETaskStatus.Progress
         setActiveStep(activeStep + 1)
       }
-      console.log('selam 2', tempUpdatedTaskData.steps[activeStep].stepStatus)
       setUpdatedTaskData({ ...tempUpdatedTaskData })
     }
   }
@@ -137,7 +148,13 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
   }
 
   useEffect(() => {
-    if (taskData && isTaskNotStarted) {
+    console.log(taskData)
+    if (
+      !taskIsLoading &&
+      taskData &&
+      isTaskNotStarted &&
+      loggedUser.user?._id === taskData.steps[0].responsibleUser._id
+    ) {
       setUpdatedTaskData(taskData)
       Swal.fire({
         icon: 'question',
@@ -149,13 +166,21 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
         cancelButtonText: 'No'
       }).then(result => {
         if (result.isConfirmed) {
-          console.log('start task')
           const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
           tempUpdatedTaskData.steps[0].stepStatus = ETaskStatus.Progress
           setUpdatedTaskData(tempUpdatedTaskData)
           setActiveStep(0)
         }
       })
+    } else {
+      if (taskData) {
+        const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
+        const currentStep = tempUpdatedTaskData.steps.find(step => step.stepStatus === ETaskStatus.Progress)
+        setUpdatedTaskData(tempUpdatedTaskData)
+        if (currentStep) {
+          setActiveStep(currentStep)
+        }
+      }
     }
   }, [taskData])
 
@@ -179,6 +204,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
                   <TaskInformations
                     activeStep={activeStep}
                     taskData={updatedTaskData}
+                    isTaskNotStarted={isTaskNotStarted}
                     handleCheckboxClick={handleCheckboxClick}
                     handleResponsibleChange={handleResponsibleChange}
                     handlePostponeChange={handlePostponeChange}
