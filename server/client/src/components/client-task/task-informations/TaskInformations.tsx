@@ -14,6 +14,8 @@ interface IProps {
   handleCheckboxClick: (checklistItem: ITaskChecklist, index: number) => void
   handleResponsibleChange: (responsible: IUser) => void
   handlePostponeChange: (value: Date[], dateText: string) => void
+  handleCancelTask: () => void
+  handleStartTask: () => void
 }
 
 const InformationCard = styled(ItemContainer)`
@@ -32,14 +34,22 @@ const TaskInformations: React.FC<IProps> = ({
   isTaskNotStarted,
   handleCheckboxClick,
   handleResponsibleChange,
-  handlePostponeChange
+  handlePostponeChange,
+  handleCancelTask,
+  handleStartTask
 }) => {
   return (
     <ItemContainer height="100%">
       {taskData && taskData.steps[activeStep] ? (
         <JustifyBetweenColumn height="100%">
           <InformationCard height="100px">
-            <TaskUserCard taskActiveStep={taskData.steps[activeStep]} onResponsibleChange={handleResponsibleChange} />
+            <TaskUserCard
+              taskActiveStep={taskData.steps[activeStep]}
+              onResponsibleChange={handleResponsibleChange}
+              handleCancelTask={handleCancelTask}
+              handleStartTask={handleStartTask}
+              isTaskNotStarted={isTaskNotStarted}
+            />
           </InformationCard>
 
           <InformationCard height="80px">

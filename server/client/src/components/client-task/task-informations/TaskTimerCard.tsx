@@ -23,8 +23,6 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted }) =
     taskActiveStep?.checklistItems.reduce((acc, item) => acc + item?.duration, 0)
   )
 
-  console.log('taskActiveStep', passedTime, totalDuration)
-
   const updateCount = () => {
     timer =
       !timer &&

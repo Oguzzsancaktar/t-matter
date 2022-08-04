@@ -31,6 +31,57 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
     [updatedTaskData]
   )
 
+  const handleCancelTask = async () => {
+    try {
+      if (updatedTaskData) {
+        Swal.fire({
+          title: 'Enter your cancel message',
+          input: 'text',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Cancel',
+          showLoaderOnConfirm: true,
+          preConfirm: login => {
+            return login
+          },
+          allowOutsideClick: () => !Swal.isLoading()
+        }).then(async result => {
+          const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: `Task Canceled`,
+              text: result.value
+            })
+
+            tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Canceled
+
+            await updateTask(tempUpdatedTaskData)
+            await createActivity({
+              title: 'Task Canceled',
+              content: result.value || ' ',
+              customer: tempUpdatedTaskData.customerId,
+              task: tempUpdatedTaskData._id,
+              owner: loggedUser.user?._id || '',
+              type: EActivity.TASK_CANCELED
+            })
+            setUpdatedTaskData({ ...tempUpdatedTaskData })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Cancelled'
+            })
+          }
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleStepChange = (step: number) => {
     if (isTaskNotStarted && step > activeStep) {
       Swal.fire({
@@ -161,31 +212,42 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
     }
   }
 
+  const handleStartTask = () => {
+    Swal.fire({
+      icon: 'question',
+      title: 'Do you want to start this task now?',
+      showCancelButton: true,
+      confirmButtonColor: colors.blue.primary,
+      cancelButtonColor: colors.red.primary,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then(async result => {
+      if (result.isConfirmed) {
+        const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
+        tempUpdatedTaskData.steps[0].stepStatus = ETaskStatus.Progress
+        setUpdatedTaskData(tempUpdatedTaskData)
+
+        await updateTask(tempUpdatedTaskData)
+        await createActivity({
+          title: 'Task Started',
+          content: 'Task Started ',
+          customer: tempUpdatedTaskData.customer._id,
+          task: tempUpdatedTaskData._id,
+          owner: loggedUser.user?._id || '',
+          type: EActivity.TASK_STARTED
+        })
+      }
+    })
+  }
+
   useEffect(() => {
-    console.log(taskData)
     if (
       !taskIsLoading &&
       taskData &&
       isTaskNotStarted &&
       loggedUser.user?._id === taskData.steps[0].responsibleUser._id
     ) {
-      setUpdatedTaskData(taskData)
-      Swal.fire({
-        icon: 'question',
-        title: 'Do you want to start this task now?',
-        showCancelButton: true,
-        confirmButtonColor: colors.blue.primary,
-        cancelButtonColor: colors.red.primary,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-      }).then(result => {
-        if (result.isConfirmed) {
-          const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
-          tempUpdatedTaskData.steps[0].stepStatus = ETaskStatus.Progress
-          setUpdatedTaskData(tempUpdatedTaskData)
-          setActiveStep(0)
-        }
-      })
+      handleStartTask()
     } else {
       if (taskData) {
         const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
@@ -222,6 +284,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
                     handleCheckboxClick={handleCheckboxClick}
                     handleResponsibleChange={handleResponsibleChange}
                     handlePostponeChange={handlePostponeChange}
+                    handleCancelTask={handleCancelTask}
+                    handleStartTask={handleStartTask}
                   />
                 </ItemContainer>
 
