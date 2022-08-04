@@ -4,8 +4,12 @@ const getTaskActivity = taskId => {
   return Activity.find({ task: taskId }).exec()
 }
 
-const getCustomerActivity = customerId => {
-  return Activity.find({ customer: customerId }).exec()
+const getCustomerActivity = ({ customer, step }) => {
+  const obj = { customer }
+  if (step) {
+    obj.step = step
+  }
+  return Activity.find(obj).exec()
 }
 
 const getAllActivity = () => {

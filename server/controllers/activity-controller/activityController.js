@@ -31,9 +31,9 @@ const getAllActivity = async (req, res) => {
 }
 
 const getCustomerActivity = async (req, res) => {
-  const { customer } = req.query
+  const { customer, step } = req.query
   try {
-    const activities = await dataAccess.activityDataAccess.getCustomerActivity(customer)
+    const activities = await dataAccess.activityDataAccess.getCustomerActivity({ customer, step })
     res.send(activities)
   } catch (e) {
     res.status(500).json(utils.errorUtils.errorInstance({ message: 'Error while getting customer activity' }))
