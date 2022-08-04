@@ -12,9 +12,13 @@ import { Tab } from '@/components/tab'
 import { InnerWrapper } from '@/components/wrapper'
 import { CustomerTaskModalNoteTab, WorkflowChecklistTab, WorkflowPlanTab } from '@/pages'
 import React, { useState } from 'react'
+import { ITask } from '@/models'
 
-interface IProps {}
-const TaskEventSection: React.FC<IProps> = () => {
+interface IProps {
+  task: ITask['_id']
+  step: number
+}
+const TaskEventSection: React.FC<IProps> = ({ task, step }) => {
   const [activeTab, setActiveTab] = useState('note')
 
   return (
@@ -33,7 +37,7 @@ const TaskEventSection: React.FC<IProps> = () => {
         <ModalBody>
           <InnerWrapper>
             {activeTab === 'note' ? (
-              <CustomerTaskModalNoteTab />
+              <CustomerTaskModalNoteTab task={task} step={step} />
             ) : activeTab === 'workflow-checklist' ? (
               <WorkflowChecklistTab />
             ) : (

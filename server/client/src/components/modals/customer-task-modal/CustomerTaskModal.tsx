@@ -300,7 +300,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
                   padding="0 2rem"
                   backgroundColor={colors.white.secondary}
                 >
-                  <TaskEventSection />
+                  <TaskEventSection task={taskId} step={activeStep} />
                 </ItemContainer>
               </Row>
             )}
