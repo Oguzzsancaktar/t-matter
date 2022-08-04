@@ -6,7 +6,7 @@ import { H1 } from '@/components/texts'
 import { UserSelect } from '@/components/user-select'
 import colors from '@/constants/colors'
 import { ETaskStatus, ITaskItem, IUser } from '@/models'
-import { selectColorForStatus } from '@/utils/statusColorUtil'
+import { selectColorForStatus, selectColorForTaskStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 import { PlayCircle, XCircle } from 'react-feather'
 
@@ -38,7 +38,7 @@ const TaskUserCard: React.FC<IProps> = ({
               <JustifyCenterRow>
                 <Badge
                   children={Object.values(ETaskStatus)[taskActiveStep?.stepStatus]?.toString().replace('_', ' ')}
-                  color={selectColorForStatus(taskActiveStep?.stepStatus)}
+                  color={selectColorForTaskStatus(taskActiveStep?.stepStatus)}
                 />
               </JustifyCenterRow>
             </ItemContainer>
