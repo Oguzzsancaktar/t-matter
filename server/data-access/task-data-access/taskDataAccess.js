@@ -78,9 +78,7 @@ const getCustomerTasks = customerId => {
       }
     },
     ...taskPopulatePipe
-  ])
-    .sort({ createdAt: -1 })
-    .exec()
+  ]).exec()
 }
 
 const getTaskById = taskId => {
