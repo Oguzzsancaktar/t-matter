@@ -75,7 +75,6 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
   ]
 
   const openCustomerTaskModal = taskId => {
-    console.log('taskId', taskId)
     dispatch(
       openModal({
         id: 'customerTaksModal' + taskId,

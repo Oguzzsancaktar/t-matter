@@ -16,8 +16,6 @@ const TaskWizzardNavigation: React.FC<IProps> = ({ taskData, activeStep, onStepC
     <ItemContainer height="100%" backgroundColor={colors.white.secondary} padding="1rem">
       <JustifyBetweenColumn height="100%">
         {taskData.steps.map((task, index) => {
-          console.log(task.stepStatus)
-
           return (
             <ItemContainer key={index} cursorType="pointer" onClick={() => onStepChange(index)}>
               <TabIndex

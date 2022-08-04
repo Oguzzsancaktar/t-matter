@@ -12,8 +12,9 @@ import { Calendar } from 'react-feather'
 interface IProps {
   taskActiveStep: ITaskItem
   isTaskNotStarted: boolean
+  handleTaskTimerChange: (timerValue: number) => void
 }
-const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted }) => {
+const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, handleTaskTimerChange }) => {
   let timer
   const { loggedUser } = useAuth()
   const [passedTime, setPassedTime] = useState(taskActiveStep?.passedTime)
@@ -33,6 +34,7 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted }) =
   useEffect(() => {
     setTotalDuration(taskActiveStep?.checklistItems.reduce((acc, item) => acc + item?.duration, 0))
     setPassedTime(taskActiveStep?.passedTime)
+    handleTaskTimerChange(taskActiveStep?.passedTime)
     if (loggedUser.user?._id === taskActiveStep?.responsibleUser?._id && !isTaskNotStarted) {
       updateCount()
     }

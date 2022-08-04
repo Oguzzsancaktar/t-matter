@@ -24,7 +24,6 @@ const TaskUserCard: React.FC<IProps> = ({
   handleCancelTask,
   handleStartTask
 }) => {
-  console.log('isTaskNotStarted', isTaskNotStarted)
   return (
     <ItemContainer>
       <JustifyBetweenRow>
