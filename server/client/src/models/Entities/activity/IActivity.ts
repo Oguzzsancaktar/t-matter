@@ -8,6 +8,7 @@ export default interface IActivity {
   task?: ITask
   owner: IUser
   type: number
+  step?: number
   createdAt: Date
   updatedAt: Date
   links?: [

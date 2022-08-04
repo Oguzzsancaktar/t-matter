@@ -66,6 +66,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
               customer: tempUpdatedTaskData.customerId,
               task: tempUpdatedTaskData._id,
               owner: loggedUser.user?._id || '',
+              step: activeStep,
               type: EActivity.TASK_CANCELED
             })
             setUpdatedTaskData({ ...tempUpdatedTaskData })
@@ -236,6 +237,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
           owner: loggedUser.user?._id || '',
           type: EActivity.TASK_STARTED
         })
+      } else {
+        setUpdatedTaskData(taskData)
       }
     })
   }

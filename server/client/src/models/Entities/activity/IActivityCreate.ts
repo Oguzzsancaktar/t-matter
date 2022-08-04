@@ -8,6 +8,7 @@ export default interface IActivityCreate {
   task?: ITask['_id']
   owner: IUser['_id']
   type: number
+  step?: number
   createdAt?: Date
   updatedAt?: Date
 }
