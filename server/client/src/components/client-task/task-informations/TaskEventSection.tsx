@@ -1,31 +1,46 @@
 import { Badge } from '@/components/badge'
 import { ItemContainer } from '@/components/item-container'
-import { Column, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components/layout'
+import {
+  Column,
+  JustifyBetweenColumn,
+  JustifyBetweenRow,
+  JustifyCenterColumn,
+  JustifyCenterRow
+} from '@/components/layout'
+import { ModalHeader, ModalBody } from '@/components/modals/types'
 import { Tab } from '@/components/tab'
-import { H1 } from '@/components/texts'
-import { UserSelect } from '@/components/user-select'
-import colors from '@/constants/colors'
-import React from 'react'
+import { InnerWrapper } from '@/components/wrapper'
+import { CustomerTaskModalNoteTab, WorkflowChecklistTab, WorkflowPlanTab } from '@/pages'
+import React, { useState } from 'react'
 
 interface IProps {}
 const TaskEventSection: React.FC<IProps> = () => {
+  const [activeTab, setActiveTab] = useState('note')
+
   return (
     <ItemContainer>
       <Column>
-        <ItemContainer>
-          <JustifyCenterRow>
-            <Tab
-              name={'Note'}
-              index={0}
-              isActive={false}
-              onClick={function (e: React.MouseEvent<Element, MouseEvent>): void {
-                throw new Error('Function not implemented.')
-              }}
-            />
-          </JustifyCenterRow>
-        </ItemContainer>
+        <ModalHeader>
+          <InnerWrapper>
+            <JustifyBetweenColumn>
+              <JustifyCenterRow>
+                <Tab name={'Note'} index={0} isActive={false} onClick={() => setActiveTab('note')} />
+              </JustifyCenterRow>
+            </JustifyBetweenColumn>
+          </InnerWrapper>
+        </ModalHeader>
 
-        <ItemContainer>tab</ItemContainer>
+        <ModalBody>
+          <InnerWrapper>
+            {activeTab === 'note' ? (
+              <CustomerTaskModalNoteTab />
+            ) : activeTab === 'workflow-checklist' ? (
+              <WorkflowChecklistTab />
+            ) : (
+              <WorkflowPlanTab />
+            )}
+          </InnerWrapper>
+        </ModalBody>
       </Column>
     </ItemContainer>
   )
