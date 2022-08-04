@@ -42,6 +42,11 @@ const populateActivity = [
       path: '$task',
       preserveNullAndEmptyArrays: true
     }
+  },
+  {
+    $sort: {
+      createdAt: -1
+    }
   }
 ]
 
