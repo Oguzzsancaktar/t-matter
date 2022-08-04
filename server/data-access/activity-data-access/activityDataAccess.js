@@ -1,15 +1,17 @@
 const Activity = require('../../models/Activity')
 
-const getTaskActivity = taskId => {
-  return Activity.find({ task: taskId }).exec()
-}
-
-const getCustomerActivity = ({ customer, step }) => {
-  const obj = { customer }
+const getTaskActivity = ({ task, step }) => {
+  const obj = {
+    task
+  }
   if (step) {
-    obj.step = step
+    obj.step = { $eq: step }
   }
   return Activity.find(obj).exec()
+}
+
+const getCustomerActivity = ({ customer }) => {
+  return Activity.find({ customer }).exec()
 }
 
 const getAllActivity = () => {

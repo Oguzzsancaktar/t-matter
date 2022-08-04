@@ -7,16 +7,18 @@ const createActivity = async (req, res) => {
     const activity = await dataAccess.activityDataAccess.createActivity(body)
     res.send(activity)
   } catch (e) {
+    console.log(e)
     res.status(500).json(utils.errorUtils.errorInstance({ message: 'Error while creating activity' }))
   }
 }
 
 const getTaskActivity = async (req, res) => {
-  const { task } = req.query
+  const { task, step } = req.query
   try {
-    const activities = await dataAccess.activityDataAccess.getTaskActivity(task)
+    const activities = await dataAccess.activityDataAccess.getTaskActivity({ task, step })
     res.send(activities)
   } catch (e) {
+    console.log(e)
     res.status(500).json(utils.errorUtils.errorInstance({ message: 'Error while getting task activity' }))
   }
 }
@@ -26,16 +28,18 @@ const getAllActivity = async (req, res) => {
     const activities = await dataAccess.activityDataAccess.getAllActivity()
     res.send(activities)
   } catch (e) {
+    console.log(e)
     res.status(500).json(utils.errorUtils.errorInstance({ message: 'Error while getting all activity' }))
   }
 }
 
 const getCustomerActivity = async (req, res) => {
-  const { customer, step } = req.query
+  const { customer } = req.query
   try {
-    const activities = await dataAccess.activityDataAccess.getCustomerActivity({ customer, step })
+    const activities = await dataAccess.activityDataAccess.getCustomerActivity({ customer })
     res.send(activities)
   } catch (e) {
+    console.log(e)
     res.status(500).json(utils.errorUtils.errorInstance({ message: 'Error while getting customer activity' }))
   }
 }
