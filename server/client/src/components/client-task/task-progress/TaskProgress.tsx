@@ -16,7 +16,7 @@ const TaskProgress: React.FC<IProps> = ({ taskSteps }) => {
     progress: 0
   })
 
-  const percentage = ((stepStatuses.completed + stepStatuses.canceled) / taskSteps.length) * 100
+  const percentage = ((stepStatuses.completed + stepStatuses.canceled + stepStatuses.progress) / taskSteps.length) * 100
 
   useEffect(() => {
     const stepStatusesR = taskSteps.reduce(

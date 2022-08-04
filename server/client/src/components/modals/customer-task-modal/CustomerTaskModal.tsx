@@ -38,12 +38,12 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
     }
   }, [updatedTaskData])
 
-  // const handleTaskTimerChange = (timerValue: number) => {
-  //   console.log(timerValue)
-  //   const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
-  //   tempUpdatedTaskData.steps[activeStep].passedTime = timerValue
-  //   setUpdatedTaskData(tempUpdatedTaskData)
-  // }
+  const handleTaskTimerChange = (timerValue: number) => {
+    console.log(timerValue)
+    const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+    tempUpdatedTaskData.steps[activeStep].passedTime = timerValue
+    setUpdatedTaskData(tempUpdatedTaskData)
+  }
 
   const handleCancelTask = async () => {
     try {
@@ -366,6 +366,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
                     handlePostponeChange={handlePostponeChange}
                     handleCancelTask={handleCancelTask}
                     handleStartTask={handleStartTask}
+                    handleTaskTimerChange={handleTaskTimerChange}
                   />
                 </ItemContainer>
 
