@@ -2,7 +2,8 @@
   "scripts": {
     "start": "env-cmd -f .env.production node app.js",
     "start:dev": "NODE_ENV=development env-cmd -f .env.development nodemon app.js",
-    "start:prod": "env-cmd -f .env.production node app.js"
+    "start:prod": "env-cmd -f .env.production node app.js",
+    "script:task-steps-objectid-fix": "env-cmd -f .env.production node scripts/task-steps-objectid-fix.js"
   },
   "engines": {
     "node": "18.4.0"

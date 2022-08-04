@@ -50,6 +50,12 @@ const updateTask = async (req, res) => {
   const { taskId } = req.params
   const { body } = req
   try {
+    body.steps = body.steps.map(({ responsibleUser, location, category, ...rest }) => ({
+      ...rest,
+      responsibleUser: mongoose.Types.ObjectId(responsibleUser),
+      location: mongoose.Types.ObjectId(location),
+      category: mongoose.Types.ObjectId(category)
+    }))
     const task = await dataAccess.taskDataAccess.updateTaskById(taskId, body)
     res.status(200).json(task)
   } catch (error) {
