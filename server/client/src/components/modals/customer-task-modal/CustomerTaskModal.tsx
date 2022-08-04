@@ -8,7 +8,7 @@ import { useGetTaskByTaskIdQuery, useUpdateTaskMutation } from '@/services/custo
 import { EActivity, ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
 import Swal from 'sweetalert2'
 import { useAuth } from '@/hooks/useAuth'
-import { useCreateActivityMutation } from '@/services/activityService'
+import { activityApi, useCreateActivityMutation } from '@/services/activityService'
 import useAccessStore from '@hooks/useAccessStore'
 import { setModalOnClose } from '@/store'
 
@@ -17,10 +17,9 @@ interface IProps {
 }
 const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
   const { loggedUser } = useAuth()
+
   const [updateTask] = useUpdateTaskMutation()
-
   const [createActivity] = useCreateActivityMutation()
-
   const { data: taskData, isLoading: taskIsLoading } = useGetTaskByTaskIdQuery(taskId)
 
   const [activeStep, setActiveStep] = useState<number>(0)
@@ -28,11 +27,9 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const isTaskNotStarted = useMemo(
-    () =>
-      updatedTaskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length ===
-      updatedTaskData?.steps.length,
-    [updatedTaskData]
+  const [isTaskNotStarted, setIsTaskNotStarted] = useState(
+    updatedTaskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length ===
+      updatedTaskData?.steps.length
   )
 
   const updateTaskData = useCallback(async () => {
@@ -41,12 +38,12 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
     }
   }, [updatedTaskData])
 
-  const handleTaskTimerChange = (timerValue: number) => {
-    console.log(timerValue)
-    const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
-    tempUpdatedTaskData.steps[activeStep].passedTime = timerValue
-    setUpdatedTaskData(tempUpdatedTaskData)
-  }
+  // const handleTaskTimerChange = (timerValue: number) => {
+  //   console.log(timerValue)
+  //   const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+  //   tempUpdatedTaskData.steps[activeStep].passedTime = timerValue
+  //   setUpdatedTaskData(tempUpdatedTaskData)
+  // }
 
   const handleCancelTask = async () => {
     try {
@@ -86,6 +83,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
               step: activeStep,
               type: EActivity.TASK_CANCELED
             })
+            dispatch(activityApi.util.resetApiState())
+
             setUpdatedTaskData({ ...tempUpdatedTaskData })
           } else {
             Swal.fire({
@@ -151,6 +150,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
               step: activeStep,
               type: EActivity.TASK_POSTPONED
             })
+            dispatch(activityApi.util.resetApiState())
+
             setUpdatedTaskData({ ...tempUpdatedTaskData })
           } else {
             Swal.fire({
@@ -203,6 +204,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
               step: activeStep,
               type: EActivity.TASK_RESPONSIBLE_CHANGED
             })
+            dispatch(activityApi.util.resetApiState())
+
             setUpdatedTaskData({ ...tempUpdatedTaskData })
           } else {
             Swal.fire({
@@ -294,6 +297,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
           step: activeStep,
           type: EActivity.TASK_STARTED
         })
+        dispatch(activityApi.util.resetApiState())
       } else {
         setUpdatedTaskData(taskData)
       }
@@ -305,26 +309,36 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
   }, [updateTaskData])
 
   useEffect(() => {
-    if (
-      !taskIsLoading &&
-      taskData &&
-      isTaskNotStarted &&
-      loggedUser.user?._id === taskData.steps[0].responsibleUser._id
-    ) {
-      handleStartTask()
-    } else {
-      if (taskData) {
-        const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
-        const currentStep: number = tempUpdatedTaskData.steps.findIndex(
-          step => step.stepStatus === ETaskStatus.Progress
-        )
-        setUpdatedTaskData(tempUpdatedTaskData)
-        if (currentStep) {
-          setActiveStep(currentStep)
+    if (!taskIsLoading && taskData) {
+      const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
+
+      const taskNotStartedYet =
+        taskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length === taskData?.steps.length
+      setIsTaskNotStarted(taskNotStartedYet)
+
+      if (taskNotStartedYet && loggedUser.user?._id === taskData.steps[0].responsibleUser._id) {
+        handleStartTask()
+      } else {
+        if (taskData) {
+          const lastStep = tempUpdatedTaskData.steps
+            .filter(
+              step =>
+                step.stepStatus === ETaskStatus.Progress ||
+                step.stepStatus === ETaskStatus.Completed ||
+                step.stepStatus === ETaskStatus.Canceled
+            )
+            .pop()
+
+          const lastStepIndex = tempUpdatedTaskData.steps.findIndex(step => step === lastStep)
+
+          setUpdatedTaskData(tempUpdatedTaskData)
+          if (lastStepIndex && lastStepIndex !== -1) {
+            setActiveStep(lastStepIndex)
+          }
         }
       }
     }
-  }, [taskData])
+  }, [taskData, taskIsLoading])
 
   return (
     <ItemContainer minHeight="750px">
@@ -352,7 +366,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
                     handlePostponeChange={handlePostponeChange}
                     handleCancelTask={handleCancelTask}
                     handleStartTask={handleStartTask}
-                    handleTaskTimerChange={handleTaskTimerChange}
                   />
                 </ItemContainer>
 

@@ -212,7 +212,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customerId }) => {
           {updateWorkflowData && !workflowIsLoading && (
             <Column max-height="100%">
               {updateWorkflowData.steps.map((task, index) => (
-                <ItemContainer height="100%" width="calc(100% - 300px)">
+                <ItemContainer height="100%" width="calc(100% - 300px)" key={index}>
                   <Row height="100%">
                     <ItemContainer height="100%" width="calc(100% - 350px)">
                       <WorkflowPlanForm

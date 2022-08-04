@@ -5,6 +5,7 @@ import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, JustifyCe
 import { H1 } from '@/components/texts'
 import { UserSelect } from '@/components/user-select'
 import colors from '@/constants/colors'
+import { useAuth } from '@/hooks/useAuth'
 import { ETaskStatus, ITaskItem, IUser } from '@/models'
 import { selectColorForStatus, selectColorForTaskStatus } from '@/utils/statusColorUtil'
 import React from 'react'
@@ -24,6 +25,8 @@ const TaskUserCard: React.FC<IProps> = ({
   handleCancelTask,
   handleStartTask
 }) => {
+  const { loggedUser } = useAuth()
+  const isResponsibleUserCurrentLoggedUser = taskActiveStep.responsibleUser._id === loggedUser.user?._id
   return (
     <ItemContainer>
       <JustifyBetweenRow>
@@ -52,7 +55,7 @@ const TaskUserCard: React.FC<IProps> = ({
           <JustifyBetweenColumn width="auto">
             <ItemContainer width="auto">
               <Button
-                disabled={!isTaskNotStarted}
+                disabled={!isTaskNotStarted || !isResponsibleUserCurrentLoggedUser}
                 padding="0"
                 width="30px"
                 height="30px"

@@ -16,10 +16,10 @@ const TaskProgress: React.FC<IProps> = ({ taskSteps }) => {
     progress: 0
   })
 
-  const [activeStep, setActiveStep] = useState(0)
+  const percentage = ((stepStatuses.completed + stepStatuses.canceled) / taskSteps.length) * 100
 
   useEffect(() => {
-    const stepStatuses = taskSteps.reduce(
+    const stepStatusesR = taskSteps.reduce(
       (acc, step) => {
         if (step.stepStatus === ETaskStatus.Canceled) {
           acc.canceled++
@@ -37,19 +37,21 @@ const TaskProgress: React.FC<IProps> = ({ taskSteps }) => {
       },
       { canceled: 0, completed: 0, notStarted: 0, progress: 0 }
     )
-    setStepStatuses(stepStatuses)
-  }, [taskSteps])
-
-  useEffect(() => {
-    const activeStep = taskSteps.findIndex(step => step.stepStatus === ETaskStatus.Progress)
-    if (activeStep && activeStep !== -1) {
-      setActiveStep(activeStep)
-    }
+    setStepStatuses(stepStatusesR)
   }, [taskSteps])
 
   return (
     <ItemContainer>
-      <ProgressBar completionPercentage={0} completionColor={colors.blue.primary}></ProgressBar>
+      <ProgressBar
+        completionPercentage={percentage}
+        completionColor={
+          stepStatuses.canceled !== 0
+            ? colors.red.primary
+            : percentage === 100
+            ? colors.green.primary
+            : colors.blue.primary
+        }
+      ></ProgressBar>
     </ItemContainer>
   )
 }

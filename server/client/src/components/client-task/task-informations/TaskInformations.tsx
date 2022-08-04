@@ -16,7 +16,6 @@ interface IProps {
   handlePostponeChange: (value: Date[], dateText: string) => void
   handleCancelTask: () => void
   handleStartTask: () => void
-  handleTaskTimerChange: (timerValue: number) => void
 }
 
 const InformationCard = styled(ItemContainer)`
@@ -37,8 +36,7 @@ const TaskInformations: React.FC<IProps> = ({
   handleResponsibleChange,
   handlePostponeChange,
   handleCancelTask,
-  handleStartTask,
-  handleTaskTimerChange
+  handleStartTask
 }) => {
   return (
     <ItemContainer height="100%">
@@ -63,11 +61,7 @@ const TaskInformations: React.FC<IProps> = ({
           </InformationCard>
 
           <InformationCard height="80px">
-            <TaskTimerCard
-              taskActiveStep={taskData.steps[activeStep]}
-              isTaskNotStarted={isTaskNotStarted}
-              handleTaskTimerChange={handleTaskTimerChange}
-            />
+            <TaskTimerCard taskActiveStep={taskData.steps[activeStep]} isTaskNotStarted={isTaskNotStarted} />
           </InformationCard>
 
           <InformationCard height="calc(100% - 100px - 80px - 80px - 80px - 6rem)">
