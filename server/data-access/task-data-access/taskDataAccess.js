@@ -58,6 +58,11 @@ const taskPopulatePipe = [
       customer: { $first: '$customer' },
       startDate: { $first: '$startDate' }
     }
+  },
+  {
+    $sort: {
+      createdAt: -1
+    }
   }
 ]
 
