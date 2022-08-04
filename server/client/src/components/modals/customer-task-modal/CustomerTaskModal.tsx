@@ -5,9 +5,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { ModalHeader } from '../types'
 import colors from '@/constants/colors'
 import { useGetTaskByTaskIdQuery, useUpdateTaskMutation } from '@/services/customers/taskService'
-import { ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
+import { EActivity, ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
 import Swal from 'sweetalert2'
 import { useAuth } from '@/hooks/useAuth'
+import { useCreateActivityMutation } from '@/services/activityService'
 
 interface IProps {
   taskId: string
@@ -15,6 +16,8 @@ interface IProps {
 const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
   const { loggedUser } = useAuth()
   const [updateTask] = useUpdateTaskMutation()
+
+  const [createActivity] = useCreateActivityMutation()
 
   const { data: taskData, isLoading: taskIsLoading } = useGetTaskByTaskIdQuery(taskId)
 
@@ -29,55 +32,66 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
   )
 
   const handleStepChange = (step: number) => {
-    setActiveStep(step)
+    if (isTaskNotStarted && step > activeStep) {
+      Swal.fire({
+        title: 'You can not go to next step',
+        text: 'You can not go to next step because you have not started this task',
+        icon: 'error'
+      })
+    } else {
+      setActiveStep(step)
+    }
   }
 
-  const handlePostponeChange = (value: Date[], dateText: string) => {
-    if (updatedTaskData) {
-      Swal.fire({
-        title: 'Enter your postpone message',
-        input: 'text',
-        inputAttributes: {
-          autocapitalize: 'off'
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Postponed',
-        showLoaderOnConfirm: true,
-        preConfirm: login => {
-          return login
-        },
-        allowOutsideClick: () => !Swal.isLoading()
-      }).then(result => {
-        const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+  const handlePostponeChange = async (value: Date[], dateText: string) => {
+    try {
+      if (updatedTaskData) {
+        Swal.fire({
+          title: 'Enter your postpone message',
+          input: 'text',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Postponed',
+          showLoaderOnConfirm: true,
+          preConfirm: login => {
+            return login
+          },
+          allowOutsideClick: () => !Swal.isLoading()
+        }).then(async result => {
+          const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
 
-        if (result.isConfirmed) {
-          Swal.fire({
-            icon: 'success',
-            title: `Task Postponed`,
-            text: result.value
-          })
-          console.log(
-            'tempUpdatedTaskData.steps[activeStep].usedPostpone2222',
-            tempUpdatedTaskData.steps[activeStep].usedPostpone,
-            updatedTaskData.steps[activeStep].usedPostpone
-          )
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: `Task Postponed`,
+              text: result.value
+            })
 
-          tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
-          tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
+            tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
+            tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
 
-          console.log(
-            'tempUpdatedTaskData.steps[activeStep].usedPostpone4444',
-            tempUpdatedTaskData.steps[activeStep].usedPostpone
-          )
-          updateTask(tempUpdatedTaskData)
-          setUpdatedTaskData({ ...tempUpdatedTaskData })
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Cancelled'
-          })
-        }
-      })
+            await updateTask(tempUpdatedTaskData)
+            await createActivity({
+              title: 'Task Postponed',
+              content: result.value || ' ',
+              customer: tempUpdatedTaskData.customerId,
+              task: tempUpdatedTaskData._id,
+              owner: loggedUser.user?._id || '',
+              type: EActivity.TASK_POSTPONED
+            })
+            setUpdatedTaskData({ ...tempUpdatedTaskData })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Cancelled'
+            })
+          }
+        })
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 

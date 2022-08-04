@@ -7,6 +7,7 @@ export default interface IActivity {
   customer?: ICustomer
   task?: ITask
   owner: IUser
+  type: number
   createdAt: Date
   updatedAt: Date
   links?: [
