@@ -149,16 +149,54 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
   }
 
   const handleResponsibleChange = (responsible: IUser) => {
-    if (updatedTaskData) {
-      setUpdatedTaskData({
-        ...updatedTaskData,
-        steps: updatedTaskData.steps.map((step, index) => {
-          if (index === activeStep) {
-            return { ...step, responsibleUser: responsible }
+    try {
+      if (updatedTaskData) {
+        Swal.fire({
+          title: 'Enter your responsible chanfe message',
+          input: 'text',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Change Responsible',
+          showLoaderOnConfirm: true,
+          preConfirm: login => {
+            return login
+          },
+          allowOutsideClick: () => !Swal.isLoading()
+        }).then(async result => {
+          const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: `Task Postponed`,
+              text: result.value
+            })
+
+            tempUpdatedTaskData.steps[activeStep].responsibleUser = responsible
+
+            await updateTask(tempUpdatedTaskData)
+            await createActivity({
+              title: 'Task Responsible Changed',
+              content: result.value.toString() || ' ',
+              customer: tempUpdatedTaskData.customerId,
+              task: tempUpdatedTaskData._id,
+              owner: loggedUser.user?._id || '',
+              step: activeStep,
+              type: EActivity.TASK_RESPONSIBLE_CHANGED
+            })
+            setUpdatedTaskData({ ...tempUpdatedTaskData })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Cancelled'
+            })
           }
-          return step
         })
-      })
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 

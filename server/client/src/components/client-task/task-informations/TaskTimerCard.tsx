@@ -6,7 +6,6 @@ import colors from '@/constants/colors'
 import { useAuth } from '@/hooks/useAuth'
 import { ITaskItem } from '@/models'
 import { secondsToHourMin } from '@/utils/timeUtils'
-import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { Calendar } from 'react-feather'
 
@@ -54,7 +53,7 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted }) =
         </ItemContainer>
         <ItemContainer>
           <ProgressBar
-            completionColor={colors.blue.primary}
+            completionColor={passedTime > totalDuration ? colors.orange.primary : colors.blue.primary}
             completionPercentage={(passedTime / totalDuration) * 100}
             startLabel="Timer"
             endLabel="Remaining"
