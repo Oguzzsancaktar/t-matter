@@ -89,7 +89,7 @@ const CustomersPage = () => {
       openModal({
         id: `customerDetailModal-${customer._id}`,
         title: 'Customer / ' + customer.firstname + ' ' + customer.lastname,
-        body: <ReadCustomerModal customerId={customer._id} />,
+        body: <ReadCustomerModal customer={customer} />,
         size: ESize.XLarge,
         backgroundColor: 'transparent'
       })

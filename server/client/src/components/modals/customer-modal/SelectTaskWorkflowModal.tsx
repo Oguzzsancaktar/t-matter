@@ -12,7 +12,7 @@ import { Row, Column } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
 import { ModalBody } from '../types'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ETaskStatus, ICustomerTask, ITaskCreateDTO, IWorkflowUpdateDTO } from '@/models'
+import { ETaskStatus, ICustomer, ICustomerTask, ITaskCreateDTO, IWorkflowUpdateDTO } from '@/models'
 import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { isValueNull, isValueBiggerThanZero } from '@/utils/validationUtils'
@@ -21,10 +21,10 @@ import { useCreateTaskMutation } from '@/services/customers/taskService'
 import moment from 'moment'
 
 interface IProps {
-  customerId: string
+  customer: ICustomer
 }
 
-const SelectTaskWorkflowModal: React.FC<IProps> = ({ customerId }) => {
+const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
   const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery()
 
   const [createTask, { isLoading: createTaskIsLoading }] = useCreateTaskMutation()
@@ -141,7 +141,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customerId }) => {
     if (validationResult) {
       try {
         const task: ICustomerTask = {
-          customerId,
+          customer,
           startDate: Date.now().toString(),
           name: updateWorkflowData.name,
           steps: []
@@ -173,7 +173,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customerId }) => {
 
         await createTask(task)
         toastSuccess(`User tasl ${updateWorkflowData.name} created successfully`)
-        dispatch(closeModal(`selectTaskWorkflowModal-${customerId}`))
+        dispatch(closeModal(`selectTaskWorkflowModal-${customer._id}`))
       } catch (error) {
         console.log(error)
       }

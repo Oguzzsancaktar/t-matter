@@ -52,7 +52,7 @@ const ReliableSlider: React.FC<IProps> = ({ customerId, activeIndex, onActiveSte
       openModal({
         id: `customerDetailModal-${reliableId}`,
         title: 'Customer / ' + reliableId,
-        body: <ReadCustomerModal customerId={reliableId} />,
+        body: <ReadCustomerModal customer={customer} />,
         size: ESize.XLarge,
         backgroundColor: 'transparent'
       })

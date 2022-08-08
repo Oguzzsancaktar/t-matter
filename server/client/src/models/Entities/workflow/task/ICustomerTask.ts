@@ -3,7 +3,7 @@ import ITaskItem from './ITaskItem'
 
 export default interface ICustomerTask {
   _id?: string
-  customerId?: ICustomer['_id']
+  customer: ICustomer
   startDate: string
   name: string
   steps: ITaskItem[]

@@ -10,7 +10,7 @@ import { JustifyCenterRow, Row } from '../layout'
 import { H1 } from '../texts'
 
 interface IProps {
-  selectedUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
+  selectedUser?: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
   onResponsibleChange: (responsible: IUser) => void
 }
 

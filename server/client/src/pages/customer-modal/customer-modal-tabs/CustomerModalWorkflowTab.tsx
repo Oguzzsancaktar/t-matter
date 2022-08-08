@@ -13,25 +13,26 @@ import {
 import { TaskActiveStepUser } from '@/components/client-task/task-active-step-user'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
-import { EStatus, ESize, ETaskStatus } from '@/models'
-import { useCreateTaskMutation, useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
+import { ESize, ICustomer } from '@/models'
+import { useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
 import { openModal } from '@/store'
-import React, { useEffect, useState } from 'react'
+import moment from 'moment'
+import React from 'react'
 import DataTable from 'react-data-table-component'
 
 interface IProps {
-  customerId: string
+  customer: ICustomer
 }
 
-const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
-  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery(customerId)
+const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
+  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery(customer._id)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
   const columns = [
     {
       name: 'Start Date',
-      selector: row => row.startDate,
+      selector: row => moment(row.startDate).format('MMMM/DD/YYYY'),
       sortable: true
     },
     {
@@ -89,9 +90,9 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customerId }) => {
   const openSelectTaskWorkflowModal = () => {
     dispatch(
       openModal({
-        id: 'selectTaskWorkflowModal-' + customerId,
+        id: 'selectTaskWorkflowModal-' + customer._id,
         title: 'Customer Task',
-        body: <SelectTaskWorkflowModal customerId={customerId} />,
+        body: <SelectTaskWorkflowModal customer={customer} />,
         size: ESize.XLarge,
         backgroundColor: colors.gray.light
       })

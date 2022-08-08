@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import colors from '@constants/colors'
 import moment from 'moment'
 import { Link } from 'react-feather'
-import { selectColorForActivityType, selectColorForTaskStatus } from '@/utils/statusColorUtil'
+import { selectColorForActivityType } from '@/utils/statusColorUtil'
 
 interface IProps {
   title: string
@@ -21,7 +21,7 @@ interface IProps {
 const BaloonContainer = styled.div<Pick<IProps, 'type'>>`
   width: 100%;
   height: 135px;
-  background-color: ${({ type }) => (type ? selectColorForActivityType(type) : '#e1edf4')};
+  background-color: ${({ type }) => (type ? selectColorForActivityType(type) + '70' : '#e1edf4')};
 
   border-radius: 4px;
   padding: 8px 16px;

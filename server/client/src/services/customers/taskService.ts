@@ -13,7 +13,7 @@ const createTask = (builder: IBuilder) => {
   return builder.mutation<unknown, ICustomerTask>({
     query(taskCreateDto) {
       return {
-        url: `/task/${taskCreateDto.customerId}`,
+        url: `/task/${taskCreateDto.customer._id}`,
         method: 'POST',
         data: {
           ...taskCreateDto,

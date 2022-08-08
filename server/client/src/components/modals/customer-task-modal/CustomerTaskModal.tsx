@@ -77,7 +77,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
             await createActivity({
               title: 'Task Canceled',
               content: result.value || ' ',
-              customer: tempUpdatedTaskData.customerId,
+              customer: tempUpdatedTaskData.customer._id,
               task: tempUpdatedTaskData._id,
               owner: loggedUser.user?._id || '',
               step: activeStep,
@@ -140,11 +140,13 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
             tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
             tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
 
+            console.log('tempUpdatedTaskData', tempUpdatedTaskData)
+
             await updateTask(tempUpdatedTaskData)
             await createActivity({
               title: 'Task Postponed',
               content: result.value || ' ',
-              customer: tempUpdatedTaskData.customerId,
+              customer: tempUpdatedTaskData.customer._id,
               task: tempUpdatedTaskData._id,
               owner: loggedUser.user?._id || '',
               step: activeStep,
@@ -198,7 +200,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
             await createActivity({
               title: 'Task Responsible Changed',
               content: result.value.toString() || ' ',
-              customer: tempUpdatedTaskData.customerId,
+              customer: tempUpdatedTaskData.customer._id,
               task: tempUpdatedTaskData._id,
               owner: loggedUser.user?._id || '',
               step: activeStep,
@@ -251,7 +253,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
           return login
         },
         allowOutsideClick: () => !Swal.isLoading()
-      }).then(result => {
+      }).then(async result => {
         if (result.isConfirmed) {
           Swal.fire({
             icon: 'success',
@@ -262,6 +264,16 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
           tempUpdatedTaskData.steps[activeStep].checklistItems[index].isChecked = true
           handleAllChecklistCheck(tempUpdatedTaskData, index)
           setUpdatedTaskData(tempUpdatedTaskData)
+          await createActivity({
+            title: 'Task Checklist Completed',
+            content: result.value || ' ',
+            customer: tempUpdatedTaskData.customer._id,
+            task: tempUpdatedTaskData._id,
+            owner: loggedUser.user?._id || '',
+            step: activeStep,
+            type: EActivity.TASK_CHECKLIST_CHECKED
+          })
+          dispatch(activityApi.util.resetApiState())
         } else {
           Swal.fire({
             icon: 'error',

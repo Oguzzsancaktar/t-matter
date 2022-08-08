@@ -15,11 +15,11 @@ import React, { useEffect, useState } from 'react'
 import ReactTooltip from 'react-tooltip'
 
 interface IProps {
-  customerId: ICustomer['_id']
+  customer: ICustomer
 }
 
-const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
-  const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customerId)
+const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
+  const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customer._id)
 
   const [activeTab, setActiveTab] = useState('activity')
   const [activeSliderIndex, setActiveSliderIndex] = useState(0)
@@ -27,11 +27,11 @@ const CustomerReadModal: React.FC<IProps> = ({ customerId }) => {
   const renderSwitch = () => {
     switch (activeTab) {
       case 'activity':
-        return <CustomerModalActivityTab customerId={customerId} />
+        return <CustomerModalActivityTab customerId={customer._id} />
       case 'calendar':
         return 'Calendar'
       case 'workflow':
-        return <CustomerModalWorkflowTab customerId={customerId} />
+        return <CustomerModalWorkflowTab customer={customer} />
       case 'file':
         return 'File'
       case 'Finance':

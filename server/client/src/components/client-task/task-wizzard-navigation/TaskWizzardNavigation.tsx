@@ -3,7 +3,7 @@ import { JustifyBetweenColumn } from '@/components/layout'
 import { TabIndex } from '@/components/tab'
 import colors from '@/constants/colors'
 import { ICustomerTask } from '@/models'
-import { selectColorForStatus, selectColorForTaskStatus } from '@/utils/statusColorUtil'
+import { selectColorForTaskStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 
 interface IProps {
