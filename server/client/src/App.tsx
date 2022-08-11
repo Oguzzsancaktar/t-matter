@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { PrivateRoute } from '@routes/PrivateRoute'
 import GlobalStyle from './styles/GlobalStyle'
-import { GlobalModal, MinimizedModal, MinimizedModalsBar, SideBar } from '@components/index'
+import { GlobalModal, ItemContainer, MinimizedModal, MinimizedModalsBar, SideBar } from '@components/index'
 import useAccessStore from '@/hooks/useAccessStore'
 import { selectMinimizedModals, selectOpenModals } from '@/store'
 import { useAuth } from '@hooks/useAuth'
@@ -41,37 +41,39 @@ function App() {
 
       {loggedUser.accessToken && <SideBar />}
 
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
+      <ItemContainer height="100vh" width="calc(100vw - 40px - 2rem)" margin="0 0 0 auto">
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
 
-        <Route
-          path="/settings"
-          element={
-            <PrivateRoute>
-              <SettingsPage />
-            </PrivateRoute>
-          }
-        />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <SettingsPage />
+              </PrivateRoute>
+            }
+          />
 
-        <Route
-          path="/customers"
-          element={
-            <PrivateRoute>
-              <CustomersPage />
-            </PrivateRoute>
-          }
-        />
+          <Route
+            path="/customers"
+            element={
+              <PrivateRoute>
+                <CustomersPage />
+              </PrivateRoute>
+            }
+          />
 
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
-        />
-        <Route path="/*" element={<Navigate replace to="/" />} />
-      </Routes>
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <DashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/*" element={<Navigate replace to="/" />} />
+        </Routes>
+      </ItemContainer>
 
       <ToastContainer />
     </Suspense>

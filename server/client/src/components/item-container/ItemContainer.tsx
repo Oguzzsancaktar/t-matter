@@ -12,7 +12,12 @@ interface IProps extends IComponentProps {
   borderRight?: string
   borderBottom?: string
   borderLeft?: string
+  position?: string
+  zIndex?: string
+  ref?: React.Ref<any>
   onClick?: (e: React.MouseEvent) => void
+  onMouseOver?: (e: React.MouseEvent) => void
+  onMouseOut?: (e: React.MouseEvent) => void
 }
 
 const Item = styled.div<IProps>`
@@ -30,6 +35,9 @@ const Item = styled.div<IProps>`
   border-right: ${({ borderRight }) => (borderRight ? borderRight : '')};
   border-bottom: ${({ borderBottom }) => (borderBottom ? borderBottom : '')};
   border-left: ${({ borderLeft }) => (borderLeft ? borderLeft : '')};
+  position: ${({ position }) => (position ? position : '')};
+  z-index: ${({ zIndex }) => (zIndex ? zIndex : '')};
+  transition: all 0.3s ease-in-out;
 `
 
 const ItemContainer: React.FC<IProps> = ({ children, ...rest }) => {

@@ -5,7 +5,7 @@ import { ActiveTasksCard, ActivityTimelineCard } from '.'
 
 const DashboardPage: React.FC = () => {
   return (
-    <ItemContainer padding="1rem" height="calc(100vh - 50px - 2rem)" backgroundColor={colors.white.primary}>
+    <ItemContainer padding="1rem" height="100%" backgroundColor={colors.white.primary}>
       <JustifyBetweenRow height="100%">
         <ItemContainer width="35%" height="100%">
           <ActivityTimelineCard />
