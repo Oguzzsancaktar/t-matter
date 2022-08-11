@@ -45,7 +45,7 @@ const SideBar = () => {
       position="fixed"
       width={isSideBarOpen ? '250px' : 'calc(40px + 2rem)'}
       backgroundColor={colors.blue.primary}
-      zIndex="9999"
+      zIndex="99"
       ref={sidebarRef}
     >
       <JustifyBetweenColumn height="100%" padding="1rem">

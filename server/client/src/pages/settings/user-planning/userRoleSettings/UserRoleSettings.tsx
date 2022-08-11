@@ -35,18 +35,18 @@ const UserRoleSettings = () => {
     },
     {
       name: 'Status',
-      right: true,
+      width: '120px',
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
     },
     {
       name: 'Actions',
+      width: '120px',
       right: true,
       cell: data => (
         <ActionButtons
           status={data.status}
-          onRead={() => handleRead(data)}
           onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
@@ -158,11 +158,10 @@ const UserRoleSettings = () => {
         <ItemContainer height="calc(100% - 0.4rem - 38px)" minHeight="370px">
           <DataTable
             style={{ height: 'calc(100% - 56px)' }}
-            pagination={true}
-            paginationPerPage={5}
             fixedHeader
             columns={columns}
             data={roleData || []}
+            onRowClicked={handleRead}
           />
         </ItemContainer>
       </Column>

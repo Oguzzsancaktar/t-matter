@@ -1,4 +1,11 @@
-import { ActionButtons, CreateRoleModal, CreateTaskCategoryModal, DataTableHeader, InnerWrapper } from '@/components'
+import {
+  ActionButtons,
+  CreateRoleModal,
+  CreateTaskCategoryModal,
+  DataTableHeader,
+  InnerWrapper,
+  ItemContainer
+} from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -20,21 +27,19 @@ const ClientTypeTab = () => {
     },
     {
       name: 'Status',
-      right: true,
+      width: '120px',
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{data.status} </Badge>
     },
     {
       name: 'Actions',
+      width: '120px',
       selector: row => row.year,
       right: true,
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={function (): void {
-            throw new Error('Function not implemented.')
-          }}
           onEdit={function (): void {
             throw new Error('Function not implemented.')
           }}
@@ -75,10 +80,10 @@ const ClientTypeTab = () => {
   }
 
   return (
-    <InnerWrapper>
+    <ItemContainer height="100%">
       <DataTableHeader handleAddNew={openCreateRoleModal} />
       <DataTable fixedHeader columns={columns} data={data} />
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

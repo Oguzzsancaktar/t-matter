@@ -53,7 +53,7 @@ const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
       cell: data => data.totalTime
     }
     // {
-    //   name: 'Actions',
+    //   name: 'Actions',width:"120px",
     //   selector: row => row.year,
     //   right: true,
     //   header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,

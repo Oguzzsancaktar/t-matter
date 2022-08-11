@@ -51,20 +51,20 @@ const WorkflowChecklist = () => {
     },
     {
       name: 'Status',
-      right: true,
+      width: '120px',
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
     },
     {
       name: 'Actions',
+      width: '120px',
       selector: row => row.year,
       right: true,
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
           status={data.status}
-          onRead={() => handleRead(data)}
           onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
@@ -167,7 +167,7 @@ const WorkflowChecklist = () => {
   return (
     <Column>
       <DataTableHeader handleAddNew={openCreateRoleModal} />
-      <DataTable fixedHeader columns={columns} data={checklistsData || []} />
+      <DataTable fixedHeader columns={columns} data={checklistsData || []} onRowClicked={handleRead} />
     </Column>
   )
 }

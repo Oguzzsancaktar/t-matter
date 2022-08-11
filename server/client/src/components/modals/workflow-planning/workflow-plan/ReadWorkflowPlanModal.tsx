@@ -18,7 +18,7 @@ interface IProps {
 
 const ReadWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   return (
-    <ModalBody minHeight="700px">
+    <ModalBody>
       <Column>
         <ItemContainer margin="0 0 1rem 0">
           <InfoCard>

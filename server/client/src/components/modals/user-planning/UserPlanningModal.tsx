@@ -33,7 +33,7 @@ const CompanyPlanningModal = () => {
           </JustifyBetweenColumn>
         </InnerWrapper>
       </ModalHeader>
-      <ModalBody minHeight="700px">
+      <ModalBody>
         <InnerWrapper>
           {activeTab === 'user-role-settings' ? (
             <UserRoleSettings />

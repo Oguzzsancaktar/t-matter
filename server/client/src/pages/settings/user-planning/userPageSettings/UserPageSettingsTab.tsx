@@ -51,20 +51,20 @@ const UserPageSettingsTab = () => {
     },
     {
       name: 'Status',
-      right: true,
+      width: '120px',
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
     },
     {
       name: 'Actions',
+      width: '120px',
       selector: row => row.year,
       right: true,
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
           status={data.status}
-          onRead={() => handleRead(data)}
           onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
@@ -174,7 +174,7 @@ const UserPageSettingsTab = () => {
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px)">
         <DataTableHeader handleAddNew={openCreateUserModal} />
-        <DataTable fixedHeader columns={columns} data={usersData || []} />
+        <DataTable fixedHeader columns={columns} data={usersData || []} onRowClicked={handleRead} />
       </Column>
     </JustifyBetweenColumn>
   )

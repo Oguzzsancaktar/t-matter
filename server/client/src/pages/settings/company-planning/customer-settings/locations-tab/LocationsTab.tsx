@@ -3,7 +3,7 @@ import {
   ConfirmModal,
   CreateLocationModal,
   DataTableHeader,
-  InnerWrapper,
+  ItemContainer,
   ReadLocationModal,
   UpdateLocationModal
 } from '@/components'
@@ -35,19 +35,19 @@ const LocationsTab = () => {
     },
     {
       name: 'Status',
-      right: true,
+      width: '120px',
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
     },
     {
       name: 'Actions',
+      width: '120px',
       right: true,
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
           status={data.status}
-          onRead={() => handleRead(data)}
           onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
@@ -148,12 +148,14 @@ const LocationsTab = () => {
   }
 
   return (
-    <InnerWrapper>
+    <ItemContainer height="100%">
       <DataTableHeader handleAddNew={openCreateLocationModal} />
       {!locationsDataIsLoading && locationsData && (
-        <DataTable fixedHeader columns={columns} data={locationsData || []} />
+        <ItemContainer height="calc(100% - 38px - 0.5rem)">
+          <DataTable fixedHeader columns={columns} data={locationsData || []} onRowClicked={handleRead} />
+        </ItemContainer>
       )}
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

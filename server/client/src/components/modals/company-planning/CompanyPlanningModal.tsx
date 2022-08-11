@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
+import { Column, ItemContainer, JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
 import { InnerWrapper } from '@components/wrapper'
 
 import { Tab } from '@components/index'
@@ -42,8 +42,8 @@ const CompanyPlanningModal = () => {
         </InnerWrapper>
       </ModalHeader>
 
-      <ModalBody minHeight="700px">
-        <InnerWrapper>
+      <ModalBody>
+        <ItemContainer height="100%">
           {activeTab === 'salary-settings' ? (
             <SalarySettings />
           ) : activeTab === 'company-pricing' ? (
@@ -51,7 +51,7 @@ const CompanyPlanningModal = () => {
           ) : (
             <CustomerSettings />
           )}
-        </InnerWrapper>
+        </ItemContainer>
       </ModalBody>
     </Column>
   )

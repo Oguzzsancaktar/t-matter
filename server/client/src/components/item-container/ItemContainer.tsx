@@ -7,6 +7,7 @@ interface IProps extends IComponentProps {
   borderRadius?: string
   overflow?: string
   maxWidth?: string
+  minWidth?: string
   minHeight?: string
   borderTop?: string
   borderRight?: string
@@ -31,6 +32,7 @@ const Item = styled.div<IProps>`
   cursor: ${({ cursorType }) => (cursorType ? cursorType : '')};
   max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : '')};
   min-height: ${({ minHeight }) => (minHeight ? minHeight : '')};
+  min-width: ${({ minWidth }) => (minWidth ? minWidth : '')};
   border-top: ${({ borderTop }) => (borderTop ? borderTop : '')};
   border-right: ${({ borderRight }) => (borderRight ? borderRight : '')};
   border-bottom: ${({ borderBottom }) => (borderBottom ? borderBottom : '')};

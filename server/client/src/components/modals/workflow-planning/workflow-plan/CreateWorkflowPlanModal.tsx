@@ -198,7 +198,7 @@ const CreateWorkflowPlanModal = () => {
   }, [validationErrorMessage])
 
   return (
-    <ModalBody minHeight="700px">
+    <ModalBody>
       <Row height="100%">
         <ItemContainer height="100%" width="300px">
           <WorkflowPlanStepNavigation

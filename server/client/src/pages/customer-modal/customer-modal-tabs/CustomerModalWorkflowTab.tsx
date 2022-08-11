@@ -55,12 +55,12 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
 
     {
       name: 'Actions',
+      width: '120px',
       selector: row => row.year,
       right: true,
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={() => openCustomerTaskModal(data._id)}
           onEdit={function (): void {
             throw new Error('Function not implemented.')
           }}
@@ -110,7 +110,12 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
         <Column height="calc(100% - 200px)">
           <DataTableHeader handleAddNew={() => openSelectTaskWorkflowModal()} />
           {!customerTasksIsLoading && customerTasksData && (
-            <DataTable fixedHeader columns={columns} data={customerTasksData || []} />
+            <DataTable
+              fixedHeader
+              columns={columns}
+              data={customerTasksData || []}
+              onRowClicked={data => openCustomerTaskModal(data._id)}
+            />
           )}
         </Column>
       </JustifyBetweenColumn>

@@ -5,7 +5,7 @@ import { IStyledProps } from './types'
 export const Input = styled.input<IStyledProps>`
   width: 100%;
   height: 38px;
-  border: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.black.light)};
+  border: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.disabled)};
   background-color: transparent;
   transition: border 0.3s ease-in-out;
   outline: none;

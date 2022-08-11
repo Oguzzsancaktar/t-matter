@@ -30,21 +30,19 @@ const UserTaskName = () => {
     },
     {
       name: 'Status',
-      right: true,
+      width: '120px',
       selector: row => row.status,
       sortable: true,
       cell: data => <div>{data.status} </div>
     },
     {
       name: 'Actions',
+      width: '120px',
       selector: row => row.year,
       right: true,
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
-          onRead={function (): void {
-            throw new Error('Function not implemented.')
-          }}
           onEdit={function (): void {
             throw new Error('Function not implemented.')
           }}

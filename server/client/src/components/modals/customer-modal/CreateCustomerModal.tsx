@@ -35,7 +35,7 @@ const CreateCustomerModal = () => {
         </InnerWrapper>
       </ModalHeader>
 
-      <ModalBody minHeight="700px">
+      <ModalBody>
         <InnerWrapper>
           {activeTab === 'create-client' ? (
             <CreateClientTab />

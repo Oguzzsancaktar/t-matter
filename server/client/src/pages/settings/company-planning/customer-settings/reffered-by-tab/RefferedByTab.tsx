@@ -4,7 +4,7 @@ import {
   ConfirmModal,
   CreateRefferedByModal,
   DataTableHeader,
-  InnerWrapper,
+  ItemContainer,
   ReadRefferedByModal,
   UpdateRefferedByModal
 } from '@/components'
@@ -38,26 +38,27 @@ const RefferedByTab = () => {
     },
     {
       name: 'Color',
+      width: '120px',
       selector: row => row.color,
       sortable: true,
       cell: data => <CircleColor cursor="normal" color={data.color} />
     },
     {
       name: 'Status',
-      right: true,
+      width: '120px',
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
     },
     {
       name: 'Actions',
+      width: '120px',
       selector: row => row.year,
       right: true,
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
           status={data.status}
-          onRead={() => handleRead(data)}
           onEdit={() => handleEdit(data)}
           onHistory={function (): void {
             throw new Error('Function not implemented.')
@@ -169,10 +170,12 @@ const RefferedByTab = () => {
   }
 
   return (
-    <InnerWrapper>
+    <ItemContainer height="100%">
       <DataTableHeader handleAddNew={openCreateRoleModal} />
-      <DataTable fixedHeader columns={columns} data={refferedByData || []} />
-    </InnerWrapper>
+      <ItemContainer height="calc(100% - 38px - 0.5rem)">
+        <DataTable fixedHeader columns={columns} data={refferedByData || []} onRowClicked={handleRead} />
+      </ItemContainer>
+    </ItemContainer>
   )
 }
 

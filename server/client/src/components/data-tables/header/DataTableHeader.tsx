@@ -26,7 +26,7 @@ const DataTableHeader: React.FC<IProps> = ({
   return (
     <JustifyBetweenRow margin="0 0 0.5rem 0">
       <Row>
-        {showPagination && (
+        {/* {showPagination && (
           <Row width="100px">
             <SelectInput
               name="pagination"
@@ -39,10 +39,10 @@ const DataTableHeader: React.FC<IProps> = ({
               ]}
             />
           </Row>
-        )}
+        )} */}
 
         {showStatus && (
-          <Row width="150px" margin="0 0.5rem">
+          <Row width="150px" margin="0 0.5rem 0 0">
             <SelectInput
               name="status"
               onChange={() => console.log('onchange triggerd')}
@@ -56,7 +56,7 @@ const DataTableHeader: React.FC<IProps> = ({
           </Row>
         )}
         {showSearch && (
-          <Row width="calc(100% - 150px - 100px - 1rem)">
+          <Row width="calc(100% - 150px )">
             <InputRegular
               name="search"
               placeholder="Search..."
@@ -67,7 +67,7 @@ const DataTableHeader: React.FC<IProps> = ({
         )}
       </Row>
 
-      <Row width="calc(1rem + 200px)" margin="0 0 0 1rem">
+      <Row width="calc(1rem + 200px)" margin="0 0 0 0.5rem">
         {showExport && (
           <Row width={showAddNew ? '100px' : '100%'} margin="0 0.5rem 0 0">
             <Button>

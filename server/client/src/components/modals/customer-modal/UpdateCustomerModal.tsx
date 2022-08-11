@@ -19,7 +19,7 @@ const UpdateCustomerModal: React.FC<IProps> = ({ customerId }) => {
   return (
     <Column>
       {customerDetailData && !customerDetailDataIsLoading && (
-        <ModalBody minHeight="700px">
+        <ModalBody>
           <InnerWrapper>
             {activeTab === 0 ? (
               <UpdateContactTab customer={customerDetailData} />

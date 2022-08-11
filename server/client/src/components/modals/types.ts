@@ -7,12 +7,14 @@ export const ModalHeader = styled.div`
   /* height: 85px; */
   width: 100%;
   background-color: ${colors.black.light};
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
 `
 
 export const ModalBody = styled.div<{ withModalFooter?: boolean; minHeight?: string }>`
-  height: calc(${({ withModalFooter }) => (withModalFooter ? '100% - 85px - 60px' : '100% - 85px')});
+  /* height: calc(${({ withModalFooter }) => (withModalFooter ? '100% - 85px - 60px' : '100% - 85px')}); */
   min-height: calc(${({ minHeight }) => minHeight && minHeight});
-  max-height: 850px;
+  /* max-height: 850px; */
   overflow-y: auto;
   width: 100%;
   padding: 1rem 1rem;

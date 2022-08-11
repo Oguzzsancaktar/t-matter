@@ -217,7 +217,7 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   }, [validationErrorMessage])
 
   return (
-    <ModalBody minHeight="700px">
+    <ModalBody>
       {updateWorkflowData && (
         <Row height="100%">
           <ItemContainer height="100%" width="300px">
