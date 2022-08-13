@@ -173,7 +173,13 @@ const RefferedByTab = () => {
     <ItemContainer height="100%">
       <DataTableHeader handleAddNew={openCreateRoleModal} />
       <ItemContainer height="calc(100% - 38px - 0.5rem)">
-        <DataTable fixedHeader columns={columns} data={refferedByData || []} onRowClicked={handleRead} />
+        <DataTable
+          fixedHeader
+          columns={columns}
+          data={refferedByData || []}
+          onRowClicked={handleRead}
+          style={{ maxHeight: '500px' }}
+        />
       </ItemContainer>
     </ItemContainer>
   )

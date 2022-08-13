@@ -6,7 +6,7 @@ import { EStatus } from '@/models'
 
 interface IProps {
   iconSize?: string
-  status?: string
+  status?: number
   buttonWidth?: string
   rowWidth?: string
   // onRead?: () => void

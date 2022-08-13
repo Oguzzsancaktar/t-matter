@@ -4,8 +4,7 @@ import { ActionButtons } from '@/components/data-tables'
 import { UserImage } from '@/components/image'
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components/layout'
-import { H1, Label } from '@/components/texts'
-import { InnerWrapper } from '@/components/wrapper'
+import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IUser } from '@/models'
@@ -16,7 +15,6 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import moment from 'moment'
 import React, { useState } from 'react'
-import { ReadUserModal } from '.'
 import { ConfirmModal } from '../../general'
 import UpdateUserModal from './UpdateUserModal'
 
@@ -43,7 +41,6 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
   }
 
   const handleEdit = (user: IUser) => {
-    console.log(user._id)
     dispatch(
       openModal({
         id: `updateUserModal-${user._id}`,
@@ -109,7 +106,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
   }
 
   return (
-    <ItemContainer borderRadius="0.3rem" overflow="hidden" backgroundColor="transparent">
+    <ItemContainer borderRadius="0.3rem" overflow="visible" backgroundColor="transparent" height="100%">
       <JustifyBetweenRow height="100%">
         <ItemContainer width="350px" height="100%" backgroundColor={colors.white.secondary} borderRadius="0.3rem">
           {isUserDataLoading || !userData || isUserDataError ? (
@@ -229,7 +226,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                     rowWidth="100%"
                     iconSize="30px"
                     buttonWidth="100%"
-                    status={userData.status.toString()}
+                    status={userData.status}
                     onEdit={() => handleEdit(userData)}
                     onHistory={function (): void {
                       throw new Error('Function not implemented.')
@@ -251,15 +248,21 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
         >
           <JustifyBetweenColumn height="100%">
             <ItemContainer height="100%" margin="0 0 0.25rem 0">
-              <Button color={colors.gray.secondary} onClick={() => setActiveTab('log-in')}>
-                <H1 color={colors.gray.primary} textAlign="center">
+              <Button
+                color={activeTab === 'log-in' ? colors.blue.primary : colors.gray.secondary}
+                onClick={() => setActiveTab('log-in')}
+              >
+                <H1 color={activeTab === 'log-in' ? colors.white.primary : colors.gray.primary} textAlign="center">
                   Activity
                 </H1>
               </Button>
             </ItemContainer>
             <ItemContainer height="100%" margin="0 0 0 0">
-              <Button color={colors.gray.secondary} onClick={() => setActiveTab('settings')}>
-                <H1 color={colors.gray.primary} textAlign="center">
+              <Button
+                color={activeTab === 'settings' ? colors.blue.primary : colors.gray.secondary}
+                onClick={() => setActiveTab('settings')}
+              >
+                <H1 color={activeTab === 'settings' ? colors.white.primary : colors.gray.primary} textAlign="center">
                   Settings
                 </H1>
               </Button>
@@ -271,7 +274,6 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
           height="inherit"
           width="calc(100% - 120px - 350px - 0.5rem)"
           backgroundColor={colors.white.secondary}
-          padding="1rem 0"
           borderRadius="0.3rem"
         >
           {renderSwitch()}

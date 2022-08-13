@@ -15,7 +15,7 @@ const Value = styled.h3`
   font-size: 0.8rem;
   width: 80px;
   text-align: center;
-  border-left: 1px solid ${colors.blue.primary};
+  border-left: 1px solid ${colors.gray.disabled};
 `
 
 const UserModalSalarySettingsSummaryFooter: React.FC<IProps> = ({ data }) => {

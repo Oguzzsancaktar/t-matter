@@ -25,13 +25,10 @@ const SideBar = () => {
   const { loggedUser, logout } = useAuth()
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
 
-  const sidebarRef = useRef() as React.MutableRefObject<HTMLDivElement>
-
   const handleMouseOver = e => {
     setIsSideBarOpen(true)
   }
   const handleMouseOut = e => {
-    console.log(e.relatedTarget, e.relatedTarget.className === 'sc-lbxAil iNpoYU', sidebarRef)
     setTimeout(() => {
       setIsSideBarOpen(false)
     }, 1000)
@@ -46,7 +43,6 @@ const SideBar = () => {
       width={isSideBarOpen ? '250px' : 'calc(40px + 2rem)'}
       backgroundColor={colors.blue.primary}
       zIndex="99"
-      ref={sidebarRef}
     >
       <JustifyBetweenColumn height="100%" padding="1rem">
         <ItemContainer>

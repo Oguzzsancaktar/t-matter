@@ -17,12 +17,12 @@ export const Modal = styled.div`
   min-height: 700px;
 `
 export const Container = styled.div<IContainerProps>`
-  display: grid;
+  /* display: grid; */
   position: relative;
   width: calc(100% - 4rem);
   // modal height LOOK
   max-height: 800px;
-  height: auto;
+  height: 700px;
   /* min-height: ${({ size }) => (size === 'xl' ? '800' : size === 'lg' ? '700' : size === 'md' ? '900' : '500')}px; */
   background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
   border-radius: 0.3rem;

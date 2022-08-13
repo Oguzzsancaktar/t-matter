@@ -44,7 +44,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
   }
 
   return (
-    <ItemContainer borderRadius="0.3rem" overflow="hidden" backgroundColor="transparent">
+    <ItemContainer borderRadius="0.3rem" overflow="hidden" backgroundColor="transparent" height="100%">
       <JustifyBetweenRow height="100%">
         <ItemContainer width="350px" height="100%" backgroundColor={colors.white.secondary} borderRadius="0.3rem">
           {customerData && !customerIsLoading && (

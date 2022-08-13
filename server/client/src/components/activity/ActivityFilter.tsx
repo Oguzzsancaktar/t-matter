@@ -107,8 +107,9 @@ const ActivityFilter = () => {
         </ItemContainer>
         <ItemContainer width="calc(100% - 35px - 1rem)" borderRadius=".3rem" overflow="hidden" margin="auto">
           <Row width="100%">
-            {activityTypes.map(type => (
+            {activityTypes.map((type, index) => (
               <ItemContainer
+                key={index}
                 onClick={() => handleTypeFilter(+EActivity[type])}
                 width={(activityTypeValues[type] / activitiesData.length) * 100 + '%'}
               >

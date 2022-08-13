@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { IStyledProps } from './types'
 
 export const Container = styled(RowStyled)<IStyledProps>`
-  border: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.dark)};
+  border: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.disabled)};
   color: ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.dark)};
   transition: all 0.4s ease-in-out;
   border-radius: 0.3rem;
@@ -49,6 +49,6 @@ export const IconContainer = styled.div<Pick<IStyledProps, 'validationError' | '
   justify-content: center;
   width: 35px;
   height: 35px;
-  border-right: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.dark)};
+  border-right: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.disabled)};
   background-color: ${({ disabled }) => disabled && colors.gray.disabled};
 `

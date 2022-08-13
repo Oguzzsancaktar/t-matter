@@ -24,7 +24,7 @@ const DataTableHeader: React.FC<IProps> = ({
   showAddNew = true
 }) => {
   return (
-    <JustifyBetweenRow margin="0 0 0.5rem 0">
+    <JustifyBetweenRow margin="0 0 0.5rem 0" height="40px">
       <Row>
         {/* {showPagination && (
           <Row width="100px">

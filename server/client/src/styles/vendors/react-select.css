@@ -22,18 +22,18 @@
 }
 
 .react-basic-single .select__control .select__input-container {
-  color: #7babb2;
+  color: #435971;
 }
 
 .react-basic-single .select__control .select__input-container::placeholder {
-  color: #7babb2;
+  color: #dddddd;
 }
 .react-basic-single .select__control .select__placeholder {
-  color: #7babb2;
+  color: #dddddd;
 }
 
 .react-basic-single .select__control .select__single-value {
-  color: #7babb2;
+  color: #435971;
 }
 
 .react-basic-single .select__indicator.select__clear-indicator {
@@ -41,30 +41,37 @@
 }
 
 .react-basic-single .select__indicator.select__dropdown-indicator {
-  color: #7babb2;
+  color: #435971;
 }
 
 .select__menu .select__menu-list {
   z-index: 9999 !important;
-  background: #e1fffe93 !important;
+  background: #fcfdfd !important;
 }
 
 .select__menu .select__menu-list .select__option {
   cursor: pointer !important;
-  background: #e1fffe93 !important;
-  color: #7babb2 !important;
+  background: #fcfdfd !important;
+  color: #435971 !important;
+  transition: 0.3s ease-in-out background-color;
 }
 
 .select__menu .select__menu-list .select__option:hover {
-  background: #abfffc93 !important;
-  color: #7babb2 !important;
+  transition: 0.3s ease-in-out background-color;
+  background-color: #e8e8e8 !important;
+  cursor: pointer;
+  color: #435971 !important;
 }
 
 .select__menu .select__menu-list .select__option.select__option--is-selected {
-  background: #27cec5 !important;
+  background: #03c3ec !important;
   color: #fff !important;
 }
 
 .input-validation-error .select__control {
   border: 1px solid #ff3e1d !important;
+}
+
+.css-1pahdxg-control {
+  border: 1px solid #566a7f !important;
 }

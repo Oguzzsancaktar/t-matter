@@ -10,7 +10,7 @@ const CompanyPlanningModal = () => {
   const [activeTab, setActiveTab] = useState('salary-settings')
 
   return (
-    <Column>
+    <Column height="100%">
       <ModalHeader>
         <InnerWrapper>
           <JustifyBetweenColumn>
@@ -42,7 +42,7 @@ const CompanyPlanningModal = () => {
         </InnerWrapper>
       </ModalHeader>
 
-      <ModalBody>
+      <ModalBody minHeight="100% - 63px">
         <ItemContainer height="100%">
           {activeTab === 'salary-settings' ? (
             <SalarySettings />

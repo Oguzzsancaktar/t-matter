@@ -9,6 +9,7 @@ import {
   JustifyBetweenRow,
   JustifyCenterColumn,
   ReadRoleModal,
+  TableSkeltonLoader,
   UpdateRoleModal
 } from '@/components'
 import { Badge } from '@/components/badge'
@@ -20,6 +21,7 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import React from 'react'
 import DataTable from 'react-data-table-component'
+import ContentLoader, { Facebook, Instagram } from 'react-content-loader'
 
 const UserRoleSettings = () => {
   const { useAppDispatch } = useAccessStore()
@@ -156,13 +158,19 @@ const UserRoleSettings = () => {
       <Column height="calc(100% - 200px)">
         <DataTableHeader handleAddNew={openCreateRoleModal} />
         <ItemContainer height="calc(100% - 0.4rem - 38px)" minHeight="370px">
-          <DataTable
-            style={{ height: 'calc(100% - 56px)' }}
-            fixedHeader
-            columns={columns}
-            data={roleData || []}
-            onRowClicked={handleRead}
-          />
+          {false && !roleLoading ? (
+            <DataTable
+              style={{ height: 'calc(100% - 56px)' }}
+              fixedHeader
+              columns={columns}
+              data={roleData || []}
+              onRowClicked={handleRead}
+            />
+          ) : (
+            <ItemContainer height="100%">
+              <TableSkeltonLoader count={6} />
+            </ItemContainer>
+          )}
         </ItemContainer>
       </Column>
     </JustifyBetweenColumn>

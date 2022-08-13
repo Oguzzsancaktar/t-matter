@@ -10,11 +10,9 @@ import {
   JustifyBetweenRow,
   JustifyCenterColumn,
   Row,
-  SelectInput,
   SummaryCard
 } from '@components/index'
 import { DollarSign, Percent } from 'react-feather'
-import { NOTIFICATION_BEFORE_AFTER, USER_ROLE_TYPES } from '@constants/statuses'
 import { SalarySettingsSummaryBody, SalarySettingsSummaryFooter } from '@/pages'
 import {
   useGetSalarySettingsQuery,

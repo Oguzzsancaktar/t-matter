@@ -176,12 +176,12 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
   }, [userDailyWorkingHourData, userDailyWorkingHourIsLoading])
 
   return (
-    <ItemContainer>
+    <ItemContainer height="100%">
       <JustifyBetweenRow height="100%" width="auto">
         <Column height="100%" margin="0px 1rem" width="70%">
-          <Row margin="0 0 2rem 0">
+          {/* <Row margin="0 0 2rem 0">
             <H1>Default</H1>
-          </Row>
+          </Row> */}
           <JustifyBetweenColumn height="100%">
             {dayOfWeek.map((day, index) => (
               <Row key={index}>
@@ -282,10 +282,10 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
         </Column>
 
         <Column height="100%" width="30%">
-          <Row margin="0 0 2rem 0">
+          {/* <Row margin="0 0 2rem 0">
             <H1>Summary</H1>
-          </Row>
-          <JustifyBetweenColumn height="calc(100% - 1rem - 40px - 2rem - 18px)">
+          </Row> */}
+          <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
             <SummaryCard
               body={
                 <UserModalWorkingScheduleSettingsSummaryBody

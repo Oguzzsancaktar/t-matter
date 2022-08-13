@@ -42,7 +42,7 @@ const UserPageSettingsTab = () => {
       name: 'Role',
       selector: row => row.role,
       sortable: true,
-      cell: data => <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.role.name} />
+      cell: data => <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.role[0].name} />
     },
     {
       name: 'Phone',

@@ -1,23 +1,17 @@
 import {
-  ActionButtons,
   Column,
-  CreateUserModal,
   DataTableHeader,
   InnerWrapper,
   JustifyBetweenColumn,
   JustifyBetweenRow,
-  JustifyCenterColumn
+  JustifyCenterColumn,
+  NoTableData
 } from '@/components'
-import { ModalHeader, ModalBody } from '@/components/modals/types'
-import UserReadModal from '@/components/modals/user-planning/userPageSettings/ReadUserModal'
 import useAccessStore from '@/hooks/useAccessStore'
-import { EStatus, ESize } from '@/models'
 
 import { useGetUserLogsByIdQuery } from '@/services/userLogService'
-import { openModal } from '@/store'
-import { selectColorForStatus } from '@/utils/statusColorUtil'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import DataTable from 'react-data-table-component'
 
 interface IProps {
@@ -26,7 +20,6 @@ interface IProps {
 
 const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
   const { useAppDispatch } = useAccessStore()
-  const dispatch = useAppDispatch()
 
   const { data: userTimeLogData, isLoading: userTimeLogIsLoading } = useGetUserLogsByIdQuery(userId)
 
@@ -84,14 +77,11 @@ const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px)">
           <DataTableHeader handleAddNew={() => console.log('not implemented')} showAddNew={false} />
-          <DataTable
-            fixedHeader
-            columns={columns}
-            style={{ height: 'calc(100% - 56px)' }}
-            pagination={true}
-            paginationPerPage={5}
-            data={userTimeLogData || []}
-          />
+          {!userTimeLogIsLoading && userTimeLogData && userTimeLogData.length > 0 ? (
+            <DataTable fixedHeader columns={columns} data={userTimeLogData || []} />
+          ) : (
+            <NoTableData />
+          )}
         </Column>
       </JustifyBetweenColumn>
     </InnerWrapper>

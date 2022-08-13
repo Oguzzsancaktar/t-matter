@@ -156,6 +156,9 @@
   overflow: auto;
 }
 
+.feHuGr {
+  max-height: 100% !important;
+}
 .rdt_Pagination {
   color: #566a7f;
   border-color: #233446;

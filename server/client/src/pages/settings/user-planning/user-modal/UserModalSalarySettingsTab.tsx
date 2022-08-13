@@ -124,9 +124,9 @@ const UserModalSalarySettingsTab: React.FC<IProps> = ({ userId }) => {
         <>
           <JustifyBetweenColumn height="100%" margin="0 2rem 0 0">
             <Column margin="0 0 2rem 0">
-              <Row margin="0 0 2rem 0">
+              {/* <Row margin="0 0 2rem 0">
                 <H1>Default</H1>
-              </Row>
+              </Row> */}
               <InputWithIcon
                 labelText="Default Payroll Rate"
                 onBlur={() => console.log('blue')}
@@ -170,9 +170,9 @@ const UserModalSalarySettingsTab: React.FC<IProps> = ({ userId }) => {
 
           <JustifyCenterColumn height="100%">
             <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
-              <ItemContainer margin="0 0 2rem 0">
+              {/* <ItemContainer margin="0 0 2rem 0">
                 <H1>Summary</H1>
-              </ItemContainer>
+              </ItemContainer> */}
               <SummaryCard
                 body={<UserModalSalarySettingsSummaryBody data={salarySettingsStateData} />}
                 footer={<UserModalSalarySettingsSummaryFooter data={salarySettingsStateData} />}

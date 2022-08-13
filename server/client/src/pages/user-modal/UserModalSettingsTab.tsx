@@ -1,4 +1,4 @@
-import { Column, InnerWrapper, JustifyBetweenColumn, JustifyCenterRow, Tab } from '@/components'
+import { Column, InnerWrapper, ItemContainer, JustifyBetweenColumn, JustifyCenterRow, Tab } from '@/components'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
 import { IUser } from '@/models'
 import React, { useState } from 'react'
@@ -11,7 +11,7 @@ const UserModalSettingsTab: React.FC<IProps> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState('salary-settings')
 
   return (
-    <Column>
+    <Column height="100%">
       <ModalHeader>
         <InnerWrapper>
           <JustifyBetweenColumn>
@@ -35,8 +35,8 @@ const UserModalSettingsTab: React.FC<IProps> = ({ userId }) => {
           </JustifyBetweenColumn>
         </InnerWrapper>
       </ModalHeader>
-      <ModalBody>
-        <InnerWrapper>
+      <ModalBody minHeight="100% - 63px">
+        <ItemContainer height="100%">
           {activeTab === 'salary-settings' ? (
             <UserModalSalarySettingsTab userId={userId} />
           ) : activeTab === 'working-schedule-settings' ? (
@@ -44,7 +44,7 @@ const UserModalSettingsTab: React.FC<IProps> = ({ userId }) => {
           ) : (
             'hata'
           )}
-        </InnerWrapper>
+        </ItemContainer>
       </ModalBody>
     </Column>
   )
