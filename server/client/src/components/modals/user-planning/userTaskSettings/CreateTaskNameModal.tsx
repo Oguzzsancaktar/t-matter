@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { ConfirmCancelButtons } from '@/components/button'
 import { InputRegular, SelectInput } from '@/components/input'
-import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from '@/components/layout'
-import { H1, Label } from '@/components/texts'
+import { JustifyBetweenColumn, JustifyCenterRow, Row } from '@/components/layout'
+import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { InnerWrapper } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 import { IOption } from '@/models'
+import colors from '@/constants/colors'
 
 const CreateTaskNameModal = () => {
   const { useAppDispatch } = useAccessStore()
@@ -56,7 +57,7 @@ const CreateTaskNameModal = () => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create User Task Name
             </H1>
           </JustifyCenterRow>

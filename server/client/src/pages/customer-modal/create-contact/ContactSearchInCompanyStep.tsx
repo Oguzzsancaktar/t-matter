@@ -5,9 +5,11 @@ import {
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterRow,
+  NoTableData,
   RoleBadge,
   Row,
   SearchBar,
+  TableSkeltonLoader,
   UserBadge
 } from '@/components'
 import DataTable from 'react-data-table-component'
@@ -70,13 +72,15 @@ const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, o
         <SearchBar onSeach={handleSearch} />
       </ItemContainer>
       <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px - 40px)" margin="0.5rem 0">
-        <DataTable
-          style={{ height: 'calc(100% - 56px)' }}
-          pagination={true}
-          paginationPerPage={5}
-          columns={columns}
-          data={filteredCustomers || []}
-        />
+        {filteredCustomersIsLoading ? (
+          <ItemContainer height="100%">
+            <TableSkeltonLoader count={13} />
+          </ItemContainer>
+        ) : filteredCustomers && filteredCustomers.length > 0 ? (
+          <DataTable fixedHeader columns={columns} data={filteredCustomers || []} />
+        ) : (
+          <NoTableData />
+        )}
       </ItemContainer>
       <ItemContainer height="40px">
         <Row>

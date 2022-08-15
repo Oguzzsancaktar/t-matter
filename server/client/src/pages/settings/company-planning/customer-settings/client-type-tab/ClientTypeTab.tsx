@@ -4,7 +4,8 @@ import {
   CreateTaskCategoryModal,
   DataTableHeader,
   InnerWrapper,
-  ItemContainer
+  ItemContainer,
+  NoTableData
 } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
@@ -74,7 +75,8 @@ const ClientTypeTab = () => {
         id: 'createTaskCategoryModal',
         title: 'Create Task Category',
         body: <CreateTaskCategoryModal />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -82,6 +84,7 @@ const ClientTypeTab = () => {
   return (
     <ItemContainer height="100%">
       <DataTableHeader handleAddNew={openCreateRoleModal} />
+
       <DataTable fixedHeader columns={columns} data={data} />
     </ItemContainer>
   )

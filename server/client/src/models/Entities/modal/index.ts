@@ -1,1 +1,1 @@
-export type { default as IModal } from './modal'
+export type { default as IModal } from './IModal'

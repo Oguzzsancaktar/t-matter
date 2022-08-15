@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Button, CustomerSearchModal, ItemContainer, JustifyBetweenColumn, RelateByModal } from '@/components'
+import { ItemContainer, JustifyBetweenColumn, RelateByModal } from '@/components'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerUpdateDTO, IOption, IRelativeType } from '@/models'
-import { UpdateCustomerExtraInfo, UpdateCustomerInfo, UpdateCustomerReliables } from '@/pages'
+import { UpdateCustomerInfo, UpdateCustomerReliables } from '@/pages'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 import { closeModal, openModal } from '@/store'
 import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isEmailValid, isValueNull } from '@/utils/validationUtils'
+import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
   customer: ICustomer
 }
 const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
-  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -113,7 +114,8 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
                 onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
               />
             ),
-            size: ESize.Medium
+            width: ESize.XLarge,
+            height: ESize.Large
           })
         )
       }

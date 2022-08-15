@@ -22,6 +22,7 @@ import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { useCreateChecklistMutation } from '@/services/settings/workflow-planning/workflowService'
 import { ITaskChecklistCreateDTO } from '@/models'
 import { useGetCompanyPricingQuery } from '@/services/settings/company-planning/companyPricingService'
+import colors from '@/constants/colors'
 
 const CreateWorkflowChecklistModal = () => {
   const { data: companyPricingData, isLoading: isCompanyPricingDataLoading } = useGetCompanyPricingQuery()
@@ -115,7 +116,7 @@ const CreateWorkflowChecklistModal = () => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create Workflow Checklist
             </H1>
           </JustifyCenterRow>

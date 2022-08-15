@@ -5,10 +5,14 @@ import {
   CreateRefferedByModal,
   DataTableHeader,
   ItemContainer,
+  NoTableData,
   ReadRefferedByModal,
+  TableSkeltonLoader,
   UpdateRefferedByModal
 } from '@/components'
 import { Badge } from '@/components/badge'
+import emptyQueryParams from '@/constants/queryParams'
+import { statusOptions } from '@/constants/statuses'
 
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IRefferedBy } from '@/models'
@@ -19,11 +23,13 @@ import {
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
 const RefferedByTab = () => {
-  const { data: refferedByData } = useGetRefferedBysQuery()
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+
+  const { data: refferedByData, isLoading: refferedByIsLoading } = useGetRefferedBysQuery(searchQueryParams)
   const [updateRefferedByStatus] = useUpdateRefferedByStatusMutation()
 
   const { useAppDispatch } = useAccessStore()
@@ -76,7 +82,9 @@ const RefferedByTab = () => {
         id: `readRefferedByModal-${refferedBy._id}`,
         title: 'Create RefferedBy',
         body: <ReadRefferedByModal refferedBy={refferedBy} />,
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -87,7 +95,9 @@ const RefferedByTab = () => {
         id: `updateRefferedByModal-${refferedBy._id}`,
         title: 'Update RefferedBy',
         body: <UpdateRefferedByModal refferedBy={refferedBy} />,
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -104,7 +114,9 @@ const RefferedByTab = () => {
             onConfirm={() => handleOnConfirmDelete(refferedBy)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -121,7 +133,9 @@ const RefferedByTab = () => {
             onConfirm={() => handleOnConfirmReactive(refferedBy)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -151,35 +165,42 @@ const RefferedByTab = () => {
     dispatch(
       openModal({
         id: 'createRefferedByModal',
-        title: 'Company RefferedBys',
-        body: <CreateRefferedByModal />,
-        size: ESize.Small
-      })
-    )
-  }
-  const openCreateRoleModal = (e: React.MouseEvent) => {
-    e.preventDefault()
-    dispatch(
-      openModal({
-        id: 'createRefferedByModal',
         title: 'Create Reffered By',
         body: <CreateRefferedByModal />,
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
 
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
+  }
+
   return (
     <ItemContainer height="100%">
-      <DataTableHeader handleAddNew={openCreateRoleModal} />
+      <DataTableHeader
+        handleAddNew={openCreateRefferedByModal}
+        status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+        handleSearch={handleSearch}
+        handleStatusFilter={handleStatusFilter}
+      />
+
       <ItemContainer height="calc(100% - 38px - 0.5rem)">
-        <DataTable
-          fixedHeader
-          columns={columns}
-          data={refferedByData || []}
-          onRowClicked={handleRead}
-          style={{ maxHeight: '500px' }}
-        />
+        {refferedByIsLoading ? (
+          <ItemContainer height="100%">
+            <TableSkeltonLoader count={13} />
+          </ItemContainer>
+        ) : refferedByData && refferedByData.length > 0 ? (
+          <DataTable fixedHeader columns={columns} data={refferedByData || []} onRowClicked={handleRead} />
+        ) : (
+          <NoTableData />
+        )}
       </ItemContainer>
     </ItemContainer>
   )

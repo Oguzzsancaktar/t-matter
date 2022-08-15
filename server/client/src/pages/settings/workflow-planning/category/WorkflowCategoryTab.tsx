@@ -4,7 +4,10 @@ import {
   ConfirmModal,
   CreateWorkflowCategoryModal,
   DataTableHeader,
+  ItemContainer,
+  NoTableData,
   ReadWorkflowCategoryModal,
+  TableSkeltonLoader,
   UpdateWorkflowCategoryModal
 } from '@/components'
 import { Badge } from '@/components/badge'
@@ -66,7 +69,8 @@ const WorkflowCategory = () => {
         id: `readWorkflowCategoryModal-${category._id}`,
         title: 'Create Category',
         body: <ReadWorkflowCategoryModal category={category} />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -77,7 +81,8 @@ const WorkflowCategory = () => {
         id: `updateWorkflowCategoryModal-${category._id}`,
         title: 'Update Category',
         body: <UpdateWorkflowCategoryModal category={category} />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -94,7 +99,9 @@ const WorkflowCategory = () => {
             onConfirm={() => handleOnConfirmDelete(category)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -111,7 +118,9 @@ const WorkflowCategory = () => {
             onConfirm={() => handleOnConfirmReactive(category)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -143,7 +152,8 @@ const WorkflowCategory = () => {
         id: 'createWorkflowCategoryModal',
         title: 'Create Workflow Category',
         body: <CreateWorkflowCategoryModal />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -151,18 +161,18 @@ const WorkflowCategory = () => {
   return (
     <Column margin="0" width="100%">
       <DataTableHeader handleAddNew={openCreateWorkflowCategoryModal} />
-      {!isCategoriesLoading && categoriesData && (
-        <DataTable
-          style={{ height: 'calc(100% - 56px)' }}
-          pagination={true}
-          paginationPerPage={5}
-          fixedHeader
-          columns={columns}
-          data={categoriesData || []}
-          noDataComponent={'sdgasdfsdfg'}
-          onRowClicked={handleRead}
-        />
-      )}
+
+      <ItemContainer height="calc(100% - 38px - 0.5rem)">
+        {isCategoriesLoading ? (
+          <ItemContainer height="100%">
+            <TableSkeltonLoader count={13} />
+          </ItemContainer>
+        ) : categoriesData && categoriesData.length > 0 ? (
+          <DataTable fixedHeader columns={columns} data={categoriesData || []} onRowClicked={handleRead} />
+        ) : (
+          <NoTableData />
+        )}
+      </ItemContainer>
     </Column>
   )
 }

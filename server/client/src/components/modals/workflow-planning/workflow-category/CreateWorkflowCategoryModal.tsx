@@ -3,6 +3,7 @@ import { InputRegular } from '@/components/input'
 import { JustifyBetweenColumn, JustifyCenterRow, JustifyCenterColumn, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import { InnerWrapper } from '@/components/wrapper'
+import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useCreateCategoryMutation } from '@/services/settings/workflow-planning/workflowService'
 import { closeModal } from '@/store'
@@ -42,7 +43,7 @@ const CreateWorkflowCategoryModal = () => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create Workflow Category
             </H1>
           </JustifyCenterRow>

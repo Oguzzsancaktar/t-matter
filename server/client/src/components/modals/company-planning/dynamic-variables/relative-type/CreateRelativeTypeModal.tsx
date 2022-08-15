@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import { ConfirmCancelButtons } from '@/components/button'
 import { InputRegular } from '@/components/input'
-import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from '@/components/layout'
+import { Column, JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { InnerWrapper } from '@/components'
+import { InnerWrapper, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../../types'
 import { IRelativeType } from '@/models'
 import { useCreateRelativeTypeMutation } from '@/services/settings/company-planning/dynamicVariableService'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'
+import colors from '@/constants/colors'
 
 const CreateRelativeTypeModal = () => {
   const [createRelativeType] = useCreateRelativeTypeMutation()
@@ -45,7 +46,7 @@ const CreateRelativeTypeModal = () => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create Relative Type
             </H1>
           </JustifyCenterRow>
@@ -55,29 +56,32 @@ const CreateRelativeTypeModal = () => {
       <ModalBody>
         <InnerWrapper>
           <JustifyCenterColumn height="100%" padding="2rem 0">
-            <Row>
-              <InputRegular
-                name="relateFrom"
-                placeholder="Relate from"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setRelateType({ ...relateType, relateFrom: e.target.value })
-                }
-                value={relateType.relateFrom}
-                type="text"
-                labelText="Relate from"
-              />
-
-              <InputRegular
-                name="relateTo"
-                placeholder="Relate to"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setRelateType({ ...relateType, relateTo: e.target.value })
-                }
-                value={relateType.relateTo}
-                type="text"
-                labelText="Relate to"
-              />
-            </Row>
+            <Column>
+              <ItemContainer margin="0 0 1rem 0">
+                <InputRegular
+                  name="relateFrom"
+                  placeholder="Relate from"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setRelateType({ ...relateType, relateFrom: e.target.value })
+                  }
+                  value={relateType.relateFrom}
+                  type="text"
+                  labelText="Relate from"
+                />
+              </ItemContainer>
+              <ItemContainer>
+                <InputRegular
+                  name="relateTo"
+                  placeholder="Relate to"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setRelateType({ ...relateType, relateTo: e.target.value })
+                  }
+                  value={relateType.relateTo}
+                  type="text"
+                  labelText="Relate to"
+                />
+              </ItemContainer>
+            </Column>
           </JustifyCenterColumn>
         </InnerWrapper>
       </ModalBody>

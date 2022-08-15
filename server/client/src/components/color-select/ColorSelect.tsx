@@ -18,7 +18,7 @@ const ColorSelectContainer = styled(JustifyBetweenRow)<Pick<IProps, 'validationE
   height: 35px;
   border-radius: 0.3rem;
   padding: 0.25rem 0.5rem;
-  border: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.dark)};
+  border: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.disabled)};
 `
 
 const ColorSelect: React.FC<IProps> = ({ margin, labelText, onClick, value, validationError }) => {

@@ -5,12 +5,13 @@ import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { ColorSelect, InnerWrapper } from '@/components'
+import { InnerWrapper } from '@/components'
 import { ModalHeader, ModalBody, ModalFooter } from '@/components/modals/types'
 import { ILocation } from '@/models'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'
 import { usePatchLocationMutation } from '@/services/settings/company-planning/dynamicVariableService'
+import colors from '@/constants/colors'
 
 interface IProps {
   location: ILocation
@@ -42,7 +43,7 @@ const UpdateLocationModal: React.FC<IProps> = ({ location }) => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update Company Location
             </H1>
           </JustifyCenterRow>

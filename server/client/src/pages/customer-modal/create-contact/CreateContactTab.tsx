@@ -14,15 +14,15 @@ import ContactInformationsStep from './ContactInformationsStep'
 import ContactSearchInCompanyStep from './ContactSearchInCompanyStep'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
 import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
-import { isValueNull, isEmailValid, isPhoneNumberValid } from '@/utils/validationUtils'
-import moment from 'moment'
+import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal, openModal } from '@/store'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import emptyQueryParams from '@/constants/queryParams'
 
 const CreateContactTab = () => {
-  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
 
   const [createCustomer] = useCreateCustomerMutation()
 
@@ -183,7 +183,8 @@ const CreateContactTab = () => {
                 onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
               />
             ),
-            size: ESize.Medium
+            width: ESize.XLarge,
+            height: ESize.Large
           })
         )
       }
@@ -212,7 +213,8 @@ const CreateContactTab = () => {
               onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
             />
           ),
-          size: ESize.XLarge
+          width: ESize.XLarge,
+          height: ESize.Large
         })
       )
     }

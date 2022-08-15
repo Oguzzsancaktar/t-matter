@@ -3,12 +3,14 @@ import { JustifyBetweenRow, Row } from '@/components/layout'
 import { InputRegular, SelectInput } from '@/components/input'
 import { Button } from '@/components/button'
 import { Upload } from 'react-feather'
-import { IOption } from '@/models'
+import { EStatus, IOption } from '@/models'
+import { statusOptions } from '@/constants/statuses'
 
 interface IProps {
   status?: IOption
   handleAddNew?: (a?: any, b?: any) => void
-  showPagination?: boolean
+  handleSearch?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleStatusFilter?: (status: EStatus) => void
   showStatus?: boolean
   showSearch?: boolean
   showExport?: boolean
@@ -17,12 +19,19 @@ interface IProps {
 const DataTableHeader: React.FC<IProps> = ({
   status,
   handleAddNew,
-  showPagination = true,
+  handleSearch,
+  handleStatusFilter,
   showStatus = true,
   showSearch = true,
   showExport = true,
   showAddNew = true
 }) => {
+  const handleStatusChange = (option: IOption) => {
+    if (handleStatusFilter) {
+      handleStatusFilter(+option.value)
+    }
+  }
+
   return (
     <JustifyBetweenRow margin="0 0 0.5rem 0" height="40px">
       <Row>
@@ -45,24 +54,16 @@ const DataTableHeader: React.FC<IProps> = ({
           <Row width="150px" margin="0 0.5rem 0 0">
             <SelectInput
               name="status"
-              onChange={() => console.log('onchange triggerd')}
-              selectedOption={[status || { value: 'all', label: 'All' }]}
-              options={[
-                { value: 'all', label: 'All' },
-                { value: 'active', label: 'Active' },
-                { value: 'inactive', label: 'Inactive' }
-              ]}
+              onChange={handleStatusChange}
+              selectedOption={[status || { value: '-9', label: 'All' }]}
+              options={statusOptions}
+              menuPlacement="top"
             />
           </Row>
         )}
         {showSearch && (
-          <Row width="calc(100% - 150px )">
-            <InputRegular
-              name="search"
-              placeholder="Search..."
-              onChange={() => console.log('onchange triggerd')}
-              type="text"
-            />
+          <Row width="calc(100% - 150px)">
+            <InputRegular name="search" placeholder="Search..." onChange={handleSearch} type="text" />
           </Row>
         )}
       </Row>

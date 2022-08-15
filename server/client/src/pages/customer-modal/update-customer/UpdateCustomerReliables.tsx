@@ -29,7 +29,8 @@ const UpdateCustomerReliables: React.FC<IProps> = ({ updateContactDTO, onAdd, on
         id: `customerSearchModal-${updateContactDTO._id}`,
         title: 'CustomerSearchModal',
         body: <CustomerSearchModal handleAdd={onAdd} customer={updateContactDTO} onRemove={onRemove} />,
-        size: ESize.Medium
+        width: ESize.XLarge,
+        height: ESize.Large
       })
     )
   }

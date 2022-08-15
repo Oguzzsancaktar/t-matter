@@ -1,15 +1,17 @@
 import {
   ActionButtons,
-  CircleColor,
   ConfirmModal,
   CreateRelativeTypeModal,
   DataTableHeader,
-  InnerWrapper,
   ItemContainer,
+  NoTableData,
   ReadRelativeTypeModal,
+  TableSkeltonLoader,
   UpdateRelativeTypeModal
 } from '@/components'
 import { Badge } from '@/components/badge'
+import emptyQueryParams from '@/constants/queryParams'
+import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IRelativeType } from '@/models'
 import {
@@ -19,11 +21,13 @@ import {
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
 const LocationsTab = () => {
-  const { data: relativeTypeData } = useGetRelativeTypesQuery()
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+
+  const { data: relativeTypeData, isLoading: relativeTypeIsLoading } = useGetRelativeTypesQuery(searchQueryParams)
   const [updateRelativeTypeStatus] = useUpdateRelativeTypeStatusMutation()
 
   const { useAppDispatch } = useAccessStore()
@@ -74,7 +78,9 @@ const LocationsTab = () => {
         id: `readRelativeTypeModal-${relativeType._id}`,
         title: 'Create RelativeType',
         body: <ReadRelativeTypeModal relativeType={relativeType} />,
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -85,7 +91,9 @@ const LocationsTab = () => {
         id: `updateRelativeTypeModal-${relativeType._id}`,
         title: 'Update RelativeType',
         body: <UpdateRelativeTypeModal relativeType={relativeType} />,
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -102,7 +110,9 @@ const LocationsTab = () => {
             onConfirm={() => handleOnConfirmDelete(relativeType)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -119,7 +129,9 @@ const LocationsTab = () => {
             onConfirm={() => handleOnConfirmReactive(relativeType)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -155,15 +167,40 @@ const LocationsTab = () => {
         id: 'createRelativeTypeModal',
         title: 'Company RelativeTypes',
         body: <CreateRelativeTypeModal />,
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
 
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
+  }
+
   return (
     <ItemContainer height="100%">
-      <DataTableHeader handleAddNew={openCreateRelativeTypeModal} />
-      <DataTable fixedHeader columns={columns} data={relativeTypeData || []} onRowClicked={handleRead} />
+      <DataTableHeader
+        status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+        handleAddNew={openCreateRelativeTypeModal}
+        handleSearch={handleSearch}
+        handleStatusFilter={handleStatusFilter}
+      />
+      <ItemContainer height="calc(100% - 38px - 0.5rem)">
+        {relativeTypeIsLoading ? (
+          <ItemContainer height="100%">
+            <TableSkeltonLoader count={13} />
+          </ItemContainer>
+        ) : relativeTypeData && relativeTypeData.length > 0 ? (
+          <DataTable fixedHeader columns={columns} data={relativeTypeData || []} onRowClicked={handleRead} />
+        ) : (
+          <NoTableData />
+        )}
+      </ItemContainer>
     </ItemContainer>
   )
 }

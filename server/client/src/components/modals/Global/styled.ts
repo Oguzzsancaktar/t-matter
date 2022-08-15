@@ -21,13 +21,11 @@ export const Container = styled.div<IContainerProps>`
   position: relative;
   width: calc(100% - 4rem);
   // modal height LOOK
-  max-height: 800px;
-  height: 700px;
-  /* min-height: ${({ size }) => (size === 'xl' ? '800' : size === 'lg' ? '700' : size === 'md' ? '900' : '500')}px; */
+  max-height: 900px;
+  height: ${({ height }) => (height ? height : '100%')};
   background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
   border-radius: 0.3rem;
-  max-width: ${({ size }) =>
-    size === 'xl' ? '2000' : size === 'lg' ? '1200' : size === 'md' ? '900' : size === 'sm' ? '600' : '100'}px;
+  max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : 'none')};
 `
 
 export const CloseButton = styled.button`

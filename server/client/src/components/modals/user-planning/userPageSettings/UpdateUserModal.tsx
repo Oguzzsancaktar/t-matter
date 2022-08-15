@@ -15,6 +15,7 @@ import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
 import { useUpdateUserMutation } from '@/services/settings/user-planning/userService'
+import colors from '@/constants/colors'
 
 interface IProps {
   user: IUser
@@ -209,7 +210,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update User ({user.firstname + ' ' + user.lastname})
             </H1>
           </JustifyCenterRow>

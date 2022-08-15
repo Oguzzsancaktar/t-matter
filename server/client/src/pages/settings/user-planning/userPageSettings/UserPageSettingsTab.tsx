@@ -4,10 +4,13 @@ import {
   ConfirmModal,
   CreateUserModal,
   DataTableHeader,
+  ItemContainer,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
+  NoTableData,
   ReadUserModal,
+  TableSkeltonLoader,
   UpdateUserModal
 } from '@/components'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
@@ -82,7 +85,8 @@ const UserPageSettingsTab = () => {
         id: `userDetailModal-${user._id}`,
         title: 'User / ' + user.firstname + ' ' + user.lastname,
         body: <ReadUserModal userId={user._id} />,
-        size: ESize.XLarge,
+        width: ESize.XLarge,
+        height: ESize.Large,
         backgroundColor: 'transparent'
       })
     )
@@ -94,7 +98,8 @@ const UserPageSettingsTab = () => {
         id: `updateUserModal-${user._id}`,
         title: 'Update User / ' + user.firstname + ' ' + user.lastname,
         body: <UpdateUserModal user={user} />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -111,7 +116,9 @@ const UserPageSettingsTab = () => {
             onConfirm={() => handleOnConfirmDelete(user)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -128,7 +135,9 @@ const UserPageSettingsTab = () => {
             onConfirm={() => handleOnConfirmReactive(user)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -160,7 +169,8 @@ const UserPageSettingsTab = () => {
         id: 'createUserModal',
         title: 'Create User',
         body: <CreateUserModal />,
-        size: ESize.Medium
+        width: ESize.XLarge,
+        height: ESize.Large
       })
     )
   }
@@ -174,7 +184,18 @@ const UserPageSettingsTab = () => {
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px)">
         <DataTableHeader handleAddNew={openCreateUserModal} />
-        <DataTable fixedHeader columns={columns} data={usersData || []} onRowClicked={handleRead} />
+
+        <ItemContainer height="calc(100% - 38px - 0.5rem)">
+          {isUsersDataLoading ? (
+            <ItemContainer height="100%">
+              <TableSkeltonLoader count={13} />
+            </ItemContainer>
+          ) : usersData && usersData.length > 0 ? (
+            <DataTable fixedHeader columns={columns} data={usersData || []} onRowClicked={handleRead} />
+          ) : (
+            <NoTableData />
+          )}
+        </ItemContainer>
       </Column>
     </JustifyBetweenColumn>
   )

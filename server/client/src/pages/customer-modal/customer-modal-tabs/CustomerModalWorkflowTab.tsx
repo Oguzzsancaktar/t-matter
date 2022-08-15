@@ -4,10 +4,13 @@ import {
   CustomerTaskModal,
   DataTableHeader,
   InnerWrapper,
+  ItemContainer,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
+  NoTableData,
   SelectTaskWorkflowModal,
+  TableSkeltonLoader,
   TaskProgress
 } from '@/components'
 import { TaskActiveStepUser } from '@/components/client-task/task-active-step-user'
@@ -81,7 +84,8 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
         id: 'customerTaksModal' + taskId,
         title: 'Customer Task',
         body: <CustomerTaskModal taskId={taskId} />,
-        size: ESize.XLarge,
+        width: ESize.XLarge,
+        height: ESize.Large,
         backgroundColor: colors.gray.light
       })
     )
@@ -93,7 +97,8 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
         id: 'selectTaskWorkflowModal-' + customer._id,
         title: 'Customer Task',
         body: <SelectTaskWorkflowModal customer={customer} />,
-        size: ESize.XLarge,
+        width: ESize.XLarge,
+        height: ESize.Large,
         backgroundColor: colors.gray.light
       })
     )
@@ -109,14 +114,23 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px)">
           <DataTableHeader handleAddNew={() => openSelectTaskWorkflowModal()} />
-          {!customerTasksIsLoading && customerTasksData && (
-            <DataTable
-              fixedHeader
-              columns={columns}
-              data={customerTasksData || []}
-              onRowClicked={data => openCustomerTaskModal(data._id)}
-            />
-          )}
+
+          <ItemContainer height="calc(100% - 38px - 0.5rem)">
+            {customerTasksIsLoading ? (
+              <ItemContainer height="100%">
+                <TableSkeltonLoader count={13} />
+              </ItemContainer>
+            ) : customerTasksData && customerTasksData.length > 0 ? (
+              <DataTable
+                fixedHeader
+                columns={columns}
+                data={customerTasksData || []}
+                onRowClicked={data => openCustomerTaskModal(data._id)}
+              />
+            ) : (
+              <NoTableData />
+            )}
+          </ItemContainer>
         </Column>
       </JustifyBetweenColumn>
     </InnerWrapper>

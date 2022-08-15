@@ -8,6 +8,7 @@ import {
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
+  NoTableData,
   ReadRoleModal,
   TableSkeltonLoader,
   UpdateRoleModal
@@ -66,7 +67,8 @@ const UserRoleSettings = () => {
         id: `readRoleModal-${role._id}`,
         title: 'Create Role',
         body: <ReadRoleModal role={role} />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -77,7 +79,8 @@ const UserRoleSettings = () => {
         id: `updateRoleModal-${role._id}`,
         title: 'Update Role',
         body: <UpdateRoleModal role={role} />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -94,7 +97,9 @@ const UserRoleSettings = () => {
             onConfirm={() => handleOnConfirmDelete(role)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -111,7 +116,9 @@ const UserRoleSettings = () => {
             onConfirm={() => handleOnConfirmReactive(role)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -143,7 +150,8 @@ const UserRoleSettings = () => {
         id: 'createRoleModal',
         title: 'Create Role',
         body: <CreateRoleModal />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -157,19 +165,16 @@ const UserRoleSettings = () => {
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px)">
         <DataTableHeader handleAddNew={openCreateRoleModal} />
-        <ItemContainer height="calc(100% - 0.4rem - 38px)" minHeight="370px">
-          {false && !roleLoading ? (
-            <DataTable
-              style={{ height: 'calc(100% - 56px)' }}
-              fixedHeader
-              columns={columns}
-              data={roleData || []}
-              onRowClicked={handleRead}
-            />
-          ) : (
+
+        <ItemContainer height="calc(100% - 38px - 0.5rem)">
+          {roleLoading ? (
             <ItemContainer height="100%">
-              <TableSkeltonLoader count={6} />
+              <TableSkeltonLoader count={13} />
             </ItemContainer>
+          ) : roleData && roleData.length > 0 ? (
+            <DataTable fixedHeader columns={columns} data={roleData || []} onRowClicked={handleRead} />
+          ) : (
+            <NoTableData />
           )}
         </ItemContainer>
       </Column>

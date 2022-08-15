@@ -39,7 +39,8 @@ const SettingsCard: React.FC<IProps> = ({ children, modal, ...rest }) => {
         id: modal.id,
         title: modal.title,
         body: modal.body,
-        size: modal.size
+        height: modal.height,
+        width: modal.width
       })
     )
   }

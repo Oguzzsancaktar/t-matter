@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
-import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
-import { EGender, ICustomerAddNew, ICustomerCreateDTO, IOption, IRefferedBy } from '@/models'
-import { Key, User } from 'react-feather'
+import { InnerWrapper, ItemContainer } from '@/components'
+import { EGender, ICustomerCreateDTO, IOption, IRefferedBy } from '@/models'
+import { User } from 'react-feather'
 import { genderOptions } from '@/constants/genders'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
   validationErrors: any
@@ -22,7 +23,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
   onGenderChange,
   onRefferTypeChange
 }) => {
-  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
 
   return (
     <InnerWrapper>

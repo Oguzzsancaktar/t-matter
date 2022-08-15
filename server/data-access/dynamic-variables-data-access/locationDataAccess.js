@@ -1,13 +1,34 @@
 const Location = require('../../models/dynamic-variables/location')
-const RefferedBy = require('../../models/dynamic-variables/refferedBy')
 
 // Location
 const createLocation = data => {
   return Location.create(data)
 }
 
-const getLocations = (query = {}, populate = '') => {
-  return Location.find(query).populate(populate).lean().exec()
+const getLocations = ({ search, size, status }) => {
+  const pipeline = []
+  const match = { $match: {} }
+
+  if (search && search !== 'undefined') {
+    match.$match.$or = [
+      {
+        name: { $regex: search, $options: 'i' }
+      }
+    ]
+  }
+
+  if (status && status !== '-9') {
+    match.$match.status = { $eq: +status }
+  }
+
+  pipeline.push(match)
+  pipeline.push({ $sort: { createdAt: -1 } })
+
+  if (size) {
+    pipeline.push({ $limit: +size })
+  }
+
+  return Location.aggregate(pipeline).exec()
 }
 
 const findLocationById = (id, populate = '') => {

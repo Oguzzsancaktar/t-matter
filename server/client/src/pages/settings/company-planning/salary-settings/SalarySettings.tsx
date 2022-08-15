@@ -132,11 +132,11 @@ const SalarySettings = () => {
         <>
           <JustifyBetweenColumn height="100%" margin="0 2rem 0 0">
             <Column margin="0 0 2rem 0">
-              <Row margin="0 0 1rem 0">
+              {/* <Row margin="0 0 1rem 0">
                 <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
                   Default
                 </H1>
-              </Row>
+              </Row> */}
               <InputWithIcon
                 labelText="Default Payroll Rate"
                 onBlur={() => console.log('blue')}
@@ -215,11 +215,11 @@ const SalarySettings = () => {
 
           <JustifyCenterColumn height="100%">
             <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
-              <ItemContainer margin="0 0 1rem 0">
+              {/* <ItemContainer margin="0 0 1rem 0">
                 <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
                   Summary
                 </H1>
-              </ItemContainer>
+              </ItemContainer> */}
               <SummaryCard
                 body={<SalarySettingsSummaryBody data={salarySettingsStateData} />}
                 footer={<SalarySettingsSummaryFooter data={salarySettingsStateData} />}

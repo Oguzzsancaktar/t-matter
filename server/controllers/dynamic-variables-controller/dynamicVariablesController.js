@@ -15,8 +15,10 @@ const createRelativeType = async (req, res) => {
 }
 
 const getRelativeTypes = async (req, res) => {
+  const { search, size, status } = req.query
+
   try {
-    const checklists = await dataAccess.relativeTypeDataAccess.getRelativeTypes({}, '')
+    const checklists = await dataAccess.relativeTypeDataAccess.getRelativeTypes({ search, size, status })
     res.status(StatusCodes.OK).json(checklists)
   } catch (e) {
     console.log(e)
@@ -70,8 +72,10 @@ const createRefferedBy = async (req, res) => {
 }
 
 const getRefferedBys = async (req, res) => {
+  const { search, size, status } = req.query
+
   try {
-    const checklists = await dataAccess.refferedByDataAccess.getRefferedBys({}, '')
+    const checklists = await dataAccess.refferedByDataAccess.getRefferedBys({ search, size, status })
     res.status(StatusCodes.OK).json(checklists)
   } catch (e) {
     console.log(e)
@@ -125,8 +129,10 @@ const createLocation = async (req, res) => {
 }
 
 const getLocations = async (req, res) => {
+  const { search, size, status } = req.query
+
   try {
-    const checklists = await dataAccess.locationDataAccess.getLocations({}, '')
+    const checklists = await dataAccess.locationDataAccess.getLocations({ search, size, status })
     res.status(StatusCodes.OK).json(checklists)
   } catch (e) {
     console.log(e)

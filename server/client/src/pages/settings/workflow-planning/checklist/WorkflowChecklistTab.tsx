@@ -4,7 +4,10 @@ import {
   ConfirmModal,
   CreateWorkflowChecklistModal,
   DataTableHeader,
+  ItemContainer,
+  NoTableData,
   ReadWorkflowChecklistModal,
+  TableSkeltonLoader,
   UpdateWorkflowChecklistModal
 } from '@/components'
 import { Badge } from '@/components/badge'
@@ -82,7 +85,8 @@ const WorkflowChecklist = () => {
         id: `readWorkflowChecklistModal-${checklist._id}`,
         title: 'Create Checklist',
         body: <ReadWorkflowChecklistModal checklist={checklist} />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -93,7 +97,8 @@ const WorkflowChecklist = () => {
         id: `updateWorkflowChecklistModal-${checklist._id}`,
         title: 'Update Checklist',
         body: <UpdateWorkflowChecklistModal checklist={checklist} />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -110,7 +115,9 @@ const WorkflowChecklist = () => {
             onConfirm={() => handleOnConfirmDelete(checklist)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -127,7 +134,9 @@ const WorkflowChecklist = () => {
             onConfirm={() => handleOnConfirmReactive(checklist)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -159,7 +168,8 @@ const WorkflowChecklist = () => {
         id: 'createWorkflowChecklistModal',
         title: 'Create Workflow Checklist',
         body: <CreateWorkflowChecklistModal />,
-        size: ESize.Small
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -167,7 +177,17 @@ const WorkflowChecklist = () => {
   return (
     <Column>
       <DataTableHeader handleAddNew={openCreateRoleModal} />
-      <DataTable fixedHeader columns={columns} data={checklistsData || []} onRowClicked={handleRead} />
+      <ItemContainer height="calc(100% - 38px - 0.5rem)">
+        {isChecklistsLoading ? (
+          <ItemContainer height="100%">
+            <TableSkeltonLoader count={13} />
+          </ItemContainer>
+        ) : checklistsData && checklistsData.length > 0 ? (
+          <DataTable fixedHeader columns={columns} data={checklistsData || []} onRowClicked={handleRead} />
+        ) : (
+          <NoTableData />
+        )}
+      </ItemContainer>
     </Column>
   )
 }

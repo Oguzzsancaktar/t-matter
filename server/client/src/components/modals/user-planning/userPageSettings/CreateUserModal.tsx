@@ -17,6 +17,7 @@ import { statusOptions } from '@/constants/statuses'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
 import { useCreateUserMutation } from '@/services/settings/user-planning/userService'
 import { companyPricingApi } from '@/services/settings/company-planning/companyPricingService'
+import colors from '@/constants/colors'
 
 const CreateUserModal = () => {
   const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
@@ -225,7 +226,7 @@ const CreateUserModal = () => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create User
             </H1>
           </JustifyCenterRow>

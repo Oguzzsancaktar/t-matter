@@ -8,6 +8,8 @@ import {
   SelectInput
 } from '@/components'
 import { ConfirmCancelButtons } from '@/components/button'
+import colors from '@/constants/colors'
+import emptyQueryParams from '@/constants/queryParams'
 import useAccessStore from '@/hooks/useAccessStore'
 import { IOption, IRelativeType } from '@/models'
 import { useGetRelativeTypesQuery } from '@/services/settings/company-planning/dynamicVariableService'
@@ -22,7 +24,9 @@ interface IProps {
   modalId: string
 }
 const RelateByModal: React.FC<IProps> = ({ title, onConfirm, modalId }) => {
-  const { data: relativeTypesData, isLoading: relativeTypesIsLoading } = useGetRelativeTypesQuery()
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+
+  const { data: relativeTypesData, isLoading: relativeTypesIsLoading } = useGetRelativeTypesQuery(searchQueryParams)
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -54,7 +58,7 @@ const RelateByModal: React.FC<IProps> = ({ title, onConfirm, modalId }) => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               {title}
             </H1>
           </JustifyCenterRow>

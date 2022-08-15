@@ -10,7 +10,8 @@ const H1Styled = styled.h1<Omit<ITextComponentProps, 'children'>>`
   font-size: ${({ fontSize }) => (fontSize ? fontSize : '1rem')};
   text-align: ${({ textAlign }) => (textAlign ? textAlign : 'left')};
   margin: ${({ margin }) => (margin ? margin : '0')};
-  font-weight: ${({ fontWeight }) => (fontWeight ? fontWeight : '0')}; ;
+  font-weight: ${({ fontWeight }) => (fontWeight ? fontWeight : '0')};
+  cursor: ${({ cursor }) => (cursor ? cursor : 'default')};
 `
 const H1: React.FC<ITextComponentProps> = ({ children, ...rest }) => {
   return <H1Styled {...rest}>{children}</H1Styled>

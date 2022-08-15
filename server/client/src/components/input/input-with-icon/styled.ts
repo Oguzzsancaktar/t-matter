@@ -51,4 +51,5 @@ export const IconContainer = styled.div<Pick<IStyledProps, 'validationError' | '
   height: 35px;
   border-right: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.disabled)};
   background-color: ${({ disabled }) => disabled && colors.gray.disabled};
+  transition: all 0.4s ease-in-out;
 `

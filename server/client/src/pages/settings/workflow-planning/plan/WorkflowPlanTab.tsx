@@ -5,7 +5,10 @@ import {
   CreateTaskNameModal,
   CreateWorkflowPlanModal,
   DataTableHeader,
+  ItemContainer,
+  NoTableData,
   ReadWorkflowPlanModal,
+  TableSkeltonLoader,
   UpdateWorkflowPlanModal
 } from '@/components'
 import { Badge } from '@/components/badge'
@@ -81,7 +84,8 @@ const WorkflowPlan = () => {
         id: `readWorkflowPlanModal-${workflow._id}`,
         title: 'Create Plan',
         body: <ReadWorkflowPlanModal workflow={workflow} />,
-        size: ESize.Large
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -92,7 +96,8 @@ const WorkflowPlan = () => {
         id: `updateWorkflowPlanModal-${workflow._id}`,
         title: 'Update Plan',
         body: <UpdateWorkflowPlanModal workflow={workflow} />,
-        size: ESize.XLarge
+        width: ESize.XLarge,
+        height: ESize.Large
       })
     )
   }
@@ -109,7 +114,9 @@ const WorkflowPlan = () => {
             onConfirm={() => handleOnConfirmDelete(workflow)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -126,7 +133,9 @@ const WorkflowPlan = () => {
             onConfirm={() => handleOnConfirmReactive(workflow)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -158,7 +167,8 @@ const WorkflowPlan = () => {
         id: 'createWorkflowPlanModal',
         title: 'Create Customer Task ',
         body: <CreateWorkflowPlanModal />,
-        size: ESize.XLarge,
+        width: ESize.XLarge,
+        height: ESize.Large,
         backgroundColor: '#fff'
       })
     )
@@ -167,7 +177,17 @@ const WorkflowPlan = () => {
   return (
     <Column>
       <DataTableHeader handleAddNew={openCreateRoleModal} />
-      <DataTable fixedHeader columns={columns} data={workflowPlans || []} onRowClicked={handleRead} />
+      <ItemContainer height="calc(100% - 38px - 0.5rem)">
+        {workflowPlanIsLoading ? (
+          <ItemContainer height="100%">
+            <TableSkeltonLoader count={13} />
+          </ItemContainer>
+        ) : workflowPlans && workflowPlans.length > 0 ? (
+          <DataTable fixedHeader columns={columns} data={workflowPlans || []} onRowClicked={handleRead} />
+        ) : (
+          <NoTableData />
+        )}
+      </ItemContainer>
     </Column>
   )
 }

@@ -1,3 +1,4 @@
+import colors from '@/constants/colors'
 import styled from 'styled-components'
 import { IStyledProps } from './types'
 
@@ -29,9 +30,9 @@ export const HiddenCheckbox = styled.input`
 
 export const StyledCheckbox = styled.div<IStyledProps>`
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  background: ${props => (props.checked ? 'salmon' : 'papayawhip')};
+  width: 1.3rem;
+  height: 1.3rem;
+  background: ${props => (props.checked ? colors.green.primary : colors.gray.disabled)};
   border-radius: 3px;
   transition: all 150ms;
 

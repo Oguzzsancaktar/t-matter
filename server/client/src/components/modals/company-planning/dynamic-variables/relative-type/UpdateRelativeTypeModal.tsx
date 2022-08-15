@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import { ConfirmCancelButtons } from '@/components/button'
 import { InputRegular } from '@/components/input'
-import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from '@/components/layout'
+import { Column, JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { ColorSelect, InnerWrapper } from '@/components'
+import { InnerWrapper, ItemContainer } from '@/components'
 import { ModalHeader, ModalBody, ModalFooter } from '@/components/modals/types'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'
 import { usePatchRelativeTypeMutation } from '@/services/settings/company-planning/dynamicVariableService'
 import { IRelativeType } from '@/models'
+import colors from '@/constants/colors'
 
 interface IProps {
   relativeType: IRelativeType
@@ -49,7 +50,7 @@ const UpdateRelativeTypeModal: React.FC<IProps> = ({ relativeType }) => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update Company RelativeType
             </H1>
           </JustifyCenterRow>
@@ -59,17 +60,19 @@ const UpdateRelativeTypeModal: React.FC<IProps> = ({ relativeType }) => {
       <ModalBody>
         <InnerWrapper>
           <JustifyCenterColumn height="100%" padding="2rem 0">
-            <Row>
-              <InputRegular
-                name="relateFrom"
-                placeholder="Relate from"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setRelateType({ ...relateType, relateFrom: e.target.value })
-                }
-                value={relateType.relateFrom}
-                type="text"
-                labelText="Relate from"
-              />
+            <Column>
+              <ItemContainer height="40px" margin="0 0 2rem 0">
+                <InputRegular
+                  name="relateFrom"
+                  placeholder="Relate from"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setRelateType({ ...relateType, relateFrom: e.target.value })
+                  }
+                  value={relateType.relateFrom}
+                  type="text"
+                  labelText="Relate from"
+                />
+              </ItemContainer>
 
               <InputRegular
                 name="relateTo"
@@ -81,7 +84,7 @@ const UpdateRelativeTypeModal: React.FC<IProps> = ({ relativeType }) => {
                 type="text"
                 labelText="Relate to"
               />
-            </Row>
+            </Column>
           </JustifyCenterColumn>
         </InnerWrapper>
       </ModalBody>

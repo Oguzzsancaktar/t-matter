@@ -10,6 +10,7 @@ import { ModalHeader, ModalBody, ModalFooter } from '@/components/modals/types'
 import { useCreateRefferedByMutation } from '@/services/settings/company-planning/dynamicVariableService'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'
+import colors from '@/constants/colors'
 
 interface IProps {}
 
@@ -49,7 +50,7 @@ const CreateRefferedByModal: React.FC<IProps> = () => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create Reffered By
             </H1>
           </JustifyCenterRow>

@@ -11,6 +11,7 @@ import { usePatchRoleMutation } from '@/services/settings/user-planning/userRole
 import { isValueNull } from '@/utils/validationUtils'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { IRole } from '@/models'
+import colors from '@/constants/colors'
 
 interface IProps {
   role: IRole
@@ -40,7 +41,7 @@ const UpdateRoleModal: React.FC<IProps> = ({ role }) => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create User Role
             </H1>
           </JustifyCenterRow>

@@ -5,6 +5,7 @@ import { Badge, InnerWrapper } from '@/components'
 import { ModalBody, ModalHeader } from '../../types'
 import { EStatus, ITaskCategory } from '@/models'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
+import colors from '@/constants/colors'
 
 interface IProps {
   category: ITaskCategory
@@ -16,7 +17,7 @@ const ReadWorkflowCategoryModal: React.FC<IProps> = ({ category }) => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Read Workflow Category
             </H1>
           </JustifyCenterRow>

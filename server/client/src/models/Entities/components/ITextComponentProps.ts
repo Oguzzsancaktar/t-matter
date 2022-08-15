@@ -8,4 +8,5 @@ export default interface ITextComponentProps {
   padding?: string
   height?: string
   width?: string
+  cursor?: string
 }

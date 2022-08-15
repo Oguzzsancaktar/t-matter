@@ -46,7 +46,8 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
         id: `updateUserModal-${user._id}`,
         title: 'Update User / ' + user.firstname + ' ' + user.lastname,
         body: <UpdateUserModal user={user} />,
-        size: ESize.Small
+        height: ESize.Small,
+        width: ESize.Large
       })
     )
   }
@@ -63,7 +64,9 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             onConfirm={() => handleOnConfirmDelete(user)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -80,7 +83,9 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             onConfirm={() => handleOnConfirmReactive(user)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }

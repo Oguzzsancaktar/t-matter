@@ -31,19 +31,27 @@ const SettingsPage = () => {
           modal={{
             id: 'companyPlanningModal',
             title: 'Company Planning',
-            size: ESize.XLarge,
+            width: ESize.XLarge,
+            height: 'calc(100% - 4rem)',
             body: <CompanyPlanningModal />
           }}
         />
         <SettingsCard
-          modal={{ id: 'userPlanningModal', title: 'User Planning', size: ESize.XLarge, body: <UserPlanningModal /> }}
+          modal={{
+            id: 'userPlanningModal',
+            title: 'User Planning',
+            width: ESize.XLarge,
+            height: ESize.Large,
+            body: <UserPlanningModal />
+          }}
         />
 
         <SettingsCard
           modal={{
             id: 'workflowPlanningModal',
             title: 'Workflow Planning',
-            size: ESize.XLarge,
+            width: ESize.XLarge,
+            height: ESize.Large,
             body: <WorkflowPlanningModal />
           }}
         />
@@ -52,7 +60,8 @@ const SettingsPage = () => {
           modal={{
             id: 'financePlanningModal',
             title: 'Finance Planning',
-            size: ESize.XLarge,
+            width: ESize.XLarge,
+            height: ESize.Large,
             body: <FinancePlaningModal />
           }}
         />

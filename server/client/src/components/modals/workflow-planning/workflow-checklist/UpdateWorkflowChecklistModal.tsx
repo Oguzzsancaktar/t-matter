@@ -22,6 +22,7 @@ import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { usePatchWorkflowChecklistMutation } from '@/services/settings/workflow-planning/workflowService'
 import { ITaskChecklist, ITaskChecklistUpdateDTO } from '@/models'
 import { useGetCompanyPricingQuery } from '@/services/settings/company-planning/companyPricingService'
+import colors from '@/constants/colors'
 
 interface IProps {
   checklist: ITaskChecklist
@@ -119,7 +120,7 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update Workflow Checklist
             </H1>
           </JustifyCenterRow>

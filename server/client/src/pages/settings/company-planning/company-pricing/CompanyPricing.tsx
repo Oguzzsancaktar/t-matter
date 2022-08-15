@@ -212,11 +212,11 @@ const CompanyPricing = () => {
   return (
     <JustifyBetweenRow height="100%" width="auto">
       <Column height="100%" width="30%">
-        <Row margin="0 0 1rem 0">
+        {/* <Row margin="0 0 1rem 0">
           <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
             Default
           </H1>
-        </Row>
+        </Row> */}
 
         <JustifyBetweenColumn height="100%">
           <InputWithIcon
@@ -257,11 +257,11 @@ const CompanyPricing = () => {
       </Column>
 
       <Column height="100%" margin="0px 2rem" width="40%">
-        <Row margin="0 0 1rem 0">
+        {/* <Row margin="0 0 1rem 0">
           <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
             Default
           </H1>
-        </Row>
+        </Row> */}
         <JustifyBetweenColumn height="100%">
           {dayOfWeek.map((day, index) => (
             <Row key={index}>
@@ -276,7 +276,13 @@ const CompanyPricing = () => {
                     isChecked={dailyWorkTimeData[EDays[day]].isChecked}
                     onChange={(e: any) => console.log('checkbox changed', e)}
                   />
-                  <Label>{EDays[day]}</Label>
+                  <H1
+                    cursor="pointer"
+                    fontSize="0.8rem"
+                    color={dailyWorkTimeData[EDays[day]].isChecked ? colors.green.primary : colors.gray.dark}
+                  >
+                    {EDays[day]}
+                  </H1>
                 </Row>
               </Column>
 
@@ -361,11 +367,11 @@ const CompanyPricing = () => {
       </Column>
 
       <Column height="100%" width="30%">
-        <Row margin="0 0 1rem 0">
+        {/* <Row margin="0 0 1rem 0">
           <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
             Summary
           </H1>
-        </Row>
+        </Row> */}
         <JustifyBetweenColumn height="100%">
           <SummaryCard
             body={

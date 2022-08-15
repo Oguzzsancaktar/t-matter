@@ -4,7 +4,6 @@ import {
   JustifyBetweenRow,
   ItemContainer,
   InputWithIcon,
-  DatePicker,
   Row,
   SelectInput,
   UserBadge,
@@ -12,11 +11,11 @@ import {
 } from '@/components'
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
+import emptyQueryParams from '@/constants/queryParams'
 import { EGender, ICustomerAddNew, IOption, IRefferedBy } from '@/models'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 import { toastError } from '@/utils/toastUtil'
-import { isValueNull, isEmailValid, isPhoneNumberValid } from '@/utils/validationUtils'
-import moment from 'moment'
+import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import React, { useEffect, useState } from 'react'
 import { User } from 'react-feather'
 
@@ -25,7 +24,7 @@ interface IProps {
   onAdd: (contact: ICustomerAddNew) => void
 }
 const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) => {
-  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
 
   const [newContact, setNewContact] = useState<ICustomerAddNew>({
     _id: '',

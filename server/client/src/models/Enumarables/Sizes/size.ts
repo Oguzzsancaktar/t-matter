@@ -1,7 +1,9 @@
 enum ESize {
-  XLarge = 'xl',
-  Large = 'lg',
-  Medium = 'md',
-  Small = 'sm'
+  XLarge = '1600px',
+  Large = '1440px',
+  Medium = '1200px',
+  Small = '600px',
+  XSmall = '480px',
+  Auto = 'auto'
 }
 export default ESize

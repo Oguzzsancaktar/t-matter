@@ -4,10 +4,14 @@ import {
   CreateLocationModal,
   DataTableHeader,
   ItemContainer,
+  NoTableData,
   ReadLocationModal,
+  TableSkeltonLoader,
   UpdateLocationModal
 } from '@/components'
 import { Badge } from '@/components/badge'
+import emptyQueryParams from '@/constants/queryParams'
+import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, ILocation } from '@/models'
 import {
@@ -17,11 +21,13 @@ import {
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
 const LocationsTab = () => {
-  const { data: locationsData, isLoading: locationsDataIsLoading } = useGetLocationsQuery()
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+
+  const { data: locationsData, isLoading: locationsDataIsLoading } = useGetLocationsQuery(searchQueryParams)
   const [updateLocationStatus] = useUpdateLocationStatusMutation()
 
   const { useAppDispatch } = useAccessStore()
@@ -65,7 +71,9 @@ const LocationsTab = () => {
         id: `readLocationModal-${location._id}`,
         title: 'Create Location',
         body: <ReadLocationModal location={location} />,
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -76,7 +84,9 @@ const LocationsTab = () => {
         id: `updateLocationModal-${location._id}`,
         title: 'Update Location',
         body: <UpdateLocationModal location={location} />,
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -93,7 +103,9 @@ const LocationsTab = () => {
             onConfirm={() => handleOnConfirmDelete(location)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -110,7 +122,9 @@ const LocationsTab = () => {
             onConfirm={() => handleOnConfirmReactive(location)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -142,19 +156,40 @@ const LocationsTab = () => {
         id: 'createLocationModal',
         title: 'Company Locations',
         body: <CreateLocationModal />,
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
+  }
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
   }
 
   return (
     <ItemContainer height="100%">
-      <DataTableHeader handleAddNew={openCreateLocationModal} />
-      {!locationsDataIsLoading && locationsData && (
-        <ItemContainer height="calc(100% - 38px - 0.5rem)">
+      <DataTableHeader
+        handleAddNew={openCreateLocationModal}
+        status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+        handleSearch={handleSearch}
+        handleStatusFilter={handleStatusFilter}
+      />
+
+      <ItemContainer height="calc(100% - 38px - 0.5rem)">
+        {locationsDataIsLoading ? (
+          <ItemContainer height="100%">
+            <TableSkeltonLoader count={13} />
+          </ItemContainer>
+        ) : locationsData && locationsData.length > 0 ? (
           <DataTable fixedHeader columns={columns} data={locationsData || []} onRowClicked={handleRead} />
-        </ItemContainer>
-      )}
+        ) : (
+          <NoTableData />
+        )}
+      </ItemContainer>
     </ItemContainer>
   )
 }

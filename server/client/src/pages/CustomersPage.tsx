@@ -10,7 +10,10 @@ import {
   CreateCustomerModal,
   ReadCustomerModal,
   ConfirmModal,
-  UpdateCustomerModal
+  UpdateCustomerModal,
+  ItemContainer,
+  TableSkeltonLoader,
+  NoTableData
 } from '@/components'
 import DataTable from 'react-data-table-component'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
@@ -91,7 +94,8 @@ const CustomersPage = () => {
         id: `customerDetailModal-${customer._id}`,
         title: 'Customer / ' + customer.firstname + ' ' + customer.lastname,
         body: <ReadCustomerModal customer={customer} />,
-        size: ESize.XLarge,
+        width: ESize.XLarge,
+        height: ESize.Large,
         backgroundColor: 'transparent'
       })
     )
@@ -103,7 +107,8 @@ const CustomersPage = () => {
         id: `updateCustomerModal-${customer._id}`,
         title: 'Update Customer / ' + customer.firstname + ' ' + customer.lastname,
         body: <UpdateCustomerModal customerId={customer._id} />,
-        size: ESize.XLarge
+        width: ESize.XLarge,
+        height: ESize.Large
       })
     )
   }
@@ -120,7 +125,9 @@ const CustomersPage = () => {
             onConfirm={() => handleOnConfirmDelete(customer)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -137,7 +144,9 @@ const CustomersPage = () => {
             onConfirm={() => handleOnConfirmReactive(customer)}
           />
         ),
-        size: ESize.Small
+        width: ESize.Large,
+        height: ESize.Auto,
+        maxWidth: ESize.Small
       })
     )
   }
@@ -169,7 +178,8 @@ const CustomersPage = () => {
         id: 'createCustomerModal',
         title: 'Create Customer',
         body: <CreateCustomerModal />,
-        size: ESize.Large
+        width: ESize.Small,
+        height: ESize.Small
       })
     )
   }
@@ -184,7 +194,18 @@ const CustomersPage = () => {
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px)">
           <DataTableHeader handleAddNew={openCreateCustomerModal} />
-          <DataTable fixedHeader columns={columns} data={customersData || []} onRowClicked={handleRead} />
+
+          <ItemContainer height="calc(100% - 38px - 0.5rem)">
+            {customersIsLoading ? (
+              <ItemContainer height="100%">
+                <TableSkeltonLoader count={13} />
+              </ItemContainer>
+            ) : customersData && customersData.length > 0 ? (
+              <DataTable fixedHeader columns={columns} data={customersData || []} onRowClicked={handleRead} />
+            ) : (
+              <NoTableData />
+            )}
+          </ItemContainer>
         </Column>
       </JustifyBetweenColumn>
     </PageWrapper>

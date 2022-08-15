@@ -21,9 +21,10 @@ import { useCreateCustomerMutation } from '@/services/customers/customerService'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal, openModal } from '@/store'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import emptyQueryParams from '@/constants/queryParams'
 
 const CreateClientTab = () => {
-  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -275,7 +276,8 @@ const CreateClientTab = () => {
                 onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
               />
             ),
-            size: ESize.Medium
+            width: ESize.XLarge,
+            height: ESize.Large
           })
         )
       }
@@ -304,7 +306,8 @@ const CreateClientTab = () => {
               onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
             />
           ),
-          size: ESize.XLarge
+          width: ESize.XLarge,
+          height: ESize.Large
         })
       )
     }

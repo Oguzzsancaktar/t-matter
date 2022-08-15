@@ -11,6 +11,7 @@ import { IRefferedBy } from '@/models'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'
 import { usePatchRefferedByMutation } from '@/services/settings/company-planning/dynamicVariableService'
+import colors from '@/constants/colors'
 
 interface IProps {
   refferedBy: IRefferedBy
@@ -47,7 +48,7 @@ const UpdateRefferedByModal: React.FC<IProps> = ({ refferedBy }) => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update Company RefferedBy
             </H1>
           </JustifyCenterRow>

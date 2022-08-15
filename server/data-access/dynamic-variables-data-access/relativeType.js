@@ -5,8 +5,32 @@ const createRelativeType = data => {
   return RelativeType.create(data)
 }
 
-const getRelativeTypes = (query = {}, populate = '') => {
-  return RelativeType.find(query).populate(populate).lean().exec()
+const getRelativeTypes = ({ search, size, status }) => {
+  const pipeline = []
+  const match = { $match: {} }
+
+  if (search && search !== 'undefined') {
+    match.$match.$or = [
+      {
+        relateTo: { $regex: search, $options: 'i' }
+      },
+
+      { relateFrom: { $regex: search, $options: 'i' } }
+    ]
+  }
+
+  if (status && status !== '-9') {
+    match.$match.status = { $eq: +status }
+  }
+
+  pipeline.push(match)
+  pipeline.push({ $sort: { createdAt: -1 } })
+
+  if (size) {
+    pipeline.push({ $limit: +size })
+  }
+
+  return RelativeType.aggregate(pipeline).exec()
 }
 
 const findRelativeTypeById = (id, populate = '') => {

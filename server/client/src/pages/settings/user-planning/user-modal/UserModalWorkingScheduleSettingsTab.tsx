@@ -197,7 +197,13 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
                       isChecked={dailyWorkTimeData[EDays[day]].isChecked}
                       onChange={(e: any) => console.log('checkbox changed', e)}
                     />
-                    <Label>{EDays[day]}</Label>
+                    <H1
+                      cursor="pointer"
+                      fontSize="0.8rem"
+                      color={dailyWorkTimeData[EDays[day]].isChecked ? colors.green.primary : colors.gray.dark}
+                    >
+                      {EDays[day]}
+                    </H1>
                   </Row>
                 </Column>
 

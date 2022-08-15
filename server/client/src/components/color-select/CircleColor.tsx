@@ -15,7 +15,7 @@ const CircleColorContainer = styled.div<IProps>`
   border-radius: 50%;
   background-color: ${({ color }) => color && color};
   transition: all 0.4s ease-in-out;
-  cursor: ${({ cursor }) => cursor && cursor};
+  cursor: ${({ cursor }) => (cursor ? cursor : 'pointer')};
 `
 const CircleColor: React.FC<IProps> = ({ onClick, ...rest }) => {
   return <CircleColorContainer onClick={onClick} {...rest} />

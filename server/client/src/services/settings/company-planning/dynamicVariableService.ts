@@ -1,7 +1,7 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { ILocation, IRefferedBy, IRelativeType } from '@/models'
+import { ILocation, IQueryParams, IRefferedBy, IRelativeType } from '@/models'
 
 const DYNAMIC_VARIABLES_API_REDUCER_PATH = 'dynamicVariablesApi'
 const DYNAMIC_VARIABLES_TAG = 'dynamicVariablesTag'
@@ -29,10 +29,10 @@ const createRelativeType = (builder: IBuilder) => {
 }
 
 const getRelativeTypes = (builder: IBuilder) => {
-  return builder.query<IRelativeType[], void>({
-    query() {
+  return builder.query<IRelativeType[], IQueryParams>({
+    query({ search = '', status = '', size = '' }) {
       return {
-        url: '/dynamic-variables/relative-type',
+        url: `/dynamic-variables/relative-type?search=${search}&status=${status}&size=${size}`,
         method: 'GET'
       }
     },
@@ -103,10 +103,10 @@ const createRefferedBy = (builder: IBuilder) => {
 }
 
 const getRefferedBys = (builder: IBuilder) => {
-  return builder.query<IRefferedBy[], void>({
-    query() {
+  return builder.query<IRefferedBy[], IQueryParams>({
+    query({ search = '', status = '', size = '' }) {
       return {
-        url: '/dynamic-variables/reffered-by',
+        url: `/dynamic-variables/reffered-by?search=${search}&status=${status}&size=${size}`,
         method: 'GET'
       }
     },
@@ -177,10 +177,10 @@ const createLocation = (builder: IBuilder) => {
 }
 
 const getLocations = (builder: IBuilder) => {
-  return builder.query<ILocation[], void>({
-    query() {
+  return builder.query<ILocation[], IQueryParams>({
+    query({ search = '', status = '', size = '' }) {
       return {
-        url: '/dynamic-variables/location',
+        url: `/dynamic-variables/location?search=${search}&status=${status}&size=${size}`,
         method: 'GET'
       }
     },

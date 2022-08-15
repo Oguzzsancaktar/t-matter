@@ -1,16 +1,10 @@
 import React from 'react'
-import {
-  Column,
-  InputWithIcon,
-  ItemContainer,
-  JustifyBetweenColumn,
-  JustifyBetweenRow,
-  SelectInput
-} from '@/components'
+import { InputWithIcon, ItemContainer, JustifyBetweenColumn, JustifyBetweenRow, SelectInput } from '@/components'
 import { genderOptions } from '@/constants/genders'
 import { IOption, IRefferedBy, EGender, ICustomerCreateDTO } from '@/models'
 import { User } from 'react-feather'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
   validationErrors: any
@@ -27,7 +21,7 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
   onGenderChange,
   onRefferTypeChange
 }) => {
-  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery()
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
 
   return (
     <ItemContainer>

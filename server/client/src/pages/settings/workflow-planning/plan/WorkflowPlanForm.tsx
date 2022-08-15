@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   ColorSelect,
@@ -8,11 +8,12 @@ import {
   JustifyBetweenRow,
   SelectInput
 } from '@/components'
-import { ILocation, IOption, ITaskCategory, ITaskChecklist, ITaskCreateDTO, IUser, IWorkflowCreateDTO } from '@/models'
+import { ILocation, IOption, ITaskCategory, ITaskChecklist, ITaskCreateDTO, IUser } from '@/models'
 import { useGetCategoriesQuery, useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import CLIENT_TASK_TABS_ARR from '@/constants/clientTaskTabs'
 import { useGetLocationsQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
   data: ITaskCreateDTO
@@ -24,7 +25,7 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery()
   const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
-  const { data: locationsData, isLoading: locationsDataIsLoading } = useGetLocationsQuery()
+  const { data: locationsData, isLoading: locationsDataIsLoading } = useGetLocationsQuery(emptyQueryParams)
 
   const handleCategoryChange = (option: IOption) => {
     const dataInstance = { ...data }

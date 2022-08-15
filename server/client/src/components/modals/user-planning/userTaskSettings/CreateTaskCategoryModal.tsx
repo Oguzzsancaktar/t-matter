@@ -7,6 +7,7 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { InnerWrapper } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
+import colors from '@/constants/colors'
 
 const CreateTaskCategoryModal = () => {
   const { useAppDispatch } = useAccessStore()
@@ -26,7 +27,7 @@ const CreateTaskCategoryModal = () => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create Task Category
             </H1>
           </JustifyCenterRow>

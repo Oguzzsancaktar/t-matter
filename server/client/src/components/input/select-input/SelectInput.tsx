@@ -16,6 +16,7 @@ interface IProps {
   onChange: ((event: React.ChangeEvent) => void) | ((option: IOption) => void) | any
   name: string
   options: any[]
+  menuPlacement?: 'auto' | 'top' | 'bottom'
 }
 
 const SelectInput: React.FC<IProps> = ({
@@ -29,7 +30,8 @@ const SelectInput: React.FC<IProps> = ({
   name,
   labelText,
   onChange,
-  options
+  options,
+  menuPlacement
 }) => {
   const selectedValues = selectedOption?.map(
     op => options?.find(option => option.value === op.value) || (isMulti ? [] : { label: 'Select Option', value: '' })
@@ -57,6 +59,7 @@ const SelectInput: React.FC<IProps> = ({
         onChange={onChange}
         defaultValue={selectedValues}
         value={selectedValues?.length === 1 ? selectedValues[0] : selectedValues}
+        menuPlacement={menuPlacement ? menuPlacement : 'auto'}
       />
     </Column>
   )

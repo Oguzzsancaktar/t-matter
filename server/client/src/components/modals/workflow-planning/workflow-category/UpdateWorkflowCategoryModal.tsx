@@ -11,6 +11,7 @@ import { isValueNull } from '@/utils/validationUtils'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { ITaskCategory } from '@/models'
 import { usePatchWorkflowCategoryMutation } from '@/services/settings/workflow-planning/workflowService'
+import colors from '@/constants/colors'
 
 interface IProps {
   category: ITaskCategory
@@ -40,7 +41,7 @@ const UpdateWorkflowCategoryModal: React.FC<IProps> = ({ category }) => {
       <ModalHeader>
         <InnerWrapper>
           <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update Workflow Category
             </H1>
           </JustifyCenterRow>
