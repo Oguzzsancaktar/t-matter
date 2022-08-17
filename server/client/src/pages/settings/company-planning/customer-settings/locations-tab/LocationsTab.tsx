@@ -71,9 +71,9 @@ const LocationsTab = () => {
         id: `readLocationModal-${location._id}`,
         title: 'Create Location',
         body: <ReadLocationModal location={location} />,
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -84,9 +84,9 @@ const LocationsTab = () => {
         id: `updateLocationModal-${location._id}`,
         title: 'Update Location',
         body: <UpdateLocationModal location={location} />,
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -103,9 +103,9 @@ const LocationsTab = () => {
             onConfirm={() => handleOnConfirmDelete(location)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -122,9 +122,9 @@ const LocationsTab = () => {
             onConfirm={() => handleOnConfirmReactive(location)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -156,9 +156,9 @@ const LocationsTab = () => {
         id: 'createLocationModal',
         title: 'Company Locations',
         body: <CreateLocationModal />,
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }

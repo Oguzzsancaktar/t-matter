@@ -1,4 +1,5 @@
 import colors from '@/constants/colors'
+import emptyQueryParams from '@/constants/queryParams'
 import { IUser } from '@/models'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import React, { useState } from 'react'
@@ -41,8 +42,10 @@ const UserListItem = styled.li`
 `
 
 const UserSelect: React.FC<IProps> = ({ selectedUser, onResponsibleChange }) => {
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+
   const [showUserList, setShowUserList] = useState<boolean>(false)
-  const { data: userListData, isLoading: userListIsLoading } = useGetUsersQuery()
+  const { data: userListData, isLoading: userListIsLoading } = useGetUsersQuery(searchQueryParams)
 
   const handleUserList = () => {
     setShowUserList(!showUserList)

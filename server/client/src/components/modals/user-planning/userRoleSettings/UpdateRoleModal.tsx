@@ -42,7 +42,7 @@ const UpdateRoleModal: React.FC<IProps> = ({ role }) => {
         <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              Create User Role
+              Update Role - {role.name}
             </H1>
           </JustifyCenterRow>
         </InnerWrapper>

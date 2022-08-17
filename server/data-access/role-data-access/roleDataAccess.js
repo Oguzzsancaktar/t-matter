@@ -10,7 +10,7 @@ const findRoleWithFilters = ({ search, size, status }) => {
   if (search) {
     match.$match.name = { $regex: search, $options: 'i' }
   }
-  if (status) {
+  if (status && status !== '-9') {
     match.$match.status = { $eq: +status }
   }
   pipeline.push(match)

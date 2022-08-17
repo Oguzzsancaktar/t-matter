@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   ColorSelect,
@@ -24,8 +24,10 @@ interface IProps {
 const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery()
   const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
-  const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
   const { data: locationsData, isLoading: locationsDataIsLoading } = useGetLocationsQuery(emptyQueryParams)
+
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+  const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(searchQueryParams)
 
   const handleCategoryChange = (option: IOption) => {
     const dataInstance = { ...data }

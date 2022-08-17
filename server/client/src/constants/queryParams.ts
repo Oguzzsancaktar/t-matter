@@ -2,7 +2,7 @@ import { IQueryParams } from '@/models'
 
 const emptyQueryParams: IQueryParams = {
   search: undefined,
-  status: undefined,
+  status: 1,
   size: undefined
 }
 

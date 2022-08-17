@@ -78,9 +78,9 @@ const LocationsTab = () => {
         id: `readRelativeTypeModal-${relativeType._id}`,
         title: 'Create RelativeType',
         body: <ReadRelativeTypeModal relativeType={relativeType} />,
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -91,9 +91,9 @@ const LocationsTab = () => {
         id: `updateRelativeTypeModal-${relativeType._id}`,
         title: 'Update RelativeType',
         body: <UpdateRelativeTypeModal relativeType={relativeType} />,
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -110,9 +110,9 @@ const LocationsTab = () => {
             onConfirm={() => handleOnConfirmDelete(relativeType)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -129,9 +129,9 @@ const LocationsTab = () => {
             onConfirm={() => handleOnConfirmReactive(relativeType)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -167,9 +167,9 @@ const LocationsTab = () => {
         id: 'createRelativeTypeModal',
         title: 'Company RelativeTypes',
         body: <CreateRelativeTypeModal />,
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }

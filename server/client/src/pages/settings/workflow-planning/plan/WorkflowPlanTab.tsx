@@ -84,8 +84,8 @@ const WorkflowPlan = () => {
         id: `readWorkflowPlanModal-${workflow._id}`,
         title: 'Create Plan',
         body: <ReadWorkflowPlanModal workflow={workflow} />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }
@@ -96,8 +96,8 @@ const WorkflowPlan = () => {
         id: `updateWorkflowPlanModal-${workflow._id}`,
         title: 'Update Plan',
         body: <UpdateWorkflowPlanModal workflow={workflow} />,
-        width: ESize.XLarge,
-        height: ESize.Large
+        width: ESize.WXLarge,
+        height: ESize.HLarge
       })
     )
   }
@@ -114,9 +114,9 @@ const WorkflowPlan = () => {
             onConfirm={() => handleOnConfirmDelete(workflow)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -133,9 +133,9 @@ const WorkflowPlan = () => {
             onConfirm={() => handleOnConfirmReactive(workflow)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -167,8 +167,8 @@ const WorkflowPlan = () => {
         id: 'createWorkflowPlanModal',
         title: 'Create Customer Task ',
         body: <CreateWorkflowPlanModal />,
-        width: ESize.XLarge,
-        height: ESize.Large,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
         backgroundColor: '#fff'
       })
     )

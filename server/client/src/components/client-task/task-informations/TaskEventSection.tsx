@@ -1,12 +1,5 @@
-import { Badge } from '@/components/badge'
 import { ItemContainer } from '@/components/item-container'
-import {
-  Column,
-  JustifyBetweenColumn,
-  JustifyBetweenRow,
-  JustifyCenterColumn,
-  JustifyCenterRow
-} from '@/components/layout'
+import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
 import { Tab } from '@/components/tab'
 import { InnerWrapper } from '@/components/wrapper'

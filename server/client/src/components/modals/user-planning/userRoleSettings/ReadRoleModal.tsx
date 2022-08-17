@@ -18,7 +18,7 @@ const ReadRoleModal: React.FC<IProps> = ({ role }) => {
         <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              Read User Role
+              Preview - {role.name}
             </H1>
           </JustifyCenterRow>
         </InnerWrapper>
@@ -28,11 +28,13 @@ const ReadRoleModal: React.FC<IProps> = ({ role }) => {
         <InnerWrapper>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <Row margin="0 0 1rem 0">
-              <H1>Role Name: </H1>
-              <H1 width="fit-content">{role.name}</H1>
+              <H1 color={colors.text.primary}>Role Name: </H1>
+              <H1 color={colors.text.primary} width="auto">
+                {role.name}
+              </H1>
             </Row>
             <Row>
-              <H1>Role Status: </H1>
+              <H1 color={colors.text.primary}>Role Status: </H1>
               <Badge color={selectColorForStatus(+role.status)}>{EStatus[role.status]} </Badge>
             </Row>
           </JustifyCenterColumn>

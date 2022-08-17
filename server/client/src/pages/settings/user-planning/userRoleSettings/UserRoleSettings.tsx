@@ -14,20 +14,23 @@ import {
   UpdateRoleModal
 } from '@/components'
 import { Badge } from '@/components/badge'
+import emptyQueryParams from '@/constants/queryParams'
+import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IRole } from '@/models'
 import { useGetRolesQuery, useUpdateRoleStatusMutation } from '@/services/settings/user-planning/userRoleService'
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
-import ContentLoader, { Facebook, Instagram } from 'react-content-loader'
 
 const UserRoleSettings = () => {
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-  const { data: roleData, isLoading: roleLoading, error: roleError } = useGetRolesQuery()
+  const { data: roleData, isLoading: roleLoading } = useGetRolesQuery(searchQueryParams)
   const [updateRoleStatus] = useUpdateRoleStatusMutation()
 
   const columns = [
@@ -67,8 +70,9 @@ const UserRoleSettings = () => {
         id: `readRoleModal-${role._id}`,
         title: 'Create Role',
         body: <ReadRoleModal role={role} />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -79,8 +83,9 @@ const UserRoleSettings = () => {
         id: `updateRoleModal-${role._id}`,
         title: 'Update Role',
         body: <UpdateRoleModal role={role} />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -97,9 +102,9 @@ const UserRoleSettings = () => {
             onConfirm={() => handleOnConfirmDelete(role)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -116,9 +121,9 @@ const UserRoleSettings = () => {
             onConfirm={() => handleOnConfirmReactive(role)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -150,10 +155,19 @@ const UserRoleSettings = () => {
         id: 'createRoleModal',
         title: 'Create Role',
         body: <CreateRoleModal />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
+  }
+
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
   }
 
   return (
@@ -163,10 +177,15 @@ const UserRoleSettings = () => {
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
       </JustifyBetweenRow>
-      <Column height="calc(100% - 200px)">
-        <DataTableHeader handleAddNew={openCreateRoleModal} />
+      <Column height="calc(100% - 200px - 1rem)">
+        <DataTableHeader
+          handleAddNew={openCreateRoleModal}
+          status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+          handleSearch={handleSearch}
+          handleStatusFilter={handleStatusFilter}
+        />
 
-        <ItemContainer height="calc(100% - 38px - 0.5rem)">
+        <ItemContainer height="calc(100% - 40px - 0.5rem)">
           {roleLoading ? (
             <ItemContainer height="100%">
               <TableSkeltonLoader count={13} />

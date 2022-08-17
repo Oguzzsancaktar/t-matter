@@ -4,6 +4,7 @@ import { ActionButtons } from '@/components/data-tables'
 import { UserImage } from '@/components/image'
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components/layout'
+import { UserSkeletonLoader } from '@/components/skelton-loader'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
@@ -46,8 +47,9 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
         id: `updateUserModal-${user._id}`,
         title: 'Update User / ' + user.firstname + ' ' + user.lastname,
         body: <UpdateUserModal user={user} />,
-        height: ESize.Small,
-        width: ESize.Large
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WMedium
       })
     )
   }
@@ -64,9 +66,9 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             onConfirm={() => handleOnConfirmDelete(user)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -83,9 +85,9 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             onConfirm={() => handleOnConfirmReactive(user)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -111,24 +113,26 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
   }
 
   return (
-    <ItemContainer borderRadius="0.3rem" overflow="visible" backgroundColor="transparent" height="100%">
+    <ItemContainer borderRadius="0.3rem" overflow="visible" height="100%">
       <JustifyBetweenRow height="100%">
         <ItemContainer width="350px" height="100%" backgroundColor={colors.white.secondary} borderRadius="0.3rem">
-          {isUserDataLoading || !userData || isUserDataError ? (
-            <div>Loading...</div>
+          {isUserDataLoading || !userData || isUserDataError || false ? (
+            <UserSkeletonLoader />
           ) : (
             <JustifyBetweenColumn height="100%" padding="1rem">
-              <ItemContainer height="150px">
+              <ItemContainer height="200px">
                 <JustifyBetweenColumn>
-                  <ItemContainer>
+                  <ItemContainer borderBottom={'1px solid ' + colors.white.primary} padding="0 0 1rem 0">
                     <JustifyCenterColumn>
                       <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
-                      <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
-                        {userData.firstname + ' ' + userData.lastname}
-                      </H1>
                     </JustifyCenterColumn>
                   </ItemContainer>
-                  <ItemContainer borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
+                  <ItemContainer>
+                    <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
+                      {userData.firstname + ' ' + userData.lastname}
+                    </H1>
+                  </ItemContainer>
+                  <ItemContainer>
                     <JustifyCenterRow>
                       <ItemContainer width="auto" margin="0 0.5rem 0 0">
                         <Badge children={userData.role.name} color={colors.gray.dark} />
@@ -141,86 +145,51 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
                 </JustifyBetweenColumn>
               </ItemContainer>
 
-              <ItemContainer padding="1rem 0" height="calc(100% - 1rem - 1rem - 150px - 40px - 1rem)">
+              <ItemContainer height="calc(100% - 200px - 40px - 1rem)">
                 <JustifyBetweenColumn>
-                  <ItemContainer margin="1rem 0">
-                    <JustifyBetweenRow>
-                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
-                        <H1 fontSize="13px" color={colors.black.dark}>
-                          Address
-                        </H1>
-                      </ItemContainer>
-                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
-                        <H1 fontSize="12px" color={colors.black.light}>
-                          {userData.address +
-                            ' ' +
-                            userData.city +
-                            ' ' +
-                            userData.state +
-                            ' ' +
-                            userData.country +
-                            ' ' +
-                            userData.zipcode}
-                        </H1>
-                      </ItemContainer>
-                    </JustifyBetweenRow>
+                  <ItemContainer margin="0.5rem 0">
+                    <JustifyCenterRow>
+                      <H1 fontSize="12px" color={colors.black.light} textAlign="center">
+                        {userData.address +
+                          ' ' +
+                          userData.city +
+                          ' ' +
+                          userData.state +
+                          ' ' +
+                          userData.country +
+                          ' ' +
+                          userData.zipcode}
+                      </H1>
+                    </JustifyCenterRow>
                   </ItemContainer>
 
-                  <ItemContainer margin="1rem 0">
-                    <JustifyBetweenRow>
-                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
-                        <H1 fontSize="13px" color={colors.black.dark}>
-                          Email
-                        </H1>
-                      </ItemContainer>
-                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
-                        <H1 fontSize="12px" color={colors.black.light}>
-                          {userData.email}
-                        </H1>
-                      </ItemContainer>
-                    </JustifyBetweenRow>
+                  <ItemContainer margin="0.5rem 0">
+                    <ItemContainer>
+                      <H1 fontSize="12px" color={colors.black.light} textAlign="center">
+                        {userData.email}
+                      </H1>
+                    </ItemContainer>
                   </ItemContainer>
-                  <ItemContainer margin="1rem 0">
-                    <JustifyBetweenRow>
-                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
-                        <H1 fontSize="13px" color={colors.black.dark}>
-                          Contact
-                        </H1>
-                      </ItemContainer>
-                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
-                        <H1 fontSize="12px" color={colors.black.light}>
-                          {userData.phone}
-                        </H1>
-                      </ItemContainer>
-                    </JustifyBetweenRow>
+                  <ItemContainer margin="0.5rem 0">
+                    <ItemContainer>
+                      <H1 fontSize="12px" color={colors.black.light} textAlign="center">
+                        {userData.phone}
+                      </H1>
+                    </ItemContainer>
                   </ItemContainer>
-                  <ItemContainer margin="1rem 0">
-                    <JustifyBetweenRow>
-                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
-                        <H1 fontSize="13px" color={colors.black.dark}>
-                          Birthday
-                        </H1>
-                      </ItemContainer>
-                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
-                        <H1 fontSize="12px" color={colors.black.light}>
-                          {moment(userData.birthday).format('MMMM-DD-YYYY')}
-                        </H1>
-                      </ItemContainer>
-                    </JustifyBetweenRow>
+                  <ItemContainer margin="0.5rem 0">
+                    <ItemContainer>
+                      <H1 fontSize="12px" color={colors.black.light} textAlign="center">
+                        {moment(userData.birthday).format('MMMM-DD-YYYY')}
+                      </H1>
+                    </ItemContainer>
                   </ItemContainer>
-                  <ItemContainer margin="1rem 0">
-                    <JustifyBetweenRow>
-                      <ItemContainer width="90px" margin="0 0.5rem 0 0">
-                        <H1 fontSize="13px" color={colors.black.dark}>
-                          Birth Location
-                        </H1>
-                      </ItemContainer>
-                      <ItemContainer width="calc(100% - 90px - 0.5rem)">
-                        <H1 fontSize="12px" color={colors.black.light}>
-                          {userData.birthplace}
-                        </H1>
-                      </ItemContainer>
-                    </JustifyBetweenRow>
+                  <ItemContainer margin="0.5rem 0">
+                    <ItemContainer>
+                      <H1 fontSize="12px" color={colors.black.light} textAlign="center">
+                        {userData.birthplace}
+                      </H1>
+                    </ItemContainer>
                   </ItemContainer>
                 </JustifyBetweenColumn>
               </ItemContainer>
@@ -244,30 +213,57 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             </JustifyBetweenColumn>
           )}
         </ItemContainer>
-        <ItemContainer
-          height="100%"
-          width="120px"
-          padding="1rem"
-          borderRadius="0.3rem"
-          backgroundColor={colors.white.secondary}
-        >
+        <ItemContainer height="100%" width="120px" padding="1rem" borderRadius="0.3rem">
           <JustifyBetweenColumn height="100%">
             <ItemContainer height="100%" margin="0 0 0.25rem 0">
               <Button
-                color={activeTab === 'log-in' ? colors.blue.primary : colors.gray.secondary}
+                color={activeTab === 'log-in' ? colors.blue.primary : colors.primary.dark}
                 onClick={() => setActiveTab('log-in')}
               >
-                <H1 color={activeTab === 'log-in' ? colors.white.primary : colors.gray.primary} textAlign="center">
+                <H1 color={activeTab === 'log-in' ? colors.gray.primary : colors.white.primary} textAlign="center">
                   Activity
+                </H1>
+              </Button>
+            </ItemContainer>
+
+            <ItemContainer height="100%" margin="0 0 0.25rem 0">
+              <Button
+                color={activeTab === 'calendar' ? colors.blue.primary : colors.primary.dark}
+                onClick={() => setActiveTab('calendar')}
+              >
+                <H1 color={activeTab === 'calendar' ? colors.gray.primary : colors.white.primary} textAlign="center">
+                  Calendar
+                </H1>
+              </Button>
+            </ItemContainer>
+
+            <ItemContainer height="100%" margin="0 0 0.25rem 0">
+              <Button
+                color={activeTab === 'work-flow' ? colors.blue.primary : colors.primary.dark}
+                onClick={() => setActiveTab('work-flow')}
+              >
+                <H1 color={activeTab === 'work-flow' ? colors.gray.primary : colors.white.primary} textAlign="center">
+                  Work Flow
+                </H1>
+              </Button>
+            </ItemContainer>
+
+            <ItemContainer height="100%" margin="0 0 0.25rem 0">
+              <Button
+                color={activeTab === 'file' ? colors.blue.primary : colors.primary.dark}
+                onClick={() => setActiveTab('file')}
+              >
+                <H1 color={activeTab === 'file' ? colors.gray.primary : colors.white.primary} textAlign="center">
+                  File
                 </H1>
               </Button>
             </ItemContainer>
             <ItemContainer height="100%" margin="0 0 0 0">
               <Button
-                color={activeTab === 'settings' ? colors.blue.primary : colors.gray.secondary}
+                color={activeTab === 'settings' ? colors.blue.primary : colors.primary.dark}
                 onClick={() => setActiveTab('settings')}
               >
-                <H1 color={activeTab === 'settings' ? colors.white.primary : colors.gray.primary} textAlign="center">
+                <H1 color={activeTab === 'settings' ? colors.gray.primary : colors.white.primary} textAlign="center">
                   Settings
                 </H1>
               </Button>

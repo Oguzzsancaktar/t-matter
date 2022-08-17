@@ -30,9 +30,11 @@ const createRelativeType = (builder: IBuilder) => {
 
 const getRelativeTypes = (builder: IBuilder) => {
   return builder.query<IRelativeType[], IQueryParams>({
-    query({ search = '', status = '', size = '' }) {
+    query({ search = '', size, status = 1 }) {
       return {
-        url: `/dynamic-variables/relative-type?search=${search}&status=${status}&size=${size}`,
+        url: `/dynamic-variables/relative-type?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
         method: 'GET'
       }
     },
@@ -104,9 +106,11 @@ const createRefferedBy = (builder: IBuilder) => {
 
 const getRefferedBys = (builder: IBuilder) => {
   return builder.query<IRefferedBy[], IQueryParams>({
-    query({ search = '', status = '', size = '' }) {
+    query({ search = '', size, status = 1 }) {
       return {
-        url: `/dynamic-variables/reffered-by?search=${search}&status=${status}&size=${size}`,
+        url: `/dynamic-variables/reffered-by?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
         method: 'GET'
       }
     },
@@ -178,9 +182,11 @@ const createLocation = (builder: IBuilder) => {
 
 const getLocations = (builder: IBuilder) => {
   return builder.query<ILocation[], IQueryParams>({
-    query({ search = '', status = '', size = '' }) {
+    query({ search = '', size, status = 1 }) {
       return {
-        url: `/dynamic-variables/location?search=${search}&status=${status}&size=${size}`,
+        url: `/dynamic-variables/location?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
         method: 'GET'
       }
     },

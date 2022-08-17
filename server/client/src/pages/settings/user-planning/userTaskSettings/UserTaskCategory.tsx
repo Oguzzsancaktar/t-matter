@@ -67,8 +67,8 @@ const UserTaskCategory = () => {
         id: 'createTaskCategoryModal',
         title: 'Create Task Category',
         body: <CreateTaskCategoryModal />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }

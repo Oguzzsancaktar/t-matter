@@ -81,8 +81,8 @@ const UserTaskName = () => {
         id: 'createTaskNameModal',
         title: 'Create Task Name',
         body: <CreateTaskNameModal />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }

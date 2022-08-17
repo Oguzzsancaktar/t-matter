@@ -49,9 +49,9 @@ const SettingsCard: React.FC<IProps> = ({ children, modal, ...rest }) => {
     <Card>
       <JustifyBetweenColumn height="100%">
         <CardTitle>{modal.title}</CardTitle>
-        <Button height="40px" color={colors.teal.primary} onClick={handleClick}>
+        <Button height="40px" color={colors.primary.light} onClick={handleClick}>
           <JustifyCenterRow>
-            <H1 color={colors.white.primary} textAlign="center">
+            <H1 color={colors.white.primary} textAlign="center" cursor="pointer">
               SHOW
             </H1>
           </JustifyCenterRow>

@@ -82,9 +82,9 @@ const RefferedByTab = () => {
         id: `readRefferedByModal-${refferedBy._id}`,
         title: 'Create RefferedBy',
         body: <ReadRefferedByModal refferedBy={refferedBy} />,
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -95,9 +95,9 @@ const RefferedByTab = () => {
         id: `updateRefferedByModal-${refferedBy._id}`,
         title: 'Update RefferedBy',
         body: <UpdateRefferedByModal refferedBy={refferedBy} />,
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -114,9 +114,9 @@ const RefferedByTab = () => {
             onConfirm={() => handleOnConfirmDelete(refferedBy)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -133,9 +133,9 @@ const RefferedByTab = () => {
             onConfirm={() => handleOnConfirmReactive(refferedBy)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -167,9 +167,9 @@ const RefferedByTab = () => {
         id: 'createRefferedByModal',
         title: 'Create Reffered By',
         body: <CreateRefferedByModal />,
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }

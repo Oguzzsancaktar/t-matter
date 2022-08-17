@@ -10,7 +10,6 @@ interface IProps {
   roleColor: string
 }
 const RoleBadge: React.FC<IProps> = ({ roleColor, roleIcon, roleName }) => {
-  console.log(roleName)
   return (
     <Row>
       <Column width="35px" margin="0 0.5rem 0 0">
@@ -20,7 +19,7 @@ const RoleBadge: React.FC<IProps> = ({ roleColor, roleIcon, roleName }) => {
       </Column>
 
       <Column width="calc(100% - 0.5rem - 35px)">
-        <H1 color={colors.black.primary}>{roleName}</H1>
+        <H1 color={colors.text.primary}>{roleName}</H1>
       </Column>
     </Row>
   )

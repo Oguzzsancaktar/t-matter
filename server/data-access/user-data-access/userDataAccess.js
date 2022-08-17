@@ -21,9 +21,16 @@ const findUserWithFiltersAndPopulate = ({ search, size, status }) => {
   const pipeline = []
   const match = { $match: {} }
   if (search) {
-    match.$match.firstname = { $regex: search, $options: 'i' }
+    match.$match.$or = [
+      { firstname: { $regex: search, $options: 'i' } },
+      { lastname: { $regex: search, $options: 'i' } },
+      // TODO: add role regex search
+      { role: { $regex: search, $options: 'i' } },
+      { phone: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } }
+    ]
   }
-  if (status) {
+  if (status && status !== '-9') {
     match.$match.status = { $eq: +status }
   }
   pipeline.push(match)

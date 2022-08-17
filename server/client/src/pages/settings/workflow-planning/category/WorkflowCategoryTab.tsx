@@ -69,8 +69,8 @@ const WorkflowCategory = () => {
         id: `readWorkflowCategoryModal-${category._id}`,
         title: 'Create Category',
         body: <ReadWorkflowCategoryModal category={category} />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }
@@ -81,8 +81,8 @@ const WorkflowCategory = () => {
         id: `updateWorkflowCategoryModal-${category._id}`,
         title: 'Update Category',
         body: <UpdateWorkflowCategoryModal category={category} />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }
@@ -99,9 +99,9 @@ const WorkflowCategory = () => {
             onConfirm={() => handleOnConfirmDelete(category)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -118,9 +118,9 @@ const WorkflowCategory = () => {
             onConfirm={() => handleOnConfirmReactive(category)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -152,8 +152,8 @@ const WorkflowCategory = () => {
         id: 'createWorkflowCategoryModal',
         title: 'Create Workflow Category',
         body: <CreateWorkflowCategoryModal />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }

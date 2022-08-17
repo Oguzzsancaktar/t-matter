@@ -276,8 +276,8 @@ const CreateClientTab = () => {
                 onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
               />
             ),
-            width: ESize.XLarge,
-            height: ESize.Large
+            width: ESize.WXLarge,
+            height: ESize.HLarge
           })
         )
       }
@@ -306,8 +306,8 @@ const CreateClientTab = () => {
               onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
             />
           ),
-          width: ESize.XLarge,
-          height: ESize.Large
+          width: ESize.WXLarge,
+          height: ESize.HLarge
         })
       )
     }
@@ -406,7 +406,7 @@ const CreateClientTab = () => {
           />
         </Column>
       </ItemContainer>
-      <JustifyBetweenColumn width="calc(100% - 200px)" height="100%">
+      <JustifyBetweenColumn width="calc(100% - 200px - 1rem)" height="100%">
         <ItemContainer height="calc(100% - 35px - 1rem)">{renderSwitch()}</ItemContainer>
 
         <ItemContainer width="100%" height="35px" margin="1rem 0 0 0 ">

@@ -15,6 +15,11 @@ export const colorOptions = [
 ]
 
 const colors = Object.freeze({
+  primary: {
+    dark: '#223446',
+    middle: '#243b4b',
+    light: '#274E57'
+  },
   blue: {
     primary: '#007bff'
   },

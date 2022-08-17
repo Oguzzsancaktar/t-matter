@@ -2,7 +2,7 @@ import colors from '@/constants/colors'
 import React from 'react'
 import CircleImage from '../image/CircleImage'
 import { Row, Column } from '../layout'
-import { H1, Label } from '../texts'
+import { H1 } from '../texts'
 
 interface IProps {
   userImage: string
@@ -18,7 +18,7 @@ const UserBadge: React.FC<IProps> = ({ userImage, userName, userEmail }) => {
 
       <Column width="calc(100% - 35px - 0.5rem)">
         <Row>
-          <H1 color={colors.black.primary}>{userName}</H1>
+          <H1 color={colors.text.primary}>{userName}</H1>
         </Row>
         <Row>
           <H1 color={colors.gray.dark} fontSize={'0.8rem'}>

@@ -16,17 +16,21 @@ import { statusOptions } from '@/constants/statuses'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
 import { useUpdateUserMutation } from '@/services/settings/user-planning/userService'
 import colors from '@/constants/colors'
+import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
   user: IUser
 }
 
 const UpdateUserModal: React.FC<IProps> = ({ user }) => {
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+
   const [updateUser, { isLoading: isUserUpdateLoading }] = useUpdateUserMutation()
-  const { data: roleData, isLoading: roleLoading, error: roleDataError } = useGetRolesQuery()
+  const { data: roleData, isLoading: roleLoading, error: roleDataError } = useGetRolesQuery(searchQueryParams)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+  console.log('user', user)
 
   const [birthDate, setBirthDate] = useState(user.birthday || '')
   const [updateUserData, setUpdateUserData] = useState<Omit<IUserUpdateDTO, 'password'>>({
@@ -43,14 +47,12 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
     zipcode: user.zipcode,
     address: user.address,
     role: {
-      _id: user.role[0]._id,
-      name: user.role[0].name
+      _id: user.role[0]?._id || user.role._id,
+      name: user.role[0]?.name || user.role.name
     },
     gender: user.gender,
     status: user.status
   })
-
-  console.log('user', user, EStatus[updateUserData.status.toString()], updateUserData.gender)
 
   const [firstnameError, setFirstnameError] = useState(false)
   const [lastnameError, setLastnameError] = useState(false)
@@ -287,6 +289,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   validationError={birthdayError}
                   name={'birthday'}
                   onChange={handleBirhdayChange}
+                  value={updateUserData.birthday}
                 />
               </ItemContainer>
 

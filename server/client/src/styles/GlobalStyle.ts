@@ -9,6 +9,7 @@ const GlobalStyle = createGlobalStyle`
   margin: 0;
   padding: 0;
   font-size: 16px;
+  text-decoration: none;
 }
 .tooltip-z-index{
   z-index: 999999999999999!important;
@@ -236,7 +237,7 @@ ul{
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px !important;
-  -webkit-box-shadow: inset 0 0 6px ${colors.blue.primary} !important;
+  -webkit-box-shadow: inset 0 0 6px ${colors.primary.light} !important;
 }
 `
 

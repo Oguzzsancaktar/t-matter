@@ -94,8 +94,8 @@ const CustomersPage = () => {
         id: `customerDetailModal-${customer._id}`,
         title: 'Customer / ' + customer.firstname + ' ' + customer.lastname,
         body: <ReadCustomerModal customer={customer} />,
-        width: ESize.XLarge,
-        height: ESize.Large,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
         backgroundColor: 'transparent'
       })
     )
@@ -107,8 +107,8 @@ const CustomersPage = () => {
         id: `updateCustomerModal-${customer._id}`,
         title: 'Update Customer / ' + customer.firstname + ' ' + customer.lastname,
         body: <UpdateCustomerModal customerId={customer._id} />,
-        width: ESize.XLarge,
-        height: ESize.Large
+        width: ESize.WXLarge,
+        height: ESize.HLarge
       })
     )
   }
@@ -125,9 +125,9 @@ const CustomersPage = () => {
             onConfirm={() => handleOnConfirmDelete(customer)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -144,9 +144,9 @@ const CustomersPage = () => {
             onConfirm={() => handleOnConfirmReactive(customer)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -178,8 +178,8 @@ const CustomersPage = () => {
         id: 'createCustomerModal',
         title: 'Create Customer',
         body: <CreateCustomerModal />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }
@@ -192,10 +192,10 @@ const CustomersPage = () => {
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         </JustifyBetweenRow>
-        <Column height="calc(100% - 200px)">
+        <Column height="calc(100% - 200px - 1rem)">
           <DataTableHeader handleAddNew={openCreateCustomerModal} />
 
-          <ItemContainer height="calc(100% - 38px - 0.5rem)">
+          <ItemContainer height="calc(100% - 40px - 0.5rem)">
             {customersIsLoading ? (
               <ItemContainer height="100%">
                 <TableSkeltonLoader count={13} />

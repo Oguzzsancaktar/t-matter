@@ -1,5 +1,6 @@
+import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenRow, Row } from '@/components/layout'
-import { Label } from '@/components/texts'
+import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { IModal } from '@/models'
@@ -15,7 +16,7 @@ interface IProps {
 const Bar = styled(JustifyBetweenRow)`
   border-radius: 0.3rem;
   padding: 0.4rem;
-  background-color: ${colors.gray.dark};
+  background-color: ${colors.primary.light};
   margin-right: 0.5rem;
 `
 const MinimizedModal: React.FC<IProps> = ({ modal }) => {
@@ -31,15 +32,16 @@ const MinimizedModal: React.FC<IProps> = ({ modal }) => {
   }
 
   const handleClose = (modal: IModal) => {
-    console.log(modal)
     dispatch(closeModal(modal.id))
   }
   return (
     <Bar width="auto">
       <Row margin="0 0.4rem 0 0">
-        <Label cursorType="pointer" onClick={() => handleOpen(modal)}>
-          {modal.title}
-        </Label>
+        <ItemContainer onClick={() => handleOpen(modal)}>
+          <H1 color={colors.white.primary} cursor="pointer">
+            {modal.title}
+          </H1>
+        </ItemContainer>
       </Row>
       <Row width="auto">
         <X cursor={'pointer'} size={20} color={colors.white.light} onClick={() => handleClose(modal)} />

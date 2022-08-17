@@ -13,7 +13,7 @@ interface IProps {
   name: string
   labelText?: string | null
   validationError?: boolean
-  value?: Date
+  value?: Date | string
   disabled?: boolean
   onChange: (value: Date[], dateText: string) => void
 }

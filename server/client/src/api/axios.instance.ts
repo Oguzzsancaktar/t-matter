@@ -15,7 +15,7 @@ axiosInstance.interceptors.response.use(
     const status = res?.status ? res.status : 0
 
     if (status > 399 && status < 500) toastWarning(msg)
-    else toastError(msg)
+    else toastError(msg + 'xxx')
     return Promise.reject(res)
   }
 )

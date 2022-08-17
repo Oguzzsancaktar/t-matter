@@ -65,7 +65,7 @@ export const selectColorForActivityType = (status: number) => {
   }
 
   if (status === EActivity.TASK_CHECKLIST_CHECKED) {
-    return (color = colors.teal.primary)
+    return (color = colors.blue.primary)
   }
 
   if (status === EActivity.TASK_FINISHED) {

@@ -84,8 +84,8 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
         id: 'customerTaksModal' + taskId,
         title: 'Customer Task',
         body: <CustomerTaskModal taskId={taskId} />,
-        width: ESize.XLarge,
-        height: ESize.Large,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
         backgroundColor: colors.gray.light
       })
     )
@@ -97,8 +97,8 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
         id: 'selectTaskWorkflowModal-' + customer._id,
         title: 'Customer Task',
         body: <SelectTaskWorkflowModal customer={customer} />,
-        width: ESize.XLarge,
-        height: ESize.Large,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
         backgroundColor: colors.gray.light
       })
     )
@@ -112,7 +112,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         </JustifyBetweenRow>
-        <Column height="calc(100% - 200px)">
+        <Column height="calc(100% - 200px - 1rem)">
           <DataTableHeader handleAddNew={() => openSelectTaskWorkflowModal()} />
 
           <ItemContainer height="calc(100% - 38px - 0.5rem)">

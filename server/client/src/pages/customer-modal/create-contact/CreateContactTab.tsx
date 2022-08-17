@@ -183,8 +183,8 @@ const CreateContactTab = () => {
                 onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
               />
             ),
-            width: ESize.XLarge,
-            height: ESize.Large
+            width: ESize.WXLarge,
+            height: ESize.HLarge
           })
         )
       }
@@ -213,8 +213,8 @@ const CreateContactTab = () => {
               onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
             />
           ),
-          width: ESize.XLarge,
-          height: ESize.Large
+          width: ESize.WXLarge,
+          height: ESize.HLarge
         })
       )
     }

@@ -85,8 +85,8 @@ const WorkflowChecklist = () => {
         id: `readWorkflowChecklistModal-${checklist._id}`,
         title: 'Create Checklist',
         body: <ReadWorkflowChecklistModal checklist={checklist} />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }
@@ -97,8 +97,8 @@ const WorkflowChecklist = () => {
         id: `updateWorkflowChecklistModal-${checklist._id}`,
         title: 'Update Checklist',
         body: <UpdateWorkflowChecklistModal checklist={checklist} />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }
@@ -115,9 +115,9 @@ const WorkflowChecklist = () => {
             onConfirm={() => handleOnConfirmDelete(checklist)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -134,9 +134,9 @@ const WorkflowChecklist = () => {
             onConfirm={() => handleOnConfirmReactive(checklist)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -168,8 +168,8 @@ const WorkflowChecklist = () => {
         id: 'createWorkflowChecklistModal',
         title: 'Create Workflow Checklist',
         body: <CreateWorkflowChecklistModal />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WSmall,
+        height: ESize.HSmall
       })
     )
   }

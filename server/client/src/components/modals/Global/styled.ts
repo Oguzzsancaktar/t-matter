@@ -21,7 +21,7 @@ export const Container = styled.div<IContainerProps>`
   position: relative;
   width: calc(100% - 4rem);
   // modal height LOOK
-  max-height: 900px;
+  max-height: 850px;
   height: ${({ height }) => (height ? height : '100%')};
   background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
   border-radius: 0.3rem;

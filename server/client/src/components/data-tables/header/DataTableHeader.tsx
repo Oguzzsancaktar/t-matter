@@ -5,6 +5,7 @@ import { Button } from '@/components/button'
 import { Upload } from 'react-feather'
 import { EStatus, IOption } from '@/models'
 import { statusOptions } from '@/constants/statuses'
+import colors from '@/constants/colors'
 
 interface IProps {
   status?: IOption
@@ -57,7 +58,6 @@ const DataTableHeader: React.FC<IProps> = ({
               onChange={handleStatusChange}
               selectedOption={[status || { value: '-9', label: 'All' }]}
               options={statusOptions}
-              menuPlacement="top"
             />
           </Row>
         )}
@@ -71,14 +71,16 @@ const DataTableHeader: React.FC<IProps> = ({
       <Row width="calc(1rem + 200px)" margin="0 0 0 0.5rem">
         {showExport && (
           <Row width={showAddNew ? '100px' : '100%'} margin="0 0.5rem 0 0">
-            <Button>
+            <Button color={colors.primary.light}>
               <Upload size={16} /> Export
             </Button>
           </Row>
         )}
         {showAddNew && (
           <Row width={showExport ? '100px' : '100%'}>
-            <Button onClick={handleAddNew}> Add New </Button>
+            <Button onClick={handleAddNew} color={colors.primary.light}>
+              Add New
+            </Button>
           </Row>
         )}
       </Row>

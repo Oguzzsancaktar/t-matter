@@ -14,13 +14,16 @@ import {
   UpdateUserModal
 } from '@/components'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
+import colors from '@/constants/colors'
+import emptyQueryParams from '@/constants/queryParams'
+import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IUser } from '@/models'
 import { useGetUsersQuery, useUpdateUserStatusMutation } from '@/services/settings/user-planning/userService'
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 import { UserCheck } from 'react-feather'
 
@@ -29,7 +32,8 @@ const UserPageSettingsTab = () => {
   const dispatch = useAppDispatch()
   const [updateUserStatus] = useUpdateUserStatusMutation()
 
-  const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery()
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+  const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(searchQueryParams)
 
   const columns = [
     {
@@ -37,7 +41,9 @@ const UserPageSettingsTab = () => {
       selector: row => row.task,
       sortable: true,
       cell: data => (
-        <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
+        <ItemContainer width="auto" onClick={() => handleRead(data)} cursorType="pointer">
+          <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
+        </ItemContainer>
       )
     },
 
@@ -45,7 +51,11 @@ const UserPageSettingsTab = () => {
       name: 'Role',
       selector: row => row.role,
       sortable: true,
-      cell: data => <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.role[0].name} />
+      cell: data => (
+        <ItemContainer width="auto" onClick={() => handleRead(data)} cursorType="pointer">
+          <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.role[0].name} />
+        </ItemContainer>
+      )
     },
     {
       name: 'Phone',
@@ -57,14 +67,17 @@ const UserPageSettingsTab = () => {
       width: '120px',
       selector: row => row.status,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
+      cell: data => (
+        <ItemContainer width="auto" onClick={() => handleRead(data)} cursorType="pointer">
+          <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>{' '}
+        </ItemContainer>
+      )
     },
     {
       name: 'Actions',
       width: '120px',
       selector: row => row.year,
       right: true,
-      header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
         <ActionButtons
           status={data.status}
@@ -85,9 +98,10 @@ const UserPageSettingsTab = () => {
         id: `userDetailModal-${user._id}`,
         title: 'User / ' + user.firstname + ' ' + user.lastname,
         body: <ReadUserModal userId={user._id} />,
-        width: ESize.XLarge,
-        height: ESize.Large,
-        backgroundColor: 'transparent'
+        width: ESize.WXLarge,
+        maxWidth: ESize.WXLarge,
+        height: ESize.HMedium,
+        backgroundColor: colors.gray.disabled
       })
     )
   }
@@ -98,8 +112,9 @@ const UserPageSettingsTab = () => {
         id: `updateUserModal-${user._id}`,
         title: 'Update User / ' + user.firstname + ' ' + user.lastname,
         body: <UpdateUserModal user={user} />,
-        width: ESize.Small,
-        height: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WMedium
       })
     )
   }
@@ -116,9 +131,9 @@ const UserPageSettingsTab = () => {
             onConfirm={() => handleOnConfirmDelete(user)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -135,9 +150,9 @@ const UserPageSettingsTab = () => {
             onConfirm={() => handleOnConfirmReactive(user)}
           />
         ),
-        width: ESize.Large,
-        height: ESize.Auto,
-        maxWidth: ESize.Small
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -169,12 +184,20 @@ const UserPageSettingsTab = () => {
         id: 'createUserModal',
         title: 'Create User',
         body: <CreateUserModal />,
-        width: ESize.XLarge,
-        height: ESize.Large
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WMedium
       })
     )
   }
 
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
+  }
   return (
     <JustifyBetweenColumn height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
@@ -182,10 +205,15 @@ const UserPageSettingsTab = () => {
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
       </JustifyBetweenRow>
-      <Column height="calc(100% - 200px)">
-        <DataTableHeader handleAddNew={openCreateUserModal} />
+      <Column height="calc(100% - 200px - 1rem)">
+        <DataTableHeader
+          handleAddNew={openCreateUserModal}
+          status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+          handleSearch={handleSearch}
+          handleStatusFilter={handleStatusFilter}
+        />
 
-        <ItemContainer height="calc(100% - 38px - 0.5rem)">
+        <ItemContainer height="calc(100% - 40px - 0.5rem)">
           {isUsersDataLoading ? (
             <ItemContainer height="100%">
               <TableSkeltonLoader count={13} />

@@ -14,7 +14,7 @@ interface IProps {
 const WizzardNavigationItemContainer = styled.div<Pick<IProps, 'isActive'>>`
   height: 100%;
   width: 100%;
-  background-color: ${({ isActive }) => (isActive ? colors.teal.primary : colors.gray.middle)};
+  background-color: ${({ isActive }) => (isActive ? colors.blue.primary : colors.gray.middle)};
   transition: background-color 0.4s ease-in-out;
   display: flex;
   flex-direction: column;

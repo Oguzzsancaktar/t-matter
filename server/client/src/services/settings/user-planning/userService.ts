@@ -1,7 +1,7 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { IUser, IUserCreateDTO, IUserLog, IUserUpdateDTO } from '@/models'
+import { IQueryParams, IUser, IUserCreateDTO, IUserUpdateDTO } from '@/models'
 
 const USER_REDUCER_PATH = 'userApi'
 const USER_TAG_TYPE = 'userTag' as const
@@ -15,10 +15,12 @@ type IBuilder = EndpointBuilder<
 >
 
 const getUsers = (builder: IBuilder) => {
-  return builder.query<IUser[], void>({
-    query() {
+  return builder.query<IUser[], IQueryParams>({
+    query({ search = '', size, status = 1 }) {
       return {
-        url: `/user`,
+        url: `/user?search=${search !== undefined ? search : ''}&status=${status !== undefined ? status : ''}&size=${
+          size !== undefined ? size : ''
+        }`,
         method: 'GET'
       }
     },

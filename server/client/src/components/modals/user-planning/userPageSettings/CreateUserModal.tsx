@@ -8,7 +8,20 @@ import { closeModal } from '@/store'
 import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 import { EGender, EStatus, IUserCreateDTO } from '@/models'
-import { Key, User } from 'react-feather'
+import {
+  Feather,
+  Flag,
+  Key,
+  Mail,
+  Map,
+  MapPin,
+  PhoneCall,
+  Pocket,
+  Send,
+  User,
+  UserMinus,
+  UserPlus
+} from 'react-feather'
 import { useToggle } from '@/hooks/useToggle'
 import { isEmailValid, isPasswordAndConfirmMatch, isPasswordValid, isValueNull } from '@/utils/validationUtils'
 import { toastError } from '@/utils/toastUtil'
@@ -18,15 +31,18 @@ import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleServ
 import { useCreateUserMutation } from '@/services/settings/user-planning/userService'
 import { companyPricingApi } from '@/services/settings/company-planning/companyPricingService'
 import colors from '@/constants/colors'
+import emptyQueryParams from '@/constants/queryParams'
 
 const CreateUserModal = () => {
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+
   const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
   const [isPasswordConfirmVisible, togglePasswordConfirmVisibility] = useToggle(false)
 
   const [passwordConfirm, setPasswordConfirm] = useState('')
 
   const [createUser, { isLoading: isUserCreateLoading }] = useCreateUserMutation()
-  const { data: roleData, isLoading: roleLoading, error: roleDataError } = useGetRolesQuery()
+  const { data: roleData, isLoading: roleLoading, error: roleDataError } = useGetRolesQuery(searchQueryParams)
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -239,7 +255,7 @@ const CreateUserModal = () => {
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0 0.5rem 0 0">
                 <InputWithIcon
-                  children={<User size={16} />}
+                  children={<UserMinus size={16} />}
                   name="firstname"
                   placeholder="Enter first name..."
                   onChange={handleInputChange}
@@ -253,7 +269,7 @@ const CreateUserModal = () => {
 
               <ItemContainer margin="0 0 0 0.5rem">
                 <InputWithIcon
-                  children={<User size={16} />}
+                  children={<UserPlus size={16} />}
                   name="lastname"
                   placeholder="Enter last name..."
                   onChange={handleInputChange}
@@ -269,7 +285,7 @@ const CreateUserModal = () => {
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0.5rem 0.5rem 0 0">
                 <InputWithIcon
-                  children={<User size={16} />}
+                  children={<Mail size={16} />}
                   name="email"
                   placeholder="Enter email address..."
                   onChange={handleInputChange}
@@ -283,7 +299,7 @@ const CreateUserModal = () => {
 
               <ItemContainer margin="0.5rem 0 0 0.5rem">
                 <InputWithIcon
-                  children={<User size={16} />}
+                  children={<PhoneCall size={16} />}
                   name="phone"
                   placeholder="Enter phone number..."
                   onChange={handleInputChange}
@@ -308,7 +324,7 @@ const CreateUserModal = () => {
 
               <ItemContainer margin="0.5rem 0 0 0.5rem">
                 <InputWithIcon
-                  children={<User size={16} />}
+                  children={<MapPin size={16} />}
                   name="birthplace"
                   placeholder="Enter birth location..."
                   onChange={handleInputChange}
@@ -324,7 +340,7 @@ const CreateUserModal = () => {
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0.5rem 0 0 0 ">
                 <InputWithIcon
-                  children={<User size={16} />}
+                  children={<Map size={16} />}
                   name="address"
                   placeholder="Enter your address..."
                   onChange={handleInputChange}
@@ -342,7 +358,7 @@ const CreateUserModal = () => {
                 <JustifyBetweenRow>
                   <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
-                      children={<User size={16} />}
+                      children={<Feather size={16} />}
                       name="city"
                       placeholder="Enter city..."
                       onChange={handleInputChange}
@@ -360,7 +376,7 @@ const CreateUserModal = () => {
                 <JustifyBetweenRow>
                   <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
-                      children={<User size={16} />}
+                      children={<Flag size={16} />}
                       name="country"
                       placeholder="Enter country..."
                       onChange={handleInputChange}
@@ -373,7 +389,7 @@ const CreateUserModal = () => {
                   </ItemContainer>
                   <ItemContainer margin="0 0 0 0.5rem" width="250px">
                     <InputWithIcon
-                      children={<User size={16} />}
+                      children={<Send size={16} />}
                       name="zipcode"
                       placeholder="Enter zip code..."
                       onChange={handleInputChange}
@@ -392,7 +408,7 @@ const CreateUserModal = () => {
               <ItemContainer margin="0.5rem 0.5rem 0 0 ">
                 <ItemContainer>
                   <InputWithIcon
-                    children={<User size={16} />}
+                    children={<Pocket size={16} />}
                     name="state"
                     placeholder="Enter state..."
                     onChange={handleInputChange}
@@ -444,6 +460,10 @@ const CreateUserModal = () => {
                   labelText="Status"
                   validationError={statusError}
                 />
+              </ItemContainer>
+
+              <ItemContainer margin="0" width="0" height="0" overflow="hidden">
+                <SelectInput onChange={undefined} name={''} options={[]} />
               </ItemContainer>
             </JustifyBetweenRow>
 

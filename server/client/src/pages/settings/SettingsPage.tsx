@@ -31,7 +31,7 @@ const SettingsPage = () => {
           modal={{
             id: 'companyPlanningModal',
             title: 'Company Planning',
-            width: ESize.XLarge,
+            width: ESize.WXLarge,
             height: 'calc(100% - 4rem)',
             body: <CompanyPlanningModal />
           }}
@@ -40,8 +40,8 @@ const SettingsPage = () => {
           modal={{
             id: 'userPlanningModal',
             title: 'User Planning',
-            width: ESize.XLarge,
-            height: ESize.Large,
+            width: ESize.WXLarge,
+            height: ESize.HLarge,
             body: <UserPlanningModal />
           }}
         />
@@ -50,8 +50,8 @@ const SettingsPage = () => {
           modal={{
             id: 'workflowPlanningModal',
             title: 'Workflow Planning',
-            width: ESize.XLarge,
-            height: ESize.Large,
+            width: ESize.WXLarge,
+            height: ESize.HLarge,
             body: <WorkflowPlanningModal />
           }}
         />
@@ -60,8 +60,8 @@ const SettingsPage = () => {
           modal={{
             id: 'financePlanningModal',
             title: 'Finance Planning',
-            width: ESize.XLarge,
-            height: ESize.Large,
+            width: ESize.WXLarge,
+            height: ESize.HLarge,
             body: <FinancePlaningModal />
           }}
         />

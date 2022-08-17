@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 
 export const toastError = (msg: string) => {
-  toast.error(msg ? msg : 'Something went wrong', {
+  toast.error(msg ? msg : 'Something went wrong danger', {
     position: 'top-right',
     autoClose: 3000,
     hideProgressBar: false,
@@ -13,7 +13,7 @@ export const toastError = (msg: string) => {
 }
 
 export const toastWarning = (msg: string) => {
-  toast.warn(msg ? msg : 'Something went wrong', {
+  toast.warn(msg ? msg : 'Something went wrong warn', {
     position: 'top-right',
     autoClose: 3000,
     hideProgressBar: false,

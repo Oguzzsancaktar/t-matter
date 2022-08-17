@@ -8,10 +8,11 @@ interface IProps {
 
 const MinimizedModalsBarWrapper = styled.div`
   border-radius: 0.3rem;
-  background-color: ${colors.gray.dark};
+  background-color: ${colors.primary.dark};
   position: fixed;
   margin: 0.5rem;
-  width: calc(100vw - 1rem);
+  width: calc(100vw - 80px - 1rem);
+  right: 0;
   bottom: 0;
   z-index: 9999;
 `
