@@ -10,7 +10,7 @@ const timeLogController = require('./time-log-controller/timeLogController')
 const workingScheduleController = require('./working-schedule-controller/workingScheduleController')
 const taskController = require('./task-controller/taskController')
 const activityController = require('./activity-controller/activityController')
-
+const financeController = require('./finance-controller/financeController')
 module.exports = {
   salarySettingController,
   authController,
@@ -23,5 +23,6 @@ module.exports = {
   workingScheduleController,
   customerController,
   taskController,
-  activityController
+  activityController,
+  financeController
 }

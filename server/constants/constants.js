@@ -37,6 +37,12 @@ const ACTIVITY_TYPES = {
   POSTPONE: 1
 }
 
+const feeCalculationType = {
+  BALANCE: 'BALANCE',
+  DEPT: 'DEPT',
+  PAYMENT: 'PAYMENT'
+}
+
 module.exports = {
   GENDER_TYPES,
   STATUS_TYPES,
@@ -45,5 +51,6 @@ module.exports = {
   USER_ROLE_TYPES,
   AUTH_COOKIE_OPTIONS,
   CHECKLIST_STATUSES,
-  ACTIVITY_TYPES
+  ACTIVITY_TYPES,
+  feeCalculationType
 }
