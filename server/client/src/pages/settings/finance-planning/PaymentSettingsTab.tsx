@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Checkbox,
   Column,
@@ -14,66 +14,29 @@ import colors from '@constants/colors'
 import { Clock, DollarSign, Percent } from 'react-feather'
 import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 import emptyQueryParams from '@constants/queryParams'
-
-const feeCalculationType = {
-  BALANCE: 'BALANCE',
-  DEPT: 'DEPT',
-  PAYMENT: 'PAYMENT'
-}
-
-const feeCalculationTypeOptions = [
-  { label: 'Balance', value: feeCalculationType.BALANCE },
-  { label: 'Payment', value: feeCalculationType.PAYMENT },
-  { label: 'Dept', value: feeCalculationType.DEPT }
-]
-
-const defaultPaymentSettings = {
-  minDepositAmount: {
-    isChecked: false,
-    value: 30
-  },
-  minInstallmentAmount: {
-    isChecked: false,
-    value: 400
-  },
-  installmentPostponeLimit: {
-    isChecked: false,
-    value: 2
-  },
-  installmentPostponeTimeLimit: {
-    isChecked: false,
-    value: 30
-  },
-  activeTimeSlipAmount: {
-    isChecked: false,
-    value: 1500
-  },
-  inactiveTimeSlipAmount: {
-    isChecked: false,
-    value: 1000
-  },
-  pastDueLateFee: {
-    isChecked: false,
-    days: 2,
-    percentage: 20,
-    feeCalculationType: feeCalculationType.BALANCE,
-    notifyUsers: []
-  },
-  suspendedFee: {
-    isChecked: false,
-    days: 2,
-    percentage: 20,
-    feeCalculationType: feeCalculationType.BALANCE,
-    notifyUsers: []
-  }
-}
-
+import { defaultPaymentSettings, feeCalculationTypeOptions } from '@/constants/financePlanning'
+import {
+  useGetFinancePlanningQuery,
+  useUpdateFinancePlanningMutation
+} from '@services/settings/finance-planning/financePlanningService'
+import { IFinancePlanning } from '@/models'
+import AwesomeDebouncePromise from 'awesome-debounce-promise'
+import useConstant from 'use-constant'
 const PaymentSettingsTab = () => {
-  const [state, setState] = useState({
+  const [state, setState] = useState<IFinancePlanning>({
     ...defaultPaymentSettings
   })
 
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
+  const { data, isLoading } = useGetFinancePlanningQuery()
+  const [updateFinancePlanning] = useUpdateFinancePlanningMutation()
+  const updateDebounce = useConstant(() => AwesomeDebouncePromise(updateFinancePlanning, 500))
+
+  useEffect(() => {
+    if (data) {
+      setState({ ...data })
+    }
+  }, [data])
 
   const selectedPastDueLateFeeCalculationType = feeCalculationTypeOptions.find(
     ({ value }) => value === state.pastDueLateFee.feeCalculationType
@@ -90,13 +53,14 @@ const PaymentSettingsTab = () => {
     state.suspendedFee.notifyUsers.includes(value as never)
   )
 
-  const handleChangeCheckbox = name => {
-    const tempState = { ...state }
+  const handleChangeCheckbox = async name => {
+    const tempState = JSON.parse(JSON.stringify(state))
     tempState[name].isChecked = !tempState[name].isChecked
     setState(tempState)
+    await updateDebounce(tempState)
   }
 
-  const handleInputChange: any = (e, o) => {
+  const handleInputChange: any = async (e, o) => {
     let name, value
     if (e.target) {
       name = e.target.name
@@ -106,7 +70,7 @@ const PaymentSettingsTab = () => {
       value = e.value ? e.value : e.map(({ value }) => value)
       name = o.name
     }
-    const tempState = { ...state }
+    const tempState = JSON.parse(JSON.stringify(state))
     if (name.includes('.')) {
       const [first, second] = name.split('.')
       tempState[first][second] = value
@@ -115,6 +79,7 @@ const PaymentSettingsTab = () => {
     }
     tempState[name].value = value
     setState(tempState)
+    await updateDebounce(tempState)
   }
 
   return (

@@ -12,6 +12,7 @@ import { logsApi } from '@/services/userLogService'
 import { customerApi } from '@/services/customers/customerService'
 import { taskApi } from '@/services/customers/taskService'
 import { activityApi } from '@/services/activityService'
+import { financePlanningApi } from '@services/settings/finance-planning/financePlanningService'
 
 const rootReducer = combineReducers({
   auth: AuthReducer,
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   [logsApi.reducerPath]: logsApi.reducer,
   [customerApi.reducerPath]: customerApi.reducer,
   [taskApi.reducerPath]: taskApi.reducer,
-  [activityApi.reducerPath]: activityApi.reducer
+  [activityApi.reducerPath]: activityApi.reducer,
+  [financePlanningApi.reducerPath]: financePlanningApi.reducer
 })
 
 export default rootReducer

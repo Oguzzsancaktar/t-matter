@@ -9,6 +9,7 @@
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
     "@types/sweetalert": "^2.0.4",
+    "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.26.1",
     "craco-alias": "^3.0.1",
     "craco-less": "^2.0.0",
@@ -34,6 +35,7 @@
     "sweetalert2": "^11.4.24",
     "sweetalert2-react-content": "^5.0.2",
     "typescript": "^4.4.2",
+    "use-constant": "^1.1.1",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
