@@ -12,7 +12,8 @@ import {
 } from '@/components'
 import colors from '@constants/colors'
 import { Clock, DollarSign, Percent } from 'react-feather'
-import { payrollTypeOptions } from '@constants/payrollOptions'
+import { useGetUsersQuery } from '@services/settings/user-planning/userService'
+import emptyQueryParams from '@constants/queryParams'
 
 const feeCalculationType = {
   BALANCE: 'BALANCE',
@@ -55,13 +56,15 @@ const defaultPaymentSettings = {
     isChecked: false,
     days: 2,
     percentage: 20,
-    feeCalculationType: feeCalculationType.BALANCE
+    feeCalculationType: feeCalculationType.BALANCE,
+    notifyUsers: []
   },
   suspendedFee: {
     isChecked: false,
     days: 2,
     percentage: 20,
-    feeCalculationType: feeCalculationType.BALANCE
+    feeCalculationType: feeCalculationType.BALANCE,
+    notifyUsers: []
   }
 }
 
@@ -70,12 +73,21 @@ const PaymentSettingsTab = () => {
     ...defaultPaymentSettings
   })
 
+  const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
+
   const selectedPastDueLateFeeCalculationType = feeCalculationTypeOptions.find(
     ({ value }) => value === state.pastDueLateFee.feeCalculationType
   )
-
   const selectedSuspendedFeeCalculationType = feeCalculationTypeOptions.find(
     ({ value }) => value === state.suspendedFee.feeCalculationType
+  )
+
+  const userOptions = users?.map(({ _id, firstname }) => ({ value: _id, label: firstname })) || []
+  const selectedPastDueLateFeeNotificationUsers = userOptions.filter(({ value }) =>
+    state.pastDueLateFee.notifyUsers.includes(value as never)
+  )
+  const selectedSuspendedFeeNotificationUsers = userOptions.filter(({ value }) =>
+    state.suspendedFee.notifyUsers.includes(value as never)
   )
 
   const handleChangeCheckbox = name => {
@@ -91,7 +103,7 @@ const PaymentSettingsTab = () => {
       value = e.target.value
     }
     if (o?.action) {
-      value = e.value
+      value = e.value ? e.value : e.map(({ value }) => value)
       name = o.name
     }
     const tempState = { ...state }
@@ -164,6 +176,7 @@ const PaymentSettingsTab = () => {
               name="installmentPostponeLimit"
               value={state.installmentPostponeLimit.value}
               onChange={handleInputChange}
+              type="number"
             >
               <Clock size="16px" />
             </InputWithIcon>
@@ -182,6 +195,7 @@ const PaymentSettingsTab = () => {
               name="installmentPostponeTimeLimit"
               value={state.installmentPostponeTimeLimit.value}
               onChange={handleInputChange}
+              type="number"
             >
               <Clock size="16px" />
             </InputWithIcon>
@@ -237,17 +251,19 @@ const PaymentSettingsTab = () => {
           </Column>
           <Column>
             <Row>
-              <InputWithIcon
-                labelText="Days"
-                placeholder="Days"
-                name="pastDueLateFee.days"
-                onChange={handleInputChange}
-                value={state.pastDueLateFee.days}
-                type="number"
-              >
-                <Clock size="16px" />
-              </InputWithIcon>
-              <Row margin="0 1rem 0 1rem">
+              <Row width="10%">
+                <InputWithIcon
+                  labelText="Days"
+                  placeholder="Days"
+                  name="pastDueLateFee.days"
+                  onChange={handleInputChange}
+                  value={state.pastDueLateFee.days}
+                  type="number"
+                >
+                  <Clock size="16px" />
+                </InputWithIcon>
+              </Row>
+              <Row width="20%" margin="0 1rem 0 1rem">
                 <SelectInput
                   selectedOption={selectedPastDueLateFeeCalculationType ? [selectedPastDueLateFeeCalculationType] : []}
                   labelText="Payroll Type"
@@ -256,16 +272,28 @@ const PaymentSettingsTab = () => {
                   options={feeCalculationTypeOptions}
                 />
               </Row>
-              <InputWithIcon
-                labelText="Percentage"
-                placeholder="Percentage"
-                name="pastDueLateFee.percentage"
-                onChange={handleInputChange}
-                value={state.pastDueLateFee.percentage}
-                type="number"
-              >
-                <Percent size="16px" />
-              </InputWithIcon>
+              <Row width="10%">
+                <InputWithIcon
+                  labelText="Percentage"
+                  placeholder="Percentage"
+                  name="pastDueLateFee.percentage"
+                  onChange={handleInputChange}
+                  value={state.pastDueLateFee.percentage}
+                  type="number"
+                >
+                  <Percent size="16px" />
+                </InputWithIcon>
+              </Row>
+              <Row width="60%" margin="0 0 0 1rem">
+                <SelectInput
+                  isMulti
+                  selectedOption={selectedPastDueLateFeeNotificationUsers}
+                  labelText="Users"
+                  onChange={handleInputChange}
+                  name="pastDueLateFee.notifyUsers"
+                  options={userOptions}
+                />
+              </Row>
             </Row>
           </Column>
         </JustifyBetweenRow>
@@ -281,17 +309,19 @@ const PaymentSettingsTab = () => {
           </Column>
           <Column>
             <Row>
-              <InputWithIcon
-                labelText="Days"
-                placeholder="Days"
-                name="suspendedFee.days"
-                onChange={handleInputChange}
-                value={state.suspendedFee.days}
-                type="number"
-              >
-                <Clock size="16px" />
-              </InputWithIcon>
-              <Row margin="0 1rem 0 1rem">
+              <Row width="10%">
+                <InputWithIcon
+                  labelText="Days"
+                  placeholder="Days"
+                  name="suspendedFee.days"
+                  onChange={handleInputChange}
+                  value={state.suspendedFee.days}
+                  type="number"
+                >
+                  <Clock size="16px" />
+                </InputWithIcon>
+              </Row>
+              <Row width="20%" margin="0 1rem 0 1rem">
                 <SelectInput
                   selectedOption={selectedSuspendedFeeCalculationType ? [selectedSuspendedFeeCalculationType] : []}
                   labelText="Payroll Type"
@@ -300,16 +330,28 @@ const PaymentSettingsTab = () => {
                   options={feeCalculationTypeOptions}
                 />
               </Row>
-              <InputWithIcon
-                labelText="Percentage"
-                placeholder="Percentage"
-                name="suspendedFee.percentage"
-                onChange={handleInputChange}
-                value={state.suspendedFee.percentage}
-                type="number"
-              >
-                <Percent size="16px" />
-              </InputWithIcon>
+              <Row width="10%">
+                <InputWithIcon
+                  labelText="Percentage"
+                  placeholder="Percentage"
+                  name="suspendedFee.percentage"
+                  onChange={handleInputChange}
+                  value={state.suspendedFee.percentage}
+                  type="number"
+                >
+                  <Percent size="16px" />
+                </InputWithIcon>
+              </Row>
+              <Row width="60%" margin="0 0 0 1rem">
+                <SelectInput
+                  isMulti
+                  selectedOption={selectedSuspendedFeeNotificationUsers}
+                  labelText="Users"
+                  onChange={handleInputChange}
+                  name="suspendedFee.notifyUsers"
+                  options={userOptions}
+                />
+              </Row>
             </Row>
           </Column>
         </JustifyBetweenRow>
