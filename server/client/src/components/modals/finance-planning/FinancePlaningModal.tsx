@@ -1,11 +1,56 @@
 import { ItemContainer } from '@/components/item-container'
-import { JustifyCenterColumn } from '@/components/layout'
-import React from 'react'
+import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
+import React, { useState } from 'react'
+import { InnerWrapper, Tab } from '@/components'
+import { ModalHeader, ModalBody } from '@components/modals/types'
+import { InvoiceCategoryTab, PaymentSettingsTab, PointSettingsTab } from '@/pages'
+
+const Component = {
+  InvoiceCategoryTab,
+  PaymentSettingsTab,
+  PointSettingsTab
+}
 
 const FinancePlaningModal = () => {
+  const [activeTab, setActiveTab] = useState('InvoiceCategoryTab')
+
   return (
     <ItemContainer minHeight="700px">
-      <JustifyCenterColumn height="100%">Fİnance Coming Soon</JustifyCenterColumn>
+      <Column>
+        <ModalHeader>
+          <InnerWrapper>
+            <JustifyBetweenColumn>
+              <JustifyCenterRow>
+                <Tab
+                  margin="0 1rem 0 0rem"
+                  index={0}
+                  name="Invoice Category"
+                  isActive={activeTab === 'InvoiceCategoryTab'}
+                  onClick={() => setActiveTab('InvoiceCategoryTab')}
+                />
+
+                <Tab
+                  margin="0 1rem 0 0rem"
+                  index={1}
+                  name="Payment Settings"
+                  isActive={activeTab === 'PaymentSettingsTab'}
+                  onClick={() => setActiveTab('PaymentSettingsTab')}
+                />
+
+                <Tab
+                  margin="0 1rem 0 0rem"
+                  index={2}
+                  name="Point Settings"
+                  isActive={activeTab === 'PointSettingsTab'}
+                  onClick={() => setActiveTab('PointSettingsTab')}
+                />
+              </JustifyCenterRow>
+            </JustifyBetweenColumn>
+          </InnerWrapper>
+        </ModalHeader>
+
+        <ModalBody>{React.createElement(Component[activeTab])}</ModalBody>
+      </Column>
     </ItemContainer>
   )
 }
