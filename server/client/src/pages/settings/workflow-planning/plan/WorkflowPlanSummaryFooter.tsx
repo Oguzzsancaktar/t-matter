@@ -6,6 +6,7 @@ import { Button } from '@/components'
 import { ITaskChecklist } from '@/models'
 import { useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
 import { secondsToHourMin } from '@/utils/timeUtils'
+import emptyQueryParams from '@/constants/queryParams'
 
 const Text = styled.h3`
   font-size: 0.8rem;
@@ -22,7 +23,7 @@ interface IProps {
 }
 
 const WorkflowPlanSummaryFooter: React.FC<IProps> = ({ checklistIdArr }) => {
-  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
+  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery(emptyQueryParams)
 
   const calculateStepTotals = () => {
     let totalDuration = 0

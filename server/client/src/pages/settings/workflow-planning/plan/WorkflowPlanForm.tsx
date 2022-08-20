@@ -22,8 +22,8 @@ interface IProps {
   onDataChange: (ITaskCreateDTO) => void
 }
 const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
-  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery()
-  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery(emptyQueryParams)
+  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery(emptyQueryParams)
   const { data: locationsData, isLoading: locationsDataIsLoading } = useGetLocationsQuery(emptyQueryParams)
 
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)

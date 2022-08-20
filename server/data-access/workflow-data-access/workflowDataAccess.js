@@ -10,8 +10,24 @@ const createWorkflowCategory = data => {
   return WorkflowCategory.create(data)
 }
 
-const getWorkflowCategories = (query = {}, populate = '') => {
-  return WorkflowCategory.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
+const getWorkflowCategories = ({ search, size, status }) => {
+  const pipeline = []
+  const match = { $match: {} }
+
+  if (search) {
+    match.$match.name = { $regex: search, $options: 'i' }
+  }
+
+  if (status && status !== '-9') {
+    match.$match.status = { $eq: +status }
+  }
+
+  pipeline.push(match)
+  pipeline.push({ $sort: { createdAt: -1 } })
+  if (size) {
+    pipeline.push({ $limit: +size })
+  }
+  return WorkflowCategory.aggregate(pipeline).exec()
 }
 
 const findWorkflowCategoryById = (id, populate = '') => {
@@ -27,17 +43,33 @@ const createWorkflowChecklist = data => {
   return WorkflowChecklist.create(data)
 }
 
-const getWorkflowChecklists = async (query = {}, populate = '') => {
+const getWorkflowChecklists = async ({ search, size, status }) => {
+  const pipeline = []
+  const match = { $match: {} }
   const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
-  return WorkflowChecklist.aggregate([
-    { $match: query },
-    {
-      $addFields: {
-        price: { $multiply: ['$duration', hourlyCompanyFee / 3600] }
-      }
-    },
-    { $sort: { createdAt: -1 } }
-  ])
+
+  if (search) {
+    match.$match.name = { $regex: search, $options: 'i' }
+  }
+
+  if (status && status !== '-9') {
+    match.$match.status = { $eq: +status }
+  }
+
+  pipeline.push(match)
+  pipeline.push({ $sort: { createdAt: -1 } })
+
+  pipeline.push({
+    $addFields: {
+      price: { $multiply: ['$duration', hourlyCompanyFee / 3600] }
+    }
+  })
+
+  if (size) {
+    pipeline.push({ $limit: +size })
+  }
+
+  return WorkflowChecklist.aggregate(pipeline)
 }
 
 const findWorkflowChecklistById = async (id, populate = '') => {
@@ -56,10 +88,12 @@ const createWorkflowPlan = data => {
   return WorkflowPlan.create(data)
 }
 
-const getWorkflowPlans = async (query = {}, populate = '') => {
-  const workflowPlans = await WorkflowPlan.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
-
+const getWorkflowPlans = async ({ search, size, status }) => {
+  const pipeline = []
+  const match = { $match: {} }
   const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
+
+  const workflowPlans = await WorkflowPlan.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
 
   if (workflowPlans) {
     for (let x = 0; x < workflowPlans.length; x++) {
@@ -77,7 +111,31 @@ const getWorkflowPlans = async (query = {}, populate = '') => {
       }
     }
   }
-  return workflowPlans
+
+  // return workflowPlans
+
+  if (search) {
+    match.$match.name = { $regex: search, $options: 'i' }
+  }
+
+  if (status && status !== '-9') {
+    match.$match.status = { $eq: +status }
+  }
+
+  pipeline.push(match)
+  pipeline.push({ $sort: { createdAt: -1 } })
+
+  pipeline.push({
+    $addFields: {
+      price: { $multiply: ['$duration', hourlyCompanyFee / 3600] }
+    }
+  })
+
+  if (size) {
+    pipeline.push({ $limit: +size })
+  }
+
+  return WorkflowChecklist.aggregate(pipeline)
 }
 
 const findWorkflowPlanById = async (id, populate = 'steps.responsibleUser') => {

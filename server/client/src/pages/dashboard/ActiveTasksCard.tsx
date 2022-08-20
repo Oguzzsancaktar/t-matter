@@ -1,8 +1,8 @@
-import { Column, ItemContainer, JustifyBetweenColumn } from '@/components'
-import ActivityItem from '@/components/activity/ActivityItem'
+import { Column, ItemContainer } from '@/components'
+
 import { TaskTrackingProgress } from '@/components/task-tracking-progress'
 import React from 'react'
-import ActivityTimelineFilter from './ActivityTimelineFilter'
+
 import DashboardCard from './DashboardCard'
 import OfflineUsers from './OfflineUsers'
 

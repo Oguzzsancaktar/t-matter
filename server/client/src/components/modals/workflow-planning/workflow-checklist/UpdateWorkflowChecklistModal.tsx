@@ -77,8 +77,9 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+
     name === 'point'
-      ? setWorkflowChecklist({ ...workflowChecklist, point: Number(value) })
+      ? setWorkflowChecklist({ ...workflowChecklist, point: Number(value[0] === '0' ? value.slice(1) : value) })
       : name === 'duration'
       ? setWorkflowChecklist({ ...workflowChecklist, duration: Number(value) })
       : setWorkflowChecklist({ ...workflowChecklist, name: value })
@@ -103,8 +104,6 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
         await patchWorkflowChecklist({ ...workflowChecklist, _id: checklist._id })
         toastSuccess('Checklist ' + checklist.name + ' updated successfully')
         dispatch(closeModal(`updateWorkflowChecklistModal-${checklist._id}`))
-      } else {
-        console.log(workflowChecklist, validationErrors)
       }
     } catch (error) {
       console.log(error)
@@ -121,71 +120,71 @@ const UpdateWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
         <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              Update Workflow Checklist
+              Update Workflow Checklist - ({checklist.name})
             </H1>
           </JustifyCenterRow>
         </InnerWrapper>
       </ModalHeader>
 
       <ModalBody>
-        <InnerWrapper>
-          <JustifyCenterColumn height="100%" padding="2rem 0">
-            <ItemContainer margin="1rem 0">
-              <InputWithIcon
-                children={<Terminal size={16} />}
-                name="name"
-                placeholder="Enter workflow checklist name..."
-                onChange={handleInputChange}
-                validationError={validationErrors.nameError}
-                value={workflowChecklist.name}
-                type="text"
-                labelText="Checklist Name"
-              />
-            </ItemContainer>
-            <ItemContainer margin="1rem 0">
-              <InputWithIcon
-                children={<MousePointer size={16} />}
-                name="point"
-                placeholder="Enter workflow point..."
-                onChange={handleInputChange}
-                validationError={validationErrors.pointError}
-                value={workflowChecklist.point}
-                type="number"
-                labelText="Checklist Point"
-              />
-            </ItemContainer>
-            <ItemContainer margin="1rem 0">
-              <ClockPicker24
-                validationError={validationErrors.durationError}
-                labelText={'Checklist Duration'}
-                value={secondsToHourMin(workflowChecklist.duration)}
-                name={'duration'}
-                onChange={(value: string) => handleDurationChange(+timeToSeconds(value))}
-              />
-            </ItemContainer>
-            <ItemContainer margin="1rem 0">
-              <InputWithIcon
-                children={<DollarSign size={16} />}
-                disabled={true}
-                name="price"
-                placeholder="0"
-                value={checklistPrice}
-                onChange={handleInputChange}
-                type="number"
-                validationError={validationErrors.priceError}
-                labelText="Checklist Price"
-              />
-            </ItemContainer>
-          </JustifyCenterColumn>
-        </InnerWrapper>
+        <JustifyCenterColumn height="100%" padding="2rem 0">
+          <ItemContainer margin="1rem 0">
+            <InputWithIcon
+              children={<Terminal size={16} />}
+              name="name"
+              placeholder="Enter workflow checklist name..."
+              onChange={handleInputChange}
+              validationError={validationErrors.nameError}
+              value={workflowChecklist.name}
+              type="text"
+              labelText="Checklist Name"
+            />
+          </ItemContainer>
+          <ItemContainer margin="1rem 0">
+            <InputWithIcon
+              children={<MousePointer size={16} />}
+              name="point"
+              placeholder="Enter workflow point..."
+              onChange={handleInputChange}
+              validationError={validationErrors.pointError}
+              value={
+                workflowChecklist.point === 0
+                  ? undefined
+                  : workflowChecklist.point[0] === '0'
+                  ? workflowChecklist.point.toString().slice(1)
+                  : workflowChecklist.point.toString()
+              }
+              type="number"
+              labelText="Checklist Point"
+            />
+          </ItemContainer>
+          <ItemContainer margin="1rem 0">
+            <ClockPicker24
+              validationError={validationErrors.durationError}
+              labelText={'Checklist Duration'}
+              value={secondsToHourMin(workflowChecklist.duration)}
+              name={'duration'}
+              onChange={(value: string) => handleDurationChange(+timeToSeconds(value))}
+            />
+          </ItemContainer>
+          <ItemContainer margin="1rem 0">
+            <InputWithIcon
+              children={<DollarSign size={16} />}
+              disabled={true}
+              name="price"
+              placeholder="0"
+              value={checklistPrice.toFixed(2)}
+              onChange={handleInputChange}
+              type="number"
+              validationError={validationErrors.priceError}
+              labelText="Checklist Price"
+            />
+          </ItemContainer>
+        </JustifyCenterColumn>
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
-          <Row>
-            <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
-          </Row>
-        </InnerWrapper>
+        <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
       </ModalFooter>
     </JustifyBetweenColumn>
   )

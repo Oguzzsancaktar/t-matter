@@ -19,6 +19,7 @@ import emptyQueryParams from '@/constants/queryParams'
 import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IUser } from '@/models'
+import { companyPricingApi } from '@/services/settings/company-planning/companyPricingService'
 import { useGetUsersQuery, useUpdateUserStatusMutation } from '@/services/settings/user-planning/userService'
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
@@ -136,6 +137,7 @@ const UserPageSettingsTab = () => {
         maxWidth: ESize.WSmall
       })
     )
+    dispatch(companyPricingApi.util.resetApiState())
   }
 
   const handleReactive = (user: IUser) => {
@@ -155,6 +157,7 @@ const UserPageSettingsTab = () => {
         maxWidth: ESize.WSmall
       })
     )
+    dispatch(companyPricingApi.util.resetApiState())
   }
 
   const handleOnConfirmDelete = async (user: IUser) => {

@@ -20,6 +20,13 @@ const colors = Object.freeze({
     middle: '#243b4b',
     light: '#274E57'
   },
+
+  secondary: {
+    dark: '#4d7298',
+    middle: '#a5d9f3',
+    light: '#e1edf4'
+  },
+
   blue: {
     primary: '#007bff'
   },

@@ -42,7 +42,7 @@ const UpdateWorkflowCategoryModal: React.FC<IProps> = ({ category }) => {
         <InnerWrapper>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              Update Workflow Category
+              Update Workflow Category - ({category.name})
             </H1>
           </JustifyCenterRow>
         </InnerWrapper>

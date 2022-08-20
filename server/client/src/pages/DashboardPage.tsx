@@ -1,7 +1,7 @@
-import { ItemContainer, JustifyBetweenRow } from '@/components'
+import { ItemContainer, JustifyBetweenColumn, JustifyBetweenRow } from '@/components'
 import colors from '@/constants/colors'
-import React, { useEffect } from 'react'
-import { ActiveTasksCard, ActivityTimelineCard } from '.'
+import React from 'react'
+import { ActiveTasksCard, ActivityTimelineCard, DashboardCard } from '.'
 
 const DashboardPage: React.FC = () => {
   return (
@@ -15,7 +15,21 @@ const DashboardPage: React.FC = () => {
           <ActiveTasksCard />
         </ItemContainer>
 
-        <ItemContainer width="35%" height="100%"></ItemContainer>
+        <ItemContainer width="35%" height="100%">
+          <JustifyBetweenColumn height="100%">
+            <ItemContainer width="100%" height="100%">
+              <DashboardCard head={'test'}>incoming chart</DashboardCard>
+            </ItemContainer>
+
+            <ItemContainer width="100%" height="100%" margin="1rem 0">
+              <DashboardCard head={'test'}>incoming chart</DashboardCard>
+            </ItemContainer>
+
+            <ItemContainer width="100%" height="100%">
+              <DashboardCard head={'test'}>incoming chart</DashboardCard>
+            </ItemContainer>
+          </JustifyBetweenColumn>
+        </ItemContainer>
       </JustifyBetweenRow>
     </ItemContainer>
   )

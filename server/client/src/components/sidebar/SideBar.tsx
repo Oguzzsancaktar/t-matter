@@ -1,11 +1,34 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Column, H1, ItemContainer, JustifyBetweenColumn, Row, UserBadge } from '@components/index'
+import {
+  Column,
+  H1,
+  ItemContainer,
+  JustifyBetweenColumn,
+  Row,
+  SearchCustomersModal,
+  UserBadge
+} from '@components/index'
 import { useAuth } from '@/hooks/useAuth'
 import colors from '@/constants/colors'
-import { Home, List, LogOut, Power, Settings, User } from 'react-feather'
+import {
+  Calendar,
+  DollarSign,
+  File,
+  Home,
+  MapPin,
+  Package,
+  Power,
+  Search,
+  Settings,
+  User,
+  UserCheck
+} from 'react-feather'
 import styled from 'styled-components'
 import CircleImage from '../image/CircleImage'
+import { ESize } from '@/models'
+import { openModal } from '@/store'
+import useAccessStore from '@/hooks/useAccessStore'
 
 const SidebarShowWhenHover = styled.div`
   color: ${colors.white.bg};
@@ -60,7 +83,23 @@ const SidebarIcon = styled.div`
 `
 
 const SideBar = () => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   const { loggedUser, logout } = useAuth()
+
+  const openSearchCustomersModal = () => {
+    dispatch(
+      openModal({
+        id: `searchCustomersModal`,
+        title: 'Search Customers Modal',
+        body: <SearchCustomersModal />,
+        width: ESize.WLarge,
+        height: ESize.HMedium,
+        maxWidth: ESize.WMedium
+      })
+    )
+  }
 
   return (
     <Sidebar>
@@ -94,7 +133,7 @@ const SideBar = () => {
                 <Link to="/">
                   <Row width="100%">
                     <SidebarIcon>
-                      <Home size={30} />
+                      <Home size={25} />
                     </SidebarIcon>
 
                     <ItemContainer margin="0 0 0 0.25rem" width="calc(100% - 40px)">
@@ -107,6 +146,22 @@ const SideBar = () => {
                   </Row>
                 </Link>
               </ItemContainer>
+
+              <ItemContainer margin="0 0 0.5rem 0" width="100%" onClick={openSearchCustomersModal.bind(this)}>
+                <Row width="100%">
+                  <SidebarIcon>
+                    <Search size={25} />
+                  </SidebarIcon>
+
+                  <ItemContainer margin="0 0 0 0.25rem" width="calc(100% - 40px)">
+                    <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                      <H1 cursor="pointer" color="white">
+                        Search
+                      </H1>
+                    </SidebarShowWhenHover>
+                  </ItemContainer>
+                </Row>
+              </ItemContainer>
             </Column>
           </ItemContainer>
 
@@ -116,12 +171,97 @@ const SideBar = () => {
                 <Link to="/customers">
                   <Row width="100%">
                     <SidebarIcon>
-                      <List size={30} />
+                      <UserCheck size={25} />
                     </SidebarIcon>
                     <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
                       <SidebarShowWhenHover className="sidebar__hover_hide_show">
                         <H1 cursor="pointer" color="white">
                           Customers
+                        </H1>
+                      </SidebarShowWhenHover>
+                    </ItemContainer>
+                  </Row>
+                </Link>
+              </ItemContainer>
+
+              <ItemContainer margin="0 0 0.5rem 0">
+                <Link to="/workflow">
+                  <Row width="100%">
+                    <SidebarIcon>
+                      <Package size={25} />
+                    </SidebarIcon>
+                    <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
+                      <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                        <H1 cursor="pointer" color="white">
+                          Workflow
+                        </H1>
+                      </SidebarShowWhenHover>
+                    </ItemContainer>
+                  </Row>
+                </Link>
+              </ItemContainer>
+
+              <ItemContainer margin="0 0 0.5rem 0">
+                <Link to="/calendar">
+                  <Row width="100%">
+                    <SidebarIcon>
+                      <Calendar size={25} />
+                    </SidebarIcon>
+                    <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
+                      <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                        <H1 cursor="pointer" color="white">
+                          Calendar
+                        </H1>
+                      </SidebarShowWhenHover>
+                    </ItemContainer>
+                  </Row>
+                </Link>
+              </ItemContainer>
+
+              <ItemContainer margin="0 0 0.5rem 0">
+                <Link to="/location">
+                  <Row width="100%">
+                    <SidebarIcon>
+                      <MapPin size={25} />
+                    </SidebarIcon>
+                    <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
+                      <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                        <H1 cursor="pointer" color="white">
+                          Location
+                        </H1>
+                      </SidebarShowWhenHover>
+                    </ItemContainer>
+                  </Row>
+                </Link>
+              </ItemContainer>
+
+              <ItemContainer margin="0 0 0.5rem 0">
+                <Link to="/finance">
+                  <Row width="100%">
+                    <SidebarIcon>
+                      <DollarSign size={25} />
+                    </SidebarIcon>
+                    <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
+                      <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                        <H1 cursor="pointer" color="white">
+                          Finance
+                        </H1>
+                      </SidebarShowWhenHover>
+                    </ItemContainer>
+                  </Row>
+                </Link>
+              </ItemContainer>
+
+              <ItemContainer margin="0 0 0.5rem 0">
+                <Link to="/file">
+                  <Row width="100%">
+                    <SidebarIcon>
+                      <File size={25} />
+                    </SidebarIcon>
+                    <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
+                      <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                        <H1 cursor="pointer" color="white">
+                          File
                         </H1>
                       </SidebarShowWhenHover>
                     </ItemContainer>
@@ -137,7 +277,7 @@ const SideBar = () => {
                 <Link to="/settings">
                   <Row width="100%">
                     <SidebarIcon>
-                      <Settings size={30} />
+                      <Settings size={25} />
                     </SidebarIcon>
                     <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
                       <SidebarShowWhenHover className="sidebar__hover_hide_show">
@@ -153,7 +293,7 @@ const SideBar = () => {
               <ItemContainer onClick={logout}>
                 <Row width="100%">
                   <SidebarIcon>
-                    <Power size={30} />
+                    <Power size={25} />
                   </SidebarIcon>
                   <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
                     <SidebarShowWhenHover className="sidebar__hover_hide_show">

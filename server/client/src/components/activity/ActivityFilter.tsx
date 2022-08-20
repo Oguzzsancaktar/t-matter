@@ -5,7 +5,6 @@ import { selectColorForActivityType } from '@/utils/statusColorUtil'
 import React, { useEffect, useMemo, useState } from 'react'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
-import { UserImage } from '../image'
 import { ItemContainer } from '../item-container'
 import { JustifyBetweenRow, Row } from '../layout'
 import { UserSelect } from '../user-select'
@@ -14,7 +13,7 @@ interface IStyledProps {
   color: string
 }
 const FilterBlock = styled.div<IStyledProps>`
-  height: 25px;
+  height: 8px;
   width: 100%;
   background-color: ${({ color }) => color};
   color: ${colors.white.primary};
@@ -100,25 +99,24 @@ const ActivityFilter = () => {
   }
 
   return (
-    <ItemContainer width="100%" height="45px">
+    <ItemContainer width="100%" height="100%">
       <JustifyBetweenRow width="100%" height="100%">
         <ItemContainer width="35px" height="35px">
           <UserSelect selectedUser={userFilter} onResponsibleChange={handleFilterUserChange} />
         </ItemContainer>
-        <ItemContainer width="calc(100% - 35px - 1rem)" borderRadius=".3rem" overflow="hidden" margin="auto">
+        <ItemContainer width="calc(100% - 35px - 1rem)" borderRadius="1rem" overflow="hidden" margin="auto">
           <Row width="100%">
             {activityTypes.map((type, index) => (
               <ItemContainer
                 key={index}
                 onClick={() => handleTypeFilter(+EActivity[type])}
                 width={(activityTypeValues[type] / activitiesData.length) * 100 + '%'}
+                margin={activityTypes.length !== index + 1 && index !== 0 ? ' 0 1px' : ''}
               >
                 <FilterBlock
-                  data-tip={type.replace('_', ' ')}
+                  data-tip={type.split('_').join(' ') + ' - ' + activityTypeValues[type]}
                   color={selectColorForActivityType(+EActivity[type]) + '90'}
-                >
-                  {activityTypeValues[type] !== 0 ? activityTypeValues[type] : ''}
-                </FilterBlock>
+                ></FilterBlock>
               </ItemContainer>
             ))}
           </Row>

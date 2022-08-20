@@ -5,12 +5,17 @@ import {
   CreateWorkflowChecklistModal,
   DataTableHeader,
   ItemContainer,
+  JustifyBetweenColumn,
+  JustifyBetweenRow,
+  JustifyCenterColumn,
   NoTableData,
   ReadWorkflowChecklistModal,
   TableSkeltonLoader,
   UpdateWorkflowChecklistModal
 } from '@/components'
 import { Badge } from '@/components/badge'
+import emptyQueryParams from '@/constants/queryParams'
+import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, ITaskChecklist } from '@/models'
 import {
@@ -21,15 +26,17 @@ import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { secondsToHourMin } from '@/utils/timeUtils'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
 const WorkflowChecklist = () => {
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery(searchQueryParams)
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const [updateChecklistStatus] = useUpdateChecklistStatusMutation()
-  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
 
   const columns = [
     {
@@ -39,7 +46,7 @@ const WorkflowChecklist = () => {
     },
     {
       name: 'Checklist Point',
-      selector: row => row.point + 'point',
+      selector: row => row.point + ' Point',
       sortable: true
     },
     {
@@ -85,8 +92,9 @@ const WorkflowChecklist = () => {
         id: `readWorkflowChecklistModal-${checklist._id}`,
         title: 'Create Checklist',
         body: <ReadWorkflowChecklistModal checklist={checklist} />,
-        width: ESize.WSmall,
-        height: ESize.HSmall
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -97,8 +105,9 @@ const WorkflowChecklist = () => {
         id: `updateWorkflowChecklistModal-${checklist._id}`,
         title: 'Update Checklist',
         body: <UpdateWorkflowChecklistModal checklist={checklist} />,
-        width: ESize.WSmall,
-        height: ESize.HSmall
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -161,34 +170,56 @@ const WorkflowChecklist = () => {
     }
   }
 
-  const openCreateRoleModal = (e: React.MouseEvent) => {
+  const openCreateChecklistModal = (e: React.MouseEvent) => {
     e.preventDefault()
     dispatch(
       openModal({
         id: 'createWorkflowChecklistModal',
         title: 'Create Workflow Checklist',
         body: <CreateWorkflowChecklistModal />,
-        width: ESize.WSmall,
-        height: ESize.HSmall
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
 
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
+  }
+
   return (
-    <Column>
-      <DataTableHeader handleAddNew={openCreateRoleModal} />
-      <ItemContainer height="calc(100% - 38px - 0.5rem)">
-        {isChecklistsLoading ? (
-          <ItemContainer height="100%">
-            <TableSkeltonLoader count={13} />
-          </ItemContainer>
-        ) : checklistsData && checklistsData.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={checklistsData || []} onRowClicked={handleRead} />
-        ) : (
-          <NoTableData />
-        )}
-      </ItemContainer>
-    </Column>
+    <JustifyBetweenColumn height="100%">
+      <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
+        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+      </JustifyBetweenRow>
+      <Column height="calc(100% - 200px - 1rem)">
+        <DataTableHeader
+          handleAddNew={openCreateChecklistModal}
+          status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+          handleSearch={handleSearch}
+          handleStatusFilter={handleStatusFilter}
+        />
+
+        <ItemContainer height="calc(100% - 40px - 0.5rem)">
+          {isChecklistsLoading ? (
+            <ItemContainer height="100%">
+              <TableSkeltonLoader count={13} />
+            </ItemContainer>
+          ) : checklistsData && checklistsData.length > 0 ? (
+            <DataTable fixedHeader columns={columns} data={checklistsData || []} onRowClicked={handleRead} />
+          ) : (
+            <NoTableData />
+          )}
+        </ItemContainer>
+      </Column>
+    </JustifyBetweenColumn>
   )
 }
 

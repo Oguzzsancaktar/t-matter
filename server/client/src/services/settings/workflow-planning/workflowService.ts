@@ -1,7 +1,9 @@
+import emptyQueryParams from '@/constants/queryParams'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import {
+  IQueryParams,
   ITaskCategory,
   ITaskCategoryCreate,
   ITaskCategoryUpdateDTO,
@@ -33,10 +35,12 @@ const createCategory = (builder: IBuilder) => {
 }
 
 const getCategories = (builder: IBuilder) => {
-  return builder.query<ITaskCategory[], void>({
-    query() {
+  return builder.query<ITaskCategory[], IQueryParams>({
+    query({ search = '', size, status = 1 }) {
       return {
-        url: '/workflow/category',
+        url: `/workflow/category?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
         method: 'GET'
       }
     },
@@ -107,10 +111,12 @@ const createChecklist = (builder: IBuilder) => {
 }
 
 const getChecklists = (builder: IBuilder) => {
-  return builder.query<ITaskChecklist[], void>({
-    query() {
+  return builder.query<ITaskChecklist[], IQueryParams>({
+    query({ search = '', size, status = 1 }) {
       return {
-        url: '/workflow/checklist',
+        url: `/workflow/checklist?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
         method: 'GET'
       }
     },
@@ -181,10 +187,12 @@ const createPlan = (builder: IBuilder) => {
 }
 
 const getPlans = (builder: IBuilder) => {
-  return builder.query<IWorkflow[], void>({
-    query() {
+  return builder.query<IWorkflow[], IQueryParams>({
+    query({ search = '', size, status = 1 } = emptyQueryParams) {
       return {
-        url: '/workflow/plan',
+        url: `/workflow/plan?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
         method: 'GET'
       }
     },

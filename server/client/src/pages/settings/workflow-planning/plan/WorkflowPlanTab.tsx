@@ -2,36 +2,38 @@ import {
   ActionButtons,
   Column,
   ConfirmModal,
-  CreateTaskNameModal,
   CreateWorkflowPlanModal,
   DataTableHeader,
   ItemContainer,
+  JustifyBetweenColumn,
+  JustifyBetweenRow,
+  JustifyCenterColumn,
   NoTableData,
   ReadWorkflowPlanModal,
   TableSkeltonLoader,
   UpdateWorkflowPlanModal
 } from '@/components'
 import { Badge } from '@/components/badge'
-import colors from '@/constants/colors'
+import emptyQueryParams from '@/constants/queryParams'
+
+import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IWorkflow } from '@/models'
-import {
-  useGetPlansQuery,
-  usePatchWorkflowPlanMutation,
-  useUpdatePlanStatusMutation
-} from '@/services/settings/workflow-planning/workflowService'
+import { useGetPlansQuery, useUpdatePlanStatusMutation } from '@/services/settings/workflow-planning/workflowService'
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { secondsToHourMin } from '@/utils/timeUtils'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
 const WorkflowPlan = () => {
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+  const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery(searchQueryParams)
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery()
   const [updatePlanStatus] = useUpdatePlanStatusMutation()
 
   const columns = [
@@ -174,21 +176,42 @@ const WorkflowPlan = () => {
     )
   }
 
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
+  }
+
   return (
-    <Column>
-      <DataTableHeader handleAddNew={openCreateRoleModal} />
-      <ItemContainer height="calc(100% - 38px - 0.5rem)">
-        {workflowPlanIsLoading ? (
-          <ItemContainer height="100%">
-            <TableSkeltonLoader count={13} />
-          </ItemContainer>
-        ) : workflowPlans && workflowPlans.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={workflowPlans || []} onRowClicked={handleRead} />
-        ) : (
-          <NoTableData />
-        )}
-      </ItemContainer>
-    </Column>
+    <JustifyBetweenColumn height="100%">
+      <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
+        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+      </JustifyBetweenRow>
+      <Column height="calc(100% - 200px - 1rem)">
+        <DataTableHeader
+          handleAddNew={openCreateRoleModal}
+          status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+          handleSearch={handleSearch}
+          handleStatusFilter={handleStatusFilter}
+        />
+
+        <ItemContainer height="calc(100% - 38px - 0.5rem)">
+          {workflowPlanIsLoading ? (
+            <ItemContainer height="100%">
+              <TableSkeltonLoader count={13} />
+            </ItemContainer>
+          ) : workflowPlans && workflowPlans.length > 0 ? (
+            <DataTable fixedHeader columns={columns} data={workflowPlans || []} onRowClicked={handleRead} />
+          ) : (
+            <NoTableData />
+          )}
+        </ItemContainer>
+      </Column>
+    </JustifyBetweenColumn>
   )
 }
 

@@ -11,6 +11,8 @@ import {
   UpdateWorkflowCategoryModal
 } from '@/components'
 import { Badge } from '@/components/badge'
+import emptyQueryParams from '@/constants/queryParams'
+import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, ITaskCategory } from '@/models'
 import {
@@ -20,15 +22,17 @@ import {
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
 const WorkflowCategory = () => {
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const [updateCategoryStatus] = useUpdateCategoryStatusMutation()
-  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery()
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery(searchQueryParams)
 
   const columns = [
     {
@@ -69,8 +73,9 @@ const WorkflowCategory = () => {
         id: `readWorkflowCategoryModal-${category._id}`,
         title: 'Create Category',
         body: <ReadWorkflowCategoryModal category={category} />,
-        width: ESize.WSmall,
-        height: ESize.HSmall
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -81,8 +86,9 @@ const WorkflowCategory = () => {
         id: `updateWorkflowCategoryModal-${category._id}`,
         title: 'Update Category',
         body: <UpdateWorkflowCategoryModal category={category} />,
-        width: ESize.WSmall,
-        height: ESize.HSmall
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -152,19 +158,33 @@ const WorkflowCategory = () => {
         id: 'createWorkflowCategoryModal',
         title: 'Create Workflow Category',
         body: <CreateWorkflowCategoryModal />,
-        width: ESize.WSmall,
-        height: ESize.HSmall
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
       })
     )
   }
 
-  return (
-    <Column margin="0" width="100%">
-      <DataTableHeader handleAddNew={openCreateWorkflowCategoryModal} />
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
 
-      <ItemContainer height="calc(100% - 38px - 0.5rem)">
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
+  }
+
+  return (
+    <Column margin="0" width="100%" height="100%">
+      <DataTableHeader
+        handleAddNew={openCreateWorkflowCategoryModal}
+        status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+        handleSearch={handleSearch}
+        handleStatusFilter={handleStatusFilter}
+      />
+
+      <ItemContainer height="calc(100% - 40px - 0.5rem)">
         {isCategoriesLoading ? (
-          <ItemContainer height="100%">
+          <ItemContainer>
             <TableSkeltonLoader count={13} />
           </ItemContainer>
         ) : categoriesData && categoriesData.length > 0 ? (

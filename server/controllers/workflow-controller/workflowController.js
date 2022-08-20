@@ -14,8 +14,10 @@ const createWorkflowCategory = async (req, res) => {
 }
 
 const getWorkflowCategories = async (req, res) => {
+  const { search, size, status } = req.query
+
   try {
-    const categories = await dataAccess.workflowDataAccess.getWorkflowCategories({}, '')
+    const categories = await dataAccess.workflowDataAccess.getWorkflowCategories({ search, size, status })
     res.status(StatusCodes.OK).json(categories)
   } catch (e) {
     console.log(e)
@@ -69,8 +71,10 @@ const createWorkflowChecklist = async (req, res) => {
 }
 
 const getWorkflowChecklists = async (req, res) => {
+  const { search, size, status } = req.query
+
   try {
-    const checklists = await dataAccess.workflowDataAccess.getWorkflowChecklists({}, '')
+    const checklists = await dataAccess.workflowDataAccess.getWorkflowChecklists({ search, size, status })
     res.status(StatusCodes.OK).json(checklists)
   } catch (e) {
     console.log(e)
@@ -124,8 +128,10 @@ const createWorkflowPlan = async (req, res) => {
 }
 
 const getWorkflowPlans = async (req, res) => {
+  const { search, size, status } = req.query
+
   try {
-    const workflowPlans = await dataAccess.workflowDataAccess.getWorkflowPlans({}, '')
+    const workflowPlans = await dataAccess.workflowDataAccess.getWorkflowPlans({ search, size, status })
     res.status(StatusCodes.OK).json(workflowPlans)
   } catch (e) {
     console.log(e)

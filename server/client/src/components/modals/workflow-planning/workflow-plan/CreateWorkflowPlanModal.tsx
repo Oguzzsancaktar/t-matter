@@ -13,11 +13,12 @@ import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import useAccessStore from '@/hooks/useAccessStore'
 import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
+import emptyQueryParams from '@/constants/queryParams'
 
 const CreateWorkflowPlanModal = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery()
+  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery(emptyQueryParams)
 
   const [activeStep, setActiveStep] = useState<number>(0)
   const [createPlan] = useCreatePlanMutation()

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
-import {
-  useGetPlanByIdQuery,
-  useGetPlansQuery,
-  usePatchWorkflowPlanMutation
-} from '@/services/settings/workflow-planning/workflowService'
+import { useGetPlanByIdQuery, useGetPlansQuery } from '@/services/settings/workflow-planning/workflowService'
 import { SelectInput } from '@/components/input'
 import { Button } from '@/components/button'
 import { SummaryCard } from '@/components/card'
@@ -19,13 +15,14 @@ import { isValueNull, isValueBiggerThanZero } from '@/utils/validationUtils'
 import colors from '@/constants/colors'
 import { useCreateTaskMutation } from '@/services/customers/taskService'
 import moment from 'moment'
+import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
   customer: ICustomer
 }
 
 const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
-  const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery()
+  const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery(emptyQueryParams)
 
   const [createTask, { isLoading: createTaskIsLoading }] = useCreateTaskMutation()
 

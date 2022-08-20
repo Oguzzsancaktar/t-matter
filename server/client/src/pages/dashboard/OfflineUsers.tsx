@@ -8,8 +8,12 @@ const OfflineUsers = () => {
       <Row height="100%">
         <ItemContainer width="auto" height="100%" margin="0 1rem 0 0">
           <JustifyCenterColumn height="100%">
-            <H1 textAlign="center">5</H1>
-            <H1 textAlign="center">OFFLINE</H1>
+            <H1 textAlign="center" fontSize="0.8rem" color={colors.primary.middle}>
+              5
+            </H1>
+            <H1 textAlign="center" fontSize="0.8rem" color={colors.blue.primary}>
+              Offline
+            </H1>
           </JustifyCenterColumn>
         </ItemContainer>
         <Row>
