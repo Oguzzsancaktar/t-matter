@@ -348,14 +348,14 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
                       children={<User size={16} />}
-                      name="country"
-                      placeholder="Enter country..."
+                      name="state"
+                      placeholder="Enter state..."
                       onChange={handleInputChange}
                       // onBlur={validateFormFields}
                       type="text"
-                      labelText="Country"
-                      validationError={countryError}
-                      value={updateUserData.country}
+                      labelText="State"
+                      validationError={stateError}
+                      value={updateUserData.state}
                     />
                   </ItemContainer>
                   <ItemContainer margin="0 0 0 0.5rem" width="250px">
@@ -380,14 +380,14 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                 <ItemContainer>
                   <InputWithIcon
                     children={<User size={16} />}
-                    name="state"
-                    placeholder="Enter state..."
+                    name="country"
+                    placeholder="Enter country..."
                     onChange={handleInputChange}
                     // onBlur={validateFormFields}
                     type="text"
-                    labelText="State"
-                    validationError={stateError}
-                    value={updateUserData.state}
+                    labelText="Country"
+                    validationError={countryError}
+                    value={updateUserData.country}
                   />
                 </ItemContainer>
               </ItemContainer>

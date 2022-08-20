@@ -239,22 +239,22 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
 
             <ItemContainer height="100%" margin="0 0 0.25rem 0">
               <Button
-                color={activeTab === 'work-flow' ? colors.blue.primary : colors.primary.dark}
-                onClick={() => setActiveTab('work-flow')}
+                color={activeTab === 'hr-activity' ? colors.blue.primary : colors.primary.dark}
+                onClick={() => setActiveTab('hr-activity')}
               >
-                <H1 color={activeTab === 'work-flow' ? colors.gray.primary : colors.white.primary} textAlign="center">
-                  Work Flow
+                <H1 color={activeTab === 'hr-activity' ? colors.gray.primary : colors.white.primary} textAlign="center">
+                  HR Activity
                 </H1>
               </Button>
             </ItemContainer>
 
             <ItemContainer height="100%" margin="0 0 0.25rem 0">
               <Button
-                color={activeTab === 'file' ? colors.blue.primary : colors.primary.dark}
-                onClick={() => setActiveTab('file')}
+                color={activeTab === 'bonus' ? colors.blue.primary : colors.primary.dark}
+                onClick={() => setActiveTab('bonus')}
               >
-                <H1 color={activeTab === 'file' ? colors.gray.primary : colors.white.primary} textAlign="center">
-                  File
+                <H1 color={activeTab === 'bonus' ? colors.gray.primary : colors.white.primary} textAlign="center">
+                  Bonus
                 </H1>
               </Button>
             </ItemContainer>

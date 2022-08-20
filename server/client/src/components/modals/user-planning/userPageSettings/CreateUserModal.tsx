@@ -376,15 +376,15 @@ const CreateUserModal = () => {
                 <JustifyBetweenRow>
                   <ItemContainer margin="0 0.5rem 0 0 ">
                     <InputWithIcon
-                      children={<Flag size={16} />}
-                      name="country"
-                      placeholder="Enter country..."
+                      children={<Pocket size={16} />}
+                      name="state"
+                      placeholder="Enter state..."
                       onChange={handleInputChange}
                       // onBlur={validateFormFields}
                       type="text"
-                      labelText="Country"
-                      validationError={countryError}
-                      value={createUserData.country}
+                      labelText="State"
+                      validationError={stateError}
+                      value={createUserData.state}
                     />
                   </ItemContainer>
                   <ItemContainer margin="0 0 0 0.5rem" width="250px">
@@ -408,15 +408,15 @@ const CreateUserModal = () => {
               <ItemContainer margin="0.5rem 0.5rem 0 0 ">
                 <ItemContainer>
                   <InputWithIcon
-                    children={<Pocket size={16} />}
-                    name="state"
-                    placeholder="Enter state..."
+                    children={<Flag size={16} />}
+                    name="country"
+                    placeholder="Enter country..."
                     onChange={handleInputChange}
                     // onBlur={validateFormFields}
                     type="text"
-                    labelText="State"
-                    validationError={stateError}
-                    value={createUserData.state}
+                    labelText="Country"
+                    validationError={countryError}
+                    value={createUserData.country}
                   />
                 </ItemContainer>
               </ItemContainer>
