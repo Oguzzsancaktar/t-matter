@@ -10,6 +10,7 @@ import { logsApi } from '@/services/userLogService'
 import { customerApi } from '@/services/customers/customerService'
 import { taskApi } from '@/services/customers/taskService'
 import { activityApi } from '@/services/activityService'
+import { financePlanningApi } from '@services/settings/finance-planning/financePlanningService'
 
 const StoreMiddlewares = [
   authApi.middleware,
@@ -22,7 +23,8 @@ const StoreMiddlewares = [
   logsApi.middleware,
   customerApi.middleware,
   taskApi.middleware,
-  activityApi.middleware
+  activityApi.middleware,
+  financePlanningApi.middleware
 ]
 
 export default StoreMiddlewares
