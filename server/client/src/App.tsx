@@ -41,7 +41,7 @@ function App() {
 
       {loggedUser.accessToken && <SideBar />}
 
-      <ItemContainer height="100vh" width="calc(100vw - 40px - 2rem)" margin="0 0 0 auto">
+      <ItemContainer height="100vh" width="calc(100vw - 48px - 2rem)" margin="0 0 0 auto">
         <Routes>
           <Route path="/login" element={<LoginPage />} />
 

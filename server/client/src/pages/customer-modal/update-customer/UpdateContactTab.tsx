@@ -114,8 +114,9 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
                 onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
               />
             ),
-            width: ESize.WXLarge,
-            height: ESize.HLarge
+            width: ESize.WLarge,
+            height: ESize.HAuto,
+            maxWidth: ESize.WSmall
           })
         )
       }

@@ -1,16 +1,15 @@
+import React, { useState } from 'react'
 import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import { Tab } from '@/components/tab'
 import { InnerWrapper } from '@/components/wrapper'
-import { UserPageSettingsTab } from '@/pages'
 import { CreateClientTab, CreateContactTab } from '@/pages/customer-modal'
-import React, { useState } from 'react'
 import { ModalHeader, ModalBody } from '../types'
 
 const CreateCustomerModal = () => {
   const [activeTab, setActiveTab] = useState('create-contact')
 
   return (
-    <Column>
+    <Column height="100%">
       <ModalHeader>
         <InnerWrapper>
           <JustifyBetweenColumn>
@@ -35,16 +34,14 @@ const CreateCustomerModal = () => {
         </InnerWrapper>
       </ModalHeader>
 
-      <ModalBody>
-        <InnerWrapper>
-          {activeTab === 'create-client' ? (
-            <CreateClientTab />
-          ) : activeTab === 'create-contact' ? (
-            <CreateContactTab />
-          ) : (
-            'Something went wrong 99'
-          )}
-        </InnerWrapper>
+      <ModalBody minHeight="100% - 63px">
+        {activeTab === 'create-client' ? (
+          <CreateClientTab />
+        ) : activeTab === 'create-contact' ? (
+          <CreateContactTab />
+        ) : (
+          'Something went wrong 99'
+        )}
       </ModalBody>
     </Column>
   )

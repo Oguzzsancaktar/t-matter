@@ -50,20 +50,18 @@ const CreateLocationModal = () => {
       </ModalHeader>
 
       <ModalBody>
-        <InnerWrapper>
-          <JustifyCenterColumn height="100%" padding="2rem 0">
-            <Row>
-              <InputRegular
-                name="locationName"
-                placeholder="Location Name"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationName(e.target.value)}
-                value={locationName}
-                type="text"
-                labelText="Location Name"
-              />
-            </Row>
-          </JustifyCenterColumn>
-        </InnerWrapper>
+        <JustifyCenterColumn height="100%" padding="2rem 0">
+          <Row>
+            <InputRegular
+              name="locationName"
+              placeholder="Location Name"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationName(e.target.value)}
+              value={locationName}
+              type="text"
+              labelText="Location Name"
+            />
+          </Row>
+        </JustifyCenterColumn>
       </ModalBody>
 
       <ModalFooter>

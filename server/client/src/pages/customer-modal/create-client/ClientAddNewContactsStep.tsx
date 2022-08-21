@@ -150,16 +150,10 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
   }, [errorMessage])
 
   return (
-    <InnerWrapper>
-      <ItemContainer height="40px">
-        <Button onClick={handleOnAdd} color={colors.blue.primary}>
-          Add
-        </Button>
-      </ItemContainer>
-
+    <ItemContainer>
       <ItemContainer height="calc(100% - 40px -  40px - 2rem )" margin="1rem 0">
         <JustifyBetweenColumn height="auto">
-          <JustifyBetweenColumn height="100%" padding="2rem 0">
+          <JustifyBetweenColumn height="100%">
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0 0.5rem 0 0">
                 <InputWithIcon
@@ -258,6 +252,12 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
       </ItemContainer>
 
       <ItemContainer height="40px">
+        <Button onClick={handleOnAdd} color={colors.blue.primary}>
+          Add
+        </Button>
+      </ItemContainer>
+
+      <ItemContainer height="40px">
         <Row>
           {newContactList.map((contact, index) => (
             <UserBadge
@@ -269,7 +269,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
           ))}
         </Row>
       </ItemContainer>
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

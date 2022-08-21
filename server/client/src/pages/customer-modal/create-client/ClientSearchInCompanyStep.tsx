@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import {
   Button,
-  InnerWrapper,
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterRow,
+  NoTableData,
   RoleBadge,
   Row,
   SearchBar,
+  TableSkeltonLoader,
   UserBadge
 } from '@/components'
 import DataTable from 'react-data-table-component'
@@ -15,6 +16,7 @@ import { Plus, UserCheck, X } from 'react-feather'
 import colors from '@/constants/colors'
 import { useGetCustomersQuery } from '@/services/customers/customerService'
 import { ECustomerType, ICustomer } from '@/models'
+import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
   reliableInCompanyList: ICustomer[]
@@ -22,7 +24,7 @@ interface IProps {
   onRemove: (id: ICustomer) => void
 }
 const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, onAdd, onRemove }) => {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(emptyQueryParams)
   const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(searchQuery)
 
   const columns = [
@@ -61,22 +63,24 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
   ]
 
   const handleSearch = (value: string) => {
-    setSearchQuery(value)
+    setSearchQuery({ ...searchQuery, search: value })
   }
 
   return (
-    <InnerWrapper height="100%">
+    <ItemContainer height="100%">
       <ItemContainer height="35px">
-        <SearchBar onSeach={handleSearch} />
+        <SearchBar onSearch={handleSearch} />
       </ItemContainer>
-      <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px - 40px)" margin="0.5rem 0">
-        <DataTable
-          style={{ height: 'calc(100% - 56px)' }}
-          pagination={true}
-          paginationPerPage={5}
-          columns={columns}
-          data={filteredCustomers || []}
-        />
+      <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px - 40px )" margin="0.5rem 0">
+        {filteredCustomersIsLoading ? (
+          <ItemContainer height="100%">
+            <TableSkeltonLoader count={13} />
+          </ItemContainer>
+        ) : filteredCustomers && filteredCustomers.length > 0 ? (
+          <DataTable fixedHeader columns={columns} data={filteredCustomers || []} />
+        ) : (
+          <NoTableData />
+        )}
       </ItemContainer>
       <ItemContainer height="40px">
         <Row>
@@ -104,7 +108,7 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
           ))}
         </Row>
       </ItemContainer>
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

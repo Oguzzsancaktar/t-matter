@@ -4,17 +4,17 @@ import styled from 'styled-components'
 import { InputWithIcon } from '../input'
 
 interface IProps {
-  onSeach: (value: string) => void
+  onSearch: (value: string) => void
 }
 
 const SearchBarContainer = styled.div``
 const SearchResultList = styled.ul``
 const SearchResultListItem = styled.li``
 
-const SearchBar: React.FC<IProps> = ({ onSeach }) => {
+const SearchBar: React.FC<IProps> = ({ onSearch }) => {
   return (
     <SearchBarContainer>
-      <InputWithIcon onChange={event => onSeach(event.target.value)} children={<Search />} name="searchBar" />
+      <InputWithIcon onChange={event => onSearch(event.target.value)} children={<Search />} name="searchBar" />
     </SearchBarContainer>
   )
 }

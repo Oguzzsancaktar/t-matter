@@ -14,9 +14,10 @@ import { H1 } from '@/components/texts'
 
 import { ModalHeader, ModalBody } from '../types'
 import colors from '@/constants/colors'
+import emptyQueryParams from '@/constants/queryParams'
 
 const SearchCustomersModal = () => {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(emptyQueryParams)
   const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(searchQuery)
 
   const columns = [
@@ -43,7 +44,7 @@ const SearchCustomersModal = () => {
   ]
 
   const handleSearch = (value: string) => {
-    setSearchQuery(value)
+    setSearchQuery({ ...searchQuery, search: value })
   }
 
   return (
@@ -60,7 +61,7 @@ const SearchCustomersModal = () => {
 
       <ModalBody minHeight="100% - 51px">
         <ItemContainer height="35px">
-          <SearchBar onSeach={handleSearch} />
+          <SearchBar onSearch={handleSearch} />
         </ItemContainer>
         <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px)" margin="0.5rem 0">
           {filteredCustomersIsLoading ? (

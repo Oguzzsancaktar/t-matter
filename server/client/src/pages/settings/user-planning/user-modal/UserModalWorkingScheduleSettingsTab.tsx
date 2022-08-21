@@ -17,10 +17,12 @@ import colors from '@/constants/colors'
 import { dayOfWeek } from '@/constants/dates'
 import { payrollTypeOptions, payrollDayOptions, payrollDateOptions } from '@/constants/payrollOptions'
 import initialWorkingHours from '@/constants/workingHours'
+import useAccessStore from '@/hooks/useAccessStore'
 
 import { IDailyWorkingHours, EDays, IOption, IUser, EPayrollType } from '@/models'
 import { UserModalWorkingScheduleSettingsSummaryBody, UserModalWorkingScheduleSettingsSummaryFooter } from '@/pages'
 import {
+  companyPricingApi,
   useGetUserCompanyPricingQuery,
   usePatchUserCompanyPricingMutation
 } from '@/services/settings/company-planning/companyPricingService'
@@ -32,6 +34,8 @@ interface IProps {
   userId: IUser['_id']
 }
 const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
   const [patchUserworkingSchedule] = usePatchUserCompanyPricingMutation()
 
   const [totalSeconds, setTotalMinutes] = useState(0)
@@ -105,6 +109,7 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
       payrollType: +payrollType,
       userId
     })
+    dispatch(companyPricingApi.util.resetApiState())
 
     toastSuccess('Company pricing updated successfully')
   }

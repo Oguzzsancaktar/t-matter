@@ -1,6 +1,6 @@
 enum ESize {
   WXLarge = '1600px',
-  WLarge = '00px',
+  WLarge = '1200px',
   WMedium = '1000px',
   WSmall = '600px',
   WXSmall = '480px',

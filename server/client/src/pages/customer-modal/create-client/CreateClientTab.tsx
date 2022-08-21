@@ -276,8 +276,9 @@ const CreateClientTab = () => {
                 onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
               />
             ),
-            width: ESize.WXLarge,
-            height: ESize.HLarge
+            width: ESize.WLarge,
+            height: ESize.HAuto,
+            maxWidth: ESize.WSmall
           })
         )
       }
@@ -306,8 +307,9 @@ const CreateClientTab = () => {
               onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
             />
           ),
-          width: ESize.WXLarge,
-          height: ESize.HLarge
+          width: ESize.WLarge,
+          height: ESize.HAuto,
+          maxWidth: ESize.WSmall
         })
       )
     }
@@ -397,7 +399,7 @@ const CreateClientTab = () => {
 
   return (
     <Row height="100%">
-      <ItemContainer borderRadius="0.3rem" height="100%" overflow="hidden" width="200px">
+      <ItemContainer borderRadius="0.3rem" height="100%" overflow="hidden" width="200px" margin="0 1rem 0 0 ">
         <Column height="100%">
           <WizzardNavigation
             onStepChange={setActiveWizzardStep}
@@ -410,15 +412,13 @@ const CreateClientTab = () => {
         <ItemContainer height="calc(100% - 35px - 1rem)">{renderSwitch()}</ItemContainer>
 
         <ItemContainer width="100%" height="35px" margin="1rem 0 0 0 ">
-          <InnerWrapper>
-            <WizzardButtons
-              actionNext={handleNext}
-              actionPrevious={handlePrevious}
-              actionSubmit={handleSubmit}
-              steps={clientWizzardSteps}
-              activeStep={activeWizzardStep}
-            />
-          </InnerWrapper>
+          <WizzardButtons
+            actionNext={handleNext}
+            actionPrevious={handlePrevious}
+            actionSubmit={handleSubmit}
+            steps={clientWizzardSteps}
+            activeStep={activeWizzardStep}
+          />
         </ItemContainer>
       </JustifyBetweenColumn>
     </Row>

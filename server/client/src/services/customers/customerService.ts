@@ -1,7 +1,7 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { ICustomer, ICustomerCreateDTO, ICustomerUpdateDTO } from '@/models'
+import { ICustomer, ICustomerCreateDTO, ICustomerUpdateDTO, IQueryParams } from '@/models'
 
 const CUSTOMER_REDUCER_PATH = 'customerApi'
 const CUSTOMER_TAG_TYPE = 'customerTag' as const
@@ -9,10 +9,12 @@ const CUSTOMER_TAG_TYPE = 'customerTag' as const
 type IBuilder = EndpointBuilder<IAxiosBaseQueryFn, typeof CUSTOMER_TAG_TYPE, typeof CUSTOMER_REDUCER_PATH>
 
 const getCustomers = (builder: IBuilder) => {
-  return builder.query<ICustomer[], string | void>({
-    query(query = '') {
+  return builder.query<ICustomer[], IQueryParams>({
+    query({ search = '', size, status = 1 }) {
       return {
-        url: `/customer?search=${query}`,
+        url: `/customer?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
         method: 'GET'
       }
     },

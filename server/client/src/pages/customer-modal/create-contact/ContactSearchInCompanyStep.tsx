@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {
   Button,
-  InnerWrapper,
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterRow,
@@ -17,6 +16,7 @@ import { Plus, UserCheck, X } from 'react-feather'
 import colors from '@/constants/colors'
 import { useGetCustomersQuery } from '@/services/customers/customerService'
 import { ECustomerType, ICustomer } from '@/models'
+import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
   reliableInCompanyList: ICustomer[]
@@ -24,7 +24,7 @@ interface IProps {
   onRemove: (id: ICustomer) => void
 }
 const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, onAdd, onRemove }) => {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(emptyQueryParams)
   const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(searchQuery)
 
   const columns = [
@@ -63,13 +63,13 @@ const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, o
   ]
 
   const handleSearch = (value: string) => {
-    setSearchQuery(value)
+    setSearchQuery({ ...searchQuery, search: value })
   }
 
   return (
-    <InnerWrapper height="100%">
+    <ItemContainer height="100%">
       <ItemContainer height="35px">
-        <SearchBar onSeach={handleSearch} />
+        <SearchBar onSearch={handleSearch} />
       </ItemContainer>
       <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px - 40px)" margin="0.5rem 0">
         {filteredCustomersIsLoading ? (
@@ -108,7 +108,7 @@ const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, o
           ))}
         </Row>
       </ItemContainer>
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   JustifyBetweenColumn,
   JustifyBetweenRow,
@@ -6,7 +6,6 @@ import {
   Column,
   DataTableHeader,
   ActionButtons,
-  PageWrapper,
   CreateCustomerModal,
   ReadCustomerModal,
   ConfirmModal,
@@ -24,11 +23,14 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { UserCheck } from 'react-feather'
 import { useGetCustomersQuery, useUpdateCustomerStatusMutation } from '@/services/customers/customerService'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
-import ReactTooltip from 'react-tooltip'
+import { statusOptions } from '@/constants/statuses'
+import emptyQueryParams from '@/constants/queryParams'
 
 const CustomersPage = () => {
+  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+  const { data: customersData, isLoading: customersIsLoading } = useGetCustomersQuery(searchQueryParams)
+
   const [updateCustomerStatus] = useUpdateCustomerStatusMutation()
-  const { data: customersData, isLoading: customersIsLoading } = useGetCustomersQuery()
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -178,37 +180,47 @@ const CustomersPage = () => {
         id: 'createCustomerModal',
         title: 'Create Customer',
         body: <CreateCustomerModal />,
-        width: ESize.WSmall,
-        height: ESize.HSmall
+        maxWidth: ESize.WLarge,
+        width: ESize.WLarge,
+        height: ESize.HMedium
       })
     )
   }
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
 
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
+  }
   return (
-    <PageWrapper>
-      <JustifyBetweenColumn height="100%">
-        <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-          <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-          <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-          <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        </JustifyBetweenRow>
-        <Column height="calc(100% - 200px - 1rem)">
-          <DataTableHeader handleAddNew={openCreateCustomerModal} />
+    <JustifyBetweenColumn height="100%" padding="1rem">
+      <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
+        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+      </JustifyBetweenRow>
+      <Column height="calc(100% - 200px - 1rem)">
+        <DataTableHeader
+          handleAddNew={openCreateCustomerModal}
+          status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+          handleSearch={handleSearch}
+          handleStatusFilter={handleStatusFilter}
+        />
 
-          <ItemContainer height="calc(100% - 40px - 0.5rem)">
-            {customersIsLoading ? (
-              <ItemContainer height="100%">
-                <TableSkeltonLoader count={13} />
-              </ItemContainer>
-            ) : customersData && customersData.length > 0 ? (
-              <DataTable fixedHeader columns={columns} data={customersData || []} onRowClicked={handleRead} />
-            ) : (
-              <NoTableData />
-            )}
-          </ItemContainer>
-        </Column>
-      </JustifyBetweenColumn>
-    </PageWrapper>
+        <ItemContainer height="calc(100% - 40px - 0.5rem)">
+          {customersIsLoading ? (
+            <ItemContainer height="100%">
+              <TableSkeltonLoader count={13} />
+            </ItemContainer>
+          ) : customersData && customersData.length > 0 ? (
+            <DataTable fixedHeader columns={columns} data={customersData || []} onRowClicked={handleRead} />
+          ) : (
+            <NoTableData />
+          )}
+        </ItemContainer>
+      </Column>
+    </JustifyBetweenColumn>
   )
 }
 

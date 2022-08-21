@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react'
 import {
   Button,
   Column,
-  H1,
   InputRegular,
   InputWithIcon,
   ItemContainer,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
-  Row,
   SummaryCard
 } from '@components/index'
 import { DollarSign, Percent } from 'react-feather'
@@ -21,6 +19,8 @@ import {
 } from '@/services/settings/company-planning/salarySettingsService'
 import { ISalarySettings, IUser } from '@/models'
 import { toastSuccess } from '@/utils/toastUtil'
+import { companyPricingApi } from '@/services/settings/company-planning/companyPricingService'
+import useAccessStore from '@/hooks/useAccessStore'
 
 const DEFAULT_PAYROLL_RATE: number = 30
 const DEFAULT_HOUR_IN_YEAR: number = 1920
@@ -36,6 +36,9 @@ interface IProps {
   userId: IUser['_id']
 }
 const UserModalSalarySettingsTab: React.FC<IProps> = ({ userId }) => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   const [
     patchUserSalarySettings,
     { data: updatedUserSalarySettingsData, isLoading: isUpdateLoading, status: salarySettingUpdateStatus }
@@ -113,6 +116,8 @@ const UserModalSalarySettingsTab: React.FC<IProps> = ({ userId }) => {
 
   const handleSave = async () => {
     await patchUserSalarySettings({ ...salarySettingsStateData, userId })
+    dispatch(companyPricingApi.util.resetApiState())
+
     toastSuccess('Salary settings updated successfully')
   }
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
   Column,
-  InnerWrapper,
   ItemContainer,
   JustifyBetweenColumn,
   RelateByModal,
@@ -90,6 +89,7 @@ const CreateContactTab = () => {
           <ContactAddNewContactsStep
             newContactList={createContactDTO.createContact || []}
             onAdd={handleAddNewContact}
+            onRemove={handleRemoveNewContact}
           />
         )
       default:
@@ -183,8 +183,9 @@ const CreateContactTab = () => {
                 onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
               />
             ),
-            width: ESize.WXLarge,
-            height: ESize.HLarge
+            width: ESize.WLarge,
+            height: ESize.HAuto,
+            maxWidth: ESize.WSmall
           })
         )
       }
@@ -196,6 +197,15 @@ const CreateContactTab = () => {
       setCreateContactDTO({
         ...createContactDTO,
         reliableInCompany: createContactDTO.reliableInCompany.filter(reliable => reliable._id !== customer._id)
+      })
+    }
+  }
+
+  const handleRemoveNewContact = (customer: ICustomerAddNew) => {
+    if (createContactDTO.createContact) {
+      setCreateContactDTO({
+        ...createContactDTO,
+        createContact: createContactDTO.createContact.filter(reliable => reliable._id !== customer._id)
       })
     }
   }
@@ -213,8 +223,9 @@ const CreateContactTab = () => {
               onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
             />
           ),
-          width: ESize.WXLarge,
-          height: ESize.HLarge
+          width: ESize.WLarge,
+          height: ESize.HAuto,
+          maxWidth: ESize.WSmall
         })
       )
     }
@@ -254,7 +265,6 @@ const CreateContactTab = () => {
     })
     setErrorMessage('')
     const validationResult = validateFormFields()
-    console.log(validationResult)
     if (validationResult) {
       setActiveWizzardStep(activeWizzardStep + 1)
     }
@@ -295,7 +305,7 @@ const CreateContactTab = () => {
 
   return (
     <Row height="100%">
-      <ItemContainer borderRadius="0.3rem" height="100%" overflow="hidden" width="200px">
+      <ItemContainer borderRadius="0.3rem" height="100%" overflow="hidden" width="200px" margin="0 1rem 0 0">
         <Column height="100%">
           <WizzardNavigation
             onStepChange={setActiveWizzardStep}
@@ -304,19 +314,17 @@ const CreateContactTab = () => {
           />
         </Column>
       </ItemContainer>
-      <JustifyBetweenColumn width="calc(100% - 200px )" height="100%">
+      <JustifyBetweenColumn width="calc(100% - 200px - 1rem)" height="100%">
         <ItemContainer height="calc(100% - 35px - 1rem)">{renderSwitch()}</ItemContainer>
 
         <ItemContainer width="100%" height="35px" margin="1rem 0 0 0 ">
-          <InnerWrapper>
-            <WizzardButtons
-              actionNext={handleNext}
-              actionPrevious={handlePrevious}
-              actionSubmit={handleSubmit}
-              steps={contactWizzardSteps}
-              activeStep={activeWizzardStep}
-            />
-          </InnerWrapper>
+          <WizzardButtons
+            actionNext={handleNext}
+            actionPrevious={handlePrevious}
+            actionSubmit={handleSubmit}
+            steps={contactWizzardSteps}
+            activeStep={activeWizzardStep}
+          />
         </ItemContainer>
       </JustifyBetweenColumn>
     </Row>

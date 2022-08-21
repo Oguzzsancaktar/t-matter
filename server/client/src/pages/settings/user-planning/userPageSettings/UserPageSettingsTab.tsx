@@ -100,8 +100,7 @@ const UserPageSettingsTab = () => {
         title: 'User / ' + user.firstname + ' ' + user.lastname,
         body: <ReadUserModal userId={user._id} />,
         width: ESize.WXLarge,
-        maxWidth: ESize.WXLarge,
-        height: ESize.HMedium,
+        height: ESize.HLarge,
         backgroundColor: colors.gray.disabled
       })
     )

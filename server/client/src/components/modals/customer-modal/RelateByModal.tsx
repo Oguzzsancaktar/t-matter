@@ -1,6 +1,5 @@
 import {
   H1,
-  InnerWrapper,
   ItemContainer,
   JustifyBetweenColumn,
   JustifyCenterColumn,
@@ -34,7 +33,7 @@ const RelateByModal: React.FC<IProps> = ({ title, onConfirm, modalId }) => {
   const [relativeTypeError, setRelativeTypeError] = useState<boolean>(false)
 
   const handleCloseRelateByModal = () => {
-    dispatch(closeModal(`addRelateByModal-${modalId}`))
+    dispatch(closeModal(modalId))
   }
 
   const handleRelateByChange = (option: IOption) => {
@@ -56,40 +55,36 @@ const RelateByModal: React.FC<IProps> = ({ title, onConfirm, modalId }) => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
-          <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              {title}
-            </H1>
-          </JustifyCenterRow>
-        </InnerWrapper>
+        <JustifyCenterRow width="100%">
+          <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
+            {title}
+          </H1>
+        </JustifyCenterRow>
       </ModalHeader>
 
       <ModalBody>
-        <InnerWrapper>
-          <JustifyCenterColumn height="100%" padding="2rem 0">
-            <ItemContainer>
-              <SelectInput
-                name={'relateBy'}
-                labelText="Customer Relate By"
-                selectedOption={[
-                  { value: relativeType?._id || '', label: relativeType?.relateFrom + ' - ' + relativeType?.relateTo }
-                ]}
-                options={(relativeTypesData || []).map((relativeType: IRelativeType) => ({
-                  label: relativeType.relateFrom + ' ' + relativeType.relateTo,
-                  value: relativeType._id
-                }))}
-                onChange={handleRelateByChange}
-                isLoading={relativeTypesIsLoading}
-                validationError={relativeTypeError}
-              />
-            </ItemContainer>
+        <JustifyCenterColumn height="100%" padding="2rem 0">
+          <ItemContainer margin="1rem 0">
+            <SelectInput
+              name={'relateBy'}
+              labelText="Customer Relate By"
+              selectedOption={[
+                { value: relativeType?._id || '', label: relativeType?.relateFrom + ' - ' + relativeType?.relateTo }
+              ]}
+              options={(relativeTypesData || []).map((relativeType: IRelativeType) => ({
+                label: relativeType.relateFrom + ' ' + relativeType.relateTo,
+                value: relativeType._id
+              }))}
+              onChange={handleRelateByChange}
+              isLoading={relativeTypesIsLoading}
+              validationError={relativeTypeError}
+            />
+          </ItemContainer>
 
-            <ItemContainer>
-              <ConfirmCancelButtons onConfirm={() => handleOnConfirm()} onCancel={handleCloseRelateByModal} />
-            </ItemContainer>
-          </JustifyCenterColumn>
-        </InnerWrapper>
+          <ItemContainer>
+            <ConfirmCancelButtons onConfirm={() => handleOnConfirm()} onCancel={() => handleCloseRelateByModal()} />
+          </ItemContainer>
+        </JustifyCenterColumn>
       </ModalBody>
     </JustifyBetweenColumn>
   )

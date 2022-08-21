@@ -4,7 +4,6 @@ import {
   JustifyBetweenColumn,
   JustifyCenterRow,
   JustifyCenterColumn,
-  Row,
   H1,
   InnerWrapper,
   ClockPicker24
@@ -33,8 +32,7 @@ const CreateWorkflowChecklistModal = () => {
   const [workflowChecklist, setWorkflowChecklist] = useState<ITaskChecklistCreateDTO>({
     name: '',
     point: 0,
-    duration: 0,
-    isChecked: false
+    duration: 0
   })
 
   const initialErrorsState = {

@@ -14,7 +14,7 @@ interface IProps {
 const WizzardNavigationItemContainer = styled.div<Pick<IProps, 'isActive'>>`
   height: 100%;
   width: 100%;
-  background-color: ${({ isActive }) => (isActive ? colors.blue.primary : colors.gray.middle)};
+  background-color: ${({ isActive }) => (isActive ? colors.primary.light : colors.primary.dark)};
   transition: background-color 0.4s ease-in-out;
   display: flex;
   flex-direction: column;
@@ -27,7 +27,7 @@ const WizzardNavigationItem: React.FC<IProps> = ({ isActive, stepName, stepIndex
   return (
     <WizzardNavigationItemContainer isActive={isActive} onClick={onClick}>
       <TabIndex index={stepIndex} isActive={isActive} />
-      <H1 margin="1rem 0 0 0" textAlign="center" color={isActive ? colors.white.bg : colors.black.primary}>
+      <H1 margin="1rem 0 0 0" textAlign="center" color={isActive ? colors.blue.primary : colors.gray.disabled}>
         {stepName}
       </H1>
     </WizzardNavigationItemContainer>

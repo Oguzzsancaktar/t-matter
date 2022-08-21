@@ -96,7 +96,7 @@ const findCustomerWithFiltersAndPopulate = ({ search, size, status }) => {
     ]
   }
 
-  if (status) {
+  if (status && status !== '-9') {
     match.$match.status = { $eq: +status }
   }
   pipeline.push(match)
