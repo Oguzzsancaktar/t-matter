@@ -33,7 +33,7 @@ const InputWithText: React.FC<Props> = ({
     <Column>
       {labelText && (
         <ItemContainer margin="0 0 0.4rem 0">
-          <Label color={colors.text.primary}>{labelText}</Label>{' '}
+          <Label color={colors.text.primary}>{labelText}</Label>
         </ItemContainer>
       )}
       <Container validationError={validationError}>

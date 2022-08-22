@@ -1,7 +1,7 @@
 import React from 'react'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
-import { InnerWrapper, ItemContainer } from '@/components'
+import { ItemContainer } from '@/components'
 import { EGender, ICustomerCreateDTO, IOption, IRefferedBy } from '@/models'
 import { User } from 'react-feather'
 import { genderOptions } from '@/constants/genders'
@@ -27,7 +27,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
 
   return (
     <JustifyBetweenColumn height="100%">
-      <JustifyBetweenColumn height="auto">
+      <JustifyBetweenColumn height="100%">
         <JustifyBetweenRow width="100%">
           <ItemContainer margin="0 0.5rem 0 0">
             <InputWithIcon
@@ -42,54 +42,7 @@ const ClientInformationsStep: React.FC<IProps> = ({
               value={createClientDTO.firstname}
             />
           </ItemContainer>
-
-          <ItemContainer margin="0 0 0 0.5rem">
-            <InputWithIcon
-              children={<User size={16} />}
-              name="lastname"
-              placeholder="Enter last name..."
-              onChange={onInputChange}
-              // onBlur={validateFormFields}
-              type="text"
-              labelText="Last Name"
-              validationError={validationErrors.lastnameError}
-              value={createClientDTO.lastname}
-            />
-          </ItemContainer>
-        </JustifyBetweenRow>
-
-        <JustifyBetweenRow width="100%">
-          <ItemContainer margin="0.5rem 0.5rem 0 0">
-            <InputWithIcon
-              children={<User size={16} />}
-              name="email"
-              placeholder="Enter email address..."
-              onChange={onInputChange}
-              // onBlur={validateFormFields}
-              type="email"
-              labelText="E-mail"
-              validationError={validationErrors.emailError}
-              value={createClientDTO.email}
-            />
-          </ItemContainer>
-
-          <ItemContainer margin="0.5rem 0 0 0.5rem">
-            <InputWithIcon
-              children={<User size={16} />}
-              name="phone"
-              placeholder="Enter phone number..."
-              onChange={onInputChange}
-              // onBlur={validateFormFields}
-              type="tel"
-              labelText="Phone Number"
-              validationError={validationErrors.phoneError}
-              value={createClientDTO.phone}
-            />
-          </ItemContainer>
-        </JustifyBetweenRow>
-
-        <JustifyBetweenRow width="100%">
-          <ItemContainer margin="0.5rem 0.5rem 0 0 ">
+          <ItemContainer margin="0 0 0 0.5rem ">
             <SelectInput
               children={<User size={16} />}
               name="refferedBy"
@@ -105,8 +58,23 @@ const ClientInformationsStep: React.FC<IProps> = ({
               selectedOption={[{ value: createClientDTO.refferedBy._id, label: createClientDTO.refferedBy.name }]}
             />
           </ItemContainer>
+        </JustifyBetweenRow>
+        <JustifyBetweenRow width="100%">
+          <ItemContainer margin="0 0.5rem 0 0">
+            <InputWithIcon
+              children={<User size={16} />}
+              name="lastname"
+              placeholder="Enter last name..."
+              onChange={onInputChange}
+              // onBlur={validateFormFields}
+              type="text"
+              labelText="Last Name"
+              validationError={validationErrors.lastnameError}
+              value={createClientDTO.lastname}
+            />
+          </ItemContainer>
 
-          <ItemContainer margin="0.5rem 0 0 0.5rem ">
+          <ItemContainer margin="0 0 0 0.5rem ">
             <SelectInput
               children={<User size={16} />}
               name="gender"
@@ -118,6 +86,49 @@ const ClientInformationsStep: React.FC<IProps> = ({
               selectedOption={[
                 { value: createClientDTO.gender.toString(), label: EGender[createClientDTO.gender.toString()] }
               ]}
+            />
+          </ItemContainer>
+        </JustifyBetweenRow>
+        <JustifyBetweenRow width="100%">
+          <ItemContainer margin="0 0.5rem 0 0">
+            <InputWithIcon
+              children={<User size={16} />}
+              name="phone"
+              placeholder="Enter phone number..."
+              onChange={onInputChange}
+              // onBlur={validateFormFields}
+              type="tel"
+              labelText="Phone Number"
+              validationError={validationErrors.phoneError}
+              value={createClientDTO.phone}
+            />
+          </ItemContainer>
+
+          <ItemContainer margin="0 0 0 0.5rem ">
+            <InputWithIcon
+              children={<User size={16} />}
+              name="email"
+              placeholder="Enter email address..."
+              onChange={onInputChange}
+              // onBlur={validateFormFields}
+              type="email"
+              labelText="E-mail"
+              validationError={validationErrors.emailError}
+              value={createClientDTO.email}
+            />
+          </ItemContainer>
+        </JustifyBetweenRow>
+        <JustifyBetweenRow width="100%">
+          <ItemContainer margin="0 0 0 0">
+            <InputWithIcon
+              children={<User size={16} />}
+              name="jobTitle"
+              placeholder="Enter phone job Title..."
+              onChange={onInputChange}
+              type="text"
+              labelText="Job Title"
+              validationError={validationErrors.jobTitleError}
+              value={createClientDTO.jobTitle}
             />
           </ItemContainer>
         </JustifyBetweenRow>

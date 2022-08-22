@@ -34,7 +34,7 @@ const ReadWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
         <JustifyCenterColumn height="100%" padding="2rem 0">
           <Row margin="0 0 1rem 0">
             <H1 color={colors.text.primary} width="200px">
-              Checklist Name:{' '}
+              Checklist Name:
             </H1>
             <H1 color={colors.text.primary} width="calc(100% - 200px)" textAlign="right">
               {checklist.name}
@@ -43,7 +43,7 @@ const ReadWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
 
           <Row margin="0 0 1rem 0">
             <H1 color={colors.text.primary} width="200px">
-              Checklist Duration:{' '}
+              Checklist Duration:
             </H1>
             <H1 color={colors.text.primary} width="calc(100% - 200px)" textAlign="right">
               {checklist.duration}
@@ -52,7 +52,7 @@ const ReadWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
 
           <Row margin="0 0 1rem 0">
             <H1 color={colors.text.primary} width="200px">
-              Checklist Point:{' '}
+              Checklist Point:
             </H1>
             <H1 color={colors.text.primary} width="calc(100% - 200px)" textAlign="right">
               {checklist.point}
@@ -61,7 +61,7 @@ const ReadWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
 
           <Row margin="0 0 1rem 0">
             <H1 color={colors.text.primary} width="200px">
-              Checklist Price:{' '}
+              Checklist Price:
             </H1>
             <H1 color={colors.text.primary} width="calc(100% - 200px)" textAlign="right">
               {checklist.price.toFixed(2)}

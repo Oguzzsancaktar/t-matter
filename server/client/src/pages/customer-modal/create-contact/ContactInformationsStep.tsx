@@ -27,7 +27,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
 
   return (
     <JustifyBetweenColumn height="100%">
-      <JustifyBetweenColumn height="auto">
+      <JustifyBetweenColumn height="100%">
         <JustifyBetweenRow width="100%">
           <ItemContainer margin="0 0.5rem 0 0">
             <InputWithIcon
@@ -42,54 +42,7 @@ const ContactInformationsStep: React.FC<IProps> = ({
               value={createContactDTO.firstname}
             />
           </ItemContainer>
-
-          <ItemContainer margin="0 0 0 0.5rem">
-            <InputWithIcon
-              children={<User size={16} />}
-              name="lastname"
-              placeholder="Enter last name..."
-              onChange={onInputChange}
-              // onBlur={validateFormFields}
-              type="text"
-              labelText="Last Name"
-              validationError={validationErrors.lastnameError}
-              value={createContactDTO.lastname}
-            />
-          </ItemContainer>
-        </JustifyBetweenRow>
-
-        <JustifyBetweenRow width="100%">
-          <ItemContainer margin="0.5rem 0.5rem 0 0">
-            <InputWithIcon
-              children={<User size={16} />}
-              name="email"
-              placeholder="Enter email address..."
-              onChange={onInputChange}
-              // onBlur={validateFormFields}
-              type="email"
-              labelText="E-mail"
-              validationError={validationErrors.emailError}
-              value={createContactDTO.email}
-            />
-          </ItemContainer>
-
-          <ItemContainer margin="0.5rem 0 0 0.5rem">
-            <InputWithIcon
-              children={<User size={16} />}
-              name="phone"
-              placeholder="Enter phone number..."
-              onChange={onInputChange}
-              // onBlur={validateFormFields}
-              type="tel"
-              labelText="Phone Number"
-              validationError={validationErrors.phoneError}
-              value={createContactDTO.phone}
-            />
-          </ItemContainer>
-        </JustifyBetweenRow>
-
-        <JustifyBetweenRow width="100%">
-          <ItemContainer margin="0.5rem 0.5rem 0 0 ">
+          <ItemContainer margin="0 0 0 0.5rem ">
             <SelectInput
               children={<User size={16} />}
               name="refferedBy"
@@ -105,8 +58,24 @@ const ContactInformationsStep: React.FC<IProps> = ({
               selectedOption={[{ value: createContactDTO.refferedBy._id, label: createContactDTO.refferedBy.name }]}
             />
           </ItemContainer>
+        </JustifyBetweenRow>
 
-          <ItemContainer margin="0.5rem 0 0 0.5rem ">
+        <JustifyBetweenRow width="100%">
+          <ItemContainer margin="0 0.5rem 0 0">
+            <InputWithIcon
+              children={<User size={16} />}
+              name="lastname"
+              placeholder="Enter last name..."
+              onChange={onInputChange}
+              // onBlur={validateFormFields}
+              type="text"
+              labelText="Last Name"
+              validationError={validationErrors.lastnameError}
+              value={createContactDTO.lastname}
+            />
+          </ItemContainer>
+
+          <ItemContainer margin="0 0 0 0.5rem ">
             <SelectInput
               children={<User size={16} />}
               name="gender"
@@ -118,6 +87,51 @@ const ContactInformationsStep: React.FC<IProps> = ({
               selectedOption={[
                 { value: createContactDTO.gender.toString(), label: EGender[createContactDTO.gender.toString()] }
               ]}
+            />
+          </ItemContainer>
+        </JustifyBetweenRow>
+
+        <JustifyBetweenRow width="100%">
+          <ItemContainer margin="0 0.5rem 0 0">
+            <InputWithIcon
+              children={<User size={16} />}
+              name="phone"
+              placeholder="Enter phone number..."
+              onChange={onInputChange}
+              // onBlur={validateFormFields}
+              type="tel"
+              labelText="Phone Number"
+              validationError={validationErrors.phoneError}
+              value={createContactDTO.phone}
+            />
+          </ItemContainer>
+
+          <ItemContainer margin="0 0 0 0.5rem">
+            <InputWithIcon
+              children={<User size={16} />}
+              name="email"
+              placeholder="Enter email address..."
+              onChange={onInputChange}
+              // onBlur={validateFormFields}
+              type="email"
+              labelText="E-mail"
+              validationError={validationErrors.emailError}
+              value={createContactDTO.email}
+            />
+          </ItemContainer>
+        </JustifyBetweenRow>
+
+        <JustifyBetweenRow width="100%">
+          <ItemContainer margin="0 0 0 0">
+            <InputWithIcon
+              children={<User size={16} />}
+              name="jobTitle"
+              placeholder="Enter phone job Title..."
+              onChange={onInputChange}
+              type="text"
+              labelText="Job Title"
+              validationError={validationErrors.jobTitleError}
+              value={createContactDTO.jobTitle}
             />
           </ItemContainer>
         </JustifyBetweenRow>

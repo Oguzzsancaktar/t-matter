@@ -12,34 +12,32 @@ const CompanyPlanningModal = () => {
   return (
     <Column height="100%">
       <ModalHeader>
-        <InnerWrapper>
-          <JustifyBetweenColumn>
-            <JustifyCenterRow>
-              <Tab
-                margin="0 1rem 0 0rem"
-                index={0}
-                name="Salary Settings"
-                isActive={activeTab === 'salary-settings'}
-                onClick={() => setActiveTab('salary-settings')}
-              />
+        <JustifyBetweenColumn>
+          <JustifyCenterRow>
+            <Tab
+              margin="0 1rem 0 0rem"
+              index={0}
+              name="Salary Settings"
+              isActive={activeTab === 'salary-settings'}
+              onClick={() => setActiveTab('salary-settings')}
+            />
 
-              <Tab
-                margin="0 1rem 0 0rem"
-                index={1}
-                name="Company Pricing"
-                isActive={activeTab === 'company-pricing'}
-                onClick={() => setActiveTab('company-pricing')}
-              />
+            <Tab
+              margin="0 1rem 0 0rem"
+              index={1}
+              name="Company Pricing"
+              isActive={activeTab === 'company-pricing'}
+              onClick={() => setActiveTab('company-pricing')}
+            />
 
-              <Tab
-                index={2}
-                name="Company Variables"
-                isActive={activeTab === 'customer-settings'}
-                onClick={() => setActiveTab('customer-settings')}
-              />
-            </JustifyCenterRow>
-          </JustifyBetweenColumn>
-        </InnerWrapper>
+            <Tab
+              index={2}
+              name="Company Variables"
+              isActive={activeTab === 'customer-settings'}
+              onClick={() => setActiveTab('customer-settings')}
+            />
+          </JustifyCenterRow>
+        </JustifyBetweenColumn>
       </ModalHeader>
 
       <ModalBody minHeight="100% - 63px">

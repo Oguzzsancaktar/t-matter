@@ -10,10 +10,16 @@ import { X } from 'react-feather'
 interface IProps {
   updateContactDTO: ICustomerUpdateDTO
   onAdd: (id: ICustomer) => void
-  onRemove: (id: ICustomer | ICustomerAddNew) => void
+  onRemovePastReliable: (id: ICustomer) => void
+  onRemoveNewReliable: (id: ICustomerAddNew) => void
 }
 
-const UpdateCustomerReliables: React.FC<IProps> = ({ updateContactDTO, onAdd, onRemove }) => {
+const UpdateCustomerReliables: React.FC<IProps> = ({
+  updateContactDTO,
+  onAdd,
+  onRemovePastReliable,
+  onRemoveNewReliable
+}) => {
   const { data: customerReliablesData, isLoading: customerReliablesIsLoading } = useGetCustomerReliablesQuery(
     updateContactDTO._id
   )
@@ -24,85 +30,79 @@ const UpdateCustomerReliables: React.FC<IProps> = ({ updateContactDTO, onAdd, on
   const dispatch = useAppDispatch()
 
   const handleOpenAddReliableSearchModal = () => {
-    dispatch(
-      openModal({
-        id: `customerSearchModal-${updateContactDTO._id}`,
-        title: 'CustomerSearchModal',
-        body: <CustomerSearchModal handleAdd={onAdd} customer={updateContactDTO} onRemove={onRemove} />,
-        width: ESize.WXLarge,
-        height: ESize.HLarge
-      })
-    )
+    // dispatch(
+    // )
   }
 
   return (
     <ItemContainer height="40px">
       <Row>
-        {!customerReliablesIsLoading &&
-          customerReliablesData &&
-          customerReliablesData.length > 0 &&
-          updateContactDTO.reliableCustomers.length > 0 && (
-            <ItemContainer>
-              {customerReliablesData.map((reliable, index) =>
-                updatedReliableList.map(updatedReliable => {
-                  if (updatedReliable.reliableId === reliable._id) {
-                    return (
-                      <ItemContainer key={index} maxWidth="250px" margin="0 1rem 0 0">
-                        <JustifyBetweenRow>
-                          <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
-                            <UserBadge
-                              userEmail={reliable.relativeType?.relateTo || ''}
-                              userImage={'reliable.photo'}
-                              userName={reliable.firstname + ' ' + reliable.lastname}
-                            />
-                          </ItemContainer>
-                          <Button
-                            color={colors.red.primary}
-                            width="30px"
-                            height="30px"
-                            padding="0"
-                            onClick={() => onRemove(reliable)}
-                          >
-                            <X size={16} />
-                          </Button>
-                        </JustifyBetweenRow>
-                      </ItemContainer>
-                    )
-                  }
-                })
-              )}
-            </ItemContainer>
+        <Row>
+          {!customerReliablesIsLoading &&
+            customerReliablesData &&
+            customerReliablesData.length > 0 &&
+            updateContactDTO.reliableCustomers.length > 0 && (
+              <Row>
+                {customerReliablesData.map((reliable, index) =>
+                  updatedReliableList.map(updatedReliable => {
+                    if (updatedReliable.reliableId === reliable._id) {
+                      return (
+                        <ItemContainer key={index} maxWidth="250px" width="auto" margin="0 1rem 0 0">
+                          <JustifyBetweenRow>
+                            <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
+                              <UserBadge
+                                userEmail={reliable.relativeType?.relateTo || ''}
+                                userImage={'reliable.photo'}
+                                userName={reliable.firstname + ' ' + reliable.lastname}
+                              />
+                            </ItemContainer>
+                            <Button
+                              color={colors.red.primary}
+                              width="30px"
+                              height="30px"
+                              padding="0"
+                              onClick={() => onRemovePastReliable(reliable)}
+                            >
+                              <X size={16} />
+                            </Button>
+                          </JustifyBetweenRow>
+                        </ItemContainer>
+                      )
+                    }
+                  })
+                )}
+              </Row>
+            )}
+
+          {updateContactDTO.createContact && (
+            <Row>
+              {(updateContactDTO.createContact || []).map((reliable, index) => (
+                <ItemContainer key={index} maxWidth="250px" width="auto" margin="0 1rem 0 0">
+                  <JustifyBetweenRow>
+                    <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
+                      <UserBadge
+                        userEmail={reliable.relativeType?.relateTo || ''}
+                        userImage={'reliable.photo'}
+                        userName={reliable.firstname + ' ' + reliable.lastname}
+                      />
+                    </ItemContainer>
+                    <Button
+                      color={colors.red.primary}
+                      width="30px"
+                      height="30px"
+                      padding="0"
+                      onClick={() => onRemoveNewReliable(reliable)}
+                    >
+                      <X size={16} />
+                    </Button>
+                  </JustifyBetweenRow>
+                </ItemContainer>
+              ))}
+            </Row>
           )}
-
-        {updateContactDTO.createContact && (
-          <ItemContainer>
-            {(updateContactDTO.createContact || []).map((reliable, index) => (
-              <ItemContainer key={index} maxWidth="250px" margin="0 1rem 0 0">
-                <JustifyBetweenRow>
-                  <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
-                    <UserBadge
-                      userEmail={reliable.relativeType?.relateTo || ''}
-                      userImage={'reliable.photo'}
-                      userName={reliable.firstname + ' ' + reliable.lastname}
-                    />
-                  </ItemContainer>
-                  <Button
-                    color={colors.red.primary}
-                    width="30px"
-                    height="30px"
-                    padding="0"
-                    onClick={() => onRemove(reliable)}
-                  >
-                    <X size={16} />
-                  </Button>
-                </JustifyBetweenRow>
-              </ItemContainer>
-            ))}
-          </ItemContainer>
-        )}
-
-        <ItemContainer>
-          <Button onClick={handleOpenAddReliableSearchModal}>Add reliable </Button>
+        </Row>
+        <ItemContainer width="200px">
+          <Button onClick={handleOpenAddReliableSearchModal}>Add reliable</Button>
         </ItemContainer>
       </Row>
     </ItemContainer>

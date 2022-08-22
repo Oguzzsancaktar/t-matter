@@ -23,12 +23,13 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
 }) => {
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
 
+  console.log('updateContactDTO', updateContactDTO)
   return (
     <ItemContainer>
       <JustifyBetweenColumn height="100%">
-        <JustifyBetweenColumn height="auto" padding="2rem 0">
-          <JustifyBetweenRow width="100%">
-            <ItemContainer margin="0 0.5rem 0 0">
+        <JustifyBetweenColumn height="auto">
+          <JustifyBetweenRow width="100%" margin="1rem 0">
+            <ItemContainer margin=" 0 0.5rem 0 0">
               <InputWithIcon
                 children={<User size={16} />}
                 name="firstname"
@@ -41,54 +42,7 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
                 value={updateContactDTO.firstname}
               />
             </ItemContainer>
-
             <ItemContainer margin="0 0 0 0.5rem">
-              <InputWithIcon
-                children={<User size={16} />}
-                name="lastname"
-                placeholder="Enter last name..."
-                onChange={onInputChange}
-                // onBlur={validateFormFields}
-                type="text"
-                labelText="Last Name"
-                validationError={validationErrors.lastnameError}
-                value={updateContactDTO.lastname}
-              />
-            </ItemContainer>
-          </JustifyBetweenRow>
-
-          <JustifyBetweenRow width="100%">
-            <ItemContainer margin="0.5rem 0.5rem 0 0">
-              <InputWithIcon
-                children={<User size={16} />}
-                name="email"
-                placeholder="Enter email address..."
-                onChange={onInputChange}
-                // onBlur={validateFormFields}
-                type="email"
-                labelText="E-mail"
-                validationError={validationErrors.emailError}
-                value={updateContactDTO.email}
-              />
-            </ItemContainer>
-
-            <ItemContainer margin="0.5rem 0 0 0.5rem">
-              <InputWithIcon
-                children={<User size={16} />}
-                name="phone"
-                placeholder="Enter phone number..."
-                onChange={onInputChange}
-                // onBlur={validateFormFields}
-                type="tel"
-                labelText="Phone Number"
-                validationError={validationErrors.phoneError}
-                value={updateContactDTO.phone}
-              />
-            </ItemContainer>
-          </JustifyBetweenRow>
-
-          <JustifyBetweenRow width="100%">
-            <ItemContainer margin="0.5rem 0.5rem 0 0 ">
               <SelectInput
                 children={<User size={16} />}
                 name="refferedBy"
@@ -104,8 +58,23 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
                 selectedOption={[{ value: updateContactDTO.refferedBy._id, label: updateContactDTO.refferedBy.name }]}
               />
             </ItemContainer>
+          </JustifyBetweenRow>
 
-            <ItemContainer margin="0.5rem 0 0 0.5rem ">
+          <JustifyBetweenRow width="100%" margin="1rem 0">
+            <ItemContainer margin="0 0.5rem 0 0">
+              <InputWithIcon
+                children={<User size={16} />}
+                name="lastname"
+                placeholder="Enter last name..."
+                onChange={onInputChange}
+                // onBlur={validateFormFields}
+                type="text"
+                labelText="Last Name"
+                validationError={validationErrors.lastnameError}
+                value={updateContactDTO.lastname}
+              />
+            </ItemContainer>
+            <ItemContainer margin="0 0 0 0.5rem ">
               <SelectInput
                 children={<User size={16} />}
                 name="gender"
@@ -115,8 +84,54 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
                 labelText="Gender"
                 validationError={validationErrors.genderError}
                 selectedOption={[
-                  { value: updateContactDTO.gender.toString(), label: EGender[updateContactDTO.gender.toString()] }
+                  { value: updateContactDTO?.gender.toString(), label: EGender[updateContactDTO.gender.toString()] }
                 ]}
+              />
+            </ItemContainer>
+          </JustifyBetweenRow>
+
+          <JustifyBetweenRow width="100%" margin="1rem 0">
+            <ItemContainer margin="0 0.5rem 0 0">
+              <InputWithIcon
+                children={<User size={16} />}
+                name="phone"
+                placeholder="Enter phone number..."
+                onChange={onInputChange}
+                // onBlur={validateFormFields}
+                type="tel"
+                labelText="Phone Number"
+                validationError={validationErrors.phoneError}
+                value={updateContactDTO.phone}
+              />
+            </ItemContainer>
+
+            <ItemContainer margin="0 0 0 0.5rem">
+              <InputWithIcon
+                children={<User size={16} />}
+                name="email"
+                placeholder="Enter email address..."
+                onChange={onInputChange}
+                // onBlur={validateFormFields}
+                type="email"
+                labelText="E-mail"
+                validationError={validationErrors.emailError}
+                value={updateContactDTO.email}
+              />
+            </ItemContainer>
+          </JustifyBetweenRow>
+
+          <JustifyBetweenRow width="100%" margin="1rem 0">
+            <ItemContainer>
+              <InputWithIcon
+                children={<User size={16} />}
+                name="jobTitle"
+                placeholder="Enter job title..."
+                onChange={onInputChange}
+                // onBlur={validateFormFields}
+                type="tel"
+                labelText="Job Title"
+                validationError={validationErrors.jobTitleError}
+                value={updateContactDTO.jobTitle}
               />
             </ItemContainer>
           </JustifyBetweenRow>

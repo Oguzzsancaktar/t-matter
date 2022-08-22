@@ -69,6 +69,9 @@ const findCustomerById = async (id, populate = '') => {
         email: { $first: '$email' },
         phone: { $first: '$phone' },
         status: { $first: '$status' },
+        gender: { $first: '$gender' },
+        jobTitle: { $first: '$jobTitle' },
+
         createdAt: { $first: '$createdAt' },
         updatedAt: { $first: '$updatedAt' },
         refferedBy: { $first: '$refferedBy' },

@@ -2,9 +2,11 @@ import colors from '@/constants/colors'
 import styled from 'styled-components'
 
 export const ModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid ${colors.primary.light};
-  padding: 1rem;
-  /* height: 85px; */
+  height: 63px;
   width: 100%;
   background-color: ${colors.primary.dark};
   border-top-left-radius: 0.3rem;

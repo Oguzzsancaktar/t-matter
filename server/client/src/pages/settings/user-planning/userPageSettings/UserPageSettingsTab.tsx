@@ -70,7 +70,7 @@ const UserPageSettingsTab = () => {
       sortable: true,
       cell: data => (
         <ItemContainer width="auto" onClick={() => handleRead(data)} cursorType="pointer">
-          <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>{' '}
+          <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
         </ItemContainer>
       )
     },

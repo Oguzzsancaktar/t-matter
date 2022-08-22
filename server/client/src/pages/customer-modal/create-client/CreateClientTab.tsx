@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
   Column,
-  InnerWrapper,
   ItemContainer,
   JustifyBetweenColumn,
   RelateByModal,
@@ -42,6 +41,7 @@ const CreateClientTab = () => {
     customerType: 0,
     firstname: '',
     lastname: '',
+    jobTitle: '',
     email: '',
     phone: '',
     birthplace: '',
@@ -96,6 +96,7 @@ const CreateClientTab = () => {
       case 1:
         return (
           <ClientExtraInformationsStep
+            birthday={birthday}
             onBirthdayChange={handleBirhdayChange}
             validationErrors={validationErrors}
             createClientDTO={{ ...createClientDTO, birthday }}
@@ -112,7 +113,11 @@ const CreateClientTab = () => {
         )
       case 3:
         return (
-          <ClientAddNewContactsStep newContactList={createClientDTO.createContact || []} onAdd={handleAddNewContact} />
+          <ClientAddNewContactsStep
+            newContactList={createClientDTO.createContact || []}
+            onAdd={handleAddNewContact}
+            onRemove={handleRemoveNewContact}
+          />
         )
       default:
         return (
@@ -293,7 +298,14 @@ const CreateClientTab = () => {
       })
     }
   }
-
+  const handleRemoveNewContact = (customer: ICustomerAddNew) => {
+    if (createClientDTO.createContact) {
+      setCreateClientDTO({
+        ...createClientDTO,
+        createContact: createClientDTO.createContact.filter(reliable => reliable._id !== customer._id)
+      })
+    }
+  }
   const handleAddNewContact = (customer: ICustomerAddNew) => {
     if (createClientDTO.createContact) {
       dispatch(

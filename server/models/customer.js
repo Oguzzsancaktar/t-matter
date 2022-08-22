@@ -69,7 +69,10 @@ const CustomerSchema = new Schema(
       required: true,
       type: Number
     },
-
+    jobTitle: {
+      required: true,
+      type: String
+    },
     reliableCustomers: [],
 
     status: {

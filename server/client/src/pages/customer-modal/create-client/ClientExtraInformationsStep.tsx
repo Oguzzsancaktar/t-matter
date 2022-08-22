@@ -2,11 +2,12 @@ import React from 'react'
 import { InputWithIcon } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 
-import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
+import { DatePicker, ItemContainer } from '@/components'
 import { ICustomerCreateDTO } from '@/models'
 import { User } from 'react-feather'
 
 interface IProps {
+  birthday: string
   validationErrors: any
   createClientDTO: Omit<ICustomerCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -16,11 +17,12 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
   createClientDTO,
   validationErrors,
   onInputChange,
-  onBirthdayChange
+  onBirthdayChange,
+  birthday
 }) => {
   return (
     <JustifyBetweenColumn height="100%">
-      <JustifyBetweenColumn height="auto">
+      <JustifyBetweenColumn height="100%">
         <JustifyBetweenRow width="100%">
           <ItemContainer margin="0.5rem 0.5rem 0 0">
             <DatePicker
@@ -28,6 +30,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
               validationError={validationErrors.birthdayError}
               name={'birthday'}
               onChange={(date: Date[]) => onBirthdayChange(date)}
+              value={birthday}
             />
           </ItemContainer>
 

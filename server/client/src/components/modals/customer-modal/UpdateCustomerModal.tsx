@@ -1,10 +1,12 @@
-import { Column } from '@/components/layout'
-import { InnerWrapper } from '@/components/wrapper'
+import { ItemContainer } from '@/components/item-container'
+import { JustifyBetweenColumn } from '@/components/layout'
+import { H1 } from '@/components/texts'
+import colors from '@/constants/colors'
 import { ICustomer } from '@/models'
 import { CreateContactTab, UpdateContactTab } from '@/pages/customer-modal'
 import { useGetCustomerByIdQuery } from '@/services/customers/customerService'
-import React, { useState } from 'react'
-import { ModalBody } from '../types'
+import React from 'react'
+import { ModalBody, ModalHeader } from '../types'
 
 interface IProps {
   customerId: ICustomer['_id']
@@ -12,24 +14,28 @@ interface IProps {
 const UpdateCustomerModal: React.FC<IProps> = ({ customerId }) => {
   const { data: customerDetailData, isLoading: customerDetailDataIsLoading } = useGetCustomerByIdQuery(customerId)
 
-  const [activeTab, setActiveTab] = useState<number>(customerDetailData?.customerType || 0)
-
   return (
-    <Column>
+    <ItemContainer height="100%">
       {customerDetailData && !customerDetailDataIsLoading && (
-        <ModalBody>
-          <InnerWrapper>
-            {activeTab === 0 ? (
+        <JustifyBetweenColumn height="100%">
+          <ModalHeader>
+            <H1 width="100%" textAlign="center" color={colors.white.primary}>
+              {customerDetailData.customerType === 0 ? 'Update Contact' : 'Update Client'} -{' '}
+              {customerDetailData.firstname + ' ' + customerDetailData.lastname}
+            </H1>
+          </ModalHeader>
+          <ModalBody minHeight="100% - 63px">
+            {customerDetailData?.customerType === 0 ? (
               <UpdateContactTab customer={customerDetailData} />
-            ) : activeTab === 1 ? (
+            ) : customerDetailData?.customerType === 1 ? (
               <CreateContactTab />
             ) : (
               'Something went wrong'
             )}
-          </InnerWrapper>
-        </ModalBody>
+          </ModalBody>
+        </JustifyBetweenColumn>
       )}
-    </Column>
+    </ItemContainer>
   )
 }
 

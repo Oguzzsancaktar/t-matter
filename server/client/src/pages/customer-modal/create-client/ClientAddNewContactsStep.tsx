@@ -1,5 +1,4 @@
 import {
-  InnerWrapper,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   ItemContainer,
@@ -17,13 +16,14 @@ import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dyn
 import { toastError } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import React, { useEffect, useState } from 'react'
-import { User } from 'react-feather'
+import { User, X } from 'react-feather'
 
 interface IProps {
   newContactList: ICustomerAddNew[]
   onAdd: (contact: ICustomerAddNew) => void
+  onRemove: (contact: ICustomerAddNew) => void
 }
-const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) => {
+const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onRemove }) => {
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
 
   const [newContact, setNewContact] = useState<ICustomerAddNew>({
@@ -33,6 +33,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
     lastname: '',
     email: '',
     phone: '',
+    jobTitle: '',
     refferedBy: {
       _id: '',
       name: '',
@@ -47,6 +48,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
     lastnameError: false,
     emailError: false,
     phoneError: false,
+    jobTitleError: false,
     refferedByError: false,
     genderError: false
   })
@@ -54,56 +56,67 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
   const [errorMessage, setErrorMessage] = useState('')
 
   const validateFormFields = (): boolean => {
+    const tempValidationErrors = {
+      firstnameError: false,
+      lastnameError: false,
+      emailError: false,
+      phoneError: false,
+      jobTitleError: false,
+      refferedByError: false,
+      genderError: false
+    }
+
     setErrorMessage('')
 
     if (!isValueNull(newContact.firstname)) {
       setErrorMessage('Please enter a valid first name')
-      setValidationErrors({ ...validationErrors, firstnameError: true })
+      tempValidationErrors.firstnameError = true
+      setValidationErrors(tempValidationErrors)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, firstnameError: false })
     }
 
     if (!isValueNull(newContact.lastname)) {
       setErrorMessage('Please enter a valid last name')
-      setValidationErrors({ ...validationErrors, lastnameError: true })
+      tempValidationErrors.lastnameError = true
+      setValidationErrors(tempValidationErrors)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, lastnameError: false })
     }
 
     if (!isEmailValid(newContact.email)) {
       setErrorMessage('Please enter a valid email')
-      setValidationErrors({ ...validationErrors, emailError: true })
+      tempValidationErrors.emailError = true
+      setValidationErrors(tempValidationErrors)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, emailError: false })
+    }
+
+    if (!isValueNull(newContact.jobTitle)) {
+      setErrorMessage('Please enter a valid job title')
+      tempValidationErrors.jobTitleError = true
+      setValidationErrors(tempValidationErrors)
+      return false
     }
 
     if (!isValueNull(newContact.phone)) {
       setErrorMessage('Please enter a valid phone number')
-      setValidationErrors({ ...validationErrors, phoneError: true })
+      tempValidationErrors.phoneError = true
+      setValidationErrors(tempValidationErrors)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, phoneError: false })
     }
 
     if (!isValueNull(newContact.refferedBy._id)) {
       setErrorMessage('Please select user refferedBy')
-      setValidationErrors({ ...validationErrors, refferedByError: true })
+      tempValidationErrors.refferedByError = true
+      setValidationErrors(tempValidationErrors)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, refferedByError: false })
     }
 
     if (!isValueNull(newContact.gender.toString())) {
       setErrorMessage('Please select user gender')
-      setValidationErrors({ ...validationErrors, genderError: true })
+      tempValidationErrors.genderError = true
+      setValidationErrors(tempValidationErrors)
       return false
-    } else {
-      setValidationErrors({ ...validationErrors, genderError: false })
     }
-
+    setValidationErrors(tempValidationErrors)
     return true
   }
 
@@ -134,6 +147,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
         lastname: '',
         email: '',
         phone: '',
+        jobTitle: '',
         refferedBy: {
           _id: '',
           name: '',
@@ -150,126 +164,158 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd }) =
   }, [errorMessage])
 
   return (
-    <ItemContainer>
-      <ItemContainer height="calc(100% - 40px -  40px - 2rem )" margin="1rem 0">
-        <JustifyBetweenColumn height="auto">
-          <JustifyBetweenColumn height="100%">
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0 0.5rem 0 0">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="firstname"
-                  placeholder="Enter first name..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Contact First Name"
-                  validationError={validationErrors.firstnameError}
-                  value={newContact.firstname}
-                />
-              </ItemContainer>
+    <JustifyBetweenColumn height="100%">
+      <JustifyBetweenColumn height="calc(100% - 0.5rem - 0.5rem - 40px - 1rem)">
+        <JustifyBetweenColumn height="100%">
+          <JustifyBetweenRow width="100%">
+            <ItemContainer margin="0 0.5rem 0 0">
+              <InputWithIcon
+                children={<User size={16} />}
+                name="firstname"
+                placeholder="Enter first name..."
+                onChange={handleInputChange}
+                // onBlur={validateFormFields}
+                type="text"
+                labelText="Contact First Name"
+                validationError={validationErrors.firstnameError}
+                value={newContact.firstname}
+              />
+            </ItemContainer>
 
-              <ItemContainer margin="0 0 0 0.5rem">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="lastname"
-                  placeholder="Enter last name..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="text"
-                  labelText="Contact Last Name"
-                  validationError={validationErrors.lastnameError}
-                  value={newContact.lastname}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
+            <ItemContainer margin="0 0 0 0.5rem">
+              <SelectInput
+                children={<User size={16} />}
+                name="refferedBy"
+                // placeholder="Enter birth location..."
+                onChange={(option: IOption) => handleRefferTypeChange(option)}
+                options={(refferedByData || []).map((refferedBy: IRefferedBy) => ({
+                  label: refferedBy.name,
+                  value: refferedBy._id
+                }))}
+                isLoading={refferedByDataIsLoading}
+                labelText="Reffered By"
+                validationError={validationErrors.refferedByError}
+                selectedOption={[{ value: newContact.refferedBy._id, label: newContact.refferedBy.name }]}
+              />
+            </ItemContainer>
+          </JustifyBetweenRow>
 
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="email"
-                  placeholder="Enter email address..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="email"
-                  labelText="Contact E-mail"
-                  validationError={validationErrors.emailError}
-                  value={newContact.email}
-                />
-              </ItemContainer>
+          <JustifyBetweenRow width="100%">
+            <ItemContainer margin="0 0.5rem 0 0">
+              <InputWithIcon
+                children={<User size={16} />}
+                name="lastname"
+                placeholder="Enter last name..."
+                onChange={handleInputChange}
+                // onBlur={validateFormFields}
+                type="text"
+                labelText="Contact Last Name"
+                validationError={validationErrors.lastnameError}
+                value={newContact.lastname}
+              />
+            </ItemContainer>
+            <ItemContainer margin="0 0 0 0.5rem">
+              <SelectInput
+                children={<User size={16} />}
+                name="gender"
+                // placeholder="Enter birth location..."
+                onChange={(option: IOption) => handleGenderChange(option)}
+                options={genderOptions}
+                labelText="Contact Gender"
+                validationError={validationErrors.genderError}
+                selectedOption={[{ value: newContact.gender.toString(), label: EGender[newContact.gender.toString()] }]}
+              />
+            </ItemContainer>
+          </JustifyBetweenRow>
 
-              <ItemContainer margin="0.5rem 0 0 0.5rem">
-                <InputWithIcon
-                  children={<User size={16} />}
-                  name="phone"
-                  placeholder="Enter phone number..."
-                  onChange={handleInputChange}
-                  // onBlur={validateFormFields}
-                  type="tel"
-                  labelText="Contact Phone Number"
-                  validationError={validationErrors.phoneError}
-                  value={newContact.phone}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
+          <JustifyBetweenRow width="100%">
+            <ItemContainer margin="0 0.5rem 0 0">
+              <InputWithIcon
+                children={<User size={16} />}
+                name="phone"
+                placeholder="Enter phone number..."
+                onChange={handleInputChange}
+                // onBlur={validateFormFields}
+                type="tel"
+                labelText="Contact Phone Number"
+                validationError={validationErrors.phoneError}
+                value={newContact.phone}
+              />
+            </ItemContainer>
 
-            <JustifyBetweenRow width="100%">
-              <ItemContainer margin="0.5rem 0.5rem 0 0 ">
-                <SelectInput
-                  children={<User size={16} />}
-                  name="refferedBy"
-                  // placeholder="Enter birth location..."
-                  onChange={(option: IOption) => handleRefferTypeChange(option)}
-                  options={(refferedByData || []).map((refferedBy: IRefferedBy) => ({
-                    label: refferedBy.name,
-                    value: refferedBy._id
-                  }))}
-                  isLoading={refferedByDataIsLoading}
-                  labelText="Reffered By"
-                  validationError={validationErrors.refferedByError}
-                  selectedOption={[{ value: newContact.refferedBy._id, label: newContact.refferedBy.name }]}
-                />
-              </ItemContainer>
+            <ItemContainer margin="0 0 0 0.5rem">
+              <InputWithIcon
+                children={<User size={16} />}
+                name="email"
+                placeholder="Enter email address..."
+                onChange={handleInputChange}
+                // onBlur={validateFormFields}
+                type="email"
+                labelText="Contact E-mail"
+                validationError={validationErrors.emailError}
+                value={newContact.email}
+              />
+            </ItemContainer>
+          </JustifyBetweenRow>
 
-              <ItemContainer margin="0.5rem 0 0 0.5rem ">
-                <SelectInput
-                  children={<User size={16} />}
-                  name="gender"
-                  // placeholder="Enter birth location..."
-                  onChange={(option: IOption) => handleGenderChange(option)}
-                  options={genderOptions}
-                  labelText="Contact Gender"
-                  validationError={validationErrors.genderError}
-                  selectedOption={[
-                    { value: newContact.gender.toString(), label: EGender[newContact.gender.toString()] }
-                  ]}
-                />
-              </ItemContainer>
-            </JustifyBetweenRow>
-          </JustifyBetweenColumn>
+          <JustifyBetweenRow width="100%">
+            <ItemContainer>
+              <InputWithIcon
+                children={<User size={16} />}
+                name="jobTitle"
+                placeholder="Enter job title..."
+                onChange={handleInputChange}
+                // onBlur={validateFormFields}
+                type="tel"
+                labelText="Contact Job Title"
+                validationError={validationErrors.jobTitleError}
+                value={newContact.jobTitle}
+              />
+            </ItemContainer>
+          </JustifyBetweenRow>
+          <ItemContainer height="40px" margin="1rem 0">
+            <Button onClick={handleOnAdd} color={colors.blue.primary}>
+              Add
+            </Button>
+          </ItemContainer>
         </JustifyBetweenColumn>
-      </ItemContainer>
+      </JustifyBetweenColumn>
 
-      <ItemContainer height="40px">
-        <Button onClick={handleOnAdd} color={colors.blue.primary}>
-          Add
-        </Button>
-      </ItemContainer>
-
-      <ItemContainer height="40px">
-        <Row>
+      <ItemContainer height="calc(40px + 1rem +  1rem)" overflow="auto">
+        <Row margin="0.5rem 0">
           {newContactList.map((contact, index) => (
-            <UserBadge
+            <ItemContainer
               key={index}
-              userName={contact.firstname + ' ' + contact.lastname}
-              userEmail={contact.relativeType?.relateTo || ''}
-              userImage={'test'} // TODO: Client side image
-            />
+              minWidth="300px"
+              width="auto"
+              margin="0 1rem 0 0"
+              backgroundColor={colors.secondary.light}
+              borderRadius="0.3rem"
+              padding="0.5rem"
+            >
+              <JustifyBetweenRow>
+                <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
+                  <UserBadge
+                    userEmail={contact.relativeType?.relateTo || ''}
+                    userImage={'reliable.photo'}
+                    userName={contact.firstname + ' ' + contact.lastname}
+                  />
+                </ItemContainer>
+                <Button
+                  color={colors.red.primary}
+                  width="20px"
+                  height="20px"
+                  padding="0"
+                  onClick={() => onRemove(contact)}
+                >
+                  <X size={16} />
+                </Button>
+              </JustifyBetweenRow>
+            </ItemContainer>
           ))}
         </Row>
       </ItemContainer>
-    </ItemContainer>
+    </JustifyBetweenColumn>
   )
 }
 

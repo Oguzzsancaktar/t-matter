@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
-import { Column, Row } from '@/components/layout'
+import { Column, JustifyBetweenColumn, JustifyBetweenRow, Row } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
 import { ModalBody } from '../../types'
 import { SummaryCard } from '@/components/card'
@@ -199,53 +199,57 @@ const CreateWorkflowPlanModal = () => {
   }, [validationErrorMessage])
 
   return (
-    <ModalBody>
-      <Row height="100%">
-        <ItemContainer height="100%" width="300px">
-          <WorkflowPlanStepNavigation
-            data={createWorkflowData}
-            activeStep={activeStep}
-            addNewStep={handleNewStep}
-            onStepChange={handleStepChange}
-            onStepRemove={handleStepRemove}
-            onWfNameChange={handleWorkflowNameChange}
-            workflowNameValidation={validationError.nameError}
-          />
-        </ItemContainer>
+    <JustifyBetweenColumn height="100%">
+      <ModalBody minHeight="100%">
+        <JustifyBetweenRow height="100%">
+          <ItemContainer height="100%" width="300px">
+            <WorkflowPlanStepNavigation
+              data={createWorkflowData}
+              activeStep={activeStep}
+              addNewStep={handleNewStep}
+              onStepChange={handleStepChange}
+              onStepRemove={handleStepRemove}
+              onWfNameChange={handleWorkflowNameChange}
+              workflowNameValidation={validationError.nameError}
+            />
+          </ItemContainer>
 
-        <ItemContainer height="100%" width="calc(100% - 300px)">
-          <Row height="100%">
-            <ItemContainer height="100%" width="calc(100% - 350px)">
-              <WorkflowPlanForm
-                activeStep={activeStep}
-                onDataChange={handleDataChange}
-                errors={validationError}
-                data={createWorkflowData.steps[activeStep]}
-              />
-            </ItemContainer>
-            <ItemContainer height="100%" width="350px">
-              <Column height="100%">
-                <ItemContainer height="calc(100% - 35px - 0.5rem)">
-                  <SummaryCard
-                    body={
-                      <WorkflowPlanSummaryBody checklistData={createWorkflowData.steps[activeStep].checklistItems} />
-                    }
-                    footer={
-                      <WorkflowPlanSummaryFooter checklistIdArr={createWorkflowData.steps[activeStep].checklistItems} />
-                    }
-                  />
-                </ItemContainer>
-                <ItemContainer height="35px" margin="0.5rem 0 0 0">
-                  <Button onClick={handleSubmit} color={colors.blue.primary}>
-                    Submit
-                  </Button>
-                </ItemContainer>
-              </Column>
-            </ItemContainer>
-          </Row>
-        </ItemContainer>
-      </Row>
-    </ModalBody>
+          <ItemContainer height="100%" width="calc(100% - 300px)">
+            <Row height="100%">
+              <ItemContainer height="100%" width="calc(100% - 350px)">
+                <WorkflowPlanForm
+                  activeStep={activeStep}
+                  onDataChange={handleDataChange}
+                  errors={validationError}
+                  data={createWorkflowData.steps[activeStep]}
+                />
+              </ItemContainer>
+              <ItemContainer height="100%" width="350px">
+                <Column height="100%">
+                  <ItemContainer height="calc(100% - 35px - 0.5rem)">
+                    <SummaryCard
+                      body={
+                        <WorkflowPlanSummaryBody checklistData={createWorkflowData.steps[activeStep].checklistItems} />
+                      }
+                      footer={
+                        <WorkflowPlanSummaryFooter
+                          checklistIdArr={createWorkflowData.steps[activeStep].checklistItems}
+                        />
+                      }
+                    />
+                  </ItemContainer>
+                  <ItemContainer height="35px" margin="0.5rem 0 0 0">
+                    <Button onClick={handleSubmit} color={colors.blue.primary}>
+                      Submit
+                    </Button>
+                  </ItemContainer>
+                </Column>
+              </ItemContainer>
+            </Row>
+          </ItemContainer>
+        </JustifyBetweenRow>
+      </ModalBody>
+    </JustifyBetweenColumn>
   )
 }
 

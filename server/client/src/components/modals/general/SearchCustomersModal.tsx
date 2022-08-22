@@ -5,7 +5,7 @@ import { NoTableData } from '@/components/no-table-data'
 import { SearchBar } from '@/components/searchBar'
 import { TableSkeltonLoader } from '@/components/skelton-loader'
 import { InnerWrapper } from '@/components/wrapper'
-import { ECustomerType } from '@/models'
+import { ECustomerType, ESize, ICustomer } from '@/models'
 import { useGetCustomersQuery } from '@/services/customers/customerService'
 import DataTable from 'react-data-table-component'
 import { UserCheck } from 'react-feather'
@@ -15,8 +15,14 @@ import { H1 } from '@/components/texts'
 import { ModalHeader, ModalBody } from '../types'
 import colors from '@/constants/colors'
 import emptyQueryParams from '@/constants/queryParams'
+import { openModal } from '@/store'
+import { ReadCustomerModal } from '../customer-modal'
+import useAccessStore from '@/hooks/useAccessStore'
 
 const SearchCustomersModal = () => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   const [searchQuery, setSearchQuery] = useState(emptyQueryParams)
   const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(searchQuery)
 
@@ -25,7 +31,9 @@ const SearchCustomersModal = () => {
       name: 'Customer',
       sortable: true,
       cell: data => (
-        <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
+        <ItemContainer onClick={() => handleRead(data)} cursorType="pointer">
+          <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
+        </ItemContainer>
       )
     },
     {
@@ -33,7 +41,13 @@ const SearchCustomersModal = () => {
       selector: row => row.type,
       sortable: true,
       cell: data => (
-        <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={ECustomerType[data.customerType]} />
+        <ItemContainer onClick={() => handleRead(data)} cursorType="pointer">
+          <RoleBadge
+            roleColor="#ff0000"
+            roleIcon={<UserCheck size={16} />}
+            roleName={ECustomerType[data.customerType]}
+          />
+        </ItemContainer>
       )
     },
     {
@@ -45,6 +59,19 @@ const SearchCustomersModal = () => {
 
   const handleSearch = (value: string) => {
     setSearchQuery({ ...searchQuery, search: value })
+  }
+
+  const handleRead = (customer: ICustomer) => {
+    dispatch(
+      openModal({
+        id: `customerDetailModal-${customer._id}`,
+        title: 'Customer / ' + customer.firstname + ' ' + customer.lastname,
+        body: <ReadCustomerModal customer={customer} />,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
+        backgroundColor: 'transparent'
+      })
+    )
   }
 
   return (
@@ -69,7 +96,7 @@ const SearchCustomersModal = () => {
               <TableSkeltonLoader count={13} />
             </ItemContainer>
           ) : filteredCustomers && filteredCustomers.length > 0 ? (
-            <DataTable fixedHeader columns={columns} data={filteredCustomers || []} />
+            <DataTable fixedHeader columns={columns} data={filteredCustomers || []} onRowClicked={handleRead} />
           ) : (
             <NoTableData />
           )}

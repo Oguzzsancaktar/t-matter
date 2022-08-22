@@ -16,10 +16,6 @@ const DashboardCard: React.FC<IProps> = ({ head, children }) => {
           backgroundColor={colors.secondary.light}
           padding="0 1rem"
           margin="0 0 0.3rem 0"
-          borderBottom={'1px solid ' + colors.gray.middle}
-          borderTop={'1px solid ' + colors.gray.middle}
-          borderLeft={'1px solid ' + colors.gray.middle}
-          borderRight={'1px solid ' + colors.gray.middle}
           borderRadius="0.2rem"
         >
           {head}

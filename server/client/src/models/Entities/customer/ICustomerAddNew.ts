@@ -7,6 +7,7 @@ export default interface ICustomerAddNew {
   lastname: string
   email: string
   phone: string
+  jobTitle: string
   refferedBy: IRefferedBy
   gender: number
   relativeType?: IRelativeType

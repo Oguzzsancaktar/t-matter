@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import { Tab } from '@/components/tab'
-import { InnerWrapper } from '@/components/wrapper'
 import { CreateClientTab, CreateContactTab } from '@/pages/customer-modal'
 import { ModalHeader, ModalBody } from '../types'
 
@@ -11,27 +10,25 @@ const CreateCustomerModal = () => {
   return (
     <Column height="100%">
       <ModalHeader>
-        <InnerWrapper>
-          <JustifyBetweenColumn>
-            <JustifyCenterRow>
-              <Tab
-                margin="0 1rem 0 0rem"
-                index={0}
-                name="Create Contact"
-                isActive={activeTab === 'create-contact'}
-                onClick={() => setActiveTab('create-contact')}
-              />
+        <JustifyBetweenColumn>
+          <JustifyCenterRow>
+            <Tab
+              margin="0 1rem 0 0rem"
+              index={0}
+              name="Create Contact"
+              isActive={activeTab === 'create-contact'}
+              onClick={() => setActiveTab('create-contact')}
+            />
 
-              <Tab
-                margin="0 1rem 0 0rem"
-                index={1}
-                name="Create Client"
-                isActive={activeTab === 'create-client'}
-                onClick={() => setActiveTab('create-client')}
-              />
-            </JustifyCenterRow>
-          </JustifyBetweenColumn>
-        </InnerWrapper>
+            <Tab
+              margin="0 1rem 0 0rem"
+              index={1}
+              name="Create Client"
+              isActive={activeTab === 'create-client'}
+              onClick={() => setActiveTab('create-client')}
+            />
+          </JustifyCenterRow>
+        </JustifyBetweenColumn>
       </ModalHeader>
 
       <ModalBody minHeight="100% - 63px">

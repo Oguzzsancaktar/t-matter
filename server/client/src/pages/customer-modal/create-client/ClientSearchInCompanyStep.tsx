@@ -71,7 +71,7 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
       <ItemContainer height="35px">
         <SearchBar onSearch={handleSearch} />
       </ItemContainer>
-      <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px - 40px )" margin="0.5rem 0">
+      <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px - 40px - 1rem - 1rem)" margin="0.5rem 0">
         {filteredCustomersIsLoading ? (
           <ItemContainer height="100%">
             <TableSkeltonLoader count={13} />
@@ -82,10 +82,19 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
           <NoTableData />
         )}
       </ItemContainer>
-      <ItemContainer height="40px">
-        <Row>
+
+      <ItemContainer height="calc(40px + 1rem +  1rem)" overflow="auto">
+        <Row margin="0.5rem 0">
           {reliableInCompanyList.map((reliable, index) => (
-            <ItemContainer key={index} maxWidth="250px" margin="0 1rem 0 0">
+            <ItemContainer
+              key={index}
+              minWidth="300px"
+              width="auto"
+              margin="0 1rem 0 0"
+              backgroundColor={colors.secondary.light}
+              borderRadius="0.3rem"
+              padding="0.5rem"
+            >
               <JustifyBetweenRow>
                 <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
                   <UserBadge
@@ -96,8 +105,8 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
                 </ItemContainer>
                 <Button
                   color={colors.red.primary}
-                  width="30px"
-                  height="30px"
+                  width="20px"
+                  height="20px"
                   padding="0"
                   onClick={() => onRemove(reliable)}
                 >

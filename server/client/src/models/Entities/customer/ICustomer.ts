@@ -16,6 +16,7 @@ export default interface ICustomer {
   email: string
   phone: string
   refferedBy: IRefferedBy
+  jobTitle: string
   gender: number
   status: number
   relativeType?: IRelativeType

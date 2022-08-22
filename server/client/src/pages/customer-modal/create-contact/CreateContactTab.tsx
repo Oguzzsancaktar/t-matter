@@ -41,6 +41,7 @@ const CreateContactTab = () => {
     lastname: '',
     email: '',
     phone: '',
+    jobTitle: '',
     refferedBy: {
       _id: '',
       name: '',
@@ -57,6 +58,7 @@ const CreateContactTab = () => {
     lastnameError: false,
     emailError: false,
     phoneError: false,
+    jobTitleError: false,
     refferedByError: false,
     genderError: false
   })
@@ -260,6 +262,7 @@ const CreateContactTab = () => {
       lastnameError: false,
       emailError: false,
       phoneError: false,
+      jobTitleError: false,
       refferedByError: false,
       genderError: false
     })
@@ -280,6 +283,7 @@ const CreateContactTab = () => {
       lastnameError: false,
       emailError: false,
       phoneError: false,
+      jobTitleError: false,
       refferedByError: false,
       genderError: false
     })

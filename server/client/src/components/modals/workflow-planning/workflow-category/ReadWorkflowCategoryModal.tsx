@@ -34,7 +34,7 @@ const ReadWorkflowCategoryModal: React.FC<IProps> = ({ category }) => {
         <JustifyCenterColumn height="100%" padding="2rem 0">
           <Row margin="0 0 1rem 0">
             <H1 color={colors.text.primary} width="200px">
-              Category Name:{' '}
+              Category Name:
             </H1>
             <H1 color={colors.text.primary} width="calc(100% - 200px)" textAlign="right">
               {category.name}

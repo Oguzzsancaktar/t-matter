@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ItemContainer, JustifyBetweenColumn, RelateByModal } from '@/components'
+import { Button, ItemContainer, JustifyBetweenColumn, RelateByModal } from '@/components'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerUpdateDTO, IOption, IRelativeType } from '@/models'
 import { UpdateCustomerInfo, UpdateCustomerReliables } from '@/pages'
@@ -8,6 +8,7 @@ import { closeModal, openModal } from '@/store'
 import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isEmailValid, isValueNull } from '@/utils/validationUtils'
 import emptyQueryParams from '@/constants/queryParams'
+import colors from '@/constants/colors'
 
 interface IProps {
   customer: ICustomer
@@ -25,6 +26,7 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     lastname: customer.lastname,
     email: customer.email,
     phone: customer.phone,
+    jobTitle: customer.jobTitle,
     refferedBy: customer.refferedBy,
     gender: customer.gender,
     reliableCustomers: customer.reliableCustomers,
@@ -123,12 +125,19 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     }
   }
 
-  const handleRemoveReliable = (customer: ICustomer | ICustomerAddNew) => {
-    if (updateContactDTO.reliableInCompany) {
-      console.log(updateContactDTO.reliableCustomers, updateContactDTO.reliableInCompany)
+  const handleRemovePastReliable = (customer: ICustomer) => {
+    if (updateContactDTO.reliableCustomers) {
       setUpdateContactDTO({
         ...updateContactDTO,
-        reliableCustomers: updateContactDTO.reliableCustomers.filter(reliable => reliable.reliableId !== customer._id),
+        reliableCustomers: updateContactDTO.reliableCustomers.filter(reliable => reliable.reliableId !== customer._id)
+      })
+    }
+  }
+
+  const handleRemoveNewReliable = (customer: ICustomer | ICustomerAddNew) => {
+    if (updateContactDTO.reliableInCompany) {
+      setUpdateContactDTO({
+        ...updateContactDTO,
         reliableInCompany: updateContactDTO.reliableInCompany.filter(reliable => reliable._id !== customer._id)
       })
     }
@@ -173,8 +182,8 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
   }, [errorMessage])
 
   return (
-    <ItemContainer>
-      <JustifyBetweenColumn>
+    <ItemContainer height="100%">
+      <JustifyBetweenColumn height="100%">
         <ItemContainer>
           <UpdateCustomerInfo
             validationErrors={validationErrors}
@@ -187,9 +196,16 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
         <ItemContainer>
           <UpdateCustomerReliables
             onAdd={handleAddReliable}
-            onRemove={handleRemoveReliable}
+            onRemovePastReliable={handleRemovePastReliable}
+            onRemoveNewReliable={handleRemoveNewReliable}
             updateContactDTO={{ ...updateContactDTO }}
           />
+        </ItemContainer>
+
+        <ItemContainer>
+          <Button onClick={handleSubmit} color={colors.green.primary}>
+            Update
+          </Button>
         </ItemContainer>
       </JustifyBetweenColumn>
     </ItemContainer>

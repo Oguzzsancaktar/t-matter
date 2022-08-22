@@ -40,7 +40,9 @@ const CustomersPage = () => {
       selector: row => row.task,
       sortable: true,
       cell: data => (
-        <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
+        <ItemContainer onClick={() => handleRead(data)} cursorType="pointer">
+          <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
+        </ItemContainer>
       )
     },
     {
@@ -48,7 +50,13 @@ const CustomersPage = () => {
       selector: row => row.customerType,
       sortable: true,
       cell: data => (
-        <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={ECustomerType[data.customerType]} />
+        <ItemContainer onClick={() => handleRead(data)} cursorType="pointer">
+          <RoleBadge
+            roleColor="#ff0000"
+            roleIcon={<UserCheck size={16} />}
+            roleName={ECustomerType[data.customerType]}
+          />
+        </ItemContainer>
       )
     },
     {
@@ -60,14 +68,22 @@ const CustomersPage = () => {
       name: 'Reffered By',
       selector: row => row.refferedBy,
       sortable: true,
-      cell: data => <Badge color={data.refferedBy.color}>{data.refferedBy.name} </Badge>
+      cell: data => (
+        <ItemContainer onClick={() => handleRead(data)} cursorType="pointer" width="auto">
+          <Badge color={data.refferedBy.color}>{data.refferedBy.name} </Badge>
+        </ItemContainer>
+      )
     },
     {
       name: 'Status',
       width: '120px',
       selector: row => row.status,
       sortable: true,
-      cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
+      cell: data => (
+        <ItemContainer onClick={() => handleRead(data)} cursorType="pointer" width="auto">
+          <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
+        </ItemContainer>
+      )
     },
     {
       name: 'Actions',
@@ -90,7 +106,6 @@ const CustomersPage = () => {
   ]
 
   const handleRead = (customer: ICustomer) => {
-    console.log(customer)
     dispatch(
       openModal({
         id: `customerDetailModal-${customer._id}`,
@@ -182,7 +197,7 @@ const CustomersPage = () => {
         body: <CreateCustomerModal />,
         maxWidth: ESize.WLarge,
         width: ESize.WLarge,
-        height: ESize.HMedium
+        height: ESize.HSmall
       })
     )
   }
