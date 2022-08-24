@@ -15,7 +15,7 @@ import { EGender, ICustomerAddNew, IOption, IRefferedBy } from '@/models'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 import { toastError } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { User, X } from 'react-feather'
 
 interface IProps {
@@ -53,8 +53,6 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onR
     genderError: false
   })
 
-  const [errorMessage, setErrorMessage] = useState('')
-
   const validateFormFields = (): boolean => {
     const tempValidationErrors = {
       firstnameError: false,
@@ -66,52 +64,50 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onR
       genderError: false
     }
 
-    setErrorMessage('')
-
     if (!isValueNull(newContact.firstname)) {
-      setErrorMessage('Please enter a valid first name')
+      toastError('Please enter a valid first name')
       tempValidationErrors.firstnameError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.lastname)) {
-      setErrorMessage('Please enter a valid last name')
+      toastError('Please enter a valid last name')
       tempValidationErrors.lastnameError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isEmailValid(newContact.email)) {
-      setErrorMessage('Please enter a valid email')
+      toastError('Please enter a valid email')
       tempValidationErrors.emailError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.jobTitle)) {
-      setErrorMessage('Please enter a valid job title')
+      toastError('Please enter a valid job title')
       tempValidationErrors.jobTitleError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.phone)) {
-      setErrorMessage('Please enter a valid phone number')
+      toastError('Please enter a valid phone number')
       tempValidationErrors.phoneError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.refferedBy._id)) {
-      setErrorMessage('Please select user refferedBy')
+      toastError('Please select user refferedBy')
       tempValidationErrors.refferedByError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.gender.toString())) {
-      setErrorMessage('Please select user gender')
+      toastError('Please select user gender')
       tempValidationErrors.genderError = true
       setValidationErrors(tempValidationErrors)
       return false
@@ -140,28 +136,24 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onR
     const validationResult = validateFormFields()
     if (validationResult) {
       onAdd(newContact)
-      setNewContact({
-        _id: '',
-        customerType: 0,
-        firstname: '',
-        lastname: '',
-        email: '',
-        phone: '',
-        jobTitle: '',
-        refferedBy: {
-          _id: '',
-          name: '',
-          status: 0,
-          color: '#f2f200'
-        },
-        gender: 0
-      })
+      // setNewContact({
+      //   _id: '',
+      //   customerType: 0,
+      //   firstname: '',
+      //   lastname: '',
+      //   email: '',
+      //   phone: '',
+      //   jobTitle: '',
+      //   refferedBy: {
+      //     _id: '',
+      //     name: '',
+      //     status: 0,
+      //     color: '#f2f200'
+      //   },
+      //   gender: 0
+      // })
     }
   }
-
-  useEffect(() => {
-    toastError(errorMessage)
-  }, [errorMessage])
 
   return (
     <JustifyBetweenColumn height="100%">

@@ -23,7 +23,7 @@ export const Container = styled.div<IContainerProps>`
   // modal height LOOK
   max-height: 850px;
   height: ${({ height }) => (height ? height : '100%')};
-  background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
+  /* background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)}; */
   border-radius: 0.3rem;
   max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : 'none')};
 `

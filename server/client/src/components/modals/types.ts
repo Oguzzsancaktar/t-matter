@@ -6,6 +6,7 @@ export const ModalHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid ${colors.primary.light};
+  padding: 1rem;
   height: 63px;
   width: 100%;
   background-color: ${colors.primary.dark};
@@ -13,13 +14,14 @@ export const ModalHeader = styled.div`
   border-top-right-radius: 0.3rem;
 `
 
-export const ModalBody = styled.div<{ withModalFooter?: boolean; minHeight?: string }>`
+export const ModalBody = styled.div<{ withModalFooter?: boolean; minHeight?: string; backgroundColor?: string }>`
   /* height: calc(${({ withModalFooter }) => (withModalFooter ? '100% - 85px - 60px' : '100% - 85px')}); */
-  min-height: calc(${({ minHeight }) => minHeight && minHeight});
   /* max-height: 850px; */
   /* overflow-y: auto; */
+  min-height: calc(${({ minHeight }) => (minHeight ? minHeight : '100% - 63px')});
   width: 100%;
   padding: 1rem 1rem;
+  background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
 `
 
 export const ModalFooter = styled.div`

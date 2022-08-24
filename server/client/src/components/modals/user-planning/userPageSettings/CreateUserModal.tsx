@@ -83,7 +83,7 @@ const CreateUserModal = () => {
   const [passwordConfirmError, setPasswordConfirmError] = useState(false)
   const [passwordMatchError, setPasswordMatchError] = useState(false)
 
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, toastError] = useState('')
 
   const validateFormFields = (): boolean => {
     setFirstnameError(false)
@@ -102,105 +102,105 @@ const CreateUserModal = () => {
     setStatusError(false)
     setPasswordError(false)
     setPasswordMatchError(false)
-    setErrorMessage('')
+    toastError('')
 
     if (!isValueNull(createUserData.firstname)) {
-      setErrorMessage('Please enter a valid first name')
+      toastError('Please enter a valid first name')
       setFirstnameError(true)
       return false
     }
 
     if (!isValueNull(createUserData.lastname)) {
-      setErrorMessage('Please enter a valid last name')
+      toastError('Please enter a valid last name')
       setLastnameError(true)
       return false
     }
 
     if (!isEmailValid(createUserData.email)) {
-      setErrorMessage('Please enter a valid email')
+      toastError('Please enter a valid email')
       setEmailError(true)
       return false
     }
 
     if (!isValueNull(createUserData.phone)) {
-      setErrorMessage('Please enter a valid phone number')
+      toastError('Please enter a valid phone number')
       setPhoneError(true)
       return false
     }
 
     if (!isValueNull(birthDate)) {
-      setErrorMessage('Please enter a valid birthday')
+      toastError('Please enter a valid birthday')
       setBirthdayError(true)
       return false
     }
 
     if (!isValueNull(createUserData.birthplace)) {
-      setErrorMessage('Please enter a valid birthplace')
+      toastError('Please enter a valid birthplace')
       setBirthplaceError(true)
       return false
     }
 
     if (!isValueNull(createUserData.country)) {
-      setErrorMessage('Please enter a valid country')
+      toastError('Please enter a valid country')
       setCountryError(true)
       return false
     }
 
     if (!isValueNull(createUserData.city)) {
-      setErrorMessage('Please enter a valid city')
+      toastError('Please enter a valid city')
       setCityError(true)
       return false
     }
 
     if (!isValueNull(createUserData.state)) {
-      setErrorMessage('Please enter a valid state')
+      toastError('Please enter a valid state')
       setStateError(true)
       return false
     }
 
     if (!isValueNull(createUserData.zipcode)) {
-      setErrorMessage('Please enter a valid zipcode')
+      toastError('Please enter a valid zipcode')
       setZipcodeError(true)
       return false
     }
 
     if (!isValueNull(createUserData.address)) {
-      setErrorMessage('Please enter a valid address')
+      toastError('Please enter a valid address')
       setAddressError(true)
       return false
     }
 
     if (!isValueNull(createUserData.role)) {
-      setErrorMessage('Please select user role')
+      toastError('Please select user role')
       setRoleError(true)
       return false
     }
 
     if (!isValueNull(createUserData.gender.toString())) {
-      setErrorMessage('Please select user gender')
+      toastError('Please select user gender')
       setGenderError(true)
       return false
     }
 
     if (!isValueNull(createUserData.status.toString())) {
-      setErrorMessage('Please select user status')
+      toastError('Please select user status')
       setStatusError(true)
       return false
     }
 
     if (!isPasswordValid(createUserData.password)) {
-      setErrorMessage('Password must be at least 6 characters long')
+      toastError('Password must be at least 6 characters long')
       setPasswordError(true)
       return false
     }
 
     if (!isPasswordAndConfirmMatch(createUserData.password, passwordConfirm)) {
-      setErrorMessage('Password confirm must be at least 6 characters long')
+      toastError('Password confirm must be at least 6 characters long')
       setPasswordConfirmError(true)
       return false
     }
     if (!isPasswordValid(passwordConfirm)) {
-      setErrorMessage('Password and confirm password do not match')
+      toastError('Password and confirm password do not match')
       setPasswordMatchError(true)
       return false
     }

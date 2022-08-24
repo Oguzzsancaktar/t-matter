@@ -93,27 +93,6 @@ const getWorkflowPlans = async ({ search, size, status }) => {
   const match = { $match: {} }
   const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
 
-  const workflowPlans = await WorkflowPlan.find(query).sort({ createdAt: -1 }).populate(populate).lean().exec()
-
-  if (workflowPlans) {
-    for (let x = 0; x < workflowPlans.length; x++) {
-      const workflowPlan = workflowPlans[x]
-      workflowPlans[x].price = 0
-      workflowPlans[x].duration = 0
-      for (let i = 0; i < workflowPlan.steps.length; i++) {
-        const steps = workflowPlan.steps[i]
-        for (let y = 0; y < steps.checklistItems.length; y++) {
-          const checklistItem = steps.checklistItems[y]
-          workflowPlans[x].steps[i].checklistItems[y] = await WorkflowChecklist.findById(checklistItem).lean().exec()
-          workflowPlans[x].price += (workflowPlans[x].steps[i].checklistItems[y].duration / 3600) * hourlyCompanyFee
-          workflowPlans[x].duration += workflowPlans[x].steps[i].checklistItems[y].duration
-        }
-      }
-    }
-  }
-
-  // return workflowPlans
-
   if (search) {
     match.$match.name = { $regex: search, $options: 'i' }
   }
@@ -125,17 +104,159 @@ const getWorkflowPlans = async ({ search, size, status }) => {
   pipeline.push(match)
   pipeline.push({ $sort: { createdAt: -1 } })
 
-  pipeline.push({
-    $addFields: {
-      price: { $multiply: ['$duration', hourlyCompanyFee / 3600] }
-    }
-  })
-
   if (size) {
     pipeline.push({ $limit: +size })
   }
 
-  return WorkflowChecklist.aggregate(pipeline)
+  const pipelineData = [
+    {
+      $unwind: {
+        path: '$steps',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'workflowchecklists',
+        localField: 'steps.checklistItems',
+        foreignField: '_id',
+        as: 'steps.checklistItems'
+      }
+    },
+    {
+      $lookup: {
+        from: 'workflowcategories',
+        localField: 'steps.category',
+        foreignField: '_id',
+        as: 'steps.category'
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps.category',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'locations',
+        localField: 'steps.location',
+        foreignField: '_id',
+        as: 'steps.location'
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps.location',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'steps.responsibleUser',
+        foreignField: '_id',
+        as: 'steps.responsibleUser'
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps.responsibleUser',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps.checklistItems',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $group: {
+        _id: '$steps._id',
+        checklistTotalDuration: {
+          $sum: '$steps.checklistItems.duration'
+        },
+        checklistItems: {
+          $push: '$steps.checklistItems'
+        },
+        x: {
+          $first: '$$ROOT'
+        }
+      }
+    },
+    {
+      $project: {
+        'steps.checklistItems': 0
+      }
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: [
+            {
+              _id: '$_id',
+              checklistItems: '$checklistItems',
+              checklistTotalDuration: '$checklistTotalDuration'
+            },
+            '$x'
+          ]
+        }
+      }
+    },
+    {
+      $addFields: {
+        'steps.checklistItems': '$checklistItems'
+      }
+    },
+    {
+      $project: {
+        checklistItems: 0
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        totalDuration: {
+          $sum: '$checklistTotalDuration'
+        },
+        steps: {
+          $push: '$steps'
+        },
+        x: {
+          $first: '$$ROOT'
+        }
+      }
+    },
+    {
+      $project: {
+        'x.steps': 0,
+        'x.checklistTotalDuration': 0
+      }
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: [
+            {
+              totalDuration: '$totalDuration',
+              steps: '$steps'
+            },
+            '$x'
+          ]
+        }
+      }
+    },
+    {
+      $addFields: {
+        totalPrice: {
+          $multiply: ['$totalDuration', hourlyCompanyFee / 3600]
+        }
+      }
+    }
+  ]
+
+  return WorkflowPlan.aggregate([...pipeline, ...pipelineData]).exec()
 }
 
 const findWorkflowPlanById = async (id, populate = 'steps.responsibleUser') => {

@@ -40,7 +40,17 @@ const WorkflowPlanStepNavigation: React.FC<IProps> = ({
           />
         </ItemContainer>
 
-        <ItemContainer margin="1rem 0" height="calc(100% - 60px - 34px - 1rem)">
+        <ItemContainer
+          overflow="auto"
+          padding="1rem"
+          margin="1rem 0"
+          height="calc(100% - 60px - 34px - 1rem)"
+          borderRadius="0.3rem"
+          borderLeft={'1px solid' + colors.gray.disabled}
+          borderRight={'1px solid' + colors.gray.disabled}
+          borderTop={'1px solid' + colors.gray.disabled}
+          borderBottom={'1px solid' + colors.gray.disabled}
+        >
           <WorkflowStepList>
             <ItemContainer>
               {data.steps.map((step, index) => (
@@ -52,14 +62,18 @@ const WorkflowPlanStepNavigation: React.FC<IProps> = ({
                       isActive={index === activeStep}
                       onClick={() => onStepChange(index)}
                     ></Tab>
-                    <Trash2 color={colors.red.primary} size={20} onClick={() => onStepRemove(index)} />
+                    <Trash2
+                      cursor={'pointer'}
+                      color={colors.red.primary}
+                      size={20}
+                      onClick={() => onStepRemove(index)}
+                    />
                   </JustifyBetweenRow>
                 </ItemContainer>
               ))}
             </ItemContainer>
           </WorkflowStepList>
         </ItemContainer>
-
         <ItemContainer>
           <Button onClick={addNewStep}>Add New Step</Button>
         </ItemContainer>

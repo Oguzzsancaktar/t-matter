@@ -12,7 +12,7 @@ import ContactAddNewContactsStep from './ContactAddNewContactsStep'
 import ContactInformationsStep from './ContactInformationsStep'
 import ContactSearchInCompanyStep from './ContactSearchInCompanyStep'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
-import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
+import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
 import useAccessStore from '@/hooks/useAccessStore'
@@ -21,7 +21,7 @@ import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dyn
 import emptyQueryParams from '@/constants/queryParams'
 
 const CreateContactTab = () => {
-  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
 
   const [createCustomer] = useCreateCustomerMutation()
 
@@ -29,7 +29,7 @@ const CreateContactTab = () => {
   const dispatch = useAppDispatch()
 
   const [activeWizzardStep, setActiveWizzardStep] = useState(0)
-  const [contactWizzardSteps, setContactWizzardSteps] = useState([
+  const [contactWizzardSteps] = useState([
     { stepName: 'Contact Informations', stepIndex: 0 },
     { stepName: 'Search Relative', stepIndex: 1 },
     { stepName: 'Add New Contacts', stepIndex: 2 }
@@ -63,7 +63,7 @@ const CreateContactTab = () => {
     genderError: false
   })
 
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, toastError] = useState('')
 
   const renderSwitch = () => {
     switch (activeWizzardStep) {
@@ -108,44 +108,44 @@ const CreateContactTab = () => {
   }
 
   const validateFormFields = (): boolean => {
-    setErrorMessage('')
+    toastError('')
 
     if (!isValueNull(createContactDTO.firstname)) {
-      setErrorMessage('Please enter a valid first name')
+      toastError('Please enter a valid first name')
       setValidationErrors({ ...validationErrors, firstnameError: true })
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createContactDTO.lastname)) {
-      setErrorMessage('Please enter a valid last name')
+      toastError('Please enter a valid last name')
       setValidationErrors({ ...validationErrors, lastnameError: true })
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isEmailValid(createContactDTO.email)) {
-      setErrorMessage('Please enter a valid email')
+      toastError('Please enter a valid email')
       setValidationErrors({ ...validationErrors, emailError: true })
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createContactDTO.phone.toString())) {
-      setErrorMessage('Please enter a valid phone number')
+      toastError('Please enter a valid phone number')
       setValidationErrors({ ...validationErrors, phoneError: true })
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createContactDTO.refferedBy._id)) {
-      setErrorMessage('Please select user refferedBy')
+      toastError('Please select user refferedBy')
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createContactDTO.gender.toString())) {
-      setErrorMessage('Please select user gender')
+      toastError('Please select user gender')
       setActiveWizzardStep(0)
       return false
     }
@@ -266,7 +266,7 @@ const CreateContactTab = () => {
       refferedByError: false,
       genderError: false
     })
-    setErrorMessage('')
+    toastError('')
     const validationResult = validateFormFields()
     if (validationResult) {
       setActiveWizzardStep(activeWizzardStep + 1)
@@ -288,7 +288,7 @@ const CreateContactTab = () => {
       genderError: false
     })
 
-    setErrorMessage('')
+    toastError('')
     const validationResult = validateFormFields()
     try {
       if (validationResult) {

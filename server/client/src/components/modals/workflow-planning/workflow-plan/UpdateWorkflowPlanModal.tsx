@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
-import { Column, Row } from '@/components/layout'
+import { Column, JustifyBetweenColumn, JustifyCenterRow, Row } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
-import { ModalBody } from '../../types'
+import { ModalBody, ModalHeader } from '../../types'
 import { SummaryCard } from '@/components/card'
 import WorkflowPlanStepNavigation from '@/pages/settings/workflow-planning/plan/WorkflowPlanStepNavigation'
 import { ITaskCreateDTO, IWorkflow, IWorkflowUpdateDTO } from '@/models'
@@ -16,6 +16,7 @@ import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import useAccessStore from '@/hooks/useAccessStore'
 import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
+import { H1 } from '@/components/texts'
 
 interface IProps {
   workflow: IWorkflow
@@ -24,9 +25,7 @@ interface IProps {
 const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-
   const { data: workflowData, isLoading: workflowIsLoading } = useGetPlanByIdQuery(workflow._id)
-
   const [activeStep, setActiveStep] = useState<number>(0)
   const [updatePlan] = usePatchWorkflowPlanMutation()
 
@@ -69,7 +68,6 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
     stepColorError: false
   }
   const [validationError, setValidationErrors] = useState({ ...initialErrors })
-  const [validationErrorMessage, setValidationErrorMessage] = useState<string>('')
 
   const handleWorkflowNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateWorkflowData({ ...updateWorkflowData, name: event.target.value })
@@ -98,7 +96,7 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
     let result = true
     if (!isValueNull(updateWorkflowData.name)) {
       setValidationErrors({ ...initialErrors, nameError: true })
-      setValidationErrorMessage('Please enter valid workflow name')
+      toastError('Please enter valid workflow name')
       return (result = false)
     }
 
@@ -106,56 +104,56 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
       if (task.category._id === '-1') {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, categoryError: true })
-        setValidationErrorMessage('Please enter valid task category')
+        toastError('Please enter valid task category')
         return (result = false)
       }
 
       if (!isValueBiggerThanZero(+(task.expireDuration ?? 0))) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, expireDurationError: true })
-        setValidationErrorMessage('Please enter valid task expire duration')
+        toastError('Please enter valid task expire duration')
         return (result = false)
       }
 
       if (task.location._id === '-1') {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, locationError: true })
-        setValidationErrorMessage('Please enter valid task location')
+        toastError('Please enter valid task location')
         return (result = false)
       }
 
       if (!isValueBiggerThanZero(+(task.postponeTime ?? 0))) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, postponeTimeError: true })
-        setValidationErrorMessage('Please enter valid task postpone duration')
+        toastError('Please enter valid task postpone duration')
         return (result = false)
       }
 
       if (task.responsibleUser._id === '-1') {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, responsibleUserError: true })
-        setValidationErrorMessage('Please select task responsible user')
+        toastError('Please select task responsible user')
         return (result = false)
       }
 
       if (task.tabs.length === 0) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, tabsError: true })
-        setValidationErrorMessage('Please select at leasst 1 tab')
+        toastError('Please select at leasst 1 tab')
         return (result = false)
       }
 
       if (task.checklistItems.length === 0) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, checklistItemsError: true })
-        setValidationErrorMessage('Please select at leasst 1 checklist')
+        toastError('Please select at leasst 1 checklist')
         return (result = false)
       }
 
       if (!isValueNull(task.stepColor)) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, stepColorError: true })
-        setValidationErrorMessage('Please select task color')
+        toastError('Please select task color')
         return (result = false)
       }
     })
@@ -202,8 +200,6 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   }
 
   useEffect(() => {
-    console.log('workflowData', workflowData, updateWorkflowData)
-
     if (workflowData) {
       setUpdateWorkflowData({
         ...workflowData
@@ -212,62 +208,70 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
     }
   }, [workflowData, workflowIsLoading])
 
-  useEffect(() => {
-    toastError(validationErrorMessage)
-  }, [validationErrorMessage])
-
   return (
-    <ModalBody>
-      {updateWorkflowData && (
-        <Row height="100%">
-          <ItemContainer height="100%" width="300px">
-            <WorkflowPlanStepNavigation
-              data={updateWorkflowData}
-              activeStep={activeStep}
-              addNewStep={handleNewStep}
-              onStepChange={handleStepChange}
-              onStepRemove={handleStepRemove}
-              onWfNameChange={handleWorkflowNameChange}
-              workflowNameValidation={validationError.nameError}
-            />
-          </ItemContainer>
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <JustifyCenterRow width="100%">
+          <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
+            Update Workflow Plan - ({workflow.name})
+          </H1>
+        </JustifyCenterRow>
+      </ModalHeader>
 
-          <ItemContainer height="100%" width="calc(100% - 300px)">
-            <Row height="100%">
-              <ItemContainer height="100%" width="calc(100% - 350px)">
-                <WorkflowPlanForm
-                  activeStep={activeStep}
-                  onDataChange={handleDataChange}
-                  errors={validationError}
-                  data={updateWorkflowData.steps[activeStep]}
-                />
-              </ItemContainer>
-              <ItemContainer height="100%" width="350px">
-                <Column height="100%">
-                  <ItemContainer height="calc(100% - 35px - 0.5rem)">
-                    <SummaryCard
-                      body={
-                        <WorkflowPlanSummaryBody checklistData={updateWorkflowData.steps[activeStep].checklistItems} />
-                      }
-                      footer={
-                        <WorkflowPlanSummaryFooter
-                          checklistIdArr={updateWorkflowData.steps[activeStep].checklistItems}
-                        />
-                      }
-                    />
-                  </ItemContainer>
-                  <ItemContainer height="35px" margin="0.5rem 0 0 0">
-                    <Button onClick={handleSubmit} color={colors.blue.primary}>
-                      Submit
-                    </Button>
-                  </ItemContainer>
-                </Column>
-              </ItemContainer>
-            </Row>
-          </ItemContainer>
-        </Row>
-      )}
-    </ModalBody>
+      <ModalBody>
+        {updateWorkflowData && (
+          <Row height="100%">
+            <ItemContainer height="100%" width="300px">
+              <WorkflowPlanStepNavigation
+                data={updateWorkflowData}
+                activeStep={activeStep}
+                addNewStep={handleNewStep}
+                onStepChange={handleStepChange}
+                onStepRemove={handleStepRemove}
+                onWfNameChange={handleWorkflowNameChange}
+                workflowNameValidation={validationError.nameError}
+              />
+            </ItemContainer>
+
+            <ItemContainer height="100%" width="calc(100% - 300px)">
+              <Row height="100%">
+                <ItemContainer height="100%" width="calc(100% - 350px)">
+                  <WorkflowPlanForm
+                    activeStep={activeStep}
+                    onDataChange={handleDataChange}
+                    errors={validationError}
+                    data={updateWorkflowData.steps[activeStep]}
+                  />
+                </ItemContainer>
+                <ItemContainer height="100%" width="350px">
+                  <Column height="100%">
+                    <ItemContainer height="calc(100% - 35px - 0.5rem)">
+                      <SummaryCard
+                        body={
+                          <WorkflowPlanSummaryBody
+                            checklistData={updateWorkflowData.steps[activeStep].checklistItems}
+                          />
+                        }
+                        footer={
+                          <WorkflowPlanSummaryFooter
+                            checklistIdArr={updateWorkflowData.steps[activeStep].checklistItems}
+                          />
+                        }
+                      />
+                    </ItemContainer>
+                    <ItemContainer height="35px" margin="0.5rem 0 0 0">
+                      <Button onClick={handleSubmit} color={colors.blue.primary}>
+                        Submit
+                      </Button>
+                    </ItemContainer>
+                  </Column>
+                </ItemContainer>
+              </Row>
+            </ItemContainer>
+          </Row>
+        )}
+      </ModalBody>
+    </JustifyBetweenColumn>
   )
 }
 

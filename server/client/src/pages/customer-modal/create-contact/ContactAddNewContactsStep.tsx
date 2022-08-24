@@ -53,7 +53,7 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, on
     genderError: false
   })
 
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, toastError] = useState('')
 
   const validateFormFields = (): boolean => {
     const tempValidationErrors = {
@@ -66,52 +66,52 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, on
       genderError: false
     }
 
-    setErrorMessage('')
+    toastError('')
 
     if (!isValueNull(newContact.firstname)) {
-      setErrorMessage('Please enter a valid first name')
+      toastError('Please enter a valid first name')
       tempValidationErrors.firstnameError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.lastname)) {
-      setErrorMessage('Please enter a valid last name')
+      toastError('Please enter a valid last name')
       tempValidationErrors.lastnameError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isEmailValid(newContact.email)) {
-      setErrorMessage('Please enter a valid email')
+      toastError('Please enter a valid email')
       tempValidationErrors.emailError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.jobTitle)) {
-      setErrorMessage('Please enter a valid job title')
+      toastError('Please enter a valid job title')
       tempValidationErrors.jobTitleError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.phone)) {
-      setErrorMessage('Please enter a valid phone number')
+      toastError('Please enter a valid phone number')
       tempValidationErrors.phoneError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.refferedBy._id)) {
-      setErrorMessage('Please select user refferedBy')
+      toastError('Please select user refferedBy')
       tempValidationErrors.refferedByError = true
       setValidationErrors(tempValidationErrors)
       return false
     }
 
     if (!isValueNull(newContact.gender.toString())) {
-      setErrorMessage('Please select user gender')
+      toastError('Please select user gender')
       tempValidationErrors.genderError = true
       setValidationErrors(tempValidationErrors)
       return false

@@ -17,7 +17,7 @@ const SigninComponent: React.FC<Props> = () => {
 
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, toastError] = useState('')
 
   const [credentials, setCredentials] = useState<IUserLoginCredentials>({
     email: 'admin@admin.com',
@@ -27,14 +27,14 @@ const SigninComponent: React.FC<Props> = () => {
   const validateFormFields = (): boolean => {
     setEmailError(false)
     setPasswordError(false)
-    setErrorMessage('')
+    toastError('')
     if (!isEmailValid(credentials.email)) {
-      setErrorMessage('Please enter a valid email')
+      toastError('Please enter a valid email')
       setEmailError(true)
       return false
     }
     if (!isPasswordValid(credentials.password)) {
-      setErrorMessage('Password must be at least 6 characters long')
+      toastError('Password must be at least 6 characters long')
       setPasswordError(true)
       return false
     }
@@ -50,7 +50,7 @@ const SigninComponent: React.FC<Props> = () => {
         login(credentials)
       }
     } catch (error: any) {
-      setErrorMessage(error.data.errors[0])
+      toastError(error.data.errors[0])
     }
   }
 

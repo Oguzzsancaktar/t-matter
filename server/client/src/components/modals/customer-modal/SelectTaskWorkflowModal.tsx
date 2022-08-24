@@ -50,7 +50,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
     stepColorError: false
   }
   const [validationError, setValidationErrors] = useState({ ...initialErrors })
-  const [validationErrorMessage, setValidationErrorMessage] = useState<string>('')
+  const [validationErrorMessage, toastError] = useState<string>('')
 
   const handleDataChange = (taskStep: ITaskCreateDTO, stepIndex: number) => {
     const stepsInstance = [...updateWorkflowData.steps]
@@ -68,56 +68,56 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
     let result = true
     if (!isValueNull(updateWorkflowData.name)) {
       setValidationErrors({ ...initialErrors, nameError: true })
-      setValidationErrorMessage('Please enter valid workflow name')
+      toastError('Please enter valid workflow name')
       return (result = false)
     }
 
     updateWorkflowData.steps.forEach((task, index) => {
       if (task.category._id === '-1') {
         setValidationErrors({ ...initialErrors, categoryError: true })
-        setValidationErrorMessage('Please enter valid task category')
+        toastError('Please enter valid task category')
         return (result = false)
       }
 
       if (!isValueBiggerThanZero(+(task.expireDuration ?? 0))) {
         setValidationErrors({ ...initialErrors, expireDurationError: true })
-        setValidationErrorMessage('Please enter valid task expire duration')
+        toastError('Please enter valid task expire duration')
         return (result = false)
       }
 
       if (task.location._id === '-1') {
         setValidationErrors({ ...initialErrors, locationError: true })
-        setValidationErrorMessage('Please enter valid task location')
+        toastError('Please enter valid task location')
         return (result = false)
       }
 
       if (!isValueBiggerThanZero(+(task.postponeTime ?? 0))) {
         setValidationErrors({ ...initialErrors, postponeTimeError: true })
-        setValidationErrorMessage('Please enter valid task postpone duration')
+        toastError('Please enter valid task postpone duration')
         return (result = false)
       }
 
       if (task.responsibleUser._id === '-1') {
         setValidationErrors({ ...initialErrors, responsibleUserError: true })
-        setValidationErrorMessage('Please select task responsible user')
+        toastError('Please select task responsible user')
         return (result = false)
       }
 
       if (task.tabs.length === 0) {
         setValidationErrors({ ...initialErrors, tabsError: true })
-        setValidationErrorMessage('Please select at leasst 1 tab')
+        toastError('Please select at leasst 1 tab')
         return (result = false)
       }
 
       if (task.checklistItems.length === 0) {
         setValidationErrors({ ...initialErrors, checklistItemsError: true })
-        setValidationErrorMessage('Please select at leasst 1 checklist')
+        toastError('Please select at leasst 1 checklist')
         return (result = false)
       }
 
       if (!isValueNull(task.stepColor)) {
         setValidationErrors({ ...initialErrors, stepColorError: true })
-        setValidationErrorMessage('Please select task color')
+        toastError('Please select task color')
         return (result = false)
       }
     })

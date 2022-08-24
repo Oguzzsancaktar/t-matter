@@ -5,7 +5,7 @@ import { ESize, ICustomer, ICustomerAddNew, ICustomerUpdateDTO, IOption, IRelati
 import { UpdateCustomerInfo, UpdateCustomerReliables } from '@/pages'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 import { closeModal, openModal } from '@/store'
-import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
+import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isEmailValid, isValueNull } from '@/utils/validationUtils'
 import emptyQueryParams from '@/constants/queryParams'
 import colors from '@/constants/colors'
@@ -14,7 +14,7 @@ interface IProps {
   customer: ICustomer
 }
 const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
-  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -42,42 +42,42 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     genderError: false
   })
 
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, toastError] = useState('')
 
   const validateFormFields = (): boolean => {
-    setErrorMessage('')
+    toastError('')
 
     if (!isValueNull(updateContactDTO.firstname)) {
-      setErrorMessage('Please enter a valid first name')
+      toastError('Please enter a valid first name')
       setValidationErrors({ ...validationErrors, firstnameError: true })
       return false
     }
 
     if (!isValueNull(updateContactDTO.lastname)) {
-      setErrorMessage('Please enter a valid last name')
+      toastError('Please enter a valid last name')
       setValidationErrors({ ...validationErrors, lastnameError: true })
       return false
     }
 
     if (!isEmailValid(updateContactDTO.email)) {
-      setErrorMessage('Please enter a valid email')
+      toastError('Please enter a valid email')
       setValidationErrors({ ...validationErrors, emailError: true })
       return false
     }
 
     if (!isValueNull(updateContactDTO.phone.toString())) {
-      setErrorMessage('Please enter a valid phone number')
+      toastError('Please enter a valid phone number')
       setValidationErrors({ ...validationErrors, phoneError: true })
       return false
     }
 
     if (!isValueNull(updateContactDTO.refferedBy._id)) {
-      setErrorMessage('Please select user refferedBy')
+      toastError('Please select user refferedBy')
       return false
     }
 
     if (!isValueNull(updateContactDTO.gender.toString())) {
-      setErrorMessage('Please select user gender')
+      toastError('Please select user gender')
       return false
     }
 
@@ -162,7 +162,7 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
       refferedByError: false,
       genderError: false
     })
-    setErrorMessage('')
+    toastError('')
     const validationResult = validateFormFields()
     try {
       if (validationResult) {

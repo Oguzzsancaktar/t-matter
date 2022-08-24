@@ -69,7 +69,7 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
   const [genderError, setGenderError] = useState(false)
   const [statusError, setStatusError] = useState(false)
 
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, toastError] = useState('')
 
   const validateFormFields = (): boolean => {
     setFirstnameError(false)
@@ -86,88 +86,88 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
     setRoleError(false)
     setGenderError(false)
     setStatusError(false)
-    setErrorMessage('')
+    toastError('')
 
     if (!isValueNull(updateUserData.firstname || '')) {
-      setErrorMessage('Please enter a valid first name')
+      toastError('Please enter a valid first name')
       setFirstnameError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.lastname || '')) {
-      setErrorMessage('Please enter a valid last name')
+      toastError('Please enter a valid last name')
       setLastnameError(true)
       return false
     }
 
     if (!isEmailValid(updateUserData.email || '')) {
-      setErrorMessage('Please enter a valid email')
+      toastError('Please enter a valid email')
       setEmailError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.phone || '')) {
-      setErrorMessage('Please enter a valid phone number')
+      toastError('Please enter a valid phone number')
       setPhoneError(true)
       return false
     }
 
     if (!isValueNull(birthDate || '')) {
-      setErrorMessage('Please enter a valid birthday')
+      toastError('Please enter a valid birthday')
       setBirthdayError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.birthplace || '')) {
-      setErrorMessage('Please enter a valid birthplace')
+      toastError('Please enter a valid birthplace')
       setBirthplaceError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.country || '')) {
-      setErrorMessage('Please enter a valid country')
+      toastError('Please enter a valid country')
       setCountryError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.city || '')) {
-      setErrorMessage('Please enter a valid city')
+      toastError('Please enter a valid city')
       setCityError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.state || '')) {
-      setErrorMessage('Please enter a valid state')
+      toastError('Please enter a valid state')
       setStateError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.zipcode || '')) {
-      setErrorMessage('Please enter a valid zipcode')
+      toastError('Please enter a valid zipcode')
       setZipcodeError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.address || '')) {
-      setErrorMessage('Please enter a valid address')
+      toastError('Please enter a valid address')
       setAddressError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.role._id || '')) {
-      setErrorMessage('Please select user role')
+      toastError('Please select user role')
       setRoleError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.gender.toString() || '')) {
-      setErrorMessage('Please select user gender')
+      toastError('Please select user gender')
       setGenderError(true)
       return false
     }
 
     if (!isValueNull(updateUserData.status.toString() || '')) {
-      setErrorMessage('Please select user status')
+      toastError('Please select user status')
       setStatusError(true)
       return false
     }

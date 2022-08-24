@@ -46,7 +46,14 @@ const CustomersPage = () => {
       )
     },
     {
+      name: 'Phone',
+      width: '200px',
+      selector: row => row.phone,
+      sortable: true
+    },
+    {
       name: 'Type',
+      width: '160px',
       selector: row => row.customerType,
       sortable: true,
       cell: data => (
@@ -59,13 +66,10 @@ const CustomersPage = () => {
         </ItemContainer>
       )
     },
-    {
-      name: 'Phone',
-      selector: row => row.phone,
-      sortable: true
-    },
+
     {
       name: 'Reffered By',
+      width: '170px',
       selector: row => row.refferedBy,
       sortable: true,
       cell: data => (

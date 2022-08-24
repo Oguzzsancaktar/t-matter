@@ -13,7 +13,7 @@ import ClientExtraInformationsStep from './ClientExtraInformationsStep'
 import ClientInformationsStep from './ClientInformationsStep'
 import ClientSearchInCompanyStep from './ClientSearchInCompanyStep'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
-import { toastError, toastWarning } from '@/utils/toastUtil'
+import { toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import moment from 'moment'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
@@ -23,7 +23,7 @@ import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dyn
 import emptyQueryParams from '@/constants/queryParams'
 
 const CreateClientTab = () => {
-  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -79,7 +79,7 @@ const CreateClientTab = () => {
     genderError: false
   })
 
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, toastError] = useState('')
 
   const renderSwitch = () => {
     switch (activeWizzardStep) {
@@ -134,14 +134,14 @@ const CreateClientTab = () => {
 
   const validateFormFields = (): boolean => {
     if (!isValueNull(createClientDTO.firstname)) {
-      setErrorMessage('Please enter a valid first name')
+      toastError('Please enter a valid first name')
       setValidationErrors({ ...validationErrors, firstnameError: true })
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createClientDTO.lastname)) {
-      setErrorMessage('Please enter a valid last name')
+      toastError('Please enter a valid last name')
       setValidationErrors({ ...validationErrors, lastnameError: true })
 
       setActiveWizzardStep(0)
@@ -149,7 +149,7 @@ const CreateClientTab = () => {
     }
 
     if (!isEmailValid(createClientDTO.email)) {
-      setErrorMessage('Please enter a valid email')
+      toastError('Please enter a valid email')
       setValidationErrors({ ...validationErrors, emailError: true })
 
       setActiveWizzardStep(0)
@@ -157,21 +157,21 @@ const CreateClientTab = () => {
     }
 
     if (!isValueNull(createClientDTO.phone)) {
-      setErrorMessage('Please enter a valid phone number')
+      toastError('Please enter a valid phone number')
       setValidationErrors({ ...validationErrors, phoneError: true })
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(birthday)) {
-      setErrorMessage('Please enter a valid birthday')
+      toastError('Please enter a valid birthday')
       setValidationErrors({ ...validationErrors, birthdayError: true })
       setActiveWizzardStep(1)
       return false
     }
 
     if (!isValueNull(createClientDTO.birthplace)) {
-      setErrorMessage('Please enter a valid birthplace')
+      toastError('Please enter a valid birthplace')
       setValidationErrors({ ...validationErrors, birthplaceError: true })
 
       setActiveWizzardStep(1)
@@ -179,7 +179,7 @@ const CreateClientTab = () => {
     }
 
     if (!isValueNull(createClientDTO.country)) {
-      setErrorMessage('Please enter a valid country')
+      toastError('Please enter a valid country')
       setValidationErrors({ ...validationErrors, countryError: true })
 
       setActiveWizzardStep(1)
@@ -187,7 +187,7 @@ const CreateClientTab = () => {
     }
 
     if (!isValueNull(createClientDTO.city)) {
-      setErrorMessage('Please enter a valid city')
+      toastError('Please enter a valid city')
       setValidationErrors({ ...validationErrors, cityError: true })
 
       setActiveWizzardStep(1)
@@ -195,7 +195,7 @@ const CreateClientTab = () => {
     }
 
     if (!isValueNull(createClientDTO.state)) {
-      setErrorMessage('Please enter a valid state')
+      toastError('Please enter a valid state')
       setValidationErrors({ ...validationErrors, stateError: true })
 
       setActiveWizzardStep(1)
@@ -203,7 +203,7 @@ const CreateClientTab = () => {
     }
 
     if (!isValueNull(createClientDTO.zipcode)) {
-      setErrorMessage('Please enter a valid zipcode')
+      toastError('Please enter a valid zipcode')
       setValidationErrors({ ...validationErrors, zipcodeError: true })
 
       setActiveWizzardStep(1)
@@ -211,7 +211,7 @@ const CreateClientTab = () => {
     }
 
     if (!isValueNull(createClientDTO.address)) {
-      setErrorMessage('Please enter a valid address')
+      toastError('Please enter a valid address')
       setValidationErrors({ ...validationErrors, addressError: true })
 
       setActiveWizzardStep(1)
@@ -219,7 +219,7 @@ const CreateClientTab = () => {
     }
 
     if (!isValueNull(createClientDTO.aSharpNumber)) {
-      setErrorMessage('Please enter a valid A# Number')
+      toastError('Please enter a valid A# Number')
       setValidationErrors({ ...validationErrors, aSharpNumberError: true })
 
       setActiveWizzardStep(1)
@@ -227,14 +227,14 @@ const CreateClientTab = () => {
     }
 
     if (!isValueNull(createClientDTO.refferedBy._id)) {
-      setErrorMessage('Please select user refferedBy')
+      toastError('Please select user refferedBy')
       setValidationErrors({ ...validationErrors, refferedByError: true })
       setActiveWizzardStep(1)
       return false
     }
 
     if (!isValueNull(createClientDTO.gender.toString())) {
-      setErrorMessage('Please select user gender')
+      toastError('Please select user gender')
       setValidationErrors({ ...validationErrors, genderError: true })
 
       setActiveWizzardStep(1)
@@ -363,7 +363,7 @@ const CreateClientTab = () => {
       refferedByError: false,
       genderError: false
     })
-    setErrorMessage('')
+    toastError('')
     const validationResult = validateFormFields()
 
     if (validationResult) {
@@ -392,7 +392,7 @@ const CreateClientTab = () => {
       refferedByError: false,
       genderError: false
     })
-    setErrorMessage('')
+    toastError('')
     const validationResult = validateFormFields()
     try {
       if (validationResult) {

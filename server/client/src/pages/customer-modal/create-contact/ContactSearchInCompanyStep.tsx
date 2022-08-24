@@ -36,6 +36,7 @@ const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, o
       )
     },
     {
+      width: '150px',
       name: 'Type',
       selector: row => row.type,
       sortable: true,
@@ -44,19 +45,23 @@ const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, o
       )
     },
     {
+      width: '200px',
       name: 'Phone',
       selector: row => row.phone,
       sortable: true
     },
     {
+      width: '70px',
       name: 'Add',
       selector: row => row.year,
       right: true,
       cell: data => (
-        <ItemContainer cursorType="pointer" width="auto">
-          <JustifyCenterRow>
-            <Plus size={16} onClick={() => onAdd(data)} />
-          </JustifyCenterRow>
+        <ItemContainer margin="auto" cursorType="pointer" width="100%">
+          <ItemContainer width="30px" height="30px" backgroundColor={colors.primary.dark} borderRadius={'0.3rem'}>
+            <JustifyCenterRow>
+              <Plus size={16} onClick={() => onAdd(data)} color={colors.white.secondary} />
+            </JustifyCenterRow>
+          </ItemContainer>
         </ItemContainer>
       )
     }

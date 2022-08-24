@@ -27,7 +27,7 @@ import { toastSuccess, toastError } from '@/utils/toastUtil'
 import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
-const WorkflowPlan = () => {
+const WorkflowPlanTab = () => {
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
   const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery(searchQueryParams)
 
@@ -44,14 +44,14 @@ const WorkflowPlan = () => {
     },
     {
       name: 'Total Duration',
-      selector: row => secondsToHourMin(row.duration, true),
+      selector: row => secondsToHourMin(row.totalDuration, true),
       sortable: true
     },
     {
       name: 'Total Price',
       selector: row => row.price,
       sortable: true,
-      cell: data => <div>${data.price.toFixed(2)} </div>
+      cell: data => <span> {data.totalPrice.toFixed(2)}$</span>
     },
     {
       name: 'Status',
@@ -86,8 +86,9 @@ const WorkflowPlan = () => {
         id: `readWorkflowPlanModal-${workflow._id}`,
         title: 'Create Plan',
         body: <ReadWorkflowPlanModal workflow={workflow} />,
-        width: ESize.WSmall,
-        height: ESize.HSmall
+        width: ESize.WMedium,
+        maxWidth: ESize.WLarge,
+        height: ESize.HLarge
       })
     )
   }
@@ -162,12 +163,12 @@ const WorkflowPlan = () => {
     }
   }
 
-  const openCreateRoleModal = (e: React.MouseEvent) => {
+  const openCreateWorkflowPlanModal = (e: React.MouseEvent) => {
     e.preventDefault()
     dispatch(
       openModal({
         id: 'createWorkflowPlanModal',
-        title: 'Create Customer Task ',
+        title: 'Create Workflow Plan ',
         body: <CreateWorkflowPlanModal />,
         width: ESize.WXLarge,
         height: ESize.HLarge,
@@ -193,7 +194,7 @@ const WorkflowPlan = () => {
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px - 1rem)">
         <DataTableHeader
-          handleAddNew={openCreateRoleModal}
+          handleAddNew={openCreateWorkflowPlanModal}
           status={statusOptions.find(status => +status.value === searchQueryParams.status)}
           handleSearch={handleSearch}
           handleStatusFilter={handleStatusFilter}
@@ -215,4 +216,4 @@ const WorkflowPlan = () => {
   )
 }
 
-export default WorkflowPlan
+export default WorkflowPlanTab

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
-import { Column, JustifyBetweenColumn, JustifyBetweenRow, Row } from '@/components/layout'
+import { Column, JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow, Row } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
-import { ModalBody } from '../../types'
+import { ModalBody, ModalHeader } from '../../types'
 import { SummaryCard } from '@/components/card'
 import WorkflowPlanStepNavigation from '@/pages/settings/workflow-planning/plan/WorkflowPlanStepNavigation'
 import { ITaskCreateDTO, IWorkflowCreateDTO } from '@/models'
@@ -14,6 +14,7 @@ import { toastError, toastSuccess } from '@/utils/toastUtil'
 import useAccessStore from '@/hooks/useAccessStore'
 import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
 import emptyQueryParams from '@/constants/queryParams'
+import { H1 } from '@/components/texts'
 
 const CreateWorkflowPlanModal = () => {
   const { useAppDispatch } = useAccessStore()
@@ -63,7 +64,7 @@ const CreateWorkflowPlanModal = () => {
     stepColorError: false
   }
   const [validationError, setValidationErrors] = useState({ ...initialErrors })
-  const [validationErrorMessage, setValidationErrorMessage] = useState<string>('')
+  const [validationErrorMessage, toastError] = useState<string>('')
 
   const handleWorkflowNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCreateWorkflowData({ ...createWorkflowData, name: event.target.value })
@@ -92,7 +93,7 @@ const CreateWorkflowPlanModal = () => {
     let result = true
     if (!isValueNull(createWorkflowData.name)) {
       setValidationErrors({ ...initialErrors, nameError: true })
-      setValidationErrorMessage('Please enter valid workflow name')
+      toastError('Please enter valid workflow name')
       return (result = false)
     }
 
@@ -100,56 +101,56 @@ const CreateWorkflowPlanModal = () => {
       if (task.category._id === '-1') {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, categoryError: true })
-        setValidationErrorMessage('Please enter valid task category')
+        toastError('Please enter valid task category')
         return (result = false)
       }
 
       if (!isValueBiggerThanZero(+(task.expireDuration ?? 0))) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, expireDurationError: true })
-        setValidationErrorMessage('Please enter valid task expire duration')
+        toastError('Please enter valid task expire duration')
         return (result = false)
       }
 
       if (task.location._id === '-1') {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, locationError: true })
-        setValidationErrorMessage('Please enter valid task location')
+        toastError('Please enter valid task location')
         return (result = false)
       }
 
       if (!isValueBiggerThanZero(+(task.postponeTime ?? 0))) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, postponeTimeError: true })
-        setValidationErrorMessage('Please enter valid task postpone duration')
+        toastError('Please enter valid task postpone duration')
         return (result = false)
       }
 
       if (task.responsibleUser._id === '-1') {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, responsibleUserError: true })
-        setValidationErrorMessage('Please select task responsible user')
+        toastError('Please select task responsible user')
         return (result = false)
       }
 
       if (task.tabs.length === 0) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, tabsError: true })
-        setValidationErrorMessage('Please select at leasst 1 tab')
+        toastError('Please select at leasst 1 tab')
         return (result = false)
       }
 
       if (task.checklistItems.length === 0) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, checklistItemsError: true })
-        setValidationErrorMessage('Please select at leasst 1 checklist')
+        toastError('Please select at leasst 1 checklist')
         return (result = false)
       }
 
       if (!isValueNull(task.stepColor)) {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, stepColorError: true })
-        setValidationErrorMessage('Please select task color')
+        toastError('Please select task color')
         return (result = false)
       }
     })
@@ -200,7 +201,14 @@ const CreateWorkflowPlanModal = () => {
 
   return (
     <JustifyBetweenColumn height="100%">
-      <ModalBody minHeight="100%">
+      <ModalHeader>
+        <JustifyCenterRow width="100%">
+          <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
+            Create Workflow Plan
+          </H1>
+        </JustifyCenterRow>
+      </ModalHeader>
+      <ModalBody minHeight="100% - 63px">
         <JustifyBetweenRow height="100%">
           <ItemContainer height="100%" width="300px">
             <WorkflowPlanStepNavigation
