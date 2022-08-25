@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Column,
   ItemContainer,
@@ -13,7 +13,7 @@ import ClientExtraInformationsStep from './ClientExtraInformationsStep'
 import ClientInformationsStep from './ClientInformationsStep'
 import ClientSearchInCompanyStep from './ClientSearchInCompanyStep'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
-import { toastWarning } from '@/utils/toastUtil'
+import { toastError, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import moment from 'moment'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
@@ -78,8 +78,6 @@ const CreateClientTab = () => {
     refferedByError: false,
     genderError: false
   })
-
-  const [errorMessage, toastError] = useState('')
 
   const renderSwitch = () => {
     switch (activeWizzardStep) {
@@ -363,7 +361,6 @@ const CreateClientTab = () => {
       refferedByError: false,
       genderError: false
     })
-    toastError('')
     const validationResult = validateFormFields()
 
     if (validationResult) {
@@ -392,7 +389,6 @@ const CreateClientTab = () => {
       refferedByError: false,
       genderError: false
     })
-    toastError('')
     const validationResult = validateFormFields()
     try {
       if (validationResult) {
@@ -404,10 +400,6 @@ const CreateClientTab = () => {
       toastError('error.message')
     }
   }
-
-  useEffect(() => {
-    toastError(errorMessage)
-  }, [errorMessage])
 
   return (
     <Row height="100%">

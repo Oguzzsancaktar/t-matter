@@ -5,7 +5,7 @@ import { Column, JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Ro
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { InnerWrapper, ItemContainer } from '@/components'
+import { ItemContainer } from '@/components'
 import { ModalHeader, ModalBody, ModalFooter } from '@/components/modals/types'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'
@@ -48,17 +48,17 @@ const UpdateRelativeTypeModal: React.FC<IProps> = ({ relativeType }) => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update Company RelativeType
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
-      <ModalBody>
-        <InnerWrapper>
+      <ModalBody withModalFooter={true}>
+        <ItemContainer>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <Column>
               <ItemContainer height="40px" margin="0 0 2rem 0">
@@ -86,15 +86,15 @@ const UpdateRelativeTypeModal: React.FC<IProps> = ({ relativeType }) => {
               />
             </Column>
           </JustifyCenterColumn>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
+        <ItemContainer>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalFooter>
     </JustifyBetweenColumn>
   )

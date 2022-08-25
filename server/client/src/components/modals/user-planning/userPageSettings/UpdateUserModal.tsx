@@ -5,12 +5,12 @@ import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow, Row } from '
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
+import { DatePicker, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 import { EGender, EStatus, IUser, IUserUpdateDTO } from '@/models'
 import { User } from 'react-feather'
 import { isEmailValid, isValueNull } from '@/utils/validationUtils'
-import { toastError, toastSuccess } from '@/utils/toastUtil'
+import { toastSuccess } from '@/utils/toastUtil'
 import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
@@ -210,17 +210,17 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update User ({user.firstname + ' ' + user.lastname})
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
-      <ModalBody>
-        <InnerWrapper>
+      <ModalBody withModalFooter={true}>
+        <ItemContainer>
           <JustifyBetweenColumn height="100%" padding="2rem 0">
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0 0.5rem 0 0">
@@ -229,7 +229,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="firstname"
                   placeholder="Enter first name..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="text"
                   labelText="First Name"
                   validationError={firstnameError}
@@ -243,7 +242,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="lastname"
                   placeholder="Enter last name..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="text"
                   labelText="Last Name"
                   validationError={lastnameError}
@@ -259,7 +257,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="email"
                   placeholder="Enter email address..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="email"
                   labelText="E-mail"
                   validationError={emailError}
@@ -273,7 +270,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="phone"
                   placeholder="Enter phone number..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="tel"
                   labelText="Phone Number"
                   validationError={phoneError}
@@ -299,7 +295,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="birthplace"
                   placeholder="Enter birth location..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="text"
                   labelText="Birth Location"
                   validationError={birthplaceError}
@@ -315,7 +310,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                   name="address"
                   placeholder="Enter your address..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="text"
                   labelText="Address"
                   validationError={addressError}
@@ -333,7 +327,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                       name="city"
                       placeholder="Enter city..."
                       onChange={handleInputChange}
-                      // onBlur={validateFormFields}
                       type="text"
                       labelText="City"
                       validationError={cityError}
@@ -351,7 +344,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                       name="state"
                       placeholder="Enter state..."
                       onChange={handleInputChange}
-                      // onBlur={validateFormFields}
                       type="text"
                       labelText="State"
                       validationError={stateError}
@@ -364,7 +356,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                       name="zipcode"
                       placeholder="Enter zip code..."
                       onChange={handleInputChange}
-                      // onBlur={validateFormFields}
                       type="text"
                       labelText="Zip Code"
                       validationError={zipcodeError}
@@ -383,7 +374,6 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
                     name="country"
                     placeholder="Enter country..."
                     onChange={handleInputChange}
-                    // onBlur={validateFormFields}
                     type="text"
                     labelText="Country"
                     validationError={countryError}
@@ -444,15 +434,15 @@ const UpdateUserModal: React.FC<IProps> = ({ user }) => {
               </ItemContainer>
             </JustifyBetweenRow>
           </JustifyBetweenColumn>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
+        <ItemContainer>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalFooter>
     </JustifyBetweenColumn>
   )

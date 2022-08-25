@@ -5,7 +5,7 @@ import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { InnerWrapper } from '@/components'
+import { ItemContainer } from '@/components'
 import { ModalHeader, ModalBody, ModalFooter } from '@/components/modals/types'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'
@@ -40,16 +40,14 @@ const CreateLocationModal = () => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
-          <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              Create Company Location
-            </H1>
-          </JustifyCenterRow>
-        </InnerWrapper>
+        <JustifyCenterRow width="100%">
+          <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
+            Create Company Location
+          </H1>
+        </JustifyCenterRow>
       </ModalHeader>
 
-      <ModalBody>
+      <ModalBody withModalFooter={true}>
         <JustifyCenterColumn height="100%" padding="2rem 0">
           <Row>
             <InputRegular
@@ -65,11 +63,11 @@ const CreateLocationModal = () => {
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
+        <ItemContainer>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalFooter>
     </JustifyBetweenColumn>
   )

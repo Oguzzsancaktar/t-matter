@@ -2,7 +2,6 @@ import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
 import { Tab } from '@/components/tab'
-import { InnerWrapper } from '@/components/wrapper'
 import { CustomerTaskModalNoteTab, WorkflowChecklistTab, WorkflowPlanTab } from '@/pages'
 import React, { useState } from 'react'
 import { ITask } from '@/models'
@@ -18,17 +17,17 @@ const TaskEventSection: React.FC<IProps> = ({ task, step }) => {
     <ItemContainer>
       <Column>
         <ModalHeader>
-          <InnerWrapper>
+          <ItemContainer>
             <JustifyBetweenColumn>
               <JustifyCenterRow>
                 <Tab name={'Note'} index={0} isActive={false} onClick={() => setActiveTab('note')} />
               </JustifyCenterRow>
             </JustifyBetweenColumn>
-          </InnerWrapper>
+          </ItemContainer>
         </ModalHeader>
 
         <ModalBody>
-          <InnerWrapper>
+          <ItemContainer>
             {activeTab === 'note' ? (
               <CustomerTaskModalNoteTab task={task} step={step} />
             ) : activeTab === 'workflow-checklist' ? (
@@ -36,7 +35,7 @@ const TaskEventSection: React.FC<IProps> = ({ task, step }) => {
             ) : (
               <WorkflowPlanTab />
             )}
-          </InnerWrapper>
+          </ItemContainer>
         </ModalBody>
       </Column>
     </ItemContainer>

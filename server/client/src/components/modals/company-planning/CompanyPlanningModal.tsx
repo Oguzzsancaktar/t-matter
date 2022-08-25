@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Column, ItemContainer, JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
-import { InnerWrapper } from '@components/wrapper'
 
 import { Tab } from '@components/index'
 import { CompanyPricing, CustomerSettings, SalarySettings } from '@/pages'

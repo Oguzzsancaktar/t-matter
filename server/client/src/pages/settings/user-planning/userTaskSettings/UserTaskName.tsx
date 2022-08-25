@@ -1,4 +1,4 @@
-import { ActionButtons, CreateRoleModal, CreateTaskNameModal, DataTableHeader, InnerWrapper } from '@/components'
+import { ActionButtons, CreateRoleModal, CreateTaskNameModal, DataTableHeader, ItemContainer } from '@/components'
 import { Badge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus } from '@/models'
@@ -88,10 +88,10 @@ const UserTaskName = () => {
   }
 
   return (
-    <InnerWrapper>
+    <ItemContainer>
       <DataTableHeader handleAddNew={openCreateRoleModal} />
       <DataTable fixedHeader columns={columns} data={data} />
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

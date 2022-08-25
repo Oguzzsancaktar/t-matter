@@ -5,7 +5,7 @@ import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow, Row } from '
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { DatePicker, InnerWrapper, ItemContainer } from '@/components'
+import { DatePicker, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 import { EGender, EStatus, IUserCreateDTO } from '@/models'
 import {
@@ -24,7 +24,6 @@ import {
 } from 'react-feather'
 import { useToggle } from '@/hooks/useToggle'
 import { isEmailValid, isPasswordAndConfirmMatch, isPasswordValid, isValueNull } from '@/utils/validationUtils'
-import { toastError } from '@/utils/toastUtil'
 import { genderOptions } from '@/constants/genders'
 import { statusOptions } from '@/constants/statuses'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
@@ -240,17 +239,17 @@ const CreateUserModal = () => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create User
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
-      <ModalBody>
-        <InnerWrapper>
+      <ModalBody withModalFooter={true}>
+        <ItemContainer>
           <JustifyBetweenColumn height="100%" padding="2rem 0">
             <JustifyBetweenRow width="100%">
               <ItemContainer margin="0 0.5rem 0 0">
@@ -259,7 +258,6 @@ const CreateUserModal = () => {
                   name="firstname"
                   placeholder="Enter first name..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="text"
                   labelText="First Name"
                   validationError={firstnameError}
@@ -273,7 +271,6 @@ const CreateUserModal = () => {
                   name="lastname"
                   placeholder="Enter last name..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="text"
                   labelText="Last Name"
                   validationError={lastnameError}
@@ -289,7 +286,6 @@ const CreateUserModal = () => {
                   name="email"
                   placeholder="Enter email address..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="email"
                   labelText="E-mail"
                   validationError={emailError}
@@ -303,7 +299,6 @@ const CreateUserModal = () => {
                   name="phone"
                   placeholder="Enter phone number..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="tel"
                   labelText="Phone Number"
                   validationError={phoneError}
@@ -328,7 +323,6 @@ const CreateUserModal = () => {
                   name="birthplace"
                   placeholder="Enter birth location..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="text"
                   labelText="Birth Location"
                   validationError={birthplaceError}
@@ -344,7 +338,6 @@ const CreateUserModal = () => {
                   name="address"
                   placeholder="Enter your address..."
                   onChange={handleInputChange}
-                  // onBlur={validateFormFields}
                   type="text"
                   labelText="Address"
                   validationError={addressError}
@@ -362,7 +355,6 @@ const CreateUserModal = () => {
                       name="city"
                       placeholder="Enter city..."
                       onChange={handleInputChange}
-                      // onBlur={validateFormFields}
                       type="text"
                       labelText="City"
                       validationError={cityError}
@@ -380,7 +372,6 @@ const CreateUserModal = () => {
                       name="state"
                       placeholder="Enter state..."
                       onChange={handleInputChange}
-                      // onBlur={validateFormFields}
                       type="text"
                       labelText="State"
                       validationError={stateError}
@@ -393,7 +384,6 @@ const CreateUserModal = () => {
                       name="zipcode"
                       placeholder="Enter zip code..."
                       onChange={handleInputChange}
-                      // onBlur={validateFormFields}
                       type="text"
                       labelText="Zip Code"
                       validationError={zipcodeError}
@@ -412,7 +402,6 @@ const CreateUserModal = () => {
                     name="country"
                     placeholder="Enter country..."
                     onChange={handleInputChange}
-                    // onBlur={validateFormFields}
                     type="text"
                     labelText="Country"
                     validationError={countryError}
@@ -473,7 +462,6 @@ const CreateUserModal = () => {
                   children={<Key size={16} />}
                   labelText="Password"
                   validationError={passwordError}
-                  // onBlur={validateFormFields}
                   onChange={handleInputChange}
                   name="password"
                   placeholder="Password"
@@ -491,7 +479,6 @@ const CreateUserModal = () => {
                   labelText="Confirm Password"
                   children={<Key size={16} />}
                   validationError={passwordConfirmError || passwordMatchError}
-                  // onBlur={validateFormFields}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value)}
                   value={passwordConfirm}
                   handleVisibility={togglePasswordConfirmVisibility}
@@ -501,15 +488,15 @@ const CreateUserModal = () => {
               </ItemContainer>
             </JustifyBetweenRow>
           </JustifyBetweenColumn>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
+        <ItemContainer>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalFooter>
     </JustifyBetweenColumn>
   )

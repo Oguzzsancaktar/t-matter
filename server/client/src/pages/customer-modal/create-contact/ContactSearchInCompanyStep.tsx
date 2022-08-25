@@ -56,10 +56,10 @@ const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, o
       selector: row => row.year,
       right: true,
       cell: data => (
-        <ItemContainer margin="auto" cursorType="pointer" width="100%">
+        <ItemContainer margin="auto" cursorType="pointer" width="100%" onClick={() => onAdd(data)}>
           <ItemContainer width="30px" height="30px" backgroundColor={colors.primary.dark} borderRadius={'0.3rem'}>
             <JustifyCenterRow>
-              <Plus size={16} onClick={() => onAdd(data)} color={colors.white.secondary} />
+              <Plus size={16} color={colors.white.secondary} />
             </JustifyCenterRow>
           </ItemContainer>
         </ItemContainer>

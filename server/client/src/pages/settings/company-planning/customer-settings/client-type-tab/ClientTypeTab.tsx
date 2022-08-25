@@ -3,7 +3,6 @@ import {
   CreateRoleModal,
   CreateTaskCategoryModal,
   DataTableHeader,
-  InnerWrapper,
   ItemContainer,
   NoTableData
 } from '@/components'

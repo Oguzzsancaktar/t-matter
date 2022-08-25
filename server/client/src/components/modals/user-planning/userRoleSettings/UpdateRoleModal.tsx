@@ -5,7 +5,7 @@ import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { InnerWrapper } from '@/components'
+import { ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 import { usePatchRoleMutation } from '@/services/settings/user-planning/userRoleService'
 import { isValueNull } from '@/utils/validationUtils'
@@ -39,17 +39,17 @@ const UpdateRoleModal: React.FC<IProps> = ({ role }) => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update Role - {role.name}
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
-      <ModalBody>
-        <InnerWrapper>
+      <ModalBody withModalFooter={true}>
+        <ItemContainer>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <InputRegular
               name="role"
@@ -60,15 +60,15 @@ const UpdateRoleModal: React.FC<IProps> = ({ role }) => {
               labelText="Role Name"
             />
           </JustifyCenterColumn>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
+        <ItemContainer>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalFooter>
     </JustifyBetweenColumn>
   )

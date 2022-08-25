@@ -2,7 +2,6 @@ import { ConfirmCancelButtons } from '@/components/button'
 import { InputRegular } from '@/components/input'
 import { JustifyBetweenColumn, JustifyCenterRow, JustifyCenterColumn, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
-import { InnerWrapper } from '@/components/wrapper'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useCreateCategoryMutation } from '@/services/settings/workflow-planning/workflowService'
@@ -41,36 +40,30 @@ const CreateWorkflowCategoryModal = () => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
-          <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              Create Workflow Category
-            </H1>
-          </JustifyCenterRow>
-        </InnerWrapper>
+        <JustifyCenterRow width="100%">
+          <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
+            Create Workflow Category
+          </H1>
+        </JustifyCenterRow>
       </ModalHeader>
 
-      <ModalBody>
-        <InnerWrapper>
-          <JustifyCenterColumn height="100%" padding="2rem 0">
-            <InputRegular
-              name="workflowCategoryName"
-              placeholder="Enter workflow category..."
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWorkflowCategoryName(e.target.value)}
-              value={workflowCategoryName}
-              type="text"
-              labelText="Workflow Category"
-            />
-          </JustifyCenterColumn>
-        </InnerWrapper>
+      <ModalBody withModalFooter={true}>
+        <JustifyCenterColumn height="100%" padding="2rem 0">
+          <InputRegular
+            name="workflowCategoryName"
+            placeholder="Enter workflow category..."
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWorkflowCategoryName(e.target.value)}
+            value={workflowCategoryName}
+            type="text"
+            labelText="Workflow Category"
+          />
+        </JustifyCenterColumn>
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
-          <Row>
-            <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
-          </Row>
-        </InnerWrapper>
+        <Row>
+          <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
+        </Row>
       </ModalFooter>
     </JustifyBetweenColumn>
   )

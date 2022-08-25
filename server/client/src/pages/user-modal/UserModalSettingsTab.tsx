@@ -1,4 +1,4 @@
-import { Column, InnerWrapper, ItemContainer, JustifyBetweenColumn, JustifyCenterRow, Tab } from '@/components'
+import { Column, ItemContainer, JustifyBetweenColumn, JustifyCenterRow, Tab } from '@/components'
 import { ModalHeader, ModalBody } from '@/components/modals/types'
 import { IUser } from '@/models'
 import React, { useState } from 'react'
@@ -13,7 +13,7 @@ const UserModalSettingsTab: React.FC<IProps> = ({ userId }) => {
   return (
     <Column height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyBetweenColumn>
             <JustifyCenterRow>
               <Tab
@@ -33,7 +33,7 @@ const UserModalSettingsTab: React.FC<IProps> = ({ userId }) => {
               />
             </JustifyCenterRow>
           </JustifyBetweenColumn>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
       <ModalBody minHeight="100% - 63px">
         <ItemContainer height="100%">

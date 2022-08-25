@@ -1,6 +1,6 @@
 import React from 'react'
 import { ICustomer } from '@/models'
-import { InnerWrapper, ItemContainer, JustifyCenterColumn } from '@/components'
+import { ItemContainer, JustifyCenterColumn } from '@/components'
 import { useGetActivitiesQuery } from '@services/activityService'
 import ActivityItem from '@components/activity/ActivityItem'
 
@@ -17,7 +17,7 @@ const CustomerModalActivityTab: React.FC<IProps> = ({ customerId }) => {
 
   return (
     <div style={{ height: '700px', overflow: 'auto' }}>
-      <InnerWrapper>
+      <ItemContainer>
         <JustifyCenterColumn>
           {data?.map((activity, index) => (
             <ItemContainer height="auto" key={index}>
@@ -25,7 +25,7 @@ const CustomerModalActivityTab: React.FC<IProps> = ({ customerId }) => {
             </ItemContainer>
           ))}
         </JustifyCenterColumn>
-      </InnerWrapper>
+      </ItemContainer>
     </div>
   )
 }

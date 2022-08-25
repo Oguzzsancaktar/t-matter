@@ -1,4 +1,4 @@
-import { InnerWrapper, JustifyCenterColumn, PageWrapper, SigninComponent } from '@components/index'
+import { ItemContainer, JustifyCenterColumn, PageWrapper, SigninComponent } from '@components/index'
 import colors from '@constants/colors'
 import { useAuth } from '@hooks/useAuth'
 import React, { useEffect } from 'react'
@@ -61,11 +61,11 @@ const LoginPage: React.FC = () => {
       <Wrapper>
         <Link to={'/'}>Home</Link>
         <Container>
-          <InnerWrapper>
+          <ItemContainer>
             <JustifyCenterColumn>
               <SigninComponent />
             </JustifyCenterColumn>
-          </InnerWrapper>
+          </ItemContainer>
         </Container>
       </Wrapper>
     </PageWrapper>

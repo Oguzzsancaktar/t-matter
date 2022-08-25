@@ -22,10 +22,17 @@ export const ModalBody = styled.div<{ withModalFooter?: boolean; minHeight?: str
   width: 100%;
   padding: 1rem 1rem;
   background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
+
+  border-bottom-right-radius: ${({ withModalFooter }) => (withModalFooter ? '0' : '0.3rem')};
+  border-bottom-left-radius: ${({ withModalFooter }) => (withModalFooter ? '0' : '0.3rem')};
 `
 
-export const ModalFooter = styled.div`
+export const ModalFooter = styled.div<{ backgroundColor?: string }>`
   width: 100%;
   height: 60px;
   padding: 1rem;
+  background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
+  overflow: hidden;
+  border-bottom-right-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
 `

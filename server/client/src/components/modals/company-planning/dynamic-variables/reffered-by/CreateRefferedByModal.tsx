@@ -5,7 +5,7 @@ import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { ColorSelect, InnerWrapper } from '@/components'
+import { ColorSelect, ItemContainer } from '@/components'
 import { ModalHeader, ModalBody, ModalFooter } from '@/components/modals/types'
 import { useCreateRefferedByMutation } from '@/services/settings/company-planning/dynamicVariableService'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
@@ -48,41 +48,35 @@ const CreateRefferedByModal: React.FC<IProps> = () => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
-          <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              Create Reffered By
-            </H1>
-          </JustifyCenterRow>
-        </InnerWrapper>
+        <JustifyCenterRow width="100%">
+          <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
+            Create Reffered By
+          </H1>
+        </JustifyCenterRow>
       </ModalHeader>
 
-      <ModalBody>
-        <InnerWrapper>
-          <JustifyCenterColumn height="100%" padding="2rem 0">
-            <Row>
-              <InputRegular
-                name="refferedByName"
-                placeholder="Enter Reffered By Name..."
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRefferedByName(e.target.value)}
-                value={refferedByName}
-                type="text"
-                labelText="Reffered By Name"
-              />
-            </Row>
-            <Row margin="1rem 0 0 0">
-              <ColorSelect labelText="Select Reffered Type Color" value={selectedColor} onClick={handleColorSelect} />
-            </Row>
-          </JustifyCenterColumn>
-        </InnerWrapper>
+      <ModalBody backgroundColor={colors.white.secondary} withModalFooter={true}>
+        <JustifyCenterColumn height="100%" padding="2rem 0">
+          <Row>
+            <InputRegular
+              name="refferedByName"
+              placeholder="Enter Reffered By Name..."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRefferedByName(e.target.value)}
+              value={refferedByName}
+              type="text"
+              labelText="Reffered By Name"
+            />
+          </Row>
+          <Row margin="1rem 0 0 0">
+            <ColorSelect labelText="Select Reffered Type Color" value={selectedColor} onClick={handleColorSelect} />
+          </Row>
+        </JustifyCenterColumn>
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
-          <Row>
-            <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
-          </Row>
-        </InnerWrapper>
+        <Row>
+          <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
+        </Row>
       </ModalFooter>
     </JustifyBetweenColumn>
   )

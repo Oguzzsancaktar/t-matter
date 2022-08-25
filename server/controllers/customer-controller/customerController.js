@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 
 const createCustomer = async (req, res) => {
   const { body } = req
+
   try {
     let reliableCustomers = []
 
@@ -38,7 +39,7 @@ const createCustomer = async (req, res) => {
     for (let index = 0; index < body.reliableCustomers.length; index++) {
       const customerId = body.reliableCustomers[index].reliableId
       const relativeTypeId = body.reliableCustomers[index].relativeType.relativeTypeId
-      await dataAccess.customerDataAccess.findByIdAndUpdateCustomer(customerId, {
+      await dataAccess.customerDataAccess.findByIdAndUpdateCustomerForCreate(customerId, {
         $push: {
           reliableCustomers: {
             reliableId: mongoose.Types.ObjectId(createdCustomer._id),

@@ -115,7 +115,12 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
   return (
     <ItemContainer borderRadius="0.3rem" overflow="visible" height="100%">
       <JustifyBetweenRow height="100%">
-        <ItemContainer width="350px" height="100%" backgroundColor={colors.white.secondary} borderRadius="0.3rem">
+        <ItemContainer
+          width="350px"
+          height="100%"
+          backgroundColor={colors.white.secondary}
+          borderRadius="0.3rem 0 0 0.3rem"
+        >
           {isUserDataLoading || !userData || isUserDataError || false ? (
             <UserSkeletonLoader />
           ) : (
@@ -213,7 +218,7 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             </JustifyBetweenColumn>
           )}
         </ItemContainer>
-        <ItemContainer height="100%" width="120px" padding="1rem" borderRadius="0.3rem">
+        <ItemContainer height="100%" width="120px" padding="1rem" backgroundColor={colors.gray.disabled}>
           <JustifyBetweenColumn height="100%">
             <ItemContainer height="100%" margin="0 0 0.25rem 0">
               <Button
@@ -273,9 +278,9 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
         <ItemContainer
           minHeight="700px"
           height="inherit"
-          width="calc(100% - 120px - 350px - 0.5rem)"
+          width="calc(100% - 120px - 350px )"
           backgroundColor={colors.white.secondary}
-          borderRadius="0.3rem"
+          borderRadius="0 0.3rem 0.3rem 0"
         >
           {renderSwitch()}
         </ItemContainer>

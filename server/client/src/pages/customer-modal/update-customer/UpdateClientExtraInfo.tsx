@@ -3,18 +3,18 @@ import { InputWithIcon } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 
 import { DatePicker, ItemContainer } from '@/components'
-import { ICustomerCreateDTO } from '@/models'
+import { ICustomerCreateDTO, IOption } from '@/models'
 import { User } from 'react-feather'
 
 interface IProps {
   birthday: string
   validationErrors: any
-  createClientDTO: Omit<ICustomerCreateDTO, '_id'>
+  updateClientDTO: Omit<ICustomerCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onBirthdayChange: (date: Date[]) => void
 }
-const ClientExtraInformationsStep: React.FC<IProps> = ({
-  createClientDTO,
+const UpdateCustomerExtraInfo: React.FC<IProps> = ({
+  updateClientDTO,
   validationErrors,
   onInputChange,
   onBirthdayChange,
@@ -43,7 +43,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
               type="text"
               labelText="Birth Location"
               validationError={validationErrors.birthplaceError}
-              value={createClientDTO.birthplace}
+              value={updateClientDTO.birthplace}
             />
           </ItemContainer>
         </JustifyBetweenRow>
@@ -58,10 +58,9 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
               type="text"
               labelText="Country"
               validationError={validationErrors.countryError}
-              value={createClientDTO.country}
+              value={updateClientDTO.country}
             />
           </ItemContainer>
-
           <ItemContainer margin="0 0 0 0.5rem" width="calc((100% - 1rem)/2)">
             <InputWithIcon
               children={<User size={16} />}
@@ -71,7 +70,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
               type="text"
               labelText="City"
               validationError={validationErrors.cityError}
-              value={createClientDTO.city}
+              value={updateClientDTO.city}
             />
           </ItemContainer>
         </JustifyBetweenRow>
@@ -86,7 +85,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
               type="text"
               labelText="State"
               validationError={validationErrors.stateError}
-              value={createClientDTO.state}
+              value={updateClientDTO.state}
             />
           </ItemContainer>
           <ItemContainer margin="0.5rem 0 0 0.5rem">
@@ -98,7 +97,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
               type="text"
               labelText="Zip Code"
               validationError={validationErrors.zipcodeError}
-              value={createClientDTO.zipcode}
+              value={updateClientDTO.zipcode}
             />
           </ItemContainer>
         </JustifyBetweenRow>
@@ -113,7 +112,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
               type="text"
               labelText="Address"
               validationError={validationErrors.addressError}
-              value={createClientDTO.address}
+              value={updateClientDTO.address}
             />
           </ItemContainer>
 
@@ -126,7 +125,7 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
               type="text"
               labelText="A# Number"
               validationError={validationErrors.aSharpNumberError}
-              value={createClientDTO.aSharpNumber}
+              value={updateClientDTO.aSharpNumber}
             />
           </ItemContainer>
         </JustifyBetweenRow>
@@ -135,4 +134,4 @@ const ClientExtraInformationsStep: React.FC<IProps> = ({
   )
 }
 
-export default ClientExtraInformationsStep
+export default UpdateCustomerExtraInfo

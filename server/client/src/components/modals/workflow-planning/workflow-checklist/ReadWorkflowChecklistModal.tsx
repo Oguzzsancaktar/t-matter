@@ -7,7 +7,7 @@ import {
   Row
 } from '@/components/layout'
 import { H1 } from '@/components/texts'
-import { Badge, InnerWrapper } from '@/components'
+import { Badge, ItemContainer } from '@/components'
 import { ModalBody, ModalHeader } from '../../types'
 import { EStatus, ITaskChecklist } from '@/models'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
@@ -21,13 +21,13 @@ const ReadWorkflowChecklistModal: React.FC<IProps> = ({ checklist }) => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               {checklist.name}
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
       <ModalBody>

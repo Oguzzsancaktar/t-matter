@@ -14,7 +14,7 @@ interface IProps {
   onRefferTypeChange: (option: IOption) => void
 }
 
-const UpdateCustomerInfo: React.FC<IProps> = ({
+const UpdateClientInfo: React.FC<IProps> = ({
   validationErrors,
   updateContactDTO,
   onInputChange,
@@ -23,7 +23,6 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
 }) => {
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
 
-  console.log('updateContactDTO', updateContactDTO)
   return (
     <ItemContainer>
       <JustifyBetweenColumn height="100%">
@@ -35,7 +34,6 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
                 name="firstname"
                 placeholder="Enter first name..."
                 onChange={onInputChange}
-                // onBlur={validateFormFields}
                 type="text"
                 labelText="First Name"
                 validationError={validationErrors.firstnameError}
@@ -67,7 +65,6 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
                 name="lastname"
                 placeholder="Enter last name..."
                 onChange={onInputChange}
-                // onBlur={validateFormFields}
                 type="text"
                 labelText="Last Name"
                 validationError={validationErrors.lastnameError}
@@ -97,7 +94,6 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
                 name="phone"
                 placeholder="Enter phone number..."
                 onChange={onInputChange}
-                // onBlur={validateFormFields}
                 type="tel"
                 labelText="Phone Number"
                 validationError={validationErrors.phoneError}
@@ -111,7 +107,6 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
                 name="email"
                 placeholder="Enter email address..."
                 onChange={onInputChange}
-                // onBlur={validateFormFields}
                 type="email"
                 labelText="E-mail"
                 validationError={validationErrors.emailError}
@@ -127,7 +122,6 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
                 name="jobTitle"
                 placeholder="Enter job title..."
                 onChange={onInputChange}
-                // onBlur={validateFormFields}
                 type="tel"
                 labelText="Job Title"
                 validationError={validationErrors.jobTitleError}
@@ -140,4 +134,4 @@ const UpdateCustomerInfo: React.FC<IProps> = ({
     </ItemContainer>
   )
 }
-export default UpdateCustomerInfo
+export default UpdateClientInfo

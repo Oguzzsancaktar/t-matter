@@ -3,7 +3,6 @@ import {
   Column,
   CustomerTaskModal,
   DataTableHeader,
-  InnerWrapper,
   ItemContainer,
   JustifyBetweenColumn,
   JustifyBetweenRow,
@@ -105,7 +104,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
   }
 
   return (
-    <InnerWrapper>
+    <ItemContainer>
       <JustifyBetweenColumn height="100%">
         <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
@@ -133,7 +132,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
           </ItemContainer>
         </Column>
       </JustifyBetweenColumn>
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

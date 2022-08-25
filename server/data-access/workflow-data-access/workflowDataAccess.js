@@ -102,7 +102,6 @@ const getWorkflowPlans = async ({ search, size, status }) => {
   }
 
   pipeline.push(match)
-  pipeline.push({ $sort: { createdAt: -1 } })
 
   if (size) {
     pipeline.push({ $limit: +size })
@@ -253,7 +252,8 @@ const getWorkflowPlans = async ({ search, size, status }) => {
           $multiply: ['$totalDuration', hourlyCompanyFee / 3600]
         }
       }
-    }
+    },
+    { $sort: { createdAt: -1 } }
   ]
 
   return WorkflowPlan.aggregate([...pipeline, ...pipelineData]).exec()

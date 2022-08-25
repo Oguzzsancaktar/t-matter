@@ -1,7 +1,7 @@
 import {
   Column,
   DataTableHeader,
-  InnerWrapper,
+  ItemContainer,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
@@ -68,7 +68,7 @@ const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
   ]
 
   return (
-    <InnerWrapper>
+    <ItemContainer>
       <JustifyBetweenColumn height="100%">
         <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
@@ -84,7 +84,7 @@ const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
           )}
         </Column>
       </JustifyBetweenColumn>
-    </InnerWrapper>
+    </ItemContainer>
   )
 }
 

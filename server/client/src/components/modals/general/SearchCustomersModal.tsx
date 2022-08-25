@@ -4,7 +4,6 @@ import { ItemContainer } from '@/components/item-container'
 import { NoTableData } from '@/components/no-table-data'
 import { SearchBar } from '@/components/searchBar'
 import { TableSkeltonLoader } from '@/components/skelton-loader'
-import { InnerWrapper } from '@/components/wrapper'
 import { ECustomerType, ESize, ICustomer } from '@/models'
 import { useGetCustomersQuery } from '@/services/customers/customerService'
 import DataTable from 'react-data-table-component'
@@ -77,13 +76,13 @@ const SearchCustomersModal = () => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Search Customers
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
       <ModalBody minHeight="100% - 51px">

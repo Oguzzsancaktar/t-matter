@@ -6,8 +6,52 @@ const createCustomer = data => {
   return Customer.create(data)
 }
 
-const findByIdAndUpdateCustomer = (id, data) => {
+const findByIdAndUpdateCustomerForCreate = (id, data) => {
   return Customer.findByIdAndUpdate(id, data)
+}
+const findByIdAndUpdateCustomer = async (id, data) => {
+  const deletedReliableIdArr = data['deleteReliableId']
+  const reliableInCompanyArr = data['reliableInCompany']
+
+  let reliableCustomers = []
+
+  for (let customerId of deletedReliableIdArr) {
+    const customer = await Customer.findById(customerId)
+    customer.reliableCustomers = customer.reliableCustomers.filter(reliable => reliable.reliableId.toString() !== id)
+    Customer.findByIdAndUpdate(customerId, customer)
+  }
+
+  for (let reliable of reliableInCompanyArr) {
+    const reliableId = reliable._id
+    const relativeType = {
+      relativeTypeId: mongoose.Types.ObjectId(reliable.relativeType._id),
+      fromOrTo: 0
+    }
+
+    reliableCustomers.push({ reliableId: mongoose.Types.ObjectId(reliableId), relativeType })
+  }
+
+  if (reliableCustomers.length) {
+    data.reliableCustomers = reliableCustomers
+  }
+
+  for (let reliableCustomer of reliableCustomers) {
+    const customerId = reliableCustomer.reliableId
+    const relativeTypeId = reliableCustomer.relativeType.relativeTypeId
+    await Customer.findByIdAndUpdate(customerId, {
+      $push: {
+        reliableCustomers: {
+          reliableId: mongoose.Types.ObjectId(id),
+          relativeType: {
+            relativeTypeId: mongoose.Types.ObjectId(relativeTypeId),
+            fromOrTo: 1
+          }
+        }
+      }
+    })
+  }
+
+  return await Customer.findByIdAndUpdate(id, data)
 }
 
 const findCustomerById = async (id, populate = '') => {
@@ -71,6 +115,15 @@ const findCustomerById = async (id, populate = '') => {
         status: { $first: '$status' },
         gender: { $first: '$gender' },
         jobTitle: { $first: '$jobTitle' },
+
+        aSharpNumber: { $first: '$aSharpNumber' },
+        country: { $first: '$country' },
+        city: { $first: '$city' },
+        state: { $first: '$state' },
+        address: { $first: '$address' },
+        zipcode: { $first: '$zipcode' },
+        birthday: { $first: '$birthday' },
+        birthplace: { $first: '$birthplace' },
 
         createdAt: { $first: '$createdAt' },
         updatedAt: { $first: '$updatedAt' },
@@ -139,5 +192,7 @@ module.exports = {
   findCustomerById,
   findCustomer,
   findCustomerWithFiltersAndPopulate,
-  findActiveCustomersAndPopulateSalarySetting
+  findActiveCustomersAndPopulateSalarySetting,
+
+  findByIdAndUpdateCustomerForCreate
 }

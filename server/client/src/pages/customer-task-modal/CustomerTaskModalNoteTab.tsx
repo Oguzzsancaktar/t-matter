@@ -1,7 +1,7 @@
 import React from 'react'
 import { useGetActivitiesQuery } from '@services/activityService'
 import { ITask } from '@/models'
-import { InnerWrapper, ItemContainer, JustifyCenterColumn } from '@/components'
+import { ItemContainer, JustifyCenterColumn } from '@/components'
 import ActivityItem from '@components/activity/ActivityItem'
 interface IProps {
   task: ITask['_id']
@@ -16,7 +16,7 @@ const CustomerTaskModalNoteTab: React.FC<IProps> = ({ task, step }) => {
 
   return (
     <div style={{ height: '700px', overflow: 'auto' }}>
-      <InnerWrapper>
+      <ItemContainer>
         <JustifyCenterColumn>
           {data?.map((activity, index) => (
             <ItemContainer height="auto" key={index}>
@@ -24,7 +24,7 @@ const CustomerTaskModalNoteTab: React.FC<IProps> = ({ task, step }) => {
             </ItemContainer>
           ))}
         </JustifyCenterColumn>
-      </InnerWrapper>
+      </ItemContainer>
     </div>
   )
 }

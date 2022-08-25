@@ -1,4 +1,4 @@
-import { H1, InnerWrapper, JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow } from '@/components'
+import { H1, ItemContainer, JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow } from '@/components'
 import { ConfirmCancelButtons } from '@/components/button'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
@@ -22,21 +22,21 @@ const ConfirmModal: React.FC<IProps> = ({ title, onConfirm, modalId }) => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               {title}
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
       <ModalBody>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <ConfirmCancelButtons onConfirm={onConfirm} onCancel={handleCloseReactiveModal} />
           </JustifyCenterColumn>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalBody>
     </JustifyBetweenColumn>
   )

@@ -67,7 +67,7 @@ const updateCustomer = (builder: IBuilder) => {
       return {
         url: `/customer`,
         method: 'PATCH',
-        data: { ...customerUpdateDto, role: customerUpdateDto._id }
+        data: { ...customerUpdateDto }
       }
     },
     invalidatesTags(result) {

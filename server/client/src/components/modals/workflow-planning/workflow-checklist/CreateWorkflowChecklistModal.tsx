@@ -5,10 +5,9 @@ import {
   JustifyCenterRow,
   JustifyCenterColumn,
   H1,
-  InnerWrapper,
+  ItemContainer,
   ClockPicker24
 } from '@/components'
-import { ItemContainer } from '@/components/item-container'
 
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
@@ -113,16 +112,16 @@ const CreateWorkflowChecklistModal = () => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create Workflow Checklist
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
-      <ModalBody>
+      <ModalBody withModalFooter={true}>
         <JustifyCenterColumn height="100%" padding="2rem 0">
           <ItemContainer margin="1rem 0">
             <InputWithIcon

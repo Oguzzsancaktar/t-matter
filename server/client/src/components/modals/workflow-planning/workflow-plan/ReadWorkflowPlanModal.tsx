@@ -2,7 +2,7 @@ import React from 'react'
 import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow, Row } from '@/components/layout'
 import { ModalBody, ModalHeader } from '../../types'
-import { InfoCard, SummaryCard } from '@/components/card'
+import { SummaryCard } from '@/components/card'
 import { EStatus, IWorkflow } from '@/models'
 import colors from '@/constants/colors'
 
@@ -13,13 +13,16 @@ import { WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
 import { Accordeon } from '@/components/accordeon'
 import ReadWorkflowPlanAccordeonHeader from './ReadWorkflowPlanAccordeonHeader'
 import { secondsToHourMin } from '@/utils/timeUtils'
-import { CircleColor, ColorSelect } from '@/components/color-select'
+import { CircleColor } from '@/components/color-select'
+import { useGetPlanByIdQuery } from '@/services/settings/workflow-planning/workflowService'
 
 interface IProps {
   workflow: IWorkflow
 }
 
 const ReadWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
+  const { data: workflowData, isLoading: workflowIsLoading } = useGetPlanByIdQuery(workflow._id)
+
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
@@ -32,69 +35,71 @@ const ReadWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
 
       <ModalBody>
         <Column height="100%">
-          <ItemContainer height="calc(100% - 40px - 1rem)" overflow="auto">
-            {workflow.steps.map((step, index) => (
-              <ItemContainer key={index} margin="0 0 0.5rem 0">
-                <Accordeon head={<ReadWorkflowPlanAccordeonHeader step={step} index={index + 1} />}>
-                  <ItemContainer margin="0 0 1rem 0 " height="100%" width="100%">
-                    <Column width="100%">
-                      <JustifyBetweenRow width="100%">
-                        <ItemContainer width="100%">
-                          <H1 width="auto" color={colors.text.primary}>
-                            Task Expire Duration:{step.expireDuration}
-                          </H1>
-                        </ItemContainer>
-                        <ItemContainer margin="1rem">
-                          <H1 width="auto" color={colors.text.primary}>
-                            Task Location: {step.location.name}
-                          </H1>
-                        </ItemContainer>
-                      </JustifyBetweenRow>
-
-                      <JustifyBetweenRow>
-                        <ItemContainer margin="0 0 1rem 0">
-                          <H1 width="auto" color={colors.text.primary}>
-                            Task Postpone Time: {step.postponeTime}
-                          </H1>
-                        </ItemContainer>
-                        <Row margin="0 0 1rem 0">
-                          <H1 width="max-content" color={colors.text.primary}>
-                            Task Color:
-                          </H1>
-                          <ItemContainer width="auto" margin="0 0 0 1rem">
-                            <CircleColor color={step.stepColor} />
+          {workflowData && !workflowIsLoading && (
+            <ItemContainer height="calc(100% - 40px - 1rem)" overflow="auto">
+              {workflow.steps.map((step, index) => (
+                <ItemContainer key={index} margin="0 0 0.5rem 0">
+                  <Accordeon head={<ReadWorkflowPlanAccordeonHeader step={step} index={index + 1} />}>
+                    <ItemContainer margin="0 0 1rem 0 " height="100%" width="100%">
+                      <Column width="100%">
+                        <JustifyBetweenRow width="100%">
+                          <ItemContainer width="100%">
+                            <H1 width="auto" color={colors.text.primary}>
+                              Task Expire Duration:{step.expireDuration}
+                            </H1>
                           </ItemContainer>
-                        </Row>
-                      </JustifyBetweenRow>
+                          <ItemContainer margin="1rem">
+                            <H1 width="auto" color={colors.text.primary}>
+                              Task Location: {step.location.name}
+                            </H1>
+                          </ItemContainer>
+                        </JustifyBetweenRow>
 
-                      <ItemContainer margin="0 0 1rem 0">
                         <JustifyBetweenRow>
-                          <H1 color={colors.text.primary}>Task Tabs</H1>
-                          <Row width="auto">
-                            {step.tabs.map(tab => (
-                              <ItemContainer margin="0 0.5rem 0 0">
-                                <Badge color={colors.blue.primary}>
-                                  <H1 width="max-content" color={colors.text.primary}>
-                                    {tab}
-                                  </H1>
-                                </Badge>
-                              </ItemContainer>
-                            ))}
+                          <ItemContainer margin="0 0 1rem 0">
+                            <H1 width="auto" color={colors.text.primary}>
+                              Task Postpone Time: {step.postponeTime}
+                            </H1>
+                          </ItemContainer>
+                          <Row margin="0 0 1rem 0">
+                            <H1 width="max-content" color={colors.text.primary}>
+                              Task Color:
+                            </H1>
+                            <ItemContainer width="auto" margin="0 0 0 1rem">
+                              <CircleColor color={step.stepColor} />
+                            </ItemContainer>
                           </Row>
                         </JustifyBetweenRow>
-                      </ItemContainer>
-                      <ItemContainer height="calc(100% - 35px - 0.5rem)">
-                        <SummaryCard
-                          body={<WorkflowPlanSummaryBody checklistData={step.checklistItems} />}
-                          footer={<WorkflowPlanSummaryFooter checklistIdArr={step.checklistItems} />}
-                        />
-                      </ItemContainer>
-                    </Column>
-                  </ItemContainer>
-                </Accordeon>
-              </ItemContainer>
-            ))}
-          </ItemContainer>
+
+                        <ItemContainer margin="0 0 1rem 0">
+                          <JustifyBetweenRow>
+                            <H1 color={colors.text.primary}>Task Tabs</H1>
+                            <Row width="auto">
+                              {step.tabs.map(tab => (
+                                <ItemContainer margin="0 0.5rem 0 0">
+                                  <Badge color={colors.blue.primary}>
+                                    <H1 width="max-content" color={colors.text.primary}>
+                                      {tab}
+                                    </H1>
+                                  </Badge>
+                                </ItemContainer>
+                              ))}
+                            </Row>
+                          </JustifyBetweenRow>
+                        </ItemContainer>
+                        <ItemContainer height="calc(100% - 35px - 0.5rem)">
+                          <SummaryCard
+                            body={<WorkflowPlanSummaryBody checklistData={step.checklistItems} />}
+                            footer={<WorkflowPlanSummaryFooter checklistIdArr={step.checklistItems} />}
+                          />
+                        </ItemContainer>
+                      </Column>
+                    </ItemContainer>
+                  </Accordeon>
+                </ItemContainer>
+              ))}
+            </ItemContainer>
+          )}
 
           <ItemContainer
             margin="1rem 0 0 0"

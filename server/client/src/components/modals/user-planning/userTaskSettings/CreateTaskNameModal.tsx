@@ -5,7 +5,7 @@ import { JustifyBetweenColumn, JustifyCenterRow, Row } from '@/components/layout
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { InnerWrapper } from '@/components'
+import { ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 import { IOption } from '@/models'
 import colors from '@/constants/colors'
@@ -55,17 +55,17 @@ const CreateTaskNameModal = () => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Create User Task Name
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
-      <ModalBody>
-        <InnerWrapper>
+      <ModalBody withModalFooter={true}>
+        <ItemContainer>
           <JustifyBetweenColumn height="100%" padding="2rem 0">
             <Row>
               <SelectInput
@@ -95,15 +95,15 @@ const CreateTaskNameModal = () => {
               />
             </Row>
           </JustifyBetweenColumn>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
+        <ItemContainer>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalFooter>
     </JustifyBetweenColumn>
   )

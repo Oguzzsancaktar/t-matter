@@ -1,7 +1,6 @@
-import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import React, { useState } from 'react'
-import { InnerWrapper, Tab } from '@/components'
+import { ItemContainer, Tab } from '@/components'
 import { ModalHeader, ModalBody } from '@components/modals/types'
 import { InvoiceCategoryTab, PaymentSettingsTab, PointSettingsTab } from '@/pages'
 
@@ -18,7 +17,7 @@ const FinancePlaningModal = () => {
     <ItemContainer minHeight="700px">
       <Column>
         <ModalHeader>
-          <InnerWrapper>
+          <ItemContainer>
             <JustifyBetweenColumn>
               <JustifyCenterRow>
                 <Tab
@@ -46,7 +45,7 @@ const FinancePlaningModal = () => {
                 />
               </JustifyCenterRow>
             </JustifyBetweenColumn>
-          </InnerWrapper>
+          </ItemContainer>
         </ModalHeader>
 
         <ModalBody>{React.createElement(Component[activeTab])}</ModalBody>

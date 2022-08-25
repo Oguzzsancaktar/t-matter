@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Column, ItemContainer, JustifyBetweenColumn, RelateByModal } from '@/components'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerUpdateDTO, IOption, IRelativeType } from '@/models'
-import { UpdateContactInfo, UpdateContactReliables } from '@/pages'
+import { UpdateClientExtraInfo, UpdateClientInfo, UpdateClientReliables } from '@/pages'
 import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
 import { closeModal, openModal } from '@/store'
 import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
@@ -10,16 +10,20 @@ import { isEmailValid, isValueNull } from '@/utils/validationUtils'
 import emptyQueryParams from '@/constants/queryParams'
 import colors from '@/constants/colors'
 import { customerApi, useUpdateCustomerMutation } from '@/services/customers/customerService'
+import moment from 'moment'
 
 interface IProps {
   customer: ICustomer
 }
-const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
+const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
   const [updateCustomer] = useUpdateCustomerMutation()
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
 
+  console.log(customer)
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const [birthday, setBirthday] = useState(customer.birthday)
 
   const [updateContactDTO, setUpdateContactDTO] = useState<Omit<ICustomerUpdateDTO, 'birthday'>>({
     _id: customer._id,
@@ -30,6 +34,13 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     phone: customer.phone,
     jobTitle: customer.jobTitle,
     refferedBy: customer.refferedBy,
+    aSharpNumber: customer.aSharpNumber,
+    country: customer.country,
+    city: customer.city,
+    state: customer.state,
+    address: customer.address,
+    zipcode: customer.zipcode,
+    birthplace: customer.birthplace,
     gender: customer.gender,
     reliableCustomers: customer.reliableCustomers,
     deleteReliableId: [],
@@ -163,6 +174,10 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     dispatch(closeModal(`updateContactCustomerSearchModal-${updateContactDTO._id}`))
   }
 
+  const handleBirhdayChange = (date: Date[]) => {
+    setBirthday(moment(date[0]).format('MM-DD-YYYY'))
+  }
+
   const handleSubmit = async () => {
     setValidationErrors({
       firstnameError: false,
@@ -193,7 +208,7 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     <ItemContainer height="100%">
       <JustifyBetweenColumn height="100%">
         <ItemContainer>
-          <UpdateContactInfo
+          <UpdateClientInfo
             validationErrors={validationErrors}
             updateContactDTO={{ ...updateContactDTO }}
             onInputChange={handleInputChange}
@@ -201,9 +216,20 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
             onRefferTypeChange={handleRefferTypeChange}
           />
         </ItemContainer>
+
+        <ItemContainer>
+          <UpdateClientExtraInfo
+            validationErrors={validationErrors}
+            birthday={birthday || ''}
+            updateClientDTO={{ ...updateContactDTO }}
+            onInputChange={handleInputChange}
+            onBirthdayChange={handleBirhdayChange}
+          />
+        </ItemContainer>
+
         <Column>
-          <ItemContainer margin="0 0 1rem 0">
-            <UpdateContactReliables
+          <ItemContainer margin="1rem 0">
+            <UpdateClientReliables
               onAdd={handleAddReliable}
               onRemovePastReliable={handleRemovePastReliable}
               onRemoveNewReliable={handleRemoveNewReliable}
@@ -222,4 +248,4 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
   )
 }
 
-export default UpdateContactTab
+export default UpdateClientTab

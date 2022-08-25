@@ -2,7 +2,6 @@ import React from 'react'
 import {
   CompanyPlanningModal,
   FinancePlaningModal,
-  InnerWrapper,
   ItemContainer,
   PageWrapper,
   SettingsCard,

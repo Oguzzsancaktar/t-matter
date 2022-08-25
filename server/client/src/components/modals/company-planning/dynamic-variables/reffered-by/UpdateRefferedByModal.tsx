@@ -5,7 +5,7 @@ import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { ColorSelect, InnerWrapper } from '@/components'
+import { ColorSelect, ItemContainer } from '@/components'
 import { ModalHeader, ModalBody, ModalFooter } from '@/components/modals/types'
 import { IRefferedBy } from '@/models'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
@@ -46,17 +46,17 @@ const UpdateRefferedByModal: React.FC<IProps> = ({ refferedBy }) => {
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
-        <InnerWrapper>
+        <ItemContainer>
           <JustifyCenterRow width="100%">
             <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
               Update Company RefferedBy
             </H1>
           </JustifyCenterRow>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalHeader>
 
-      <ModalBody>
-        <InnerWrapper>
+      <ModalBody withModalFooter={true}>
+        <ItemContainer>
           <JustifyCenterColumn height="100%" padding="2rem 0">
             <Row>
               <InputRegular
@@ -72,15 +72,15 @@ const UpdateRefferedByModal: React.FC<IProps> = ({ refferedBy }) => {
               <ColorSelect labelText="Select Reffered Type Color" value={selectedColor} onClick={handleColorSelect} />
             </Row>
           </JustifyCenterColumn>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalBody>
 
       <ModalFooter>
-        <InnerWrapper>
+        <ItemContainer>
           <Row>
             <ConfirmCancelButtons onCancel={handleCancel} onConfirm={handleConfirm} />
           </Row>
-        </InnerWrapper>
+        </ItemContainer>
       </ModalFooter>
     </JustifyBetweenColumn>
   )
