@@ -15,6 +15,7 @@ const workingScheduleRoutes = require('./working-schedule-routes/workingSchedule
 const taskRoutes = require('./task-routes/taskRoutes')
 const activityRoutes = require('./activity-routes/activityRoutes')
 const financeRoutes = require('./finance-routes/financeRoutes')
+const invoiceCategoryRoutes = require('./invoice-category-routes/invoiceCategoryRoutes')
 
 router.get('/hello', (req, res) => {
   res.send('hello')
@@ -33,5 +34,6 @@ router.use('/dynamic-variables', dynamicVariableRoutes)
 router.use('/task', taskRoutes)
 router.use('/activity', activityRoutes)
 router.use('/finance', financeRoutes)
+router.use('/invoice-category', invoiceCategoryRoutes)
 
 module.exports = router
