@@ -14,7 +14,7 @@ const findByIdAndUpdateCustomer = async (id, data) => {
   const reliableInCompanyArr = data['reliableInCompany']
 
   let reliableCustomers = []
-
+  debugger
   for (let customerId of deletedReliableIdArr) {
     const customer = await Customer.findById(customerId)
     customer.reliableCustomers = customer.reliableCustomers.filter(reliable => reliable.reliableId.toString() !== id)
@@ -32,7 +32,7 @@ const findByIdAndUpdateCustomer = async (id, data) => {
   }
 
   if (reliableCustomers.length) {
-    data.reliableCustomers = reliableCustomers
+    data.reliableCustomers = data.reliableCustomers.concat(reliableCustomers)
   }
 
   for (let reliableCustomer of reliableCustomers) {
@@ -50,6 +50,8 @@ const findByIdAndUpdateCustomer = async (id, data) => {
       }
     })
   }
+
+  console.log('=========', data)
 
   return await Customer.findByIdAndUpdate(id, data)
 }

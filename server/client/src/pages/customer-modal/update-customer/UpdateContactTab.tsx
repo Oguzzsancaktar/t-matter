@@ -105,20 +105,22 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     }
   }
 
-  const handleAddReliable = (customer: ICustomer) => {
+  const handleAddReliable = (reliableCustomer: ICustomer) => {
     const isSelectedBefore = updateContactDTO.reliableCustomers.find(reliable => reliable.reliableId === customer._id)
     if (isSelectedBefore) {
       toastWarning('Contact is already selected')
+    } else if (reliableCustomer._id === customer._id) {
+      toastWarning('You cand add relative itself')
     } else {
       dispatch(
         openModal({
-          id: `addRelateByModal-${customer._id}`,
-          title: `Add relate by modal ${customer.firstname}?`,
+          id: `addRelateByModal-${reliableCustomer._id}`,
+          title: `Add relate by modal ${reliableCustomer.firstname}?`,
           body: (
             <RelateByModal
-              modalId={`addRelateByModal-${customer._id}`}
-              title={`Choose relate by for ${customer.firstname} ${customer.lastname} ?`}
-              onConfirm={relativeType => handleConfirmAddReliable(customer, relativeType)}
+              modalId={`addRelateByModal-${reliableCustomer._id}`}
+              title={`Choose relate by for ${reliableCustomer.firstname} ${reliableCustomer.lastname} ?`}
+              onConfirm={relativeType => handleConfirmAddReliable(reliableCustomer, relativeType)}
             />
           ),
           width: ESize.WLarge,
@@ -145,21 +147,21 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     }
   }
 
-  const handleRemoveNewReliable = (customer: ICustomer | ICustomerAddNew) => {
+  const handleRemoveNewReliable = (reliableCustomer: ICustomer | ICustomerAddNew) => {
     if (updateContactDTO.reliableInCompany) {
       setUpdateContactDTO({
         ...updateContactDTO,
-        reliableInCompany: updateContactDTO.reliableInCompany.filter(reliable => reliable._id !== customer._id)
+        reliableInCompany: updateContactDTO.reliableInCompany.filter(reliable => reliable._id !== reliableCustomer._id)
       })
     }
   }
 
-  const handleConfirmAddReliable = (customer: ICustomer, relativeType?: IRelativeType) => {
+  const handleConfirmAddReliable = (reliableCustomer: ICustomer, relativeType?: IRelativeType) => {
     setUpdateContactDTO({
       ...updateContactDTO,
-      reliableInCompany: updateContactDTO.reliableInCompany?.concat({ ...customer, relativeType: relativeType })
+      reliableInCompany: updateContactDTO.reliableInCompany?.concat({ ...reliableCustomer, relativeType: relativeType })
     })
-    dispatch(closeModal(`addRelateByModal-${customer._id}`))
+    dispatch(closeModal(`addRelateByModal-${reliableCustomer._id}`))
     dispatch(closeModal(`updateContactCustomerSearchModal-${updateContactDTO._id}`))
   }
 
@@ -177,6 +179,7 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     const validationResult = validateFormFields()
     try {
       if (validationResult) {
+        console.log('updateContactDTO', updateContactDTO)
         await updateCustomer({ ...updateContactDTO })
         dispatch(closeModal(`updateCustomerModal-${customer._id}`))
         toastSuccess(

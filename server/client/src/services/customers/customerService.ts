@@ -103,7 +103,7 @@ const getCustomerReliables = (builder: IBuilder) => {
     providesTags(result) {
       if (!result) return [{ type: CUSTOMER_TAG_TYPE, id: 'LIST' }]
       return [
-        ...result.map(customer => ({ type: CUSTOMER_TAG_TYPE, id: customer._id })),
+        ...result.map(customer => ({ type: CUSTOMER_TAG_TYPE, id: customer?._id || 'LIST' })),
         { type: CUSTOMER_TAG_TYPE, id: 'LIST' }
       ]
     }
