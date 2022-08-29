@@ -27,6 +27,9 @@ const taskSchema = new Schema(
     isInvoiced: {
       type: Boolean,
       default: false
+    },
+    index: {
+      type: Number
     }
   },
   {

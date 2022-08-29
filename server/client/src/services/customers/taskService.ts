@@ -85,6 +85,21 @@ const updateTask = (builder: IBuilder) => {
   })
 }
 
+const reorderTasks = (builder: IBuilder) => {
+  return builder.mutation<ICustomerTask[], { _id: ICustomerTask['_id']; index: ICustomerTask['index'] }[]>({
+    query(tasks) {
+      return {
+        url: '/task/reorder',
+        method: 'PUT',
+        data: tasks
+      }
+    },
+    invalidatesTags() {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const taskApi = createApi({
   reducerPath: TASK_REDUCER_PATH,
   tagTypes: [TASK_TAG_TYPE],
@@ -93,9 +108,23 @@ const taskApi = createApi({
     createTask: createTask(builder),
     getTasksByCustomerId: getTasksByCustomerId(builder),
     getTaskByTaskId: getTaskByTaskId(builder),
-    updateTask: updateTask(builder)
+    updateTask: updateTask(builder),
+    reorderTasks: reorderTasks(builder)
   })
 })
 
-const { useGetTasksByCustomerIdQuery, useCreateTaskMutation, useGetTaskByTaskIdQuery, useUpdateTaskMutation } = taskApi
-export { taskApi, useCreateTaskMutation, useGetTasksByCustomerIdQuery, useGetTaskByTaskIdQuery, useUpdateTaskMutation }
+const {
+  useGetTasksByCustomerIdQuery,
+  useCreateTaskMutation,
+  useGetTaskByTaskIdQuery,
+  useUpdateTaskMutation,
+  useReorderTasksMutation
+} = taskApi
+export {
+  taskApi,
+  useCreateTaskMutation,
+  useGetTasksByCustomerIdQuery,
+  useGetTaskByTaskIdQuery,
+  useUpdateTaskMutation,
+  useReorderTasksMutation
+}

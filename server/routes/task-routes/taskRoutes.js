@@ -3,6 +3,8 @@ const router = express.Router()
 const middlewares = require('../../middlewares')
 const controllers = require('../../controllers')
 
+router.put('/reorder', controllers.taskController.reorderTasks)
+
 router.post(
   '/:customerId',
   middlewares.validations.taskValidations.createTaskValidation,

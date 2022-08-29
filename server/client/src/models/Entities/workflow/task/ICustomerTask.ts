@@ -9,4 +9,5 @@ export default interface ICustomerTask {
   steps: ITaskItem[]
   totalPrice?: number
   isInvoiced?: boolean
+  index?: number
 }

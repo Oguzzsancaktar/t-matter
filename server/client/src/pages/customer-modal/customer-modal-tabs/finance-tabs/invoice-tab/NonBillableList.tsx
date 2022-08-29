@@ -1,8 +1,10 @@
 import React from 'react'
-import { H1, JustifyBetweenRow } from '@/components'
+import { H1 } from '@/components'
 import { ICustomerTask } from '@/models'
 import styled from 'styled-components'
 import colors from '@constants/colors'
+import { Draggable, Droppable } from 'react-beautiful-dnd'
+import JustifyBetweenRow from '@components/layout/JustifyBetweenRow'
 
 interface IProps {
   nonBillableTasks?: ICustomerTask[]
@@ -17,18 +19,41 @@ const Item = styled(JustifyBetweenRow)`
 
 const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
   return (
-    <div style={{ marginTop: '1rem' }}>
-      {nonBillableTasks?.map((task, index) => {
+    <Droppable key="non" droppableId="nonBillableTasks">
+      {(provided, snapshot) => {
         return (
-          <Item key={index}>
-            <H1 color={colors.black.primary}>{task.name}</H1>
-            <H1 color={colors.black.primary} textAlign="end">
-              ${task.totalPrice}
-            </H1>
-          </Item>
+          <div
+            style={{
+              marginTop: '1rem',
+              height: '95%',
+              backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
+            }}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {nonBillableTasks?.map((task, index) => {
+              return (
+                <Draggable draggableId={task._id as string} index={index} key={task._id}>
+                  {provided => {
+                    return (
+                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <Item>
+                          <H1 color={colors.black.primary}>{task.name}</H1>
+                          <H1 color={colors.black.primary} textAlign="end">
+                            ${task.totalPrice}
+                          </H1>
+                        </Item>
+                      </div>
+                    )
+                  }}
+                </Draggable>
+              )
+            })}
+            {provided.placeholder}
+          </div>
         )
-      })}
-    </div>
+      }}
+    </Droppable>
   )
 }
 export default NonBillableList
