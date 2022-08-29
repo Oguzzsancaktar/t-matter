@@ -8,7 +8,7 @@ import ReliableSlider from '@/components/slider/ReliableSlider'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import { ECustomerType, EStatus, ICustomer } from '@/models'
-import { CustomerModalActivityTab, CustomerModalWorkflowTab } from '@/pages'
+import { CustomerModalActivityTab, CustomerModalFinanceTab, CustomerModalWorkflowTab } from '@/pages'
 import { useGetCustomerByIdQuery } from '@/services/customers/customerService'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
@@ -34,8 +34,8 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
         return <CustomerModalWorkflowTab customer={customer} />
       case 'file':
         return 'File'
-      case 'Finance':
-        return 'Finance'
+      case 'finance':
+        return <CustomerModalFinanceTab customerId={customer._id} />
     }
   }
 
@@ -243,7 +243,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
           height="inherit"
           width="calc(100% - 120px - 350px - 0.5rem)"
           backgroundColor={colors.white.secondary}
-          padding="1rem 0"
+          padding={activeTab === 'finance' ? undefined : '1rem 0'}
           borderRadius="0.3rem"
         >
           {renderSwitch()}

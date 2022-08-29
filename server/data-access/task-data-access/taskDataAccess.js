@@ -56,7 +56,8 @@ const taskPopulatePipe = [
       name: { $first: '$name' },
       __v: { $first: '$__v' },
       customer: { $first: '$customer' },
-      startDate: { $first: '$startDate' }
+      startDate: { $first: '$startDate' },
+      totalPrice: { $first: '$totalPrice' }
     }
   },
   {

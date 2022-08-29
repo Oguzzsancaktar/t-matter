@@ -5,4 +5,5 @@ export default interface IComponentProps {
   height?: string
   width?: string
   cursorType?: string
+  gap?: string
 }

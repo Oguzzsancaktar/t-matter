@@ -142,7 +142,7 @@ const getWorkflowPlans = async (req, res) => {
 const getWorkflowPlanById = async (req, res) => {
   const { id } = req.params
   try {
-    const workflowPlan = await dataAccess.workflowDataAccess.findWorkflowPlanById(id, '')
+    const workflowPlan = await dataAccess.workflowDataAccess.findWorkflowPlanById(id)
     res.status(StatusCodes.OK).json(workflowPlan)
   } catch (e) {
     console.log(e)

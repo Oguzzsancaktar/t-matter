@@ -17,7 +17,8 @@ const createTask = async (req, res) => {
         responsibleUser: mongoose.Types.ObjectId(step.responsibleUser._id),
         startDate: new Date()
       })),
-      customer: customerId
+      customer: customerId,
+      totalPrice: body.totalPrice
     }
     await dataAccess.taskDataAccess.createTask(task)
     res.status(201).json({ message: 'Task created' })

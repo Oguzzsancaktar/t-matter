@@ -87,6 +87,154 @@ const findByIdAndUpdateWorkflowChecklist = (id, data) => {
 const createWorkflowPlan = data => {
   return WorkflowPlan.create(data)
 }
+const pipelineData = hourlyCompanyFee => [
+  {
+    $unwind: {
+      path: '$steps',
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $lookup: {
+      from: 'workflowchecklists',
+      localField: 'steps.checklistItems',
+      foreignField: '_id',
+      as: 'steps.checklistItems'
+    }
+  },
+  {
+    $lookup: {
+      from: 'workflowcategories',
+      localField: 'steps.category',
+      foreignField: '_id',
+      as: 'steps.category'
+    }
+  },
+  {
+    $unwind: {
+      path: '$steps.category',
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $lookup: {
+      from: 'locations',
+      localField: 'steps.location',
+      foreignField: '_id',
+      as: 'steps.location'
+    }
+  },
+  {
+    $unwind: {
+      path: '$steps.location',
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $lookup: {
+      from: 'users',
+      localField: 'steps.responsibleUser',
+      foreignField: '_id',
+      as: 'steps.responsibleUser'
+    }
+  },
+  {
+    $unwind: {
+      path: '$steps.responsibleUser',
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $unwind: {
+      path: '$steps.checklistItems',
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $group: {
+      _id: '$steps._id',
+      checklistTotalDuration: {
+        $sum: '$steps.checklistItems.duration'
+      },
+      checklistItems: {
+        $push: '$steps.checklistItems'
+      },
+      x: {
+        $first: '$$ROOT'
+      }
+    }
+  },
+  {
+    $project: {
+      'steps.checklistItems': 0
+    }
+  },
+  {
+    $replaceRoot: {
+      newRoot: {
+        $mergeObjects: [
+          {
+            _id: '$_id',
+            checklistItems: '$checklistItems',
+            checklistTotalDuration: '$checklistTotalDuration'
+          },
+          '$x'
+        ]
+      }
+    }
+  },
+  {
+    $addFields: {
+      'steps.checklistItems': '$checklistItems'
+    }
+  },
+  {
+    $project: {
+      checklistItems: 0
+    }
+  },
+  {
+    $group: {
+      _id: '$_id',
+      totalDuration: {
+        $sum: '$checklistTotalDuration'
+      },
+      steps: {
+        $push: '$steps'
+      },
+      x: {
+        $first: '$$ROOT'
+      }
+    }
+  },
+  {
+    $project: {
+      'x.steps': 0,
+      'x.checklistTotalDuration': 0
+    }
+  },
+  {
+    $replaceRoot: {
+      newRoot: {
+        $mergeObjects: [
+          {
+            totalDuration: '$totalDuration',
+            steps: '$steps'
+          },
+          '$x'
+        ]
+      }
+    }
+  },
+  {
+    $addFields: {
+      totalPrice: {
+        $multiply: ['$totalDuration', hourlyCompanyFee / 3600]
+      }
+    }
+  },
+  { $sort: { createdAt: -1 } }
+]
 
 const getWorkflowPlans = async ({ search, size, status }) => {
   const pipeline = []
@@ -107,181 +255,23 @@ const getWorkflowPlans = async ({ search, size, status }) => {
     pipeline.push({ $limit: +size })
   }
 
-  const pipelineData = [
-    {
-      $unwind: {
-        path: '$steps',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $lookup: {
-        from: 'workflowchecklists',
-        localField: 'steps.checklistItems',
-        foreignField: '_id',
-        as: 'steps.checklistItems'
-      }
-    },
-    {
-      $lookup: {
-        from: 'workflowcategories',
-        localField: 'steps.category',
-        foreignField: '_id',
-        as: 'steps.category'
-      }
-    },
-    {
-      $unwind: {
-        path: '$steps.category',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $lookup: {
-        from: 'locations',
-        localField: 'steps.location',
-        foreignField: '_id',
-        as: 'steps.location'
-      }
-    },
-    {
-      $unwind: {
-        path: '$steps.location',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'steps.responsibleUser',
-        foreignField: '_id',
-        as: 'steps.responsibleUser'
-      }
-    },
-    {
-      $unwind: {
-        path: '$steps.responsibleUser',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $unwind: {
-        path: '$steps.checklistItems',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $group: {
-        _id: '$steps._id',
-        checklistTotalDuration: {
-          $sum: '$steps.checklistItems.duration'
-        },
-        checklistItems: {
-          $push: '$steps.checklistItems'
-        },
-        x: {
-          $first: '$$ROOT'
-        }
-      }
-    },
-    {
-      $project: {
-        'steps.checklistItems': 0
-      }
-    },
-    {
-      $replaceRoot: {
-        newRoot: {
-          $mergeObjects: [
-            {
-              _id: '$_id',
-              checklistItems: '$checklistItems',
-              checklistTotalDuration: '$checklistTotalDuration'
-            },
-            '$x'
-          ]
-        }
-      }
-    },
-    {
-      $addFields: {
-        'steps.checklistItems': '$checklistItems'
-      }
-    },
-    {
-      $project: {
-        checklistItems: 0
-      }
-    },
-    {
-      $group: {
-        _id: '$_id',
-        totalDuration: {
-          $sum: '$checklistTotalDuration'
-        },
-        steps: {
-          $push: '$steps'
-        },
-        x: {
-          $first: '$$ROOT'
-        }
-      }
-    },
-    {
-      $project: {
-        'x.steps': 0,
-        'x.checklistTotalDuration': 0
-      }
-    },
-    {
-      $replaceRoot: {
-        newRoot: {
-          $mergeObjects: [
-            {
-              totalDuration: '$totalDuration',
-              steps: '$steps'
-            },
-            '$x'
-          ]
-        }
-      }
-    },
-    {
-      $addFields: {
-        totalPrice: {
-          $multiply: ['$totalDuration', hourlyCompanyFee / 3600]
-        }
-      }
-    },
-    { $sort: { createdAt: -1 } }
-  ]
-
-  return WorkflowPlan.aggregate([...pipeline, ...pipelineData]).exec()
+  return WorkflowPlan.aggregate([...pipeline, ...pipelineData(hourlyCompanyFee)]).exec()
 }
 
-const findWorkflowPlanById = async (id, populate = 'steps.responsibleUser') => {
-  const workflowPlan = await WorkflowPlan.findById(id).lean().exec()
+const findWorkflowPlanById = async id => {
+  const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
 
-  if (workflowPlan) {
-    for (let x = 0; x < workflowPlan.steps.length; x++) {
-      const step = workflowPlan.steps[x]
-      const stepCategory = await WorkflowCategory.findById(step.category).lean().exec()
-      const stepLocation = await Location.findById(step.location).lean().exec()
-      const stepUser = await User.findById(step.responsibleUser).lean().exec()
-
-      for (let i = 0; i < step.checklistItems.length; i++) {
-        const checklistItemId = step.checklistItems[i]
-        const checklistItem = await WorkflowChecklist.findById(checklistItemId).lean().exec()
-        workflowPlan.steps[x].checklistItems[i] = checklistItem
+  const [plan] = await WorkflowPlan.aggregate([
+    {
+      $match: {
+        _id: mongoose.Types.ObjectId(id)
       }
-
-      workflowPlan.steps[x].category = stepCategory
-      workflowPlan.steps[x].location = stepLocation
-      workflowPlan.steps[x].responsibleUser = stepUser
-    }
-  }
-  return workflowPlan
+    },
+    ...pipelineData(hourlyCompanyFee)
+  ]).exec()
+  return plan
 }
+
 const findByIdAndUpdateWorkflowPlan = (id, data) => {
   return WorkflowPlan.findByIdAndUpdate(id, data)
 }

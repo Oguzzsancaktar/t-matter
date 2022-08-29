@@ -7,4 +7,6 @@ export default interface ICustomerTask {
   startDate: string
   name: string
   steps: ITaskItem[]
+  totalPrice?: number
+  isInvoiced?: boolean
 }
