@@ -25,7 +25,7 @@ const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks }) => {
           <div
             style={{
               marginTop: '1rem',
-              height: '95%',
+              height: '43%',
               backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
             }}
             ref={provided.innerRef}
@@ -40,7 +40,7 @@ const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks }) => {
                         <Item>
                           <H1 color={colors.black.primary}>{task.name}</H1>
                           <H1 color={colors.black.primary} textAlign="end">
-                            ${task.totalPrice}
+                            ${task.totalPrice?.toFixed(2)}
                           </H1>
                         </Item>
                       </div>

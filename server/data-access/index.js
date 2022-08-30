@@ -13,7 +13,7 @@ const refferedByDataAccess = require('./dynamic-variables-data-access/refferedBy
 const relativeTypeDataAccess = require('./dynamic-variables-data-access/relativeType')
 const taskDataAccess = require('./task-data-access/taskDataAccess')
 const activityDataAccess = require('./activity-data-access/activityDataAccess')
-const financePlanningDataAccess = require('./finance-data-access/financeDataAcces')
+const financeDataAccess = require('./finance-data-access/financeDataAcces')
 const invoiceCategoryDataAccess = require('./invoice-category-data-access/invoiceCategoryDataAccess')
 
 module.exports = {
@@ -31,6 +31,6 @@ module.exports = {
   customerDataAccess,
   taskDataAccess,
   activityDataAccess,
-  financePlanningDataAccess,
+  financeDataAccess,
   invoiceCategoryDataAccess
 }

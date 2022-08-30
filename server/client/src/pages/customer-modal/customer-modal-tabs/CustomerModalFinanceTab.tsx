@@ -3,7 +3,7 @@ import { ICustomer } from '@/models'
 import { Column, ItemContainer, JustifyBetweenColumn, JustifyCenterRow, Tab } from '@/components'
 import { ModalBody, ModalHeader } from '@components/modals/types'
 import InvoiceTab from '@pages/customer-modal/customer-modal-tabs/finance-tabs/InvoiceTab'
-import EstimateTab from '@pages/customer-modal/customer-modal-tabs/finance-tabs/invoice-tab/EstimateTab'
+import EstimateTab from '@pages/customer-modal/customer-modal-tabs/finance-tabs/estimate-tab/EstimateTab'
 import InstallmentTab from '@pages/customer-modal/customer-modal-tabs/finance-tabs/InstallmentTab'
 
 interface IProps {

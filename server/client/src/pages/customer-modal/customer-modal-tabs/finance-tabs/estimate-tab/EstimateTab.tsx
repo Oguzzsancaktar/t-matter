@@ -3,10 +3,13 @@ import { JustifyCenterRow, H1, Column, ProgressBar, JustifyCenterColumn } from '
 import styled from 'styled-components'
 import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd'
 import colors from '@constants/colors'
-import { InvoicesBarChart, CreateInvoiceList, InvoicedList, NonBillableList } from '@/pages'
+import { InvoicesBarChart, CreateInvoiceList, InvoicedList, NonBillableList, CreateInvoice } from '@/pages'
 import { useGetTasksByCustomerIdQuery, useReorderTasksMutation } from '@services/customers/taskService'
-import { ICustomerTask } from '@/models'
+import { ICustomerTask, Invoice } from '@/models'
 import { arrayMoveImmutable } from 'array-move'
+import { useGetInvoiceCategoriesQuery } from '@services/settings/finance-planning/financePlanningService'
+import emptyQueryParams from '@constants/queryParams'
+import { invoiceDefault } from '@constants/finance'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -25,13 +28,21 @@ interface IState {
 }
 
 const EstimateTab = ({ customerId }) => {
-  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery(customerId)
+  const {
+    data: customerTasksData,
+    isLoading: customerTasksIsLoading,
+    refetch
+  } = useGetTasksByCustomerIdQuery(customerId)
+  const { data: invoiceCategories, isLoading: invoiceCategoriesLoading } =
+    useGetInvoiceCategoriesQuery(emptyQueryParams)
   const [reorder] = useReorderTasksMutation()
+
   const [state, setState] = useState<IState>({
     createInvoiceTasks: [],
     invoicedTasks: [],
     nonBillableTasks: []
   })
+  const [invoice, setInvoice] = useState<Invoice>({ ...invoiceDefault })
 
   useEffect(() => {
     if (customerTasksData) {
@@ -59,6 +70,28 @@ const EstimateTab = ({ customerId }) => {
       setState(obj)
     }
   }, [customerTasksData])
+
+  useEffect(() => {
+    if (invoice) {
+      const x = state.createInvoiceTasks.reduce((acc, curr) => {
+        if (curr.totalPrice) {
+          acc = acc + curr.totalPrice
+        }
+        return acc
+      }, 0)
+      setInvoice({
+        ...invoice,
+        amount: x,
+        total: invoice.addition - invoice.discount + x
+      })
+    }
+  }, [state.createInvoiceTasks])
+
+  useEffect(() => {
+    if (invoice) {
+      setInvoice({ ...invoice, total: invoice.addition - invoice.discount + invoice.amount })
+    }
+  }, [invoice?.discount, invoice?.addition])
 
   if (customerTasksIsLoading) return <JustifyCenterRow>Loading...</JustifyCenterRow>
 
@@ -109,7 +142,7 @@ const EstimateTab = ({ customerId }) => {
         <Bordered margin="0 4px 0 0" width="66%">
           <H1 color={colors.text.primary}>Invoices</H1>
           <Column height="100%">
-            <InvoicesBarChart />
+            <InvoicesBarChart customerId={customerId} />
           </Column>
         </Bordered>
         <Bordered margin="0 0 0 8px" width="33%">
@@ -135,6 +168,14 @@ const EstimateTab = ({ customerId }) => {
           <Bordered width="33%">
             <H1 color={colors.text.primary}>Create invoice</H1>
             <CreateInvoiceList createInvoiceTasks={state.createInvoiceTasks} />
+            <CreateInvoice
+              customerId={customerId}
+              createInvoiceTasks={state.createInvoiceTasks}
+              setInvoice={setInvoice}
+              invoiceCategories={invoiceCategories}
+              invoice={invoice}
+              refetch={refetch}
+            />
           </Bordered>
         </DragDropContext>
       </JustifyCenterRow>

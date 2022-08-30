@@ -1,25 +1,25 @@
 import React from 'react'
-import { H1 } from '@/components'
 import { ICustomerTask } from '@/models'
-import styled from 'styled-components'
+import { H1 } from '@/components'
 import colors from '@constants/colors'
+import styled from 'styled-components'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import JustifyBetweenRow from '@components/layout/JustifyBetweenRow'
 
 interface IProps {
-  nonBillableTasks?: ICustomerTask[]
+  invoicedTasks?: ICustomerTask[]
 }
 
 const Item = styled(JustifyBetweenRow)`
   padding: 0.5rem 1rem;
   border: 1px solid #e0e0e0;
-  background: ${colors.background.gray.light};
+  background: #add8e6;
   margin-bottom: 0.5rem;
 `
 
-const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
+const InvoicedList: React.FC<IProps> = ({ invoicedTasks }) => {
   return (
-    <Droppable key="non" droppableId="nonBillableTasks">
+    <Droppable key="invoiced" droppableId="invoicedTasks">
       {(provided, snapshot) => {
         return (
           <div
@@ -31,7 +31,7 @@ const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {nonBillableTasks?.map((task, index) => {
+            {invoicedTasks?.map((task, index) => {
               return (
                 <Draggable draggableId={task._id as string} index={index} key={task._id}>
                   {provided => {
@@ -40,7 +40,7 @@ const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
                         <Item>
                           <H1 color={colors.black.primary}>{task.name}</H1>
                           <H1 color={colors.black.primary} textAlign="end">
-                            ${task.totalPrice}
+                            ${task.totalPrice?.toFixed(2)}
                           </H1>
                         </Item>
                       </div>
@@ -56,4 +56,5 @@ const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
     </Droppable>
   )
 }
-export default NonBillableList
+
+export default InvoicedList
