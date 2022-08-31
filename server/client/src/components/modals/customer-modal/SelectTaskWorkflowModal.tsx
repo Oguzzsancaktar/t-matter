@@ -4,18 +4,19 @@ import { useGetPlanByIdQuery, useGetPlansQuery } from '@/services/settings/workf
 import { SelectInput } from '@/components/input'
 import { Button } from '@/components/button'
 import { SummaryCard } from '@/components/card'
-import { Row, Column } from '@/components/layout'
+import { Row, Column, JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
-import { ModalBody } from '../types'
+import { ModalBody, ModalHeader } from '../types'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ETaskStatus, ICustomer, ICustomerTask, ITaskCreateDTO, IWorkflowUpdateDTO } from '@/models'
 import { closeModal } from '@/store'
-import { toastError, toastSuccess } from '@/utils/toastUtil'
+import { toastSuccess } from '@/utils/toastUtil'
 import { isValueNull, isValueBiggerThanZero } from '@/utils/validationUtils'
 import colors from '@/constants/colors'
 import { useCreateTaskMutation } from '@/services/customers/taskService'
 import moment from 'moment'
 import emptyQueryParams from '@/constants/queryParams'
+import { H1 } from '@/components/texts'
 
 interface IProps {
   customer: ICustomer
@@ -191,60 +192,71 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
   }, [validationErrorMessage])
 
   return (
-    <ItemContainer backgroundColor={colors.white.bg}>
-      <ItemContainer margin="0.5rem 0.5rem 0 0">
-        <SelectInput
-          isLoading={workflowPlanIsLoading}
-          name="Create Task"
-          // placeholder="Select your birthday..."
-          onChange={option => setSelectedWorkflowPlan(option.value)}
-          options={(workflowPlans || []).map(wf => ({ value: wf._id, label: wf.name }))}
-          // selectedOption={[{ label: selectedWorkflowPlan, value: selectedWorkflowPlan }]}
-          labelText="Select Workflow Plan"
-          // validationError={roleError}
-        />
-      </ItemContainer>
-      <ItemContainer>
-        <ModalBody>
-          {updateWorkflowData && !workflowIsLoading && (
-            <Column max-height="100%">
-              {updateWorkflowData.steps.map((task, index) => (
-                <ItemContainer height="100%" width="calc(100% - 300px)" key={index}>
-                  <Row height="100%">
-                    <ItemContainer height="100%" width="calc(100% - 350px)">
-                      <WorkflowPlanForm
-                        activeStep={index}
-                        onDataChange={() => handleDataChange(task, index)}
-                        errors={validationError}
-                        data={task}
-                      />
-                    </ItemContainer>
-                    <ItemContainer height="100%" width="350px">
-                      <Column height="100%">
-                        <ItemContainer height="calc(100% - 35px - 0.5rem)">
-                          <SummaryCard
-                            body={<WorkflowPlanSummaryBody checklistData={task.checklistItems} />}
-                            footer={<WorkflowPlanSummaryFooter checklistIdArr={task.checklistItems} />}
+    <JustifyBetweenColumn height="100%">
+      <ModalHeader>
+        <ItemContainer>
+          <JustifyCenterRow width="100%">
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
+              Select Workflow For Customer
+            </H1>
+          </JustifyCenterRow>
+        </ItemContainer>
+      </ModalHeader>
+
+      <ModalBody>
+        <ItemContainer backgroundColor={colors.white.bg}>
+          <ItemContainer margin="0.5rem 0.5rem 0 0">
+            <SelectInput
+              isLoading={workflowPlanIsLoading}
+              name="Create Task"
+              onChange={option => setSelectedWorkflowPlan(option.value)}
+              options={(workflowPlans || []).map(wf => ({ value: wf._id, label: wf.name }))}
+              labelText="Select Workflow Plan"
+            />
+          </ItemContainer>
+          <ItemContainer>
+            <ModalBody>
+              {updateWorkflowData && !workflowIsLoading && (
+                <Column max-height="100%">
+                  {updateWorkflowData.steps.map((task, index) => (
+                    <ItemContainer height="100%" width="calc(100% - 300px)" key={index}>
+                      <Row height="100%">
+                        <ItemContainer height="100%" width="calc(100% - 350px)">
+                          <WorkflowPlanForm
+                            activeStep={index}
+                            onDataChange={() => handleDataChange(task, index)}
+                            errors={validationError}
+                            data={task}
                           />
                         </ItemContainer>
-                        <ItemContainer height="35px" margin="0.5rem 0 0 0">
-                          <Button onClick={() => handleRemoveStep(index)} color={colors.red.primary}>
-                            Remove Step
-                          </Button>
+                        <ItemContainer height="100%" width="350px">
+                          <Column height="100%">
+                            <ItemContainer height="calc(100% - 35px - 0.5rem)">
+                              <SummaryCard
+                                body={<WorkflowPlanSummaryBody checklistData={task.checklistItems} />}
+                                footer={<WorkflowPlanSummaryFooter checklistIdArr={task.checklistItems} />}
+                              />
+                            </ItemContainer>
+                            <ItemContainer height="35px" margin="0.5rem 0 0 0">
+                              <Button onClick={() => handleRemoveStep(index)} color={colors.red.primary}>
+                                Remove Step
+                              </Button>
+                            </ItemContainer>
+                          </Column>
                         </ItemContainer>
-                      </Column>
+                      </Row>
                     </ItemContainer>
-                  </Row>
-                </ItemContainer>
-              ))}
-              <Button onClick={handleSubmit} color={colors.blue.primary}>
-                Submit
-              </Button>
-            </Column>
-          )}
-        </ModalBody>
-      </ItemContainer>
-    </ItemContainer>
+                  ))}
+                  <Button onClick={handleSubmit} color={colors.blue.primary}>
+                    Submit
+                  </Button>
+                </Column>
+              )}
+            </ModalBody>
+          </ItemContainer>
+        </ItemContainer>
+      </ModalBody>
+    </JustifyBetweenColumn>
   )
 }
 export default SelectTaskWorkflowModal

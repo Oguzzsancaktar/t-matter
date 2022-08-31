@@ -12,6 +12,7 @@ import { H1 } from '../texts'
 
 interface IProps {
   selectedUser?: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
+  disabled?: boolean
   onResponsibleChange: (responsible: IUser) => void
 }
 
@@ -41,14 +42,16 @@ const UserListItem = styled.li`
   }
 `
 
-const UserSelect: React.FC<IProps> = ({ selectedUser, onResponsibleChange }) => {
+const UserSelect: React.FC<IProps> = ({ selectedUser, disabled, onResponsibleChange }) => {
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
 
   const [showUserList, setShowUserList] = useState<boolean>(false)
   const { data: userListData, isLoading: userListIsLoading } = useGetUsersQuery(searchQueryParams)
 
   const handleUserList = () => {
-    setShowUserList(!showUserList)
+    if (!disabled) {
+      setShowUserList(!showUserList)
+    }
   }
 
   const handleUserClick = (user: IUser) => {

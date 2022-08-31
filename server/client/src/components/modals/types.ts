@@ -14,13 +14,18 @@ export const ModalHeader = styled.div`
   border-top-right-radius: 0.3rem;
 `
 
-export const ModalBody = styled.div<{ withModalFooter?: boolean; minHeight?: string; backgroundColor?: string }>`
+export const ModalBody = styled.div<{
+  withModalFooter?: boolean
+  height?: string
+  backgroundColor?: string
+  padding?: string
+}>`
   /* height: calc(${({ withModalFooter }) => (withModalFooter ? '100% - 85px - 60px' : '100% - 85px')}); */
   /* max-height: 850px; */
   /* overflow-y: auto; */
-  min-height: calc(${({ minHeight }) => (minHeight ? minHeight : '100% - 63px')});
+  height: ${({ height }) => (height ? height : 'calc(100% - 63px)')};
   width: 100%;
-  padding: 1rem 1rem;
+  padding: ${({ padding }) => (padding ? padding : '1rem 1rem')};
   background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
 
   border-bottom-right-radius: ${({ withModalFooter }) => (withModalFooter ? '0' : '0.3rem')};

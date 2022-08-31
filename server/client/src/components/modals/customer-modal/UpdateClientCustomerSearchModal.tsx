@@ -80,7 +80,7 @@ const UpdateClientCustomerSearchModal: React.FC<IProps> = ({ handleAdd }) => {
         </JustifyCenterRow>
       </ModalHeader>
 
-      <ModalBody minHeight="100% - 63px">
+      <ModalBody height="calc(100% - 63px)">
         <ItemContainer height="100%">
           <ItemContainer height="35px">
             <SearchBar onSearch={handleSearch} />

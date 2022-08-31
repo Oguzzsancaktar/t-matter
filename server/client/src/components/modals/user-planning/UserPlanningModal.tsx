@@ -31,7 +31,7 @@ const UserPlanningModal = () => {
         </JustifyBetweenColumn>
       </ModalHeader>
 
-      <ModalBody minHeight="100% - 63px">
+      <ModalBody height="calc(100% - 63px)">
         {activeTab === 'user-role-settings' ? (
           <UserRoleSettings />
         ) : activeTab === 'user-task-settings' ? (

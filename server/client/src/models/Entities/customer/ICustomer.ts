@@ -21,4 +21,7 @@ export default interface ICustomer {
   status: number
   relativeType?: IRelativeType
   reliableCustomers: IReliableCustomer[]
+
+  createdAt?: string
+  updatedAt?: string
 }

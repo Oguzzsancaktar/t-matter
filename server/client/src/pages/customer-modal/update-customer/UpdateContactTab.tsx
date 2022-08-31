@@ -71,7 +71,7 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
       return false
     }
 
-    if (!isValueNull(updateContactDTO.jobTitle.toString())) {
+    if (!isValueNull(updateContactDTO.jobTitle)) {
       toastError('Please enter a valid job title')
       setValidationErrors({ ...validationErrors, jobTitleError: true })
       return false

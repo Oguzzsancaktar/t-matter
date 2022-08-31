@@ -27,13 +27,20 @@ const TaskUserCard: React.FC<IProps> = ({
 }) => {
   const { loggedUser } = useAuth()
   const isResponsibleUserCurrentLoggedUser = taskActiveStep.responsibleUser._id === loggedUser.user?._id
+  const canResponsibleUserChange: boolean = taskActiveStep.stepStatus === ETaskStatus['Progress']
+  const canTaskCancel: boolean = canResponsibleUserChange && isResponsibleUserCurrentLoggedUser
+
   return (
     <ItemContainer>
       <JustifyBetweenRow>
         <ItemContainer>
           <JustifyCenterColumn>
             <ItemContainer>
-              <UserSelect selectedUser={taskActiveStep?.responsibleUser} onResponsibleChange={onResponsibleChange} />
+              <UserSelect
+                disabled={!canResponsibleUserChange}
+                selectedUser={taskActiveStep?.responsibleUser}
+                onResponsibleChange={onResponsibleChange}
+              />
             </ItemContainer>
 
             <ItemContainer>
@@ -67,7 +74,14 @@ const TaskUserCard: React.FC<IProps> = ({
             </ItemContainer>
 
             <ItemContainer width="auto">
-              <Button padding="0" width="30px" height="30px" color={colors.red.primary} onClick={handleCancelTask}>
+              <Button
+                padding="0"
+                width="30px"
+                height="30px"
+                color={colors.red.primary}
+                disabled={!canTaskCancel}
+                onClick={handleCancelTask}
+              >
                 <XCircle size={20} />
               </Button>
             </ItemContainer>

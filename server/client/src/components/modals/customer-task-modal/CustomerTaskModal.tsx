@@ -1,8 +1,8 @@
 import { ItemContainer } from '@/components/item-container'
 import { Row } from '@/components/layout'
-import { TaskEventSection, TaskInformations, TaskWizzardNavigation } from '@/components'
+import { H1, TaskEventSection, TaskInformations, TaskWizzardNavigation } from '@/components'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { ModalHeader } from '../types'
+import { ModalBody, ModalHeader } from '../types'
 import colors from '@/constants/colors'
 import { useGetTaskByTaskIdQuery, useUpdateTaskMutation } from '@/services/customers/taskService'
 import { EActivity, ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
@@ -39,7 +39,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
   }, [updatedTaskData])
 
   const handleTaskTimerChange = (timerValue: number) => {
-    console.log(timerValue)
     const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
     tempUpdatedTaskData.steps[activeStep].passedTime = timerValue
     setUpdatedTaskData(tempUpdatedTaskData)
@@ -353,46 +352,52 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
   }, [taskData, taskIsLoading])
 
   return (
-    <ItemContainer minHeight="750px">
+    <ItemContainer height="100%" overflow="hidden" borderRadius="0.3rem">
       {taskData && !taskIsLoading && updatedTaskData ? (
         <>
-          <ModalHeader>{taskData?.name}</ModalHeader>
-          <ItemContainer height="calc(100% - 52px)">
-            {!taskIsLoading && taskData && (
-              <Row height="100%">
-                <ItemContainer width="auto" height="100%">
-                  <TaskWizzardNavigation
-                    activeStep={activeStep}
-                    taskData={updatedTaskData}
-                    onStepChange={handleStepChange}
-                  />
-                </ItemContainer>
+          <ModalHeader>
+            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
+              {taskData?.name}
+            </H1>
+          </ModalHeader>
+          <ModalBody height="calc(100% - 63px)" padding="0" withModalFooter={false}>
+            <ItemContainer height="100%">
+              {!taskIsLoading && taskData && (
+                <Row height="100%">
+                  <ItemContainer width="calc(30px + 2rem)" height="100%" backgroundColor={colors.primary.light}>
+                    <TaskWizzardNavigation
+                      activeStep={activeStep}
+                      taskData={updatedTaskData}
+                      onStepChange={handleStepChange}
+                    />
+                  </ItemContainer>
 
-                <ItemContainer width="400px" height="100%" padding="0 2rem" backgroundColor={colors.white.primary}>
-                  <TaskInformations
-                    activeStep={activeStep}
-                    taskData={updatedTaskData}
-                    isTaskNotStarted={isTaskNotStarted}
-                    handleCheckboxClick={handleCheckboxClick}
-                    handleResponsibleChange={handleResponsibleChange}
-                    handlePostponeChange={handlePostponeChange}
-                    handleCancelTask={handleCancelTask}
-                    handleStartTask={handleStartTask}
-                    handleTaskTimerChange={handleTaskTimerChange}
-                  />
-                </ItemContainer>
+                  <ItemContainer width="400px" height="100%" padding="0 1rem" backgroundColor={colors.white.primary}>
+                    <TaskInformations
+                      activeStep={activeStep}
+                      taskData={updatedTaskData}
+                      isTaskNotStarted={isTaskNotStarted}
+                      handleCheckboxClick={handleCheckboxClick}
+                      handleResponsibleChange={handleResponsibleChange}
+                      handlePostponeChange={handlePostponeChange}
+                      handleCancelTask={handleCancelTask}
+                      handleStartTask={handleStartTask}
+                      handleTaskTimerChange={handleTaskTimerChange}
+                    />
+                  </ItemContainer>
 
-                <ItemContainer
-                  width="calc(100% - 400px)"
-                  height="100%"
-                  padding="0 2rem"
-                  backgroundColor={colors.white.secondary}
-                >
-                  <TaskEventSection task={taskId} step={activeStep} />
-                </ItemContainer>
-              </Row>
-            )}
-          </ItemContainer>
+                  <ItemContainer
+                    width="calc(100% - 400px - 30px - 2rem)"
+                    height="100%"
+                    padding="0 1rem"
+                    backgroundColor={colors.white.secondary}
+                  >
+                    <TaskEventSection taskData={updatedTaskData} task={taskId} activeStepNumber={activeStep} />
+                  </ItemContainer>
+                </Row>
+              )}
+            </ItemContainer>
+          </ModalBody>
         </>
       ) : (
         <div>loading</div>

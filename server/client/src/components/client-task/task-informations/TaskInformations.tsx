@@ -72,6 +72,7 @@ const TaskInformations: React.FC<IProps> = ({
 
           <InformationCard height="calc(100% - 100px - 80px - 80px - 80px - 6rem)">
             <TaskChecklistCard
+              taskActiveStep={taskData.steps[activeStep]}
               handleCheckboxClick={handleCheckboxClick}
               checklistData={taskData.steps[activeStep]?.checklistItems}
             />

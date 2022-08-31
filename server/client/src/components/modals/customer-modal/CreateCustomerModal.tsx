@@ -31,7 +31,7 @@ const CreateCustomerModal = () => {
         </JustifyBetweenColumn>
       </ModalHeader>
 
-      <ModalBody minHeight="100% - 63px">
+      <ModalBody height="calc(100% - 63px)">
         {activeTab === 'create-client' ? (
           <CreateClientTab />
         ) : activeTab === 'create-contact' ? (

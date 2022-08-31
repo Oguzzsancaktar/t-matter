@@ -108,47 +108,64 @@ const CreateContactTab = () => {
   }
 
   const validateFormFields = (): boolean => {
-    toastError('')
+    const tempValidationErrors = {
+      firstnameError: false,
+      lastnameError: false,
+      emailError: false,
+      phoneError: false,
+      jobTitleError: false,
+      refferedByError: false,
+      genderError: false
+    }
 
     if (!isValueNull(createContactDTO.firstname)) {
       toastError('Please enter a valid first name')
-      setValidationErrors({ ...validationErrors, firstnameError: true })
+      tempValidationErrors.firstnameError = true
+      setValidationErrors(tempValidationErrors)
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createContactDTO.lastname)) {
       toastError('Please enter a valid last name')
-      setValidationErrors({ ...validationErrors, lastnameError: true })
+      tempValidationErrors.lastnameError = true
+      setValidationErrors(tempValidationErrors)
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isEmailValid(createContactDTO.email)) {
       toastError('Please enter a valid email')
-      setValidationErrors({ ...validationErrors, emailError: true })
+      tempValidationErrors.emailError = true
+      setValidationErrors(tempValidationErrors)
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createContactDTO.phone.toString())) {
       toastError('Please enter a valid phone number')
-      setValidationErrors({ ...validationErrors, phoneError: true })
+      tempValidationErrors.phoneError = true
+      setValidationErrors(tempValidationErrors)
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createContactDTO.refferedBy._id)) {
       toastError('Please select user refferedBy')
+      tempValidationErrors.refferedByError = true
+      setValidationErrors(tempValidationErrors)
       setActiveWizzardStep(0)
       return false
     }
 
     if (!isValueNull(createContactDTO.gender.toString())) {
       toastError('Please select user gender')
+      tempValidationErrors.genderError = true
+      setValidationErrors(tempValidationErrors)
       setActiveWizzardStep(0)
       return false
     }
+    setValidationErrors(tempValidationErrors)
 
     return true
   }

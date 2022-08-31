@@ -9,6 +9,7 @@ const createCustomer = data => {
 const findByIdAndUpdateCustomerForCreate = (id, data) => {
   return Customer.findByIdAndUpdate(id, data)
 }
+
 const findByIdAndUpdateCustomer = async (id, data) => {
   const deletedReliableIdArr = data['deleteReliableId']
   const reliableInCompanyArr = data['reliableInCompany']
@@ -32,7 +33,7 @@ const findByIdAndUpdateCustomer = async (id, data) => {
   }
 
   if (reliableCustomers.length) {
-    data.reliableCustomers = data.reliableCustomers.concat(reliableCustomers)
+    data.reliableCustomers = [...data.reliableCustomers, ...reliableCustomers]
   }
 
   for (let reliableCustomer of reliableCustomers) {
@@ -51,7 +52,11 @@ const findByIdAndUpdateCustomer = async (id, data) => {
     })
   }
 
-  console.log('=========', data)
+  //TODO
+  let bugIndex = data.reliableCustomers.findIndex({
+    relativeType: {}
+  })
+  data.reliableCustomers.splice(bugIndex)
 
   return await Customer.findByIdAndUpdate(id, data)
 }

@@ -11,6 +11,7 @@ import { Badge } from '../badge'
 import { ItemContainer } from '../item-container'
 import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow, Row } from '../layout'
 import { ReadCustomerModal } from '../modals'
+import { H1 } from '../texts'
 
 type IReliableCustomerExtended = {
   relativeType: {
@@ -62,44 +63,60 @@ const ReliableSlider: React.FC<IProps> = ({ customerId, activeIndex, onActiveSte
 
   return (
     <ItemContainer>
-      <ItemContainer onClick={() => handleReliableClick(customer._id)}>
+      <ItemContainer>
         <JustifyBetweenColumn>
           <ItemContainer
+            padding="1rem 0"
             borderBottom={'1px solid ' + colors.gray.secondary}
             borderTop={'1px solid ' + colors.gray.secondary}
             borderLeft={'1px solid ' + colors.gray.secondary}
             borderRight={'1px solid ' + colors.gray.secondary}
             borderRadius={'0.3rem 0.3rem 0.3rem 0.3rem'}
+            onClick={() => handleReliableClick(customer._id)}
           >
             <JustifyBetweenRow>
               <ItemContainer>
                 <JustifyBetweenColumn>
                   <JustifyCenterRow>
-                    <ItemContainer width="auto">{customer?.firstname + ' ' + customer?.lastname}</ItemContainer>
+                    <ItemContainer width="auto">
+                      <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
+                        {customer?.firstname + ' ' + customer?.lastname}
+                      </H1>
+                    </ItemContainer>
                   </JustifyCenterRow>
 
                   <JustifyCenterRow>
+                    <ItemContainer width="auto" margin=" 0 0.5rem 0 0">
+                      <Badge children={ECustomerType[customer?.customerType]} color={colors.gray.dark} />
+                    </ItemContainer>
                     <ItemContainer width="auto">
                       <Badge color={selectColorForStatus(customer?.status)}>{EStatus[customer?.status]}</Badge>
                     </ItemContainer>
+                  </JustifyCenterRow>
+
+                  <JustifyCenterRow>
                     <ItemContainer width="auto">
-                      <Badge children={ECustomerType[customer?.customerType]} color={colors.gray.dark} />
+                      <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
+                        {customer?.email}
+                      </H1>
                     </ItemContainer>
                   </JustifyCenterRow>
 
                   <JustifyCenterRow>
-                    <ItemContainer width="auto">{customer?.email}</ItemContainer>
-                  </JustifyCenterRow>
-
-                  <JustifyCenterRow>
-                    <ItemContainer width="auto">{customer?.phone}</ItemContainer>
+                    <ItemContainer width="auto">
+                      <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
+                        {customer?.phone}
+                      </H1>
+                    </ItemContainer>
                   </JustifyCenterRow>
 
                   <JustifyCenterRow>
                     <ItemContainer width="auto">
-                      {reliableCustomers[activeIndex].relativeType.fromOrTo == 0
-                        ? relativeType.relateTo
-                        : relativeType.relateFrom}
+                      <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
+                        {reliableCustomers[activeIndex].relativeType.fromOrTo === 0
+                          ? relativeType.relateTo
+                          : relativeType.relateFrom}
+                      </H1>
                     </ItemContainer>
                   </JustifyCenterRow>
                 </JustifyBetweenColumn>

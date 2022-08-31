@@ -39,7 +39,7 @@ const CompanyPlanningModal = () => {
         </JustifyBetweenColumn>
       </ModalHeader>
 
-      <ModalBody minHeight="100% - 63px">
+      <ModalBody height="calc(100% - 63px)">
         <ItemContainer height="100%">
           {activeTab === 'salary-settings' ? (
             <SalarySettings />

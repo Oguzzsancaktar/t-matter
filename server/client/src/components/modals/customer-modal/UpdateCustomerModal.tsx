@@ -24,7 +24,7 @@ const UpdateCustomerModal: React.FC<IProps> = ({ customerId }) => {
               {customerDetailData.firstname + ' ' + customerDetailData.lastname}
             </H1>
           </ModalHeader>
-          <ModalBody minHeight="100% - 63px">
+          <ModalBody height="calc(100% - 63px)">
             {customerDetailData?.customerType === 1 ? (
               <UpdateContactTab customer={customerDetailData} />
             ) : customerDetailData?.customerType === 0 ? (

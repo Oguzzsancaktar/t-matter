@@ -3,9 +3,10 @@ import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenRow, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
-import { ITaskItem } from '@/models'
+import { useAuth } from '@/hooks/useAuth'
+import { ETaskStatus, ITaskItem } from '@/models'
 import moment from 'moment'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Calendar, ExternalLink } from 'react-feather'
 import Flatpickr from 'react-flatpickr'
 
@@ -16,6 +17,9 @@ interface IProps {
 const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }) => {
   const [postponeDate, setPostponeDate] = useState({ value: [new Date(taskActiveStep.postponedDate)], dateText: '' })
   const notInitialRender = useRef(false)
+  const { loggedUser } = useAuth()
+
+  const canTaskPostpone: boolean = taskActiveStep.stepStatus === ETaskStatus['Progress']
 
   const onDateChange = (value: Date[], dateText: string) => {
     setPostponeDate({ value, dateText })
@@ -36,17 +40,16 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
           <JustifyBetweenRow>
             <Row>
               <ExternalLink size={20} />
-              <H1 width="auto">
-                <Flatpickr
-                  options={{
-                    enableTime: false,
-                    dateFormat: 'M/d/Y'
-                  }}
-                  value={taskActiveStep.postponedDate}
-                  onChange={onDateChange}
-                  placeholder="Postpone Task"
-                />
-              </H1>
+              <Flatpickr
+                disabled={!canTaskPostpone}
+                options={{
+                  enableTime: false,
+                  dateFormat: 'M/d/Y'
+                }}
+                value={taskActiveStep.postponedDate}
+                onChange={onDateChange}
+                placeholder="Postpone Task"
+              />
             </Row>
             <H1 width="80px">
               {taskActiveStep?.usedPostpone} / {taskActiveStep?.postponeTime}

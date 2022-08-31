@@ -1,7 +1,8 @@
 import { InfoCard } from '@/components/card'
 import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenColumn, JustifyBetweenRow, Row } from '@/components/layout'
-import { ITaskChecklist } from '@/models'
+import { useAuth } from '@/hooks/useAuth'
+import { ETaskStatus, ITaskChecklist, ITaskItem } from '@/models'
 import { SummaryCardTitle } from '@/shared'
 import React from 'react'
 import styled from 'styled-components'
@@ -9,12 +10,23 @@ import TaskChecklistItem from './TaskChecklistItem'
 
 interface IProps {
   checklistData: ITaskChecklist[]
+  taskActiveStep: ITaskItem
   handleCheckboxClick: (checklistItem: ITaskChecklist, index: number) => void
 }
 
 const ChecklistList = styled.ul``
 
-const TaskChecklistCard: React.FC<IProps> = ({ checklistData, handleCheckboxClick }) => {
+const TaskChecklistCard: React.FC<IProps> = ({ checklistData, taskActiveStep, handleCheckboxClick }) => {
+  const { loggedUser } = useAuth()
+
+  const isResponsibleUserCurrentLoggedUser = taskActiveStep.responsibleUser._id === loggedUser.user?._id
+  const isStepStatusProcess: boolean = taskActiveStep.stepStatus === ETaskStatus['Progress']
+  const canChecklistCheck: boolean = isStepStatusProcess && isResponsibleUserCurrentLoggedUser
+
+  const handleOnCheckboxClick = (checklistItem: ITaskChecklist, index: number) => {
+    handleCheckboxClick(checklistItem, index)
+  }
+
   return (
     <ItemContainer height="100%">
       <ItemContainer>
@@ -24,9 +36,6 @@ const TaskChecklistCard: React.FC<IProps> = ({ checklistData, handleCheckboxClic
               <SummaryCardTitle>Checklist</SummaryCardTitle>
               <ItemContainer width="auto">
                 <Row>
-                  <ItemContainer margin="0 0.5rem 0 0" width="auto">
-                    <SummaryCardTitle>Price</SummaryCardTitle>
-                  </ItemContainer>
                   <SummaryCardTitle>Time</SummaryCardTitle>
                 </Row>
               </ItemContainer>
@@ -37,9 +46,10 @@ const TaskChecklistCard: React.FC<IProps> = ({ checklistData, handleCheckboxClic
             <ChecklistList>
               {checklistData?.map((item, index) => (
                 <TaskChecklistItem
+                  disabled={!canChecklistCheck}
                   key={index}
                   checklistItem={item}
-                  onCheckboxClick={item => handleCheckboxClick(item, index)}
+                  onCheckboxClick={item => handleOnCheckboxClick(item, index)}
                 />
               ))}
             </ChecklistList>

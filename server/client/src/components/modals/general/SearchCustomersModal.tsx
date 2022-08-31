@@ -85,7 +85,7 @@ const SearchCustomersModal = () => {
         </ItemContainer>
       </ModalHeader>
 
-      <ModalBody minHeight="100% - 51px">
+      <ModalBody height="calc(100% - 63px)">
         <ItemContainer height="35px">
           <SearchBar onSearch={handleSearch} />
         </ItemContainer>

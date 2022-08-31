@@ -51,36 +51,40 @@ const UpdateCustomerReliables: React.FC<IProps> = ({
               customerReliablesData.length > 0 &&
               updateContactDTO.reliableCustomers.length > 0 && (
                 <Row>
-                  {customerReliablesData.map((reliable, index) => (
-                    <ItemContainer
-                      key={Math.random()}
-                      minWidth="300px"
-                      width="auto"
-                      margin="0 1rem 0 0"
-                      backgroundColor={colors.secondary.light}
-                      borderRadius="0.3rem"
-                      padding="0.5rem"
-                    >
-                      <JustifyBetweenRow>
-                        <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
-                          <UserBadge
-                            userEmail={reliable.relativeType?.relateTo || ''}
-                            userImage={'reliable.photo'}
-                            userName={reliable.firstname + ' ' + reliable.lastname}
-                          />
-                        </ItemContainer>
-                        <Button
-                          color={colors.red.primary}
-                          width="30px"
-                          height="30px"
-                          padding="0"
-                          onClick={() => onRemovePastReliable(reliable)}
+                  {customerReliablesData.map((reliable, index) => {
+                    if (reliable?.relativeType) {
+                      return (
+                        <ItemContainer
+                          key={Math.random()}
+                          minWidth="300px"
+                          width="auto"
+                          margin="0 1rem 0 0"
+                          backgroundColor={colors.secondary.light}
+                          borderRadius="0.3rem"
+                          padding="0.5rem"
                         >
-                          <X size={16} />
-                        </Button>
-                      </JustifyBetweenRow>
-                    </ItemContainer>
-                  ))}
+                          <JustifyBetweenRow>
+                            <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
+                              <UserBadge
+                                userEmail={reliable?.relativeType?.relateTo || ''}
+                                userImage={'reliable.photo'}
+                                userName={reliable?.firstname + ' ' + reliable?.lastname}
+                              />
+                            </ItemContainer>
+                            <Button
+                              color={colors.red.primary}
+                              width="30px"
+                              height="30px"
+                              padding="0"
+                              onClick={() => onRemovePastReliable(reliable)}
+                            >
+                              <X size={16} />
+                            </Button>
+                          </JustifyBetweenRow>
+                        </ItemContainer>
+                      )
+                    }
+                  })}
                 </Row>
               )}
 

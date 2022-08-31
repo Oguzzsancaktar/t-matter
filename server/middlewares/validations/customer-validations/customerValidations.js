@@ -46,8 +46,8 @@ const updateCustomerValidation = async (req, res, next) => {
   const schema = joi.object({
     ...customerValidationSchema,
     _id: joi.string().required(),
-    reliableCustomers: joi.array().required(),
-    deleteReliableId: joi.array().required()
+    reliableCustomers: joi.array(),
+    deleteReliableId: joi.array()
   })
 
   try {

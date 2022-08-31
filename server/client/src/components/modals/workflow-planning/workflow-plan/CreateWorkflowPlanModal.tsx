@@ -208,7 +208,7 @@ const CreateWorkflowPlanModal = () => {
           </H1>
         </JustifyCenterRow>
       </ModalHeader>
-      <ModalBody minHeight="100% - 63px">
+      <ModalBody height="calc(100% - 63px)">
         <JustifyBetweenRow height="100%">
           <ItemContainer height="100%" width="300px">
             <WorkflowPlanStepNavigation
