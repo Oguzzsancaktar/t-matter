@@ -54,7 +54,7 @@ const InvoiceItem = ({ invoice }: { invoice: Invoice }) => {
             return (
               <JustifyBetweenRow margin="0 0 0.3rem 0">
                 <H1 color={colors.black.middle}>
-                  {step.task.name} - Step: {step.stepIndex}
+                  {step.task.name} - Step: {step.stepIndex + 1}
                 </H1>
                 <H1 color={colors.black.middle} textAlign="end">
                   ${step.expiredTimePrice?.toFixed(2)}

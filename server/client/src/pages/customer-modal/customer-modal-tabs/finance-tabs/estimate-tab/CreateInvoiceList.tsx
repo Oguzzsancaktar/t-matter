@@ -47,7 +47,7 @@ const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks, expiredTaskSt
                       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <ExpiredItem>
                           <H1 color={colors.black.primary}>
-                            {step.task.name} - Step: {step.stepIndex}
+                            {step.task.name} - Step: {step.stepIndex + 1}
                           </H1>
                           <H1 color={colors.black.primary} textAlign="end">
                             ${step.expiredTimePrice?.toFixed(2)}
