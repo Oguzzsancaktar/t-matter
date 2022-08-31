@@ -27,7 +27,8 @@ const TaskUserCard: React.FC<IProps> = ({
 }) => {
   const { loggedUser } = useAuth()
   const isResponsibleUserCurrentLoggedUser = taskActiveStep.responsibleUser._id === loggedUser.user?._id
-  const canResponsibleUserChange: boolean = taskActiveStep.stepStatus === ETaskStatus['Progress']
+  const canResponsibleUserChange: boolean =
+    taskActiveStep.stepStatus === ETaskStatus['Progress'] || taskActiveStep.stepStatus === ETaskStatus['Not_Started']
   const canTaskCancel: boolean = canResponsibleUserChange && isResponsibleUserCurrentLoggedUser
 
   return (
