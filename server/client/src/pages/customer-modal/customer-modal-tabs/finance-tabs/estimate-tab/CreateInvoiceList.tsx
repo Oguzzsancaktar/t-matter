@@ -33,7 +33,9 @@ const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks, expiredTaskSt
           <div
             style={{
               marginTop: '1rem',
-              height: '58%',
+              height: 253,
+              maxHeight: 253,
+              overflowY: 'auto',
               backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
             }}
             ref={provided.innerRef}

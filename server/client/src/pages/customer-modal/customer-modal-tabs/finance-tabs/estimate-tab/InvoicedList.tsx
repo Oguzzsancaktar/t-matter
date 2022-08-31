@@ -76,7 +76,9 @@ const InvoicedList: React.FC<IProps> = ({ invoices }) => {
           <div
             style={{
               marginTop: '1rem',
-              height: '95%',
+              height: 425,
+              maxHeight: 425,
+              overflowY: 'auto',
               backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
             }}
             ref={provided.innerRef}

@@ -25,7 +25,9 @@ const ExpiredTaskStepList: React.FC<IProps> = ({ expiredTaskSteps }) => {
           <div
             style={{
               marginTop: '1rem',
-              height: '30%',
+              height: 120,
+              maxHeight: 120,
+              overflowY: 'auto',
               backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
             }}
             ref={provided.innerRef}
@@ -39,7 +41,7 @@ const ExpiredTaskStepList: React.FC<IProps> = ({ expiredTaskSteps }) => {
                       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <ExpiredItem>
                           <H1 color={colors.black.primary}>
-                            {step.task.name} - Step: {step.stepIndex  +1}
+                            {step.task.name} - Step: {step.stepIndex + 1}
                           </H1>
                           <H1 color={colors.black.primary} textAlign="end">
                             ${step.expiredTimePrice?.toFixed(2)}
