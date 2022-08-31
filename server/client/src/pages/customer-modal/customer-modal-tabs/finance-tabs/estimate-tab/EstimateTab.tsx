@@ -9,7 +9,8 @@ import {
   InvoicedList,
   NonBillableList,
   CreateInvoice,
-  ExpiredTaskStepList
+  ExpiredTaskStepList,
+  NonBillableCircleProgress
 } from '@/pages'
 import { useGetTasksByCustomerIdQuery, useReorderTasksMutation } from '@services/customers/taskService'
 import { ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
@@ -225,10 +226,7 @@ const EstimateTab = ({ customerId }) => {
         <Bordered margin="0 0 0 8px" width="33%">
           <H1 color={colors.text.primary}>Non billable</H1>
           <JustifyCenterColumn height="100%">
-            <H1 margin="0 0 1rem 0" textAlign="center" fontSize="32px" fontWeight="600" color={colors.teal.primary}>
-              57%
-            </H1>
-            <ProgressBar startLabel="" completionColor={colors.teal.primary} completionPercentage={57} endLabel="" />
+            <NonBillableCircleProgress />
           </JustifyCenterColumn>
         </Bordered>
       </JustifyCenterRow>
