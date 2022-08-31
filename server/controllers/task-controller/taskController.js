@@ -17,7 +17,8 @@ const createTask = async (req, res) => {
         responsibleUser: mongoose.Types.ObjectId(step.responsibleUser._id),
         startDate: new Date()
       })),
-      customer: customerId
+      customer: customerId,
+      totalPrice: body.totalPrice
     }
     await dataAccess.taskDataAccess.createTask(task)
     res.status(201).json({ message: 'Task created' })
@@ -63,9 +64,22 @@ const updateTask = async (req, res) => {
   }
 }
 
+const reorderTasks = async (req, res) => {
+  const { body } = req
+  try {
+    for (const task of body) {
+      await dataAccess.taskDataAccess.updateTaskById(task._id, { index: task.index })
+    }
+    res.status(200)
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
   getTask,
-  updateTask
+  updateTask,
+  reorderTasks
 }

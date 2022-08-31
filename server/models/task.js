@@ -20,6 +20,16 @@ const taskSchema = new Schema(
     customer: {
       type: Schema.Types.ObjectId,
       ref: 'customers'
+    },
+    totalPrice: {
+      type: Number
+    },
+    isInvoiced: {
+      type: Boolean,
+      default: false
+    },
+    index: {
+      type: Number
     }
   },
   {

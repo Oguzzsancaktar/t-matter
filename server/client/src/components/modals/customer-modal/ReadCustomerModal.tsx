@@ -9,20 +9,20 @@ import ReliableSlider from '@/components/slider/ReliableSlider'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ECustomerType, ESize, EStatus, ICustomer } from '@/models'
-import { CustomerModalActivityTab, CustomerModalWorkflowTab } from '@/pages'
+import { ICustomer, ESize, EStatus, ECustomerType } from '@/models'
+import { CustomerModalActivityTab, CustomerModalWorkflowTab, CustomerModalFinanceTab } from '@/pages'
 import {
   useGetCustomerByIdQuery,
-  useUpdateCustomerMutation,
-  useUpdateCustomerStatusMutation
+  useUpdateCustomerStatusMutation,
+  useUpdateCustomerMutation
 } from '@/services/customers/customerService'
 import { openModal, closeModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import moment from 'moment'
-import React, { useState } from 'react'
-import { MakeContactToClientModal } from '..'
+import { useState } from 'react'
 import { ConfirmModal } from '../general'
+import MakeContactToClientModal from './MakeContactToClientModal'
 import UpdateCustomerModal from './UpdateCustomerModal'
 
 interface IProps {
@@ -158,8 +158,8 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
         return <CustomerModalWorkflowTab customer={customer} />
       case 'file':
         return 'File'
-      case 'Finance':
-        return 'Finance'
+      case 'finance':
+        return <CustomerModalFinanceTab customerId={customer._id} />
     }
   }
 
@@ -370,7 +370,8 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
           width="calc(100% - 120px - 350px )"
           backgroundColor={colors.white.secondary}
           borderRadius="0 0.3rem 0.3rem 0"
-          padding="1rem"
+          // padding="1rem"
+          padding={activeTab === 'finance' ? undefined : '1rem 0'}
         >
           {renderSwitch()}
         </ItemContainer>
