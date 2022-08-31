@@ -1,15 +1,15 @@
 import IInvoiceCategory from '@models/Entities/finance-plannin/IInvoiceCategory'
-import { ICustomerTask } from '@/models'
+import { ICustomerTask, IExpiredTaskStep } from '@/models'
 
 interface Invoice {
+  _id?: string
   category: IInvoiceCategory
   amount: number
   total: number
-  addition: number
   discount: number
-  additionReason: string
-  tasks?: ICustomerTask
+  tasks?: ICustomerTask[]
   createdAt?: Date
+  expiredTaskSteps?: IExpiredTaskStep[]
 }
 
 export default Invoice

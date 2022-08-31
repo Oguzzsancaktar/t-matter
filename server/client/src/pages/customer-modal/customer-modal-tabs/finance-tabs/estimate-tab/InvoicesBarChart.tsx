@@ -7,6 +7,7 @@ import { JustifyCenterColumn, ProgressBar } from '@/components'
 import { useGetInvoicesQuery } from '@services/settings/finance-planning/financePlanningService'
 import moment from 'moment'
 import colors from '@constants/colors'
+import { Invoice } from '@/models'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -26,13 +27,10 @@ export const options = {
 
 interface IProps {
   customerId: string
+  invoices?: Invoice[]
 }
 
-const InvoicesBarChart: React.FC<IProps> = ({ customerId }) => {
-  const { data: invoices, isLoading } = useGetInvoicesQuery(customerId)
-
-  if (isLoading) return <JustifyCenterColumn>Loading...</JustifyCenterColumn>
-
+const InvoicesBarChart: React.FC<IProps> = ({ customerId, invoices }) => {
   if (!invoices) {
     return null
   }

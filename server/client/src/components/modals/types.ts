@@ -17,6 +17,7 @@ export const ModalHeader = styled.div`
 export const ModalBody = styled.div<{
   withModalFooter?: boolean
   height?: string
+  minHeight?: string
   backgroundColor?: string
   padding?: string
 }>`
@@ -27,7 +28,7 @@ export const ModalBody = styled.div<{
   width: 100%;
   padding: ${({ padding }) => (padding ? padding : '1rem 1rem')};
   background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)};
-
+  min-height: ${({ minHeight }) => (minHeight ? minHeight : 'unset')};
   border-bottom-right-radius: ${({ withModalFooter }) => (withModalFooter ? '0' : '0.3rem')};
   border-bottom-left-radius: ${({ withModalFooter }) => (withModalFooter ? '0' : '0.3rem')};
 `

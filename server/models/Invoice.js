@@ -13,14 +13,22 @@ const InvoiceSchema = new Schema(
     total: Number,
     amount: Number,
     discount: Number,
-    addition: Number,
-    additionReason: String,
     tasks: [
       {
         type: Schema.Types.ObjectId,
         ref: 'tasks'
       }
-    ]
+    ],
+    expiredTaskSteps: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'expiredtasksteps'
+      }
+    ],
+    index: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true

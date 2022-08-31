@@ -1,48 +1,50 @@
 import React from 'react'
-import { H1 } from '@/components'
-import { ICustomerTask } from '@/models'
-import styled from 'styled-components'
-import colors from '@constants/colors'
+import { IExpiredTaskStep } from '@/models'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
-import JustifyBetweenRow from '@components/layout/JustifyBetweenRow'
+import colors from '@constants/colors'
+import { H1 } from '@/components'
+import styled from 'styled-components'
+import JustifyBetweenRow from '../../../../../components/layout/JustifyBetweenRow'
 
 interface IProps {
-  nonBillableTasks?: ICustomerTask[]
+  expiredTaskSteps?: IExpiredTaskStep[]
 }
 
-const Item = styled(JustifyBetweenRow)`
+const ExpiredItem = styled(JustifyBetweenRow)`
   padding: 0.5rem 1rem;
   border: 1px solid #e0e0e0;
-  background: ${colors.background.gray.light};
+  background: #d08989;
   margin-bottom: 0.5rem;
 `
 
-const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
+const ExpiredTaskStepList: React.FC<IProps> = ({ expiredTaskSteps }) => {
   return (
-    <Droppable key="non" droppableId="nonBillableTasks">
+    <Droppable key="expired" droppableId="expiredTaskSteps">
       {(provided, snapshot) => {
         return (
           <div
             style={{
               marginTop: '1rem',
-              height: '65%',
+              height: '30%',
               backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
             }}
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {nonBillableTasks?.map((task, index) => {
+            {expiredTaskSteps?.map((step, index) => {
               return (
-                <Draggable draggableId={task._id as string} index={index} key={task._id}>
+                <Draggable draggableId={step._id as string} index={index} key={step._id}>
                   {provided => {
                     return (
                       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <Item>
-                          <H1 color={colors.black.primary}>{task.name}</H1>
-                          <H1 color={colors.black.primary} textAlign="end">
-                            ${task.totalPrice?.toFixed(2)}
+                        <ExpiredItem>
+                          <H1 color={colors.black.primary}>
+                            {step.task.name} - Step: {step.stepIndex}
                           </H1>
-                        </Item>
+                          <H1 color={colors.black.primary} textAlign="end">
+                            ${step.expiredTimePrice?.toFixed(2)}
+                          </H1>
+                        </ExpiredItem>
                       </div>
                     )
                   }}
@@ -56,4 +58,5 @@ const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
     </Droppable>
   )
 }
-export default NonBillableList
+
+export default ExpiredTaskStepList

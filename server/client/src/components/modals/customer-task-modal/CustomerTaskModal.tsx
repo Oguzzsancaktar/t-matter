@@ -5,23 +5,25 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ModalBody, ModalHeader } from '../types'
 import colors from '@/constants/colors'
 import { useGetTaskByTaskIdQuery, useUpdateTaskMutation } from '@/services/customers/taskService'
-import { EActivity, ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
+import { EActivity, ETaskStatus, ICustomer, ICustomerTask, ITaskChecklist, IUser } from '@/models'
 import Swal from 'sweetalert2'
 import { useAuth } from '@/hooks/useAuth'
 import { activityApi, useCreateActivityMutation } from '@/services/activityService'
 import useAccessStore from '@hooks/useAccessStore'
 import { setModalOnClose } from '@/store'
+import { useCreateExpiredTaskStepMutation } from '@services/settings/finance-planning/financePlanningService'
 
 interface IProps {
   taskId: string
+  customerId: ICustomer['_id']
 }
-const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
+const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
   const { loggedUser } = useAuth()
 
   const [updateTask] = useUpdateTaskMutation()
   const [createActivity] = useCreateActivityMutation()
   const { data: taskData, isLoading: taskIsLoading } = useGetTaskByTaskIdQuery(taskId)
-
+  const [createExpiredTaskStep] = useCreateExpiredTaskStepMutation()
   const [activeStep, setActiveStep] = useState<number>(0)
   const [updatedTaskData, setUpdatedTaskData] = useState<ICustomerTask>()
   const { useAppDispatch } = useAccessStore()
@@ -228,12 +230,28 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId }) => {
       (tempChecklist.length === index && tempChecklist.every(checklist => checklist.isChecked)) ||
       tempChecklist.length === 0
     ) {
+      if (
+        tempUpdatedTaskData.steps[activeStep].passedTime >
+        tempUpdatedTaskData.steps[activeStep].checklistItems?.reduce((acc, cur) => acc + cur.duration, 0)
+      ) {
+        createExpiredTaskStep({
+          task: tempUpdatedTaskData._id as string,
+          stepIndex: activeStep,
+          customer: customerId,
+          index: 0,
+          isInvoiced: false,
+          expiredTime:
+            tempUpdatedTaskData.steps[activeStep].passedTime -
+            tempUpdatedTaskData.steps[activeStep].checklistItems?.reduce((acc, cur) => acc + cur.duration, 0)
+        })
+      }
       tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Completed
       if (tempUpdatedTaskData.steps[activeStep + 1]) {
         tempUpdatedTaskData.steps[activeStep + 1].stepStatus = ETaskStatus.Progress
         setActiveStep(activeStep + 1)
       }
       setUpdatedTaskData({ ...tempUpdatedTaskData })
+      updateTask(tempUpdatedTaskData)
     }
   }
 
