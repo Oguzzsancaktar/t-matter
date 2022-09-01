@@ -17,6 +17,7 @@ import { ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
 import { arrayMoveImmutable } from 'array-move'
 import {
   useGetExpiredTaskStepsQuery,
+  useGetFinancePlanningQuery,
   useGetInvoiceCategoriesQuery,
   useGetInvoicesQuery
 } from '@services/settings/finance-planning/financePlanningService'
@@ -35,7 +36,6 @@ const Bordered = styled.div<{ margin?: string; width?: string }>`
 
 interface IState {
   createInvoiceTasks: ICustomerTask[]
-  invoicedTasks: ICustomerTask[]
   nonBillableTasks: ICustomerTask[]
 }
 
@@ -44,7 +44,7 @@ const EstimateTab = ({ customerId }) => {
     data: customerTasksData,
     isLoading: customerTasksIsLoading,
     refetch: r1
-  } = useGetTasksByCustomerIdQuery(customerId)
+  } = useGetTasksByCustomerIdQuery({ customerId, isInvoiced: false })
   const { data: invoiceCategories, isLoading: invoiceCategoriesLoading } =
     useGetInvoiceCategoriesQuery(emptyQueryParams)
   const [reorder] = useReorderTasksMutation()
@@ -57,7 +57,6 @@ const EstimateTab = ({ customerId }) => {
 
   const [state, setState] = useState<IState>({
     createInvoiceTasks: [],
-    invoicedTasks: [],
     nonBillableTasks: []
   })
   const [expiredTaskStepsState, setExpiredTaskStepsState] = useState<{
@@ -69,6 +68,7 @@ const EstimateTab = ({ customerId }) => {
   })
 
   const [invoice, setInvoice] = useState<Invoice>({ ...invoiceDefault })
+  const [openInvoice, setOpenInvoice] = useState<Invoice>()
 
   const refetch = () => {
     r1()
@@ -77,28 +77,7 @@ const EstimateTab = ({ customerId }) => {
 
   useEffect(() => {
     if (customerTasksData) {
-      const obj = customerTasksData.reduce<IState>(
-        (acc, curr, i) => {
-          if (curr.isInvoiced) {
-            acc.invoicedTasks.push(curr)
-            return acc
-          }
-          acc.nonBillableTasks.push(curr)
-          return acc
-        },
-        { createInvoiceTasks: [], invoicedTasks: [], nonBillableTasks: [] }
-      )
-      console.log(obj.nonBillableTasks)
-      obj.nonBillableTasks = obj.nonBillableTasks.sort((a, b) => {
-        // @ts-ignore
-        return a?.index - b?.index
-      })
-      console.log(obj.nonBillableTasks)
-      obj.invoicedTasks = obj.invoicedTasks.sort((a, b) => {
-        // @ts-ignore
-        return a?.index - b?.index
-      })
-      setState(obj)
+      setState({ createInvoiceTasks: [], nonBillableTasks: customerTasksData })
     }
   }, [customerTasksData])
 
@@ -220,28 +199,32 @@ const EstimateTab = ({ customerId }) => {
         <Bordered margin="0 4px 0 0" width="66%">
           <H1 color={colors.text.primary}>Invoices</H1>
           <Column height="100%">
-            <InvoicesBarChart invoices={invoices} customerId={customerId} />
+            <InvoicesBarChart onSelectBar={invoice => setOpenInvoice(invoice)} customerId={customerId} />
           </Column>
         </Bordered>
         <Bordered margin="0 0 0 8px" width="33%">
           <H1 color={colors.text.primary}>Non billable</H1>
           <JustifyCenterColumn height="100%">
-            <NonBillableCircleProgress />
+            <NonBillableCircleProgress customerId={customerId} />
           </JustifyCenterColumn>
         </Bordered>
       </JustifyCenterRow>
-      <JustifyCenterRow height="70%">
+      <JustifyCenterRow height={'calc(70% - 60px)'}>
         <DragDropContext key="context" onDragEnd={onDragEnd}>
           <Bordered margin="0 12px 0 0" width="33%">
             <H1 color={colors.text.primary}>Invoiced</H1>
-            <InvoicedList invoices={invoices} />
+            <InvoicedList openInvoice={openInvoice} invoices={invoices} />
           </Bordered>
-          <Bordered margin="0 12px 0 0" width="33%">
-            <H1 color={colors.text.primary}>Expired Non billable</H1>
-            <ExpiredTaskStepList expiredTaskSteps={expiredTaskStepsState.nonBillable} />
-            <H1 color={colors.text.primary}>Non billable</H1>
-            <NonBillableList nonBillableTasks={state.nonBillableTasks} />
-          </Bordered>
+          <div style={{ margin: '0 12px 0 0', width: '33%' }}>
+            <Bordered style={{ marginBottom: 8 }}>
+              <H1 color={colors.text.primary}>Expire time limit</H1>
+              <ExpiredTaskStepList expiredTaskSteps={expiredTaskStepsState.nonBillable} />
+            </Bordered>
+            <Bordered>
+              <H1 color={colors.text.primary}>Non billable</H1>
+              <NonBillableList nonBillableTasks={state.nonBillableTasks} />
+            </Bordered>
+          </div>
           <Bordered width="33%">
             <H1 color={colors.text.primary}>Create invoice</H1>
             <CreateInvoiceList

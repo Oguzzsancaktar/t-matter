@@ -29,11 +29,14 @@ const createTask = (builder: IBuilder) => {
 }
 
 const getTasksByCustomerId = (builder: IBuilder) => {
-  return builder.query<ICustomerTask[], ICustomer['_id']>({
-    query(customerId) {
+  return builder.query<ICustomerTask[], { customerId: ICustomer['_id']; isInvoiced?: boolean }>({
+    query({ customerId, isInvoiced }) {
       return {
         url: `/task/customer/${customerId}`,
-        method: 'GET'
+        method: 'GET',
+        params: {
+          isInvoiced
+        }
       }
     },
     providesTags(result) {

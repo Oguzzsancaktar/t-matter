@@ -2,13 +2,19 @@ import React from 'react'
 import moment from 'moment'
 import { Invoice } from '@/models'
 import ReactApexChart from 'react-apexcharts'
+import { useGetInvoicesQuery } from '@services/settings/finance-planning/financePlanningService'
+import { JustifyCenterRow } from '@/components'
 
 interface IProps {
   customerId: string
-  invoices?: Invoice[]
+  onSelectBar: (invoice: Invoice) => void
 }
 
-const InvoicesBarChart: React.FC<IProps> = ({ customerId, invoices }) => {
+const InvoicesBarChart: React.FC<IProps> = ({ customerId, onSelectBar }) => {
+  const { data: invoices, isLoading: isInvoicesLoading } = useGetInvoicesQuery(customerId)
+
+  if (isInvoicesLoading) return <JustifyCenterRow>Loading...</JustifyCenterRow>
+
   if (!invoices) {
     return null
   }
@@ -27,7 +33,12 @@ const InvoicesBarChart: React.FC<IProps> = ({ customerId, invoices }) => {
   const config: ApexCharts.ApexOptions = {
     chart: {
       type: 'bar',
-      height: 205
+      height: 205,
+      events: {
+        dataPointSelection: function (event, chartContext, config) {
+          onSelectBar(sortedInvoices[config.dataPointIndex])
+        }
+      }
     },
     plotOptions: {
       bar: {

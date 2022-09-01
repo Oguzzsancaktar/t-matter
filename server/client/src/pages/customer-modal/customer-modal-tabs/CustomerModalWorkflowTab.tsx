@@ -27,7 +27,9 @@ interface IProps {
 }
 
 const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
-  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery(customer._id)
+  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
+    customerId: customer._id
+  })
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()

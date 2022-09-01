@@ -29,8 +29,9 @@ const createTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
   const { customerId } = req.params
+  const { isInvoiced } = req.query
   try {
-    const tasks = await dataAccess.taskDataAccess.getCustomerTasks(customerId)
+    const tasks = await dataAccess.taskDataAccess.getCustomerTasks({ customerId, isInvoiced })
     res.status(200).json(tasks)
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))

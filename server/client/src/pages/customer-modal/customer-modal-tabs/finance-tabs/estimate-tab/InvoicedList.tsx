@@ -1,22 +1,26 @@
-import React, { useState } from 'react'
-import { ICustomerTask, Invoice } from '@/models'
-import { H1, JustifyCenterColumn } from '@/components'
+import React, { useEffect, useState } from 'react'
+import { Invoice } from '@/models'
+import { H1 } from '@/components'
 import colors from '@constants/colors'
-import styled from 'styled-components'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import JustifyBetweenRow from '@components/layout/JustifyBetweenRow'
 import { ChevronDown, ChevronUp } from 'react-feather'
 
 interface IProps {
   invoices?: Invoice[]
+  openInvoice?: Invoice
 }
 
-const InvoiceItem = ({ invoice }: { invoice: Invoice }) => {
-  const [isOpen, setIsOpen] = useState(false)
+const InvoiceItem = ({ invoice, isOpen: isInvoiceOpen }: { invoice: Invoice; isOpen: boolean }) => {
+  const [isOpen, setIsOpen] = useState(isInvoiceOpen)
 
   const handleToggle = () => {
     setIsOpen(!isOpen)
   }
+
+  useEffect(() => {
+    setIsOpen(isInvoiceOpen)
+  }, [isInvoiceOpen])
 
   return (
     <div
@@ -68,7 +72,7 @@ const InvoiceItem = ({ invoice }: { invoice: Invoice }) => {
   )
 }
 
-const InvoicedList: React.FC<IProps> = ({ invoices }) => {
+const InvoicedList: React.FC<IProps> = ({ invoices, openInvoice }) => {
   return (
     <Droppable key="invoiced" droppableId="invoicedTasks">
       {(provided, snapshot) => {
@@ -90,7 +94,7 @@ const InvoicedList: React.FC<IProps> = ({ invoices }) => {
                   {provided => {
                     return (
                       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <InvoiceItem invoice={invoice} />
+                        <InvoiceItem isOpen={openInvoice?._id === invoice._id} invoice={invoice} />
                       </div>
                     )
                   }}
