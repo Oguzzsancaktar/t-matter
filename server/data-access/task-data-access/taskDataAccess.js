@@ -73,12 +73,17 @@ const createTask = data => {
   return Task.create(data)
 }
 
-const getCustomerTasks = customerId => {
+const getCustomerTasks = ({ customerId, isInvoiced }) => {
+  const $match = {
+    customer: mongoose.Types.ObjectId(customerId)
+  }
+  if (isInvoiced) {
+    $match.isInvoiced = isInvoiced === 'true'
+  }
+
   return Task.aggregate([
     {
-      $match: {
-        customer: mongoose.Types.ObjectId(customerId)
-      }
+      $match
     },
     ...taskPopulatePipe
   ]).exec()

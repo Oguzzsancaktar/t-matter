@@ -27,7 +27,9 @@ interface IProps {
 }
 
 const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
-  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery(customer._id)
+  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
+    customerId: customer._id
+  })
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -82,7 +84,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
       openModal({
         id: 'customerTaksModal' + taskId,
         title: 'Customer Task',
-        body: <CustomerTaskModal taskId={taskId} />,
+        body: <CustomerTaskModal customerId={customer._id} taskId={taskId} />,
         width: ESize.WXLarge,
         height: ESize.HLarge,
         backgroundColor: colors.gray.light

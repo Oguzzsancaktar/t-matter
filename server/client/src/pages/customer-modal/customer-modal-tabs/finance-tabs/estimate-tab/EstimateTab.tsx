@@ -3,11 +3,24 @@ import { JustifyCenterRow, H1, Column, ProgressBar, JustifyCenterColumn } from '
 import styled from 'styled-components'
 import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd'
 import colors from '@constants/colors'
-import { InvoicesBarChart, CreateInvoiceList, InvoicedList, NonBillableList, CreateInvoice } from '@/pages'
+import {
+  InvoicesBarChart,
+  CreateInvoiceList,
+  InvoicedList,
+  NonBillableList,
+  CreateInvoice,
+  ExpiredTaskStepList,
+  NonBillableCircleProgress
+} from '@/pages'
 import { useGetTasksByCustomerIdQuery, useReorderTasksMutation } from '@services/customers/taskService'
-import { ICustomerTask, Invoice } from '@/models'
+import { ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
 import { arrayMoveImmutable } from 'array-move'
-import { useGetInvoiceCategoriesQuery } from '@services/settings/finance-planning/financePlanningService'
+import {
+  useGetExpiredTaskStepsQuery,
+  useGetFinancePlanningQuery,
+  useGetInvoiceCategoriesQuery,
+  useGetInvoicesQuery
+} from '@services/settings/finance-planning/financePlanningService'
 import emptyQueryParams from '@constants/queryParams'
 import { invoiceDefault } from '@constants/finance'
 
@@ -23,7 +36,6 @@ const Bordered = styled.div<{ margin?: string; width?: string }>`
 
 interface IState {
   createInvoiceTasks: ICustomerTask[]
-  invoicedTasks: ICustomerTask[]
   nonBillableTasks: ICustomerTask[]
 }
 
@@ -31,108 +43,153 @@ const EstimateTab = ({ customerId }) => {
   const {
     data: customerTasksData,
     isLoading: customerTasksIsLoading,
-    refetch
-  } = useGetTasksByCustomerIdQuery(customerId)
+    refetch: r1
+  } = useGetTasksByCustomerIdQuery({ customerId, isInvoiced: false })
   const { data: invoiceCategories, isLoading: invoiceCategoriesLoading } =
     useGetInvoiceCategoriesQuery(emptyQueryParams)
   const [reorder] = useReorderTasksMutation()
+  const { data: invoices, isLoading: isInvoicesLoading } = useGetInvoicesQuery(customerId)
+  const {
+    data: expiredTaskSteps,
+    isLoading: isExpiredTaskStepsLoading,
+    refetch: r2
+  } = useGetExpiredTaskStepsQuery(customerId)
 
   const [state, setState] = useState<IState>({
     createInvoiceTasks: [],
-    invoicedTasks: [],
     nonBillableTasks: []
   })
+  const [expiredTaskStepsState, setExpiredTaskStepsState] = useState<{
+    nonBillable: IExpiredTaskStep[]
+    createInvoice: IExpiredTaskStep[]
+  }>({
+    nonBillable: [],
+    createInvoice: []
+  })
+
   const [invoice, setInvoice] = useState<Invoice>({ ...invoiceDefault })
+  const [openInvoice, setOpenInvoice] = useState<Invoice>()
+
+  const refetch = () => {
+    r1()
+    r2()
+  }
 
   useEffect(() => {
     if (customerTasksData) {
-      const obj = customerTasksData.reduce<IState>(
-        (acc, curr, i) => {
-          if (curr.isInvoiced) {
-            acc.invoicedTasks.push(curr)
-            return acc
-          }
-          acc.nonBillableTasks.push(curr)
-          return acc
-        },
-        { createInvoiceTasks: [], invoicedTasks: [], nonBillableTasks: [] }
-      )
-      console.log(obj.nonBillableTasks)
-      obj.nonBillableTasks = obj.nonBillableTasks.sort((a, b) => {
-        // @ts-ignore
-        return a?.index - b?.index
-      })
-      console.log(obj.nonBillableTasks)
-      obj.invoicedTasks = obj.invoicedTasks.sort((a, b) => {
-        // @ts-ignore
-        return a?.index - b?.index
-      })
-      setState(obj)
+      setState({ createInvoiceTasks: [], nonBillableTasks: customerTasksData })
     }
   }, [customerTasksData])
 
   useEffect(() => {
     if (invoice) {
-      const x = state.createInvoiceTasks.reduce((acc, curr) => {
-        if (curr.totalPrice) {
-          acc = acc + curr.totalPrice
-        }
-        return acc
-      }, 0)
-      setInvoice({
-        ...invoice,
-        amount: x,
-        total: invoice.addition - invoice.discount + x
-      })
+      setInvoice({ ...invoice, total: invoice.amount - invoice.discount })
     }
-  }, [state.createInvoiceTasks])
+  }, [invoice?.discount])
 
   useEffect(() => {
-    if (invoice) {
-      setInvoice({ ...invoice, total: invoice.addition - invoice.discount + invoice.amount })
+    if (expiredTaskSteps) {
+      setExpiredTaskStepsState({ createInvoice: [], nonBillable: expiredTaskSteps })
     }
-  }, [invoice?.discount, invoice?.addition])
+  }, [expiredTaskSteps])
 
   if (customerTasksIsLoading) return <JustifyCenterRow>Loading...</JustifyCenterRow>
 
   const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
     const { destination, source, draggableId } = result
-    if (destination?.droppableId === source.droppableId) {
-      if (destination.index === source.index) {
+    // if (destination?.droppableId === source.droppableId) {
+    //   if (destination.index === source.index) {
+    //     return
+    //   }
+    //   const arr = arrayMoveImmutable(state[destination.droppableId], source.index, destination.index) as ICustomerTask[]
+    //   setState(s => {
+    //     return {
+    //       ...s,
+    //       [destination.droppableId]: arr
+    //     }
+    //   })
+    //   setTimeout(() => {
+    //     const reorderd = state.nonBillableTasks?.map((x, i) => ({ _id: x._id, index: i }))
+    //     if (reorderd.length > 0) {
+    //       reorder(reorderd)
+    //     }
+    //   }, 0)
+    // }
+    if (destination?.droppableId === 'createInvoiceTasks' && source?.droppableId === 'expiredTaskSteps') {
+      const i = expiredTaskStepsState.nonBillable.findIndex(x => x._id === draggableId)
+      if (i === -1) {
         return
       }
-      const arr = arrayMoveImmutable(state[destination.droppableId], source.index, destination.index) as ICustomerTask[]
-      setState(s => {
-        return {
-          ...s,
-          [destination.droppableId]: arr
-        }
+      const expiredTaskStep = expiredTaskStepsState.nonBillable[i]
+      const newNonBillable = [...expiredTaskStepsState.nonBillable]
+      newNonBillable.splice(i, 1)
+      const newCreateInvoice = [...expiredTaskStepsState.createInvoice]
+      newCreateInvoice.splice(destination.index, 0, expiredTaskStep)
+      setExpiredTaskStepsState({
+        ...expiredTaskStepsState,
+        nonBillable: newNonBillable,
+        createInvoice: newCreateInvoice
       })
-      setTimeout(() => {
-        const reorderd = [
-          ...state.nonBillableTasks?.map((x, i) => ({ _id: x._id, index: i })),
-          ...state.invoicedTasks?.map((x, i) => ({ _id: x._id, index: i }))
-        ]
-        reorder(reorderd)
-      }, 0)
+      setInvoice({
+        ...invoice,
+        amount: invoice.amount + expiredTaskStep.expiredTimePrice,
+        total: invoice.amount + expiredTaskStep.expiredTimePrice - invoice.discount
+      })
+    }
+    if (destination?.droppableId === 'expiredTaskSteps' && source?.droppableId === 'createInvoiceTasks') {
+      const i = expiredTaskStepsState.createInvoice.findIndex(x => x._id === draggableId)
+      if (i === -1) {
+        return
+      }
+      const expiredTaskStep = expiredTaskStepsState.createInvoice[i]
+      const newCreateInvoice = [...expiredTaskStepsState.createInvoice]
+      newCreateInvoice.splice(i, 1)
+      const newNonBillable = [...expiredTaskStepsState.nonBillable]
+      newNonBillable.splice(destination.index, 0, expiredTaskStep)
+      setExpiredTaskStepsState({
+        ...expiredTaskStepsState,
+        nonBillable: newNonBillable,
+        createInvoice: newCreateInvoice
+      })
+      setInvoice({
+        ...invoice,
+        amount: invoice.amount - expiredTaskStep.expiredTimePrice,
+        total: invoice.amount - expiredTaskStep.expiredTimePrice - invoice.discount
+      })
     }
     if (destination?.droppableId === 'createInvoiceTasks' && source.droppableId === 'nonBillableTasks') {
       const i = state.nonBillableTasks.findIndex(task => task._id === draggableId)
+      if (i === -1) {
+        return
+      }
       const task = state.nonBillableTasks[i]
       const newNonBillableTasks = [...state.nonBillableTasks]
       newNonBillableTasks.splice(i, 1)
       const newCreateInvoiceTasks = [...state.createInvoiceTasks]
       newCreateInvoiceTasks.splice(destination.index, 0, task)
       setState({ ...state, createInvoiceTasks: newCreateInvoiceTasks, nonBillableTasks: newNonBillableTasks })
+      setInvoice({
+        ...invoice,
+        amount: invoice.amount + (task.totalPrice as number),
+        total: invoice.amount + (task.totalPrice as number) - invoice.discount
+      })
     }
     if (destination?.droppableId === 'nonBillableTasks' && source.droppableId === 'createInvoiceTasks') {
       const i = state.createInvoiceTasks.findIndex(task => task._id === draggableId)
+      if (i === -1) {
+        return
+      }
       const task = state.createInvoiceTasks[i]
       const newCreateInvoiceTasks = [...state.createInvoiceTasks]
       newCreateInvoiceTasks.splice(i, 1)
       const newNonBillableTasks = [...state.nonBillableTasks]
       newNonBillableTasks.splice(destination.index, 0, task)
       setState({ ...state, createInvoiceTasks: newCreateInvoiceTasks, nonBillableTasks: newNonBillableTasks })
+      setInvoice({
+        ...invoice,
+        amount: invoice.amount - (task.totalPrice as number),
+        total: invoice.amount - (task.totalPrice as number) - invoice.discount
+      })
     }
   }
 
@@ -142,34 +199,41 @@ const EstimateTab = ({ customerId }) => {
         <Bordered margin="0 4px 0 0" width="66%">
           <H1 color={colors.text.primary}>Invoices</H1>
           <Column height="100%">
-            <InvoicesBarChart customerId={customerId} />
+            <InvoicesBarChart onSelectBar={invoice => setOpenInvoice(invoice)} customerId={customerId} />
           </Column>
         </Bordered>
         <Bordered margin="0 0 0 8px" width="33%">
           <H1 color={colors.text.primary}>Non billable</H1>
           <JustifyCenterColumn height="100%">
-            <H1 margin="0 0 1rem 0" textAlign="center" fontSize="32px" fontWeight="600" color={colors.teal.primary}>
-              57%
-            </H1>
-            <ProgressBar startLabel="" completionColor={colors.teal.primary} completionPercentage={57} endLabel="" />
+            <NonBillableCircleProgress customerId={customerId} />
           </JustifyCenterColumn>
         </Bordered>
       </JustifyCenterRow>
-      <JustifyCenterRow height="70%">
+      <JustifyCenterRow height={'calc(70% - 60px)'}>
         <DragDropContext key="context" onDragEnd={onDragEnd}>
           <Bordered margin="0 12px 0 0" width="33%">
             <H1 color={colors.text.primary}>Invoiced</H1>
-            <InvoicedList invoicedTasks={state.invoicedTasks} />
+            <InvoicedList openInvoice={openInvoice} invoices={invoices} />
           </Bordered>
-          <Bordered margin="0 12px 0 0" width="33%">
-            <H1 color={colors.text.primary}>Non billable</H1>
-            <NonBillableList nonBillableTasks={state.nonBillableTasks} />
-          </Bordered>
+          <div style={{ margin: '0 12px 0 0', width: '33%' }}>
+            <Bordered style={{ marginBottom: 8 }}>
+              <H1 color={colors.text.primary}>Expire time limit</H1>
+              <ExpiredTaskStepList expiredTaskSteps={expiredTaskStepsState.nonBillable} />
+            </Bordered>
+            <Bordered>
+              <H1 color={colors.text.primary}>Non billable</H1>
+              <NonBillableList nonBillableTasks={state.nonBillableTasks} />
+            </Bordered>
+          </div>
           <Bordered width="33%">
             <H1 color={colors.text.primary}>Create invoice</H1>
-            <CreateInvoiceList createInvoiceTasks={state.createInvoiceTasks} />
+            <CreateInvoiceList
+              expiredTaskSteps={expiredTaskStepsState.createInvoice}
+              createInvoiceTasks={state.createInvoiceTasks}
+            />
             <CreateInvoice
               customerId={customerId}
+              expiredTaskSteps={expiredTaskStepsState.createInvoice}
               createInvoiceTasks={state.createInvoiceTasks}
               setInvoice={setInvoice}
               invoiceCategories={invoiceCategories}

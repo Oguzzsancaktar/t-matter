@@ -9,7 +9,7 @@ import {
   SelectInput
 } from '@/components'
 import IInvoiceCategory from '@models/Entities/finance-plannin/IInvoiceCategory'
-import { ICustomer, ICustomerTask, Invoice } from '@/models'
+import { ICustomer, ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
 import { DollarSign } from 'react-feather'
 import { invoiceDefault } from '@constants/finance'
 import { useCreateInvoiceMutation } from '@services/settings/finance-planning/financePlanningService'
@@ -21,6 +21,7 @@ interface IProps {
   createInvoiceTasks?: ICustomerTask[]
   refetch: () => void
   customerId: ICustomer['_id']
+  expiredTaskSteps?: IExpiredTaskStep[]
 }
 
 const CreateInvoice: React.FC<IProps> = ({
@@ -29,7 +30,8 @@ const CreateInvoice: React.FC<IProps> = ({
   invoice,
   createInvoiceTasks,
   customerId,
-  refetch
+  refetch,
+  expiredTaskSteps
 }) => {
   const [createInvoice] = useCreateInvoiceMutation()
 
@@ -47,7 +49,8 @@ const CreateInvoice: React.FC<IProps> = ({
         ...invoice,
         category: invoice.category._id,
         tasks: createInvoiceTasks.map(t => t._id),
-        customer: customerId
+        customer: customerId,
+        expiredTaskSteps: expiredTaskSteps?.map(t => t._id)
       }
       // @ts-ignore
       await createInvoice(obj)
@@ -114,31 +117,6 @@ const CreateInvoice: React.FC<IProps> = ({
             type="number"
             onChange={handleInputChange}
             value={invoice?.total}
-          />
-        </JustifyBetweenRow>
-      </JustifyBetweenRow>
-      <JustifyBetweenRow margin="0.5rem 0 0 0">
-        <JustifyBetweenRow>
-          <InputWithIcon
-            labelText="Addition"
-            placeholder="Addition"
-            onBlur={() => console.log('blue')}
-            children={<DollarSign size="16px" />}
-            name="addition"
-            type="number"
-            onChange={handleInputChange}
-            value={invoice?.addition}
-          />
-        </JustifyBetweenRow>
-        <JustifyBetweenRow margin="0 0 0 0.5rem">
-          <InputWithIcon
-            labelText="Reason"
-            placeholder="Reason"
-            onBlur={() => console.log('blue')}
-            name="additionReason"
-            type="text"
-            onChange={handleInputChange}
-            value={invoice?.additionReason}
           />
         </JustifyBetweenRow>
       </JustifyBetweenRow>

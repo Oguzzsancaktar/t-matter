@@ -25,7 +25,9 @@ const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
           <div
             style={{
               marginTop: '1rem',
-              height: '95%',
+              height: 225,
+              maxHeight: 225,
+              overflowY: 'auto',
               backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
             }}
             ref={provided.innerRef}

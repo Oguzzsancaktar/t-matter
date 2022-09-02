@@ -15,22 +15,25 @@
     "@testing-library/user-event": "^13.2.1",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/sweetalert": "^2.0.4",
+    "apexcharts": "^3.35.5",
     "array-move": "^4.0.0",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.26.1",
-    "chart.js": "^3.9.1",
     "craco-alias": "^3.0.1",
     "craco-less": "^2.0.0",
+<<<<<<< HEAD
     "dotenv": "^16.0.2",
     "faker": "^6.6.6",
+=======
+>>>>>>> 72259b147f8c00b8da28fd812774a2d178b5fdf4
     "feather-icons": "^4.28.0",
     "fullcalendar": "^5.11.3",
     "gapi-script": "^1.2.0",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.3",
     "react": "^17.0.2",
+    "react-apexcharts": "^1.4.0",
     "react-beautiful-dnd": "^13.1.0",
-    "react-chartjs-2": "^4.3.1",
     "react-content-loader": "^6.2.0",
     "react-data-table-component": "^7.5.2",
     "react-dom": "^17.0.2",
@@ -78,7 +81,6 @@
     ]
   },
   "devDependencies": {
-    "@types/faker": "^6.6.9",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
     "@types/react": "^17.0.20",
