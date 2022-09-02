@@ -3,7 +3,8 @@ import ReactApexChart from 'react-apexcharts'
 import colors from '@constants/colors'
 import {
   useGetExpiredTaskStepsQuery,
-  useGetFinancePlanningQuery
+  useGetFinancePlanningQuery,
+  useGetInvoicesQuery
 } from '@services/settings/finance-planning/financePlanningService'
 import { ICustomer } from '@/models'
 import { useGetTasksByCustomerIdQuery } from '@services/customers/taskService'
@@ -12,19 +13,16 @@ interface IProps {
   customerId: ICustomer['_id']
 }
 
-const NonBillableCircleProgress: React.FC<IProps> = ({ customerId }) => {
+const UnPaidInvoicesCircleProgress: React.FC<IProps> = ({ customerId }) => {
   const { data: financePlanning, isLoading: isFinancePlanningLoading } = useGetFinancePlanningQuery()
-  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
-    customerId,
-    isInvoiced: false
-  })
-  const { data: expiredTaskSteps, isLoading: isExpiredTaskStepsLoading } = useGetExpiredTaskStepsQuery(customerId)
+  const { data: invoices, isLoading: isInvoicesLoading } = useGetInvoicesQuery(customerId)
+
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
       height: 200,
+      width: 200,
       type: 'radialBar',
-      offsetY: 0,
-      width: 200
+      offsetY: 0
     },
     plotOptions: {
       radialBar: {
@@ -61,26 +59,20 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId }) => {
     stroke: {
       dashArray: 4
     },
-    labels: ['Non Billable']
+    labels: ['Un Paid']
   })
   const [series, setSeries] = useState([0])
 
   useEffect(() => {
-    if (expiredTaskSteps && financePlanning && customerTasksData) {
-      const p1 = expiredTaskSteps.reduce((acc, cur) => {
-        return acc + cur.expiredTimePrice
+    if (invoices && financePlanning) {
+      const d1 = invoices.reduce((acc, cur) => {
+        return acc + cur.discount
       }, 0)
-      const p2 = customerTasksData?.reduce((acc, cur) => {
-        if (cur.totalPrice) {
-          return acc + cur.totalPrice
-        }
-        return acc
-      }, 0)
-      setSeries([+(((p2 + p1) / financePlanning.activeTimeSlipAmount.value) * 100).toFixed(0)])
+      setSeries([+((d1 / financePlanning.inactiveTimeSlipAmount.value) * 100).toFixed(0)])
     }
-  }, [expiredTaskSteps, financePlanning, customerTasksData])
+  }, [invoices, financePlanning])
 
   return <ReactApexChart width={200} options={options} series={series} type="radialBar" height={200} />
 }
 
-export default NonBillableCircleProgress
+export default UnPaidInvoicesCircleProgress

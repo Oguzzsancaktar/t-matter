@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { JustifyCenterRow, H1, Column, ProgressBar, JustifyCenterColumn } from '@/components'
+import { JustifyCenterRow, H1, Column, ProgressBar, JustifyCenterColumn, JustifyBetweenRow } from '@/components'
 import styled from 'styled-components'
 import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd'
 import colors from '@constants/colors'
@@ -10,7 +10,8 @@ import {
   NonBillableList,
   CreateInvoice,
   ExpiredTaskStepList,
-  NonBillableCircleProgress
+  NonBillableCircleProgress,
+  UnPaidInvoicesCircleProgress
 } from '@/pages'
 import { useGetTasksByCustomerIdQuery, useReorderTasksMutation } from '@services/customers/taskService'
 import { ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
@@ -195,7 +196,7 @@ const EstimateTab = ({ customerId }) => {
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1rem' }}>
-      <JustifyCenterRow margin="0 0 1rem 0" height="30%">
+      <JustifyCenterRow margin="0 0 1rem 0" height="235px">
         <Bordered margin="0 4px 0 0" width="66%">
           <H1 color={colors.text.primary}>Invoices</H1>
           <Column height="100%">
@@ -204,12 +205,13 @@ const EstimateTab = ({ customerId }) => {
         </Bordered>
         <Bordered margin="0 0 0 8px" width="33%">
           <H1 color={colors.text.primary}>Non billable</H1>
-          <JustifyCenterColumn height="100%">
+          <JustifyBetweenRow height="100%">
             <NonBillableCircleProgress customerId={customerId} />
-          </JustifyCenterColumn>
+            <UnPaidInvoicesCircleProgress customerId={customerId} />
+          </JustifyBetweenRow>
         </Bordered>
       </JustifyCenterRow>
-      <JustifyCenterRow height={'calc(70% - 60px)'}>
+      <JustifyCenterRow height={'calc(70% - 40px)'}>
         <DragDropContext key="context" onDragEnd={onDragEnd}>
           <Bordered margin="0 12px 0 0" width="33%">
             <H1 color={colors.text.primary}>Invoiced</H1>
