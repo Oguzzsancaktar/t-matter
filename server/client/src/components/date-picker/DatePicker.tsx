@@ -12,9 +12,11 @@ import colors from '@/constants/colors'
 interface IProps {
   name: string
   labelText?: string | null
+  enableTime?: boolean
   validationError?: boolean
   value?: Date | string
   disabled?: boolean
+  dateFormat?: string
   onChange: (value: Date[], dateText: string) => void
 }
 
@@ -23,11 +25,19 @@ export interface IStyledProps {
   disabled?: boolean
 }
 
-const DatePicker: React.FC<IProps> = ({ name, value = '', disabled, labelText, validationError, onChange }) => {
+const DatePicker: React.FC<IProps> = ({
+  name,
+  value = '',
+  enableTime = false,
+  disabled,
+  labelText,
+  validationError,
+  dateFormat = 'M/d/Y',
+  onChange
+}) => {
   const [date, setDate] = useState(value)
 
   const handleDateChange = (date: Date[], dateText) => {
-    // setDate(date[0])
     onChange(date, dateText)
   }
 
@@ -47,8 +57,8 @@ const DatePicker: React.FC<IProps> = ({ name, value = '', disabled, labelText, v
               </IconContainer>
               <Flatpickr
                 options={{
-                  enableTime: false,
-                  dateFormat: 'M/d/Y'
+                  enableTime: enableTime,
+                  dateFormat: dateFormat
                 }}
                 disabled={disabled}
                 value={date}

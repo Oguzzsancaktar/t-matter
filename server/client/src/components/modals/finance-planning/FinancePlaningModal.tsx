@@ -48,7 +48,7 @@ const FinancePlaningModal = () => {
           </ItemContainer>
         </ModalHeader>
 
-        <ModalBody minHeight="800px">{React.createElement(Component[activeTab])}</ModalBody>
+        <ModalBody height="800px">{React.createElement(Component[activeTab])}</ModalBody>
       </Column>
     </ItemContainer>
   )

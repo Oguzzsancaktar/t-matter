@@ -10,11 +10,14 @@ import { selectMinimizedModals, selectOpenModals } from '@/store'
 import { useAuth } from '@hooks/useAuth'
 import ReactTooltip from 'react-tooltip'
 
+import './styles/vendors/fullcalendar.css'
+
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const CustomersPage = lazy(() => import('./pages/CustomersPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
+const CalendarPage = lazy(() => import('./pages/CalendarPage'))
 
 function App() {
   const { useAppDispatch, useAppSelector } = useAccessStore()
@@ -50,6 +53,15 @@ function App() {
             element={
               <PrivateRoute>
                 <SettingsPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/calendar"
+            element={
+              <PrivateRoute>
+                <CalendarPage />
               </PrivateRoute>
             }
           />

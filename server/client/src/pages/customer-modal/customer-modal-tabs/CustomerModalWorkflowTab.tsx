@@ -96,8 +96,9 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
         id: 'selectTaskWorkflowModal-' + customer._id,
         title: 'Customer Task',
         body: <SelectTaskWorkflowModal customer={customer} />,
-        width: ESize.WXLarge,
-        height: ESize.HLarge,
+        width: ESize.WSmall,
+        height: ESize.HMedium,
+        maxWidth: ESize.WSmall,
         backgroundColor: colors.gray.light
       })
     )
