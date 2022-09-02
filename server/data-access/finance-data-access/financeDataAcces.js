@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Invoice = require('../../models/invoice')
 const FinancePlanning = require('../../models/financePlanning')
 const ExpiredTaskStep = require('../../models/expiredTaskStep')
-const { object } = require('joi')
+const Installment = require('../../models/installment')
 
 const createFinancePlanning = data => {
   return FinancePlanning.create(data)
@@ -141,6 +141,14 @@ const updateExpiredTaskStepById = (id, data) => {
   return ExpiredTaskStep.findByIdAndUpdate(id, data)
 }
 
+const createInstallment = data => {
+  return Installment.create(data)
+}
+
+const updateInstallment = (id, data) => {
+  return Installment.findByIdAndUpdate(id, data)
+}
+
 module.exports = {
   updateFinancePlanning,
   getFinancePlanning,
@@ -149,5 +157,7 @@ module.exports = {
   getInvoicesByCustomerId,
   getExpiredTaskStepsByCustomerId,
   createExpiredTaskStep,
-  updateExpiredTaskStepById
+  updateExpiredTaskStepById,
+  createInstallment,
+  updateInstallment
 }

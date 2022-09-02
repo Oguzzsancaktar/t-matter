@@ -78,11 +78,22 @@ const getExpiredTaskSteps = async (req, res) => {
   }
 }
 
+const createInstallment = async (req, res) => {
+  const { body, params } = req
+  try {
+    const { startDate, deposit, quantity, payAmount } = body
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   getFinancePlanning,
   updateFinancePlanning,
   getInvoices,
   createInvoice,
   createExpiredTaskStep,
-  getExpiredTaskSteps
+  getExpiredTaskSteps,
+  createInstallment
 }
