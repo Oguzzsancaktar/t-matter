@@ -69,4 +69,26 @@ router.patch(
   controllers.dynamicVariableController.updateLocation
 )
 
+// JobTitles
+router.post(
+  '/jobTitle',
+  middlewares.validations.dynamicVariableValidations.createJobTitleValidation,
+  controllers.dynamicVariableController.createJobTitle
+)
+
+router.get('/jobTitle', controllers.dynamicVariableController.getJobTitles)
+router.get('/jobTitle/:id', controllers.dynamicVariableController.getJobTitleById)
+
+router.patch(
+  '/jobTitle/:id',
+  middlewares.validations.dynamicVariableValidations.updateJobTitleValidation,
+  controllers.dynamicVariableController.updateJobTitle
+)
+
+router.patch(
+  '/jobTitle/:id/status',
+  middlewares.validations.generalValidations.statusUpdateValidation,
+  controllers.dynamicVariableController.updateJobTitle
+)
+
 module.exports = router

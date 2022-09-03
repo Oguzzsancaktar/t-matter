@@ -173,7 +173,70 @@ const removeLocation = async (req, res) => {
   }
 }
 
+// JobTitle
+const createJobTitle = async (req, res) => {
+  const { body } = req
+  try {
+    await dataAccess.jobTitleDataAccess.createJobTitle(body)
+    res.sendStatus(StatusCodes.CREATED)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getJobTitles = async (req, res) => {
+  const { search, size, status } = req.query
+
+  try {
+    const checklists = await dataAccess.jobTitleDataAccess.getJobTitles({ search, size, status })
+    res.status(StatusCodes.OK).json(checklists)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getJobTitleById = async (req, res) => {
+  const { id } = req.params
+  try {
+    const checklist = await dataAccess.jobTitleDataAccess.findJobTitleById(id, '')
+    res.status(StatusCodes.OK).json(checklist)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const updateJobTitle = async (req, res) => {
+  const { _id, ...data } = req.body
+  try {
+    await dataAccess.jobTitleDataAccess.findByIdAndUpdateJobTitle(_id ? _id : req.params.id, data)
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const removeJobTitle = async (req, res) => {
+  const { id } = req.params
+  try {
+    await dataAccess.jobTitleDataAccess.findByIdAndUpdateJobTitle(id, { status: STATUS_TYPES.INACTIVE })
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
+  createJobTitle,
+  getJobTitles,
+  getJobTitleById,
+  updateJobTitle,
+  removeJobTitle,
+
   createLocation,
   getLocations,
   getLocationById,

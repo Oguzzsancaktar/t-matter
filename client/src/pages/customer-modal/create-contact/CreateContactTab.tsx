@@ -17,11 +17,15 @@ import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal, openModal } from '@/store'
-import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@/services/settings/company-planning/dynamicVariableService'
 import emptyQueryParams from '@/constants/queryParams'
 
 const CreateContactTab = () => {
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
   const [createCustomer] = useCreateCustomerMutation()
 
@@ -41,7 +45,10 @@ const CreateContactTab = () => {
     lastname: '',
     email: '',
     phone: '',
-    jobTitle: '',
+    jobTitle: {
+      _id: '',
+      name: ''
+    },
     refferedBy: {
       _id: '',
       name: '',
@@ -75,6 +82,7 @@ const CreateContactTab = () => {
             onInputChange={handleInputChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
+            onJobTitleChange={handleJobTitleChange}
           />
         )
 
@@ -102,6 +110,7 @@ const CreateContactTab = () => {
             onInputChange={handleInputChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
+            onJobTitleChange={handleJobTitleChange}
           />
         )
     }
@@ -182,6 +191,13 @@ const CreateContactTab = () => {
     const refBy = refferedByData?.find(rb => rb._id === option.value)
     if (refBy) {
       setCreateContactDTO({ ...createContactDTO, refferedBy: refBy })
+    }
+  }
+
+  const handleJobTitleChange = (option: IOption) => {
+    const jobTitle = jobTitleData?.find(jt => jt._id === option.value)
+    if (jobTitle) {
+      setCreateContactDTO({ ...createContactDTO, jobTitle: jobTitle })
     }
   }
 

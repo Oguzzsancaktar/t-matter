@@ -11,8 +11,11 @@ import {
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
 import emptyQueryParams from '@/constants/queryParams'
-import { EGender, ICustomerAddNew, IOption, IRefferedBy } from '@/models'
-import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import { EGender, ICustomerAddNew, IJobTitle, IOption, IRefferedBy } from '@/models'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@/services/settings/company-planning/dynamicVariableService'
 import { toastError } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import React, { useState } from 'react'
@@ -25,6 +28,7 @@ interface IProps {
 }
 const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onRemove }) => {
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
   const [newContact, setNewContact] = useState<ICustomerAddNew>({
     _id: '',
@@ -33,7 +37,10 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onR
     lastname: '',
     email: '',
     phone: '',
-    jobTitle: '',
+    jobTitle: {
+      _id: '',
+      name: ''
+    },
     refferedBy: {
       _id: '',
       name: '',
@@ -85,7 +92,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onR
       return false
     }
 
-    if (!isValueNull(newContact.jobTitle)) {
+    if (!isValueNull(newContact.jobTitle._id)) {
       toastError('Please enter a valid job title')
       tempValidationErrors.jobTitleError = true
       setValidationErrors(tempValidationErrors)
@@ -128,6 +135,13 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onR
     const refBy = refferedByData?.find(rb => rb._id === option.value)
     if (refBy) {
       setNewContact({ ...newContact, refferedBy: refBy })
+    }
+  }
+
+  const handleJobTitleChange = (option: IOption) => {
+    const jobTitle = jobTitleData?.find(jt => jt._id === option.value)
+    if (jobTitle) {
+      setNewContact({ ...newContact, jobTitle: jobTitle })
     }
   }
 
@@ -248,15 +262,18 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onR
 
           <JustifyBetweenRow width="100%">
             <ItemContainer>
-              <InputWithIcon
+              <SelectInput
                 children={<User size={16} />}
                 name="jobTitle"
-                placeholder="Enter job title..."
-                onChange={handleInputChange}
-                type="tel"
+                onChange={(option: IOption) => handleJobTitleChange(option)}
+                options={(jobTitleData || []).map((jobTitle: IJobTitle) => ({
+                  label: jobTitle.name,
+                  value: jobTitle._id
+                }))}
+                isLoading={jobTitleDataIsLoading}
                 labelText="Contact Job Title"
                 validationError={validationErrors.jobTitleError}
-                value={newContact.jobTitle}
+                selectedOption={[{ value: newContact.jobTitle._id, label: newContact.jobTitle.name }]}
               />
             </ItemContainer>
           </JustifyBetweenRow>

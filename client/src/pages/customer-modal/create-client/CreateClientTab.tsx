@@ -19,11 +19,15 @@ import moment from 'moment'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal, openModal } from '@/store'
-import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@/services/settings/company-planning/dynamicVariableService'
 import emptyQueryParams from '@/constants/queryParams'
 
 const CreateClientTab = () => {
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -41,7 +45,10 @@ const CreateClientTab = () => {
     customerType: 0,
     firstname: '',
     lastname: '',
-    jobTitle: '',
+    jobTitle: {
+      _id: '',
+      name: ''
+    },
     email: '',
     phone: '',
     birthplace: '',
@@ -89,6 +96,7 @@ const CreateClientTab = () => {
             onInputChange={handleInputChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
+            onJobTitleChange={handleJobTitleChange}
           />
         )
       case 1:
@@ -125,6 +133,7 @@ const CreateClientTab = () => {
             onInputChange={handleInputChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
+            onJobTitleChange={handleJobTitleChange}
           />
         )
     }
@@ -259,6 +268,13 @@ const CreateClientTab = () => {
     const refBy = refferedByData?.find(rb => rb._id === option.value)
     if (refBy) {
       setCreateClientDTO({ ...createClientDTO, refferedBy: refBy })
+    }
+  }
+
+  const handleJobTitleChange = (option: IOption) => {
+    const jobTitle = jobTitleData?.find(jt => jt._id === option.value)
+    if (jobTitle) {
+      setCreateClientDTO({ ...createClientDTO, jobTitle: jobTitle })
     }
   }
 

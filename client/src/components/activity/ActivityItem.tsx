@@ -7,6 +7,7 @@ interface IProps {
 }
 
 const ActivityItem: React.FC<IProps> = ({ activity }) => {
+  console.log(activity)
   return (
     <JustifyCenterRow width="100%" margin="0 0 16px 0">
       <UserImage

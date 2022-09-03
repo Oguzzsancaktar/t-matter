@@ -1,4 +1,4 @@
-import { ICustomer } from '@models/index'
+import { ICustomer, IQueryParams } from '@models/index'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
@@ -29,13 +29,16 @@ const createTask = (builder: IBuilder) => {
 }
 
 const getTasksByCustomerId = (builder: IBuilder) => {
-  return builder.query<ICustomerTask[], { customerId: ICustomer['_id']; isInvoiced?: boolean }>({
-    query({ customerId, isInvoiced }) {
+  return builder.query<ICustomerTask[], { customerId: ICustomer['_id']; isInvoiced?: boolean } & IQueryParams>({
+    query({ customerId, isInvoiced, search, size, status }) {
       return {
         url: `/task/customer/${customerId}`,
         method: 'GET',
         params: {
-          isInvoiced
+          isInvoiced,
+          search,
+          size,
+          status
         }
       }
     },

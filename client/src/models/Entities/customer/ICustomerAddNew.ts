@@ -1,4 +1,4 @@
-import { IRefferedBy, IRelativeType } from '@/models'
+import { IJobTitle, IRefferedBy, IRelativeType } from '@/models'
 
 export default interface ICustomerAddNew {
   _id: string
@@ -7,7 +7,7 @@ export default interface ICustomerAddNew {
   lastname: string
   email: string
   phone: string
-  jobTitle: string
+  jobTitle: Omit<IJobTitle, 'status'>
   refferedBy: IRefferedBy
   gender: number
   relativeType?: IRelativeType

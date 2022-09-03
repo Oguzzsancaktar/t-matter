@@ -30,6 +30,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
+  console.log(taskData)
+
   const [isTaskNotStarted, setIsTaskNotStarted] = useState(
     updatedTaskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length ===
       updatedTaskData?.steps.length
@@ -102,15 +104,17 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
   }
 
   const handleStepChange = (step: number) => {
-    if (isTaskNotStarted && step > activeStep) {
-      Swal.fire({
-        title: 'You can not go to next step',
-        text: 'You can not go to next step because you have not started this task',
-        icon: 'error'
-      })
-    } else {
-      setActiveStep(step)
-    }
+    // if (isTaskNotStarted && step > activeStep) {
+    //   Swal.fire({
+    //     title: 'You can not go to next step',
+    //     text: 'You can not go to next step because you have not started this task',
+    //     icon: 'error'
+    //   })
+    // } else {
+    //   setActiveStep(step)
+    // }
+
+    setActiveStep(step)
   }
 
   const handlePostponeChange = async (value: Date[], dateText: string) => {

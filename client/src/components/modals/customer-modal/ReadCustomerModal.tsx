@@ -180,7 +180,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
             <UserSkeletonLoader />
           ) : (
             <JustifyBetweenColumn height="100%" padding="1rem">
-              <ItemContainer height="200px">
+              <ItemContainer height="280px">
                 <JustifyBetweenColumn>
                   <ItemContainer
                     borderBottom={'1px solid ' + colors.white.primary}
@@ -200,12 +200,14 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
                         </Button>
                       </ItemContainer>
                     )}
-                    <JustifyCenterColumn>
-                      <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
-                    </JustifyCenterColumn>
+                    <ItemContainer margin="2rem 0">
+                      <JustifyCenterColumn>
+                        <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
+                      </JustifyCenterColumn>
+                    </ItemContainer>
                   </ItemContainer>
                   <ItemContainer>
-                    <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
+                    <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="2rem 0 1rem 0">
                       {customerData.firstname + ' ' + customerData.lastname}
                     </H1>
                   </ItemContainer>
@@ -226,7 +228,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
                 </JustifyBetweenColumn>
               </ItemContainer>
 
-              <ItemContainer height="calc(100% - 200px - 40px - 1rem)">
+              <ItemContainer height="calc(100% - 200px - 40px - 1rem )">
                 <JustifyBetweenColumn>
                   <ItemContainer margin="0.5rem 0">
                     <JustifyCenterRow>

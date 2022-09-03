@@ -67,11 +67,7 @@ const ReliableSlider: React.FC<IProps> = ({ customerId, activeIndex, onActiveSte
         <JustifyBetweenColumn>
           <ItemContainer
             padding="1rem 0"
-            borderBottom={'1px solid ' + colors.gray.secondary}
             borderTop={'1px solid ' + colors.gray.secondary}
-            borderLeft={'1px solid ' + colors.gray.secondary}
-            borderRight={'1px solid ' + colors.gray.secondary}
-            borderRadius={'0.3rem 0.3rem 0.3rem 0.3rem'}
             onClick={() => handleReliableClick(customer._id)}
           >
             <JustifyBetweenRow>
@@ -79,7 +75,7 @@ const ReliableSlider: React.FC<IProps> = ({ customerId, activeIndex, onActiveSte
                 <JustifyBetweenColumn>
                   <JustifyCenterRow>
                     <ItemContainer width="auto">
-                      <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
+                      <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
                         {customer?.firstname + ' ' + customer?.lastname}
                       </H1>
                     </ItemContainer>

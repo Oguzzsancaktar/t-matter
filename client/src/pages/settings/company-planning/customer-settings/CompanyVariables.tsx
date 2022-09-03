@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { Column, ItemContainer, Row, Tab } from '@components/index'
 import { ClientTypeTab, LocationsTab, RefferedByTab, RelativeTypeTab } from '@/pages'
 import colors from '@/constants/colors'
+import { JobTitleTab } from './job-title-tab'
 
-const CustomerSettings = () => {
+const CompanyVariables = () => {
   const [activeTab, setActiveTab] = useState('reffered-by')
 
   return (
@@ -45,6 +46,13 @@ const CustomerSettings = () => {
               isActive={activeTab === 'locations'}
               onClick={() => setActiveTab('locations')}
             />
+            <Tab
+              margin="0 0 1rem 0rem"
+              index={3}
+              name="Job Titles"
+              isActive={activeTab === 'job-title'}
+              onClick={() => setActiveTab('job-title')}
+            />
           </Column>
         </ItemContainer>
 
@@ -57,6 +65,8 @@ const CustomerSettings = () => {
             <RelativeTypeTab />
           ) : activeTab === 'locations' ? (
             <LocationsTab />
+          ) : activeTab === 'job-title' ? (
+            <JobTitleTab />
           ) : (
             ''
           )}
@@ -66,4 +76,4 @@ const CustomerSettings = () => {
   )
 }
 
-export default CustomerSettings
+export default CompanyVariables

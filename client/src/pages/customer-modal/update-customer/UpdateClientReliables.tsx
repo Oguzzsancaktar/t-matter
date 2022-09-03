@@ -1,5 +1,5 @@
 import { Button, ItemContainer, JustifyBetweenRow, Row, UserBadge } from '@/components'
-import UpdateContactCustomerSearchModal from '@/components/modals/customer-modal/UpdateContactCustomerSearchModal'
+import UpdateClientCustomerSearchModal from '@/components/modals/customer-modal/UpdateClientCustomerSearchModal'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerUpdateDTO } from '@/models'
@@ -9,23 +9,23 @@ import React, { useState } from 'react'
 import { X } from 'react-feather'
 
 interface IProps {
-  updateContactDTO: ICustomerUpdateDTO
+  updateClientDTO: ICustomerUpdateDTO
   onAdd: (id: ICustomer) => void
   onRemovePastReliable: (id: ICustomer) => void
   onRemoveNewReliable: (id: ICustomerAddNew) => void
 }
 
 const UpdateClientReliables: React.FC<IProps> = ({
-  updateContactDTO,
+  updateClientDTO,
   onAdd,
   onRemovePastReliable,
   onRemoveNewReliable
 }) => {
   const { data: customerReliablesData, isLoading: customerReliablesIsLoading } = useGetCustomerReliablesQuery(
-    updateContactDTO._id
+    updateClientDTO._id
   )
 
-  const [updatedReliableList, setUpdatedReliableList] = useState(updateContactDTO.reliableCustomers)
+  const [updatedReliableList, setUpdatedReliableList] = useState(updateClientDTO.reliableCustomers)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -33,9 +33,9 @@ const UpdateClientReliables: React.FC<IProps> = ({
   const handleOpenAddReliableSearchModal = () => {
     dispatch(
       openModal({
-        id: `updateContactCustomerSearchModal-${updateContactDTO._id}`,
+        id: `updateClientCustomerSearchModal-${updateClientDTO._id}`,
         title: `Customer Search Reliable Modal`,
-        body: <UpdateContactCustomerSearchModal handleAdd={customer => onAdd(customer)} />,
+        body: <UpdateClientCustomerSearchModal handleAdd={customer => onAdd(customer)} />,
         width: ESize.WMedium,
         height: ESize.HMedium,
         maxWidth: ESize.WMedium
@@ -51,7 +51,7 @@ const UpdateClientReliables: React.FC<IProps> = ({
             {!customerReliablesIsLoading &&
               customerReliablesData &&
               customerReliablesData.length > 0 &&
-              updateContactDTO.reliableCustomers.length > 0 && (
+              updateClientDTO.reliableCustomers.length > 0 && (
                 <Row>
                   {customerReliablesData.map((reliable, index) =>
                     updatedReliableList.map(updatedReliable => {
@@ -92,9 +92,9 @@ const UpdateClientReliables: React.FC<IProps> = ({
                 </Row>
               )}
 
-            {updateContactDTO.reliableInCompany && (
+            {updateClientDTO.reliableInCompany && (
               <Row>
-                {(updateContactDTO.reliableInCompany || []).map((reliable, index) => (
+                {(updateClientDTO.reliableInCompany || []).map((reliable, index) => (
                   <ItemContainer
                     key={index}
                     minWidth="300px"

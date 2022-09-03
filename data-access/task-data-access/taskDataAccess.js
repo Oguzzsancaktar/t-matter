@@ -59,12 +59,14 @@ const taskPopulatePipe = [
       startDate: { $first: '$startDate' },
       totalPrice: { $first: '$totalPrice' },
       index: { $first: '$index' },
-      isInvoiced: { $first: '$isInvoiced' }
+      isInvoiced: { $first: '$isInvoiced' },
+      status: { $first: '$status' }
     }
   },
+  // TODO created At gelmiyor
   {
     $sort: {
-      createdAt: -1
+      startDate: -1
     }
   }
 ]
@@ -73,10 +75,18 @@ const createTask = data => {
   return Task.create(data)
 }
 
-const getCustomerTasks = ({ customerId, isInvoiced }) => {
+const getCustomerTasks = ({ customerId, isInvoiced, search, size, status }) => {
   const $match = {
     customer: mongoose.Types.ObjectId(customerId)
   }
+
+  if (search) {
+    $match.name = { $regex: search, $options: 'i' }
+  }
+  if (status && status !== '-9') {
+    $match.status = { $eq: +status }
+  }
+
   if (isInvoiced) {
     $match.isInvoiced = isInvoiced === 'true'
   }

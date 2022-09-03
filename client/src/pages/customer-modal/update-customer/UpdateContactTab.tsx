@@ -3,7 +3,10 @@ import { Button, Column, ItemContainer, JustifyBetweenColumn, RelateByModal } fr
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerUpdateDTO, IOption, IRelativeType } from '@/models'
 import { UpdateContactInfo, UpdateContactReliables } from '@/pages'
-import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@/services/settings/company-planning/dynamicVariableService'
 import { closeModal, openModal } from '@/store'
 import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isEmailValid, isValueNull } from '@/utils/validationUtils'
@@ -17,6 +20,7 @@ interface IProps {
 const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
   const [updateCustomer] = useUpdateCustomerMutation()
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -71,7 +75,7 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
       return false
     }
 
-    if (!isValueNull(updateContactDTO.jobTitle)) {
+    if (!isValueNull(updateContactDTO.jobTitle._id)) {
       toastError('Please enter a valid job title')
       setValidationErrors({ ...validationErrors, jobTitleError: true })
       return false
@@ -102,6 +106,13 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     const refBy = refferedByData?.find(rb => rb._id === option.value)
     if (refBy) {
       setUpdateContactDTO({ ...updateContactDTO, refferedBy: refBy })
+    }
+  }
+
+  const handleJobTitleChange = (option: IOption) => {
+    const jobTitle = jobTitleData?.find(jt => jt._id === option.value)
+    if (jobTitle) {
+      setUpdateContactDTO({ ...updateContactDTO, jobTitle: jobTitle })
     }
   }
 
@@ -202,6 +213,7 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
             onInputChange={handleInputChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
+            onJobTitleChange={handleJobTitleChange}
           />
         </ItemContainer>
         <Column>

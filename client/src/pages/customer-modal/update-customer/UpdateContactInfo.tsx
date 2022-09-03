@@ -1,9 +1,12 @@
 import React from 'react'
 import { InputWithIcon, ItemContainer, JustifyBetweenColumn, JustifyBetweenRow, SelectInput } from '@/components'
 import { genderOptions } from '@/constants/genders'
-import { IOption, IRefferedBy, EGender, ICustomerCreateDTO } from '@/models'
+import { IOption, IRefferedBy, EGender, ICustomerCreateDTO, IJobTitle } from '@/models'
 import { User } from 'react-feather'
-import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@/services/settings/company-planning/dynamicVariableService'
 import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
@@ -12,6 +15,7 @@ interface IProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onGenderChange: (option: IOption) => void
   onRefferTypeChange: (option: IOption) => void
+  onJobTitleChange: (option: IOption) => void
 }
 
 const UpdateContactInfo: React.FC<IProps> = ({
@@ -19,9 +23,11 @@ const UpdateContactInfo: React.FC<IProps> = ({
   updateContactDTO,
   onInputChange,
   onGenderChange,
-  onRefferTypeChange
+  onRefferTypeChange,
+  onJobTitleChange
 }) => {
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
   return (
     <ItemContainer>
@@ -117,15 +123,18 @@ const UpdateContactInfo: React.FC<IProps> = ({
 
           <JustifyBetweenRow width="100%" margin="1rem 0">
             <ItemContainer>
-              <InputWithIcon
+              <SelectInput
                 children={<User size={16} />}
                 name="jobTitle"
-                placeholder="Enter job title..."
-                onChange={onInputChange}
-                type="tel"
+                onChange={(option: IOption) => onJobTitleChange(option)}
+                options={(jobTitleData || []).map((jobTitle: IJobTitle) => ({
+                  label: jobTitle.name,
+                  value: jobTitle._id
+                }))}
+                isLoading={jobTitleDataIsLoading}
                 labelText="Job Title"
                 validationError={validationErrors.jobTitleError}
-                value={updateContactDTO.jobTitle}
+                selectedOption={[{ value: updateContactDTO.jobTitle._id, label: updateContactDTO.jobTitle.name }]}
               />
             </ItemContainer>
           </JustifyBetweenRow>

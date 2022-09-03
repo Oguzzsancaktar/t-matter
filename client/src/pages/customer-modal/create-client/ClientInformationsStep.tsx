@@ -2,10 +2,13 @@ import React from 'react'
 import { InputWithIcon, SelectInput } from '@/components/input'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@/components/layout'
 import { ItemContainer } from '@/components'
-import { EGender, ICustomerCreateDTO, IOption, IRefferedBy } from '@/models'
+import { EGender, ICustomerCreateDTO, IJobTitle, IOption, IRefferedBy } from '@/models'
 import { User } from 'react-feather'
 import { genderOptions } from '@/constants/genders'
-import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@/services/settings/company-planning/dynamicVariableService'
 import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
@@ -14,6 +17,7 @@ interface IProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onGenderChange: (option: IOption) => void
   onRefferTypeChange: (option: IOption) => void
+  onJobTitleChange: (option: IOption) => void
 }
 
 const ClientInformationsStep: React.FC<IProps> = ({
@@ -21,9 +25,11 @@ const ClientInformationsStep: React.FC<IProps> = ({
   createClientDTO,
   onInputChange,
   onGenderChange,
-  onRefferTypeChange
+  onRefferTypeChange,
+  onJobTitleChange
 }) => {
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
   return (
     <JustifyBetweenColumn height="100%">
@@ -116,15 +122,18 @@ const ClientInformationsStep: React.FC<IProps> = ({
         </JustifyBetweenRow>
         <JustifyBetweenRow width="100%">
           <ItemContainer margin="0 0 0 0">
-            <InputWithIcon
+            <SelectInput
               children={<User size={16} />}
               name="jobTitle"
-              placeholder="Enter phone job Title..."
-              onChange={onInputChange}
-              type="text"
+              onChange={(option: IOption) => onJobTitleChange(option)}
+              options={(jobTitleData || []).map((jobTitle: IJobTitle) => ({
+                label: jobTitle.name,
+                value: jobTitle._id
+              }))}
+              isLoading={jobTitleDataIsLoading}
               labelText="Job Title"
               validationError={validationErrors.jobTitleError}
-              value={createClientDTO.jobTitle}
+              selectedOption={[{ value: createClientDTO.jobTitle._id, label: createClientDTO.jobTitle.name }]}
             />
           </ItemContainer>
         </JustifyBetweenRow>

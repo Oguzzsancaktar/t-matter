@@ -13,10 +13,12 @@ interface IProps {
   name: string
   labelText?: string | null
   enableTime?: boolean
+  placeholder?: string
   validationError?: boolean
-  value?: Date | string
+  value?: Date | string | number
   disabled?: boolean
   dateFormat?: string
+  minDate?: number
   onChange: (value: Date[], dateText: string) => void
 }
 
@@ -29,10 +31,12 @@ const DatePicker: React.FC<IProps> = ({
   name,
   value = '',
   enableTime = false,
+  placeholder = 'Select Birthday...',
   disabled,
   labelText,
   validationError,
   dateFormat = 'M/d/Y',
+  minDate,
   onChange
 }) => {
   const [date, setDate] = useState(value)
@@ -58,12 +62,13 @@ const DatePicker: React.FC<IProps> = ({
               <Flatpickr
                 options={{
                   enableTime: enableTime,
-                  dateFormat: dateFormat
+                  dateFormat: dateFormat,
+                  minDate: minDate
                 }}
                 disabled={disabled}
                 value={date}
                 onChange={handleDateChange}
-                placeholder="Select birhday"
+                placeholder={placeholder}
               />
             </Row>
           </Container>

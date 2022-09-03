@@ -1,7 +1,7 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { ILocation, IQueryParams, IRefferedBy, IRelativeType } from '@/models'
+import { IJobTitle, ILocation, IQueryParams, IRefferedBy, IRelativeType } from '@/models'
 
 const DYNAMIC_VARIABLES_API_REDUCER_PATH = 'dynamicVariablesApi'
 const DYNAMIC_VARIABLES_TAG = 'dynamicVariablesTag'
@@ -240,6 +240,82 @@ const updateLocationStatus = (builder: IBuilder) => {
   })
 }
 
+// JobTitle
+const createJobTitle = (builder: IBuilder) => {
+  return builder.mutation<string, Pick<IJobTitle, 'name'>>({
+    query(dto) {
+      return {
+        url: '/dynamic-variables/jobTitle',
+        method: 'POST',
+        data: dto
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getJobTitles = (builder: IBuilder) => {
+  return builder.query<IJobTitle[], IQueryParams>({
+    query({ search = '', size, status = 1 }) {
+      return {
+        url: `/dynamic-variables/jobTitle?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getJobTitleById = (builder: IBuilder) => {
+  return builder.query<IJobTitle, IJobTitle['_id']>({
+    query(id) {
+      return {
+        url: `/dynamic-variables/jobTitle/${id}`,
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const patchJobTitle = (builder: IBuilder) => {
+  return builder.mutation<IJobTitle, Omit<IJobTitle, 'status'>>({
+    query(dto) {
+      return {
+        url: `/dynamic-variables/jobTitle/${dto._id}`,
+        method: 'PATCH',
+        data: { name: dto.name }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const updateJobTitleStatus = (builder: IBuilder) => {
+  return builder.mutation<any, Omit<IJobTitle, 'name'>>({
+    query(dto) {
+      return {
+        url: `/dynamic-variables/jobTitle/${dto._id}/status`,
+        method: 'PATCH',
+        data: { status: dto.status }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
 const dynamicVariablesApi = createApi({
   reducerPath: DYNAMIC_VARIABLES_API_REDUCER_PATH,
   tagTypes: [DYNAMIC_VARIABLES_TAG],
@@ -261,7 +337,13 @@ const dynamicVariablesApi = createApi({
     getRelativeTypes: getRelativeTypes(builder),
     getRelativeTypeById: getRelativeTypeById(builder),
     patchRelativeType: patchRelativeType(builder),
-    updateRelativeTypeStatus: updateRelativeTypeStatus(builder)
+    updateRelativeTypeStatus: updateRelativeTypeStatus(builder),
+
+    createJobTitle: createJobTitle(builder),
+    getJobTitles: getJobTitles(builder),
+    getJobTitleById: getJobTitleById(builder),
+    patchJobTitle: patchJobTitle(builder),
+    updateJobTitleStatus: updateJobTitleStatus(builder)
   })
 })
 
@@ -282,7 +364,13 @@ const {
   useGetRelativeTypeByIdQuery,
   usePatchRelativeTypeMutation,
   useUpdateRelativeTypeStatusMutation,
-  useCreateRelativeTypeMutation
+  useCreateRelativeTypeMutation,
+
+  useGetJobTitlesQuery,
+  useGetJobTitleByIdQuery,
+  usePatchJobTitleMutation,
+  useUpdateJobTitleStatusMutation,
+  useCreateJobTitleMutation
 } = dynamicVariablesApi
 
 export {
@@ -301,5 +389,10 @@ export {
   useGetRelativeTypeByIdQuery,
   usePatchRelativeTypeMutation,
   useUpdateRelativeTypeStatusMutation,
-  useCreateRelativeTypeMutation
+  useCreateRelativeTypeMutation,
+  useGetJobTitlesQuery,
+  useGetJobTitleByIdQuery,
+  usePatchJobTitleMutation,
+  useUpdateJobTitleStatusMutation,
+  useCreateJobTitleMutation
 }

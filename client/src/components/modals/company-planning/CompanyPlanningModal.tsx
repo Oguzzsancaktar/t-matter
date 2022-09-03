@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Column, ItemContainer, JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
 
 import { Tab } from '@components/index'
-import { CompanyPricing, CustomerSettings, SalarySettings } from '@/pages'
+import { CompanyPricing, CompanyVariables, SalarySettings } from '@/pages'
 import { ModalBody, ModalHeader } from '../types'
 
 const CompanyPlanningModal = () => {
@@ -46,7 +46,7 @@ const CompanyPlanningModal = () => {
           ) : activeTab === 'company-pricing' ? (
             <CompanyPricing />
           ) : (
-            <CustomerSettings />
+            <CompanyVariables />
           )}
         </ItemContainer>
       </ModalBody>
