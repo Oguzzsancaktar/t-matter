@@ -1,4 +1,4 @@
-const JobTitle = require('../../models/dynamic-variables/JobTitle')
+const JobTitle = require('../../models/dynamic-variables/jobTitle')
 
 // JobTitle
 const createJobTitle = data => {
