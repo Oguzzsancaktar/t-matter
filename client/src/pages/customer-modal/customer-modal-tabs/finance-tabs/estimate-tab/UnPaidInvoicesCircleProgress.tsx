@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 import colors from '@constants/colors'
 import {
-  useGetExpiredTaskStepsQuery,
   useGetFinancePlanningQuery,
   useGetInvoicesQuery
 } from '@services/settings/finance-planning/financePlanningService'
 import { ICustomer } from '@/models'
-import { useGetTasksByCustomerIdQuery } from '@services/customers/taskService'
 
 interface IProps {
   customerId: ICustomer['_id']
@@ -23,6 +21,14 @@ const UnPaidInvoicesCircleProgress: React.FC<IProps> = ({ customerId }) => {
       width: 200,
       type: 'radialBar',
       offsetY: 0
+    },
+    title: {
+      text: 'Un Paid',
+      align: 'center',
+      style: {
+        fontSize: '12px',
+        color: colors.text.primary
+      }
     },
     plotOptions: {
       radialBar: {
@@ -59,7 +65,7 @@ const UnPaidInvoicesCircleProgress: React.FC<IProps> = ({ customerId }) => {
     stroke: {
       dashArray: 4
     },
-    labels: ['Un Paid']
+    labels: ['']
   })
   const [series, setSeries] = useState([0])
 

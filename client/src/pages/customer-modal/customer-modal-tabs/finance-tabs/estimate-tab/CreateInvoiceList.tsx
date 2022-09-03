@@ -33,8 +33,8 @@ const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks, expiredTaskSt
           <div
             style={{
               marginTop: '1rem',
-              height: 253,
-              maxHeight: 253,
+              height: 300,
+              maxHeight: 300,
               overflowY: 'auto',
               backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
             }}

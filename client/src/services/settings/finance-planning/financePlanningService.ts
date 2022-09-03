@@ -151,11 +151,14 @@ const getInvoices = (builder: IBuilder) => {
 }
 
 const getExpiredTaskSteps = (builder: IBuilder) => {
-  return builder.query<IExpiredTaskStep[], ICustomer['_id']>({
+  return builder.query<IExpiredTaskStep[], { customerId: ICustomer['_id']; isInvoiced?: boolean }>({
     query(args) {
       return {
-        url: '/finance/invoice/expired/' + args,
-        method: 'GET'
+        url: '/finance/invoice/expired/' + args.customerId,
+        method: 'GET',
+        params: {
+          isInvoiced: args.isInvoiced
+        }
       }
     },
     providesTags(result) {

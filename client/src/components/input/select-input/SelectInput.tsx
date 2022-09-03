@@ -17,6 +17,7 @@ interface IProps {
   name: string
   options: any[]
   menuPlacement?: 'auto' | 'top' | 'bottom'
+  placeHolder?: string
 }
 
 const SelectInput: React.FC<IProps> = ({
@@ -31,10 +32,13 @@ const SelectInput: React.FC<IProps> = ({
   labelText,
   onChange,
   options,
-  menuPlacement
+  menuPlacement,
+  placeHolder
 }) => {
   const selectedValues = selectedOption?.map(
-    op => options?.find(option => option.value === op.value) || (isMulti ? [] : { label: 'Select Option', value: '' })
+    op =>
+      options?.find(option => option.value === op.value) ||
+      (isMulti ? [] : { label: placeHolder ? placeHolder : 'Select Option', value: '' })
   )
 
   return (
@@ -46,7 +50,7 @@ const SelectInput: React.FC<IProps> = ({
       )}
 
       <Select
-        placeholder="Select an option"
+        placeholder={placeHolder ? placeHolder : 'Select an option'}
         className={`react-basic-single ${validationError && 'input-validation-error'}`}
         classNamePrefix="select"
         options={options}
