@@ -35,8 +35,6 @@ const DataTableHeader: React.FC<IProps> = ({
     }
   }
 
-  console.log(status)
-
   return (
     <JustifyBetweenRow margin="0 0 0.5rem 0" height="40px">
       <Row>

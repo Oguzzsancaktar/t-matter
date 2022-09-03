@@ -78,22 +78,28 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
     console.log(tempSelectedWorkflow)
   }
 
-  const handleRemoveStep = (selectedOptions: IOption[]) => {
+  const handleStepChange = (selectedOptions: IOption[]) => {
     const tempselectedWorkflow = { ...selectedWorkflow }
 
-    let removedIndex
-    for (let k = 0; k < selectedWorkflow.steps.length; k++) {
-      const result = selectedOptions.find(option => +option.value === k)
-      if (result === undefined) {
-        removedIndex = k
-      }
+    console.log(tempselectedWorkflow, selectedOptions)
+
+    let wfSteps: ITaskCreateDTO[] = []
+
+    if (workflowData) {
+      workflowData.steps.map(step => {
+        for (let k = 0; k < selectedOptions.length; k++) {
+          const option = selectedOptions[k]
+          if (step.category._id === option.value) {
+            wfSteps.push(step)
+          }
+        }
+      })
     }
 
-    tempselectedWorkflow.steps.splice(removedIndex, 1)
+    tempselectedWorkflow.steps = wfSteps
 
-    console.log(tempselectedWorkflow)
     if (tempselectedWorkflow.steps.length > 0) {
-      // setselectedWorkflow(tempselectedWorkflow)
+      setSelectedWorkflow(tempselectedWorkflow)
     } else {
       toastError('Task have to min 1 step')
     }
@@ -246,14 +252,14 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
               isLoading={workflowIsLoading}
               name="workflowSteps"
               isDisabled={!(selectedWorkflowPlanId.trim().length > 0)}
-              onChange={option => handleRemoveStep(option)}
+              onChange={option => handleStepChange(option)}
               isClearable={false}
               selectedOption={(selectedWorkflow?.steps || []).map((step, index) => ({
-                value: index.toString(),
+                value: step.category._id,
                 label: step.category.name
               }))}
               options={(workflowData?.steps || []).map((step, index) => ({
-                value: index.toString(),
+                value: step.category._id,
                 label: step.category.name
               }))}
               labelText="Workflow Steps"
