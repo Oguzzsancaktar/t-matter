@@ -70,7 +70,10 @@ const createExpiredTaskStep = async (req, res) => {
 
 const getExpiredTaskSteps = async (req, res) => {
   try {
-    const expiredTaskSteps = await dataAccess.financeDataAccess.getExpiredTaskStepsByCustomerId(req.params.customerId)
+    const expiredTaskSteps = await dataAccess.financeDataAccess.getExpiredTaskStepsByCustomerId({
+      customerId: req.params.customerId,
+      isInvoiced: req.query.isInvoiced
+    })
     res.json(expiredTaskSteps)
   } catch (e) {
     console.log(e)

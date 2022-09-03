@@ -18,13 +18,24 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId }) => {
     customerId,
     isInvoiced: false
   })
-  const { data: expiredTaskSteps, isLoading: isExpiredTaskStepsLoading } = useGetExpiredTaskStepsQuery(customerId)
+  const { data: expiredTaskSteps, isLoading: isExpiredTaskStepsLoading } = useGetExpiredTaskStepsQuery({
+    customerId,
+    isInvoiced: false
+  })
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
       height: 200,
       type: 'radialBar',
       offsetY: 0,
       width: 200
+    },
+    title: {
+      text: 'Non Billable',
+      align: 'center',
+      style: {
+        fontSize: '12px',
+        color: colors.text.primary
+      }
     },
     plotOptions: {
       radialBar: {
@@ -61,7 +72,7 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId }) => {
     stroke: {
       dashArray: 4
     },
-    labels: ['Non Billable']
+    labels: ['']
   })
   const [series, setSeries] = useState([0])
 

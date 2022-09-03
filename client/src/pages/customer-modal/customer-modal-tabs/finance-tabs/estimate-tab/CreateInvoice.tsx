@@ -67,7 +67,7 @@ const CreateInvoice: React.FC<IProps> = ({
             selectedOption={
               invoice?.category ? [{ label: invoice.category.name, value: invoice.category._id as string }] : []
             }
-            labelText="Category"
+            placeHolder="Select Category"
             onChange={onChange}
             name="invoice.category"
             options={
@@ -83,40 +83,37 @@ const CreateInvoice: React.FC<IProps> = ({
         <JustifyBetweenRow margin="0 0 0 0.5rem">
           <InputWithIcon
             disabled
-            labelText="Amount"
             placeholder="Amount"
             onBlur={() => console.log('blue')}
             children={<DollarSign size="16px" />}
             name="amount"
             type="number"
-            value={invoice?.amount}
+            value={invoice?.amount ? invoice?.amount : undefined}
           />
         </JustifyBetweenRow>
       </JustifyBetweenRow>
       <JustifyBetweenRow margin="0.5rem 0 0 0">
         <JustifyBetweenRow>
           <InputWithIcon
-            labelText="Discount"
             placeholder="Discount"
             onBlur={() => console.log('blue')}
             children={<DollarSign size="16px" />}
             name="discount"
             type="number"
             onChange={handleInputChange}
-            value={invoice?.discount}
+            value={invoice?.discount ? invoice?.discount : undefined}
           />
         </JustifyBetweenRow>
         <JustifyBetweenRow margin="0 0 0 0.5rem">
           <InputWithIcon
             disabled
-            labelText="Total"
             placeholder="Total"
             onBlur={() => console.log('blue')}
             children={<DollarSign size="16px" />}
             name="total"
             type="number"
             onChange={handleInputChange}
-            value={invoice?.total}
+            value={invoice?.total ? invoice?.total : undefined}
           />
         </JustifyBetweenRow>
       </JustifyBetweenRow>

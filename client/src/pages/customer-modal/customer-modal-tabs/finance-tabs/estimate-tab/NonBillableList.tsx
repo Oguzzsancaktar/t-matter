@@ -25,8 +25,8 @@ const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
           <div
             style={{
               marginTop: '1rem',
-              height: 225,
-              maxHeight: 225,
+              height: 170,
+              maxHeight: 170,
               overflowY: 'auto',
               backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
             }}

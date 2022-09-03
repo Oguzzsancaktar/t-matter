@@ -11,7 +11,9 @@ import {
   CreateInvoice,
   ExpiredTaskStepList,
   NonBillableCircleProgress,
-  UnPaidInvoicesCircleProgress
+  UnPaidInvoicesCircleProgress,
+  InvoicesDonut,
+  AdditionalTimeDonut
 } from '@/pages'
 import { useGetTasksByCustomerIdQuery, useReorderTasksMutation } from '@services/customers/taskService'
 import { ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
@@ -24,6 +26,7 @@ import {
 } from '@services/settings/finance-planning/financePlanningService'
 import emptyQueryParams from '@constants/queryParams'
 import { invoiceDefault } from '@constants/finance'
+import invoicesDonut from '@pages/customer-modal/customer-modal-tabs/finance-tabs/estimate-tab/InvoicesDonut'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -54,7 +57,7 @@ const EstimateTab = ({ customerId }) => {
     data: expiredTaskSteps,
     isLoading: isExpiredTaskStepsLoading,
     refetch: r2
-  } = useGetExpiredTaskStepsQuery(customerId)
+  } = useGetExpiredTaskStepsQuery({ customerId, isInvoiced: false })
 
   const [state, setState] = useState<IState>({
     createInvoiceTasks: [],
@@ -197,15 +200,10 @@ const EstimateTab = ({ customerId }) => {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1rem' }}>
       <JustifyCenterRow margin="0 0 1rem 0" height="235px">
-        <Bordered margin="0 4px 0 0" width="66%">
-          <H1 color={colors.text.primary}>Invoices</H1>
-          <Column height="100%">
-            <InvoicesBarChart onSelectBar={invoice => setOpenInvoice(invoice)} customerId={customerId} />
-          </Column>
-        </Bordered>
-        <Bordered margin="0 0 0 8px" width="33%">
-          <H1 color={colors.text.primary}>Non billable</H1>
+        <Bordered width="100%">
           <JustifyBetweenRow height="100%">
+            <InvoicesDonut onSelect={i => setOpenInvoice(i)} customerId={customerId} />
+            <AdditionalTimeDonut customerId={customerId} />
             <NonBillableCircleProgress customerId={customerId} />
             <UnPaidInvoicesCircleProgress customerId={customerId} />
           </JustifyBetweenRow>
@@ -219,7 +217,7 @@ const EstimateTab = ({ customerId }) => {
           </Bordered>
           <div style={{ margin: '0 12px 0 0', width: '33%' }}>
             <Bordered style={{ marginBottom: 8 }}>
-              <H1 color={colors.text.primary}>Expire time limit</H1>
+              <H1 color={colors.text.primary}>Additional time</H1>
               <ExpiredTaskStepList expiredTaskSteps={expiredTaskStepsState.nonBillable} />
             </Bordered>
             <Bordered>
@@ -228,7 +226,7 @@ const EstimateTab = ({ customerId }) => {
             </Bordered>
           </div>
           <Bordered width="33%">
-            <H1 color={colors.text.primary}>Create invoice</H1>
+            <H1 color={colors.text.primary}>New invoice</H1>
             <CreateInvoiceList
               expiredTaskSteps={expiredTaskStepsState.createInvoice}
               createInvoiceTasks={state.createInvoiceTasks}

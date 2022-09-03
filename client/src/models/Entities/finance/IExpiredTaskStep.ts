@@ -1,4 +1,4 @@
-import { ICustomer, ICustomerTask } from '@/models'
+import { ICustomer, ICustomerTask, IUser } from '@/models'
 
 interface IExpiredTaskStep {
   _id: string
@@ -7,6 +7,7 @@ interface IExpiredTaskStep {
   expiredTimePrice: number
   task: ICustomerTask
   customer: ICustomer
+  user: IUser
   index: number
   isInvoiced: boolean
 }

@@ -25,8 +25,8 @@ const ExpiredTaskStepList: React.FC<IProps> = ({ expiredTaskSteps }) => {
           <div
             style={{
               marginTop: '1rem',
-              height: 118,
-              maxHeight: 118,
+              height: 170,
+              maxHeight: 170,
               overflowY: 'auto',
               backgroundColor: snapshot.isDraggingOver ? colors.background.gray.light : 'transparent'
             }}

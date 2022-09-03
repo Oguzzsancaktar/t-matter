@@ -16,6 +16,10 @@ const expiredTaskStepSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'tasks'
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'users'
+    },
     customer: {
       type: Schema.Types.ObjectId,
       ref: 'customers'

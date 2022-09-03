@@ -112,13 +112,16 @@ const createExpiredTaskStep = data => {
   return ExpiredTaskStep.create(data)
 }
 
-const getExpiredTaskStepsByCustomerId = customerId => {
+const getExpiredTaskStepsByCustomerId = ({ customerId, isInvoiced }) => {
+  const $match = {
+    customer: mongoose.Types.ObjectId(customerId)
+  }
+  if (isInvoiced) {
+    $match.isInvoiced = { $eq: isInvoiced === 'true' }
+  }
   return ExpiredTaskStep.aggregate([
     {
-      $match: {
-        isInvoiced: false,
-        customer: mongoose.Types.ObjectId(customerId)
-      }
+      $match
     },
     {
       $lookup: {
@@ -129,8 +132,36 @@ const getExpiredTaskStepsByCustomerId = customerId => {
       }
     },
     {
+      $lookup: {
+        from: 'customers',
+        localField: 'customer',
+        foreignField: '_id',
+        as: 'customer'
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    {
       $unwind: {
         path: '$task',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $unwind: {
+        path: '$customer',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $unwind: {
+        path: '$user',
         preserveNullAndEmptyArrays: true
       }
     }
