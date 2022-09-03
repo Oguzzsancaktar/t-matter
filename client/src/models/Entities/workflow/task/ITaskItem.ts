@@ -7,8 +7,8 @@ export default interface ITaskItem {
   location: Omit<ILocation, 'status'>
   tabs: string[]
   responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
-  startDate: string
-  endDate: string
+  startDate: number
+  endDate: number
   stepColor: string
   stepStatus: number
 

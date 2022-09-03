@@ -123,6 +123,46 @@ const updateLocationValidation = async (req, res, next) => {
   }
 }
 
+// Job Title
+const jobTitleValidationSchema = {
+  name: joi.string().required()
+}
+
+const createJobTitleValidation = async (req, res, next) => {
+  const { body } = req
+  const schema = joi.object({ ...jobTitleValidationSchema })
+
+  try {
+    await schema.validateAsync(body)
+    next()
+  } catch (error) {
+    res.status(400).json(
+      utils.errorUtils.errorInstance({
+        message: error.message,
+        validationError: error.details
+      })
+    )
+  }
+}
+
+const updateJobTitleValidation = async (req, res, next) => {
+  const { id } = req.params
+  const { body } = req
+  const schema = joi.object({ ...jobTitleValidationSchema, id: joi.string().required() })
+
+  try {
+    await schema.validateAsync({ ...body, id })
+    next()
+  } catch (error) {
+    res.status(400).json(
+      utils.errorUtils.errorInstance({
+        message: error.message,
+        validationError: error.details
+      })
+    )
+  }
+}
+
 module.exports = {
   createLocationValidation,
   updateLocationValidation,
@@ -131,5 +171,8 @@ module.exports = {
   updateRefferedByValidation,
 
   createRelativeTypeValidation,
-  updateRelativeTypeValidation
+  updateRelativeTypeValidation,
+
+  createJobTitleValidation,
+  updateJobTitleValidation
 }

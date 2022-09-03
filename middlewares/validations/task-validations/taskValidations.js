@@ -35,7 +35,7 @@ const createTaskValidation = async (req, res, next) => {
   const schema = joi
     .object({
       customerId: joi.string().required(),
-      name: joi.string().required(),
+      name: joi.string(),
       createdAt: joi.date(),
       status: joi.number(),
       steps: joi.array().items(

@@ -12,6 +12,7 @@ interface IProps {
   handleAddNew?: (a?: any, b?: any) => void
   handleSearch?: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleStatusFilter?: (status: EStatus) => void
+  filterStatusOptions?: IOption[]
   showStatus?: boolean
   showSearch?: boolean
   showExport?: boolean
@@ -22,6 +23,7 @@ const DataTableHeader: React.FC<IProps> = ({
   handleAddNew,
   handleSearch,
   handleStatusFilter,
+  filterStatusOptions = statusOptions,
   showStatus = true,
   showSearch = true,
   showExport = true,
@@ -32,6 +34,8 @@ const DataTableHeader: React.FC<IProps> = ({
       handleStatusFilter(+option.value)
     }
   }
+
+  console.log(status)
 
   return (
     <JustifyBetweenRow margin="0 0 0.5rem 0" height="40px">
@@ -57,7 +61,7 @@ const DataTableHeader: React.FC<IProps> = ({
               name="status"
               onChange={handleStatusChange}
               selectedOption={[status || { value: '-9', label: 'All' }]}
-              options={statusOptions}
+              options={filterStatusOptions}
             />
           </Row>
         )}

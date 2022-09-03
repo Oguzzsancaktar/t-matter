@@ -5,10 +5,9 @@ const taskSchema = new Schema(
   {
     startDate: {
       required: true,
-      type: Date
+      type: Number
     },
     name: {
-      required: true,
       type: String
     },
     steps: [
@@ -29,6 +28,9 @@ const taskSchema = new Schema(
       default: false
     },
     index: {
+      type: Number
+    },
+    status: {
       type: Number
     }
   },

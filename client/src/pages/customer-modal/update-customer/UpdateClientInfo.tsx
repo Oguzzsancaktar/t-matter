@@ -1,27 +1,33 @@
 import React from 'react'
 import { InputWithIcon, ItemContainer, JustifyBetweenColumn, JustifyBetweenRow, SelectInput } from '@/components'
 import { genderOptions } from '@/constants/genders'
-import { IOption, IRefferedBy, EGender, ICustomerCreateDTO } from '@/models'
+import { IOption, IRefferedBy, EGender, ICustomerCreateDTO, IJobTitle } from '@/models'
 import { User } from 'react-feather'
-import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@/services/settings/company-planning/dynamicVariableService'
 import emptyQueryParams from '@/constants/queryParams'
 
 interface IProps {
   validationErrors: any
-  updateContactDTO: Omit<ICustomerCreateDTO, '_id'>
+  updateClientDTO: Omit<ICustomerCreateDTO, '_id'>
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onGenderChange: (option: IOption) => void
   onRefferTypeChange: (option: IOption) => void
+  onJobTitleChange: (option: IOption) => void
 }
 
 const UpdateClientInfo: React.FC<IProps> = ({
   validationErrors,
-  updateContactDTO,
+  updateClientDTO,
   onInputChange,
   onGenderChange,
-  onRefferTypeChange
+  onRefferTypeChange,
+  onJobTitleChange
 }) => {
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
   return (
     <ItemContainer>
@@ -37,7 +43,7 @@ const UpdateClientInfo: React.FC<IProps> = ({
                 type="text"
                 labelText="First Name"
                 validationError={validationErrors.firstnameError}
-                value={updateContactDTO.firstname}
+                value={updateClientDTO.firstname}
               />
             </ItemContainer>
             <ItemContainer margin="0 0 0 0.5rem">
@@ -53,7 +59,7 @@ const UpdateClientInfo: React.FC<IProps> = ({
                 isLoading={refferedByDataIsLoading}
                 labelText="Reffered By"
                 validationError={validationErrors.refferedByError}
-                selectedOption={[{ value: updateContactDTO.refferedBy._id, label: updateContactDTO.refferedBy.name }]}
+                selectedOption={[{ value: updateClientDTO.refferedBy._id, label: updateClientDTO.refferedBy.name }]}
               />
             </ItemContainer>
           </JustifyBetweenRow>
@@ -68,7 +74,7 @@ const UpdateClientInfo: React.FC<IProps> = ({
                 type="text"
                 labelText="Last Name"
                 validationError={validationErrors.lastnameError}
-                value={updateContactDTO.lastname}
+                value={updateClientDTO.lastname}
               />
             </ItemContainer>
             <ItemContainer margin="0 0 0 0.5rem ">
@@ -81,7 +87,7 @@ const UpdateClientInfo: React.FC<IProps> = ({
                 labelText="Gender"
                 validationError={validationErrors.genderError}
                 selectedOption={[
-                  { value: updateContactDTO?.gender.toString(), label: EGender[updateContactDTO.gender.toString()] }
+                  { value: updateClientDTO?.gender.toString(), label: EGender[updateClientDTO.gender.toString()] }
                 ]}
               />
             </ItemContainer>
@@ -97,7 +103,7 @@ const UpdateClientInfo: React.FC<IProps> = ({
                 type="tel"
                 labelText="Phone Number"
                 validationError={validationErrors.phoneError}
-                value={updateContactDTO.phone}
+                value={updateClientDTO.phone}
               />
             </ItemContainer>
 
@@ -110,22 +116,25 @@ const UpdateClientInfo: React.FC<IProps> = ({
                 type="email"
                 labelText="E-mail"
                 validationError={validationErrors.emailError}
-                value={updateContactDTO.email}
+                value={updateClientDTO.email}
               />
             </ItemContainer>
           </JustifyBetweenRow>
 
           <JustifyBetweenRow width="100%" margin="1rem 0">
             <ItemContainer>
-              <InputWithIcon
+              <SelectInput
                 children={<User size={16} />}
                 name="jobTitle"
-                placeholder="Enter job title..."
-                onChange={onInputChange}
-                type="tel"
+                onChange={(option: IOption) => onJobTitleChange(option)}
+                options={(jobTitleData || []).map((jobTitle: IJobTitle) => ({
+                  label: jobTitle.name,
+                  value: jobTitle._id
+                }))}
+                isLoading={jobTitleDataIsLoading}
                 labelText="Job Title"
                 validationError={validationErrors.jobTitleError}
-                value={updateContactDTO.jobTitle}
+                selectedOption={[{ value: updateClientDTO.jobTitle._id, label: updateClientDTO.jobTitle.name }]}
               />
             </ItemContainer>
           </JustifyBetweenRow>

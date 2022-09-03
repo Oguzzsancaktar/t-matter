@@ -9,6 +9,8 @@ const customerDataAccess = require('./customer-data-access/customerDataAccess')
 const workflowDataAccess = require('./workflow-data-access/workflowDataAccess')
 const timeLogDataAccess = require('./time-log-data-access/timeLogDataAccess')
 const locationDataAccess = require('./dynamic-variables-data-access/locationDataAccess')
+const jobTitleDataAccess = require('./dynamic-variables-data-access/jobTitleDataAccess')
+
 const refferedByDataAccess = require('./dynamic-variables-data-access/refferedBy')
 const relativeTypeDataAccess = require('./dynamic-variables-data-access/relativeType')
 const taskDataAccess = require('./task-data-access/taskDataAccess')
@@ -26,6 +28,7 @@ module.exports = {
   workflowDataAccess,
   timeLogDataAccess,
   locationDataAccess,
+  jobTitleDataAccess,
   refferedByDataAccess,
   relativeTypeDataAccess,
   customerDataAccess,

@@ -18,6 +18,8 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
       moment(taskActiveStep.endDate).diff(moment(taskActiveStep.startDate))) *
     100
 
+  console.log(taskActiveStep)
+
   return (
     <ItemContainer>
       <Column>
@@ -25,7 +27,7 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
           <JustifyBetweenRow>
             <Row>
               <Calendar size={20} />
-              <H1 width="auto">{moment(taskActiveStep.startDate).format('MMMM DD YYYY')}</H1>
+              <H1 width="auto">{moment(taskActiveStep.startDate).format('MMMM DD YYYY HH:mm')}</H1>
             </Row>
             <ItemContainer width="80px">
               <H1>{moment(taskActiveStep.endDate).diff(moment(Date.now()), 'days')} days</H1>

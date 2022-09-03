@@ -141,7 +141,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
       try {
         const task: ICustomerTask = {
           customer,
-          startDate: Date.now().toString(),
+          startDate: Date.now(),
           name: updateWorkflowData.name,
           steps: [],
           totalPrice: workflowData?.totalPrice
@@ -155,8 +155,8 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
             location: step.location,
             tabs: step.tabs,
             responsibleUser: step.responsibleUser,
-            startDate: Date.now().toString(),
-            endDate: moment(Date.now()).add(7, 'days').toString(),
+            startDate: Date.now(),
+            endDate: moment(Date.now()).add(7, 'days').valueOf(),
             stepColor: step.stepColor,
             stepStatus: ETaskStatus.Not_Started,
             expireDuration: step.expireDuration,

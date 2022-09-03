@@ -1,3 +1,4 @@
+import { ETaskStatus, IOption } from '@/models'
 export const GENDER_TYPES = Object.freeze({
   FEMALE: 0,
   MALE: 1,
@@ -31,8 +32,16 @@ export const AUTH_COOKIE_OPTIONS = {
 export const STATUSES = [STATUS_TYPES.ACTIVE, STATUS_TYPES.INACTIVE]
 export const GENDERS = [GENDER_TYPES.FEMALE, GENDER_TYPES.MALE, GENDER_TYPES.OTHER]
 
-export const statusOptions = [
+export const statusOptions: IOption[] = [
   { value: '-9', label: 'All' },
   { label: 'Inactive', value: '0' },
   { label: 'Active', value: '1' }
+]
+
+export const taskStatusOptions: IOption[] = [
+  { value: '-9', label: 'All' },
+  { label: 'Completed', value: ETaskStatus.Completed.toString() },
+  { label: 'Progress', value: ETaskStatus.Progress.toString() },
+  { label: 'Not Started', value: ETaskStatus.Not_Started.toString() },
+  { label: 'Canceled', value: ETaskStatus.Canceled.toString() }
 ]

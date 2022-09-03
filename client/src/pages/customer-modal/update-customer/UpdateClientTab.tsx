@@ -3,7 +3,10 @@ import { Button, Column, ItemContainer, JustifyBetweenColumn, RelateByModal } fr
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, ICustomer, ICustomerAddNew, ICustomerUpdateDTO, IOption, IRelativeType } from '@/models'
 import { UpdateClientExtraInfo, UpdateClientInfo, UpdateClientReliables } from '@/pages'
-import { useGetRefferedBysQuery } from '@/services/settings/company-planning/dynamicVariableService'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@/services/settings/company-planning/dynamicVariableService'
 import { closeModal, openModal } from '@/store'
 import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isEmailValid, isValueNull } from '@/utils/validationUtils'
@@ -18,6 +21,7 @@ interface IProps {
 const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
   const [updateCustomer] = useUpdateCustomerMutation()
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
   console.log(customer)
   const { useAppDispatch } = useAccessStore()
@@ -25,7 +29,7 @@ const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
 
   const [birthday, setBirthday] = useState(customer.birthday)
 
-  const [updateContactDTO, setUpdateContactDTO] = useState<Omit<ICustomerUpdateDTO, 'birthday'>>({
+  const [updateClientDTO, setUpdateClientDTO] = useState<Omit<ICustomerUpdateDTO, 'birthday'>>({
     _id: customer._id,
     customerType: customer.customerType,
     firstname: customer.firstname,
@@ -58,42 +62,42 @@ const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
   })
 
   const validateFormFields = (): boolean => {
-    if (!isValueNull(updateContactDTO.firstname)) {
+    if (!isValueNull(updateClientDTO.firstname)) {
       toastError('Please enter a valid first name')
       setValidationErrors({ ...validationErrors, firstnameError: true })
       return false
     }
 
-    if (!isValueNull(updateContactDTO.lastname)) {
+    if (!isValueNull(updateClientDTO.lastname)) {
       toastError('Please enter a valid last name')
       setValidationErrors({ ...validationErrors, lastnameError: true })
       return false
     }
 
-    if (!isEmailValid(updateContactDTO.email)) {
+    if (!isEmailValid(updateClientDTO.email)) {
       toastError('Please enter a valid email')
       setValidationErrors({ ...validationErrors, emailError: true })
       return false
     }
 
-    if (!isValueNull(updateContactDTO.phone.toString())) {
+    if (!isValueNull(updateClientDTO.phone.toString())) {
       toastError('Please enter a valid phone number')
       setValidationErrors({ ...validationErrors, phoneError: true })
       return false
     }
 
-    if (!isValueNull(updateContactDTO.jobTitle.toString())) {
+    if (!isValueNull(updateClientDTO.jobTitle._id)) {
       toastError('Please enter a valid job title')
       setValidationErrors({ ...validationErrors, jobTitleError: true })
       return false
     }
 
-    if (!isValueNull(updateContactDTO.refferedBy._id)) {
+    if (!isValueNull(updateClientDTO.refferedBy._id)) {
       toastError('Please select user refferedBy')
       return false
     }
 
-    if (!isValueNull(updateContactDTO.gender.toString())) {
+    if (!isValueNull(updateClientDTO.gender.toString())) {
       toastError('Please select user gender')
       return false
     }
@@ -102,24 +106,24 @@ const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdateContactDTO({ ...updateContactDTO, [event.target.name]: event.target.value })
+    setUpdateClientDTO({ ...updateClientDTO, [event.target.name]: event.target.value })
   }
 
   const handleGenderChange = (option: IOption) => {
-    setUpdateContactDTO({ ...updateContactDTO, gender: +option.value })
+    setUpdateClientDTO({ ...updateClientDTO, gender: +option.value })
   }
 
   const handleRefferTypeChange = (option: IOption) => {
     const refBy = refferedByData?.find(rb => rb._id === option.value)
     if (refBy) {
-      setUpdateContactDTO({ ...updateContactDTO, refferedBy: refBy })
+      setUpdateClientDTO({ ...updateClientDTO, refferedBy: refBy })
     }
   }
 
   const handleAddReliable = (customer: ICustomer) => {
-    const isSelectedBefore = updateContactDTO.reliableCustomers.find(reliable => reliable.reliableId === customer._id)
+    const isSelectedBefore = updateClientDTO.reliableCustomers.find(reliable => reliable.reliableId === customer._id)
     if (isSelectedBefore) {
-      toastWarning('Contact is already selected')
+      toastWarning('Client is already selected')
     } else {
       dispatch(
         openModal({
@@ -140,16 +144,23 @@ const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
     }
   }
 
+  const handleJobTitleChange = (option: IOption) => {
+    const jobTitle = jobTitleData?.find(jt => jt._id === option.value)
+    if (jobTitle) {
+      setUpdateClientDTO({ ...updateClientDTO, jobTitle: jobTitle })
+    }
+  }
+
   const handleRemovePastReliable = (customerReliable: ICustomer) => {
-    if (updateContactDTO.reliableCustomers) {
-      setUpdateContactDTO({
-        ...updateContactDTO,
-        reliableCustomers: updateContactDTO.reliableCustomers.filter(
+    if (updateClientDTO.reliableCustomers) {
+      setUpdateClientDTO({
+        ...updateClientDTO,
+        reliableCustomers: updateClientDTO.reliableCustomers.filter(
           reliable => reliable.reliableId !== customerReliable._id
         ),
         deleteReliableId: [
-          ...updateContactDTO.deleteReliableId,
-          updateContactDTO.reliableCustomers.filter(reliable => reliable.reliableId === customerReliable._id)[0]
+          ...updateClientDTO.deleteReliableId,
+          updateClientDTO.reliableCustomers.filter(reliable => reliable.reliableId === customerReliable._id)[0]
             .reliableId
         ]
       })
@@ -157,21 +168,21 @@ const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
   }
 
   const handleRemoveNewReliable = (customer: ICustomer | ICustomerAddNew) => {
-    if (updateContactDTO.reliableInCompany) {
-      setUpdateContactDTO({
-        ...updateContactDTO,
-        reliableInCompany: updateContactDTO.reliableInCompany.filter(reliable => reliable._id !== customer._id)
+    if (updateClientDTO.reliableInCompany) {
+      setUpdateClientDTO({
+        ...updateClientDTO,
+        reliableInCompany: updateClientDTO.reliableInCompany.filter(reliable => reliable._id !== customer._id)
       })
     }
   }
 
   const handleConfirmAddReliable = (customer: ICustomer, relativeType?: IRelativeType) => {
-    setUpdateContactDTO({
-      ...updateContactDTO,
-      reliableInCompany: updateContactDTO.reliableInCompany?.concat({ ...customer, relativeType: relativeType })
+    setUpdateClientDTO({
+      ...updateClientDTO,
+      reliableInCompany: updateClientDTO.reliableInCompany?.concat({ ...customer, relativeType: relativeType })
     })
     dispatch(closeModal(`addRelateByModal-${customer._id}`))
-    dispatch(closeModal(`updateContactCustomerSearchModal-${updateContactDTO._id}`))
+    dispatch(closeModal(`updateClientCustomerSearchModal-${updateClientDTO._id}`))
   }
 
   const handleBirhdayChange = (date: Date[]) => {
@@ -192,11 +203,9 @@ const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
     const validationResult = validateFormFields()
     try {
       if (validationResult) {
-        await updateCustomer({ ...updateContactDTO })
+        await updateCustomer({ ...updateClientDTO })
         dispatch(closeModal(`updateCustomerModal-${customer._id}`))
-        toastSuccess(
-          'Contact ' + updateContactDTO.firstname + ' ' + updateContactDTO.lastname + ' updated successfully'
-        )
+        toastSuccess('Client ' + updateClientDTO.firstname + ' ' + updateClientDTO.lastname + ' updated successfully')
         customerApi.util.resetApiState()
       }
     } catch (error) {
@@ -210,10 +219,13 @@ const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
         <ItemContainer>
           <UpdateClientInfo
             validationErrors={validationErrors}
-            updateContactDTO={{ ...updateContactDTO }}
+            updateClientDTO={{ ...updateClientDTO }}
             onInputChange={handleInputChange}
             onGenderChange={handleGenderChange}
             onRefferTypeChange={handleRefferTypeChange}
+            onJobTitleChange={function (option: IOption): void {
+              throw new Error('Function not implemented.')
+            }}
           />
         </ItemContainer>
 
@@ -221,7 +233,7 @@ const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
           <UpdateClientExtraInfo
             validationErrors={validationErrors}
             birthday={birthday || ''}
-            updateClientDTO={{ ...updateContactDTO }}
+            updateClientDTO={{ ...updateClientDTO }}
             onInputChange={handleInputChange}
             onBirthdayChange={handleBirhdayChange}
           />
@@ -233,7 +245,7 @@ const UpdateClientTab: React.FC<IProps> = ({ customer }) => {
               onAdd={handleAddReliable}
               onRemovePastReliable={handleRemovePastReliable}
               onRemoveNewReliable={handleRemoveNewReliable}
-              updateContactDTO={{ ...updateContactDTO }}
+              updateClientDTO={{ ...updateClientDTO }}
             />
           </ItemContainer>
 

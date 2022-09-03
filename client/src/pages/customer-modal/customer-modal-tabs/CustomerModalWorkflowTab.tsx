@@ -14,12 +14,14 @@ import {
 } from '@/components'
 import { TaskActiveStepUser } from '@/components/client-task/task-active-step-user'
 import colors from '@/constants/colors'
+import emptyQueryParams from '@/constants/queryParams'
+import { statusOptions, taskStatusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ESize, ICustomer } from '@/models'
+import { ESize, EStatus, ICustomer } from '@/models'
 import { useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
 import { openModal } from '@/store'
 import moment from 'moment'
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
 interface IProps {
@@ -27,12 +29,15 @@ interface IProps {
 }
 
 const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
+  const [searchQueryParams, setSearchQueryParams] = useState({ ...emptyQueryParams, status: -9 })
   const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
+    ...searchQueryParams,
     customerId: customer._id
   })
 
-  const { useAppDispatch } = useAccessStore()
-  const dispatch = useAppDispatch()
   const columns = [
     {
       name: 'Start Date',
@@ -106,8 +111,16 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
     )
   }
 
+  const handleStatusFilter = (status: EStatus) => {
+    setSearchQueryParams({ ...searchQueryParams, status })
+  }
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
+  }
+
   return (
-    <ItemContainer>
+    <ItemContainer height="100%" padding="0 1rem">
       <JustifyBetweenColumn height="100%">
         <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
@@ -115,7 +128,13 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
           <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px - 1rem)">
-          <DataTableHeader handleAddNew={() => openSelectTaskWorkflowModal()} />
+          <DataTableHeader
+            filterStatusOptions={taskStatusOptions}
+            handleAddNew={() => openSelectTaskWorkflowModal()}
+            status={taskStatusOptions.find(status => +status.value === searchQueryParams.status)}
+            handleSearch={handleSearch}
+            handleStatusFilter={handleStatusFilter}
+          />
 
           <ItemContainer height="calc(100% - 38px - 0.5rem)">
             {customerTasksIsLoading ? (

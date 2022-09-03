@@ -70,8 +70,9 @@ const CustomerSchema = new Schema(
       type: Number
     },
     jobTitle: {
-      required: true,
-      type: String
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'jobTitle',
+      required: true
     },
     reliableCustomers: [],
 
