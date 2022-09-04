@@ -12,6 +12,8 @@ import {
   JustifyBetweenRow,
   JustifyCenterRow,
   NoTableData,
+  PostponeInstallmentModal,
+  RePlanningInstallmentModal,
   RoleBadge,
   Row,
   SearchCustomersModal,
@@ -23,11 +25,13 @@ import { AdditionalTimeDonut, InvoicesDonut, NonBillableCircleProgress, UnPaidIn
 import styled from 'styled-components'
 import useAccessStore from '@hooks/useAccessStore'
 import { openModal } from '@/store'
-import { ESize, Invoice } from '@/models'
+import { ESize, IInstallment, Invoice } from '@/models'
 import DataTable from 'react-data-table-component'
 import { useGetInstallmentsQuery } from '@services/settings/finance-planning/financePlanningService'
 import { Calendar, DollarSign, Edit, FileText, UserCheck } from 'react-feather'
 import moment from 'moment'
+import PayInstallment from '@components/modals/finance/PayInstallmentModal'
+import Flatpickr from 'react-flatpickr'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -58,6 +62,52 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
           id: `createInstallment`,
           title: 'Create Installment Modal',
           body: <CreateInstallmentModal invoice={selectedInvoice} />,
+          width: ESize.WSmall,
+          height: ESize.WSmall,
+          maxWidth: ESize.WSmall
+        })
+      )
+    }
+  }
+
+  const showRePlanningInstallment = () => {
+    if (selectedInvoice) {
+      dispatch(
+        openModal({
+          id: `rePlanningInstallment`,
+          title: 'Re Planning Installment Modal',
+          body: <RePlanningInstallmentModal invoice={selectedInvoice} />,
+          width: ESize.WSmall,
+          height: ESize.WSmall,
+          maxWidth: ESize.WSmall
+        })
+      )
+    }
+  }
+
+  const showPayInstallment = () => {
+    if (selectedInvoice) {
+      dispatch(
+        openModal({
+          id: `payInstallment`,
+          title: 'Pay Installment Modal',
+          body: <PayInstallment invoice={selectedInvoice} />,
+          width: ESize.WSmall,
+          height: ESize.WSmall,
+          maxWidth: ESize.WSmall
+        })
+      )
+    }
+  }
+
+  const showPostponeInstallment = (row: IInstallment) => {
+    console.log(row)
+    if (selectedInvoice) {
+      dispatch(
+        openModal({
+          id: `postponeInstallment`,
+          title: 'Postpone Installment Modal',
+          body: <PostponeInstallmentModal installment={row} />,
           width: ESize.WSmall,
           height: ESize.WSmall,
           maxWidth: ESize.WSmall
@@ -134,17 +184,19 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
       cell: data => (
         <Row>
           <IconButton
-            onClick={() => {}}
+            onClick={showPayInstallment}
             bgColor={colors.background.gray.light}
             margin="0 .2rem 0 0"
             children={<DollarSign size={'16px'} color={colors.text.primary} />}
           />
+
           <IconButton
-            onClick={() => {}}
+            onClick={showPostponeInstallment.bind(this, data)}
             bgColor={colors.background.gray.light}
             margin="0 .2rem 0 0"
             children={<Calendar size={'16px'} color={colors.text.primary} />}
           />
+
           <IconButton
             onClick={() => {}}
             bgColor={colors.background.gray.light}
@@ -173,9 +225,13 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
           <>
             <JustifyBetweenRow>
               <div></div>
-              {!(isInstallmentsLoading || (installments && installments?.length)) && (
+              {!(isInstallmentsLoading || (installments && installments?.length)) ? (
                 <Button width="200px" onClick={showCreateInstallment}>
                   Create Installment
+                </Button>
+              ) : (
+                <Button width="200px" onClick={showRePlanningInstallment}>
+                  Re Planning Installment
                 </Button>
               )}
             </JustifyBetweenRow>
