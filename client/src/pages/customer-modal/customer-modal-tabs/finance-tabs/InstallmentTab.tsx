@@ -173,9 +173,11 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
           <>
             <JustifyBetweenRow>
               <div></div>
-              <Button width="200px" onClick={showCreateInstallment}>
-                Create Installment
-              </Button>
+              {!(isInstallmentsLoading || (installments && installments?.length)) && (
+                <Button width="200px" onClick={showCreateInstallment}>
+                  Create Installment
+                </Button>
+              )}
             </JustifyBetweenRow>
             <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 50px)" margin="0.5rem 0">
               {isInstallmentsLoading ? (
