@@ -13,6 +13,7 @@ router.post(
   middlewares.authMiddlewares.checkAuth,
   controllers.financeController.createExpiredTaskStep
 )
-router.post('/invoice/installment/:invoiceId', controllers.financeController.createInstallment)
+router.post('/installment/:invoiceId', controllers.financeController.createInstallment)
+router.get('/installment/:invoiceId', controllers.financeController.getInstallments)
 
 module.exports = router

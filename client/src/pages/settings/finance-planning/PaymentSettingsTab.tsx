@@ -99,8 +99,8 @@ const PaymentSettingsTab = () => {
           </Column>
           <Column>
             <InputWithIcon
-              labelText="Minimum deposit amount"
-              placeholder="Minimum deposit amount"
+              labelText="Minimum deposit percentage"
+              placeholder="Minimum deposit percentage"
               name="minDepositAmount"
               onChange={handleInputChange}
               value={state.minDepositAmount.value}

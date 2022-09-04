@@ -180,6 +180,30 @@ const updateInstallment = (id, data) => {
   return Installment.findByIdAndUpdate(id, data)
 }
 
+const getInstallmentsByInvoiceId = invoiceId => {
+  return Installment.aggregate([
+    {
+      $match: {
+        invoice: mongoose.Types.ObjectId(invoiceId)
+      }
+    },
+    {
+      $lookup: {
+        from: 'invoices',
+        localField: 'invoice',
+        foreignField: '_id',
+        as: 'invoice'
+      }
+    },
+    {
+      $unwind: {
+        path: '$invoice',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ])
+}
+
 module.exports = {
   updateFinancePlanning,
   getFinancePlanning,
@@ -190,5 +214,6 @@ module.exports = {
   createExpiredTaskStep,
   updateExpiredTaskStepById,
   createInstallment,
-  updateInstallment
+  updateInstallment,
+  getInstallmentsByInvoiceId
 }

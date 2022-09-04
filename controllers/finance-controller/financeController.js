@@ -4,6 +4,8 @@ const constants = require('../../constants')
 const { StatusCodes } = require('http-status-codes')
 const { getCompanyPricing } = require('../company-pricing-controller/companyPricingController')
 const calculateHourlyCompanyFee = require('../../helpers/calculateHourlyCompanyFee')
+const { INSTALLMENT_TYPES, INSTALLMENT_STATUS } = require('../../constants/finance')
+const moment = require('moment')
 
 const getFinancePlanning = async (req, res) => {
   try {
@@ -85,6 +87,34 @@ const createInstallment = async (req, res) => {
   const { body, params } = req
   try {
     const { startDate, deposit, quantity, payAmount } = body
+    await dataAccess.financeDataAccess.createInstallment({
+      type: INSTALLMENT_TYPES.DEPOSIT,
+      invoice: params.invoiceId,
+      payDate: new Date(),
+      payAmount: deposit,
+      status: INSTALLMENT_STATUS.UN_PAID
+    })
+    for (let i = 0; i < quantity; i++) {
+      const installment = {
+        type: INSTALLMENT_TYPES.PAYMENT,
+        invoice: params.invoiceId,
+        payDate: moment(startDate).add(i, 'months').toDate(),
+        payAmount,
+        status: INSTALLMENT_STATUS.UN_PAID
+      }
+      await dataAccess.financeDataAccess.createInstallment(installment)
+    }
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getInstallments = async (req, res) => {
+  try {
+    const installments = await dataAccess.financeDataAccess.getInstallmentsByInvoiceId(req.params.invoiceId)
+    res.json(installments)
   } catch (e) {
     console.log(e)
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -98,5 +128,6 @@ module.exports = {
   createInvoice,
   createExpiredTaskStep,
   getExpiredTaskSteps,
-  createInstallment
+  createInstallment,
+  getInstallments
 }

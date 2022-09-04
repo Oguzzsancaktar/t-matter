@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import 'flatpickr/dist/themes/material_green.css'
 import '@/styles/vendors/flat-picker.css'
 import Flatpickr from 'react-flatpickr'
@@ -44,6 +44,12 @@ const DatePicker: React.FC<IProps> = ({
   const handleDateChange = (date: Date[], dateText) => {
     onChange(date, dateText)
   }
+
+  useEffect(() => {
+    if (value) {
+      setDate(value)
+    }
+  }, [value])
 
   return (
     <Column>

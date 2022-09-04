@@ -8,7 +8,8 @@ const InvoiceSchema = new Schema(
     },
     invoice: {
       type: Schema.Types.ObjectId,
-      ref: 'invoices'
+      ref: 'invoices',
+      required: true
     },
     payDate: {
       type: Date,
@@ -18,9 +19,15 @@ const InvoiceSchema = new Schema(
       type: Number,
       required: true
     },
-    paidMethod: {
+    status: {
       type: String,
       required: true
+    },
+    paidMethod: {
+      type: String
+    },
+    paidDate: {
+      type: Date
     },
     paidAmount: {
       type: Number
@@ -30,10 +37,6 @@ const InvoiceSchema = new Schema(
     },
     suspendedFee: {
       type: Number
-    },
-    status: {
-      type: String, // PAID - MOREPAID - LATEFEE - SUSPENDED
-      required: true
     },
     notes: {
       type: [String]
