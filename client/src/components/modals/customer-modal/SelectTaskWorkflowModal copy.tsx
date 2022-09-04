@@ -15,7 +15,7 @@ import { isValueNull, isValueBiggerThanZero } from '@/utils/validationUtils'
 import colors from '@/constants/colors'
 import { useCreateTaskMutation } from '@/services/customers/taskService'
 import moment from 'moment'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import { H1 } from '@/components/texts'
 
 interface IProps {

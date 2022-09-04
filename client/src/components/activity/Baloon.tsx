@@ -4,12 +4,19 @@ import colors from '@constants/colors'
 import moment from 'moment'
 import { Link } from 'react-feather'
 import { selectColorForActivityType } from '@/utils/statusColorUtil'
+import { H1 } from '../texts'
+import { ESize, ICustomer, ITask } from '@/models'
+import useAccessStore from '@/hooks/useAccessStore'
+import { openModal } from '@/store'
+import { CustomerTaskModal } from '../modals'
 
 interface IProps {
   title: string
   content: string
   date: Date
+  customer?: ICustomer
   type?: number
+  task?: ITask
   links?: [
     {
       url: string
@@ -20,7 +27,8 @@ interface IProps {
 
 const BaloonContainer = styled.div<Pick<IProps, 'type'>>`
   width: 100%;
-  height: 135px;
+  height: auto;
+  min-height: 100px;
   /* background-color: ${({ type }) => (type ? selectColorForActivityType(type) + '70' : '#eff3fe')};
   */
 
@@ -28,7 +36,6 @@ const BaloonContainer = styled.div<Pick<IProps, 'type'>>`
 
   border-radius: 4px;
   padding: 8px 16px;
-  max-width: 700px;
   display: flex;
   flex-direction: column;
 `
@@ -44,6 +51,9 @@ const BaloonTitle = styled.span`
   font-size: 16px;
   font-weight: 700;
   color: ${colors.black.primary};
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 `
 
 const BaloonDate = styled.span`
@@ -69,6 +79,7 @@ const BaloonHour = styled.span`
   font-size: 16px;
   color: ${colors.black.primary};
   font-weight: 700;
+  margin-left: 1rem;
 `
 
 const BaloonContent = styled.span`
@@ -94,17 +105,49 @@ const BaloonFooter = styled.div`
   display: flex;
 `
 
-const Baloon: React.FC<IProps> = ({ title, content, date, links, type }) => {
+const Baloon: React.FC<IProps> = ({ task, customer, title, content, date, links, type }) => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
+  const handleOpenTaskModal = (taskId?: ITask['_id']) => {
+    if (customer?._id && taskId) {
+      dispatch(
+        openModal({
+          id: 'customerTaksModal' + taskId,
+          title: 'Customer Task',
+          body: <CustomerTaskModal customerId={customer?._id} taskId={taskId} />,
+          width: ESize.WXLarge,
+          height: ESize.HLarge,
+          backgroundColor: colors.gray.light
+        })
+      )
+    }
+  }
+
   return (
     <BaloonContainer type={type}>
       <BaloonHeader>
-        <BaloonTitle>{title}</BaloonTitle>
+        <BaloonTitle onClick={() => handleOpenTaskModal(task?._id)}>
+          <H1 fontSize="0.8rem" cursor="pointer" width="auto" color={colors.text.primary}>
+            {task?.name}
+          </H1>
+          <H1 cursor="pointer" margin="0 0.2rem" width="auto" color={colors.text.primary}>
+            -
+          </H1>
+          <H1 cursor="pointer" width="auto" fontSize="0.6rem" color={selectColorForActivityType(type || 0)}>
+            {title}
+          </H1>
+        </BaloonTitle>
         <BaloonDate>{moment(date).format('Do YYYY')}</BaloonDate>
       </BaloonHeader>
       <Hr />
       <BaloonBody>
         <BaloonContent>{content}</BaloonContent>
-        <BaloonHour>{moment(date).format('hh:mm a')}</BaloonHour>
+        <BaloonHour>
+          <H1 color={colors.gray.dark} fontSize="0.7rem">
+            {moment(date).format('hh:mm a')}
+          </H1>
+        </BaloonHour>
       </BaloonBody>
       <BaloonFooter>
         {links &&

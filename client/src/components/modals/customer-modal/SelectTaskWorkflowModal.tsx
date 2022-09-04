@@ -15,7 +15,7 @@ import { isValueNull, isValueBiggerThanZero } from '@/utils/validationUtils'
 import colors from '@/constants/colors'
 import { useCreateTaskMutation } from '@/services/customers/taskService'
 import moment from 'moment'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import { H1, Label } from '@/components/texts'
 import { DatePicker } from '@/components/date-picker'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
@@ -75,7 +75,6 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
     }
 
     setSelectedWorkflow(tempSelectedWorkflow)
-    console.log(tempSelectedWorkflow)
   }
 
   const handleStepChange = (selectedOptions: IOption[]) => {

@@ -23,7 +23,7 @@ import {
   useGetJobTitlesQuery,
   useGetRefferedBysQuery
 } from '@/services/settings/company-planning/dynamicVariableService'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 
 const CreateClientTab = () => {
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)

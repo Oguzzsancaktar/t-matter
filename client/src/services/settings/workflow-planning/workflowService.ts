@@ -1,4 +1,4 @@
-import emptyQueryParams from '@/constants/queryParams'
+import {emptyQueryParams} from '@/constants/queryParams'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'

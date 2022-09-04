@@ -1,5 +1,4 @@
 import { ItemContainer } from '@/components/item-container'
-import { ProgressBar } from '@/components/progress-bar'
 import { ETaskStatus, ITaskItem } from '@/models'
 import React, { useEffect, useState } from 'react'
 
@@ -17,7 +16,11 @@ const TaskActiveStepUser: React.FC<IProps> = ({ taskSteps }) => {
     }
   }, [taskSteps])
 
-  return <ItemContainer>{taskSteps[activeStep]?.responsibleUser?.firstname}</ItemContainer>
+  return (
+    <ItemContainer>
+      {taskSteps[activeStep]?.responsibleUser?.firstname + ' ' + taskSteps[activeStep]?.responsibleUser?.lastname}
+    </ItemContainer>
+  )
 }
 
 export default TaskActiveStepUser

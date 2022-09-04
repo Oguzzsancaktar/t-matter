@@ -1,10 +1,16 @@
+import { Button } from '@/components/button'
 import { ItemContainer } from '@/components/item-container'
-import { JustifyBetweenColumn } from '@/components/layout'
+import { Column, JustifyBetweenColumn } from '@/components/layout'
+import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
+import useAccessStore from '@/hooks/useAccessStore'
+import { useAuth } from '@/hooks/useAuth'
 
-import { ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
-import React, { useState } from 'react'
+import { EActivity, ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
+import { activityApi, useCreateActivityMutation } from '@/services/activityService'
+import React from 'react'
 import styled from 'styled-components'
+import Swal from 'sweetalert2'
 import { TaskChecklistCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, TaskUserCard } from '.'
 
 interface IProps {
@@ -40,6 +46,54 @@ const TaskInformations: React.FC<IProps> = ({
   handleStartTask,
   handleTaskTimerChange
 }) => {
+  const { loggedUser } = useAuth()
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+  const [createActivity] = useCreateActivityMutation()
+
+  const handleAddNewNote = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+
+    Swal.fire({
+      title: 'Enter your note message',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Add Note',
+      showLoaderOnConfirm: true,
+      preConfirm: login => {
+        return login
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then(async result => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: `Note Created`,
+          text: result.value
+        })
+
+        await createActivity({
+          title: 'Note Added',
+          content: result.value || ' ',
+          customer: taskData.customer._id,
+          task: taskData._id,
+          owner: loggedUser.user?._id || '',
+          step: activeStep,
+          type: EActivity.NORMAL_NOTE
+        })
+        dispatch(activityApi.util.resetApiState())
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Cancelled'
+        })
+      }
+    })
+  }
+
   return (
     <ItemContainer height="100%">
       {taskData && taskData.steps[activeStep] ? (
@@ -54,21 +108,25 @@ const TaskInformations: React.FC<IProps> = ({
             />
           </InformationCard>
 
-          <InformationCard height="80px">
-            <TaskDeadlineCard taskActiveStep={taskData.steps[activeStep]} />
-          </InformationCard>
+          <ItemContainer backgroundColor={colors.white.secondary} borderRadius="0.3rem" margin="0 0 1rem 0">
+            <Column height="100%">
+              <InformationCard height="80px">
+                <TaskDeadlineCard taskActiveStep={taskData.steps[activeStep]} />
+              </InformationCard>
 
-          <InformationCard height="80px">
-            <TaskPostponeCard taskActiveStep={taskData.steps[activeStep]} onPostponeChange={handlePostponeChange} />
-          </InformationCard>
+              <InformationCard height="80px">
+                <TaskPostponeCard taskActiveStep={taskData.steps[activeStep]} onPostponeChange={handlePostponeChange} />
+              </InformationCard>
 
-          <InformationCard height="80px">
-            <TaskTimerCard
-              taskActiveStep={taskData.steps[activeStep]}
-              isTaskNotStarted={isTaskNotStarted}
-              handleTaskTimerChange={handleTaskTimerChange}
-            />
-          </InformationCard>
+              <InformationCard height="80px">
+                <TaskTimerCard
+                  taskActiveStep={taskData.steps[activeStep]}
+                  isTaskNotStarted={isTaskNotStarted}
+                  handleTaskTimerChange={handleTaskTimerChange}
+                />
+              </InformationCard>
+            </Column>
+          </ItemContainer>
 
           <InformationCard height="calc(100% - 100px - 80px - 80px - 80px - 6rem)">
             <TaskChecklistCard
@@ -77,6 +135,14 @@ const TaskInformations: React.FC<IProps> = ({
               checklistData={taskData.steps[activeStep]?.checklistItems}
             />
           </InformationCard>
+
+          <ItemContainer margin="0 0 1rem 0">
+            <Button onClick={handleAddNewNote} color={colors.gray.middle}>
+              <H1 textAlign="center" color={colors.primary.dark}>
+                Add Note
+              </H1>
+            </Button>
+          </ItemContainer>
         </JustifyBetweenColumn>
       ) : (
         <div>Loading</div>

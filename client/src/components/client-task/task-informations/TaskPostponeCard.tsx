@@ -39,21 +39,25 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
         <ItemContainer>
           <JustifyBetweenRow>
             <Row>
-              <ExternalLink size={20} />
-              <Flatpickr
-                disabled={!canTaskPostpone}
-                options={{
-                  enableTime: false,
-                  dateFormat: 'M/d/Y'
-                }}
-                value={taskActiveStep.postponedDate}
-                onChange={onDateChange}
-                placeholder="Postpone Task"
-              />
+              <ExternalLink size={20} color={colors.text.primary} />
+              <ItemContainer margin="0 0 0 -0.2rem ">
+                <Flatpickr
+                  disabled={!canTaskPostpone}
+                  options={{
+                    enableTime: false,
+                    dateFormat: 'M/d/Y'
+                  }}
+                  value={taskActiveStep.postponedDate}
+                  onChange={onDateChange}
+                  placeholder="Postpone Task"
+                />
+              </ItemContainer>
             </Row>
-            <H1 width="80px">
-              {taskActiveStep?.usedPostpone} / {taskActiveStep?.postponeTime}
-            </H1>
+            <ItemContainer width="auto">
+              <H1 width="max-content" fontWeight="400" color={colors.text.primary}>
+                {taskActiveStep?.usedPostpone} / {taskActiveStep?.postponeTime}
+              </H1>
+            </ItemContainer>
           </JustifyBetweenRow>
         </ItemContainer>
         <ItemContainer>

@@ -8,7 +8,7 @@ import {
 } from '@/components'
 import { ConfirmCancelButtons } from '@/components/button'
 import colors from '@/constants/colors'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import useAccessStore from '@/hooks/useAccessStore'
 import { IOption, IRelativeType } from '@/models'
 import { useGetRelativeTypesQuery } from '@/services/settings/company-planning/dynamicVariableService'

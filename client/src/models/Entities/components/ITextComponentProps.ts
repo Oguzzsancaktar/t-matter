@@ -9,4 +9,5 @@ export default interface ITextComponentProps {
   height?: string
   width?: string
   cursor?: string
+  fontFamily?: string
 }

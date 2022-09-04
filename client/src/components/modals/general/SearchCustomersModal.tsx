@@ -13,7 +13,7 @@ import { H1 } from '@/components/texts'
 
 import { ModalHeader, ModalBody } from '../types'
 import colors from '@/constants/colors'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import { openModal } from '@/store'
 import { ReadCustomerModal } from '../customer-modal'
 import useAccessStore from '@/hooks/useAccessStore'

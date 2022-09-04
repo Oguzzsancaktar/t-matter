@@ -14,8 +14,8 @@ import {
 } from '@/components'
 import { TaskActiveStepUser } from '@/components/client-task/task-active-step-user'
 import colors from '@/constants/colors'
-import emptyQueryParams from '@/constants/queryParams'
-import { statusOptions, taskStatusOptions } from '@/constants/statuses'
+import { emptyQueryParams } from '@/constants/queryParams'
+import { taskStatusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, ICustomer } from '@/models'
 import { useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
@@ -41,22 +41,20 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
   const columns = [
     {
       name: 'Start Date',
-      selector: row => moment(row.startDate).format('MMMM/DD/YYYY'),
+      width: '200px',
+      selector: row => moment(row.startDate).format('MMM - DD - YYYY'),
       sortable: true
     },
-    {
-      name: 'Workflow Name',
-      selector: row => row.name,
-      sortable: true
-    },
+
     {
       name: 'Steps',
       selector: row => row.name,
       sortable: true,
-      cell: data => <TaskProgress taskSteps={data.steps} />
+      cell: data => <TaskProgress workflowName={data.name} taskStatus={data.status} taskSteps={data.steps} />
     },
     {
       name: 'User',
+      width: '200px',
       selector: row => row.steps,
       sortable: true,
       cell: data => <TaskActiveStepUser taskSteps={data.steps} />

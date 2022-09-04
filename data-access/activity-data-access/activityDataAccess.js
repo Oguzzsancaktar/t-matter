@@ -76,8 +76,27 @@ const getCustomerActivity = ({ customer }) => {
   ]).exec()
 }
 
-const getAllActivity = () => {
-  return Activity.aggregate(populateActivity).exec()
+const getAllActivity = (userId, type) => {
+  const tempPipeline = []
+
+  if (userId) {
+    tempPipeline.push({
+      $match: {
+        owner: { $eq: mongoose.Types.ObjectId(userId) }
+      }
+    })
+  }
+
+  if (type && type.toString() !== '-9') {
+    tempPipeline.push({
+      $match: {
+        type: { $eq: +type }
+      }
+    })
+  }
+
+  console.log('0======))))((((((======', userId, type)
+  return Activity.aggregate([...tempPipeline, ...populateActivity]).exec()
 }
 
 const createActivity = data => {

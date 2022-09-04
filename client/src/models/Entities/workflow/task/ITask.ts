@@ -9,6 +9,7 @@ export default interface ITask {
   category: Pick<ITaskCategory, '_id' | 'name'>
   location: Pick<ILocation, '_id' | 'name'>
   responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
+  name?: string
   tabs: ITab['name'][]
   checklistItems: ITaskChecklist[]
   stepColor: string

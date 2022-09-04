@@ -10,7 +10,7 @@ import {
 } from '@/components'
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import { EGender, ICustomerAddNew, IJobTitle, IOption, IRefferedBy } from '@/models'
 import {
   useGetJobTitlesQuery,

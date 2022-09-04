@@ -54,7 +54,7 @@ export const selectColorForTaskStatus = (status: number) => {
 }
 
 export const selectColorForActivityType = (status: number) => {
-  let color = colors.white.bg
+  let color = 'yellowgreen'
 
   if (status === EActivity.NORMAL_NOTE) {
     return (color = colors.indigo.primary)

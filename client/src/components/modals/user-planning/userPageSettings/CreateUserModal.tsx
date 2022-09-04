@@ -30,7 +30,7 @@ import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleServ
 import { useCreateUserMutation } from '@/services/settings/user-planning/userService'
 import { companyPricingApi } from '@/services/settings/company-planning/companyPricingService'
 import colors from '@/constants/colors'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 
 const CreateUserModal = () => {
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)

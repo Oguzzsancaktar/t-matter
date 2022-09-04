@@ -30,8 +30,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  console.log(taskData)
-
   const [isTaskNotStarted, setIsTaskNotStarted] = useState(
     updatedTaskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length ===
       updatedTaskData?.steps.length
@@ -59,7 +57,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
             autocapitalize: 'off'
           },
           showCancelButton: true,
-          confirmButtonText: 'Cancel',
+          confirmButtonText: 'Cancel Task',
           showLoaderOnConfirm: true,
           preConfirm: login => {
             return login
@@ -75,6 +73,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
               text: result.value
             })
 
+            tempUpdatedTaskData.status = ETaskStatus.Canceled
             tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Canceled
 
             await updateTask(tempUpdatedTaskData)
@@ -228,7 +227,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
     }
   }
 
-  const handleAllChecklistCheck = (tempUpdatedTaskData, index: number) => {
+  const handleAllChecklistCheck = async (tempUpdatedTaskData, index: number, activityContent: string) => {
     const tempChecklist = JSON.parse(JSON.stringify(tempUpdatedTaskData.steps[activeStep].checklistItems))
     tempChecklist.pop()
     if (
@@ -252,9 +251,35 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
         })
       }
       tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Completed
+
       if (tempUpdatedTaskData.steps[activeStep + 1]) {
+        tempUpdatedTaskData.status = ETaskStatus.Progress
         tempUpdatedTaskData.steps[activeStep + 1].stepStatus = ETaskStatus.Progress
         setActiveStep(activeStep + 1)
+
+        await createActivity({
+          title: 'Task Checklist Completed',
+          content: activityContent || ' ',
+          customer: tempUpdatedTaskData.customer._id,
+          task: tempUpdatedTaskData._id,
+          owner: loggedUser.user?._id || '',
+          step: activeStep,
+          type: EActivity.TASK_CHECKLIST_CHECKED
+        })
+        dispatch(activityApi.util.resetApiState())
+      } else {
+        await createActivity({
+          title: 'Task Step Completed',
+          content: activityContent || ' ',
+          customer: tempUpdatedTaskData.customer._id,
+          task: tempUpdatedTaskData._id,
+          owner: loggedUser.user?._id || '',
+          step: activeStep,
+          type: EActivity.TASK_FINISHED
+        })
+        dispatch(activityApi.util.resetApiState())
+
+        tempUpdatedTaskData.status = ETaskStatus.Completed
       }
       setUpdatedTaskData({ ...tempUpdatedTaskData })
       updateTask(tempUpdatedTaskData)
@@ -285,18 +310,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
           })
           const tempUpdatedTaskData = JSON.parse(JSON.stringify(updatedTaskData))
           tempUpdatedTaskData.steps[activeStep].checklistItems[index].isChecked = true
-          handleAllChecklistCheck(tempUpdatedTaskData, index)
+          handleAllChecklistCheck(tempUpdatedTaskData, index, result.value)
           setUpdatedTaskData(tempUpdatedTaskData)
-          await createActivity({
-            title: 'Task Checklist Completed',
-            content: result.value || ' ',
-            customer: tempUpdatedTaskData.customer._id,
-            task: tempUpdatedTaskData._id,
-            owner: loggedUser.user?._id || '',
-            step: activeStep,
-            type: EActivity.TASK_CHECKLIST_CHECKED
-          })
-          dispatch(activityApi.util.resetApiState())
         } else {
           Swal.fire({
             icon: 'error',
@@ -319,6 +334,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
     }).then(async result => {
       if (result.isConfirmed) {
         const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
+        tempUpdatedTaskData.status = ETaskStatus.Progress
         tempUpdatedTaskData.steps[0].stepStatus = ETaskStatus.Progress
         setUpdatedTaskData(tempUpdatedTaskData)
 

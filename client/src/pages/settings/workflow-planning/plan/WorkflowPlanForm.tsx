@@ -13,7 +13,7 @@ import { useGetCategoriesQuery, useGetChecklistsQuery } from '@/services/setting
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import CLIENT_TASK_TABS_ARR from '@/constants/clientTaskTabs'
 import { useGetLocationsQuery } from '@/services/settings/company-planning/dynamicVariableService'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 
 interface IProps {
   data: ITaskCreateDTO

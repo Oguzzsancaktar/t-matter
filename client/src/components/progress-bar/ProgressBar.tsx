@@ -10,6 +10,7 @@ interface IProps {
   endLabel?: string
   completionPercentage: number
   completionColor: string
+  reverse?: boolean
 }
 
 interface IStyledProps {
@@ -34,26 +35,52 @@ const ProgressBarCompletion = styled.div<IStyledProps>`
   left: 0;
 `
 
-const ProgressBar: React.FC<IProps> = ({ startLabel, endLabel, completionPercentage, completionColor }) => {
+const ProgressBar: React.FC<IProps> = ({
+  startLabel,
+  endLabel,
+  completionPercentage,
+  completionColor,
+  reverse = false
+}) => {
   return (
     <ItemContainer>
-      <Column>
-        <ItemContainer>
-          <ProgressBarContainer>
-            <ProgressBarCompletion completionPercentage={completionPercentage} completionColor={completionColor} />
-          </ProgressBarContainer>
-        </ItemContainer>
-        <ItemContainer>
-          <JustifyBetweenRow>
-            <H1 width="auto" color={colors.black.middle}>
-              {startLabel}
-            </H1>
-            <H1 width="auto" color={colors.black.middle}>
-              {endLabel}
-            </H1>
-          </JustifyBetweenRow>
-        </ItemContainer>
-      </Column>
+      {reverse ? (
+        <Column>
+          <ItemContainer>
+            <JustifyBetweenRow>
+              <H1 width="auto" color={colors.black.middle}>
+                {startLabel}
+              </H1>
+              <H1 width="auto" color={colors.black.middle}>
+                {endLabel}
+              </H1>
+            </JustifyBetweenRow>
+          </ItemContainer>
+          <ItemContainer>
+            <ProgressBarContainer>
+              <ProgressBarCompletion completionPercentage={completionPercentage} completionColor={completionColor} />
+            </ProgressBarContainer>
+          </ItemContainer>
+        </Column>
+      ) : (
+        <Column>
+          <ItemContainer>
+            <ProgressBarContainer>
+              <ProgressBarCompletion completionPercentage={completionPercentage} completionColor={completionColor} />
+            </ProgressBarContainer>
+          </ItemContainer>
+          <ItemContainer>
+            <JustifyBetweenRow>
+              <H1 width="auto" color={colors.black.middle}>
+                {startLabel}
+              </H1>
+              <H1 width="auto" color={colors.black.middle}>
+                {endLabel}
+              </H1>
+            </JustifyBetweenRow>
+          </ItemContainer>
+        </Column>
+      )}
     </ItemContainer>
   )
 }

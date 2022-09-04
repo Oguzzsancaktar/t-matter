@@ -24,8 +24,9 @@ const getTaskActivity = async (req, res) => {
 }
 
 const getAllActivity = async (req, res) => {
+  const { userId, type } = req.query
   try {
-    const activities = await dataAccess.activityDataAccess.getAllActivity()
+    const activities = await dataAccess.activityDataAccess.getAllActivity(userId, type)
     res.send(activities)
   } catch (e) {
     console.log(e)

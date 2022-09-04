@@ -12,6 +12,12 @@ import { UserSelect } from '../user-select'
 interface IStyledProps {
   color: string
 }
+
+interface IProps {
+  handleFilterUserChange: (responsible: IUser) => void
+  handleTypeFilter: (activityType: number) => void
+  userFilter?: IUser
+}
 const FilterBlock = styled.div<IStyledProps>`
   height: 8px;
   width: 100%;
@@ -25,7 +31,7 @@ const FilterBlock = styled.div<IStyledProps>`
   cursor: pointer;
 `
 
-const ActivityFilter = () => {
+const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleTypeFilter, userFilter }) => {
   const { data: activitiesData, isLoading } = useGetActivitiesQuery({})
 
   const activityTypesArr = useMemo(() => Object.keys(EActivity), [EActivity])
@@ -35,18 +41,7 @@ const ActivityFilter = () => {
   )
   const obj = activityTypes.reduce((o, key) => Object.assign(o, { [key]: 0 }), {})
 
-  const [userFilter, setUserFilter] = useState<IUser>()
-  const [typeFilter, setTypeFilter] = useState<EActivity>()
-
   const [activityTypeValues, setActivityTypeValues] = useState(obj)
-
-  const handleFilterUserChange = (user: IUser) => {
-    setUserFilter(user)
-  }
-
-  const handleTypeFilter = (type: EActivity) => {
-    setTypeFilter(type)
-  }
 
   useEffect(() => {
     ReactTooltip.rebuild()

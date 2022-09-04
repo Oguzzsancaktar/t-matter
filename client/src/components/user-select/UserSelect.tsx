@@ -1,5 +1,5 @@
 import colors from '@/constants/colors'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import { IUser } from '@/models'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import React, { useState } from 'react'
@@ -60,11 +60,11 @@ const UserSelect: React.FC<IProps> = ({ selectedUser, disabled, onResponsibleCha
   }
 
   return (
-    <ItemContainer>
+    <ItemContainer width="100%" height="100%">
       <RelativeContainer>
-        <ItemContainer onClick={handleUserList} cursorType="pointer">
+        <ItemContainer width="100%" height="100%" onClick={handleUserList} cursorType="pointer">
           <JustifyCenterRow data-tip={selectedUser?.firstname + ' ' + selectedUser?.lastname}>
-            <UserImage src="" width="40px" height="40px" />
+            <UserImage src="" width="100%" height="100%" />
           </JustifyCenterRow>
         </ItemContainer>
         {showUserList && !userListIsLoading && userListData && (

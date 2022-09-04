@@ -16,7 +16,7 @@ import { Plus, UserCheck, X } from 'react-feather'
 import colors from '@/constants/colors'
 import { useGetCustomersQuery } from '@/services/customers/customerService'
 import { ECustomerType, ICustomer } from '@/models'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 
 interface IProps {
   reliableInCompanyList: ICustomer[]

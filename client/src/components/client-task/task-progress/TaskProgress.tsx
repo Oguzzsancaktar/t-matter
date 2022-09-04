@@ -1,14 +1,16 @@
 import { ItemContainer } from '@/components/item-container'
 import { ProgressBar } from '@/components/progress-bar'
-import colors from '@/constants/colors'
 import { ETaskStatus, ITaskItem } from '@/models'
+import { selectColorForTaskStatus } from '@/utils/statusColorUtil'
 import React, { useEffect, useState } from 'react'
 
 interface IProps {
+  workflowName: string
   taskSteps: ITaskItem[]
+  taskStatus: ETaskStatus
 }
 
-const TaskProgress: React.FC<IProps> = ({ taskSteps }) => {
+const TaskProgress: React.FC<IProps> = ({ taskStatus, taskSteps, workflowName }) => {
   const [stepStatuses, setStepStatuses] = useState({
     canceled: 0,
     completed: 0,
@@ -43,14 +45,10 @@ const TaskProgress: React.FC<IProps> = ({ taskSteps }) => {
   return (
     <ItemContainer>
       <ProgressBar
+        reverse={true}
+        startLabel={workflowName}
         completionPercentage={percentage}
-        completionColor={
-          stepStatuses.canceled !== 0
-            ? colors.red.primary
-            : percentage === 100
-            ? colors.green.primary
-            : colors.blue.primary
-        }
+        completionColor={selectColorForTaskStatus(taskStatus)}
       ></ProgressBar>
     </ItemContainer>
   )

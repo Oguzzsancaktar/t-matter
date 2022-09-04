@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { IProps } from './types'
 
 export const ButtonSC = styled.button<Pick<IProps, 'width' | 'height' | 'disabled' | 'color' | 'padding'>>`
-  font-family: 'Chillax-Regular';
   cursor: ${({ disabled }) => (disabled ? 'disabled' : 'pointer')};
   border-radius: 0.3rem;
   transition: background 0.3s ease-in-out;
@@ -23,7 +22,7 @@ export const ButtonSC = styled.button<Pick<IProps, 'width' | 'height' | 'disable
   }
 
   &:disabled {
-    cursor: wait;
+    cursor: not-allowed;
     background-color: ${({ disabled }) => disabled && colors.gray.disabled};
   }
 `

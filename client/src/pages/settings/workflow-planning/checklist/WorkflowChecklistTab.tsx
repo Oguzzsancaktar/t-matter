@@ -14,7 +14,7 @@ import {
   UpdateWorkflowChecklistModal
 } from '@/components'
 import { Badge } from '@/components/badge'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, ITaskChecklist } from '@/models'

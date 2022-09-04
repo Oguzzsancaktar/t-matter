@@ -10,7 +10,7 @@ import {
 import { closeModal, openModal } from '@/store'
 import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isEmailValid, isValueNull } from '@/utils/validationUtils'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import colors from '@/constants/colors'
 import { customerApi, useUpdateCustomerMutation } from '@/services/customers/customerService'
 

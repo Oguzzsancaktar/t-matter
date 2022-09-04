@@ -15,7 +15,7 @@ import {
 } from '@/components'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
 import colors from '@/constants/colors'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import { statusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IUser } from '@/models'

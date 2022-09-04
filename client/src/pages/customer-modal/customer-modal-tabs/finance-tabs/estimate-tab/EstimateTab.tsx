@@ -24,7 +24,7 @@ import {
   useGetInvoiceCategoriesQuery,
   useGetInvoicesQuery
 } from '@services/settings/finance-planning/financePlanningService'
-import emptyQueryParams from '@constants/queryParams'
+import { emptyQueryParams } from '@constants/queryParams'
 import { invoiceDefault } from '@constants/finance'
 import invoicesDonut from '@pages/customer-modal/customer-modal-tabs/finance-tabs/estimate-tab/InvoicesDonut'
 

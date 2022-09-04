@@ -7,7 +7,7 @@ import { UserSelect } from '@/components/user-select'
 import colors from '@/constants/colors'
 import { useAuth } from '@/hooks/useAuth'
 import { ETaskStatus, ITaskItem, IUser } from '@/models'
-import { selectColorForStatus, selectColorForTaskStatus } from '@/utils/statusColorUtil'
+import { selectColorForTaskStatus } from '@/utils/statusColorUtil'
 import React from 'react'
 import { PlayCircle, XCircle } from 'react-feather'
 
@@ -34,34 +34,17 @@ const TaskUserCard: React.FC<IProps> = ({
   return (
     <ItemContainer>
       <JustifyBetweenRow>
-        <ItemContainer>
-          <JustifyCenterColumn>
-            <ItemContainer>
-              <UserSelect
-                disabled={!canResponsibleUserChange}
-                selectedUser={taskActiveStep?.responsibleUser}
-                onResponsibleChange={onResponsibleChange}
-              />
-            </ItemContainer>
-
-            <ItemContainer>
-              <JustifyCenterRow>
-                <Badge
-                  children={Object.values(ETaskStatus)[taskActiveStep?.stepStatus]?.toString().replace('_', ' ')}
-                  color={selectColorForTaskStatus(taskActiveStep?.stepStatus)}
-                />
-              </JustifyCenterRow>
-            </ItemContainer>
-          </JustifyCenterColumn>
+        <ItemContainer width="60px" height="60px">
+          <UserSelect
+            disabled={!canResponsibleUserChange}
+            selectedUser={taskActiveStep?.responsibleUser}
+            onResponsibleChange={onResponsibleChange}
+          />
         </ItemContainer>
 
-        <ItemContainer>
-          <H1>{taskActiveStep?.category.name}</H1>
-        </ItemContainer>
-
-        <ItemContainer width="auto" height="100%">
+        <ItemContainer width="calc(30px)" margin="0 0.5rem">
           <JustifyBetweenColumn width="auto">
-            <ItemContainer width="auto">
+            <ItemContainer width="auto" margin="0 0 0.25rem 0" cursorType="pointer">
               <Button
                 disabled={!isTaskNotStarted || !isResponsibleUserCurrentLoggedUser}
                 padding="0"
@@ -87,6 +70,34 @@ const TaskUserCard: React.FC<IProps> = ({
               </Button>
             </ItemContainer>
           </JustifyBetweenColumn>
+        </ItemContainer>
+
+        <ItemContainer width="calc(100% - 60px - 30px - 1rem)">
+          <JustifyCenterColumn>
+            <ItemContainer
+              width="100%"
+              backgroundColor={colors.gray.middle}
+              height="30px"
+              borderRadius="0.3rem"
+              margin="0 0 0.25rem 0"
+            >
+              <JustifyCenterColumn width="100%" height="100%">
+                <H1 width="100%" textAlign="center" fontWeight="600" color={colors.primary.dark}>
+                  {taskActiveStep?.category.name}
+                </H1>
+              </JustifyCenterColumn>
+            </ItemContainer>
+
+            <ItemContainer width="100%" height="30px">
+              <JustifyCenterRow width="100%">
+                <Badge
+                  width="100%"
+                  children={Object.values(ETaskStatus)[taskActiveStep?.stepStatus]?.toString().replace('_', ' ')}
+                  color={selectColorForTaskStatus(taskActiveStep?.stepStatus)}
+                />
+              </JustifyCenterRow>
+            </ItemContainer>
+          </JustifyCenterColumn>
         </ItemContainer>
       </JustifyBetweenRow>
     </ItemContainer>

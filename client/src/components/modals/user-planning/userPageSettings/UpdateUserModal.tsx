@@ -16,7 +16,7 @@ import { statusOptions } from '@/constants/statuses'
 import { useGetRolesQuery } from '@/services/settings/user-planning/userRoleService'
 import { useUpdateUserMutation } from '@/services/settings/user-planning/userService'
 import colors from '@/constants/colors'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 
 interface IProps {
   user: IUser

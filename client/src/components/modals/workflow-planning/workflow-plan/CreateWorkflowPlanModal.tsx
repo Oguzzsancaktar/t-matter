@@ -13,7 +13,7 @@ import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import useAccessStore from '@/hooks/useAccessStore'
 import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import { H1 } from '@/components/texts'
 
 const CreateWorkflowPlanModal = () => {

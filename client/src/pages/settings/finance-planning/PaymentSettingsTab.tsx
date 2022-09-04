@@ -13,7 +13,7 @@ import {
 import colors from '@constants/colors'
 import { Clock, DollarSign, Percent } from 'react-feather'
 import { useGetUsersQuery } from '@services/settings/user-planning/userService'
-import emptyQueryParams from '@constants/queryParams'
+import { emptyQueryParams } from '@constants/queryParams'
 import { defaultPaymentSettings, feeCalculationTypeOptions } from '@/constants/financePlanning'
 import {
   useGetFinancePlanningQuery,

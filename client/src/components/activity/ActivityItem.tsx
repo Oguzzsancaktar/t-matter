@@ -7,7 +7,6 @@ interface IProps {
 }
 
 const ActivityItem: React.FC<IProps> = ({ activity }) => {
-  console.log(activity)
   return (
     <JustifyCenterRow width="100%" margin="0 0 16px 0">
       <UserImage
@@ -18,6 +17,8 @@ const ActivityItem: React.FC<IProps> = ({ activity }) => {
         data-tip={activity.owner.firstname + ' ' + activity.owner.lastname}
       />
       <Baloon
+        customer={activity.customer}
+        task={activity.task}
         type={activity.type}
         title={activity.title}
         content={activity.content}

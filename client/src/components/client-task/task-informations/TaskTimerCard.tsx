@@ -53,10 +53,18 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, han
         <ItemContainer>
           <JustifyBetweenRow>
             <Row>
-              <Calendar size={20} />
-              <H1 width="auto">{secondsToHourMin(passedTime, true)}</H1>
+              <Calendar size={20} color={colors.text.primary} />
+              <ItemContainer margin="0 0 0 0.3rem ">
+                <H1 color={colors.text.primary} fontWeight="400" width="auto">
+                  {secondsToHourMin(passedTime, true)}
+                </H1>
+              </ItemContainer>
             </Row>
-            <H1 width="auto">{secondsToHourMin(totalDuration, true)}</H1>
+            <ItemContainer width="auto">
+              <H1 color={colors.text.primary} fontWeight="400" width="max-content">
+                {secondsToHourMin(totalDuration, true)}
+              </H1>
+            </ItemContainer>
           </JustifyBetweenRow>
         </ItemContainer>
         <ItemContainer>

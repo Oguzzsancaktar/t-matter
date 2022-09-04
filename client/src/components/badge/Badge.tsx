@@ -15,6 +15,7 @@ const BadgeContainer = styled.div<IProps>`
   color: ${({ color }) => color && color};
   background-color: ${({ color }) => color && color}20;
   border-radius: 0.3rem;
+  text-align: center;
 `
 const Badge = ({ children, color, ...rest }) => {
   return (

@@ -1,7 +1,7 @@
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
-import { IActivity, IActivityCreate, ICustomer, ITask } from '@/models'
+import { IActivity, IActivityCreate, IActivityFilter, ICustomer, ITask } from '@/models'
 
 const ACTIVITY_API_REDUCER_PATH = 'activityApi'
 const ACTIVITY_TAG = 'activityTag'
@@ -21,7 +21,10 @@ const createActivity = (builder: IBuilder) => {
 }
 
 const getActivities = (builder: IBuilder) => {
-  return builder.query<IActivity[], { customer?: ICustomer['_id']; task?: ITask['_id']; step?: number }>({
+  return builder.query<
+    IActivity[],
+    { customer?: ICustomer['_id']; task?: ITask['_id']; step?: number } & IActivityFilter
+  >({
     query(params) {
       return {
         url: '/activity',

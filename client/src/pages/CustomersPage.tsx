@@ -24,7 +24,7 @@ import { UserCheck } from 'react-feather'
 import { useGetCustomersQuery, useUpdateCustomerStatusMutation } from '@/services/customers/customerService'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import { statusOptions } from '@/constants/statuses'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 
 const CustomersPage = () => {
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)

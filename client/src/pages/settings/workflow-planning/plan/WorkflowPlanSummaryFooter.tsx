@@ -6,7 +6,7 @@ import { Button } from '@/components'
 import { ITaskChecklist } from '@/models'
 import { useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
 import { secondsToHourMin } from '@/utils/timeUtils'
-import emptyQueryParams from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 
 const Text = styled.h3`
   font-size: 0.8rem;
