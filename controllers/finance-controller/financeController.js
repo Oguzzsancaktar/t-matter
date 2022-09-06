@@ -6,6 +6,7 @@ const { getCompanyPricing } = require('../company-pricing-controller/companyPric
 const calculateHourlyCompanyFee = require('../../helpers/calculateHourlyCompanyFee')
 const { INSTALLMENT_TYPES, INSTALLMENT_STATUS } = require('../../constants/finance')
 const moment = require('moment')
+const { errorUtils } = require('../../utils')
 
 const getFinancePlanning = async (req, res) => {
   try {
@@ -136,6 +137,94 @@ const postponeInstallment = async (req, res) => {
   }
 }
 
+const payInstallment = async (req, res) => {
+  const { installmentId, invoiceId } = req.params
+  let { amount, paidDate, paidMethod } = req.body
+  try {
+    const installment = await dataAccess.financeDataAccess.getInstallmentById(installmentId)
+    if (installment.type === INSTALLMENT_TYPES.DEPOSIT) {
+      // if deposit greater than amount, throw error
+      if (installment.payAmount !== amount) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json(errorUtils.errorInstance({ message: 'Deposit amount is not equal to pay amount' }))
+      }
+      await dataAccess.financeDataAccess.updateInstallment(installmentId, {
+        paidDate,
+        paidMethod,
+        status: INSTALLMENT_STATUS.PAID,
+        paidAmount: amount
+      })
+      const dayDiff = moment(installment.payDate).diff(moment(paidDate), 'days')
+      if (dayDiff > 0) {
+        await dataAccess.financeDataAccess.updateManyInstallment(
+          { invoice: invoiceId, type: INSTALLMENT_TYPES.PAYMENT },
+          [{ $set: { payDate: { $dateAdd: { startDate: '$payDate', unit: 'day', amount: dayDiff } } } }]
+        )
+      }
+      return res.sendStatus(StatusCodes.OK)
+    }
+
+    const restPay = installment.payAmount + installment.suspendedFee + installment.lateFee - installment.paidAmount
+    if (restPay < amount) {
+      await dataAccess.financeDataAccess.updateInstallment(installmentId, {
+        paidDate,
+        paidMethod,
+        paidAmount: restPay + installment.paidAmount,
+        status: INSTALLMENT_STATUS.PAID
+      })
+      const installments = await dataAccess.financeDataAccess.getInstallmentsByInvoiceId(invoiceId)
+      let index = installments.findIndex(item => item._id.toString() === installmentId)
+      amount = amount - restPay
+      while (amount) {
+        const i = installments[index + 1]
+        const rest = i.payAmount + i.suspendedFee + i.lateFee - i.paidAmount
+        if (amount >= rest) {
+          await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
+            paidDate,
+            paidMethod,
+            paidAmount: i.payAmount,
+            status: INSTALLMENT_STATUS.PAID
+          })
+          amount = amount - rest
+        } else {
+          await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
+            paidDate,
+            paidMethod,
+            paidAmount: amount,
+            status: INSTALLMENT_STATUS.LESS_PAID
+          })
+          amount = 0
+        }
+        index = index + 1
+      }
+      return res.sendStatus(StatusCodes.OK)
+    }
+    if (restPay > amount) {
+      await dataAccess.financeDataAccess.updateInstallment(installmentId, {
+        paidDate,
+        paidMethod,
+        paidAmount: amount,
+        status: INSTALLMENT_STATUS.LESS_PAID
+      })
+      return res.sendStatus(StatusCodes.OK)
+    }
+    if (restPay === amount) {
+      await dataAccess.financeDataAccess.updateInstallment(installmentId, {
+        paidDate,
+        paidMethod,
+        paidAmount: amount,
+        status: INSTALLMENT_STATUS.PAID
+      })
+      return res.sendStatus(StatusCodes.OK)
+    }
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   getFinancePlanning,
   updateFinancePlanning,
@@ -145,5 +234,6 @@ module.exports = {
   getExpiredTaskSteps,
   createInstallment,
   getInstallments,
-  postponeInstallment
+  postponeInstallment,
+  payInstallment
 }

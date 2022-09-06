@@ -30,7 +30,8 @@ const InvoiceSchema = new Schema(
       type: Date
     },
     paidAmount: {
-      type: Number
+      type: Number,
+      default: 0
     },
     lateFee: {
       type: Number,

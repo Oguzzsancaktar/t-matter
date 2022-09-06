@@ -236,6 +236,37 @@ const postponeInstallment = (builder: IBuilder) => {
   })
 }
 
+const payInstallment = (builder: IBuilder) => {
+  return builder.mutation<
+    void,
+    {
+      installmentId: IInstallment['_id']
+      invoiceId: Invoice['_id']
+      amount: number
+      paidDate: Date
+      paidMethod: string
+    }
+  >({
+    query(arg) {
+      return {
+        url: `/finance/installment/${arg.invoiceId}/pay/${arg.installmentId}`,
+        method: 'PUT',
+        data: {
+          amount: arg.amount,
+          paidDate: arg.paidDate,
+          paidMethod: arg.paidMethod
+        }
+      }
+    },
+    invalidatesTags(result) {
+      return [
+        { type: INSTALLMENT_TAG_TYPE, id: 'LIST' },
+        { type: INVOICE_TAG_TYPE, id: 'LIST' }
+      ]
+    }
+  })
+}
+
 const financePlanningApi = createApi({
   reducerPath: FINANCE_PLANNING_REDUCER_PATH,
   tagTypes: [FINANCE_PLANNING_TAG_TYPE, INVOICE_CATEGORY_TAG_TYPE, INVOICE_TAG_TYPE, EXPIRED_INVOICE_TAG_TYPE],
@@ -253,7 +284,8 @@ const financePlanningApi = createApi({
     createExpiredTaskStep: createExpiredTaskStep(builder),
     createInstallment: createInstallment(builder),
     getInstallments: getInstallments(builder),
-    postponeInstallment: postponeInstallment(builder)
+    postponeInstallment: postponeInstallment(builder),
+    payInstallment: payInstallment(builder)
   })
 })
 
@@ -270,7 +302,8 @@ const {
   useCreateExpiredTaskStepMutation,
   useCreateInstallmentMutation,
   useGetInstallmentsQuery,
-  usePostponeInstallmentMutation
+  usePostponeInstallmentMutation,
+  usePayInstallmentMutation
 } = financePlanningApi
 
 export {
@@ -287,5 +320,6 @@ export {
   useCreateExpiredTaskStepMutation,
   useCreateInstallmentMutation,
   useGetInstallmentsQuery,
-  usePostponeInstallmentMutation
+  usePostponeInstallmentMutation,
+  usePayInstallmentMutation
 }

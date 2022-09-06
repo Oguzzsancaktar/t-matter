@@ -91,13 +91,13 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
     }
   }
 
-  const showPayInstallment = () => {
+  const showPayInstallment = (installment: IInstallment) => {
     if (selectedInvoice) {
       dispatch(
         openModal({
           id: `payInstallment`,
           title: 'Pay Installment Modal',
-          body: <PayInstallment invoice={selectedInvoice} />,
+          body: <PayInstallment invoice={selectedInvoice} installment={installment} />,
           width: ESize.WSmall,
           height: ESize.WSmall,
           maxWidth: ESize.WSmall
@@ -197,10 +197,10 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         selector: row => row._id,
         right: true,
         header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
-        cell: data => (
+        cell: (data: IInstallment) => (
           <Row>
             <IconButton
-              onClick={showPayInstallment}
+              onClick={showPayInstallment.bind(this, data)}
               bgColor={colors.background.gray.light}
               margin="0 .2rem 0 0"
               children={<DollarSign size={'16px'} color={colors.text.primary} />}

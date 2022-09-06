@@ -20,6 +20,7 @@ import moment from 'moment'
 import { DollarSign } from 'react-feather'
 import useAccessStore from '@hooks/useAccessStore'
 import { closeModal } from '@/store'
+import { toastError } from '@utils/toastUtil'
 
 interface IProps {
   invoice: Invoice
@@ -57,7 +58,14 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
   }, [state?.deposit, state?.quantity])
 
   const handleCreate = () => {
-    if (state) {
+    if (state && financePlanning) {
+      if (
+        state.payAmount < financePlanning.minInstallmentAmount.value ||
+        state.deposit < (invoice.total * financePlanning.minDepositAmount.value) / 100
+      ) {
+        toastError('Pay amount or deposit is less than minimum amount')
+        return
+      }
       createInstallment(state)
       dispatch(closeModal('createInstallment'))
     }

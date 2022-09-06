@@ -211,7 +211,7 @@ const getInstallmentsByInvoiceId = invoiceId => {
         payDate: 1
       }
     }
-  ])
+  ]).exec()
 }
 
 const getInstallmentById = id => {
