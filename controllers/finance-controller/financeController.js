@@ -121,6 +121,21 @@ const getInstallments = async (req, res) => {
   }
 }
 
+const postponeInstallment = async (req, res) => {
+  const { days, oldDate } = req.body
+  const { invoiceId } = req.params
+  try {
+    await dataAccess.financeDataAccess.updateInvoiceById(invoiceId, { $inc: { postponeCount: 1 } })
+    await dataAccess.financeDataAccess.updateManyInstallment({ invoice: invoiceId, payDate: { $gte: oldDate } }, [
+      { $set: { payDate: { $dateAdd: { startDate: '$payDate', unit: 'day', amount: days } } } }
+    ])
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   getFinancePlanning,
   updateFinancePlanning,
@@ -129,5 +144,6 @@ module.exports = {
   createExpiredTaskStep,
   getExpiredTaskSteps,
   createInstallment,
-  getInstallments
+  getInstallments,
+  postponeInstallment
 }

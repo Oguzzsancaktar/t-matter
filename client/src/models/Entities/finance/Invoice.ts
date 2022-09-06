@@ -10,6 +10,7 @@ interface Invoice {
   tasks?: ICustomerTask[]
   createdAt?: Date
   expiredTaskSteps?: IExpiredTaskStep[]
+  postponeCount: number
 }
 
 export default Invoice

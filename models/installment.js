@@ -33,10 +33,12 @@ const InvoiceSchema = new Schema(
       type: Number
     },
     lateFee: {
-      type: Number
+      type: Number,
+      default: 0
     },
     suspendedFee: {
-      type: Number
+      type: Number,
+      default: 0
     },
     notes: {
       type: [String]

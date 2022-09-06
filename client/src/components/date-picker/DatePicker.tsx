@@ -19,6 +19,7 @@ interface IProps {
   disabled?: boolean
   dateFormat?: string
   minDate?: number
+  maxDate?: number
   onChange: (value: Date[], dateText: string) => void
 }
 
@@ -37,7 +38,8 @@ const DatePicker: React.FC<IProps> = ({
   validationError,
   dateFormat = 'M/d/Y',
   minDate,
-  onChange
+  onChange,
+  maxDate
 }) => {
   const [date, setDate] = useState(value)
 
@@ -69,7 +71,8 @@ const DatePicker: React.FC<IProps> = ({
                 options={{
                   enableTime: enableTime,
                   dateFormat: dateFormat,
-                  minDate: minDate
+                  minDate: minDate,
+                  maxDate: maxDate
                 }}
                 disabled={disabled}
                 value={date}

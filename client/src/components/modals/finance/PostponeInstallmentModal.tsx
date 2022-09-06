@@ -3,15 +3,36 @@ import { IInstallment, Invoice } from '@/models'
 import React, { useState } from 'react'
 import colors from '@constants/colors'
 import { ModalHeader, ModalBody } from '@components/modals/types'
+import {
+  useGetFinancePlanningQuery,
+  usePostponeInstallmentMutation
+} from '@services/settings/finance-planning/financePlanningService'
+import useAccessStore from '@hooks/useAccessStore'
+import { closeModal } from '@/store'
+import moment from 'moment'
 
 interface IProps {
   installment: IInstallment
+  selectedInvoice: Invoice
+  setSelectedInvoice: React.Dispatch<React.SetStateAction<Invoice | undefined>>
 }
 
-const PostponeInstallmentModal: React.FC<IProps> = ({ installment }) => {
+const PostponeInstallmentModal: React.FC<IProps> = ({ installment, selectedInvoice, setSelectedInvoice }) => {
   const [state, setState] = useState(installment.payDate)
-  console.log(state)
-  const handlePostpone = () => {}
+  const [postponeInstallment] = usePostponeInstallmentMutation()
+  const { data: financePlanning, isLoading: isFinancePlanningLoading } = useGetFinancePlanningQuery()
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
+  const handlePostpone = async () => {
+    await postponeInstallment({
+      invoiceId: selectedInvoice._id,
+      oldDate: installment.payDate,
+      days: moment(state).diff(moment(installment.payDate), 'days') + 1
+    })
+    setSelectedInvoice({ ...selectedInvoice, postponeCount: selectedInvoice.postponeCount + 1 })
+    dispatch(closeModal('postponeInstallment'))
+  }
 
   return (
     <ItemContainer height="100%" overflow="hidden" borderRadius="0.3rem">
@@ -32,6 +53,10 @@ const PostponeInstallmentModal: React.FC<IProps> = ({ installment }) => {
                   setState(date[0])
                 }
               }}
+              minDate={moment(installment.payDate).valueOf()}
+              maxDate={moment(installment.payDate)
+                .add(financePlanning?.installmentPostponeTimeLimit.value, 'days')
+                .valueOf()}
               value={state}
             />
           </JustifyCenterRow>

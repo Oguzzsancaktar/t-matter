@@ -27,11 +27,16 @@ import useAccessStore from '@hooks/useAccessStore'
 import { openModal } from '@/store'
 import { ESize, IInstallment, Invoice } from '@/models'
 import DataTable from 'react-data-table-component'
-import { useGetInstallmentsQuery } from '@services/settings/finance-planning/financePlanningService'
+import {
+  useGetFinancePlanningQuery,
+  useGetInstallmentsQuery
+} from '@services/settings/finance-planning/financePlanningService'
 import { Calendar, DollarSign, Edit, FileText, UserCheck } from 'react-feather'
 import moment from 'moment'
 import PayInstallment from '@components/modals/finance/PayInstallmentModal'
 import Flatpickr from 'react-flatpickr'
+import { INSTALLMENT_TYPES } from '@constants/finance'
+import invoice from '@models/Entities/finance/Invoice'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -54,6 +59,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
   const { data: installments, isLoading: isInstallmentsLoading } = useGetInstallmentsQuery(selectedInvoice?._id, {
     skip: !selectedInvoice
   })
+  const { data: financePlanning, isLoading: isFinancePlanningLoading } = useGetFinancePlanningQuery()
 
   const showCreateInstallment = () => {
     if (selectedInvoice) {
@@ -107,7 +113,13 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         openModal({
           id: `postponeInstallment`,
           title: 'Postpone Installment Modal',
-          body: <PostponeInstallmentModal installment={row} />,
+          body: (
+            <PostponeInstallmentModal
+              installment={row}
+              selectedInvoice={selectedInvoice}
+              setSelectedInvoice={setSelectedInvoice}
+            />
+          ),
           width: ESize.WSmall,
           height: ESize.WSmall,
           maxWidth: ESize.WSmall
@@ -120,93 +132,100 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
     return moment(date).format('MMM DD YYYY')
   }
 
-  const columns = [
-    {
-      name: 'Type',
-      selector: row => row.type,
-      sortable: true,
-      cell: data => <div>{data.type}</div>
-    },
-    {
-      name: 'Pay date',
-      selector: row => row.payDate,
-      sortable: true,
-      cell: data => <div>{dateFormat(data.payDate)}</div>
-    },
-    {
-      name: 'Pay amount',
-      selector: row => row.payAmount,
-      sortable: true,
-      cell: data => <div>{data.payAmount}</div>
-    },
-    {
-      name: 'Paid date',
-      selector: row => row.paidDate,
-      sortable: true,
-      cell: data => <div>{dateFormat(data.paidDate)}</div>
-    },
-    {
-      name: 'Paid amount',
-      selector: row => row.paidAmount,
-      sortable: true,
-      cell: data => <div>{data.paidAmount}</div>
-    },
-    {
-      name: 'Late fee',
-      selector: row => row.lateFee,
-      sortable: true,
-      cell: data => <div>{data.lateFee}</div>
-    },
-    {
-      name: 'Suspended fee',
-      selector: row => row.suspendedFee,
-      sortable: true,
-      cell: data => <div>{data.suspendedFee}</div>
-    },
-    {
-      name: 'Balance',
-      selector: row => selectedInvoice?.total,
-      sortable: true,
-      cell: data => <div>{+Math.ceil(selectedInvoice?.total as number)}</div>
-    },
-    {
-      name: 'Status',
-      selector: row => row.status,
-      sortable: true,
-      cell: data => <div>{data.status}</div>
-    },
-    {
-      name: 'Actions',
-      width: '120px',
-      selector: row => row._id,
-      right: true,
-      header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
-      cell: data => (
-        <Row>
-          <IconButton
-            onClick={showPayInstallment}
-            bgColor={colors.background.gray.light}
-            margin="0 .2rem 0 0"
-            children={<DollarSign size={'16px'} color={colors.text.primary} />}
-          />
-
-          <IconButton
-            onClick={showPostponeInstallment.bind(this, data)}
-            bgColor={colors.background.gray.light}
-            margin="0 .2rem 0 0"
-            children={<Calendar size={'16px'} color={colors.text.primary} />}
-          />
-
-          <IconButton
-            onClick={() => {}}
-            bgColor={colors.background.gray.light}
-            margin="0 .2rem 0 0"
-            children={<FileText size={'16px'} color={colors.text.primary} />}
-          />
-        </Row>
-      )
+  const columns = () => {
+    if (!selectedInvoice) {
+      return []
     }
-  ]
+    return [
+      {
+        name: 'Type',
+        selector: row => row.type,
+        sortable: true,
+        cell: data => <div>{data.type}</div>
+      },
+      {
+        name: 'Pay date',
+        selector: row => row.payDate,
+        sortable: true,
+        cell: data => <div>{dateFormat(data.payDate)}</div>
+      },
+      {
+        name: 'Pay amount',
+        selector: row => row.payAmount,
+        sortable: true,
+        cell: data => <div>${data.payAmount}</div>
+      },
+      {
+        name: 'Paid date',
+        selector: row => row.paidDate,
+        sortable: true,
+        cell: data => <div>{data.paidDate ? dateFormat(data.paidDate) : '-'}</div>
+      },
+      {
+        name: 'Paid amount',
+        selector: row => row.paidAmount,
+        sortable: true,
+        cell: data => <div>{data.paidAmount}</div>
+      },
+      {
+        name: 'Late fee',
+        selector: row => row.lateFee,
+        sortable: true,
+        cell: data => <div>{data.lateFee}</div>
+      },
+      {
+        name: 'Suspended fee',
+        selector: row => row.suspendedFee,
+        sortable: true,
+        cell: data => <div>{data.suspendedFee}</div>
+      },
+      {
+        name: 'Balance',
+        selector: row => selectedInvoice?.total,
+        sortable: true,
+        cell: data => <div>{+Math.ceil(selectedInvoice?.total as number)}</div>
+      },
+      {
+        name: 'Status',
+        selector: row => row.status,
+        sortable: true,
+        cell: data => <div>{data.status}</div>
+      },
+      {
+        name: 'Actions',
+        width: '120px',
+        selector: row => row._id,
+        right: true,
+        header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
+        cell: data => (
+          <Row>
+            <IconButton
+              onClick={showPayInstallment}
+              bgColor={colors.background.gray.light}
+              margin="0 .2rem 0 0"
+              children={<DollarSign size={'16px'} color={colors.text.primary} />}
+            />
+            {data.type === INSTALLMENT_TYPES.PAYMENT &&
+              selectedInvoice?.postponeCount < (financePlanning?.installmentPostponeLimit?.value as number) && (
+                <IconButton
+                  onClick={showPostponeInstallment.bind(this, data)}
+                  bgColor={colors.background.gray.light}
+                  margin="0 .2rem 0 0"
+                  children={<Calendar size={'16px'} color={colors.text.primary} />}
+                />
+              )}
+
+            <IconButton
+              onClick={() => {}}
+              bgColor={colors.background.gray.light}
+              margin="0 .2rem 0 0"
+              children={<FileText size={'16px'} color={colors.text.primary} />}
+            />
+          </Row>
+        )
+      }
+    ]
+  }
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1rem' }}>
@@ -241,7 +260,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
                   <TableSkeltonLoader count={13} />
                 </ItemContainer>
               ) : installments && installments.length > 0 ? (
-                <DataTable fixedHeader columns={columns} data={installments || []} />
+                <DataTable fixedHeader columns={columns()} data={installments || []} />
               ) : (
                 <NoTableData />
               )}
