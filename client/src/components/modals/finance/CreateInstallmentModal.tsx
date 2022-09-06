@@ -61,7 +61,7 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
     if (state && financePlanning) {
       if (
         state.payAmount < financePlanning.minInstallmentAmount.value ||
-        state.deposit < (invoice.total * financePlanning.minDepositAmount.value) / 100
+        state.deposit < +Number((invoice.total * financePlanning.minDepositAmount.value) / 100).toFixed(0)
       ) {
         toastError('Pay amount or deposit is less than minimum amount')
         return
