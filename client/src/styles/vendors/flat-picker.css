@@ -169,14 +169,12 @@ ddd .flatpickr-calendar .flatpickr-day:hover {
   -webkit-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
   font-weight: 400;
-  font-family: 'Satoshi-Variable';
 }
 
 .flatpickr-input[readonly]::placeholder,
 .flatpickr-inputperu,
 .flatpickr-human-friendly[readonly] {
   color: #435971 !important;
-  font-family: 'Satoshi-Variable';
 }
 
 .flatpickr-weekdays {

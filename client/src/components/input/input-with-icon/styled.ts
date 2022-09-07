@@ -28,7 +28,6 @@ export const Input = styled.input<Pick<IStyledProps, 'validationError' | 'disabl
   padding: 0.2rem 0.4rem;
   transition: all 0.4s ease-in-out;
   font-weight: 400;
-  font-family: 'Satoshi-Variable';
 
   &:focus {
     color: ${colors.text.primary};

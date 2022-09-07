@@ -1,5 +1,6 @@
 const path = require('path')
 
+const bodyParser = require('body-parser')
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
@@ -31,6 +32,9 @@ const main = async () => {
   app.use(cors())
   app.use(morgan('dev'))
 
+  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.json())
+
   app.use('/api', routes)
 
   // error handler
@@ -41,12 +45,8 @@ const main = async () => {
 
   app.use(express.static(path.join(__dirname, '/client/build')))
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/client/build', 'index.html'))
-  })
-
   // app.get('*', (req, res) => {
-  //   res.sendFile(path.join(__dirname, '.', 'index.html'))
+  //   res.sendFile(path.join(__dirname, '/client/build', 'index.html'))
   // })
 
   app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
