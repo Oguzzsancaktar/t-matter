@@ -45,9 +45,9 @@ const main = async () => {
 
   app.use(express.static(path.join(__dirname, '/client/build')))
 
-  // app.get('*', (req, res) => {
-  //   res.sendFile(path.join(__dirname, '/client/build', 'index.html'))
-  // })
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/build', 'index.html'))
+  })
 
   app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
 }
