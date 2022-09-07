@@ -71,8 +71,8 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, han
           <ProgressBar
             completionColor={passedTime > totalDuration ? colors.orange.primary : colors.blue.primary}
             completionPercentage={(passedTime / totalDuration) * 100}
-            startLabel="Timer"
-            endLabel="Remaining"
+            // startLabel="Timer"
+            // endLabel="Remaining"
           />
         </ItemContainer>
       </Column>

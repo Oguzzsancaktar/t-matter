@@ -50,15 +50,29 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
       name: 'Steps',
       selector: row => row.name,
       sortable: true,
-      cell: data => <TaskProgress workflowName={data.name} taskStatus={data.status} taskSteps={data.steps} />
+      cell: data => (
+        <ItemContainer onClick={() => openCustomerTaskModal(data._id)}>
+          <TaskProgress
+            workflowStatus={data.status}
+            workflowName={data.name}
+            taskId={data._id}
+            taskStatus={data.status}
+            taskSteps={data.steps}
+          />
+        </ItemContainer>
+      )
     },
-    {
-      name: 'User',
-      width: '200px',
-      selector: row => row.steps,
-      sortable: true,
-      cell: data => <TaskActiveStepUser taskSteps={data.steps} />
-    },
+    // {
+    //   name: 'User',
+    //   width: '200px',
+    //   selector: row => row.steps,
+    //   sortable: true,
+    //   cell: data => (
+    //     <ItemContainer onClick={() => openCustomerTaskModal(data._id)}>
+    //       <TaskActiveStepUser taskSteps={data.steps} />
+    //     </ItemContainer>
+    //   )
+    // },
 
     {
       name: 'Actions',

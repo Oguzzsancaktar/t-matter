@@ -429,8 +429,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
                   <ItemContainer
                     width="calc(100% - 400px - 30px - 2rem)"
                     height="100%"
-                    padding="0 1rem"
-                    backgroundColor={colors.white.secondary}
+                    backgroundColor={colors.white.primary}
                   >
                     <TaskEventSection taskData={updatedTaskData} task={taskId} activeStepNumber={activeStep} />
                   </ItemContainer>

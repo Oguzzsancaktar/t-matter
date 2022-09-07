@@ -34,7 +34,7 @@ const createCustomer = (builder: IBuilder) => {
       return {
         url: '/customer',
         method: 'POST',
-        data: customerCreateDto
+        data: { ...customerCreateDto, jobTitle: customerCreateDto.jobTitle._id }
       }
     },
     invalidatesTags() {

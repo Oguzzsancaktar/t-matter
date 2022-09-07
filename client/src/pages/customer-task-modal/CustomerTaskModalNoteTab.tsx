@@ -15,17 +15,15 @@ const CustomerTaskModalNoteTab: React.FC<IProps> = ({ task, step }) => {
   }
 
   return (
-    <div style={{ height: '700px', overflow: 'auto' }}>
-      <ItemContainer>
-        <JustifyCenterColumn>
-          {data?.map((activity, index) => (
-            <ItemContainer height="auto" key={index}>
-              <ActivityItem activity={activity} />
-            </ItemContainer>
-          ))}
-        </JustifyCenterColumn>
-      </ItemContainer>
-    </div>
+    <ItemContainer>
+      <JustifyCenterColumn>
+        {data?.map((activity, index) => (
+          <ItemContainer height="auto" key={index}>
+            <ActivityItem activity={activity} />
+          </ItemContainer>
+        ))}
+      </JustifyCenterColumn>
+    </ItemContainer>
   )
 }
 

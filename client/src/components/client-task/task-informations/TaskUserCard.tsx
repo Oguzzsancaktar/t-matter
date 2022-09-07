@@ -42,7 +42,35 @@ const TaskUserCard: React.FC<IProps> = ({
           />
         </ItemContainer>
 
-        <ItemContainer width="calc(30px)" margin="0 0.5rem">
+        <ItemContainer width="calc(100% - 60px - 30px - 1rem)" margin="0 0.5rem">
+          <JustifyCenterColumn>
+            <ItemContainer
+              width="100%"
+              backgroundColor={colors.gray.middle}
+              height="30px"
+              borderRadius="0.3rem"
+              margin="0 0 0.25rem 0"
+            >
+              <JustifyCenterColumn width="100%" height="100%">
+                <H1 width="100%" textAlign="center" fontWeight="600" color={colors.primary.dark}>
+                  {taskActiveStep?.category.name}
+                </H1>
+              </JustifyCenterColumn>
+            </ItemContainer>
+
+            <ItemContainer width="100%" height="30px">
+              <JustifyCenterRow width="100%">
+                <Badge
+                  width="100%"
+                  children={Object.values(ETaskStatus)[taskActiveStep?.stepStatus]?.toString().replace('_', ' ')}
+                  color={selectColorForTaskStatus(taskActiveStep?.stepStatus)}
+                />
+              </JustifyCenterRow>
+            </ItemContainer>
+          </JustifyCenterColumn>
+        </ItemContainer>
+
+        <ItemContainer width="calc(30px)">
           <JustifyBetweenColumn width="auto">
             <ItemContainer width="auto" margin="0 0 0.25rem 0" cursorType="pointer">
               <Button
@@ -70,34 +98,6 @@ const TaskUserCard: React.FC<IProps> = ({
               </Button>
             </ItemContainer>
           </JustifyBetweenColumn>
-        </ItemContainer>
-
-        <ItemContainer width="calc(100% - 60px - 30px - 1rem)">
-          <JustifyCenterColumn>
-            <ItemContainer
-              width="100%"
-              backgroundColor={colors.gray.middle}
-              height="30px"
-              borderRadius="0.3rem"
-              margin="0 0 0.25rem 0"
-            >
-              <JustifyCenterColumn width="100%" height="100%">
-                <H1 width="100%" textAlign="center" fontWeight="600" color={colors.primary.dark}>
-                  {taskActiveStep?.category.name}
-                </H1>
-              </JustifyCenterColumn>
-            </ItemContainer>
-
-            <ItemContainer width="100%" height="30px">
-              <JustifyCenterRow width="100%">
-                <Badge
-                  width="100%"
-                  children={Object.values(ETaskStatus)[taskActiveStep?.stepStatus]?.toString().replace('_', ' ')}
-                  color={selectColorForTaskStatus(taskActiveStep?.stepStatus)}
-                />
-              </JustifyCenterRow>
-            </ItemContainer>
-          </JustifyCenterColumn>
         </ItemContainer>
       </JustifyBetweenRow>
     </ItemContainer>

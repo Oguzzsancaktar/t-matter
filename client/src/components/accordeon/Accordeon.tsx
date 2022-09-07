@@ -33,7 +33,7 @@ const Accordeon: React.FC<IProps> = ({ children, head }) => {
   const [isAccordeonOpen, setIsAccordeonOpen] = useState(false)
 
   return (
-    <ItemContainer width="calc(100% - 2rem)" margin="0 1rem">
+    <ItemContainer width="100%">
       <Column>
         <AccordeonHeader onClick={setIsAccordeonOpen.bind(this, !isAccordeonOpen)}>{head}</AccordeonHeader>
         <AccordeonBody isAccordeonOpen={isAccordeonOpen}>{children}</AccordeonBody>

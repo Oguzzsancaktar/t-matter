@@ -195,7 +195,7 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
 
   const handleStepChange = (index: number) => {
     setValidationErrors({ ...initialErrors })
-    const validationResult = validateFieldValues()
+    validateFieldValues()
     setActiveStep(index)
   }
 
@@ -203,7 +203,6 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
     if (workflowData) {
       setUpdateWorkflowData({
         ...workflowData
-        // steps: [...workflowData.steps]
       })
     }
   }, [workflowData, workflowIsLoading])
@@ -219,7 +218,7 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
       </ModalHeader>
 
       <ModalBody>
-        {updateWorkflowData && (
+        {workflowData && !workflowIsLoading && updateWorkflowData && (
           <Row height="100%">
             <ItemContainer height="100%" width="300px">
               <WorkflowPlanStepNavigation

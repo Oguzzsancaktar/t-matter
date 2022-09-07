@@ -66,8 +66,8 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
               taskActiveStep?.usedPostpone > taskActiveStep?.postponeTime ? colors.orange.primary : colors.blue.primary
             }
             completionPercentage={(taskActiveStep?.usedPostpone / taskActiveStep?.postponeTime) * 100}
-            startLabel="Postponed"
-            endLabel="Remaining"
+            // startLabel="Postponed"
+            // endLabel="Remaining"
           />
         </ItemContainer>
       </Column>

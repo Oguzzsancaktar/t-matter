@@ -43,8 +43,8 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
           <ProgressBar
             completionColor={percentage > 100 ? colors.orange.primary : colors.blue.primary}
             completionPercentage={percentage}
-            startLabel="Start Date"
-            endLabel="Expire Date"
+            // startLabel="Start Date"
+            // endLabel="Expire Date"
           />
         </ItemContainer>
       </Column>

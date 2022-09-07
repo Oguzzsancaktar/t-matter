@@ -1,11 +1,9 @@
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ECustomerType, EGender, ESize, EStatus, ICustomer, IRelativeType, IReliableCustomer } from '@/models'
-import { useGetCustomerReliablesQuery } from '@/services/customers/customerService'
+import { ECustomerType, ESize, EStatus, ICustomer, IRelativeType, IReliableCustomer } from '@/models'
 import { openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
-import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import { Badge } from '../badge'
 import { ItemContainer } from '../item-container'
@@ -63,79 +61,81 @@ const ReliableSlider: React.FC<IProps> = ({ customerId, activeIndex, onActiveSte
 
   return (
     <ItemContainer>
-      <ItemContainer>
-        <JustifyBetweenColumn>
-          <ItemContainer
-            padding="1rem 0"
-            borderTop={'1px solid ' + colors.gray.secondary}
-            onClick={() => handleReliableClick(customer._id)}
-          >
-            <JustifyBetweenRow>
-              <ItemContainer>
-                <JustifyBetweenColumn>
-                  <JustifyCenterRow>
-                    <ItemContainer width="auto">
-                      <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
-                        {customer?.firstname + ' ' + customer?.lastname}
-                      </H1>
-                    </ItemContainer>
-                  </JustifyCenterRow>
+      {customer && (
+        <ItemContainer>
+          <JustifyBetweenColumn>
+            <ItemContainer
+              padding="1rem 0"
+              borderTop={'1px solid ' + colors.gray.secondary}
+              onClick={() => handleReliableClick(customer._id)}
+            >
+              <JustifyBetweenRow>
+                <ItemContainer>
+                  <JustifyBetweenColumn>
+                    <JustifyCenterRow>
+                      <ItemContainer width="auto">
+                        <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">
+                          {customer?.firstname + ' ' + customer?.lastname}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyCenterRow>
 
-                  <JustifyCenterRow>
-                    <ItemContainer width="auto" margin=" 0 0.5rem 0 0">
-                      <Badge children={ECustomerType[customer?.customerType]} color={colors.gray.dark} />
-                    </ItemContainer>
-                    <ItemContainer width="auto">
-                      <Badge color={selectColorForStatus(customer?.status)}>{EStatus[customer?.status]}</Badge>
-                    </ItemContainer>
-                  </JustifyCenterRow>
+                    <JustifyCenterRow>
+                      <ItemContainer width="auto" margin=" 0 0.5rem 0 0">
+                        <Badge children={ECustomerType[customer?.customerType]} color={colors.gray.dark} />
+                      </ItemContainer>
+                      <ItemContainer width="auto">
+                        <Badge color={selectColorForStatus(customer?.status)}>{EStatus[customer?.status]}</Badge>
+                      </ItemContainer>
+                    </JustifyCenterRow>
 
-                  <JustifyCenterRow>
-                    <ItemContainer width="auto">
-                      <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
-                        {customer?.email}
-                      </H1>
-                    </ItemContainer>
-                  </JustifyCenterRow>
+                    <JustifyCenterRow>
+                      <ItemContainer width="auto">
+                        <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
+                          {customer?.email}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyCenterRow>
 
-                  <JustifyCenterRow>
-                    <ItemContainer width="auto">
-                      <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
-                        {customer?.phone}
-                      </H1>
-                    </ItemContainer>
-                  </JustifyCenterRow>
+                    <JustifyCenterRow>
+                      <ItemContainer width="auto">
+                        <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
+                          {customer?.phone}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyCenterRow>
 
-                  <JustifyCenterRow>
-                    <ItemContainer width="auto">
-                      <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
-                        {reliableCustomers[activeIndex].relativeType.fromOrTo === 0
-                          ? relativeType.relateTo
-                          : relativeType.relateFrom}
-                      </H1>
-                    </ItemContainer>
-                  </JustifyCenterRow>
-                </JustifyBetweenColumn>
-              </ItemContainer>
-            </JustifyBetweenRow>
-          </ItemContainer>
-
-          <ItemContainer>
-            <JustifyCenterRow>
-              {reliableCustomers.map((customerReliable, index) => (
-                <ItemContainer
-                  width="auto"
-                  margin="0.2rem"
-                  cursorType="pointer"
-                  onClick={() => onActiveStepChange(index)}
-                >
-                  <SliderDot key={index} isActive={index === activeIndex} />
+                    <JustifyCenterRow>
+                      <ItemContainer width="auto">
+                        <H1 fontSize="0.8rem" textAlign="center" color={colors.text.primary} margin="0.5rem 0">
+                          {reliableCustomers[activeIndex].relativeType.fromOrTo === 0
+                            ? relativeType.relateTo
+                            : relativeType.relateFrom}
+                        </H1>
+                      </ItemContainer>
+                    </JustifyCenterRow>
+                  </JustifyBetweenColumn>
                 </ItemContainer>
-              ))}
-            </JustifyCenterRow>
-          </ItemContainer>
-        </JustifyBetweenColumn>
-      </ItemContainer>
+              </JustifyBetweenRow>
+            </ItemContainer>
+
+            <ItemContainer>
+              <JustifyCenterRow>
+                {reliableCustomers.map((customerReliable, index) => (
+                  <ItemContainer
+                    width="auto"
+                    margin="0.2rem"
+                    cursorType="pointer"
+                    onClick={() => onActiveStepChange(index)}
+                  >
+                    <SliderDot key={index} isActive={index === activeIndex} />
+                  </ItemContainer>
+                ))}
+              </JustifyCenterRow>
+            </ItemContainer>
+          </JustifyBetweenColumn>
+        </ItemContainer>
+      )}
     </ItemContainer>
   )
 }

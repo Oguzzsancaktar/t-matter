@@ -8,15 +8,16 @@ import { ECustomerType, ESize, ICustomer } from '@/models'
 import { useGetCustomersQuery } from '@/services/customers/customerService'
 import DataTable from 'react-data-table-component'
 import { UserCheck } from 'react-feather'
-import { JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
+import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow } from '@/components/layout'
 import { H1 } from '@/components/texts'
 
 import { ModalHeader, ModalBody } from '../types'
 import colors from '@/constants/colors'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { openModal } from '@/store'
-import { ReadCustomerModal } from '../customer-modal'
+import { CreateCustomerModal, ReadCustomerModal } from '../customer-modal'
 import useAccessStore from '@/hooks/useAccessStore'
+import { Button } from '@/components/button'
 
 const SearchCustomersModal = () => {
   const { useAppDispatch } = useAccessStore()
@@ -60,6 +61,20 @@ const SearchCustomersModal = () => {
     setSearchQuery({ ...searchQuery, search: value })
   }
 
+  const openCreateCustomerModal = (e: React.MouseEvent) => {
+    e.preventDefault()
+    dispatch(
+      openModal({
+        id: 'createCustomerModal',
+        title: 'Create Customer',
+        body: <CreateCustomerModal />,
+        maxWidth: ESize.WLarge,
+        width: ESize.WLarge,
+        height: ESize.HSmall
+      })
+    )
+  }
+
   const handleRead = (customer: ICustomer) => {
     dispatch(
       openModal({
@@ -87,7 +102,14 @@ const SearchCustomersModal = () => {
 
       <ModalBody height="calc(100% - 63px)">
         <ItemContainer height="35px">
-          <SearchBar onSearch={handleSearch} />
+          <JustifyBetweenRow width="100%">
+            <ItemContainer margin="0 0.5rem 0 0">
+              <SearchBar onSearch={handleSearch} />
+            </ItemContainer>
+            <Button onClick={openCreateCustomerModal} color={colors.primary.light} width="150px" height="35px">
+              Add Customer
+            </Button>
+          </JustifyBetweenRow>
         </ItemContainer>
         <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 35px)" margin="0.5rem 0">
           {filteredCustomersIsLoading ? (

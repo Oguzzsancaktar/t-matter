@@ -37,7 +37,7 @@ const ReadWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
         <Column height="100%">
           {workflowData && !workflowIsLoading && (
             <ItemContainer height="calc(100% - 40px - 1rem)" overflow="auto">
-              {workflow.steps.map((step, index) => (
+              {workflowData.steps.map((step, index) => (
                 <ItemContainer key={index} margin="0 0 0.5rem 0">
                   <Accordeon head={<ReadWorkflowPlanAccordeonHeader step={step} index={index + 1} />}>
                     <ItemContainer margin="0 0 1rem 0 " height="100%" width="100%">
@@ -122,7 +122,7 @@ const ReadWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
                 </ItemContainer>
 
                 <ItemContainer width="100px">
-                  <H1 color={colors.text.primary}>${workflow.totalPrice}</H1>
+                  <H1 color={colors.text.primary}>${(workflow.totalPrice || 0).toFixed(2)}</H1>
                 </ItemContainer>
               </Row>
             </JustifyBetweenRow>
