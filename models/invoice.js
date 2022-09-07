@@ -28,6 +28,10 @@ const InvoiceSchema = new Schema(
     index: {
       type: Number,
       default: 0
+    },
+    postponeCount: {
+      type: Number,
+      default: 0
     }
   },
   {

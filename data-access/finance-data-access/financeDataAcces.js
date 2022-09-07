@@ -20,6 +20,10 @@ const createInvoice = data => {
   return Invoice.create(data)
 }
 
+const updateInvoiceById = (id, data) => {
+  return Invoice.findByIdAndUpdate(id, data)
+}
+
 const getInvoicesByCustomerId = customerId => {
   return Invoice.aggregate([
     { $match: { customer: mongoose.Types.ObjectId(customerId) } },
@@ -90,7 +94,8 @@ const getInvoicesByCustomerId = customerId => {
           }
         },
         index: { $first: '$index' },
-        createdAt: { $first: '$createdAt' }
+        createdAt: { $first: '$createdAt' },
+        postponeCount: { $first: '$postponeCount' }
       }
     },
     {
@@ -177,7 +182,48 @@ const createInstallment = data => {
 }
 
 const updateInstallment = (id, data) => {
-  return Installment.findByIdAndUpdate(id, data)
+  return Installment.findByIdAndUpdate(id, data, { new: true })
+}
+
+const getInstallmentsByInvoiceId = invoiceId => {
+  return Installment.aggregate([
+    {
+      $match: {
+        invoice: mongoose.Types.ObjectId(invoiceId)
+      }
+    },
+    {
+      $lookup: {
+        from: 'invoices',
+        localField: 'invoice',
+        foreignField: '_id',
+        as: 'invoice'
+      }
+    },
+    {
+      $unwind: {
+        path: '$invoice',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $sort: {
+        payDate: 1
+      }
+    }
+  ]).exec()
+}
+
+const getInstallmentById = id => {
+  return Installment.findById(id)
+}
+
+const updateManyInstallment = (query, data) => {
+  return Installment.updateMany(query, data)
+}
+
+const deleteManyInstallment = query => {
+  return Installment.deleteMany(query)
 }
 
 module.exports = {
@@ -190,5 +236,10 @@ module.exports = {
   createExpiredTaskStep,
   updateExpiredTaskStepById,
   createInstallment,
-  updateInstallment
+  updateInstallment,
+  getInstallmentsByInvoiceId,
+  getInstallmentById,
+  updateInvoiceById,
+  updateManyInstallment,
+  deleteManyInstallment
 }

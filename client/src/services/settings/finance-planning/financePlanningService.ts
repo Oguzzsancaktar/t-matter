@@ -6,6 +6,8 @@ import {
   IExpiredTaskStep,
   IExpiredTaskStepCreateDTO,
   IFinancePlanning,
+  IInstallment,
+  IInstallmentCreateDTO,
   Invoice,
   IQueryParams
 } from '@/models'
@@ -17,13 +19,15 @@ const FINANCE_PLANNING_TAG_TYPE = 'financePlanningTag' as const
 const INVOICE_CATEGORY_TAG_TYPE = 'invoiceCategoryTag' as const
 const INVOICE_TAG_TYPE = 'invoiceTag' as const
 const EXPIRED_INVOICE_TAG_TYPE = 'expiredInvoiceTag' as const
+const INSTALLMENT_TAG_TYPE = 'installmentTag' as const
 
 type IBuilder = EndpointBuilder<
   IAxiosBaseQueryFn,
   | typeof FINANCE_PLANNING_TAG_TYPE
   | typeof INVOICE_CATEGORY_TAG_TYPE
   | typeof INVOICE_TAG_TYPE
-  | typeof EXPIRED_INVOICE_TAG_TYPE,
+  | typeof EXPIRED_INVOICE_TAG_TYPE
+  | typeof INSTALLMENT_TAG_TYPE,
   typeof FINANCE_PLANNING_REDUCER_PATH
 >
 
@@ -182,6 +186,101 @@ const createExpiredTaskStep = (builder: IBuilder) => {
   })
 }
 
+const createInstallment = (builder: IBuilder) => {
+  return builder.mutation<IInstallment, IInstallmentCreateDTO>({
+    query(args) {
+      return {
+        url: '/finance/installment/' + args.invoiceId,
+        method: 'POST',
+        data: args
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
+const getInstallments = (builder: IBuilder) => {
+  return builder.query<IInstallment[], Invoice['_id']>({
+    query(args) {
+      return {
+        url: '/finance/installment/' + args,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
+const postponeInstallment = (builder: IBuilder) => {
+  return builder.mutation<void, { days: number; oldDate: Date; invoiceId: Invoice['_id'] }>({
+    query(arg) {
+      return {
+        url: `/finance/installment/${arg.invoiceId}/postpone`,
+        method: 'PUT',
+        data: {
+          days: arg.days,
+          oldDate: arg.oldDate
+        }
+      }
+    },
+    invalidatesTags(result) {
+      return [
+        { type: INSTALLMENT_TAG_TYPE, id: 'LIST' },
+        { type: INVOICE_TAG_TYPE, id: 'LIST' }
+      ]
+    }
+  })
+}
+
+const payInstallment = (builder: IBuilder) => {
+  return builder.mutation<
+    void,
+    {
+      installmentId: IInstallment['_id']
+      invoiceId: Invoice['_id']
+      amount: number
+      paidDate: Date
+      paidMethod: string
+    }
+  >({
+    query(arg) {
+      return {
+        url: `/finance/installment/${arg.invoiceId}/pay/${arg.installmentId}`,
+        method: 'PUT',
+        data: {
+          amount: arg.amount,
+          paidDate: arg.paidDate,
+          paidMethod: arg.paidMethod
+        }
+      }
+    },
+    invalidatesTags(result) {
+      return [
+        { type: INSTALLMENT_TAG_TYPE, id: 'LIST' },
+        { type: INVOICE_TAG_TYPE, id: 'LIST' }
+      ]
+    }
+  })
+}
+
+const resetInstallments = (builder: IBuilder) => {
+  return builder.mutation<void, Invoice['_id']>({
+    query(arg) {
+      return {
+        url: `/finance/installment/${arg}/reset`,
+        method: 'PUT'
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const financePlanningApi = createApi({
   reducerPath: FINANCE_PLANNING_REDUCER_PATH,
   tagTypes: [FINANCE_PLANNING_TAG_TYPE, INVOICE_CATEGORY_TAG_TYPE, INVOICE_TAG_TYPE, EXPIRED_INVOICE_TAG_TYPE],
@@ -196,7 +295,12 @@ const financePlanningApi = createApi({
     getInvoices: getInvoices(builder),
     createInvoice: createInvoice(builder),
     getExpiredTaskSteps: getExpiredTaskSteps(builder),
-    createExpiredTaskStep: createExpiredTaskStep(builder)
+    createExpiredTaskStep: createExpiredTaskStep(builder),
+    createInstallment: createInstallment(builder),
+    getInstallments: getInstallments(builder),
+    postponeInstallment: postponeInstallment(builder),
+    payInstallment: payInstallment(builder),
+    resetInstallments: resetInstallments(builder)
   })
 })
 
@@ -210,7 +314,12 @@ const {
   useGetInvoicesQuery,
   useCreateInvoiceMutation,
   useGetExpiredTaskStepsQuery,
-  useCreateExpiredTaskStepMutation
+  useCreateExpiredTaskStepMutation,
+  useCreateInstallmentMutation,
+  useGetInstallmentsQuery,
+  usePostponeInstallmentMutation,
+  usePayInstallmentMutation,
+  useResetInstallmentsMutation
 } = financePlanningApi
 
 export {
@@ -224,5 +333,10 @@ export {
   useGetInvoicesQuery,
   useCreateInvoiceMutation,
   useGetExpiredTaskStepsQuery,
-  useCreateExpiredTaskStepMutation
+  useCreateExpiredTaskStepMutation,
+  useCreateInstallmentMutation,
+  useGetInstallmentsQuery,
+  usePostponeInstallmentMutation,
+  usePayInstallmentMutation,
+  useResetInstallmentsMutation
 }

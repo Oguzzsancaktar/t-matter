@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import 'flatpickr/dist/themes/material_green.css'
 import '@/styles/vendors/flat-picker.css'
 import Flatpickr from 'react-flatpickr'
@@ -19,6 +19,7 @@ interface IProps {
   disabled?: boolean
   dateFormat?: string
   minDate?: number
+  maxDate?: number
   onChange: (value: Date[], dateText: string) => void
 }
 
@@ -37,13 +38,20 @@ const DatePicker: React.FC<IProps> = ({
   validationError,
   dateFormat = 'M/d/Y',
   minDate,
-  onChange
+  onChange,
+  maxDate
 }) => {
   const [date, setDate] = useState(value)
 
   const handleDateChange = (date: Date[], dateText) => {
     onChange(date, dateText)
   }
+
+  useEffect(() => {
+    if (value) {
+      setDate(value)
+    }
+  }, [value])
 
   return (
     <Column>
@@ -63,7 +71,8 @@ const DatePicker: React.FC<IProps> = ({
                 options={{
                   enableTime: enableTime,
                   dateFormat: dateFormat,
-                  minDate: minDate
+                  minDate: minDate,
+                  maxDate: maxDate
                 }}
                 disabled={disabled}
                 value={date}

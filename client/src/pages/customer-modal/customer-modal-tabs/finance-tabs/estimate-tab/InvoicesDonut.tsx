@@ -68,7 +68,7 @@ const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect }) => {
 
   useEffect(() => {
     if (invoices) {
-      setSeries(invoices.map(invoice => +invoice.total.toFixed(0)))
+      setSeries(invoices.map(invoice => +Math.ceil(invoice.total)))
       setOptions({
         ...options,
         labels: invoices.map(invoice => invoice.category.name + ' - ' + moment(invoice.createdAt).format('DD/MMM/YYYY'))

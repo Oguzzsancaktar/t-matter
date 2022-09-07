@@ -13,6 +13,10 @@ router.post(
   middlewares.authMiddlewares.checkAuth,
   controllers.financeController.createExpiredTaskStep
 )
-router.post('/invoice/installment/:invoiceId', controllers.financeController.createInstallment)
+router.post('/installment/:invoiceId', controllers.financeController.createInstallment)
+router.get('/installment/:invoiceId', controllers.financeController.getInstallments)
+router.put('/installment/:invoiceId/postpone', controllers.financeController.postponeInstallment)
+router.put('/installment/:invoiceId/pay/:installmentId', controllers.financeController.payInstallment)
+router.put('/installment/:invoiceId/reset', controllers.financeController.resetInstallments)
 
 module.exports = router

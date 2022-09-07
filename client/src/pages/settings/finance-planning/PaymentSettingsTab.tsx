@@ -99,8 +99,8 @@ const PaymentSettingsTab = () => {
           </Column>
           <Column>
             <InputWithIcon
-              labelText="Minimum deposit amount"
-              placeholder="Minimum deposit amount"
+              labelText="Minimum deposit percentage"
+              placeholder="Minimum deposit percentage"
               name="minDepositAmount"
               onChange={handleInputChange}
               value={state.minDepositAmount.value}
@@ -137,8 +137,8 @@ const PaymentSettingsTab = () => {
           </Column>
           <Column>
             <InputWithIcon
-              labelText="Installment postpone limit"
-              placeholder="Installment postpone limit"
+              labelText="Installment postpone limit (Times)"
+              placeholder="Installment postpone limit (Times)"
               name="installmentPostponeLimit"
               value={state.installmentPostponeLimit.value}
               onChange={handleInputChange}
@@ -156,8 +156,8 @@ const PaymentSettingsTab = () => {
           </Column>
           <Column>
             <InputWithIcon
-              labelText="Installment postpone time limit"
-              placeholder="Installment postpone time limit"
+              labelText="Installment postpone time limit (Days)"
+              placeholder="Installment postpone time limit (Days)"
               name="installmentPostponeTimeLimit"
               value={state.installmentPostponeTimeLimit.value}
               onChange={handleInputChange}
