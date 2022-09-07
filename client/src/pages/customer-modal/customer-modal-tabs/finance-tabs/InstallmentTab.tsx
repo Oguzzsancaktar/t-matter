@@ -149,6 +149,17 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
     return moment(date).format('MMM DD YYYY')
   }
 
+  const calculateBalance = (index: number) => {
+    if (selectedInvoice) {
+      const slicedInstallments = installments?.slice(0, index + 1)
+      const balance = slicedInstallments?.reduce(
+        (acc, curr) => (acc - (curr.paidAmount ? curr.paidAmount : 0)) as number,
+        +Math.ceil(selectedInvoice?.total)
+      )
+      return balance
+    }
+  }
+
   const columns = () => {
     if (!selectedInvoice) {
       return []
@@ -200,7 +211,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         name: 'Balance',
         selector: row => selectedInvoice?.total,
         sortable: true,
-        cell: data => <div>{+Math.ceil(selectedInvoice?.total as number)}</div>
+        cell: (data, i) => <div>${calculateBalance(i)}</div>
       },
       {
         name: 'Status',
