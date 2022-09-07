@@ -222,6 +222,10 @@ const updateManyInstallment = (query, data) => {
   return Installment.updateMany(query, data)
 }
 
+const deleteManyInstallment = query => {
+  return Installment.deleteMany(query)
+}
+
 module.exports = {
   updateFinancePlanning,
   getFinancePlanning,
@@ -236,5 +240,6 @@ module.exports = {
   getInstallmentsByInvoiceId,
   getInstallmentById,
   updateInvoiceById,
-  updateManyInstallment
+  updateManyInstallment,
+  deleteManyInstallment
 }

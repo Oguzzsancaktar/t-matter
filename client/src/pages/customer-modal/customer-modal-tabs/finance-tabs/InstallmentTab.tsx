@@ -29,7 +29,8 @@ import { ESize, IInstallment, Invoice } from '@/models'
 import DataTable from 'react-data-table-component'
 import {
   useGetFinancePlanningQuery,
-  useGetInstallmentsQuery
+  useGetInstallmentsQuery,
+  useResetInstallmentsMutation
 } from '@services/settings/finance-planning/financePlanningService'
 import { Calendar, DollarSign, Edit, FileText, UserCheck } from 'react-feather'
 import moment from 'moment'
@@ -37,6 +38,7 @@ import PayInstallment from '@components/modals/finance/PayInstallmentModal'
 import Flatpickr from 'react-flatpickr'
 import { INSTALLMENT_TYPES } from '@constants/finance'
 import invoice from '@models/Entities/finance/Invoice'
+import Swal from 'sweetalert2'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -60,6 +62,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
     skip: !selectedInvoice
   })
   const { data: financePlanning, isLoading: isFinancePlanningLoading } = useGetFinancePlanningQuery()
+  const [resetInstallments] = useResetInstallmentsMutation()
 
   const showCreateInstallment = () => {
     if (selectedInvoice) {
@@ -107,7 +110,6 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
   }
 
   const showPostponeInstallment = (row: IInstallment) => {
-    console.log(row)
     if (selectedInvoice) {
       dispatch(
         openModal({
@@ -126,6 +128,21 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         })
       )
     }
+  }
+
+  const handleResetInstallments = async () => {
+    try {
+      await Swal.fire({
+        icon: 'question',
+        title: 'Do you want remove all installment for selected invoice?',
+        showCancelButton: true,
+        confirmButtonColor: colors.blue.primary,
+        cancelButtonColor: colors.red.primary,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      })
+      await resetInstallments(selectedInvoice?._id)
+    } catch (e) {}
   }
 
   const dateFormat = date => {
@@ -245,13 +262,24 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
             <JustifyBetweenRow>
               <div></div>
               {!(isInstallmentsLoading || (installments && installments?.length)) ? (
-                <Button width="200px" onClick={showCreateInstallment}>
-                  Create Installment
-                </Button>
+                <Row width="auto">
+                  <Button width="200px" onClick={showCreateInstallment}>
+                    Create Installment
+                  </Button>
+                </Row>
               ) : (
-                <Button width="200px" onClick={showRePlanningInstallment}>
-                  Re Planning Installment
-                </Button>
+                <Row width="auto">
+                  <JustifyCenterRow margin="0 1rem 0 0">
+                    <Button color={colors.red.primary} width="200px" onClick={handleResetInstallments}>
+                      Reset
+                    </Button>
+                  </JustifyCenterRow>
+                  <JustifyCenterRow>
+                    <Button width="200px" onClick={showRePlanningInstallment}>
+                      Re Planning Installment
+                    </Button>
+                  </JustifyCenterRow>
+                </Row>
               )}
             </JustifyBetweenRow>
             <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 50px)" margin="0.5rem 0">

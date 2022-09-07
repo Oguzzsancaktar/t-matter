@@ -259,6 +259,17 @@ const payInstallment = async (req, res) => {
   }
 }
 
+const resetInstallments = async (req, res) => {
+  const { invoiceId } = req.params
+  try {
+    await dataAccess.financeDataAccess.deleteManyInstallment({ invoice: invoiceId })
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   getFinancePlanning,
   updateFinancePlanning,
@@ -269,5 +280,6 @@ module.exports = {
   createInstallment,
   getInstallments,
   postponeInstallment,
-  payInstallment
+  payInstallment,
+  resetInstallments
 }

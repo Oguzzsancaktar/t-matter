@@ -267,6 +267,20 @@ const payInstallment = (builder: IBuilder) => {
   })
 }
 
+const resetInstallments = (builder: IBuilder) => {
+  return builder.mutation<void, Invoice['_id']>({
+    query(arg) {
+      return {
+        url: `/finance/installment/${arg}/reset`,
+        method: 'PUT'
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const financePlanningApi = createApi({
   reducerPath: FINANCE_PLANNING_REDUCER_PATH,
   tagTypes: [FINANCE_PLANNING_TAG_TYPE, INVOICE_CATEGORY_TAG_TYPE, INVOICE_TAG_TYPE, EXPIRED_INVOICE_TAG_TYPE],
@@ -285,7 +299,8 @@ const financePlanningApi = createApi({
     createInstallment: createInstallment(builder),
     getInstallments: getInstallments(builder),
     postponeInstallment: postponeInstallment(builder),
-    payInstallment: payInstallment(builder)
+    payInstallment: payInstallment(builder),
+    resetInstallments: resetInstallments(builder)
   })
 })
 
@@ -303,7 +318,8 @@ const {
   useCreateInstallmentMutation,
   useGetInstallmentsQuery,
   usePostponeInstallmentMutation,
-  usePayInstallmentMutation
+  usePayInstallmentMutation,
+  useResetInstallmentsMutation
 } = financePlanningApi
 
 export {
@@ -321,5 +337,6 @@ export {
   useCreateInstallmentMutation,
   useGetInstallmentsQuery,
   usePostponeInstallmentMutation,
-  usePayInstallmentMutation
+  usePayInstallmentMutation,
+  useResetInstallmentsMutation
 }
