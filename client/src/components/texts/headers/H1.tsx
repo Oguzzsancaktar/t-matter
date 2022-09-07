@@ -11,7 +11,7 @@ const H1Styled = styled.h1<Omit<ITextComponentProps, 'children'>>`
   text-align: ${({ textAlign }) => (textAlign ? textAlign : 'left')};
   margin: ${({ margin }) => (margin ? margin : '0')};
   font-weight: ${({ fontWeight }) => (fontWeight ? fontWeight : '0')};
-  font-family: ${({ fontFamily }) => (fontFamily ? fontFamily : 'Satoshi-Variable')};
+  font-family: ${({ fontFamily }) => (fontFamily ? fontFamily : 'Satoshi-Regular')};
   cursor: ${({ cursor }) => (cursor ? cursor : 'default')};
 `
 const H1: React.FC<ITextComponentProps> = ({ children, ...rest }) => {

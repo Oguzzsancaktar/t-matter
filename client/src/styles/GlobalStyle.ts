@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
 
    * {
   box-sizing: border-box;
-  font-family: 'Satoshi-Bold';
+  font-family: 'Satoshi-Regular';
   margin: 0;
   padding: 0;
   font-size: 16px;

@@ -12,7 +12,6 @@ export const Input = styled.input<IStyledProps>`
   padding: 0rem 0.4rem;
   border-radius: 0.3rem;
   font-weight: 400;
-  font-family: 'Satoshi-Variable';
   &:hover,
   &:focus {
     border-color: ${colors.text.primary};
