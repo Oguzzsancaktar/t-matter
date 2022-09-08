@@ -1,9 +1,9 @@
 const dataAccess = require('../../data-access')
 const { StatusCodes } = require('http-status-codes')
 const { STATUS_TYPES } = require('../../constants/constants')
-const utils = require('../../utils')
 const Customer = require('../../models/customer')
 const mongoose = require('mongoose')
+const cloudinary = require('../../utils/upload-utils/cloudinary')
 
 const createCustomer = async (req, res) => {
   const { body } = req
@@ -125,11 +125,33 @@ const getCustomerReliablesWithId = async (req, res) => {
   }
 }
 
+const addImageToCustomer = async (req, res) => {
+  const { id } = req.params
+  try {
+    const customer = await Customer.findById(id)
+    if (customer) {
+      const result = await cloudinary.uploader.upload(req.file.path)
+      const updatedCustomer = await Customer.findByIdAndUpdate(id, {
+        ...customer,
+        profile_img: result.secure_url,
+        cloudinary_id: result.public_id
+      })
+
+      res.status(200).send(updatedCustomer)
+    } else {
+      res.status(404).send('Customer not found!!')
+    }
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 module.exports = {
   createCustomer,
   getCustomers,
   removeCustomer,
   getCustomer,
   updateCustomer,
-  getCustomerReliablesWithId
+  getCustomerReliablesWithId,
+  addImageToCustomer
 }

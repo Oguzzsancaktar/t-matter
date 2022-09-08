@@ -3,6 +3,8 @@ const router = express.Router()
 const middlewares = require('../../middlewares')
 const controllers = require('../../controllers')
 
+const upload = require('../../utils/upload-utils/multer')
+
 router.post(
   '/',
   middlewares.validations.customerValidations.createCustomerValidation,
@@ -34,5 +36,7 @@ router.get(
 )
 
 router.get('/', controllers.customerController.getCustomers)
+
+router.post('/add-image/:id', upload.single('image'), controllers.customerController.addImageToCustomer)
 
 module.exports = router

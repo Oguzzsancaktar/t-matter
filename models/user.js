@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const { STATUSES } = require('../constants/constants')
-const { mongo } = require('mongoose')
 
 const UserSchema = new Schema(
   {
+    profile_img: String,
+    cloudinary_id: String,
     email: {
       required: true,
       unique: true,
