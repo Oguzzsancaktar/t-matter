@@ -9,6 +9,7 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 
 const routes = require('./routes')
+const cronJobs = require('./cron/cronJobs')
 
 const app = express()
 
@@ -59,6 +60,8 @@ const main = async () => {
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/client/build', 'index.html'))
   })
+
+  cronJobs()
 
   app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
 }
