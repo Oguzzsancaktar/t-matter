@@ -34,4 +34,4 @@ const FinancePlanningSchema = new Schema({
   suspendedFee: financePlanningExtendItem
 })
 
-module.exports = FinancePlanning = mongoose.model('financePlanning', FinancePlanningSchema)
+module.exports = FinancePlanning = mongoose.model('FinancePlanning', FinancePlanningSchema)

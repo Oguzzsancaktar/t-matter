@@ -17,4 +17,4 @@ const relativeTypeSchema = new Schema({
   }
 })
 
-module.exports = RelativeType = mongoose.model('relativeType', relativeTypeSchema)
+module.exports = RelativeType = mongoose.model('RelativeType', relativeTypeSchema)

@@ -50,4 +50,4 @@ const WorkingScheduleSchema = new Schema({
   }
 })
 
-module.exports = WorkingSchedule = mongoose.model('workingSchedule', WorkingScheduleSchema)
+module.exports = WorkingSchedule = mongoose.model('WorkingSchedule', WorkingScheduleSchema)

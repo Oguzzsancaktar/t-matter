@@ -37,4 +37,4 @@ const expiredTaskStepSchema = new Schema(
   }
 )
 
-module.exports = ExpiredTaskStep = mongoose.model('expiredtaskstep', expiredTaskStepSchema)
+module.exports = ExpiredTaskStep = mongoose.model('Expiredtaskstep', expiredTaskStepSchema)

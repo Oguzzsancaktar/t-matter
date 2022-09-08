@@ -32,4 +32,4 @@ const SalarySettingSchema = new Schema({
   }
 })
 
-module.exports = SalarySetting = mongoose.model('salarySetting', SalarySettingSchema)
+module.exports = SalarySetting = mongoose.model('SalarySetting', SalarySettingSchema)

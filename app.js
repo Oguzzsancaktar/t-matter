@@ -43,6 +43,17 @@ const main = async () => {
     res.sendStatus(err.status || 500)
   })
 
+  process.on('unhandledRejection', error => {
+    console.log('unhandledRejection', error.message)
+  })
+
+  app.use(express.json())
+  app.use(
+    express.urlencoded({
+      extended: true
+    })
+  )
+
   app.use(express.static(path.join(__dirname, '/client/build')))
 
   app.get('*', (req, res) => {

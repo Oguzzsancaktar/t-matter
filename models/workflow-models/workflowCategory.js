@@ -16,4 +16,4 @@ const workflowCategorySchema = new Schema(
   { timestamps: true }
 )
 
-module.exports = WorkflowCategory = mongoose.model('workflowCategory', workflowCategorySchema)
+module.exports = WorkflowCategory = mongoose.model('WorkflowCategory', workflowCategorySchema)

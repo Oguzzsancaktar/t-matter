@@ -84,4 +84,4 @@ const CustomerSchema = new Schema(
   { timestamps: true }
 )
 
-module.exports = Customer = mongoose.model('customer', CustomerSchema)
+module.exports = Customer = mongoose.model('Customer', CustomerSchema)

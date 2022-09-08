@@ -17,4 +17,4 @@ const refferedBySchema = new Schema({
   }
 })
 
-module.exports = RefferedBy = mongoose.model('refferedBy', refferedBySchema)
+module.exports = RefferedBy = mongoose.model('RefferedBy', refferedBySchema)

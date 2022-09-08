@@ -14,4 +14,4 @@ const TimeLogSchema = new Schema(
   { timestamps: true }
 )
 
-module.exports = TimeLog = mongoose.model('timeLog', TimeLogSchema)
+module.exports = TimeLog = mongoose.model('TimeLog', TimeLogSchema)

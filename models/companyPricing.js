@@ -17,4 +17,4 @@ const CompanyPricingSchema = new Schema({
   }
 })
 
-module.exports = CompanyPricing = mongoose.model('companyPricing', CompanyPricingSchema)
+module.exports = CompanyPricing = mongoose.model('CompanyPricing', CompanyPricingSchema)

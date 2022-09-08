@@ -24,4 +24,4 @@ const workflowChecklistSchema = new Schema(
   { timestamps: true }
 )
 
-module.exports = WorkflowChecklist = mongoose.model('workflowChecklist', workflowChecklistSchema)
+module.exports = WorkflowChecklist = mongoose.model('WorkflowChecklist', workflowChecklistSchema)

@@ -51,4 +51,4 @@ const workflowPlanSchema = new Schema(
   { timestamps: true }
 )
 
-module.exports = WorkflowPlan = mongoose.model('workflowPlan', workflowPlanSchema)
+module.exports = WorkflowPlan = mongoose.model('WorkflowPlan', workflowPlanSchema)
