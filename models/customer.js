@@ -5,6 +5,8 @@ const { mongo } = require('mongoose')
 
 const CustomerSchema = new Schema(
   {
+    profile_img: String,
+    cloudinary_id: String,
     aSharpNumber: {
       required: false,
       type: String

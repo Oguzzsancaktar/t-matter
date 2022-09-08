@@ -37,6 +37,6 @@ router.get(
 
 router.get('/', controllers.customerController.getCustomers)
 
-router.post('/add-image/:id', upload.single('image'), controllers.customerController.addImageToCustomer)
+router.post('/image/:id', upload.single('image'), controllers.customerController.addOrChangeCustomerProfileImage)
 
 module.exports = router

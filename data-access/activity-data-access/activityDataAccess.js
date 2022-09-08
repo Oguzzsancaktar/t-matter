@@ -95,7 +95,6 @@ const getAllActivity = (userId, type) => {
     })
   }
 
-  console.log('0======))))((((((======', userId, type)
   return Activity.aggregate([...tempPipeline, ...populateActivity]).exec()
 }
 
