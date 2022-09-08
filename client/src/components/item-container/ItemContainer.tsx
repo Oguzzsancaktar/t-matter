@@ -17,6 +17,8 @@ interface IProps extends IComponentProps {
   zIndex?: string
   display?: string
   ref?: React.Ref<any>
+  left?: string
+  top?: string
   onClick?: (e: React.MouseEvent) => void
   onMouseOver?: (e: React.MouseEvent) => void
   onMouseOut?: (e: React.MouseEvent) => void
@@ -41,6 +43,9 @@ const Item = styled.div<IProps>`
   position: ${({ position }) => (position ? position : '')};
   z-index: ${({ zIndex }) => (zIndex ? zIndex : '')};
   display: ${({ display }) => (display ? display : '')};
+  left: ${({ left }) => (left ? left : '')};
+  top: ${({ top }) => (top ? top : '')};
+
   transition: all 0.3s ease-in-out;
 `
 

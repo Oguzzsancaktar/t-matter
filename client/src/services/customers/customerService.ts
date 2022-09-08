@@ -110,6 +110,21 @@ const getCustomerReliables = (builder: IBuilder) => {
   })
 }
 
+const addOrUpdateCustomerImage = (builder: IBuilder) => {
+  return builder.mutation<ICustomer, Pick<ICustomer, '_id'> & { image: any }>({
+    query(dto) {
+      return {
+        url: `/customer/image/${dto._id}`,
+        method: 'POST',
+        data: { image: dto.image }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: CUSTOMER_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const customerApi = createApi({
   reducerPath: CUSTOMER_REDUCER_PATH,
   tagTypes: [CUSTOMER_TAG_TYPE],
@@ -120,7 +135,8 @@ const customerApi = createApi({
     getCustomerById: getCustomerById(builder),
     updateCustomer: updateCustomer(builder),
     updateCustomerStatus: updateCustomerStatus(builder),
-    getCustomerReliables: getCustomerReliables(builder)
+    getCustomerReliables: getCustomerReliables(builder),
+    addOrUpdateCustomerImage: addOrUpdateCustomerImage(builder)
   })
 })
 
@@ -130,7 +146,8 @@ const {
   useGetCustomerByIdQuery,
   useUpdateCustomerMutation,
   useUpdateCustomerStatusMutation,
-  useGetCustomerReliablesQuery
+  useGetCustomerReliablesQuery,
+  useAddOrUpdateCustomerImageMutation
 } = customerApi
 export {
   customerApi,
@@ -139,5 +156,6 @@ export {
   useCreateCustomerMutation,
   useUpdateCustomerMutation,
   useUpdateCustomerStatusMutation,
-  useGetCustomerReliablesQuery
+  useGetCustomerReliablesQuery,
+  useAddOrUpdateCustomerImageMutation
 }

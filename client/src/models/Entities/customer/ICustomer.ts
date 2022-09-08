@@ -22,6 +22,9 @@ export default interface ICustomer {
   relativeType?: IRelativeType
   reliableCustomers: IReliableCustomer[]
 
+  profile_img?: string
+  cloudinary_id?: string
+
   createdAt?: string
   updatedAt?: string
 }

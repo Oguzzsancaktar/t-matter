@@ -125,17 +125,18 @@ const getCustomerReliablesWithId = async (req, res) => {
   }
 }
 
-const addImageToCustomer = async (req, res) => {
+const addOrChangeCustomerProfileImage = async (req, res) => {
   const { id } = req.params
   try {
     const customer = await Customer.findById(id)
+
     if (customer) {
       const result = await cloudinary.uploader.upload(req.file.path)
-      const updatedCustomer = await Customer.findByIdAndUpdate(id, {
-        ...customer,
-        profile_img: result.secure_url,
-        cloudinary_id: result.public_id
-      })
+
+      customer.cloudinary_id = result.public_id
+      customer.profile_img = result.secure_url
+
+      const updatedCustomer = await Customer.findByIdAndUpdate(id, customer)
 
       res.status(200).send(updatedCustomer)
     } else {
@@ -153,5 +154,5 @@ module.exports = {
   getCustomer,
   updateCustomer,
   getCustomerReliablesWithId,
-  addImageToCustomer
+  addOrChangeCustomerProfileImage
 }

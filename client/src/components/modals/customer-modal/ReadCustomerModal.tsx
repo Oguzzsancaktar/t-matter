@@ -1,3 +1,4 @@
+import { AddOrChangeCustomerImageModal } from '@/components'
 import { Badge } from '@/components/badge'
 import { Button } from '@/components/button'
 import { ActionButtons } from '@/components/data-tables'
@@ -21,6 +22,7 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import moment from 'moment'
 import { useState } from 'react'
+import { Camera } from 'react-feather'
 import { ConfirmModal } from '../general'
 import MakeContactToClientModal from './MakeContactToClientModal'
 import UpdateCustomerModal from './UpdateCustomerModal'
@@ -123,6 +125,19 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
     )
   }
 
+  const openAddOrChangeImageModal = () => {
+    dispatch(
+      openModal({
+        id: `openAddOrChangeImageModal-${customer._id}`,
+        title: `Are you sure to change customer image ${customer.firstname + ' ' + customer.lastname}?`,
+        body: <AddOrChangeCustomerImageModal customer={customer} />,
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WMedium
+      })
+    )
+  }
+
   const handleMakeContactToClient = async extraInformations => {
     const tempContactData = { ...customerData }
 
@@ -201,9 +216,26 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
                       </ItemContainer>
                     )}
                     <ItemContainer margin="2rem 0">
-                      <JustifyCenterColumn>
-                        <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
-                      </JustifyCenterColumn>
+                      <ItemContainer position="relative" margin="auto" width="100px">
+                        <JustifyCenterRow width="100%">
+                          <ItemContainer
+                            cursorType="pointer"
+                            padding="0.3rem"
+                            position="absolute"
+                            left="calc(100% - 30px)"
+                            top="calc(100% - 35px)"
+                            zIndex="9"
+                            backgroundColor={colors.secondary.dark}
+                            borderRadius="0.3rem"
+                            width="auto"
+                            onClick={openAddOrChangeImageModal}
+                          >
+                            <Camera size={15} height="15px" width={'15px'} color={colors.white.secondary} />
+                          </ItemContainer>
+
+                          <UserImage width="100px" height="100px" src={customer?.profile_img} />
+                        </JustifyCenterRow>
+                      </ItemContainer>
                     </ItemContainer>
                   </ItemContainer>
                   <ItemContainer>
