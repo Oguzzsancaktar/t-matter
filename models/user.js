@@ -67,7 +67,7 @@ const UserSchema = new Schema(
     role: {
       required: true,
       type: mongoose.Types.ObjectId,
-      ref: 'role'
+      ref: 'Role'
     }
   },
   { timestamps: true }

@@ -62,7 +62,7 @@ const CustomerSchema = new Schema(
 
     refferedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'refferedBy',
+      ref: 'RefferedBy',
       required: false
     },
     gender: {
@@ -71,7 +71,7 @@ const CustomerSchema = new Schema(
     },
     jobTitle: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'jobTitle',
+      ref: 'JobTitle',
       required: true
     },
     reliableCustomers: [],
