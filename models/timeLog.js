@@ -8,7 +8,7 @@ const TimeLogSchema = new Schema(
     },
     owner: {
       type: mongoose.Types.ObjectId,
-      ref: 'user'
+      ref: 'User'
     }
   },
   { timestamps: true }

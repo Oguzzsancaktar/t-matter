@@ -14,15 +14,15 @@ const expiredTaskStepSchema = new Schema(
     },
     task: {
       type: Schema.Types.ObjectId,
-      ref: 'tasks'
+      ref: 'Tasks'
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'users'
+      ref: 'Users'
     },
     customer: {
       type: Schema.Types.ObjectId,
-      ref: 'customers'
+      ref: 'Customers'
     },
     index: {
       type: Number

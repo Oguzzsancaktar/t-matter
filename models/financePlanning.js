@@ -18,7 +18,7 @@ const financePlanningExtendItem = {
   notifyUsers: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'user'
+      ref: 'User'
     }
   ]
 }

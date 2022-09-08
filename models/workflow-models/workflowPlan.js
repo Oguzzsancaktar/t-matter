@@ -6,19 +6,19 @@ const workflowPlanStep = new Schema({
   checklistItems: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'workflowChecklists'
+      ref: 'WorkflowChecklists'
     }
   ],
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'workflowCategories'
+    ref: 'WorkflowCategories'
   },
   expireDuration: {
     type: Number
   },
   location: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'locations'
+    ref: 'Locations'
   },
   postponeTime: {
     type: Number
@@ -26,7 +26,7 @@ const workflowPlanStep = new Schema({
   tabs: [],
   responsibleUser: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users'
+    ref: 'Users'
   },
   stepColor: {
     type: String

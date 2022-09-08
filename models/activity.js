@@ -5,19 +5,19 @@ const activitySchema = new Schema(
   {
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
+      ref: 'Users',
       required: true
     },
     customer: {
       type: Schema.Types.ObjectId,
-      ref: 'customers'
+      ref: 'Customers'
     },
     step: {
       type: Number
     },
     task: {
       type: Schema.Types.ObjectId,
-      ref: 'tasks'
+      ref: 'Tasks'
     },
     type: {
       type: Number,

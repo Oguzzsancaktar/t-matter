@@ -8,7 +8,7 @@ const InvoiceSchema = new Schema(
     },
     invoice: {
       type: Schema.Types.ObjectId,
-      ref: 'invoices',
+      ref: 'Invoices',
       required: true
     },
     payDate: {

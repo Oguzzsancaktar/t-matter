@@ -4,11 +4,11 @@ const InvoiceSchema = new Schema(
   {
     category: {
       type: Schema.Types.ObjectId,
-      ref: 'invoicecategories'
+      ref: 'Invoicecategories'
     },
     customer: {
       type: Schema.Types.ObjectId,
-      ref: 'customers'
+      ref: 'Customers'
     },
     total: Number,
     amount: Number,
@@ -16,13 +16,13 @@ const InvoiceSchema = new Schema(
     tasks: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'tasks'
+        ref: 'Tasks'
       }
     ],
     expiredTaskSteps: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'expiredtasksteps'
+        ref: 'Expiredtasksteps'
       }
     ],
     index: {

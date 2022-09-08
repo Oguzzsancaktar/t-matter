@@ -14,21 +14,21 @@ const SalarySettingSchema = new Schema({
   ],
   notificationTask: {
     type: mongoose.Types.ObjectId,
-    ref: 'task'
+    ref: 'Task'
   },
   notificationType: {
     type: Number
   },
   notificationReceiver: {
     type: mongoose.Types.ObjectId,
-    ref: 'user'
+    ref: 'User'
   },
   isNotificationForAdmin: {
     type: Boolean
   },
   owner: {
     type: mongoose.Types.ObjectId,
-    ref: 'user'
+    ref: 'User'
   }
 })
 
