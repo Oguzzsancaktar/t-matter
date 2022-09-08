@@ -12,6 +12,7 @@ const taskController = require('./task-controller/taskController')
 const activityController = require('./activity-controller/activityController')
 const financeController = require('./finance-controller/financeController')
 const invoiceCategoryController = require('./invoice-category-controller/invoiceCategoryController')
+const companyController = require('./company-controller/companyController')
 
 module.exports = {
   salarySettingController,
@@ -27,5 +28,6 @@ module.exports = {
   taskController,
   activityController,
   financeController,
-  invoiceCategoryController
+  invoiceCategoryController,
+  companyController
 }

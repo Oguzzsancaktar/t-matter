@@ -178,22 +178,28 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         cell: data => <div>{dateFormat(data.payDate)}</div>
       },
       {
-        name: 'Pay amount',
+        name: 'Installment amount',
         selector: row => row.payAmount,
         sortable: true,
         cell: data => <div>${data.payAmount}</div>
       },
       {
-        name: 'Paid date',
+        name: 'Transaction date',
         selector: row => row.paidDate,
         sortable: true,
         cell: data => <div>{data.paidDate ? dateFormat(data.paidDate) : '-'}</div>
       },
       {
-        name: 'Paid amount',
+        name: 'Transaction amount',
         selector: row => row.paidAmount,
         sortable: true,
-        cell: data => <div>{data.paidAmount}</div>
+        cell: data => <div>${data.paidAmount}</div>
+      },
+      {
+        name: 'Pay Amount',
+        selector: row => row.payAmount,
+        sortable: true,
+        cell: data => <div>${data.payAmount - data.paidAmount}</div>
       },
       {
         name: 'Late fee',

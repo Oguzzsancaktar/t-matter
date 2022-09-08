@@ -13,6 +13,7 @@ import { customerApi } from '@/services/customers/customerService'
 import { taskApi } from '@/services/customers/taskService'
 import { activityApi } from '@/services/activityService'
 import { financePlanningApi } from '@services/settings/finance-planning/financePlanningService'
+import { companyInfoApi } from '@services/settings/company-info/companyInfoService'
 
 const rootReducer = combineReducers({
   auth: AuthReducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [companyPricingApi.reducerPath]: companyPricingApi.reducer,
+  [companyInfoApi.reducerPath]: companyInfoApi.reducer,
   [userRoleApi.reducerPath]: userRoleApi.reducer,
   [workflowApi.reducerPath]: workflowApi.reducer,
   [dynamicVariablesApi.reducerPath]: dynamicVariablesApi.reducer,

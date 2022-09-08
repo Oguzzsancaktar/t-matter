@@ -16,6 +16,7 @@ const taskRoutes = require('./task-routes/taskRoutes')
 const activityRoutes = require('./activity-routes/activityRoutes')
 const financeRoutes = require('./finance-routes/financeRoutes')
 const invoiceCategoryRoutes = require('./invoice-category-routes/invoiceCategoryRoutes')
+const companyRoutes = require('./company-routes/companyRoutes')
 
 router.get('/hello', (req, res) => {
   res.send('hello')
@@ -24,6 +25,7 @@ router.get('/hello', (req, res) => {
 router.use('/auth', authRoutes)
 router.use('/salarySetting', salarySettingRoutes)
 router.use('/companyPricing', companyPricingRoutes)
+router.use('/company', companyRoutes)
 router.use('/role', roleRoutes)
 router.use('/user', userRoutes)
 router.use('/customer', customerRoutes)
