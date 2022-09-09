@@ -91,11 +91,7 @@ const SideBar = () => {
                 <ItemContainer margin="0 0 0.5rem 0">
                   <Row>
                     <ItemContainer width="35px" margin="0 0.5rem 0 0">
-                      <CircleImage
-                        height="35px"
-                        width="35px"
-                        imageUrl={'https:source.unsplash.com/user/c_v_r/100x100'}
-                      />
+                      <CircleImage height="35px" width="35px" imageUrl={loggedUser.user?.profile_img || ''} />
                     </ItemContainer>
                     <SidebarShowWhenHover className="sidebar__hover_hide_show">
                       <Column>
