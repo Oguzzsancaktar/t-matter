@@ -13,7 +13,7 @@ const Component = {
 }
 
 const CompanyPlanningModal = () => {
-  const [activeTab, setActiveTab] = useState('CompanyPricing')
+  const [activeTab, setActiveTab] = useState('CompanyInfo')
 
   return (
     <Column height="100%">

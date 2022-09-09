@@ -138,7 +138,6 @@ const addOrChangeCustomerProfileImage = async (req, res) => {
 
       const updatedCustomer = await dataAccess.customerDataAccess.findByIdAndUpdateCustomerForCreate(id, customer)
 
-      console.log(updatedCustomer)
       res.status(200).send(updatedCustomer)
     } else {
       res.status(404).send('Customer not found!!')

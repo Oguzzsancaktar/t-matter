@@ -54,7 +54,7 @@ const UserPageSettingsTab = () => {
       sortable: true,
       cell: data => (
         <ItemContainer width="auto" onClick={() => handleRead(data)} cursorType="pointer">
-          <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.role[0].name} />
+          <RoleBadge roleColor="#ff0000" roleIcon={<UserCheck size={16} />} roleName={data.role[0]?.name} />
         </ItemContainer>
       )
     },

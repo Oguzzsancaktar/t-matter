@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const middlewares = require('../../middlewares')
 const controllers = require('../../controllers')
+const upload = require('../../utils/upload-utils/multer')
 
 router.post('/', middlewares.validations.userValidations.createUserValidation, controllers.userController.createUser)
 
@@ -16,5 +17,7 @@ router.patch(
 )
 
 router.get('/', controllers.userController.getUsers)
+
+router.post('/image/:id', upload.single('file'), controllers.userController.addOrChangeUserProfileImage)
 
 module.exports = router

@@ -4,23 +4,23 @@ import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
-import { ICustomer } from '@/models'
-import { customerApi, useAddOrUpdateCustomerImageMutation } from '@/services/customers/customerService'
+import { IUser } from '@/models'
 import { useState } from 'react'
-import { ModalHeader, ModalBody } from '../types'
 import { WebcamCapture } from '@/components/camera'
 import { Button } from '@/components/button'
 import { UserImage } from '@/components/image'
 import { base64ToJpeg, getBase64 } from '@/utils/imageConvert'
+import { ModalHeader, ModalBody } from '../../types'
+import { useAddOrUpdateUserImageMutation, userApi } from '@/services/settings/user-planning/userService'
 
 interface IProps {
-  customer: ICustomer
+  user: IUser
 }
 
-const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
-  const [addOrUpdateCustomerImage] = useAddOrUpdateCustomerImageMutation()
+const AddOrChangeUserImageModal: React.FC<IProps> = ({ user }) => {
+  const [addOrUpdateUserImage] = useAddOrUpdateUserImageMutation()
   const [formData, setFormData] = useState<FormData>(new FormData())
-  const [image, setImage] = useState(customer?.profile_img || 'https://via.placeholder.com/150')
+  const [image, setImage] = useState(user?.profile_img || 'https://via.placeholder.com/150')
   const [showCamera, setShowCamera] = useState<boolean>(false)
 
   const handleUploadChange = async file => {
@@ -28,7 +28,7 @@ const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
 
     if (typeof file === 'string') {
       try {
-        const result = await base64ToJpeg(file, `profile_image-${customer._id}.jpeg`)
+        const result = await base64ToJpeg(file, `profile_image-${user._id}.jpeg`)
         tempFormData.append('file', result)
         setImage(file)
       } catch (error) {
@@ -52,8 +52,8 @@ const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
 
   const handleSubmit = async () => {
     try {
-      await addOrUpdateCustomerImage({ _id: customer._id, file: formData })
-      customerApi.util.resetApiState()
+      await addOrUpdateUserImage({ _id: user._id, file: formData })
+      userApi.util.resetApiState()
     } catch (error) {
       console.log(error)
     }
@@ -64,7 +64,7 @@ const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
       <JustifyBetweenColumn height="100%">
         <ModalHeader>
           <H1 width="100%" textAlign="center" color={colors.white.primary}>
-            Update Customer ({customer.firstname + ' ' + customer.lastname}) Image
+            Update User ({user.firstname + ' ' + user.lastname}) Image
           </H1>
         </ModalHeader>
         <ModalBody height="calc(100% - 63px)">
@@ -103,4 +103,4 @@ const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
   )
 }
 
-export default AddOrChangeCustomerImageModal
+export default AddOrChangeUserImageModal

@@ -21,7 +21,11 @@ const createCompanyPricing = async (req, res, next) => {
   const schema = joi.object().keys({
     dailyAverageExpenseAmount: joi.number().required(),
     specifiedCompanyProfit: joi.number().required(),
-    workingSchedule: workingScheduleValidationConstants.workingScheduleSchema
+    workingSchedule: {
+      workingSchedule: workingScheduleValidationConstants.workingScheduleSchema,
+      payrollType: joi.number().min(PAYROLL.MONTHLY).max(PAYROLL.WEEKLY).required(),
+      payrollDay: joi.number().custom((value, helpers) => customPayrollDayValidation(value, helpers, body))
+    }
   })
 
   try {

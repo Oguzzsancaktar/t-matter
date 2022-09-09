@@ -258,6 +258,7 @@ const getWorkflowPlans = async ({ search, size, status }) => {
   return WorkflowPlan.aggregate([...pipeline, ...pipelineData(hourlyCompanyFee)]).exec()
 }
 
+// TODO wf sıralam bozuluyor
 const findWorkflowPlanById = async id => {
   const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
 

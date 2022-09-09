@@ -98,6 +98,21 @@ const updateUserStatus = (builder: IBuilder) => {
   })
 }
 
+const addOrUpdateUserImage = (builder: IBuilder) => {
+  return builder.mutation<IUser, Pick<IUser, '_id'> & { file: FormData }>({
+    query(dto) {
+      return {
+        url: `/user/image/${dto._id}`,
+        method: 'POST',
+        data: dto.file
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: USER_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const userApi = createApi({
   reducerPath: USER_REDUCER_PATH,
   tagTypes: [USER_TAG_TYPE, COMPANY_PRICING_TAG],
@@ -107,7 +122,8 @@ const userApi = createApi({
     createUser: createUser(builder),
     getUserById: getUserById(builder),
     updateUser: updateUser(builder),
-    updateUserStatus: updateUserStatus(builder)
+    updateUserStatus: updateUserStatus(builder),
+    addOrUpdateUserImage: addOrUpdateUserImage(builder)
   })
 })
 
@@ -116,7 +132,8 @@ const {
   useCreateUserMutation,
   useGetUserByIdQuery,
   useUpdateUserMutation,
-  useUpdateUserStatusMutation
+  useUpdateUserStatusMutation,
+  useAddOrUpdateUserImageMutation
 } = userApi
 export {
   userApi,
@@ -124,5 +141,6 @@ export {
   useGetUserByIdQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
-  useUpdateUserStatusMutation
+  useUpdateUserStatusMutation,
+  useAddOrUpdateUserImageMutation
 }

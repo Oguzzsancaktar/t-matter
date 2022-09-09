@@ -16,7 +16,9 @@ import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import moment from 'moment'
 import React, { useState } from 'react'
+import { Camera } from 'react-feather'
 import { ConfirmModal } from '../../general'
+import AddOrChangeUserImageModal from './AddOrChangeUserImageModal'
 import UpdateUserModal from './UpdateUserModal'
 
 interface IProps {
@@ -112,6 +114,21 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
     }
   }
 
+  const openAddOrChangeImageModal = () => {
+    if (userData) {
+      dispatch(
+        openModal({
+          id: `openAddOrChangeImageModal-${userData?._id}`,
+          title: `Are you sure to change customer image ${userData?.firstname + ' ' + userData?.lastname}?`,
+          body: <AddOrChangeUserImageModal user={userData} />,
+          width: ESize.WSmall,
+          height: ESize.HAuto,
+          maxWidth: ESize.WSmall
+        })
+      )
+    }
+  }
+
   return (
     <ItemContainer borderRadius="0.3rem" overflow="visible" height="100%">
       <JustifyBetweenRow height="100%">
@@ -125,12 +142,31 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
             <UserSkeletonLoader />
           ) : (
             <JustifyBetweenColumn height="100%" padding="1rem">
-              <ItemContainer height="200px">
+              <ItemContainer height="280px">
                 <JustifyBetweenColumn>
                   <ItemContainer borderBottom={'1px solid ' + colors.white.primary} padding="0 0 1rem 0">
-                    <JustifyCenterColumn>
-                      <UserImage width="100px" height="100px" src="https://via.placeholder.com/150" />
-                    </JustifyCenterColumn>
+                    <ItemContainer margin="2rem 0">
+                      <ItemContainer position="relative" margin="auto" width="100px">
+                        <JustifyCenterRow width="100%">
+                          <ItemContainer
+                            cursorType="pointer"
+                            padding="0.3rem"
+                            position="absolute"
+                            left="calc(100% - 30px)"
+                            top="calc(100% - 35px)"
+                            zIndex="9"
+                            backgroundColor={colors.secondary.dark}
+                            borderRadius="0.3rem"
+                            width="auto"
+                            onClick={openAddOrChangeImageModal}
+                          >
+                            <Camera size={15} height="15px" width={'15px'} color={colors.white.secondary} />
+                          </ItemContainer>
+
+                          <UserImage width="100px" height="100px" src={userData?.profile_img} />
+                        </JustifyCenterRow>
+                      </ItemContainer>
+                    </ItemContainer>
                   </ItemContainer>
                   <ItemContainer>
                     <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="1rem 0">

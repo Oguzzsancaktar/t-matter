@@ -1,4 +1,4 @@
-import { ILoginResponse, IUser, IUserLog, IUserLoginCredentials } from '@models/index'
+import { IUser, IUserLog } from '@models/index'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'

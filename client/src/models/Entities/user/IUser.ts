@@ -16,4 +16,7 @@ export default interface IUser {
   gender: number
   password: string
   status: number
+
+  profile_img?: string
+  cloudinary_id?: string
 }

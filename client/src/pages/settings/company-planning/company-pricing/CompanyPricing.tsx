@@ -164,6 +164,16 @@ const CompanyPricing = () => {
           workingSchedule: dailyWorkTimeData
         }
       })
+
+      console.log({
+        dailyAverageExpenseAmount: dailyAvarageExpenceAmount as number,
+        specifiedCompanyProfit: specifiedCompanyProfitPercentage as number,
+        workingSchedule: {
+          payrollType,
+          payrollDay,
+          workingSchedule: dailyWorkTimeData
+        }
+      })
       dispatch(workflowApi.util.resetApiState())
     } catch (error) {}
 

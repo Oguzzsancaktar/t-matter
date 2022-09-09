@@ -2,6 +2,7 @@ const dataAccess = require('../../data-access')
 const { StatusCodes } = require('http-status-codes')
 const { STATUS_TYPES } = require('../../constants/constants')
 const utils = require('../../utils')
+const cloudinary = require('../../utils/upload-utils/cloudinary')
 
 const createUser = async (req, res) => {
   const { body } = req
@@ -63,10 +64,33 @@ const getUsers = async (req, res) => {
   }
 }
 
+const addOrChangeUserProfileImage = async (req, res) => {
+  const { id } = req.params
+  try {
+    const user = await User.findById(id)
+
+    if (user) {
+      const result = await cloudinary.uploader.upload(req.file.path)
+
+      user.cloudinary_id = result.public_id
+      user.profile_img = result.secure_url
+
+      const updatedUser = await dataAccess.userDataAccess.findByIdAndUpdateUser(id, user)
+
+      res.status(200).send(updatedUser)
+    } else {
+      res.status(404).send('Customer not found!!')
+    }
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 module.exports = {
   createUser,
   getUsers,
   removeUser,
   getUser,
-  updateUser
+  updateUser,
+  addOrChangeUserProfileImage
 }

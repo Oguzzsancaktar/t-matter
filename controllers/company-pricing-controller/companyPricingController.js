@@ -5,10 +5,11 @@ const calculateHourlyCompanyFee = require('../../helpers/calculateHourlyCompanyF
 const createCompanyPricing = async (req, res) => {
   const { body } = req
   try {
-    const [companyPricing] = await dataAccess.companyPricingDataAccess.getCompanyPricing()
-    if (companyPricing) {
-      return res.status(400).json(utils.errorUtils.errorInstance({ message: 'Company Pricing already exists' }))
-    }
+    // const [companyPricing] = await dataAccess.companyPricingDataAccess.getCompanyPricing()
+    // if (companyPricing) {
+    //   return res.status(400).json(utils.errorUtils.errorInstance({ message: 'Company Pricing already exists' }))
+    // }
+
     const workingSchedule = await dataAccess.workingScheduleDataAccess.createWorkingSchedule(body.workingSchedule)
     body.workingSchedule = workingSchedule._id
     await dataAccess.companyPricingDataAccess.createCompanyPricing(body)
