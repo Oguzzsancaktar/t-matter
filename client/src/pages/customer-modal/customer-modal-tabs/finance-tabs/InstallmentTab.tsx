@@ -258,13 +258,6 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         cell: (data: IInstallment, i: number) => (
           <Row>
             <IconButton
-              // @ts-ignore
-              onClick={showInstallmentPrint.bind(this, { row: data, i })}
-              bgColor={colors.background.gray.light}
-              margin="0 .2rem 0 0"
-              children={<Printer size={'16px'} color={colors.text.primary} />}
-            />
-            <IconButton
               onClick={showPayInstallment.bind(this, data)}
               bgColor={colors.background.gray.light}
               margin="0 .2rem 0 0"
@@ -279,12 +272,17 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
                   children={<Calendar size={'16px'} color={colors.text.primary} />}
                 />
               )}
-
             <IconButton
               onClick={() => {}}
               bgColor={colors.background.gray.light}
               margin="0 .2rem 0 0"
               children={<FileText size={'16px'} color={colors.text.primary} />}
+            />
+            <IconButton
+              onClick={showInstallmentPrint.bind(this, { row: data, i })}
+              bgColor={colors.background.gray.light}
+              margin="0 .2rem 0 0"
+              children={<Printer size={'16px'} color={colors.text.primary} />}
             />
           </Row>
         )
