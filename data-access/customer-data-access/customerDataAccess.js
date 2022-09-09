@@ -136,7 +136,10 @@ const findCustomerById = async (id, populate = '') => {
         updatedAt: { $first: '$updatedAt' },
         refferedBy: { $first: '$refferedBy' },
         customerType: { $first: '$customerType' },
-        reliableCustomers: { $push: '$reliableCustomers' }
+        reliableCustomers: { $push: '$reliableCustomers' },
+
+        profile_img: { $push: '$profile_img' },
+        cloudinary_id: { $push: '$cloudinary_id' }
       }
     }
   ]).exec()

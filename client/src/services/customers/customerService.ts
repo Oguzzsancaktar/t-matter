@@ -111,12 +111,12 @@ const getCustomerReliables = (builder: IBuilder) => {
 }
 
 const addOrUpdateCustomerImage = (builder: IBuilder) => {
-  return builder.mutation<ICustomer, Pick<ICustomer, '_id'> & { image: any }>({
+  return builder.mutation<ICustomer, Pick<ICustomer, '_id'> & { file: FormData }>({
     query(dto) {
       return {
         url: `/customer/image/${dto._id}`,
         method: 'POST',
-        data: { image: dto.image }
+        data: dto.file
       }
     },
     invalidatesTags(result) {

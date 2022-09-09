@@ -136,8 +136,9 @@ const addOrChangeCustomerProfileImage = async (req, res) => {
       customer.cloudinary_id = result.public_id
       customer.profile_img = result.secure_url
 
-      const updatedCustomer = await Customer.findByIdAndUpdate(id, customer)
+      const updatedCustomer = await dataAccess.customerDataAccess.findByIdAndUpdateCustomerForCreate(id, customer)
 
+      console.log(updatedCustomer)
       res.status(200).send(updatedCustomer)
     } else {
       res.status(404).send('Customer not found!!')

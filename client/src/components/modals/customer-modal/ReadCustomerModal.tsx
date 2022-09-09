@@ -131,9 +131,9 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
         id: `openAddOrChangeImageModal-${customer._id}`,
         title: `Are you sure to change customer image ${customer.firstname + ' ' + customer.lastname}?`,
         body: <AddOrChangeCustomerImageModal customer={customer} />,
-        width: ESize.WLarge,
+        width: ESize.WSmall,
         height: ESize.HAuto,
-        maxWidth: ESize.WMedium
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -182,6 +182,8 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
     setActiveSliderIndex(index)
   }
 
+  console.log('customerData', customerData)
+
   return (
     <ItemContainer borderRadius="0.3rem" overflow="visible" height="100%">
       <JustifyBetweenRow height="100%">
@@ -202,7 +204,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
                     padding="0 0 1rem 0"
                     position="relative"
                   >
-                    {customer.customerType === 1 && (
+                    {customerData.customerType === 1 && (
                       <ItemContainer position="absolute">
                         <Button
                           color={colors.primary.light}
@@ -233,7 +235,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
                             <Camera size={15} height="15px" width={'15px'} color={colors.white.secondary} />
                           </ItemContainer>
 
-                          <UserImage width="100px" height="100px" src={customer?.profile_img} />
+                          <UserImage width="100px" height="100px" src={customerData?.profile_img} />
                         </JustifyCenterRow>
                       </ItemContainer>
                     </ItemContainer>

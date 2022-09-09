@@ -11,6 +11,7 @@ import { useAuth } from '@hooks/useAuth'
 import ReactTooltip from 'react-tooltip'
 
 import './styles/vendors/fullcalendar.css'
+import './styles/vendors/react-drag-drop-file.css'
 
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 

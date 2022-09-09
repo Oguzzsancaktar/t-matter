@@ -19,6 +19,7 @@ interface IProps extends IComponentProps {
   ref?: React.Ref<any>
   left?: string
   top?: string
+  transform?: string
   onClick?: (e: React.MouseEvent) => void
   onMouseOver?: (e: React.MouseEvent) => void
   onMouseOut?: (e: React.MouseEvent) => void
@@ -45,6 +46,7 @@ const Item = styled.div<IProps>`
   display: ${({ display }) => (display ? display : '')};
   left: ${({ left }) => (left ? left : '')};
   top: ${({ top }) => (top ? top : '')};
+  transform: ${({ transform }) => (transform ? transform : '')};
 
   transition: all 0.3s ease-in-out;
 `
