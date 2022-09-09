@@ -8,6 +8,7 @@ import {
   CreateInstallmentModal,
   H1,
   IconButton,
+  InstallmentPrintModal,
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterRow,
@@ -32,13 +33,14 @@ import {
   useGetInstallmentsQuery,
   useResetInstallmentsMutation
 } from '@services/settings/finance-planning/financePlanningService'
-import { Calendar, DollarSign, Edit, FileText, UserCheck } from 'react-feather'
+import { Calendar, DollarSign, Edit, FileText, Printer, UserCheck } from 'react-feather'
 import moment from 'moment'
 import PayInstallment from '@components/modals/finance/PayInstallmentModal'
 import Flatpickr from 'react-flatpickr'
 import { INSTALLMENT_TYPES } from '@constants/finance'
 import invoice from '@models/Entities/finance/Invoice'
 import Swal from 'sweetalert2'
+import constantToLabel from '@utils/constantToLabel'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -130,6 +132,28 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
     }
   }
 
+  const showInstallmentPrint = ({ row, i }) => {
+    if (selectedInvoice) {
+      dispatch(
+        openModal({
+          id: `installmentPrint`,
+          title: 'Installment Print Modal',
+          body: (
+            <InstallmentPrintModal
+              installment={row}
+              invoice={selectedInvoice}
+              balance={calculateBalance(i)}
+              customerId={customerId}
+            />
+          ),
+          width: ESize.WSmall,
+          height: ESize.WSmall,
+          maxWidth: ESize.WSmall
+        })
+      )
+    }
+  }
+
   const handleResetInstallments = async () => {
     try {
       await Swal.fire({
@@ -146,7 +170,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
   }
 
   const dateFormat = date => {
-    return moment(date).format('MMM DD YYYY')
+    return moment(date).format('MMM DD YY')
   }
 
   const calculateBalance = (index: number) => {
@@ -164,12 +188,13 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
     if (!selectedInvoice) {
       return []
     }
+
     return [
       {
         name: 'Type',
         selector: row => row.type,
         sortable: true,
-        cell: data => <div>{data.type}</div>
+        cell: data => <div>{constantToLabel(data.type)}</div>
       },
       {
         name: 'Pay date',
@@ -205,13 +230,13 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         name: 'Late fee',
         selector: row => row.lateFee,
         sortable: true,
-        cell: data => <div>{data.lateFee}</div>
+        cell: data => <div>${data.lateFee}</div>
       },
       {
         name: 'Suspended fee',
         selector: row => row.suspendedFee,
         sortable: true,
-        cell: data => <div>{data.suspendedFee}</div>
+        cell: data => <div>${data.suspendedFee}</div>
       },
       {
         name: 'Balance',
@@ -227,12 +252,18 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
       },
       {
         name: 'Actions',
-        width: '120px',
         selector: row => row._id,
         right: true,
         header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
-        cell: (data: IInstallment) => (
+        cell: (data: IInstallment, i: number) => (
           <Row>
+            <IconButton
+              // @ts-ignore
+              onClick={showInstallmentPrint.bind(this, { row: data, i })}
+              bgColor={colors.background.gray.light}
+              margin="0 .2rem 0 0"
+              children={<Printer size={'16px'} color={colors.text.primary} />}
+            />
             <IconButton
               onClick={showPayInstallment.bind(this, data)}
               bgColor={colors.background.gray.light}
@@ -305,7 +336,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
                   <TableSkeltonLoader count={13} />
                 </ItemContainer>
               ) : installments && installments.length > 0 ? (
-                <DataTable fixedHeader columns={columns()} data={installments || []} />
+                <DataTable responsive fixedHeader columns={columns()} data={installments || []} />
               ) : (
                 <NoTableData />
               )}

@@ -10,7 +10,6 @@
   font-weight: bold;
   font-style: 0.857rem;
   letter-spacing: 0.5px;
-  text-transform: uppercase;
 }
 .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol .rdt_TableCol_Sortable:hover {
   opacity: 1;

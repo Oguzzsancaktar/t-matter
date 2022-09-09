@@ -2,8 +2,12 @@ import colors from '@/constants/colors'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
-
-   * {
+  @media print {
+    .hp {
+      display: none !important;
+    }
+  }
+  * {
   box-sizing: border-box;
   font-family: 'Satoshi-Regular';
   margin: 0;
