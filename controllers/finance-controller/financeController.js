@@ -247,7 +247,7 @@ const payInstallment = async (req, res) => {
       await dataAccess.financeDataAccess.updateInstallment(installmentId, {
         paidDate,
         paidMethod,
-        paidAmount: amount,
+        paidAmount: installment.payAmount,
         status: INSTALLMENT_STATUS.PAID
       })
       return res.sendStatus(StatusCodes.OK)

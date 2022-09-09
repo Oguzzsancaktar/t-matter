@@ -39,7 +39,7 @@ const PayInstallment: React.FC<IProps> = ({ invoice, installment }) => {
     await payInstallment({
       invoiceId: invoice._id,
       installmentId: installment._id,
-      amount: state.amount,
+      amount: +state.amount,
       paidDate: state.paidDate,
       paidMethod: state.paidMethod
     })
