@@ -9,7 +9,7 @@ interface IInstallment {
   status: string
   paidMethod?: string
   paidDate?: Date
-  paidAmount?: number
+  paidAmount: number
   lateFee?: number
   suspendedFee?: number
   notes?: string[]

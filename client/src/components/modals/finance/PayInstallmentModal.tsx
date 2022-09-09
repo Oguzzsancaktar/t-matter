@@ -28,7 +28,7 @@ interface IProps {
 const PayInstallment: React.FC<IProps> = ({ invoice, installment }) => {
   const [payInstallment] = usePayInstallmentMutation()
   const [state, setState] = useState({
-    amount: installment.payAmount,
+    amount: installment.payAmount - installment.paidAmount,
     paidDate: moment().toDate(),
     paidMethod: PAYMENT_METHODS.CASH
   })
