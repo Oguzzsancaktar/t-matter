@@ -38,35 +38,42 @@ const InstallmentPrintModal: React.FC<IProps> = ({ invoice, installment, balance
       </ModalHeader>
       <ModalBody height="calc(100% - 63px)" padding="0" withModalFooter={false}>
         <div
-          style={{ display: 'flex', flexDirection: 'column', margin: 'auto', padding: '1rem', width: '80%' }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            margin: 'auto',
+            padding: '1rem',
+            width: '100%',
+            maxWidth: 500
+          }}
           ref={componentRef}
         >
-          <JustifyBetweenRow margin="0 0 1rem 0">
+          <JustifyBetweenRow margin="0 0 3rem 0">
             <H1 color={colors.black.primary} fontWeight="600" fontSize="16px">
               {data?.name}
             </H1>
           </JustifyBetweenRow>
-          <JustifyBetweenRow margin="0 0 1rem 0">
+          <JustifyBetweenRow margin="0 0 2rem 0">
             <H1 color={colors.black.primary} fontWeight="600" fontSize="16px">
               {customer?.firstname + ' ' + customer?.lastname}
             </H1>
           </JustifyBetweenRow>
-          <JustifyBetweenRow margin="0 0 1rem 0">
+          <JustifyBetweenRow margin="0 0 2rem 0">
             <Text>{invoice.category.name}</Text>
           </JustifyBetweenRow>
-          <JustifyBetweenRow margin="0 0 1rem 0">
+          <JustifyBetweenRow margin="0 0 2rem 0">
             <Text>PAID DATE: </Text>
             <Text>{moment(installment.paidDate).format('MMM/DD/YY')}</Text>
           </JustifyBetweenRow>
-          <JustifyBetweenRow margin="0 0 1rem 0">
+          <JustifyBetweenRow margin="0 0 2rem 0">
             <Text>PAID AMOUNT: </Text>
             <Text>${installment.paidAmount}</Text>
           </JustifyBetweenRow>
-          <JustifyBetweenRow margin="0 0 1rem 0">
+          <JustifyBetweenRow margin="0 0 2rem 0">
             <Text>PAID METHOD: </Text>
             <Text>{constantToLabel(installment.paidMethod as string)}</Text>
           </JustifyBetweenRow>
-          <JustifyBetweenRow margin="0 0 1rem 0">
+          <JustifyBetweenRow margin="0 0 2rem 0">
             <Text>BALANCE: </Text>
             <Text>${balance}</Text>
           </JustifyBetweenRow>
