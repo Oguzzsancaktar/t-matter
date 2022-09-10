@@ -240,7 +240,12 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         cell: data => (
           <div
             style={{
-              background: data.status === INSTALLMENT_STATUS.PAID ? colors.green.primary : colors.red.primary,
+              background:
+                data.status === INSTALLMENT_STATUS.PAID
+                  ? colors.green.primary
+                  : data.status === INSTALLMENT_STATUS.LESS_PAID
+                  ? colors.orange.primary
+                  : colors.red.primary,
               borderRadius: 5,
               padding: 5,
               color: 'white',
