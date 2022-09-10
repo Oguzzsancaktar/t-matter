@@ -7,7 +7,8 @@ import {
   InputWithIcon,
   ItemContainer,
   JustifyBetweenColumn,
-  JustifyCenterRow
+  JustifyCenterRow,
+  TextArea
 } from '@/components'
 import colors from '@constants/colors'
 import { ModalHeader, ModalBody } from '@components/modals/types'
@@ -37,9 +38,9 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
 
   useEffect(() => {
     if (financePlanning) {
-      const deposit = +Number((invoice.total * financePlanning.minDepositAmount.value) / 100).toFixed(0)
+      const deposit = +Math.ceil((invoice.total * financePlanning.minDepositAmount.value) / 100)
       const totalPayment = invoice.total - deposit
-      if (totalPayment < financePlanning.minInstallmentAmount.value) {
+      if (totalPayment <= financePlanning.minInstallmentAmount.value) {
         setState({
           invoiceId: invoice._id as string,
           startDate: moment().add(1, 'months').toDate(),
@@ -69,21 +70,24 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
 
   const handleCreate = () => {
     if (state && financePlanning) {
+      const deposit = +Math.ceil((invoice.total * financePlanning.minDepositAmount.value) / 100)
+      const totalPayment = invoice.total - deposit
+      if (totalPayment <= financePlanning.minInstallmentAmount.value) {
+        createInstallment({
+          invoiceId: state.invoiceId,
+          startDate: state.startDate,
+          deposit: 0,
+          payAmount: +Math.ceil(invoice.total),
+          quantity: 1,
+          note: state.note
+        })
+        dispatch(closeModal('createInstallment'))
+        return
+      }
       if (
         state.payAmount < financePlanning.minInstallmentAmount.value ||
-        state.deposit < +Number((invoice.total * financePlanning.minDepositAmount.value) / 100).toFixed(0)
+        state.deposit < +Math.ceil((invoice.total * financePlanning.minDepositAmount.value) / 100)
       ) {
-        if (invoice.total <= financePlanning.minInstallmentAmount.value) {
-          createInstallment({
-            invoiceId: state.invoiceId,
-            startDate: state.startDate,
-            deposit: 0,
-            payAmount: +Math.ceil(invoice.total),
-            quantity: 1
-          })
-          dispatch(closeModal('createInstallment'))
-          return
-        }
         toastError('Pay amount or deposit is less than minimum amount')
         return
       }
@@ -155,6 +159,15 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
               type="number"
               value={state?.quantity}
               onChange={handleInputChange}
+            />
+          </JustifyCenterRow>
+          <JustifyCenterRow margin="0 0 0.5rem 0">
+            <TextArea
+              name="note"
+              labelText="Note (optional)"
+              onChange={handleInputChange}
+              value={state?.note}
+              rows={8}
             />
           </JustifyCenterRow>
         </Column>

@@ -6,6 +6,7 @@ interface IInstallmentCreateDTO {
   quantity: number
   payAmount: number
   invoiceId: Invoice['_id']
+  note?: string
 }
 
 export default IInstallmentCreateDTO

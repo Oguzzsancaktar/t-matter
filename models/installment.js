@@ -42,7 +42,8 @@ const InvoiceSchema = new Schema(
       default: 0
     },
     notes: {
-      type: [String]
+      type: [String],
+      default: []
     }
   },
   {

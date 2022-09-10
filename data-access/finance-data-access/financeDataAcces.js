@@ -24,6 +24,10 @@ const updateInvoiceById = (id, data) => {
   return Invoice.findByIdAndUpdate(id, data)
 }
 
+const getInvoiceById = id => {
+  return Invoice.findById(id)
+}
+
 const getInvoicesByCustomerId = customerId => {
   return Invoice.aggregate([
     { $match: { customer: mongoose.Types.ObjectId(customerId) } },
@@ -241,5 +245,6 @@ module.exports = {
   getInstallmentById,
   updateInvoiceById,
   updateManyInstallment,
-  deleteManyInstallment
+  deleteManyInstallment,
+  getInvoiceById
 }

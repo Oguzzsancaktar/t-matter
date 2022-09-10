@@ -1,4 +1,13 @@
-import { Button, Column, DatePicker, H1, ItemContainer, JustifyBetweenColumn, JustifyCenterRow } from '@/components'
+import {
+  Button,
+  Column,
+  DatePicker,
+  H1,
+  ItemContainer,
+  JustifyBetweenColumn,
+  JustifyCenterRow,
+  TextArea
+} from '@/components'
 import { IInstallment, Invoice } from '@/models'
 import React, { useState } from 'react'
 import colors from '@constants/colors'
@@ -19,6 +28,7 @@ interface IProps {
 
 const PostponeInstallmentModal: React.FC<IProps> = ({ installment, selectedInvoice, setSelectedInvoice }) => {
   const [state, setState] = useState(installment.payDate)
+  const [note, setNote] = useState('')
   const [postponeInstallment] = usePostponeInstallmentMutation()
   const { data: financePlanning, isLoading: isFinancePlanningLoading } = useGetFinancePlanningQuery()
   const { useAppDispatch } = useAccessStore()
@@ -28,7 +38,9 @@ const PostponeInstallmentModal: React.FC<IProps> = ({ installment, selectedInvoi
     await postponeInstallment({
       invoiceId: selectedInvoice._id,
       oldDate: installment.payDate,
-      days: moment(state).diff(moment(installment.payDate), 'days') + 1
+      days: moment(state).diff(moment(installment.payDate), 'days') + 1,
+      note,
+      installmentId: installment._id
     })
     setSelectedInvoice({ ...selectedInvoice, postponeCount: selectedInvoice.postponeCount + 1 })
     dispatch(closeModal('postponeInstallment'))
@@ -58,6 +70,15 @@ const PostponeInstallmentModal: React.FC<IProps> = ({ installment, selectedInvoi
                 .add(financePlanning?.installmentPostponeTimeLimit.value, 'days')
                 .valueOf()}
               value={state}
+            />
+          </JustifyCenterRow>
+          <JustifyCenterRow margin="0 0 0.5rem 0">
+            <TextArea
+              name="note"
+              labelText="Note (optional)"
+              onChange={e => setNote(e.target.value)}
+              value={note}
+              rows={18}
             />
           </JustifyCenterRow>
         </Column>

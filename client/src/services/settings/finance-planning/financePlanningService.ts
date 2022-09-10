@@ -216,22 +216,23 @@ const getInstallments = (builder: IBuilder) => {
 }
 
 const postponeInstallment = (builder: IBuilder) => {
-  return builder.mutation<void, { days: number; oldDate: Date; invoiceId: Invoice['_id'] }>({
+  return builder.mutation<
+    void,
+    { days: number; oldDate: Date; invoiceId: Invoice['_id']; note: string; installmentId: IInstallment['_id'] }
+  >({
     query(arg) {
       return {
-        url: `/finance/installment/${arg.invoiceId}/postpone`,
+        url: `/finance/installment/${arg.invoiceId}/postpone/${arg.installmentId}`,
         method: 'PUT',
         data: {
           days: arg.days,
-          oldDate: arg.oldDate
+          oldDate: arg.oldDate,
+          note: arg.note
         }
       }
     },
     invalidatesTags(result) {
-      return [
-        { type: INSTALLMENT_TAG_TYPE, id: 'LIST' },
-        { type: INVOICE_TAG_TYPE, id: 'LIST' }
-      ]
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
     }
   })
 }
@@ -245,6 +246,7 @@ const payInstallment = (builder: IBuilder) => {
       amount: number
       paidDate: Date
       paidMethod: string
+      note: string
     }
   >({
     query(arg) {
@@ -254,15 +256,13 @@ const payInstallment = (builder: IBuilder) => {
         data: {
           amount: arg.amount,
           paidDate: arg.paidDate,
-          paidMethod: arg.paidMethod
+          paidMethod: arg.paidMethod,
+          note: arg.note
         }
       }
     },
     invalidatesTags(result) {
-      return [
-        { type: INSTALLMENT_TAG_TYPE, id: 'LIST' },
-        { type: INVOICE_TAG_TYPE, id: 'LIST' }
-      ]
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
     }
   })
 }
