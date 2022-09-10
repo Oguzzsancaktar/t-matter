@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {
   ActionButtons,
   Badge,
+  Button,
   Column,
   ConfirmModal,
   CreateRoleModal,
@@ -31,6 +32,8 @@ import useAccessStore from '@hooks/useAccessStore'
 import InvoiceCategoryCreateModal from '@pages/settings/finance-planning/InvoiceCategoryCreateModal'
 import InvoiceCategoryUpdateModal from '@pages/settings/finance-planning/InvoiceCategoryUpdateModal'
 import { toastError, toastSuccess } from '@utils/toastUtil'
+import { AgreementUploadModal } from '@/pages'
+import colors from '@constants/colors'
 
 const InvoiceCategoryTab = () => {
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
@@ -52,6 +55,18 @@ const InvoiceCategoryTab = () => {
       selector: row => row.status,
       sortable: true,
       cell: data => <Badge color={selectColorForStatus(data.status)}>{EStatus[data.status]} </Badge>
+    },
+    {
+      name: 'Agreement',
+      width: '120px',
+      cell: data => (
+        <Button
+          color={data.agreement ? colors.blue.primary : colors.orange.primary}
+          onClick={showUploadAgreementModal.bind(this, data)}
+        >
+          {data.agreement ? 'Change' : 'Upload'}
+        </Button>
+      )
     },
     {
       name: 'Actions',
@@ -79,6 +94,19 @@ const InvoiceCategoryTab = () => {
         body: <InvoiceCategoryReadModal _id={invoiceCategory._id} />,
         width: ESize.WLarge,
         height: ESize.HAuto,
+        maxWidth: ESize.WSmall
+      })
+    )
+  }
+
+  const showUploadAgreementModal = (invoiceCategory: IInvoiceCategory) => {
+    return dispatch(
+      openModal({
+        id: `uploadAgreement-${invoiceCategory._id}`,
+        title: 'Upload agreement',
+        body: <AgreementUploadModal invoiceCategory={invoiceCategory} />,
+        width: ESize.WSmall,
+        height: ESize.WSmall,
         maxWidth: ESize.WSmall
       })
     )

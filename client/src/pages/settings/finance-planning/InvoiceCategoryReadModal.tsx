@@ -55,6 +55,14 @@ const InvoiceCategoryReadModal: React.FC<IProps> = props => {
                 {data.name}
               </H1>
             </Row>
+            <Row margin="0 0 1rem 0">
+              <H1 color={colors.text.primary}>Agreement: </H1>
+              <H1 color={colors.text.primary} width="auto">
+                <a href={data.agreement} target="_blank">
+                  view
+                </a>
+              </H1>
+            </Row>
             <Row>
               <H1 color={colors.text.primary}>Category Status: </H1>
               <Badge color={selectColorForStatus(+data.status)}>{EStatus[data.status]} </Badge>

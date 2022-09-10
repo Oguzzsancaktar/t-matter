@@ -281,6 +281,23 @@ const resetInstallments = (builder: IBuilder) => {
   })
 }
 
+const uploadPdfToInvoiceCategory = (builder: IBuilder) => {
+  return builder.mutation<IInvoiceCategory, { _id: IInvoiceCategory['_id']; file: File }>({
+    query(args) {
+      const formData = new FormData()
+      formData.append('file', args.file)
+      return {
+        url: `/invoice-category/${args._id}/agreement`,
+        method: 'POST',
+        data: formData
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: INVOICE_CATEGORY_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const financePlanningApi = createApi({
   reducerPath: FINANCE_PLANNING_REDUCER_PATH,
   tagTypes: [FINANCE_PLANNING_TAG_TYPE, INVOICE_CATEGORY_TAG_TYPE, INVOICE_TAG_TYPE, EXPIRED_INVOICE_TAG_TYPE],
@@ -300,7 +317,8 @@ const financePlanningApi = createApi({
     getInstallments: getInstallments(builder),
     postponeInstallment: postponeInstallment(builder),
     payInstallment: payInstallment(builder),
-    resetInstallments: resetInstallments(builder)
+    resetInstallments: resetInstallments(builder),
+    uploadPdfToInvoiceCategory: uploadPdfToInvoiceCategory(builder)
   })
 })
 
@@ -319,7 +337,8 @@ const {
   useGetInstallmentsQuery,
   usePostponeInstallmentMutation,
   usePayInstallmentMutation,
-  useResetInstallmentsMutation
+  useResetInstallmentsMutation,
+  useUploadPdfToInvoiceCategoryMutation
 } = financePlanningApi
 
 export {
@@ -338,5 +357,6 @@ export {
   useGetInstallmentsQuery,
   usePostponeInstallmentMutation,
   usePayInstallmentMutation,
-  useResetInstallmentsMutation
+  useResetInstallmentsMutation,
+  useUploadPdfToInvoiceCategoryMutation
 }

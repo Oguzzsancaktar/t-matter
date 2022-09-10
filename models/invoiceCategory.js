@@ -6,6 +6,9 @@ const InvoiceCategorySchema = new Schema({
     type: String,
     required: true
   },
+  agreement: {
+    type: String
+  },
   status: {
     type: Number,
     required: true,
