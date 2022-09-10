@@ -8,6 +8,7 @@ import {
   CreateInstallmentModal,
   H1,
   IconButton,
+  InputWithIcon,
   InstallmentPrintModal,
   ItemContainer,
   JustifyBetweenRow,
@@ -37,7 +38,7 @@ import { Calendar, DollarSign, Edit, FileText, Printer, UserCheck } from 'react-
 import moment from 'moment'
 import PayInstallment from '@components/modals/finance/PayInstallmentModal'
 import Flatpickr from 'react-flatpickr'
-import { INSTALLMENT_TYPES } from '@constants/finance'
+import { INSTALLMENT_STATUS, INSTALLMENT_TYPES } from '@constants/finance'
 import invoice from '@models/Entities/finance/Invoice'
 import Swal from 'sweetalert2'
 import constantToLabel from '@utils/constantToLabel'
@@ -133,7 +134,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
   }
 
   const showInstallmentPrint = ({ row, i }) => {
-    if (selectedInvoice) {
+    if (selectedInvoice && installments) {
       dispatch(
         openModal({
           id: `installmentPrint`,
@@ -142,7 +143,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
             <InstallmentPrintModal
               installment={row}
               invoice={selectedInvoice}
-              balance={calculateBalance(i)}
+              balance={calculateBalance(installments.length - 1)}
               customerId={customerId}
             />
           ),
@@ -191,22 +192,11 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
 
     return [
       {
-        name: 'Type',
-        selector: row => row.type,
-        sortable: true,
-        cell: data => <div>{constantToLabel(data.type)}</div>
-      },
-      {
         name: 'Pay date',
         selector: row => row.payDate,
+        width: '125px',
         sortable: true,
         cell: data => <div>{dateFormat(data.payDate)}</div>
-      },
-      {
-        name: 'Installment amount',
-        selector: row => row.payAmount,
-        sortable: true,
-        cell: data => <div>${data.payAmount}</div>
       },
       {
         name: 'Transaction date',
@@ -216,42 +206,54 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
       },
       {
         name: 'Transaction amount',
+        width: '205px',
         selector: row => row.paidAmount,
         sortable: true,
         cell: data => <div>${data.paidAmount}</div>
       },
       {
         name: 'Pay Amount',
+        width: '150px',
         selector: row => row.payAmount,
         sortable: true,
         cell: data => <div>${data.payAmount - data.paidAmount}</div>
       },
       {
         name: 'Late fee',
+        width: '120px',
         selector: row => row.lateFee,
         sortable: true,
         cell: data => <div>${data.lateFee}</div>
       },
       {
         name: 'Suspended fee',
+        width: '170px',
         selector: row => row.suspendedFee,
         sortable: true,
         cell: data => <div>${data.suspendedFee}</div>
       },
       {
-        name: 'Balance',
-        selector: row => selectedInvoice?.total,
-        sortable: true,
-        cell: (data, i) => <div>${calculateBalance(i)}</div>
-      },
-      {
         name: 'Status',
+        width: '120px',
         selector: row => row.status,
         sortable: true,
-        cell: data => <div>{data.status}</div>
+        cell: data => (
+          <div
+            style={{
+              background: data.status === INSTALLMENT_STATUS.PAID ? colors.green.primary : colors.red.primary,
+              borderRadius: 5,
+              padding: 5,
+              color: 'white',
+              textAlign: 'center'
+            }}
+          >
+            {constantToLabel(data.status)}
+          </div>
+        )
       },
       {
         name: 'Actions',
+        width: '120px',
         selector: row => row._id,
         right: true,
         header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
@@ -303,29 +305,49 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         </Bordered>
       </JustifyCenterRow>
       <Column height={'calc(70% - 40px)'}>
-        {selectedInvoice && (
+        {installments && selectedInvoice && (
           <>
             <JustifyBetweenRow>
-              <div></div>
-              {!(isInstallmentsLoading || (installments && installments?.length)) ? (
+              {!(isInstallmentsLoading || installments?.length) ? (
                 <Row width="auto">
+                  <div></div>
                   <Button width="200px" onClick={showCreateInstallment}>
                     Create Installment
                   </Button>
                 </Row>
               ) : (
-                <Row width="auto">
-                  <JustifyCenterRow margin="0 1rem 0 0">
-                    <Button color={colors.red.primary} width="200px" onClick={handleResetInstallments}>
-                      Reset
-                    </Button>
-                  </JustifyCenterRow>
-                  <JustifyCenterRow>
-                    <Button width="200px" onClick={showRePlanningInstallment}>
-                      Re Planning Installment
-                    </Button>
-                  </JustifyCenterRow>
-                </Row>
+                <>
+                  <Row width="auto">
+                    <div
+                      style={{ marginRight: '1rem', display: 'flex', alignItems: 'center', minWidth: 'fit-content' }}
+                    >
+                      <b style={{ marginRight: '0.5rem', minWidth: 'fit-content' }}>Installment Amount:</b>
+                      <H1 color={colors.text.primary}>
+                        <strong>$</strong>
+                        {installments[1]?.payAmount}
+                      </H1>
+                    </div>
+                    <Row>
+                      <b style={{ marginRight: '0.5rem' }}>Balance:</b>
+                      <H1 color={colors.text.primary}>
+                        <strong>$</strong>
+                        {calculateBalance(installments.length - 1)}
+                      </H1>
+                    </Row>
+                  </Row>
+                  <Row width="auto">
+                    <JustifyCenterRow margin="0 1rem 0 0">
+                      <Button color={colors.red.primary} width="200px" onClick={handleResetInstallments}>
+                        Reset
+                      </Button>
+                    </JustifyCenterRow>
+                    <JustifyCenterRow>
+                      <Button width="200px" onClick={showRePlanningInstallment}>
+                        Re Planning Installment
+                      </Button>
+                    </JustifyCenterRow>
+                  </Row>
+                </>
               )}
             </JustifyBetweenRow>
             <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 50px)" margin="0.5rem 0">

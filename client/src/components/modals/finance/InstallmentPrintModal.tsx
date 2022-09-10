@@ -11,7 +11,7 @@ import ReactToPrint from 'react-to-print'
 
 const Text: React.FC<{}> = ({ children }) => {
   return (
-    <H1 color={colors.text.primary} fontSize="16px">
+    <H1 color={colors.black.primary} fontSize="16px">
       {children}
     </H1>
   )
@@ -38,7 +38,7 @@ const InstallmentPrintModal: React.FC<IProps> = ({ invoice, installment, balance
       </ModalHeader>
       <ModalBody height="calc(100% - 63px)" padding="0" withModalFooter={false}>
         <div
-          style={{ display: 'flex', flexDirection: 'column', margin: 'auto', padding: '1rem', width: '60%' }}
+          style={{ display: 'flex', flexDirection: 'column', margin: 'auto', padding: '1rem', width: '80%' }}
           ref={componentRef}
         >
           <JustifyBetweenRow margin="0 0 1rem 0">
