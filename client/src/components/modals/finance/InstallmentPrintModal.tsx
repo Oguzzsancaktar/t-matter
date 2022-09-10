@@ -55,19 +55,19 @@ const InstallmentPrintModal: React.FC<IProps> = ({ invoice, installment, balance
             <Text>{invoice.category.name}</Text>
           </JustifyBetweenRow>
           <JustifyBetweenRow margin="0 0 1rem 0">
-            <Text>PAID DATE</Text>
+            <Text>PAID DATE: </Text>
             <Text>{moment(installment.paidDate).format('MMM/DD/YY')}</Text>
           </JustifyBetweenRow>
           <JustifyBetweenRow margin="0 0 1rem 0">
-            <Text>PAID AMOUNT</Text>
+            <Text>PAID AMOUNT: </Text>
             <Text>${installment.paidAmount}</Text>
           </JustifyBetweenRow>
           <JustifyBetweenRow margin="0 0 1rem 0">
-            <Text>PAID METHOD</Text>
+            <Text>PAID METHOD: </Text>
             <Text>{constantToLabel(installment.paidMethod as string)}</Text>
           </JustifyBetweenRow>
           <JustifyBetweenRow margin="0 0 1rem 0">
-            <Text>BALANCE</Text>
+            <Text>BALANCE: </Text>
             <Text>${balance}</Text>
           </JustifyBetweenRow>
           <div className="hp">
