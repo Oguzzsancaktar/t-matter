@@ -49,7 +49,7 @@ const InstallmentPrintModal: React.FC<IProps> = ({ invoice, installment, balance
           ref={componentRef}
         >
           <JustifyBetweenRow margin="0 0 3rem 0">
-            <H1 color={colors.black.primary} fontWeight="600" fontSize="16px">
+            <H1 textAlign="center" color={colors.black.primary} fontWeight="600" fontSize="16px">
               {data?.name}
             </H1>
           </JustifyBetweenRow>
