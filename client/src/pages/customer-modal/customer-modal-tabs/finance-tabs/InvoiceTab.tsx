@@ -12,7 +12,6 @@ import {
 } from '@/pages'
 import styled from 'styled-components'
 import { Invoice } from '@/models'
-import { PDFViewer } from '@react-pdf/renderer'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -59,9 +58,7 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                     Invoice
                   </H1>
                 </div>
-                <JustifyCenterColumn>
-                  <InvoiceDoc />
-                </JustifyCenterColumn>
+                <JustifyCenterColumn>{/*<InvoiceDoc />*/}</JustifyCenterColumn>
               </Bordered>
             </JustifyCenterColumn>
             <JustifyCenterColumn margin="0 1rem 0 0">
@@ -71,9 +68,7 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                     Installments
                   </H1>
                 </div>
-                <JustifyCenterColumn>
-                  <InstallmentDoc invoiceId={selectedInvoice._id} />
-                </JustifyCenterColumn>
+                <JustifyCenterColumn>{/*<InstallmentDoc invoiceId={selectedInvoice._id} />*/}</JustifyCenterColumn>
               </Bordered>
             </JustifyCenterColumn>
             <JustifyCenterColumn>
@@ -83,7 +78,7 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                     Agreement
                   </H1>
                 </div>
-                <JustifyCenterColumn>div{/*<AgreementDoc invoice={selectedInvoice} />*/}</JustifyCenterColumn>
+                <JustifyCenterColumn>{/*<AgreementDoc invoice={selectedInvoice} />*/}</JustifyCenterColumn>
               </Bordered>
             </JustifyCenterColumn>
           </>
