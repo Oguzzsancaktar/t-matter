@@ -8,6 +8,8 @@ import {
   CreateInstallmentModal,
   H1,
   IconButton,
+  InputWithIcon,
+  InstallmentPrintModal,
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterRow,
@@ -32,13 +34,14 @@ import {
   useGetInstallmentsQuery,
   useResetInstallmentsMutation
 } from '@services/settings/finance-planning/financePlanningService'
-import { Calendar, DollarSign, Edit, FileText, UserCheck } from 'react-feather'
+import { Calendar, DollarSign, Edit, FileText, Printer, UserCheck } from 'react-feather'
 import moment from 'moment'
 import PayInstallment from '@components/modals/finance/PayInstallmentModal'
 import Flatpickr from 'react-flatpickr'
-import { INSTALLMENT_TYPES } from '@constants/finance'
+import { INSTALLMENT_STATUS, INSTALLMENT_TYPES } from '@constants/finance'
 import invoice from '@models/Entities/finance/Invoice'
 import Swal from 'sweetalert2'
+import constantToLabel from '@utils/constantToLabel'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -130,6 +133,28 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
     }
   }
 
+  const showInstallmentPrint = ({ row, i }) => {
+    if (selectedInvoice && installments) {
+      dispatch(
+        openModal({
+          id: `installmentPrint`,
+          title: 'Installment Print Modal',
+          body: (
+            <InstallmentPrintModal
+              installment={row}
+              invoice={selectedInvoice}
+              balance={calculateBalance(installments.length - 1)}
+              customerId={customerId}
+            />
+          ),
+          width: ESize.WSmall,
+          height: ESize.WSmall,
+          maxWidth: ESize.WSmall
+        })
+      )
+    }
+  }
+
   const handleResetInstallments = async () => {
     try {
       await Swal.fire({
@@ -146,7 +171,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
   }
 
   const dateFormat = date => {
-    return moment(date).format('MMM DD YYYY')
+    return moment(date).format('MMM DD YY')
   }
 
   const calculateBalance = (index: number) => {
@@ -164,24 +189,14 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
     if (!selectedInvoice) {
       return []
     }
+
     return [
-      {
-        name: 'Type',
-        selector: row => row.type,
-        sortable: true,
-        cell: data => <div>{data.type}</div>
-      },
       {
         name: 'Pay date',
         selector: row => row.payDate,
+        width: '125px',
         sortable: true,
         cell: data => <div>{dateFormat(data.payDate)}</div>
-      },
-      {
-        name: 'Installment amount',
-        selector: row => row.payAmount,
-        sortable: true,
-        cell: data => <div>${data.payAmount}</div>
       },
       {
         name: 'Transaction date',
@@ -191,39 +206,55 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
       },
       {
         name: 'Transaction amount',
+        width: '205px',
         selector: row => row.paidAmount,
         sortable: true,
         cell: data => <div>${data.paidAmount}</div>
       },
       {
         name: 'Pay Amount',
+        width: '150px',
         selector: row => row.payAmount,
         sortable: true,
         cell: data => <div>${data.payAmount - data.paidAmount}</div>
       },
       {
         name: 'Late fee',
+        width: '120px',
         selector: row => row.lateFee,
         sortable: true,
-        cell: data => <div>{data.lateFee}</div>
+        cell: data => <div>${data.lateFee}</div>
       },
       {
         name: 'Suspended fee',
+        width: '170px',
         selector: row => row.suspendedFee,
         sortable: true,
-        cell: data => <div>{data.suspendedFee}</div>
-      },
-      {
-        name: 'Balance',
-        selector: row => selectedInvoice?.total,
-        sortable: true,
-        cell: (data, i) => <div>${calculateBalance(i)}</div>
+        cell: data => <div>${data.suspendedFee}</div>
       },
       {
         name: 'Status',
+        width: '120px',
         selector: row => row.status,
         sortable: true,
-        cell: data => <div>{data.status}</div>
+        cell: data => (
+          <div
+            style={{
+              background:
+                data.status === INSTALLMENT_STATUS.PAID
+                  ? colors.green.primary
+                  : data.status === INSTALLMENT_STATUS.LESS_PAID
+                  ? colors.orange.primary
+                  : colors.red.primary,
+              borderRadius: 5,
+              padding: 5,
+              color: 'white',
+              textAlign: 'center'
+            }}
+          >
+            {constantToLabel(data.status)}
+          </div>
+        )
       },
       {
         name: 'Actions',
@@ -231,7 +262,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         selector: row => row._id,
         right: true,
         header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
-        cell: (data: IInstallment) => (
+        cell: (data: IInstallment, i: number) => (
           <Row>
             <IconButton
               onClick={showPayInstallment.bind(this, data)}
@@ -248,12 +279,17 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
                   children={<Calendar size={'16px'} color={colors.text.primary} />}
                 />
               )}
-
             <IconButton
               onClick={() => {}}
               bgColor={colors.background.gray.light}
               margin="0 .2rem 0 0"
               children={<FileText size={'16px'} color={colors.text.primary} />}
+            />
+            <IconButton
+              onClick={showInstallmentPrint.bind(this, { row: data, i })}
+              bgColor={colors.background.gray.light}
+              margin="0 .2rem 0 0"
+              children={<Printer size={'16px'} color={colors.text.primary} />}
             />
           </Row>
         )
@@ -274,29 +310,49 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
         </Bordered>
       </JustifyCenterRow>
       <Column height={'calc(70% - 40px)'}>
-        {selectedInvoice && (
+        {installments && selectedInvoice && (
           <>
             <JustifyBetweenRow>
-              <div></div>
-              {!(isInstallmentsLoading || (installments && installments?.length)) ? (
+              {!(isInstallmentsLoading || installments?.length) ? (
                 <Row width="auto">
+                  <div></div>
                   <Button width="200px" onClick={showCreateInstallment}>
                     Create Installment
                   </Button>
                 </Row>
               ) : (
-                <Row width="auto">
-                  <JustifyCenterRow margin="0 1rem 0 0">
-                    <Button color={colors.red.primary} width="200px" onClick={handleResetInstallments}>
-                      Reset
-                    </Button>
-                  </JustifyCenterRow>
-                  <JustifyCenterRow>
-                    <Button width="200px" onClick={showRePlanningInstallment}>
-                      Re Planning Installment
-                    </Button>
-                  </JustifyCenterRow>
-                </Row>
+                <>
+                  <Row width="auto">
+                    <div
+                      style={{ marginRight: '1rem', display: 'flex', alignItems: 'center', minWidth: 'fit-content' }}
+                    >
+                      <b style={{ marginRight: '0.5rem', minWidth: 'fit-content' }}>Installment Amount:</b>
+                      <H1 color={colors.text.primary}>
+                        <strong>$</strong>
+                        {installments[1]?.payAmount}
+                      </H1>
+                    </div>
+                    <Row>
+                      <b style={{ marginRight: '0.5rem' }}>Balance:</b>
+                      <H1 color={colors.text.primary}>
+                        <strong>$</strong>
+                        {calculateBalance(installments.length - 1)}
+                      </H1>
+                    </Row>
+                  </Row>
+                  <Row width="auto">
+                    <JustifyCenterRow margin="0 1rem 0 0">
+                      <Button color={colors.red.primary} width="200px" onClick={handleResetInstallments}>
+                        Reset
+                      </Button>
+                    </JustifyCenterRow>
+                    <JustifyCenterRow>
+                      <Button width="200px" onClick={showRePlanningInstallment}>
+                        Re Planning Installment
+                      </Button>
+                    </JustifyCenterRow>
+                  </Row>
+                </>
               )}
             </JustifyBetweenRow>
             <ItemContainer height="calc(100% - 0.5rem - 0.5rem - 50px)" margin="0.5rem 0">
@@ -305,7 +361,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
                   <TableSkeltonLoader count={13} />
                 </ItemContainer>
               ) : installments && installments.length > 0 ? (
-                <DataTable fixedHeader columns={columns()} data={installments || []} />
+                <DataTable responsive fixedHeader columns={columns()} data={installments || []} />
               ) : (
                 <NoTableData />
               )}

@@ -216,22 +216,23 @@ const getInstallments = (builder: IBuilder) => {
 }
 
 const postponeInstallment = (builder: IBuilder) => {
-  return builder.mutation<void, { days: number; oldDate: Date; invoiceId: Invoice['_id'] }>({
+  return builder.mutation<
+    void,
+    { days: number; oldDate: Date; invoiceId: Invoice['_id']; note: string; installmentId: IInstallment['_id'] }
+  >({
     query(arg) {
       return {
-        url: `/finance/installment/${arg.invoiceId}/postpone`,
+        url: `/finance/installment/${arg.invoiceId}/postpone/${arg.installmentId}`,
         method: 'PUT',
         data: {
           days: arg.days,
-          oldDate: arg.oldDate
+          oldDate: arg.oldDate,
+          note: arg.note
         }
       }
     },
     invalidatesTags(result) {
-      return [
-        { type: INSTALLMENT_TAG_TYPE, id: 'LIST' },
-        { type: INVOICE_TAG_TYPE, id: 'LIST' }
-      ]
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
     }
   })
 }
@@ -245,6 +246,7 @@ const payInstallment = (builder: IBuilder) => {
       amount: number
       paidDate: Date
       paidMethod: string
+      note: string
     }
   >({
     query(arg) {
@@ -254,15 +256,13 @@ const payInstallment = (builder: IBuilder) => {
         data: {
           amount: arg.amount,
           paidDate: arg.paidDate,
-          paidMethod: arg.paidMethod
+          paidMethod: arg.paidMethod,
+          note: arg.note
         }
       }
     },
     invalidatesTags(result) {
-      return [
-        { type: INSTALLMENT_TAG_TYPE, id: 'LIST' },
-        { type: INVOICE_TAG_TYPE, id: 'LIST' }
-      ]
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
     }
   })
 }
@@ -277,6 +277,23 @@ const resetInstallments = (builder: IBuilder) => {
     },
     invalidatesTags(result) {
       return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
+const uploadPdfToInvoiceCategory = (builder: IBuilder) => {
+  return builder.mutation<IInvoiceCategory, { _id: IInvoiceCategory['_id']; file: File }>({
+    query(args) {
+      const formData = new FormData()
+      formData.append('file', args.file)
+      return {
+        url: `/invoice-category/${args._id}/agreement`,
+        method: 'POST',
+        data: formData
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: INVOICE_CATEGORY_TAG_TYPE, id: 'LIST' }]
     }
   })
 }
@@ -300,7 +317,8 @@ const financePlanningApi = createApi({
     getInstallments: getInstallments(builder),
     postponeInstallment: postponeInstallment(builder),
     payInstallment: payInstallment(builder),
-    resetInstallments: resetInstallments(builder)
+    resetInstallments: resetInstallments(builder),
+    uploadPdfToInvoiceCategory: uploadPdfToInvoiceCategory(builder)
   })
 })
 
@@ -319,7 +337,8 @@ const {
   useGetInstallmentsQuery,
   usePostponeInstallmentMutation,
   usePayInstallmentMutation,
-  useResetInstallmentsMutation
+  useResetInstallmentsMutation,
+  useUploadPdfToInvoiceCategoryMutation
 } = financePlanningApi
 
 export {
@@ -338,5 +357,6 @@ export {
   useGetInstallmentsQuery,
   usePostponeInstallmentMutation,
   usePayInstallmentMutation,
-  useResetInstallmentsMutation
+  useResetInstallmentsMutation,
+  useUploadPdfToInvoiceCategoryMutation
 }

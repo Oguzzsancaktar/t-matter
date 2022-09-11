@@ -6,7 +6,8 @@ import {
   InputWithIcon,
   ItemContainer,
   JustifyCenterRow,
-  SelectInput
+  SelectInput,
+  TextArea
 } from '@/components'
 import { IInstallment, Invoice } from '@/models'
 import React, { useEffect, useState } from 'react'
@@ -28,9 +29,10 @@ interface IProps {
 const PayInstallment: React.FC<IProps> = ({ invoice, installment }) => {
   const [payInstallment] = usePayInstallmentMutation()
   const [state, setState] = useState({
-    amount: installment.payAmount,
+    amount: installment.payAmount - installment.paidAmount,
     paidDate: moment().toDate(),
-    paidMethod: PAYMENT_METHODS.CASH
+    paidMethod: PAYMENT_METHODS.CASH,
+    note: ''
   })
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
@@ -39,14 +41,15 @@ const PayInstallment: React.FC<IProps> = ({ invoice, installment }) => {
     await payInstallment({
       invoiceId: invoice._id,
       installmentId: installment._id,
-      amount: state.amount,
+      amount: +state.amount,
       paidDate: state.paidDate,
-      paidMethod: state.paidMethod
+      paidMethod: state.paidMethod,
+      note: state.note
     })
     dispatch(closeModal('payInstallment'))
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setState({
       ...state,
@@ -95,6 +98,15 @@ const PayInstallment: React.FC<IProps> = ({ invoice, installment }) => {
               onChange={o => setState({ ...state, paidMethod: o.value })}
               name="paidMethod"
               options={PAYMENT_OPTIONS}
+            />
+          </JustifyCenterRow>
+          <JustifyCenterRow margin="0 0 0.5rem 0">
+            <TextArea
+              name="note"
+              labelText="Note (optional)"
+              onChange={handleInputChange}
+              value={state.note}
+              rows={11}
             />
           </JustifyCenterRow>
           <JustifyCenterRow margin="0 0 0.5rem 0">

@@ -88,6 +88,11 @@ const createInstallment = async (req, res) => {
   const { body, params } = req
   try {
     const { startDate, deposit, quantity, payAmount } = body
+    if (body.note) {
+      const invoice = await dataAccess.financeDataAccess.getInvoiceById(params.invoiceId)
+      invoice.notes.push(body.note)
+      await invoice.save()
+    }
     await dataAccess.financeDataAccess.createInstallment({
       type: INSTALLMENT_TYPES.DEPOSIT,
       invoice: params.invoiceId,
@@ -123,9 +128,14 @@ const getInstallments = async (req, res) => {
 }
 
 const postponeInstallment = async (req, res) => {
-  const { days, oldDate } = req.body
-  const { invoiceId } = req.params
+  const { days, oldDate, note } = req.body
+  const { invoiceId, installmentId } = req.params
   try {
+    if (note) {
+      const installment = await dataAccess.financeDataAccess.getInstallmentById(installmentId)
+      installment.notes.push(note)
+      await installment.save()
+    }
     await dataAccess.financeDataAccess.updateInvoiceById(invoiceId, { $inc: { postponeCount: 1 } })
     await dataAccess.financeDataAccess.updateManyInstallment({ invoice: invoiceId, payDate: { $gte: oldDate } }, [
       { $set: { payDate: { $dateAdd: { startDate: '$payDate', unit: 'day', amount: days } } } }
@@ -139,9 +149,13 @@ const postponeInstallment = async (req, res) => {
 
 const payInstallment = async (req, res) => {
   const { installmentId, invoiceId } = req.params
-  let { amount, paidDate, paidMethod } = req.body
+  let { amount, paidDate, paidMethod, note } = req.body
   try {
     const installment = await dataAccess.financeDataAccess.getInstallmentById(installmentId)
+    if (note) {
+      installment.notes.push(note)
+      await installment.save()
+    }
     if (installment.type === INSTALLMENT_TYPES.DEPOSIT) {
       // if deposit greater than amount, throw error
       if (installment.payAmount > amount) {
@@ -247,7 +261,7 @@ const payInstallment = async (req, res) => {
       await dataAccess.financeDataAccess.updateInstallment(installmentId, {
         paidDate,
         paidMethod,
-        paidAmount: amount,
+        paidAmount: installment.payAmount,
         status: INSTALLMENT_STATUS.PAID
       })
       return res.sendStatus(StatusCodes.OK)
