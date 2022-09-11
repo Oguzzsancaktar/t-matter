@@ -16,6 +16,7 @@ import DefaultCalendarOptions from '@/constants/calendarOptions'
 function calendarFiltersReducer(state, action) {
   switch (action.type) {
     case 'CHANGE_CATEGORY':
+      console.log(action.payload)
       return { ...state, category: action.payload }
   }
 }
@@ -37,34 +38,40 @@ const CalendarModal = () => {
   const calendarOptions = { ...defaultOptions }
   calendarOptions.ref = calendarRef
 
+  const handleCategoryChange = (option: IOption) => {
+    if (option) {
+      const selectedCategory = {
+        _id: option.value,
+        name: option.label,
+        color: option.color
+      }
+      calendarFiltersDispatch({ type: 'CHANGE_CATEGORY', payload: selectedCategory })
+    } else {
+      calendarFiltersDispatch({ type: 'CHANGE_CATEGORY', payload: undefined })
+    }
+    // onDataChange(dataInstance)
+  }
+
   useEffect(() => {
     let allTaskSteps: any[] = []
     if (taskData) {
       taskData.forEach(task => {
         task.steps.forEach(step => {
-          allTaskSteps.push({
-            // allDay: false,
-            backgroundColor: step.category.color.color,
-            start: step.startDate,
-            end: step.endDate,
-            title: 'asdf'
-          })
+          console.log(calendarFilters.category?._id)
+          if (calendarFilters.category?._id === undefined || calendarFilters.category?._id === step.category._id) {
+            allTaskSteps.push({
+              // allDay: false,
+              backgroundColor: step.category.color.color,
+              start: step.startDate,
+              end: step.endDate,
+              title: 'asdf'
+            })
+          }
         })
       })
     }
     setCalendarEvents(allTaskSteps)
   }, [taskData])
-
-  const handleCategoryChange = (option: IOption) => {
-    const selectedCategory = {
-      _id: option.value,
-      name: option.label,
-      color: option.color
-    }
-    // onDataChange(dataInstance)
-
-    calendarFiltersDispatch({ type: 'CHANGE_CATEGORY', payload: selectedCategory })
-  }
 
   return (
     <JustifyBetweenColumn height="100%">
@@ -84,6 +91,7 @@ const CalendarModal = () => {
             <Column>
               <ItemContainer>
                 <SelectInput
+                  isClearable={true}
                   name={'stepCategory'}
                   labelText="Workflow Category"
                   selectedOption={[

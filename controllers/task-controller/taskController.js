@@ -29,8 +29,9 @@ const createTask = async (req, res) => {
 }
 
 const getAllTaskList = async (req, res) => {
+  const { categoryId } = req.query
   try {
-    const tasks = await dataAccess.taskDataAccess.getCustomerTasks({})
+    const tasks = await dataAccess.taskDataAccess.getCustomerTasks({ categoryId })
     res.status(200).json(tasks)
   } catch (error) {
     console.log(error)
