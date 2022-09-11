@@ -12,7 +12,6 @@ import {
 } from '@/pages'
 import styled from 'styled-components'
 import { Invoice } from '@/models'
-import { PDFViewer } from '@react-pdf/renderer'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -83,7 +82,9 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                     Agreement
                   </H1>
                 </div>
-                <JustifyCenterColumn>div{/*<AgreementDoc invoice={selectedInvoice} />*/}</JustifyCenterColumn>
+                <JustifyCenterColumn>
+                  <AgreementDoc invoice={selectedInvoice} />
+                </JustifyCenterColumn>
               </Bordered>
             </JustifyCenterColumn>
           </>

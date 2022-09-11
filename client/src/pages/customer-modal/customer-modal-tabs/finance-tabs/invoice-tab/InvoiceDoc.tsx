@@ -11,7 +11,8 @@ interface IProps {
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    padding: '15px 40px'
   },
   section: {
     margin: 10,
@@ -30,11 +31,13 @@ const InvoiceDoc: React.FC<IProps> = ({ invoice }) => {
           <View>
             <Text>{companyInfo?.name}</Text>
           </View>
-          <View style={styles.section}>
-            <Text>{invoice?.category.name}</Text>
-          </View>
-          <View style={styles.section}>
-            <Text>Section #2</Text>
+          <View>
+            <View style={styles.section}>
+              <Text>{invoice?.category.name}</Text>
+            </View>
+            <View style={styles.section}>
+              <Text>Section #2</Text>
+            </View>
           </View>
         </Page>
       </Document>

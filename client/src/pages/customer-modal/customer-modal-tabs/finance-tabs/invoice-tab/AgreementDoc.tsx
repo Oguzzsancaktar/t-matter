@@ -6,7 +6,6 @@ interface IProps {
 
 const AgreementDoc: React.FC<IProps> = ({ invoice }) => {
   return null
-  // return <object width="100%" height="450" data={invoice?.category.agreement} type="application/pdf"></object>
 }
 
 export default AgreementDoc
