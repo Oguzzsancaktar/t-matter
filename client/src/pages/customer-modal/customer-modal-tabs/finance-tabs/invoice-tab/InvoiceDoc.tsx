@@ -1,7 +1,11 @@
 import React from 'react'
 import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer'
+import { Invoice } from '@/models'
+import { useGetCompanyInfoQuery } from '@services/settings/company-info/companyInfoService'
 
-interface IProps {}
+interface IProps {
+  invoice?: Invoice
+}
 
 // Create styles
 const styles = StyleSheet.create({
@@ -16,13 +20,18 @@ const styles = StyleSheet.create({
   }
 })
 
-const InvoiceDoc: React.FC<IProps> = () => {
+const InvoiceDoc: React.FC<IProps> = ({ invoice }) => {
+  const { data: companyInfo } = useGetCompanyInfoQuery()
+
   return (
-    <PDFViewer height={450} width="90%">
+    <PDFViewer showToolbar height={450} width="100%">
       <Document>
         <Page size="A4" style={styles.page}>
+          <View>
+            <Text>{companyInfo?.name}</Text>
+          </View>
           <View style={styles.section}>
-            <Text>Section #1</Text>
+            <Text>{invoice?.category.name}</Text>
           </View>
           <View style={styles.section}>
             <Text>Section #2</Text>
