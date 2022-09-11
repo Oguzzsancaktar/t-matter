@@ -65,6 +65,7 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                 type="application/pdf"
               >
                 <iframe
+                  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-popups-to-escape-sandbox"
                   src={`https://docs.google.com/viewer?url=${selectedInvoice?.category.agreement}&embedded=true`}
                 ></iframe>
               </object>
