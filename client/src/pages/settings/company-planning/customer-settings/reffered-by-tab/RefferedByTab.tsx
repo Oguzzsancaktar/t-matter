@@ -47,7 +47,7 @@ const RefferedByTab = () => {
       width: '120px',
       selector: row => row.color,
       sortable: true,
-      cell: data => <CircleColor cursor="normal" color={data.color} />
+      cell: data => <CircleColor cursor="normal" color={data.color.color} />
     },
     {
       name: 'Status',

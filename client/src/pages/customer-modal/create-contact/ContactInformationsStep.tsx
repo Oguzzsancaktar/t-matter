@@ -55,12 +55,19 @@ const ContactInformationsStep: React.FC<IProps> = ({
               onChange={(option: IOption) => onRefferTypeChange(option)}
               options={(refferedByData || []).map((refferedBy: IRefferedBy) => ({
                 label: refferedBy.name,
-                value: refferedBy._id
+                value: refferedBy._id,
+                color: refferedBy.color
               }))}
               isLoading={refferedByDataIsLoading}
               labelText="Reffered By"
               validationError={validationErrors.refferedByError}
-              selectedOption={[{ value: createContactDTO.refferedBy._id, label: createContactDTO.refferedBy.name }]}
+              selectedOption={[
+                {
+                  value: createContactDTO.refferedBy._id,
+                  label: createContactDTO.refferedBy.name,
+                  color: createContactDTO.refferedBy.color
+                }
+              ]}
             />
           </ItemContainer>
         </JustifyBetweenRow>

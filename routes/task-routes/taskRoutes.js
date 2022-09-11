@@ -11,6 +11,8 @@ router.post(
   controllers.taskController.createTask
 )
 
+router.get('/', controllers.taskController.getAllTaskList)
+
 router.get(
   '/customer/:customerId',
   middlewares.validations.taskValidations.getTasksValidation,

@@ -1,6 +1,9 @@
-import colors, { colorOptions } from '@/constants/colors'
-import { IComponentProps } from '@/models'
+import colors from '@/constants/colors'
+import { emptyQueryParams } from '@/constants/queryParams'
+import { IColor, IComponentProps } from '@/models'
+import { useGetColorsQuery } from '@/services/settings/company-planning/dynamicVariableService'
 import React from 'react'
+import { Loader } from 'react-feather'
 import styled from 'styled-components'
 import { ItemContainer } from '../item-container'
 import { Column, JustifyBetweenRow } from '../layout'
@@ -8,10 +11,10 @@ import { H1, Label } from '../texts'
 import CircleColor from './CircleColor'
 
 interface IProps extends IComponentProps {
-  value: string
+  value: IColor
   labelText?: string
   validationError?: boolean
-  onClick: (color: string) => void
+  onClick: (color: IColor) => void
 }
 
 const ColorSelectContainer = styled(JustifyBetweenRow)<Pick<IProps, 'validationError'>>`
@@ -22,6 +25,8 @@ const ColorSelectContainer = styled(JustifyBetweenRow)<Pick<IProps, 'validationE
 `
 
 const ColorSelect: React.FC<IProps> = ({ margin, labelText, onClick, value, validationError }) => {
+  const { data: colorList, isLoading: colorListIsLoading } = useGetColorsQuery(emptyQueryParams)
+
   return (
     <Column margin={margin}>
       {labelText && (
@@ -30,9 +35,18 @@ const ColorSelect: React.FC<IProps> = ({ margin, labelText, onClick, value, vali
         </ItemContainer>
       )}
       <ColorSelectContainer validationError={validationError}>
-        {colorOptions.map((color, index) => (
-          <CircleColor onClick={() => onClick(color)} isSelected={color === value} key={index} color={color} />
-        ))}
+        {colorList && !colorListIsLoading ? (
+          colorList.map((color, index) => (
+            <CircleColor
+              onClick={() => onClick(color)}
+              isSelected={color._id === value._id}
+              key={index}
+              color={color.color}
+            />
+          ))
+        ) : (
+          <Loader />
+        )}
       </ColorSelectContainer>
     </Column>
   )

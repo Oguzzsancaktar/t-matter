@@ -6,11 +6,10 @@ export default interface ITask {
   _id: string
   expireDuration: number
   postponeTime: number
-  category: Pick<ITaskCategory, '_id' | 'name'>
+  category: Pick<ITaskCategory, '_id' | 'name' | 'color'>
   location: Pick<ILocation, '_id' | 'name'>
   responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
   name?: string
   tabs: ITab['name'][]
   checklistItems: ITaskChecklist[]
-  stepColor: string
 }

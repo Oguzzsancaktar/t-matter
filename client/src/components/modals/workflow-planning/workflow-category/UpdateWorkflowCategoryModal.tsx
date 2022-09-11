@@ -5,11 +5,11 @@ import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { ItemContainer } from '@/components'
+import { ColorSelect, ItemContainer } from '@/components'
 import { ModalBody, ModalFooter, ModalHeader } from '../../types'
 import { isValueNull } from '@/utils/validationUtils'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
-import { ITaskCategory } from '@/models'
+import { EStatus, IColor, ITaskCategory } from '@/models'
 import { usePatchWorkflowCategoryMutation } from '@/services/settings/workflow-planning/workflowService'
 import colors from '@/constants/colors'
 
@@ -20,8 +20,19 @@ const UpdateWorkflowCategoryModal: React.FC<IProps> = ({ category }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [categoryName, setCategoryName] = useState(category.name)
   const [patchWorkflowCategory] = usePatchWorkflowCategoryMutation()
+
+  const [categoryName, setCategoryName] = useState(category.name)
+
+  const [workflowCategoryColor, setWorkflowCategoryColor] = useState<IColor>({
+    _id: category.color._id,
+    color: category.color.color,
+    status: category.color.status
+  })
+
+  const handleColorChange = (color: IColor) => {
+    setWorkflowCategoryColor(color)
+  }
 
   const handleCancel = () => {
     dispatch(closeModal('createCategoryModal'))
@@ -29,7 +40,7 @@ const UpdateWorkflowCategoryModal: React.FC<IProps> = ({ category }) => {
 
   const handleConfirm = async () => {
     if (isValueNull(categoryName)) {
-      await patchWorkflowCategory({ _id: category._id, name: categoryName })
+      await patchWorkflowCategory({ _id: category._id, color: workflowCategoryColor._id, name: categoryName })
       toastSuccess('Category ' + categoryName + ' updated successfully')
       dispatch(closeModal(`updateWorkflowCategoryModal-${category._id}`))
     } else {
@@ -59,6 +70,10 @@ const UpdateWorkflowCategoryModal: React.FC<IProps> = ({ category }) => {
               type="text"
               labelText="Category Name"
             />
+
+            <ItemContainer margin="1rem 0 0 0 ">
+              <ColorSelect labelText="Category Color" value={workflowCategoryColor} onClick={handleColorChange} />
+            </ItemContainer>
           </JustifyCenterColumn>
         </ItemContainer>
       </ModalBody>

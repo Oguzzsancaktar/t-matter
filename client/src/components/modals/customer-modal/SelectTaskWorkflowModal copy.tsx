@@ -47,8 +47,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
     locationError: false,
     responsibleUserError: false,
     tabsError: false,
-    checklistItemsError: false,
-    stepColorError: false
+    checklistItemsError: false
   }
   const [validationError, setValidationErrors] = useState({ ...initialErrors })
   const [validationErrorMessage, toastError] = useState<string>('')
@@ -115,12 +114,6 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
         toastError('Please select at leasst 1 checklist')
         return (result = false)
       }
-
-      if (!isValueNull(task.stepColor)) {
-        setValidationErrors({ ...initialErrors, stepColorError: true })
-        toastError('Please select task color')
-        return (result = false)
-      }
     })
 
     return result
@@ -157,7 +150,6 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
             responsibleUser: step.responsibleUser,
             startDate: Date.now(),
             endDate: moment(Date.now()).add(7, 'days').valueOf(),
-            stepColor: step.stepColor,
             stepStatus: ETaskStatus.Not_Started,
             expireDuration: step.expireDuration,
             passedTime: 0,

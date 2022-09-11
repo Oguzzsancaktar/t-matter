@@ -91,4 +91,26 @@ router.patch(
   controllers.dynamicVariableController.updateJobTitle
 )
 
+// Color
+router.post(
+  '/color',
+  middlewares.validations.dynamicVariableValidations.createColorValidation,
+  controllers.dynamicVariableController.createColor
+)
+
+router.get('/color', controllers.dynamicVariableController.getColors)
+router.get('/color/:id', controllers.dynamicVariableController.getColorById)
+
+router.patch(
+  '/color/:id',
+  middlewares.validations.dynamicVariableValidations.updateColorValidation,
+  controllers.dynamicVariableController.updateColor
+)
+
+router.patch(
+  '/color/:id/status',
+  middlewares.validations.generalValidations.statusUpdateValidation,
+  controllers.dynamicVariableController.updateColor
+)
+
 module.exports = router

@@ -8,6 +8,11 @@ const workflowCategorySchema = new Schema(
       required: true,
       type: String
     },
+    color: {
+      required: true,
+      type: mongoose.Types.ObjectId,
+      ref: 'Color'
+    },
     status: {
       type: Number,
       default: STATUS_TYPES.ACTIVE

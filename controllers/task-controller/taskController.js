@@ -28,6 +28,16 @@ const createTask = async (req, res) => {
   }
 }
 
+const getAllTaskList = async (req, res) => {
+  try {
+    const tasks = await dataAccess.taskDataAccess.getCustomerTasks({})
+    res.status(200).json(tasks)
+  } catch (error) {
+    console.log(error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
 const getTasks = async (req, res) => {
   const { customerId } = req.params
   const { isInvoiced, search, size, status } = req.query
@@ -83,5 +93,6 @@ module.exports = {
   getTasks,
   getTask,
   updateTask,
-  reorderTasks
+  reorderTasks,
+  getAllTaskList
 }

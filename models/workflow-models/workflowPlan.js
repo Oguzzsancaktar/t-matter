@@ -27,9 +27,6 @@ const workflowPlanStep = new Schema({
   responsibleUser: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Users'
-  },
-  stepColor: {
-    type: String
   }
 })
 

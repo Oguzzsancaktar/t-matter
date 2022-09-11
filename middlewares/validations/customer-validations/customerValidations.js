@@ -2,14 +2,14 @@ const joi = require('joi')
 const utils = require('../../../utils')
 
 const customerValidationSchema = {
-  aSharpNumber: joi.string(),
-  country: joi.string(),
-  city: joi.string(),
-  state: joi.string(),
-  address: joi.string(),
-  zipcode: joi.string(),
-  birthday: joi.date(),
-  birthplace: joi.string(),
+  aSharpNumber: joi.string().allow(''),
+  country: joi.string().allow(''),
+  city: joi.string().allow(''),
+  state: joi.string().allow(''),
+  address: joi.string().allow(''),
+  zipcode: joi.string().allow(''),
+  birthday: joi.date().allow(''),
+  birthplace: joi.string().allow(''),
 
   customerType: joi.number(),
   firstname: joi.string().required(),

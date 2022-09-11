@@ -1,4 +1,4 @@
-import { IActivityFilter, IQueryParams } from '@/models'
+import { IActivityFilter, IQueryParams, ITaskFilter } from '@/models'
 
 export const emptyQueryParams: IQueryParams = {
   search: undefined,
@@ -9,4 +9,8 @@ export const emptyQueryParams: IQueryParams = {
 export const emptyActivtyFilter: IActivityFilter = {
   type: -9,
   userId: ''
+}
+
+export const emptyTaskFilter: ITaskFilter = {
+  categoryId: undefined
 }

@@ -2,23 +2,23 @@ import {
   ActionButtons,
   CircleColor,
   ConfirmModal,
-  CreateJobTitleModal,
+  CreateColorModal,
   DataTableHeader,
   ItemContainer,
   NoTableData,
-  ReadJobTitleModal,
+  ReadColorModal,
   TableSkeltonLoader,
-  UpdateJobTitleModal
+  UpdateColorModal
 } from '@/components'
 import { Badge } from '@/components/badge'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { statusOptions } from '@/constants/statuses'
 
 import useAccessStore from '@/hooks/useAccessStore'
-import { ESize, EStatus, IJobTitle } from '@/models'
+import { ESize, EStatus, IColor } from '@/models'
 import {
-  useGetJobTitlesQuery,
-  useUpdateJobTitleStatusMutation
+  useGetColorsQuery,
+  useUpdateColorStatusMutation
 } from '@/services/settings/company-planning/dynamicVariableService'
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
@@ -26,23 +26,22 @@ import { toastSuccess, toastError } from '@/utils/toastUtil'
 import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
-const JobTitleTab = () => {
+const ColorsTab = () => {
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
 
-  const { data: jobTitleData, isLoading: jobTitleIsLoading } = useGetJobTitlesQuery(searchQueryParams)
-  const [updateJobTitleStatus] = useUpdateJobTitleStatusMutation()
+  const { data: colorData, isLoading: colorIsLoading } = useGetColorsQuery(searchQueryParams)
+  const [updateColorStatus] = useUpdateColorStatusMutation()
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const columns = [
     {
-      name: 'Refffered By Name',
-      selector: row => row.name,
+      name: 'Color',
+      selector: row => row.color,
       sortable: true,
-      cell: data => <div>{data.name} </div>
+      cell: data => <CircleColor cursor="normal" color={data.color} />
     },
-
     {
       name: 'Status',
       width: '120px',
@@ -70,12 +69,12 @@ const JobTitleTab = () => {
     }
   ]
 
-  const handleRead = (jobTitle: IJobTitle) => {
+  const handleRead = (color: IColor) => {
     dispatch(
       openModal({
-        id: `readJobTitleModal-${jobTitle._id}`,
-        title: 'Create JobTitle',
-        body: <ReadJobTitleModal jobTitle={jobTitle} />,
+        id: `readColorModal-${color._id}`,
+        title: 'Create Color',
+        body: <ReadColorModal color={color} />,
         width: ESize.WLarge,
         height: ESize.HAuto,
         maxWidth: ESize.WSmall
@@ -83,12 +82,12 @@ const JobTitleTab = () => {
     )
   }
 
-  const handleEdit = (jobTitle: IJobTitle) => {
+  const handleEdit = (color: IColor) => {
     dispatch(
       openModal({
-        id: `updateJobTitleModal-${jobTitle._id}`,
-        title: 'Update JobTitle',
-        body: <UpdateJobTitleModal jobTitle={jobTitle} />,
+        id: `updateColorModal-${color._id}`,
+        title: 'Update Color',
+        body: <UpdateColorModal color={color} />,
         width: ESize.WLarge,
         height: ESize.HAuto,
         maxWidth: ESize.WSmall
@@ -96,16 +95,16 @@ const JobTitleTab = () => {
     )
   }
 
-  const handleDelete = (jobTitle: IJobTitle) => {
+  const handleDelete = (color: IColor) => {
     dispatch(
       openModal({
-        id: `deleteJobTitleModal-${jobTitle._id}`,
-        title: `Are you sure to inactivate ${jobTitle.name}?`,
+        id: `deleteColorModal-${color._id}`,
+        title: `Are you sure to inactivate ${color.color}?`,
         body: (
           <ConfirmModal
-            modalId={`deleteJobTitleModal-${jobTitle._id}`}
-            title={`Are you sure to inactivate ${jobTitle.name}?`}
-            onConfirm={() => handleOnConfirmDelete(jobTitle)}
+            modalId={`deleteColorModal-${color._id}`}
+            title={`Are you sure to inactivate ${color.color}?`}
+            onConfirm={() => handleOnConfirmDelete(color)}
           />
         ),
         width: ESize.WLarge,
@@ -115,16 +114,16 @@ const JobTitleTab = () => {
     )
   }
 
-  const handleReactive = (jobTitle: IJobTitle) => {
+  const handleReactive = (color: IColor) => {
     dispatch(
       openModal({
-        id: `reactiveJobTitleModal-${jobTitle._id}`,
-        title: `Are you sure to reactivate ${jobTitle.name}?`,
+        id: `reactiveColorModal-${color._id}`,
+        title: `Are you sure to reactivate ${color.color}?`,
         body: (
           <ConfirmModal
-            modalId={`reactiveJobTitleModal-${jobTitle._id}`}
-            title={`Are you sure to reactivate ${jobTitle.name}?`}
-            onConfirm={() => handleOnConfirmReactive(jobTitle)}
+            modalId={`reactiveColorModal-${color._id}`}
+            title={`Are you sure to reactivate ${color.color}?`}
+            onConfirm={() => handleOnConfirmReactive(color)}
           />
         ),
         width: ESize.WLarge,
@@ -134,33 +133,33 @@ const JobTitleTab = () => {
     )
   }
 
-  const handleOnConfirmDelete = async (jobTitle: IJobTitle) => {
+  const handleOnConfirmDelete = async (color: IColor) => {
     try {
-      await updateJobTitleStatus({ _id: jobTitle._id, status: EStatus.Inactive })
-      toastSuccess('JobTitle ' + jobTitle.name + ' inactivated successfully')
-      dispatch(closeModal(`deleteJobTitleModal-${jobTitle._id}`))
+      await updateColorStatus({ _id: color._id, status: EStatus.Inactive })
+      toastSuccess('Color ' + color.color + ' inactivated successfully')
+      dispatch(closeModal(`deleteColorModal-${color._id}`))
     } catch (error) {
-      toastError('Error inactivating jobTitle')
+      toastError('Error inactivating color')
     }
   }
 
-  const handleOnConfirmReactive = async (jobTitle: IJobTitle) => {
+  const handleOnConfirmReactive = async (color: IColor) => {
     try {
-      await updateJobTitleStatus({ _id: jobTitle._id, status: EStatus.Active })
-      toastSuccess('JobTitle ' + jobTitle.name + ' reactivated successfully')
-      dispatch(closeModal(`reactiveJobTitleModal-${jobTitle._id}`))
+      await updateColorStatus({ _id: color._id, status: EStatus.Active })
+      toastSuccess('Color ' + color.color + ' reactivated successfully')
+      dispatch(closeModal(`reactiveColorModal-${color._id}`))
     } catch (error) {
-      toastError('Error reactivating jobTitle')
+      toastError('Error reactivating color')
     }
   }
 
-  const openCreateJobTitleModal = (e: React.MouseEvent) => {
+  const openCreateColorModal = (e: React.MouseEvent) => {
     e.preventDefault()
     dispatch(
       openModal({
-        id: 'createJobTitleModal',
+        id: 'createColorModal',
         title: 'Create Reffered By',
-        body: <CreateJobTitleModal />,
+        body: <CreateColorModal />,
         width: ESize.WLarge,
         height: ESize.HAuto,
         maxWidth: ESize.WSmall
@@ -179,19 +178,19 @@ const JobTitleTab = () => {
   return (
     <ItemContainer height="100%">
       <DataTableHeader
-        handleAddNew={openCreateJobTitleModal}
+        handleAddNew={openCreateColorModal}
         status={statusOptions.find(status => +status.value === searchQueryParams.status)}
         handleSearch={handleSearch}
         handleStatusFilter={handleStatusFilter}
       />
 
       <ItemContainer height="calc(100% - 38px - 0.5rem)">
-        {jobTitleIsLoading ? (
+        {colorIsLoading ? (
           <ItemContainer height="100%">
             <TableSkeltonLoader count={13} />
           </ItemContainer>
-        ) : jobTitleData && jobTitleData.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={jobTitleData || []} onRowClicked={handleRead} />
+        ) : colorData && colorData.length > 0 ? (
+          <DataTable fixedHeader columns={columns} data={colorData || []} onRowClicked={handleRead} />
         ) : (
           <NoTableData />
         )}
@@ -200,4 +199,4 @@ const JobTitleTab = () => {
   )
 }
 
-export default JobTitleTab
+export default ColorsTab

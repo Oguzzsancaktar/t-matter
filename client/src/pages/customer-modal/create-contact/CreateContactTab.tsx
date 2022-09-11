@@ -22,10 +22,11 @@ import {
   useGetRefferedBysQuery
 } from '@/services/settings/company-planning/dynamicVariableService'
 import { emptyQueryParams } from '@/constants/queryParams'
+import { initialCreateCustomer } from '@/constants/initialValues'
 
 const CreateContactTab = () => {
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
-  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
+  const { data: jobTitleData } = useGetJobTitlesQuery(emptyQueryParams)
 
   const [createCustomer] = useCreateCustomerMutation()
 
@@ -39,26 +40,8 @@ const CreateContactTab = () => {
     { stepName: 'Add New Contacts', stepIndex: 2 }
   ])
 
-  const [createContactDTO, setCreateContactDTO] = useState<Omit<ICustomerCreateDTO, '_id' | 'birthday'>>({
-    customerType: 1,
-    firstname: '',
-    lastname: '',
-    email: '',
-    phone: '',
-    jobTitle: {
-      _id: '',
-      name: ''
-    },
-    refferedBy: {
-      _id: '',
-      name: '',
-      status: 0,
-      color: '#f2f200'
-    },
-    gender: 0,
-    reliableInCompany: [],
-    createContact: []
-  })
+  const [createContactDTO, setCreateContactDTO] =
+    useState<Omit<ICustomerCreateDTO, '_id' | 'birthday'>>(initialCreateCustomer)
 
   const [validationErrors, setValidationErrors] = useState({
     firstnameError: false,
@@ -321,11 +304,14 @@ const CreateContactTab = () => {
       genderError: false
     })
 
-    toastError('')
     const validationResult = validateFormFields()
     try {
+      const tempCreateContactDTO = { ...createContactDTO }
       if (validationResult) {
-        await createCustomer({ ...createContactDTO })
+        // @ts-ignore
+        delete tempCreateContactDTO._id
+        const result = await createCustomer({ ...tempCreateContactDTO })
+        console.log(result)
         dispatch(closeModal('createCustomerModal'))
         toastSuccess(
           'Contact ' + createContactDTO.firstname + ' ' + createContactDTO.lastname + ' created successfully'

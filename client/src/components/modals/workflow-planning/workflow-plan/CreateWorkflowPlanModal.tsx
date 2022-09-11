@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterRow, Row } from '@/components/layout'
 import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
@@ -8,42 +8,20 @@ import WorkflowPlanStepNavigation from '@/pages/settings/workflow-planning/plan/
 import { ITaskCreateDTO, IWorkflowCreateDTO } from '@/models'
 import { Button } from '@/components/button'
 import colors from '@/constants/colors'
-import { useCreatePlanMutation, useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
+import { useCreatePlanMutation } from '@/services/settings/workflow-planning/workflowService'
 import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import useAccessStore from '@/hooks/useAccessStore'
 import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
-import { emptyQueryParams } from '@/constants/queryParams'
 import { H1 } from '@/components/texts'
+import { initialTask } from '@/constants/task'
 
 const CreateWorkflowPlanModal = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-  const { data: checklistsData, isLoading: isChecklistsLoading } = useGetChecklistsQuery(emptyQueryParams)
 
   const [activeStep, setActiveStep] = useState<number>(0)
   const [createPlan] = useCreatePlanMutation()
-
-  const initialTask: ITaskCreateDTO = {
-    expireDuration: 0,
-    postponeTime: 0,
-    category: {
-      _id: '-1',
-      name: 'Select Value'
-    },
-    location: {
-      _id: '-1',
-      name: 'Select Value'
-    },
-    responsibleUser: {
-      _id: '-1',
-      firstname: 'First Name',
-      lastname: 'Last Name'
-    },
-    tabs: [],
-    checklistItems: [],
-    stepColor: ''
-  }
 
   const [createWorkflowData, setCreateWorkflowData] = useState<IWorkflowCreateDTO>({
     name: '',
@@ -60,11 +38,9 @@ const CreateWorkflowPlanModal = () => {
     locationError: false,
     responsibleUserError: false,
     tabsError: false,
-    checklistItemsError: false,
-    stepColorError: false
+    checklistItemsError: false
   }
   const [validationError, setValidationErrors] = useState({ ...initialErrors })
-  const [validationErrorMessage, toastError] = useState<string>('')
 
   const handleWorkflowNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCreateWorkflowData({ ...createWorkflowData, name: event.target.value })
@@ -146,13 +122,6 @@ const CreateWorkflowPlanModal = () => {
         toastError('Please select at leasst 1 checklist')
         return (result = false)
       }
-
-      if (!isValueNull(task.stepColor)) {
-        setActiveStep(index)
-        setValidationErrors({ ...initialErrors, stepColorError: true })
-        toastError('Please select task color')
-        return (result = false)
-      }
     })
 
     return result
@@ -191,13 +160,8 @@ const CreateWorkflowPlanModal = () => {
 
   const handleStepChange = (index: number) => {
     setValidationErrors({ ...initialErrors })
-    const validationResult = validateFieldValues()
     setActiveStep(index)
   }
-
-  useEffect(() => {
-    toastError(validationErrorMessage)
-  }, [validationErrorMessage])
 
   return (
     <JustifyBetweenColumn height="100%">

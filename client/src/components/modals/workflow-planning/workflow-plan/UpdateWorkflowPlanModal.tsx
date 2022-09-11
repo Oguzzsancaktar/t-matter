@@ -17,6 +17,7 @@ import { toastError, toastSuccess } from '@/utils/toastUtil'
 import useAccessStore from '@/hooks/useAccessStore'
 import { isValueBiggerThanZero, isValueNull } from '@/utils/validationUtils'
 import { H1 } from '@/components/texts'
+import { initialTask } from '@/constants/task'
 
 interface IProps {
   workflow: IWorkflow
@@ -28,27 +29,6 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   const { data: workflowData, isLoading: workflowIsLoading } = useGetPlanByIdQuery(workflow._id)
   const [activeStep, setActiveStep] = useState<number>(0)
   const [updatePlan] = usePatchWorkflowPlanMutation()
-
-  const initialTask: ITaskCreateDTO = {
-    expireDuration: 0,
-    postponeTime: 0,
-    category: {
-      _id: '-1',
-      name: 'Select Value'
-    },
-    location: {
-      _id: '-1',
-      name: 'Select Value'
-    },
-    responsibleUser: {
-      _id: '-1',
-      firstname: 'First Name',
-      lastname: 'Last Name'
-    },
-    tabs: [],
-    checklistItems: [],
-    stepColor: ''
-  }
 
   const [updateWorkflowData, setUpdateWorkflowData] = useState<IWorkflowUpdateDTO>({
     _id: workflowData?._id || workflow._id,
@@ -64,8 +44,7 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
     locationError: false,
     responsibleUserError: false,
     tabsError: false,
-    checklistItemsError: false,
-    stepColorError: false
+    checklistItemsError: false
   }
   const [validationError, setValidationErrors] = useState({ ...initialErrors })
 
@@ -147,13 +126,6 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
         setActiveStep(index)
         setValidationErrors({ ...initialErrors, checklistItemsError: true })
         toastError('Please select at leasst 1 checklist')
-        return (result = false)
-      }
-
-      if (!isValueNull(task.stepColor)) {
-        setActiveStep(index)
-        setValidationErrors({ ...initialErrors, stepColorError: true })
-        toastError('Please select task color')
         return (result = false)
       }
     })

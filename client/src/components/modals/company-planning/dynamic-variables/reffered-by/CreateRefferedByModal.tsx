@@ -5,12 +5,14 @@ import { JustifyBetweenColumn, JustifyCenterColumn, JustifyCenterRow, Row } from
 import { H1 } from '@/components/texts'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
-import { ColorSelect, ItemContainer } from '@/components'
+import { ColorSelect } from '@/components'
 import { ModalHeader, ModalBody, ModalFooter } from '@/components/modals/types'
 import { useCreateRefferedByMutation } from '@/services/settings/company-planning/dynamicVariableService'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'
 import colors from '@/constants/colors'
+import { initialColor } from '@/constants/initialValues'
+import { IColor } from '@/models'
 
 interface IProps {}
 
@@ -20,10 +22,10 @@ const CreateRefferedByModal: React.FC<IProps> = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [selectedColor, setSelectedColor] = useState('')
+  const [selectedColor, setSelectedColor] = useState(initialColor)
   const [refferedByName, setRefferedByName] = useState('')
 
-  const handleColorSelect = (color: string) => {
+  const handleColorSelect = (color: IColor) => {
     setSelectedColor(color)
   }
 

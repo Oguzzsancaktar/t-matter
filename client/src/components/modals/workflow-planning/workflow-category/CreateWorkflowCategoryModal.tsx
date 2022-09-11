@@ -1,9 +1,12 @@
 import { ConfirmCancelButtons } from '@/components/button'
+import { ColorSelect } from '@/components/color-select'
 import { InputRegular } from '@/components/input'
+import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn, JustifyCenterRow, JustifyCenterColumn, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
+import { EStatus, IColor } from '@/models'
 import { useCreateCategoryMutation } from '@/services/settings/workflow-planning/workflowService'
 import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
@@ -15,10 +18,19 @@ const CreateWorkflowCategoryModal = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [createCategory, { data: createCategoryData, isLoading: createCategoryLoading, error: createCategoryError }] =
-    useCreateCategoryMutation()
+  const [createCategory] = useCreateCategoryMutation()
 
   const [workflowCategoryName, setWorkflowCategoryName] = useState('')
+
+  const [workflowCategoryColor, setWorkflowCategoryColor] = useState<IColor>({
+    _id: '',
+    color: '',
+    status: EStatus.Active
+  })
+
+  const handleColorChange = (color: IColor) => {
+    setWorkflowCategoryColor(color)
+  }
 
   const handleCancel = () => {
     dispatch(closeModal('createWorkflowCategoryModal'))
@@ -27,7 +39,7 @@ const CreateWorkflowCategoryModal = () => {
   const handleConfirm = async () => {
     try {
       if (isValueNull(workflowCategoryName)) {
-        await createCategory({ name: workflowCategoryName })
+        await createCategory({ name: workflowCategoryName, color: workflowCategoryColor._id })
         toastSuccess(`Workflow category ${workflowCategoryName} created successfully`)
         dispatch(closeModal('createWorkflowCategoryModal'))
       } else {
@@ -47,8 +59,8 @@ const CreateWorkflowCategoryModal = () => {
         </JustifyCenterRow>
       </ModalHeader>
 
-      <ModalBody withModalFooter={true}>
-        <JustifyCenterColumn height="100%" padding="2rem 0">
+      <ModalBody withModalFooter={true} padding="1rem">
+        <JustifyCenterColumn height="100%">
           <InputRegular
             name="workflowCategoryName"
             placeholder="Enter workflow category..."
@@ -57,6 +69,10 @@ const CreateWorkflowCategoryModal = () => {
             type="text"
             labelText="Workflow Category"
           />
+
+          <ItemContainer margin="1rem 0 0 0 ">
+            <ColorSelect labelText="Category Color" value={workflowCategoryColor} onClick={handleColorChange} />
+          </ItemContainer>
         </JustifyCenterColumn>
       </ModalBody>
 

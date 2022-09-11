@@ -1,5 +1,5 @@
 import React from 'react'
-import { Column, ItemContainer, Label } from '@components/index'
+import { CircleColor, Column, H1, ItemContainer, JustifyBetweenRow, Label } from '@components/index'
 import Select from 'react-select'
 import { IOption } from '@/models'
 import colors from '@/constants/colors'
@@ -64,6 +64,14 @@ const SelectInput: React.FC<IProps> = ({
         defaultValue={selectedValues}
         value={selectedValues?.length === 1 ? selectedValues[0] : selectedValues}
         menuPlacement={menuPlacement ? menuPlacement : 'auto'}
+        formatOptionLabel={data => (
+          <ItemContainer>
+            <JustifyBetweenRow>
+              <H1 color={colors.text.primary}>{data.label}</H1>
+              <CircleColor color={data.color?.color} />
+            </JustifyBetweenRow>
+          </ItemContainer>
+        )}
       />
     </Column>
   )

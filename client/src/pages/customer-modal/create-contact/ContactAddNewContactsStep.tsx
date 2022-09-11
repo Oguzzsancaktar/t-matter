@@ -10,6 +10,7 @@ import {
 } from '@/components'
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
+import { initialCreateCustomer } from '@/constants/initialValues'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { EGender, ICustomerAddNew, ICustomerCreateDTO, IJobTitle, IOption, IRefferedBy } from '@/models'
 import {
@@ -29,25 +30,7 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, on
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
   const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
-  const [newContact, setNewContact] = useState<ICustomerCreateDTO>({
-    _id: '',
-    customerType: 0,
-    firstname: '',
-    lastname: '',
-    email: '',
-    phone: '',
-    jobTitle: {
-      _id: '',
-      name: ''
-    },
-    refferedBy: {
-      _id: '',
-      name: '',
-      status: 0,
-      color: '#f2f200'
-    },
-    gender: 0
-  })
+  const [newContact, setNewContact] = useState<ICustomerCreateDTO>(initialCreateCustomer)
 
   const [validationErrors, setValidationErrors] = useState({
     firstnameError: false,
@@ -153,25 +136,7 @@ const ContactAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, on
     const validationResult = validateFormFields()
     if (validationResult) {
       onAdd(newContact)
-      setNewContact({
-        _id: '',
-        customerType: 0,
-        firstname: '',
-        lastname: '',
-        email: '',
-        phone: '',
-        jobTitle: {
-          _id: '',
-          name: ''
-        },
-        refferedBy: {
-          _id: '',
-          name: '',
-          status: 0,
-          color: '#f2f200'
-        },
-        gender: 0
-      })
+      setNewContact(initialCreateCustomer)
     }
   }
 

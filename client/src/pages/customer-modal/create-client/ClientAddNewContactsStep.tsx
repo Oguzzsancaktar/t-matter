@@ -10,6 +10,7 @@ import {
 } from '@/components'
 import colors from '@/constants/colors'
 import { genderOptions } from '@/constants/genders'
+import { initialCreateCustomer } from '@/constants/initialValues'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { EGender, ICustomerAddNew, IJobTitle, IOption, IRefferedBy } from '@/models'
 import {
@@ -30,25 +31,7 @@ const ClientAddNewContactsStep: React.FC<IProps> = ({ newContactList, onAdd, onR
   const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
   const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
-  const [newContact, setNewContact] = useState<ICustomerAddNew>({
-    _id: '',
-    customerType: 0,
-    firstname: '',
-    lastname: '',
-    email: '',
-    phone: '',
-    jobTitle: {
-      _id: '',
-      name: ''
-    },
-    refferedBy: {
-      _id: '',
-      name: '',
-      status: 0,
-      color: '#f2f200'
-    },
-    gender: 0
-  })
+  const [newContact, setNewContact] = useState<ICustomerAddNew>({ ...initialCreateCustomer })
 
   const [validationErrors, setValidationErrors] = useState({
     firstnameError: false,

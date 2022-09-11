@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import colors from '@constants/colors'
 
 interface IProps {
-  name: string
+  name: string | React.ReactNode
   index: number
   isActive: boolean
   margin?: string
