@@ -1,6 +1,7 @@
 import { EStatus, ITaskCreateDTO } from '@/models'
 
 export const initialTask: ITaskCreateDTO = {
+  stepIndex: 0,
   expireDuration: 0,
   postponeTime: 0,
   category: {

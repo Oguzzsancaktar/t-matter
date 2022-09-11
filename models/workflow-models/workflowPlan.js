@@ -3,6 +3,10 @@ const { STATUS_TYPES } = require('../../constants/constants')
 const { Schema } = mongoose
 
 const workflowPlanStep = new Schema({
+  stepIndex: {
+    type: Number,
+    required: true
+  },
   checklistItems: [
     {
       type: mongoose.Schema.Types.ObjectId,

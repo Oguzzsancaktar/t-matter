@@ -30,12 +30,12 @@ const createTask = (builder: IBuilder) => {
 
 const getAllTaskList = (builder: IBuilder) => {
   return builder.query<ICustomerTask[], ITaskFilter>({
-    query({ categoryId }) {
+    query({ category }) {
       return {
         url: `/task`,
         method: 'GET',
         params: {
-          categoryId
+          categoryId: category?._id
         }
       }
     },

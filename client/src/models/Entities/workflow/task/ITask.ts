@@ -4,6 +4,7 @@ import ITaskCategory from './ITaskCategory'
 
 export default interface ITask {
   _id: string
+  stepIndex: number
   expireDuration: number
   postponeTime: number
   category: Pick<ITaskCategory, '_id' | 'name' | 'color'>
