@@ -1,19 +1,3 @@
-export const colorOptions = [
-  '#007bff',
-  '#6610f2',
-  '#696cff',
-  '#e83e8c',
-  '#ff3e1d',
-  '#fd7e14',
-  '#ffab00',
-  '#71dd37',
-  '#20c997',
-  '#03c3ec',
-  '#435971',
-  '#233446',
-  '#566a7f'
-]
-
 const colors = Object.freeze({
   primary: {
     dark: '#223446',

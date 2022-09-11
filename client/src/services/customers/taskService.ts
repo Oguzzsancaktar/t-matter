@@ -1,4 +1,4 @@
-import { ICustomer, IQueryParams } from '@models/index'
+import { ICustomer, IQueryParams, ITaskFilter } from '@models/index'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
@@ -24,6 +24,24 @@ const createTask = (builder: IBuilder) => {
     },
     invalidatesTags() {
       return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
+const getAllTaskList = (builder: IBuilder) => {
+  return builder.query<ICustomerTask[], ITaskFilter>({
+    query({ categoryId }) {
+      return {
+        url: `/task`,
+        method: 'GET',
+        params: {
+          categoryId
+        }
+      }
+    },
+    providesTags(result) {
+      if (!result) return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+      return [...result.map(task => ({ type: TASK_TAG_TYPE, id: task._id })), { type: TASK_TAG_TYPE, id: 'LIST' }]
     }
   })
 }
@@ -115,7 +133,8 @@ const taskApi = createApi({
     getTasksByCustomerId: getTasksByCustomerId(builder),
     getTaskByTaskId: getTaskByTaskId(builder),
     updateTask: updateTask(builder),
-    reorderTasks: reorderTasks(builder)
+    reorderTasks: reorderTasks(builder),
+    getAllTaskList: getAllTaskList(builder)
   })
 })
 
@@ -124,7 +143,8 @@ const {
   useCreateTaskMutation,
   useGetTaskByTaskIdQuery,
   useUpdateTaskMutation,
-  useReorderTasksMutation
+  useReorderTasksMutation,
+  useGetAllTaskListQuery
 } = taskApi
 export {
   taskApi,
@@ -132,5 +152,6 @@ export {
   useGetTasksByCustomerIdQuery,
   useGetTaskByTaskIdQuery,
   useUpdateTaskMutation,
-  useReorderTasksMutation
+  useReorderTasksMutation,
+  useGetAllTaskListQuery
 }

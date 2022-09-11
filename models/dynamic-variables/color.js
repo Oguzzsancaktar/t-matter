@@ -2,15 +2,11 @@ const mongoose = require('mongoose')
 const { STATUS_TYPES } = require('../../constants/constants')
 const { Schema } = mongoose
 
-const relativeTypeSchema = new Schema(
+const colorSchema = new Schema(
   {
-    relateTo: {
-      required: true,
-      type: String
-    },
-    relateFrom: {
-      required: true,
-      type: String
+    color: {
+      type: String,
+      required: true
     },
     status: {
       type: Number,
@@ -20,4 +16,4 @@ const relativeTypeSchema = new Schema(
   { timestamps: true }
 )
 
-module.exports = RelativeType = mongoose.model('RelativeType', relativeTypeSchema)
+module.exports = JobTitle = mongoose.model('Color', colorSchema)

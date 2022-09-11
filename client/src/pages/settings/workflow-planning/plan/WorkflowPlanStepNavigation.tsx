@@ -1,8 +1,8 @@
-import { Button, Column, InputRegular, ItemContainer, JustifyBetweenRow, Tab } from '@/components'
+import { Button, Column, H1, InputRegular, ItemContainer, JustifyBetweenRow, Tab } from '@/components'
 import colors from '@/constants/colors'
-import { IWorkflow, IWorkflowCreateDTO } from '@/models'
-import React, { useState } from 'react'
-import { Delete, Trash2 } from 'react-feather'
+import { IWorkflowCreateDTO } from '@/models'
+import React from 'react'
+import { Trash2 } from 'react-feather'
 import styled from 'styled-components'
 
 interface IProps {
@@ -57,7 +57,11 @@ const WorkflowPlanStepNavigation: React.FC<IProps> = ({
                 <ItemContainer key={index} margin="0 0 0.5rem 0">
                   <JustifyBetweenRow>
                     <Tab
-                      name={data.name + '/' + data.steps[index].category.name}
+                      name={
+                        <H1 color={step.category.color.color || colors.text.primary}>
+                          {data.name + '/' + data.steps[index].category.name}
+                        </H1>
+                      }
                       index={index}
                       isActive={index === activeStep}
                       onClick={() => onStepChange(index)}

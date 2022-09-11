@@ -76,8 +76,10 @@ const createTask = data => {
 }
 
 const getCustomerTasks = ({ customerId, isInvoiced, search, size, status }) => {
-  const $match = {
-    customer: mongoose.Types.ObjectId(customerId)
+  const $match = {}
+
+  if (customerId) {
+    $match.customer = mongoose.Types.ObjectId(customerId)
   }
 
   if (search) {

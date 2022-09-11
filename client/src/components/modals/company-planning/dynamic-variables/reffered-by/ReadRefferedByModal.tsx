@@ -36,7 +36,7 @@ const ReadRefferedByModal: React.FC<IProps> = ({ refferedBy }) => {
             <JustifyCenterRow height="40px" margin="1rem 0">
               <H1 color={colors.text.primary}>RefferedBy Color: </H1>
               <ItemContainer width="40px">
-                <CircleColor cursor="normal" color={refferedBy.color} />
+                <CircleColor cursor="normal" color={refferedBy.color.color} />
               </ItemContainer>
             </JustifyCenterRow>
             <Row height="40px">

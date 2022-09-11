@@ -230,6 +230,65 @@ const removeJobTitle = async (req, res) => {
   }
 }
 
+// Color
+const createColor = async (req, res) => {
+  const { body } = req
+  try {
+    const createdColor = await dataAccess.colorDataAccess.createColor(body)
+    res.status(StatusCodes.CREATED).send(createdColor)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getColors = async (req, res) => {
+  const { search, size, status } = req.query
+
+  try {
+    const colors = await dataAccess.colorDataAccess.getColors({ search, size, status })
+    res.status(StatusCodes.OK).json(colors)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getColorById = async (req, res) => {
+  const { id } = req.params
+  try {
+    const color = await dataAccess.colorDataAccess.findColorById(id, '')
+    res.status(StatusCodes.OK).json(color)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const updateColor = async (req, res) => {
+  const { _id, ...data } = req.body
+  try {
+    const updatedColor = await dataAccess.colorDataAccess.findByIdAndUpdateColor(_id ? _id : req.params.id, data)
+    res.status(StatusCodes.OK).json(updatedColor)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const removeColor = async (req, res) => {
+  const { id } = req.params
+  try {
+    const updatedColor = await dataAccess.colorDataAccess.findByIdAndUpdateJobTitle(id, {
+      status: STATUS_TYPES.INACTIVE
+    })
+    res.status(StatusCodes.OK).json(updatedColor)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createJobTitle,
   getJobTitles,
@@ -253,5 +312,11 @@ module.exports = {
   getRelativeTypes,
   getRelativeTypeById,
   updateRelativeType,
-  removeRelativeType
+  removeRelativeType,
+
+  createColor,
+  getColors,
+  getColorById,
+  updateColor,
+  removeColor
 }

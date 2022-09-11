@@ -7,7 +7,7 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { ColorSelect, ItemContainer } from '@/components'
 import { ModalHeader, ModalBody, ModalFooter } from '@/components/modals/types'
-import { IRefferedBy } from '@/models'
+import { IColor, IRefferedBy } from '@/models'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull } from '@/utils/validationUtils'
 import { usePatchRefferedByMutation } from '@/services/settings/company-planning/dynamicVariableService'
@@ -25,7 +25,7 @@ const UpdateRefferedByModal: React.FC<IProps> = ({ refferedBy }) => {
   const [refferedByName, setRefferedByName] = useState(refferedBy.name)
   const [selectedColor, setSelectedColor] = useState(refferedBy.color)
 
-  const handleColorSelect = (color: string) => {
+  const handleColorSelect = (color: IColor) => {
     setSelectedColor(color)
   }
 

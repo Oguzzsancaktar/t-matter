@@ -2,7 +2,8 @@ const joi = require('joi')
 const utils = require('../../../utils')
 
 const workflowCategoryValidationSchema = {
-  name: joi.string().required()
+  name: joi.string().required(),
+  color: joi.string().required()
 }
 
 const workflowChecklistValidationSchema = {

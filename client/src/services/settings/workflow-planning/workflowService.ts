@@ -1,4 +1,4 @@
-import {emptyQueryParams} from '@/constants/queryParams'
+import { emptyQueryParams } from '@/constants/queryParams'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
@@ -70,7 +70,7 @@ const patchWorkflowCategory = (builder: IBuilder) => {
       return {
         url: `/workflow/category/${dto._id}`,
         method: 'PATCH',
-        data: { name: dto.name }
+        data: { name: dto.name, color: dto.color }
       }
     },
     invalidatesTags(result) {
@@ -80,7 +80,7 @@ const patchWorkflowCategory = (builder: IBuilder) => {
 }
 
 const updateCategoryStatus = (builder: IBuilder) => {
-  return builder.mutation<any, Omit<ITaskCategoryUpdateDTO, 'name'>>({
+  return builder.mutation<any, Omit<ITaskCategoryUpdateDTO, 'name' | 'color'>>({
     query(dto) {
       return {
         url: `/workflow/category/${dto._id}/status`,

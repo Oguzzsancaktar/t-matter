@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
 import { useGetPlanByIdQuery, useGetPlansQuery } from '@/services/settings/workflow-planning/workflowService'
-import { ClockPicker24, InputWithIcon, SelectInput } from '@/components/input'
+import { SelectInput } from '@/components/input'
 import { Button } from '@/components/button'
-import { SummaryCard } from '@/components/card'
-import { Row, Column, JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
-import { WorkflowPlanForm, WorkflowPlanSummaryBody, WorkflowPlanSummaryFooter } from '@/pages'
+import { JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import { ModalBody, ModalHeader } from '../types'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ETaskStatus, ICustomer, ICustomerTask, IOption, ITaskCreateDTO, IUser, IWorkflowUpdateDTO } from '@/models'
@@ -16,10 +14,9 @@ import colors from '@/constants/colors'
 import { useCreateTaskMutation } from '@/services/customers/taskService'
 import moment from 'moment'
 import { emptyQueryParams } from '@/constants/queryParams'
-import { H1, Label } from '@/components/texts'
+import { H1 } from '@/components/texts'
 import { DatePicker } from '@/components/date-picker'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
-import { MultiValueGeneric } from 'react-select/dist/declarations/src/components/MultiValue'
 
 interface IProps {
   customer: ICustomer
@@ -165,7 +162,6 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
               responsibleUser: step.responsibleUser,
               startDate: startDate,
               endDate: startDate + step.expireDuration * 60 * 60 * 24 * 1000,
-              stepColor: step.stepColor,
               stepStatus: ETaskStatus.Not_Started,
               expireDuration: step.expireDuration,
               passedTime: 0,
@@ -185,7 +181,6 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
               responsibleUser: step.responsibleUser,
               startDate: task.steps[index - 1].endDate,
               endDate: task.steps[index - 1].endDate + step.expireDuration * 60 * 60 * 24 * 1000,
-              stepColor: step.stepColor,
               stepStatus: ETaskStatus.Not_Started,
               expireDuration: step.expireDuration,
               passedTime: 0,

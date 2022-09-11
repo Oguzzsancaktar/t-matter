@@ -1,19 +1,13 @@
 import React, { useState } from 'react'
 
-import {
-  ColorSelect,
-  InputWithText,
-  ItemContainer,
-  JustifyBetweenColumn,
-  JustifyBetweenRow,
-  SelectInput
-} from '@/components'
+import { InputWithText, ItemContainer, JustifyBetweenColumn, JustifyBetweenRow, SelectInput } from '@/components'
 import { ILocation, IOption, ITaskCategory, ITaskChecklist, ITaskCreateDTO, IUser } from '@/models'
 import { useGetCategoriesQuery, useGetChecklistsQuery } from '@/services/settings/workflow-planning/workflowService'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import CLIENT_TASK_TABS_ARR from '@/constants/clientTaskTabs'
 import { useGetLocationsQuery } from '@/services/settings/company-planning/dynamicVariableService'
 import { emptyQueryParams } from '@/constants/queryParams'
+import { initialColor } from '@/constants/initialValues'
 
 interface IProps {
   data: ITaskCreateDTO
@@ -32,8 +26,10 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
   const handleCategoryChange = (option: IOption) => {
     const dataInstance = { ...data }
     dataInstance.category = {
+      ...dataInstance.category,
       _id: option.value,
-      name: option.label
+      name: option.label,
+      color: option.color || initialColor
     }
     onDataChange(dataInstance)
   }
@@ -86,12 +82,6 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
     onDataChange(dataInstance)
   }
 
-  const handleColorChange = (color: string) => {
-    const dataInstance = { ...data }
-    dataInstance.stepColor = color
-    onDataChange(dataInstance)
-  }
-
   return (
     <ItemContainer height="100%" padding="0 1rem">
       <JustifyBetweenColumn height="100%">
@@ -104,12 +94,14 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
                 selectedOption={[
                   {
                     value: data.category._id,
-                    label: data.category.name
+                    label: data.category.name,
+                    color: data.category.color
                   }
                 ]}
                 options={(categoriesData || []).map((category: ITaskCategory) => ({
                   label: category.name,
-                  value: category._id
+                  value: category._id,
+                  color: category.color
                 }))}
                 onChange={handleCategoryChange}
                 isLoading={isCategoriesLoading}
@@ -223,15 +215,6 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
             }))}
             onChange={handleChecklistChange}
             validationError={errors.checklistItemsError}
-          />
-        </ItemContainer>
-
-        <ItemContainer>
-          <ColorSelect
-            labelText="Task Step Color"
-            value={data.stepColor}
-            onClick={handleColorChange}
-            validationError={errors.stepColorError}
           />
         </ItemContainer>
       </JustifyBetweenColumn>

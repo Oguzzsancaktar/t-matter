@@ -11,7 +11,22 @@ const createWorkflowCategory = data => {
 }
 
 const getWorkflowCategories = ({ search, size, status }) => {
-  const pipeline = []
+  const pipeline = [
+    {
+      $lookup: {
+        from: 'colors',
+        localField: 'color',
+        foreignField: '_id',
+        as: 'color'
+      }
+    },
+    {
+      $unwind: {
+        path: '$color',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]
   const match = { $match: {} }
 
   if (search) {
@@ -113,6 +128,20 @@ const pipelineData = hourlyCompanyFee => [
   {
     $unwind: {
       path: '$steps.category',
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $lookup: {
+      from: 'colors',
+      localField: 'steps.category.color',
+      foreignField: '_id',
+      as: 'steps.category.color'
+    }
+  },
+  {
+    $unwind: {
+      path: '$steps.category.color',
       preserveNullAndEmptyArrays: true
     }
   },

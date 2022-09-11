@@ -1,10 +1,12 @@
 import {
   ActionButtons,
+  CircleColor,
   Column,
   ConfirmModal,
   CreateWorkflowCategoryModal,
   DataTableHeader,
   ItemContainer,
+  JustifyCenterRow,
   NoTableData,
   ReadWorkflowCategoryModal,
   TableSkeltonLoader,
@@ -34,6 +36,7 @@ const WorkflowCategory = () => {
   const [updateCategoryStatus] = useUpdateCategoryStatusMutation()
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery(searchQueryParams)
 
+  console.log(categoriesData)
   const columns = [
     {
       name: 'Category Name',
@@ -41,6 +44,15 @@ const WorkflowCategory = () => {
       sortable: true,
       cell: data => <div>{data.name} </div>
     },
+
+    {
+      name: 'Color',
+      width: '120px',
+      selector: row => row.color,
+      sortable: true,
+      cell: data => <CircleColor color={data?.color?.color} />
+    },
+
     {
       name: 'Status',
       width: '120px',

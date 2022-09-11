@@ -1,13 +1,8 @@
 import React, { useState } from 'react'
 import { H1, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components'
+import { Document, Page, pdfjs } from 'react-pdf'
 import colors from '@constants/colors'
-import {
-  AdditionalTimeDonut,
-  InvoicesBarChart,
-  InvoicesDonut,
-  NonBillableCircleProgress,
-  UnPaidInvoicesCircleProgress
-} from '@/pages'
+import { AdditionalTimeDonut, InvoicesDonut, NonBillableCircleProgress, UnPaidInvoicesCircleProgress } from '@/pages'
 import styled from 'styled-components'
 import { Invoice } from '@/models'
 

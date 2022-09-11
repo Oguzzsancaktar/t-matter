@@ -9,6 +9,7 @@ import CircleImage from '../image/CircleImage'
 import { ESize } from '@/models'
 import { openModal } from '@/store'
 import useAccessStore from '@/hooks/useAccessStore'
+import CalendarModal from '../modals/general/CalendarModal'
 
 const SidebarShowWhenHover = styled.div`
   color: ${colors.white.bg};
@@ -77,6 +78,19 @@ const SideBar = () => {
         width: ESize.WLarge,
         height: ESize.HMedium,
         maxWidth: ESize.WMedium
+      })
+    )
+  }
+
+  const handleOpenCalendar = () => {
+    dispatch(
+      openModal({
+        id: `calendarModal`,
+        title: 'Calendar Modal',
+        body: <CalendarModal />,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
+        maxWidth: ESize.WXLarge
       })
     )
   }
@@ -159,21 +173,19 @@ const SideBar = () => {
                     </Link>
                   </ItemContainer>
 
-                  <ItemContainer margin="0 0 0.5rem 0">
-                    <Link to="/calendar">
-                      <Row width="100%">
-                        <SidebarIcon>
-                          <Calendar size={20} />
-                        </SidebarIcon>
-                        <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
-                          <SidebarShowWhenHover className="sidebar__hover_hide_show">
-                            <H1 cursor="pointer" color="white">
-                              Calendar
-                            </H1>
-                          </SidebarShowWhenHover>
-                        </ItemContainer>
-                      </Row>
-                    </Link>
+                  <ItemContainer margin="0 0 0.5rem 0" onClick={handleOpenCalendar}>
+                    <Row width="100%">
+                      <SidebarIcon>
+                        <Calendar size={20} />
+                      </SidebarIcon>
+                      <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
+                        <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                          <H1 cursor="pointer" color="white">
+                            Calendar
+                          </H1>
+                        </SidebarShowWhenHover>
+                      </ItemContainer>
+                    </Row>
                   </ItemContainer>
 
                   <ItemContainer margin="0 0 0.5rem 0">

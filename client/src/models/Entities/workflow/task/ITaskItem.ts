@@ -9,7 +9,6 @@ export default interface ITaskItem {
   responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
   startDate: number
   endDate: number
-  stepColor: string
   stepStatus: number
 
   expireDuration: number

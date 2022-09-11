@@ -1,7 +1,7 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { IJobTitle, ILocation, IQueryParams, IRefferedBy, IRelativeType } from '@/models'
+import { IColor, IJobTitle, ILocation, IQueryParams, IRefferedBy, IRelativeType } from '@/models'
 
 const DYNAMIC_VARIABLES_API_REDUCER_PATH = 'dynamicVariablesApi'
 const DYNAMIC_VARIABLES_TAG = 'dynamicVariablesTag'
@@ -316,6 +316,82 @@ const updateJobTitleStatus = (builder: IBuilder) => {
   })
 }
 
+// Color
+const createColor = (builder: IBuilder) => {
+  return builder.mutation<string, Pick<IColor, 'color'>>({
+    query(dto) {
+      return {
+        url: '/dynamic-variables/color',
+        method: 'POST',
+        data: dto
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getColors = (builder: IBuilder) => {
+  return builder.query<IColor[], IQueryParams>({
+    query({ search = '', size, status = 1 }) {
+      return {
+        url: `/dynamic-variables/color?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getColorById = (builder: IBuilder) => {
+  return builder.query<IColor, IColor['_id']>({
+    query(id) {
+      return {
+        url: `/dynamic-variables/color/${id}`,
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const patchColor = (builder: IBuilder) => {
+  return builder.mutation<IColor, Omit<IColor, 'status'>>({
+    query(dto) {
+      return {
+        url: `/dynamic-variables/color/${dto._id}`,
+        method: 'PATCH',
+        data: { color: dto.color }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const updateColorStatus = (builder: IBuilder) => {
+  return builder.mutation<any, Omit<IColor, 'color'>>({
+    query(dto) {
+      return {
+        url: `/dynamic-variables/color/${dto._id}/status`,
+        method: 'PATCH',
+        data: { status: dto.status }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
 const dynamicVariablesApi = createApi({
   reducerPath: DYNAMIC_VARIABLES_API_REDUCER_PATH,
   tagTypes: [DYNAMIC_VARIABLES_TAG],
@@ -343,7 +419,13 @@ const dynamicVariablesApi = createApi({
     getJobTitles: getJobTitles(builder),
     getJobTitleById: getJobTitleById(builder),
     patchJobTitle: patchJobTitle(builder),
-    updateJobTitleStatus: updateJobTitleStatus(builder)
+    updateJobTitleStatus: updateJobTitleStatus(builder),
+
+    createColor: createColor(builder),
+    getColors: getColors(builder),
+    getColorById: getColorById(builder),
+    patchColor: patchColor(builder),
+    updateColorStatus: updateColorStatus(builder)
   })
 })
 
@@ -370,7 +452,13 @@ const {
   useGetJobTitleByIdQuery,
   usePatchJobTitleMutation,
   useUpdateJobTitleStatusMutation,
-  useCreateJobTitleMutation
+  useCreateJobTitleMutation,
+
+  useGetColorsQuery,
+  useGetColorByIdQuery,
+  usePatchColorMutation,
+  useUpdateColorStatusMutation,
+  useCreateColorMutation
 } = dynamicVariablesApi
 
 export {
@@ -394,5 +482,10 @@ export {
   useGetJobTitleByIdQuery,
   usePatchJobTitleMutation,
   useUpdateJobTitleStatusMutation,
-  useCreateJobTitleMutation
+  useCreateJobTitleMutation,
+  useGetColorsQuery,
+  useGetColorByIdQuery,
+  usePatchColorMutation,
+  useUpdateColorStatusMutation,
+  useCreateColorMutation
 }

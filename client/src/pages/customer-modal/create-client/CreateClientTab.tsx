@@ -24,6 +24,7 @@ import {
   useGetRefferedBysQuery
 } from '@/services/settings/company-planning/dynamicVariableService'
 import { emptyQueryParams } from '@/constants/queryParams'
+import { initialCreateCustomer } from '@/constants/initialValues'
 
 const CreateClientTab = () => {
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
@@ -42,31 +43,7 @@ const CreateClientTab = () => {
 
   const [birthday, setBirthday] = useState('')
   const [createClientDTO, setCreateClientDTO] = useState<Omit<ICustomerCreateDTO, '_id' | 'birthday'>>({
-    customerType: 0,
-    firstname: '',
-    lastname: '',
-    jobTitle: {
-      _id: '',
-      name: ''
-    },
-    email: '',
-    phone: '',
-    birthplace: '',
-    country: '',
-    city: '',
-    state: '',
-    zipcode: '',
-    address: '',
-    aSharpNumber: '',
-    refferedBy: {
-      _id: '',
-      name: '',
-      status: 0,
-      color: '#f2f200'
-    },
-    gender: 0,
-    reliableInCompany: [],
-    createContact: []
+    ...initialCreateCustomer
   })
 
   const [validationErrors, setValidationErrors] = useState({

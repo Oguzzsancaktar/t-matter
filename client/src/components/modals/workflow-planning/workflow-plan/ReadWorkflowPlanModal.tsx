@@ -66,7 +66,7 @@ const ReadWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
                               Task Color:
                             </H1>
                             <ItemContainer width="auto" margin="0 0 0 1rem">
-                              <CircleColor color={step.stepColor} />
+                              <CircleColor color={step.category.color.color} />
                             </ItemContainer>
                           </Row>
                         </JustifyBetweenRow>
