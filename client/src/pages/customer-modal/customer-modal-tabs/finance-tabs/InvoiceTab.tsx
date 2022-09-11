@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Column, H1, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components'
-import { Document, Page, pdfjs } from 'react-pdf'
+import { H1, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components'
 import colors from '@constants/colors'
 import {
   AdditionalTimeDonut,
@@ -11,29 +10,22 @@ import {
 } from '@/pages'
 import styled from 'styled-components'
 import { Invoice } from '@/models'
+
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
   height: 100%;
   box-sizing: border-box;
   border-radius: 5px;
-  padding: 1rem 0.5rem;
+  padding: 0.5rem;
   margin: ${({ margin }) => (margin ? margin : '0')};
   width: ${({ width }) => (width ? width : '100%')};
 `
-
 interface IProps {
   customerId: string
 }
 
 const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
-  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice>()
-  const [numPages, setNumPages] = useState(null)
-  const [pageNumber, setPageNumber] = useState(1)
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages)
-  }
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1rem' }}>
@@ -48,19 +40,41 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
         </Bordered>
       </JustifyCenterRow>
       <JustifyBetweenRow height={'calc(70% - 40px)'}>
-        <JustifyCenterColumn></JustifyCenterColumn>
-        <JustifyCenterColumn></JustifyCenterColumn>
+        <JustifyCenterColumn margin="0 1rem 0 0">
+          <Bordered>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
+                Invoice
+              </H1>
+            </div>
+          </Bordered>
+        </JustifyCenterColumn>
+        <JustifyCenterColumn margin="0 1rem 0 0">
+          <Bordered>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
+                Installments
+              </H1>
+            </div>
+          </Bordered>
+        </JustifyCenterColumn>
         <JustifyCenterColumn>
-          <Document file={selectedInvoice?.category.agreement} onLoadSuccess={onDocumentLoadSuccess}>
-            <Page width={300} pageNumber={pageNumber} />
-          </Document>
-          <JustifyBetweenRow>
-            <span onClick={() => setPageNumber(pageNumber - 1)}>Prev</span>
-            <span>
-              {pageNumber}/{numPages}
-            </span>
-            <span onClick={() => setPageNumber(pageNumber + 1)}>Next</span>
-          </JustifyBetweenRow>
+          <Bordered>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
+                Agreement
+              </H1>
+              <object
+                style={{ minHeight: 460, width: '100%', maxWidth: 450 }}
+                data={selectedInvoice?.category.agreement}
+                type="application/pdf"
+              >
+                <iframe
+                  src={`https://docs.google.com/viewer?url=${selectedInvoice?.category.agreement}&embedded=true`}
+                ></iframe>
+              </object>
+            </div>
+          </Bordered>
         </JustifyCenterColumn>
       </JustifyBetweenRow>
     </div>
