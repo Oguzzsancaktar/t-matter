@@ -59,12 +59,13 @@ const CalendarModal = () => {
         task.steps.forEach(step => {
           console.log(calendarFilters.category?._id)
           if (calendarFilters.category?._id === undefined || calendarFilters.category?._id === step.category._id) {
+            console.log(step)
             allTaskSteps.push({
               // allDay: false,
               backgroundColor: step.category.color.color,
               start: step.startDate,
               end: step.endDate,
-              title: 'asdf'
+              title: task.name
             })
           }
         })
