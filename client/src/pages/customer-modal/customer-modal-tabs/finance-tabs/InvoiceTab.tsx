@@ -59,7 +59,7 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                   </H1>
                 </div>
                 <JustifyCenterColumn>
-                  <InvoiceDoc invoice={selectedInvoice} />
+                  <InvoiceDoc invoice={selectedInvoice} customerId={customerId} />
                 </JustifyCenterColumn>
               </Bordered>
             </JustifyCenterColumn>
