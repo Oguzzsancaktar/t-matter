@@ -1,10 +1,18 @@
 import React, { useState } from 'react'
 import { H1, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components'
-import { Document, Page, pdfjs } from 'react-pdf'
 import colors from '@constants/colors'
-import { AdditionalTimeDonut, InvoicesDonut, NonBillableCircleProgress, UnPaidInvoicesCircleProgress } from '@/pages'
+import {
+  AdditionalTimeDonut,
+  AgreementDoc,
+  InstallmentDoc,
+  InvoiceDoc,
+  InvoicesDonut,
+  NonBillableCircleProgress,
+  UnPaidInvoicesCircleProgress
+} from '@/pages'
 import styled from 'styled-components'
 import { Invoice } from '@/models'
+import { PDFViewer } from '@react-pdf/renderer'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid ${colors.gray.light};
@@ -42,6 +50,9 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                 Invoice
               </H1>
             </div>
+            <JustifyCenterColumn>
+              <InvoiceDoc />
+            </JustifyCenterColumn>
           </Bordered>
         </JustifyCenterColumn>
         <JustifyCenterColumn margin="0 1rem 0 0">
@@ -51,6 +62,9 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                 Installments
               </H1>
             </div>
+            <JustifyCenterColumn>
+              <InstallmentDoc />
+            </JustifyCenterColumn>
           </Bordered>
         </JustifyCenterColumn>
         <JustifyCenterColumn>
@@ -59,17 +73,8 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
               <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
                 Agreement
               </H1>
-              <object
-                style={{ minHeight: 460, width: '100%', maxWidth: 450 }}
-                data={selectedInvoice?.category.agreement}
-                type="application/pdf"
-              >
-                <iframe
-                  sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-popups-to-escape-sandbox"
-                  src={`https://docs.google.com/viewer?url=${selectedInvoice?.category.agreement}&embedded=true`}
-                ></iframe>
-              </object>
             </div>
+            <AgreementDoc invoice={selectedInvoice} />
           </Bordered>
         </JustifyCenterColumn>
       </JustifyBetweenRow>
