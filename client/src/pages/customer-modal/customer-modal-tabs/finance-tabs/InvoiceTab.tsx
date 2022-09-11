@@ -43,40 +43,53 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
         </Bordered>
       </JustifyCenterRow>
       <JustifyBetweenRow height={'calc(70% - 40px)'}>
-        <JustifyCenterColumn margin="0 1rem 0 0">
-          <Bordered>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
-                Invoice
-              </H1>
-            </div>
-            <JustifyCenterColumn>
-              <InvoiceDoc />
+        {!selectedInvoice && (
+          <JustifyCenterColumn>
+            <H1 width="auto" fontSize="2rem" color={colors.gray.disabled}>
+              Select invoice to see documents
+            </H1>
+          </JustifyCenterColumn>
+        )}
+        {selectedInvoice && (
+          <>
+            <JustifyCenterColumn margin="0 1rem 0 0">
+              <Bordered>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
+                    Invoice
+                  </H1>
+                </div>
+                <JustifyCenterColumn>
+                  <InvoiceDoc />
+                </JustifyCenterColumn>
+              </Bordered>
             </JustifyCenterColumn>
-          </Bordered>
-        </JustifyCenterColumn>
-        <JustifyCenterColumn margin="0 1rem 0 0">
-          <Bordered>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
-                Installments
-              </H1>
-            </div>
-            <JustifyCenterColumn>
-              <InstallmentDoc />
+            <JustifyCenterColumn margin="0 1rem 0 0">
+              <Bordered>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
+                    Installments
+                  </H1>
+                </div>
+                <JustifyCenterColumn>
+                  <InstallmentDoc invoiceId={selectedInvoice._id} />
+                </JustifyCenterColumn>
+              </Bordered>
             </JustifyCenterColumn>
-          </Bordered>
-        </JustifyCenterColumn>
-        <JustifyCenterColumn>
-          <Bordered>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
-                Agreement
-              </H1>
-            </div>
-            <AgreementDoc invoice={selectedInvoice} />
-          </Bordered>
-        </JustifyCenterColumn>
+            <JustifyCenterColumn>
+              <Bordered>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <H1 textAlign="center" margin="0 0 0.5rem 0" color={colors.text.primary}>
+                    Agreement
+                  </H1>
+                </div>
+                <JustifyCenterColumn>
+                  <AgreementDoc invoice={selectedInvoice} />
+                </JustifyCenterColumn>
+              </Bordered>
+            </JustifyCenterColumn>
+          </>
+        )}
       </JustifyBetweenRow>
     </div>
   )
