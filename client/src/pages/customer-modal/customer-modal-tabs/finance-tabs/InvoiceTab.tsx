@@ -58,7 +58,9 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                     Invoice
                   </H1>
                 </div>
-                <JustifyCenterColumn>{/*<InvoiceDoc />*/}</JustifyCenterColumn>
+                <JustifyCenterColumn>
+                  <InvoiceDoc invoice={selectedInvoice} />
+                </JustifyCenterColumn>
               </Bordered>
             </JustifyCenterColumn>
             <JustifyCenterColumn margin="0 1rem 0 0">
@@ -68,7 +70,9 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                     Installments
                   </H1>
                 </div>
-                <JustifyCenterColumn>{/*<InstallmentDoc invoiceId={selectedInvoice._id} />*/}</JustifyCenterColumn>
+                <JustifyCenterColumn>
+                  <InstallmentDoc invoiceId={selectedInvoice._id} />
+                </JustifyCenterColumn>
               </Bordered>
             </JustifyCenterColumn>
             <JustifyCenterColumn>
@@ -78,7 +82,9 @@ const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
                     Agreement
                   </H1>
                 </div>
-                <JustifyCenterColumn>{/*<AgreementDoc invoice={selectedInvoice} />*/}</JustifyCenterColumn>
+                <JustifyCenterColumn>
+                  <AgreementDoc invoice={selectedInvoice} />
+                </JustifyCenterColumn>
               </Bordered>
             </JustifyCenterColumn>
           </>
