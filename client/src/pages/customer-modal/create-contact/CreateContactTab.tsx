@@ -11,7 +11,7 @@ import {
 import ContactAddNewContactsStep from './ContactAddNewContactsStep'
 import ContactInformationsStep from './ContactInformationsStep'
 import ContactSearchInCompanyStep from './ContactSearchInCompanyStep'
-import { ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
+import { ECustomerType, ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
@@ -310,6 +310,7 @@ const CreateContactTab = () => {
       if (validationResult) {
         // @ts-ignore
         delete tempCreateContactDTO._id
+        tempCreateContactDTO.customerType = ECustomerType.Client
         const result = await createCustomer({ ...tempCreateContactDTO })
         console.log(result)
         dispatch(closeModal('createCustomerModal'))

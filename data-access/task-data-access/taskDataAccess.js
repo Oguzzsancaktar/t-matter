@@ -18,6 +18,20 @@ const taskPopulatePipe = [
   },
   {
     $lookup: {
+      from: 'colors',
+      localField: 'steps.category.color',
+      foreignField: '_id',
+      as: 'steps.category.color'
+    }
+  },
+  {
+    $unwind: {
+      path: '$steps.category.color',
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $lookup: {
       from: 'users',
       localField: 'steps.responsibleUser',
       foreignField: '_id',

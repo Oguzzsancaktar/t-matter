@@ -149,7 +149,13 @@ const CreateWorkflowPlanModal = () => {
     const validationResult = validateFieldValues()
     if (validationResult) {
       try {
-        await createPlan(createWorkflowData)
+        const tempCreateWorkflowData = { ...createWorkflowData }
+
+        tempCreateWorkflowData.steps.map((step, index) => {
+          tempCreateWorkflowData.steps[index].stepIndex = index
+        })
+
+        await createPlan(tempCreateWorkflowData)
         toastSuccess(`Workflow plan ${createWorkflowData.name} created successfully`)
         dispatch(closeModal('createWorkflowPlanModal'))
       } catch (error) {

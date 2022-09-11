@@ -26,7 +26,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [createTask, { isLoading: createTaskIsLoading }] = useCreateTaskMutation()
+  const [createTask] = useCreateTaskMutation()
 
   const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery(emptyQueryParams)
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(emptyQueryParams)
