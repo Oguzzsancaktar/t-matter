@@ -12,11 +12,10 @@ import { activityApi, useCreateActivityMutation } from '@/services/activityServi
 import useAccessStore from '@hooks/useAccessStore'
 import { setModalOnClose } from '@/store'
 import { useCreateExpiredTaskStepMutation } from '@services/settings/finance-planning/financePlanningService'
-import { log } from 'util'
 
 interface IProps {
   taskId: string
-  customerId: ICustomer['_id']
+  customerId?: ICustomer['_id']
 }
 const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
   const { loggedUser } = useAuth()
@@ -241,7 +240,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
         createExpiredTaskStep({
           task: tempUpdatedTaskData._id as string,
           stepIndex: activeStep,
-          customer: customerId,
+          customer: customerId || '',
           user: loggedUser?.user?._id as string,
           index: 0,
           isInvoiced: false,

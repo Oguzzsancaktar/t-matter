@@ -12,7 +12,6 @@ import {
   TableSkeltonLoader,
   TaskProgress
 } from '@/components'
-import { TaskActiveStepUser } from '@/components/client-task/task-active-step-user'
 import colors from '@/constants/colors'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { taskStatusOptions } from '@/constants/statuses'

@@ -12,5 +12,7 @@ export const emptyActivtyFilter: IActivityFilter = {
 }
 
 export const emptyTaskFilter: ITaskFilter = {
-  category: undefined
+  category: undefined,
+  user: undefined,
+  status: undefined
 }

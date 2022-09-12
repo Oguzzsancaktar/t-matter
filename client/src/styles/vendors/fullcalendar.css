@@ -295,6 +295,18 @@
 .app-calendar .fc-list-event {
   background: transparent !important;
 }
+
+/* .fc.fc-media-screen.fc-direction-ltr.fc-theme-standard {
+  display: flex;
+  flex-direction: row;
+}
+
+.fc-header-toolbar.fc-toolbar {
+  display: flex;
+  flex-direction: column !important;
+  margin: 0 !important;
+} */
+
 @media (min-width: 992px) {
   .app-calendar .app-calendar-sidebar {
     position: static;
@@ -311,16 +323,7 @@
 .horizontal-layout .app-calendar {
   margin-bottom: 1rem;
 }
-@media (max-width: 992px) {
-  .fc .fc-sidebarToggle-button {
-    font-size: 0;
-  }
-}
-@media (min-width: 992px) {
-  .fc .fc-sidebarToggle-button {
-    display: none;
-  }
-}
+
 @media (max-width: 700px) {
   .app-calendar .fc .fc-header-toolbar .fc-toolbar-chunk:last-of-type {
     margin-top: 1rem;

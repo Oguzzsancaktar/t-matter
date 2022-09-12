@@ -1,30 +1,41 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
-import { Column, JustifyBetweenColumn, JustifyCenterRow, Row } from '@/components/layout'
-import { H1 } from '@/components/texts'
-import { ModalHeader, ModalBody } from '../types'
+import { Column, JustifyBetweenColumn, Row } from '@/components/layout'
 import FullCalendar from '@fullcalendar/react'
 
 import colors from '@/constants/colors'
 import { SelectInput } from '@/components/input'
 import { emptyQueryParams, emptyTaskFilter } from '@/constants/queryParams'
-import { IOption, ITaskCategory } from '@/models'
+import { ESize, ETaskStatus, IOption, ITaskCategory, IUser } from '@/models'
 import { useGetCategoriesQuery } from '@/services/settings/workflow-planning/workflowService'
 import { useGetAllTaskListQuery } from '@/services/customers/taskService'
 import DefaultCalendarOptions from '@/constants/calendarOptions'
+import { CustomerTaskModal } from '@/components'
+import { openModal } from '@/store'
+import useAccessStore from '@/hooks/useAccessStore'
+import { ModalBody } from '../types'
+import { taskStatusOptions } from '@/constants/statuses'
+import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 
 function calendarFiltersReducer(state, action) {
   switch (action.type) {
     case 'CHANGE_CATEGORY':
+      return { ...state, category: action.payload }
+    case 'CHANGE_USER':
+      return { ...state, category: action.payload }
+    case 'CHANGE_STATUS':
       console.log(action.payload)
       return { ...state, category: action.payload }
   }
 }
 
 const CalendarModal = () => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
+  const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(emptyQueryParams)
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery(emptyQueryParams)
 
-  const calendarRef = useRef(null)
   const defaultOptions = DefaultCalendarOptions()
 
   const [calendarFilters, calendarFiltersDispatch] = useReducer(calendarFiltersReducer, {
@@ -33,10 +44,29 @@ const CalendarModal = () => {
 
   const { data: taskData, isLoading: taskDataIsLoading } = useGetAllTaskListQuery(calendarFilters)
 
+  const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false)
   const [calendarEvents, setCalendarEvents] = useState<any>(null)
 
   const calendarOptions = { ...defaultOptions }
-  calendarOptions.ref = calendarRef
+
+  const handleOpenTaskModal = ({ event }) => {
+    const taskId = event.id
+    if (taskId) {
+      dispatch(
+        openModal({
+          id: 'customerTaksModal' + taskId,
+          title: 'Customer Task',
+          body: <CustomerTaskModal taskId={taskId} />,
+          width: ESize.WXLarge,
+          height: ESize.HLarge,
+          backgroundColor: colors.gray.light
+        })
+      )
+    }
+  }
+
+  calendarOptions.eventClick = handleOpenTaskModal
+  calendarOptions.customButtons.sidebarToggle.click = () => setIsFiltersOpen(!isFiltersOpen)
 
   const handleCategoryChange = (option: IOption) => {
     if (option) {
@@ -49,7 +79,18 @@ const CalendarModal = () => {
     } else {
       calendarFiltersDispatch({ type: 'CHANGE_CATEGORY', payload: undefined })
     }
-    // onDataChange(dataInstance)
+  }
+
+  const handleUserChange = (option: IOption) => {
+    if (option) {
+      const selectedUser = {
+        _id: option.value,
+        name: option.label
+      }
+      calendarFiltersDispatch({ type: 'CHANGE_USER', payload: selectedUser })
+    } else {
+      calendarFiltersDispatch({ type: 'CHANGE_USER', payload: undefined })
+    }
   }
 
   useEffect(() => {
@@ -57,12 +98,12 @@ const CalendarModal = () => {
     if (taskData) {
       taskData.forEach(task => {
         task.steps.forEach(step => {
-          console.log(calendarFilters.category?._id)
           if (calendarFilters.category?._id === undefined || calendarFilters.category?._id === step.category._id) {
-            console.log(step)
             allTaskSteps.push({
+              id: task._id,
               // allDay: false,
               backgroundColor: step.category.color.color,
+              borderColor: 'transparent',
               date: step.startDate,
               // end: step.endDate,
               title: task.name
@@ -76,20 +117,10 @@ const CalendarModal = () => {
 
   return (
     <JustifyBetweenColumn height="100%">
-      <ModalHeader>
-        <ItemContainer>
-          <JustifyCenterRow width="100%">
-            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              Calendar
-            </H1>
-          </JustifyCenterRow>
-        </ItemContainer>
-      </ModalHeader>
-
-      <ModalBody height="calc(100% - 63px)">
-        <Row>
-          <ItemContainer width="250px" margin="0 1rem 0 0">
-            <Column>
+      <ModalBody height="100% ">
+        <Row height="100%">
+          <ItemContainer height="100%" overflow="hidden" width={isFiltersOpen ? '250px' : '0'} margin="0 1rem 0 0">
+            <JustifyBetweenColumn height="100%">
               <ItemContainer>
                 <SelectInput
                   isClearable={true}
@@ -111,9 +142,50 @@ const CalendarModal = () => {
                   isLoading={isCategoriesLoading}
                 />
               </ItemContainer>
-            </Column>
+
+              <ItemContainer>
+                <SelectInput
+                  isClearable={true}
+                  name={'responsibleUser'}
+                  labelText="Responsible User"
+                  selectedOption={[
+                    {
+                      value: calendarFilters.user?._id,
+                      label: calendarFilters.user?.firstname + ' ' + calendarFilters.user?.lastname
+                    }
+                  ]}
+                  options={(usersData || []).map((user: IUser) => ({
+                    label: user.firstname + ' ' + user.lastname,
+                    value: user._id
+                  }))}
+                  onChange={handleUserChange}
+                  isLoading={isUsersDataLoading}
+                />
+              </ItemContainer>
+
+              <ItemContainer>
+                <SelectInput
+                  isClearable={true}
+                  name={'stepCategory'}
+                  labelText="Step Status"
+                  selectedOption={[
+                    {
+                      value: calendarFilters.category?._id,
+                      label: calendarFilters.category?.name,
+                      color: calendarFilters.category?.color
+                    }
+                  ]}
+                  options={taskStatusOptions.map((status: IOption) => ({
+                    label: status.label,
+                    value: status.value
+                  }))}
+                  onChange={handleCategoryChange}
+                  isLoading={isCategoriesLoading}
+                />
+              </ItemContainer>
+            </JustifyBetweenColumn>
           </ItemContainer>
-          <ItemContainer width="calc(100% - 250px)">
+          <ItemContainer height="100%" width={isFiltersOpen ? 'calc(100% - 250px)' : '100%'}>
             {calendarEvents && !taskDataIsLoading ? (
               // @ts-ignore
               <FullCalendar height="100%" {...calendarOptions} events={calendarEvents} />

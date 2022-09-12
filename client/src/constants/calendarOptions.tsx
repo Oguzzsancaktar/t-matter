@@ -11,6 +11,8 @@ const DefaultCalendarOptions = () => {
   return {
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
+    nowIndicator: true,
+    now: Date.now(),
     headerToolbar: {
       start: 'sidebarToggle, prev,next, title',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
@@ -19,7 +21,7 @@ const DefaultCalendarOptions = () => {
       Enable dragging and resizing event
       ? Docs: https://fullcalendar.io/docs/editable
     */
-    editable: true,
+    editable: false,
 
     /*
       Enable resizing event from start
@@ -47,12 +49,12 @@ const DefaultCalendarOptions = () => {
 
     eventClassNames({ event: calendarEvent }) {
       // eslint-disable-next-line no-underscore-dangle
-      console.log('calendarEvent', calendarEvent)
+      // console.log('calendarEvent', calendarEvent)
       return []
     },
 
     eventClick({ event: clickedEvent }) {
-      console.log('clickedEvent')
+      console.log('clickedEvent', clickedEvent)
 
       // * Only grab required field otherwise it goes in infinity loop
       // ! Always grab all fields rendered by form (even if it get `undefined`) otherwise due to Vue3/Composition API you might get: "object is not extensible"
@@ -64,8 +66,8 @@ const DefaultCalendarOptions = () => {
 
     customButtons: {
       sidebarToggle: {
-        text: <Menu className="d-xl-none d-block" />,
-        click() {
+        text: <Menu />,
+        click: () => {
           console.log('first')
         }
       }
