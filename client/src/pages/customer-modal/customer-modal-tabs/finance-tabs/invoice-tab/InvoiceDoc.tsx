@@ -63,8 +63,10 @@ const Bold = styled.span`
 `
 
 const ContainerDiv = styled.div`
+  width: 100%;
   @media print {
     padding: 20px 30px;
+    width: 100%;
   }
 `
 
@@ -78,72 +80,76 @@ const InvoiceDoc: React.FC<IProps> = ({ invoice, customerId }) => {
   })
 
   return (
-    <ContainerDiv ref={ref}>
-      <HeadText>{companyInfo?.name}</HeadText>
-      <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', minWidth: '300px' }}>
-          <Text>
-            <Bold>Adress:</Bold> {companyInfo?.address}
-          </Text>
-          <Text margin="0.5rem 0 0 0">
-            <Bold>Phone:</Bold> {companyInfo?.phone}
-          </Text>
-          <Text margin="0.5rem 0 0 0">
-            <Bold>Fax:</Bold> {companyInfo?.fax}
-          </Text>
-          <Text margin="0.5rem 0 0 0">
-            <Bold>Website:</Bold> {companyInfo?.website}
-          </Text>
+    <div style={{ maxHeight: 400, height: 400, overflowY: 'auto', width: '100%' }}>
+      <ContainerDiv ref={ref}>
+        <HeadText>{companyInfo?.name}</HeadText>
+        <div
+          style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', minWidth: '300px' }}>
+            <Text>
+              <Bold>Adress:</Bold> {companyInfo?.address}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Phone:</Bold> {companyInfo?.phone}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Fax:</Bold> {companyInfo?.fax}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Website:</Bold> {companyInfo?.website}
+            </Text>
+          </div>
+          <JustifyCenterColumn width="200px">
+            <Text>
+              <Bold>Name:</Bold> {`${customer?.firstname} ${customer?.lastname}`}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Phone:</Bold> {customer?.phone}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Address:</Bold> {customer?.address ? customer?.address : 'N/A'}
+            </Text>
+          </JustifyCenterColumn>
         </div>
-        <JustifyCenterColumn>
-          <Text>
-            <Bold>Name:</Bold> {`${customer?.firstname} ${customer?.lastname}`}
-          </Text>
-          <Text margin="0.5rem 0 0 0">
-            <Bold>Phone:</Bold> {customer?.phone}
-          </Text>
-          <Text margin="0.5rem 0 0 0">
-            <Bold>Address:</Bold> {customer?.address}
-          </Text>
-        </JustifyCenterColumn>
-      </div>
-      <JustifyBetweenColumn margin="1rem 0 0 0">
-        <SubHeadText>{invoice.category.name}</SubHeadText>
-        <hr style={{ width: '100%', marginTop: '0.25rem' }} />
-        {invoice.tasks?.map(t => (
-          <Text margin="1rem 0 0 0">- {t.name}</Text>
-        ))}
-        {invoice.expiredTaskSteps?.map(t => (
-          <Text margin="1rem 0 0 0">
-            - {t.task.name}: Step - {t.stepIndex}
-          </Text>
-        ))}
-        <hr style={{ width: '100%', marginTop: '1rem' }} />
-      </JustifyBetweenColumn>
-      <JustifyBetweenRow margin="1rem 0 0 0">
-        <JustifyBetweenColumn></JustifyBetweenColumn>
-        <JustifyBetweenColumn>
-          <Text>
-            <Bold>Subtotal:</Bold> ${+Math.ceil(invoice.amount)}
-          </Text>
-          <Text margin="0.5rem 0 0.5rem 0">
-            <Bold>discount:</Bold> ${+Math.ceil(invoice.discount)}
-          </Text>
-          <hr style={{ width: '100%' }} />
-          <Text margin="0.5rem 0 0 0">
-            <Bold>Total:</Bold> ${+Math.ceil(invoice.total)}
-          </Text>
+        <JustifyBetweenColumn margin="1rem 0 0 0">
+          <SubHeadText>{invoice.category.name}</SubHeadText>
+          <hr style={{ width: '100%', marginTop: '0.25rem' }} />
+          {invoice.tasks?.map(t => (
+            <Text margin="1rem 0 0 0">- {t.name}</Text>
+          ))}
+          {invoice.expiredTaskSteps?.map(t => (
+            <Text margin="1rem 0 0 0">
+              - {t.task.name}: Step - {t.stepIndex}
+            </Text>
+          ))}
+          <hr style={{ width: '100%', marginTop: '1rem' }} />
         </JustifyBetweenColumn>
-      </JustifyBetweenRow>
-      <div className="hp" style={{ marginTop: '1rem', display: 'flex', flexDirection: 'row-reverse' }}>
-        <IconButton
-          width="30px"
-          bgColor={colors.background.gray.light}
-          onClick={handlePrint}
-          children={<Printer size={16} />}
-        />
-      </div>
-    </ContainerDiv>
+        <JustifyBetweenRow margin="1rem 0 0 0">
+          <JustifyBetweenColumn></JustifyBetweenColumn>
+          <JustifyBetweenColumn>
+            <Text>
+              <Bold>Subtotal:</Bold> ${+Math.ceil(invoice.amount)}
+            </Text>
+            <Text margin="0.5rem 0 0.5rem 0">
+              <Bold>discount:</Bold> ${+Math.ceil(invoice.discount)}
+            </Text>
+            <hr style={{ width: '100%' }} />
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Total:</Bold> ${+Math.ceil(invoice.total)}
+            </Text>
+          </JustifyBetweenColumn>
+        </JustifyBetweenRow>
+        <div className="hp" style={{ marginTop: '1rem', display: 'flex', flexDirection: 'row-reverse' }}>
+          <IconButton
+            width="30px"
+            bgColor={colors.background.gray.light}
+            onClick={handlePrint}
+            children={<Printer size={16} />}
+          />
+        </div>
+      </ContainerDiv>
+    </div>
   )
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Invoice } from '@/models'
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack'
+import { Document, Page, pdfjs } from 'react-pdf/dist/esm/entry.webpack'
 import { List } from 'react-virtualized'
 import { Button, IconButton } from '@/components'
 import colors from '@constants/colors'
@@ -11,19 +11,24 @@ interface IProps {
 }
 
 const AgreementDoc: React.FC<IProps> = ({ invoice }) => {
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
   const [numPages, setNumPages] = useState(null)
+
+  if (!invoice || !invoice.category.agreement) {
+    return <div style={{ maxHeight: 400, height: 400, overflowY: 'auto', width: '100%' }}></div>
+  }
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages)
   }
 
   return (
-    <div>
+    <div style={{ maxHeight: 400, height: 400, overflowY: 'auto', width: '100%' }}>
       <Document file={invoice?.category.agreement} onLoadSuccess={onDocumentLoadSuccess}>
         <List
           height={350}
           width={400}
-          rowHeight={450}
+          rowHeight={350}
           rowCount={numPages}
           rowRenderer={({ index, key, style }) => <Page key={key} style={style} pageNumber={index} />}
         />
