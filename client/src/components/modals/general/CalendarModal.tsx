@@ -63,8 +63,8 @@ const CalendarModal = () => {
             allTaskSteps.push({
               // allDay: false,
               backgroundColor: step.category.color.color,
-              start: step.startDate,
-              end: step.endDate,
+              date: step.startDate,
+              // end: step.endDate,
               title: task.name
             })
           }
