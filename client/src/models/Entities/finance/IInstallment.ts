@@ -10,8 +10,8 @@ interface IInstallment {
   paidMethod?: string
   paidDate?: Date
   paidAmount: number
-  lateFee?: number
-  suspendedFee?: number
+  lateFee: number
+  suspendedFee: number
   notes?: string[]
   createdAt?: Date
   updatedAt?: Date
