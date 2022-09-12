@@ -1,47 +1,149 @@
-import React from 'react'
-import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer'
-import { Invoice } from '@/models'
+import React, { useRef } from 'react'
+import { ICustomer, Invoice } from '@/models'
 import { useGetCompanyInfoQuery } from '@services/settings/company-info/companyInfoService'
+import {
+  Button,
+  H1,
+  IconButton,
+  ItemContainer,
+  JustifyBetweenColumn,
+  JustifyBetweenRow,
+  JustifyCenterColumn
+} from '@/components'
+import { useGetCustomerByIdQuery } from '@services/customers/customerService'
+import styled from 'styled-components'
+import { useReactToPrint } from 'react-to-print'
+import colors from '@constants/colors'
+import { Printer } from 'react-feather'
 
 interface IProps {
-  invoice?: Invoice
+  invoice: Invoice
+  customerId: ICustomer['_id']
 }
 
-// Create styles
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    padding: '15px 40px'
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1
+const Text = styled.span<{ margin?: string }>`
+  font-size: 12px;
+  font-weight: 500;
+  color: #000000;
+  width: 100%;
+  margin: ${({ margin }) => (margin ? margin : '0')};
+  @media print {
+    font-size: 14px;
   }
-})
+`
 
-const InvoiceDoc: React.FC<IProps> = ({ invoice }) => {
+const HeadText = styled.span`
+  font-size: 15px;
+  font-weight: 700;
+  color: #000000;
+  width: 100%;
+  @media print {
+    font-size: 18px;
+  }
+`
+
+const SubHeadText = styled.span`
+  font-size: 13px;
+  font-weight: 900;
+  color: #000000;
+  width: 100%;
+  @media print {
+    font-size: 15px;
+  }
+`
+
+const Bold = styled.span`
+  font-weight: 900;
+  font-size: 12px;
+  color: #000000;
+  width: 100%;
+  @media print {
+    font-size: 14px;
+  }
+`
+
+const ContainerDiv = styled.div`
+  @media print {
+    padding: 20px 30px;
+  }
+`
+
+const InvoiceDoc: React.FC<IProps> = ({ invoice, customerId }) => {
   const { data: companyInfo } = useGetCompanyInfoQuery()
+  const { data: customer } = useGetCustomerByIdQuery(customerId)
+  const ref = useRef(null)
+
+  const handlePrint = useReactToPrint({
+    content: () => ref.current
+  })
 
   return (
-    <PDFViewer showToolbar height={450} width="100%">
-      <Document>
-        <Page size="A4" style={styles.page}>
-          <View>
-            <Text>{companyInfo?.name}</Text>
-          </View>
-          <View>
-            <View style={styles.section}>
-              <Text>{invoice?.category.name}</Text>
-            </View>
-            <View style={styles.section}>
-              <Text>Section #2</Text>
-            </View>
-          </View>
-        </Page>
-      </Document>
-    </PDFViewer>
+    <ContainerDiv ref={ref}>
+      <HeadText>{companyInfo?.name}</HeadText>
+      <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', minWidth: '300px' }}>
+          <Text>
+            <Bold>Adress:</Bold> {companyInfo?.address}
+          </Text>
+          <Text margin="0.5rem 0 0 0">
+            <Bold>Phone:</Bold> {companyInfo?.phone}
+          </Text>
+          <Text margin="0.5rem 0 0 0">
+            <Bold>Fax:</Bold> {companyInfo?.fax}
+          </Text>
+          <Text margin="0.5rem 0 0 0">
+            <Bold>Website:</Bold> {companyInfo?.website}
+          </Text>
+        </div>
+        <JustifyCenterColumn>
+          <Text>
+            <Bold>Name:</Bold> {`${customer?.firstname} ${customer?.lastname}`}
+          </Text>
+          <Text margin="0.5rem 0 0 0">
+            <Bold>Phone:</Bold> {customer?.phone}
+          </Text>
+          <Text margin="0.5rem 0 0 0">
+            <Bold>Address:</Bold> {customer?.address}
+          </Text>
+        </JustifyCenterColumn>
+      </div>
+      <JustifyBetweenColumn margin="1rem 0 0 0">
+        <SubHeadText>{invoice.category.name}</SubHeadText>
+        <hr style={{ width: '100%', marginTop: '0.25rem' }} />
+        {invoice.tasks?.map(t => (
+          <Text margin="1rem 0 0 0">- {t.name}</Text>
+        ))}
+        {invoice.expiredTaskSteps?.map(t => (
+          <Text margin="1rem 0 0 0">
+            - {t.task.name}: Step - {t.stepIndex}
+          </Text>
+        ))}
+        <hr style={{ width: '100%', marginTop: '1rem' }} />
+      </JustifyBetweenColumn>
+      <JustifyBetweenRow margin="1rem 0 0 0">
+        <JustifyBetweenColumn></JustifyBetweenColumn>
+        <JustifyBetweenColumn>
+          <Text>
+            <Bold>Subtotal:</Bold> ${+Math.ceil(invoice.amount)}
+          </Text>
+          <Text margin="0.5rem 0 0.5rem 0">
+            <Bold>discount:</Bold> ${+Math.ceil(invoice.discount)}
+          </Text>
+          <hr style={{ width: '100%' }} />
+          <Text margin="0.5rem 0 0 0">
+            <Bold>Total:</Bold> ${+Math.ceil(invoice.total)}
+          </Text>
+        </JustifyBetweenColumn>
+      </JustifyBetweenRow>
+      <div className="hp" style={{ marginTop: '1rem', display: 'flex', flexDirection: 'row-reverse' }}>
+        <IconButton
+          width="30px"
+          bgColor={colors.background.gray.light}
+          onClick={handlePrint}
+          children={<Printer size={16} />}
+        />
+      </div>
+    </ContainerDiv>
   )
 }
 

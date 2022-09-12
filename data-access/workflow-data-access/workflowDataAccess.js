@@ -198,12 +198,6 @@ const pipelineData = hourlyCompanyFee => [
       'steps.checklistItems': 0
     }
   },
-
-  {
-    $sort: {
-      'steps.stepIndex': 1
-    }
-  },
   {
     $replaceRoot: {
       newRoot: {
@@ -226,6 +220,11 @@ const pipelineData = hourlyCompanyFee => [
   {
     $project: {
       checklistItems: 0
+    }
+  },
+  {
+    $sort: {
+      'steps.stepIndex': 1
     }
   },
   {
