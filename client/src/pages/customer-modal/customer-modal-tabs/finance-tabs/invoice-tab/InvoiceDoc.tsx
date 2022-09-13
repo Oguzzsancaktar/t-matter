@@ -70,6 +70,17 @@ const ContainerDiv = styled.div`
   }
 `
 
+const CompanyInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  max-width: 150px;
+  @media print {
+    min-width: 200px;
+    max-width: 200px;
+  }
+`
+
 const InvoiceDoc: React.FC<IProps> = ({ invoice, customerId }) => {
   const { data: companyInfo } = useGetCompanyInfoQuery()
   const { data: customer } = useGetCustomerByIdQuery(customerId)
@@ -80,13 +91,13 @@ const InvoiceDoc: React.FC<IProps> = ({ invoice, customerId }) => {
   })
 
   return (
-    <div style={{ maxHeight: 400, height: 400, overflowY: 'auto', width: '100%' }}>
+    <div style={{ maxHeight: 400, height: 400, overflowY: 'auto', width: '100%', overflowX: 'hidden' }}>
       <ContainerDiv ref={ref}>
         <HeadText>{companyInfo?.name}</HeadText>
         <div
           style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', minWidth: '300px' }}>
+          <CompanyInfoContainer>
             <Text>
               <Bold>Adress:</Bold> {companyInfo?.address}
             </Text>
@@ -99,8 +110,8 @@ const InvoiceDoc: React.FC<IProps> = ({ invoice, customerId }) => {
             <Text margin="0.5rem 0 0 0">
               <Bold>Website:</Bold> {companyInfo?.website}
             </Text>
-          </div>
-          <JustifyCenterColumn width="200px">
+          </CompanyInfoContainer>
+          <JustifyCenterColumn width="fit-content">
             <Text>
               <Bold>Name:</Bold> {`${customer?.firstname} ${customer?.lastname}`}
             </Text>

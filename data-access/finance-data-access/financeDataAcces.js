@@ -29,8 +29,12 @@ const getInvoiceById = id => {
 }
 
 const getInvoicesByCustomerId = customerId => {
+  const $match = {}
+  if (customerId) {
+    $match.customer = mongoose.Types.ObjectId(customerId)
+  }
   return Invoice.aggregate([
-    { $match: { customer: mongoose.Types.ObjectId(customerId) } },
+    { $match },
     {
       $lookup: {
         from: 'tasks',
@@ -190,11 +194,13 @@ const updateInstallment = (id, data) => {
 }
 
 const getInstallmentsByInvoiceId = invoiceId => {
+  const $match = {}
+  if (invoiceId) {
+    $match.invoice = mongoose.Types.ObjectId(invoiceId)
+  }
   return Installment.aggregate([
     {
-      $match: {
-        invoice: mongoose.Types.ObjectId(invoiceId)
-      }
+      $match
     },
     {
       $lookup: {

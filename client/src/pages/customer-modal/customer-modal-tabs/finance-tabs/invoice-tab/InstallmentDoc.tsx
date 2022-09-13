@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Invoice } from '@/models'
+import { ICustomer, Invoice } from '@/models'
 import {
   useGetInstallmentsQuery,
   useGetInvoicesQuery
@@ -10,9 +10,12 @@ import styled from 'styled-components'
 import moment from 'moment/moment'
 import { Printer } from 'react-feather'
 import { useReactToPrint } from 'react-to-print'
+import { useGetCompanyInfoQuery } from '@services/settings/company-info/companyInfoService'
+import { useGetCustomerByIdQuery } from '@services/customers/customerService'
 
 interface IProps {
   invoice: Invoice
+  customerId: ICustomer['_id']
 }
 
 const Text = styled.span<{ margin?: string }>`
@@ -65,7 +68,21 @@ const ContainerDiv = styled.div`
   }
 `
 
-const InstallmentDoc: React.FC<IProps> = ({ invoice }) => {
+const CompanyInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  max-width: 150px;
+  @media print {
+    min-width: 200px;
+    max-width: 200px;
+  }
+`
+
+const InstallmentDoc: React.FC<IProps> = ({ invoice, customerId }) => {
+  const { data: companyInfo } = useGetCompanyInfoQuery()
+  const { data: customer } = useGetCustomerByIdQuery(customerId)
+
   const { data: installments } = useGetInstallmentsQuery(invoice._id)
   const ref = useRef(null)
 
@@ -89,13 +106,42 @@ const InstallmentDoc: React.FC<IProps> = ({ invoice }) => {
   }
 
   return (
-    <div style={{ maxHeight: 400, height: 400, overflowY: 'auto', width: '100%' }}>
+    <div style={{ maxHeight: 400, height: 400, overflowY: 'auto', width: '100%', overflowX: 'hidden' }}>
       <ContainerDiv ref={ref}>
         <HeadText>Installment Plan</HeadText>
         <div
           style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', minWidth: '300px' }}>
+          <CompanyInfoContainer>
+            <Text>
+              <Bold>Adress:</Bold> {companyInfo?.address}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Phone:</Bold> {companyInfo?.phone}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Fax:</Bold> {companyInfo?.fax}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Website:</Bold> {companyInfo?.website}
+            </Text>
+          </CompanyInfoContainer>
+          <JustifyCenterColumn width="fit-content">
+            <Text>
+              <Bold>Name:</Bold> {`${customer?.firstname} ${customer?.lastname}`}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Phone:</Bold> {customer?.phone}
+            </Text>
+            <Text margin="0.5rem 0 0 0">
+              <Bold>Address:</Bold> {customer?.address ? customer?.address : 'N/A'}
+            </Text>
+          </JustifyCenterColumn>
+        </div>
+        <div
+          style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', minWidth: '100%' }}>
             <Bold>{invoice.category.name}</Bold>
             <hr style={{ margin: '4px 0 12px 0' }} />
             <Text>
@@ -108,7 +154,6 @@ const InstallmentDoc: React.FC<IProps> = ({ invoice }) => {
               <Bold>Balance:</Bold> ${calculateBalance(installments.length - 1)}
             </Text>
           </div>
-          <JustifyCenterColumn></JustifyCenterColumn>
         </div>
         <hr style={{ margin: '12px 0 12px 0' }} />
         <JustifyBetweenRow>
@@ -118,7 +163,6 @@ const InstallmentDoc: React.FC<IProps> = ({ invoice }) => {
           <Bold>Paid Amount</Bold>
           <Bold>Late Fee</Bold>
           <Bold>Suspended Fee</Bold>
-          <Bold>Balance</Bold>
         </JustifyBetweenRow>
         <hr style={{ margin: '4px 0 12px 0' }} />
         {installments.map((installment, i) => {
@@ -130,7 +174,6 @@ const InstallmentDoc: React.FC<IProps> = ({ invoice }) => {
               <Text>${+Math.ceil(installment.paidAmount)}</Text>
               <Text>${+Math.ceil(installment.lateFee)}</Text>
               <Text>${+Math.ceil(installment.suspendedFee)}</Text>
-              <Text>${calculateBalance(i)}</Text>
             </JustifyBetweenRow>
           )
         })}
@@ -142,7 +185,6 @@ const InstallmentDoc: React.FC<IProps> = ({ invoice }) => {
           <Text></Text>
           <Text></Text>
           <Text></Text>
-          <Text>${calculateBalance(installments.length - 1)}</Text>
         </JustifyBetweenRow>
         <div className="hp" style={{ marginTop: '1rem', display: 'flex', flexDirection: 'row-reverse' }}>
           <IconButton

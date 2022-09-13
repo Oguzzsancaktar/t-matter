@@ -10,6 +10,7 @@ import { ESize } from '@/models'
 import { openModal } from '@/store'
 import useAccessStore from '@/hooks/useAccessStore'
 import CalendarModal from '../modals/general/CalendarModal'
+import { FinanceModal } from '@/components'
 
 const SidebarShowWhenHover = styled.div`
   color: ${colors.white.bg};
@@ -88,6 +89,19 @@ const SideBar = () => {
         id: `calendarModal`,
         title: 'Calendar Modal',
         body: <CalendarModal />,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
+        maxWidth: ESize.WXLarge
+      })
+    )
+  }
+
+  const handleOpenFinance = () => {
+    dispatch(
+      openModal({
+        id: `financeModal`,
+        title: 'Finance Modal',
+        body: <FinanceModal />,
         width: ESize.WXLarge,
         height: ESize.HLarge,
         maxWidth: ESize.WXLarge
@@ -205,7 +219,7 @@ const SideBar = () => {
                     </Link>
                   </ItemContainer>
 
-                  <ItemContainer margin="0 0 0.5rem 0">
+                  <ItemContainer margin="0 0 0.5rem 0" onClick={handleOpenFinance}>
                     <Link to="/finance">
                       <Row width="100%">
                         <SidebarIcon>
