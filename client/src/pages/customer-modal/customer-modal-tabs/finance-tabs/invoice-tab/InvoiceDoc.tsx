@@ -91,7 +91,7 @@ const InvoiceDoc: React.FC<IProps> = ({ invoice, customerId }) => {
   })
 
   return (
-    <div style={{ maxHeight: 400, height: 400, overflowY: 'auto', width: '100%' }}>
+    <div style={{ maxHeight: 400, height: 400, overflowY: 'auto', width: '100%', overflowX: 'hidden' }}>
       <ContainerDiv ref={ref}>
         <HeadText>{companyInfo?.name}</HeadText>
         <div
