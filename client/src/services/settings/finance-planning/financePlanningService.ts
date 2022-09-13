@@ -141,10 +141,10 @@ const createInvoice = (builder: IBuilder) => {
 }
 
 const getInvoices = (builder: IBuilder) => {
-  return builder.query<Invoice[], ICustomer['_id']>({
+  return builder.query<Invoice[], ICustomer['_id'] | undefined>({
     query(args) {
       return {
-        url: '/finance/invoice/' + args,
+        url: `/finance/invoice${args ? args : ''}`,
         method: 'GET'
       }
     },
@@ -205,7 +205,7 @@ const getInstallments = (builder: IBuilder) => {
   return builder.query<IInstallment[], Invoice['_id']>({
     query(args) {
       return {
-        url: '/finance/installment/' + args,
+        url: `/finance/installment${args ? args : ''}`,
         method: 'GET'
       }
     },

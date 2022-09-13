@@ -7,6 +7,21 @@ const GlobalStyle = createGlobalStyle`
       display: none !important;
     }
   }
+  #side-drawer-root {
+    height: 100%;
+    background: white;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 30%;
+    z-index: 9999999999;
+    box-shadow: 1px 0px 7px rgba(0, 0, 0, 0.5);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+    &.open {
+      transform: translateX(0);
+    }
+  }
   * {
   box-sizing: border-box;
   font-family: 'Satoshi-Regular';
