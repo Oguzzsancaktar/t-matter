@@ -134,7 +134,7 @@
 .fc .fc-daygrid-event-harness .fc-event {
   font-size: 0.8rem;
   font-weight: 600;
-  padding: 0.25rem 0.5rem;
+  padding: 0;
 }
 .fc .fc-daygrid-event-harness + .fc-daygrid-event-harness {
   margin-top: 0.3rem;
