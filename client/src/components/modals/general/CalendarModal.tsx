@@ -1,8 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
-import { Column, JustifyBetweenColumn, Row } from '@/components/layout'
+import { Column, JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, Row } from '@/components/layout'
 import FullCalendar from '@fullcalendar/react'
-
 import colors from '@/constants/colors'
 import { SelectInput } from '@/components/input'
 import { emptyQueryParams, emptyTaskFilter } from '@/constants/queryParams'
@@ -10,12 +9,16 @@ import { ESize, ETaskStatus, IOption, ITaskCategory, IUser } from '@/models'
 import { useGetCategoriesQuery } from '@/services/settings/workflow-planning/workflowService'
 import { useGetAllTaskListQuery } from '@/services/customers/taskService'
 import DefaultCalendarOptions from '@/constants/calendarOptions'
-import { CustomerTaskModal } from '@/components'
+import { Button, CustomerTaskModal, H1, UserImage } from '@/components'
 import { openModal } from '@/store'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ModalBody } from '../types'
 import { taskStatusOptions } from '@/constants/statuses'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
+import ReactTooltip from 'react-tooltip'
+import styled from 'styled-components'
+import moment from 'moment'
+import { secondsToHourMin } from '@/utils/timeUtils'
 
 function calendarFiltersReducer(state, action) {
   switch (action.type) {
@@ -24,7 +27,6 @@ function calendarFiltersReducer(state, action) {
     case 'CHANGE_USER':
       return { ...state, category: action.payload }
     case 'CHANGE_STATUS':
-      console.log(action.payload)
       return { ...state, category: action.payload }
   }
 }
@@ -68,6 +70,19 @@ const CalendarModal = () => {
   calendarOptions.eventClick = handleOpenTaskModal
   calendarOptions.customButtons.sidebarToggle.click = () => setIsFiltersOpen(!isFiltersOpen)
 
+  const StyledReactTooltip = styled(ReactTooltip)`
+    border-radius: 0.3rem !important;
+    padding: 0.3rem 0.5rem !important;
+    background-color: ${colors.gray.secondary} !important;
+    border: 2px solid ${colors.white.secondary} !important;
+    opacity: 1 !important;
+    overflow: hidden;
+
+    &:after {
+      border-top-color: ${colors.gray.dark} !important;
+    }
+  `
+
   const handleCategoryChange = (option: IOption) => {
     if (option) {
       const selectedCategory = {
@@ -101,19 +116,20 @@ const CalendarModal = () => {
           if (calendarFilters.category?._id === undefined || calendarFilters.category?._id === step.category._id) {
             allTaskSteps.push({
               id: task._id,
-              // allDay: false,
+              allDay: false,
               backgroundColor: step.category.color.color,
-              borderColor: 'transparent',
               date: step.startDate,
-              // end: step.endDate,
-              title: task.name
+              color: step.category.color.color,
+              end: step.startDate + (task?.totalDuration || 0),
+              title: task.name,
+              extendedProps: { task, step }
             })
           }
         })
       })
     }
     setCalendarEvents(allTaskSteps)
-  }, [taskData])
+  }, [taskData, taskDataIsLoading])
 
   return (
     <JustifyBetweenColumn height="100%">
@@ -188,7 +204,57 @@ const CalendarModal = () => {
           <ItemContainer height="100%" width={isFiltersOpen ? 'calc(100% - 250px)' : '100%'}>
             {calendarEvents && !taskDataIsLoading ? (
               // @ts-ignore
-              <FullCalendar height="100%" {...calendarOptions} events={calendarEvents} />
+              <FullCalendar
+                height="100%"
+                {...calendarOptions}
+                eventContent={props => {
+                  const task = props.event._def.extendedProps.task
+                  const step = props.event._def.extendedProps.step
+
+                  return (
+                    <ItemContainer width="100%" height="100%">
+                      <Button
+                        width="100%"
+                        color={props.backgroundColor}
+                        padding={task.totalDuration / 60 / 60 ? '0' : '0.25rem 0.5rem'}
+                      >
+                        <JustifyBetweenRow width="100%">
+                          <H1 fontSize="0.7rem" color={colors.white.secondary}>
+                            {step.category.name}
+                          </H1>
+                          <H1 fontSize="0.7rem" width="auto" color={colors.white.secondary}>
+                            {secondsToHourMin(task.totalDuration, true)}
+                          </H1>
+                        </JustifyBetweenRow>
+                      </Button>
+
+                      <StyledReactTooltip id={'taskProgressTooltip-' + props.event.id} effect="solid">
+                        <JustifyCenterColumn>
+                          <H1 textAlign="center" margin="0.3rem 0" color={colors.blue.primary} width="max-content">
+                            {task.customer.firstname + ' ' + task.customer.lastname}
+                          </H1>
+                          <H1 textAlign="center" margin="0.3rem 0" color={colors.text.primary} width="max-content">
+                            {moment(task.startDate).format('hh:mm A')}
+                          </H1>
+                          <H1 margin="0 0.3rem" textAlign="center" color={colors.text.primary} width="max-content">
+                            {ETaskStatus[task.status].replace('_', ' ')}
+                          </H1>
+                          <H1 textAlign="center" margin="0.3rem 0" color={colors.text.primary} width="max-content">
+                            {task.name}
+                          </H1>
+                        </JustifyCenterColumn>
+                      </StyledReactTooltip>
+                    </ItemContainer>
+                  )
+                }}
+                eventDidMount={info => {
+                  info.el.setAttribute('data-tip', '')
+                  info.el.setAttribute('data-for', 'taskProgressTooltip-' + info.event.id)
+
+                  ReactTooltip.rebuild()
+                }}
+                events={calendarEvents}
+              />
             ) : (
               // @ts-ignore
               <FullCalendar height="100%" {...calendarOptions} events={[{}]} />

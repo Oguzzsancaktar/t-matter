@@ -18,6 +18,7 @@ const createTask = async (req, res) => {
         startDate: step.startDate
       })),
       customer: customerId,
+      totalDuration: body.totalDuration,
       totalPrice: body.totalPrice,
       status: body.status
     }

@@ -129,7 +129,6 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
   const handleSubmit = async () => {
     setValidationErrors({ ...initialErrors })
     const validationResult = validateFieldValues()
-    console.log(validationResult)
     if (validationResult) {
       try {
         const task: ICustomerTask = {
@@ -137,6 +136,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
           startDate: Date.now(),
           name: updateWorkflowData.name,
           steps: [],
+          totalDuration: workflowData?.totalDuration,
           totalPrice: workflowData?.totalPrice
         }
 

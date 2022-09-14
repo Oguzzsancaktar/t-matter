@@ -20,6 +20,9 @@ const taskSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Customers'
     },
+    totalDuration: {
+      type: Number
+    },
     totalPrice: {
       type: Number
     },

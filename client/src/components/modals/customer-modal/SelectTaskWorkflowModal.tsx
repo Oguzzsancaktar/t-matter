@@ -148,6 +148,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
           name: selectedWorkflow.name,
           steps: [],
           totalPrice: workflowData?.totalPrice,
+          totalDuration: workflowData?.totalDuration,
           status: ETaskStatus.Not_Started
         }
 

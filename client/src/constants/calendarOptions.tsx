@@ -13,6 +13,7 @@ const DefaultCalendarOptions = () => {
     initialView: 'dayGridMonth',
     nowIndicator: true,
     now: Date.now(),
+    displayEventTime: false,
     headerToolbar: {
       start: 'sidebarToggle, prev,next, title',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
