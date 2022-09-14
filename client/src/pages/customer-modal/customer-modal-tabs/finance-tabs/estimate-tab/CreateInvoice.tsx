@@ -13,6 +13,7 @@ import { ICustomer, ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
 import { DollarSign } from 'react-feather'
 import { invoiceDefault } from '@constants/finance'
 import { useCreateInvoiceMutation } from '@services/settings/finance-planning/financePlanningService'
+import { toastError } from '@utils/toastUtil'
 
 interface IProps {
   invoiceCategories?: IInvoiceCategory[]
@@ -44,7 +45,7 @@ const CreateInvoice: React.FC<IProps> = ({
   }
 
   const handleCreate = async () => {
-    if (invoice && createInvoiceTasks) {
+    if (invoice && createInvoiceTasks && !!invoice.category.name) {
       const obj = {
         ...invoice,
         category: invoice.category._id,
@@ -56,6 +57,8 @@ const CreateInvoice: React.FC<IProps> = ({
       await createInvoice(obj)
       await refetch()
       setInvoice({ ...invoiceDefault })
+    } else {
+      toastError('Please fill all fields')
     }
   }
 
@@ -88,7 +91,7 @@ const CreateInvoice: React.FC<IProps> = ({
             children={<DollarSign size="16px" />}
             name="amount"
             type="number"
-            value={invoice?.amount ? invoice?.amount : undefined}
+            value={invoice?.amount ? +Math.ceil(invoice?.amount) : undefined}
           />
         </JustifyBetweenRow>
       </JustifyBetweenRow>
@@ -101,7 +104,7 @@ const CreateInvoice: React.FC<IProps> = ({
             name="discount"
             type="number"
             onChange={handleInputChange}
-            value={invoice?.discount ? invoice?.discount : undefined}
+            value={invoice?.discount ? +Math.ceil(invoice?.discount) : undefined}
           />
         </JustifyBetweenRow>
         <JustifyBetweenRow margin="0 0 0 0.5rem">
@@ -113,7 +116,7 @@ const CreateInvoice: React.FC<IProps> = ({
             name="total"
             type="number"
             onChange={handleInputChange}
-            value={invoice?.total ? invoice?.total : undefined}
+            value={invoice?.total ? +Math.ceil(invoice?.total) : undefined}
           />
         </JustifyBetweenRow>
       </JustifyBetweenRow>

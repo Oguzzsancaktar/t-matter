@@ -14,7 +14,7 @@ import styled from 'styled-components'
 import { Invoice } from '@/models'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
-  border: 1px solid ${colors.gray.light};
+  border: 1px solid #ccc;
   height: 100%;
   box-sizing: border-box;
   border-radius: 5px;

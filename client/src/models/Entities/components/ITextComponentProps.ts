@@ -10,4 +10,5 @@ export default interface ITextComponentProps {
   width?: string
   cursor?: string
   fontFamily?: string
+  isEllipsis?: boolean
 }

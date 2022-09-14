@@ -93,13 +93,15 @@ const createInstallment = async (req, res) => {
       invoice.notes.push(body.note)
       await invoice.save()
     }
-    await dataAccess.financeDataAccess.createInstallment({
-      type: INSTALLMENT_TYPES.DEPOSIT,
-      invoice: params.invoiceId,
-      payDate: new Date(),
-      payAmount: deposit,
-      status: INSTALLMENT_STATUS.UN_PAID
-    })
+    if (deposit != 0) {
+      await dataAccess.financeDataAccess.createInstallment({
+        type: INSTALLMENT_TYPES.DEPOSIT,
+        invoice: params.invoiceId,
+        payDate: new Date(),
+        payAmount: deposit,
+        status: INSTALLMENT_STATUS.UN_PAID
+      })
+    }
     for (let i = 0; i < quantity; i++) {
       const installment = {
         type: INSTALLMENT_TYPES.PAYMENT,

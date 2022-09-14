@@ -11,10 +11,14 @@ interface IProps {
 }
 
 const ExpiredItem = styled(JustifyBetweenRow)`
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 1rem;
   border: 1px solid #e0e0e0;
   background: #d08989;
   margin-bottom: 0.5rem;
+  border-radius: 5px;
+  & h1 {
+    font-size: 13px;
+  }
 `
 
 const ExpiredTaskStepList: React.FC<IProps> = ({ expiredTaskSteps }) => {
@@ -40,11 +44,11 @@ const ExpiredTaskStepList: React.FC<IProps> = ({ expiredTaskSteps }) => {
                     return (
                       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <ExpiredItem>
-                          <H1 color={colors.black.primary}>
+                          <H1 isEllipsis color={colors.black.primary}>
                             {step.task.name} - Step: {step.stepIndex + 1}
                           </H1>
-                          <H1 color={colors.black.primary} textAlign="end">
-                            ${step.expiredTimePrice?.toFixed(2)}
+                          <H1 width="fit-content" color={colors.black.primary} textAlign="end">
+                            ${+Math.ceil(step.expiredTimePrice)}
                           </H1>
                         </ExpiredItem>
                       </div>

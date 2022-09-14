@@ -44,7 +44,7 @@ import Swal from 'sweetalert2'
 import constantToLabel from '@utils/constantToLabel'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
-  border: 1px solid ${colors.gray.light};
+  border: 1px solid #ccc;
   height: 100%;
   box-sizing: border-box;
   border-radius: 5px;
