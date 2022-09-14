@@ -9,7 +9,7 @@ import { ESize, ETaskStatus, IOption, ITaskCategory, IUser } from '@/models'
 import { useGetCategoriesQuery } from '@/services/settings/workflow-planning/workflowService'
 import { useGetAllTaskListQuery } from '@/services/customers/taskService'
 import DefaultCalendarOptions from '@/constants/calendarOptions'
-import { Button, CustomerTaskModal, H1 } from '@/components'
+import { Button, CustomerTaskModal, H1, UserImage } from '@/components'
 import { openModal } from '@/store'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ModalBody } from '../types'
@@ -243,6 +243,9 @@ const CalendarModal = () => {
                           <H1 margin="0 0.3rem" textAlign="center" color={colors.text.primary} width="max-content">
                             {ETaskStatus[task.status].replace('_', ' ')}
                           </H1>
+                          <ItemContainer margin="0.3rem" width="max-content" transition="0s">
+                            <UserImage src={step.responsibleUser?.profile_img} width="40px" height="40px" />
+                          </ItemContainer>
                           <H1 textAlign="center" margin="0.3rem 0" color={colors.text.primary} width="max-content">
                             {task.name}
                           </H1>

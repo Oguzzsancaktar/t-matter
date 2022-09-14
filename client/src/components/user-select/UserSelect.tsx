@@ -11,7 +11,7 @@ import { JustifyCenterRow, Row } from '../layout'
 import { H1 } from '../texts'
 
 interface IProps {
-  selectedUser?: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
+  selectedUser?: Pick<IUser, '_id' | 'firstname' | 'lastname' | 'profile_img'> | IUser
   disabled?: boolean
   onResponsibleChange: (responsible: IUser) => void
 }
@@ -64,7 +64,7 @@ const UserSelect: React.FC<IProps> = ({ selectedUser, disabled, onResponsibleCha
       <RelativeContainer>
         <ItemContainer width="100%" height="100%" onClick={handleUserList} cursorType="pointer">
           <JustifyCenterRow data-tip={selectedUser?.firstname + ' ' + selectedUser?.lastname}>
-            <UserImage src="" width="100%" height="100%" />
+            <UserImage src={selectedUser?.profile_img} width="100%" height="100%" />
           </JustifyCenterRow>
         </ItemContainer>
         {showUserList && !userListIsLoading && userListData && (
@@ -73,7 +73,7 @@ const UserSelect: React.FC<IProps> = ({ selectedUser, disabled, onResponsibleCha
               <UserListItem key={index} onClick={() => handleUserClick(user)}>
                 <Row>
                   <ItemContainer width="30px">
-                    <UserImage src="" width="30px" height="30px" />
+                    <UserImage src={user?.profile_img} width="30px" height="30px" />
                   </ItemContainer>
                   <ItemContainer>
                     <H1>{user?.firstname + ' ' + user?.lastname}</H1>

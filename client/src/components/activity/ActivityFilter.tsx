@@ -54,6 +54,8 @@ const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleCatego
     return <div>Activiries Loading...</div>
   }
 
+  console.log(activityCategoryCountsData)
+
   return (
     <ItemContainer width="100%" height="100%">
       <JustifyBetweenRow width="100%" height="100%">
@@ -69,7 +71,10 @@ const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleCatego
                 width={(type.count / totalActivity) * 100 + '%'}
                 margin={totalActivity !== index + 1 && index !== 0 ? ' 0 1px' : ''}
               >
-                <FilterBlock data-tip={type + ' - ' + type.count} color={type._id?.color + '90'}></FilterBlock>
+                <FilterBlock
+                  data-tip={type._id?.name + ' - ' + type.count}
+                  color={type._id?.color?.color + '90'}
+                ></FilterBlock>
               </ItemContainer>
             ))}
           </Row>
