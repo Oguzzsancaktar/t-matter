@@ -24,6 +24,8 @@ const StyledReactTooltip = styled(ReactTooltip)`
   background-color: ${colors.gray.secondary} !important;
   border: 2px solid ${colors.white.secondary} !important;
   opacity: 1 !important;
+  overflow: hidden;
+  transition: 0s;
   &:after {
     border-top-color: ${colors.gray.secondary} !important;
   }
@@ -90,13 +92,13 @@ const TaskProgress: React.FC<IProps> = ({ taskStatus, taskSteps, workflowName, t
         reverse={true}
         startLabel={workflowName}
         completionPercentage={percentage}
-        completionColor={selectColorForTaskStatus(taskStatus)}
+        completionColor={selectColorForTaskStatus(taskStatus) + '99'}
       ></ProgressBar>
 
       <StyledReactTooltip id={'taskProgressTooltip-' + taskId} effect="solid">
         <Row>
-          <ItemContainer margin="0 0.5rem 0 0">
-            <UserImage width="40px" height="40px"></UserImage>
+          <ItemContainer margin="0 0.5rem 0 0" transition="none">
+            <UserImage width="40px" height="40px" src={taskSteps[activeStep]?.responsibleUser.profile_img}></UserImage>
           </ItemContainer>
           <Column>
             <H1 color={colors.text.primary} width="max-content">

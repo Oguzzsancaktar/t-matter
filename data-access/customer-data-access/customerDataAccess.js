@@ -138,8 +138,8 @@ const findCustomerById = async (id, populate = '') => {
         customerType: { $first: '$customerType' },
         reliableCustomers: { $push: '$reliableCustomers' },
 
-        profile_img: { $push: '$profile_img' },
-        cloudinary_id: { $push: '$cloudinary_id' }
+        profile_img: { $first: '$profile_img' },
+        cloudinary_id: { $first: '$cloudinary_id' }
       }
     }
   ]).exec()

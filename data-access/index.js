@@ -11,6 +11,7 @@ const timeLogDataAccess = require('./time-log-data-access/timeLogDataAccess')
 const locationDataAccess = require('./dynamic-variables-data-access/locationDataAccess')
 const jobTitleDataAccess = require('./dynamic-variables-data-access/jobTitleDataAccess')
 const colorDataAccess = require('./dynamic-variables-data-access/colorDataAccess')
+const customerTypeDataAccess = require('./dynamic-variables-data-access/customerTypeDataAccess')
 
 const refferedByDataAccess = require('./dynamic-variables-data-access/refferedBy')
 const relativeTypeDataAccess = require('./dynamic-variables-data-access/relativeType')
@@ -39,5 +40,6 @@ module.exports = {
   financeDataAccess,
   invoiceCategoryDataAccess,
   companyDataAccess,
-  colorDataAccess
+  colorDataAccess,
+  customerTypeDataAccess
 }

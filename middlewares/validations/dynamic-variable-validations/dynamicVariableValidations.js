@@ -203,6 +203,47 @@ const updateColorValidation = async (req, res, next) => {
   }
 }
 
+// CustomerType
+const customerTypeValidationSchema = {
+  name: joi.string().required(),
+  color: joi.string().required()
+}
+
+const createCustomerTypeValidation = async (req, res, next) => {
+  const { body } = req
+  const schema = joi.object({ ...customerTypeValidationSchema })
+
+  try {
+    await schema.validateAsync(body)
+    next()
+  } catch (error) {
+    res.status(400).json(
+      utils.errorUtils.errorInstance({
+        message: error.message,
+        validationError: error.details
+      })
+    )
+  }
+}
+
+const updateCustomerTypeValidation = async (req, res, next) => {
+  const { id } = req.params
+  const { body } = req
+  const schema = joi.object({ ...customerTypeValidationSchema, id: joi.string().required() })
+
+  try {
+    await schema.validateAsync({ ...body, id })
+    next()
+  } catch (error) {
+    res.status(400).json(
+      utils.errorUtils.errorInstance({
+        message: error.message,
+        validationError: error.details
+      })
+    )
+  }
+}
+
 module.exports = {
   createLocationValidation,
   updateLocationValidation,
@@ -217,5 +258,8 @@ module.exports = {
   updateJobTitleValidation,
 
   createColorValidation,
-  updateColorValidation
+  updateColorValidation,
+
+  createCustomerTypeValidation,
+  updateCustomerTypeValidation
 }

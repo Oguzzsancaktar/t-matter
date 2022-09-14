@@ -51,7 +51,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
       if (updatedTaskData) {
         Swal.fire({
           title: 'Enter your cancel message',
-          input: 'text',
+          input: 'textarea',
           inputAttributes: {
             autocapitalize: 'off'
           },
@@ -120,7 +120,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
       if (updatedTaskData) {
         Swal.fire({
           title: 'Enter your postpone message',
-          input: 'text',
+          input: 'textarea',
           inputAttributes: {
             autocapitalize: 'off'
           },
@@ -176,8 +176,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
     try {
       if (updatedTaskData) {
         Swal.fire({
-          title: 'Enter your responsible chanfe message',
-          input: 'text',
+          title: 'Enter your responsible change message',
+          input: 'textarea',
           inputAttributes: {
             autocapitalize: 'off'
           },
@@ -289,7 +289,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
     if (!checklistItem.isChecked && updatedTaskData) {
       Swal.fire({
         title: 'Enter your complete message',
-        input: 'text',
+        input: 'textarea',
         inputAttributes: {
           autocapitalize: 'off'
         },

@@ -1,6 +1,6 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
-import { Column, JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, Row } from '@/components/layout'
+import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, Row } from '@/components/layout'
 import FullCalendar from '@fullcalendar/react'
 import colors from '@/constants/colors'
 import { SelectInput } from '@/components/input'
@@ -9,7 +9,7 @@ import { ESize, ETaskStatus, IOption, ITaskCategory, IUser } from '@/models'
 import { useGetCategoriesQuery } from '@/services/settings/workflow-planning/workflowService'
 import { useGetAllTaskListQuery } from '@/services/customers/taskService'
 import DefaultCalendarOptions from '@/constants/calendarOptions'
-import { Button, CustomerTaskModal, H1, UserImage } from '@/components'
+import { Button, CustomerTaskModal, H1 } from '@/components'
 import { openModal } from '@/store'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ModalBody } from '../types'
@@ -20,6 +20,10 @@ import styled from 'styled-components'
 import moment from 'moment'
 import { secondsToHourMin } from '@/utils/timeUtils'
 
+const EventInner = styled(Button)`
+  display: flex;
+  align-items: center;
+`
 function calendarFiltersReducer(state, action) {
   switch (action.type) {
     case 'CHANGE_CATEGORY':
@@ -118,7 +122,7 @@ const CalendarModal = () => {
               id: task._id,
               allDay: false,
               backgroundColor: step.category.color.color,
-              date: step.startDate,
+              start: step.startDate,
               color: step.category.color.color,
               end: step.startDate + (task?.totalDuration || 0),
               title: task.name,
@@ -213,10 +217,10 @@ const CalendarModal = () => {
 
                   return (
                     <ItemContainer width="100%" height="100%">
-                      <Button
+                      <EventInner
                         width="100%"
                         color={props.backgroundColor}
-                        padding={task.totalDuration / 60 / 60 ? '0' : '0.25rem 0.5rem'}
+                        padding={task.totalDuration / 60 / 60 > task.totalDuration ? '0' : '0.25rem 0.5rem'}
                       >
                         <JustifyBetweenRow width="100%">
                           <H1 fontSize="0.7rem" color={colors.white.secondary}>
@@ -226,7 +230,7 @@ const CalendarModal = () => {
                             {secondsToHourMin(task.totalDuration, true)}
                           </H1>
                         </JustifyBetweenRow>
-                      </Button>
+                      </EventInner>
 
                       <StyledReactTooltip id={'taskProgressTooltip-' + props.event.id} effect="solid">
                         <JustifyCenterColumn>

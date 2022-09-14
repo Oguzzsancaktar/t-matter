@@ -1,7 +1,7 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { IColor, IJobTitle, ILocation, IQueryParams, IRefferedBy, IRelativeType } from '@/models'
+import { IColor, ICustomerType, IJobTitle, ILocation, IQueryParams, IRefferedBy, IRelativeType } from '@/models'
 
 const DYNAMIC_VARIABLES_API_REDUCER_PATH = 'dynamicVariablesApi'
 const DYNAMIC_VARIABLES_TAG = 'dynamicVariablesTag'
@@ -392,6 +392,82 @@ const updateColorStatus = (builder: IBuilder) => {
   })
 }
 
+// CustomerType
+const createCustomerType = (builder: IBuilder) => {
+  return builder.mutation<string, Omit<ICustomerType, 'status' | '_id'>>({
+    query(dto) {
+      return {
+        url: '/dynamic-variables/customer-type',
+        method: 'POST',
+        data: { name: dto.name, color: dto.color._id }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getCustomerTypes = (builder: IBuilder) => {
+  return builder.query<ICustomerType[], IQueryParams>({
+    query({ search = '', size, status = 1 }) {
+      return {
+        url: `/dynamic-variables/customer-type?search=${search !== undefined ? search : ''}&status=${
+          status !== undefined ? status : ''
+        }&size=${size !== undefined ? size : ''}`,
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getCustomerTypeById = (builder: IBuilder) => {
+  return builder.query<ICustomerType, ICustomerType['_id']>({
+    query(id) {
+      return {
+        url: `/dynamic-variables/customer-type/${id}`,
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const patchCustomerType = (builder: IBuilder) => {
+  return builder.mutation<ICustomerType, Omit<ICustomerType, 'status'>>({
+    query(dto) {
+      return {
+        url: `/dynamic-variables/customer-type/${dto._id}`,
+        method: 'PATCH',
+        data: { name: dto.name, color: dto.color._id }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const updateCustomerTypeStatus = (builder: IBuilder) => {
+  return builder.mutation<any, Omit<ICustomerType, 'name' | 'color'>>({
+    query(dto) {
+      return {
+        url: `/dynamic-variables/customer-type/${dto._id}/status`,
+        method: 'PATCH',
+        data: { status: dto.status }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: DYNAMIC_VARIABLES_TAG, id: 'LIST' }]
+    }
+  })
+}
+
 const dynamicVariablesApi = createApi({
   reducerPath: DYNAMIC_VARIABLES_API_REDUCER_PATH,
   tagTypes: [DYNAMIC_VARIABLES_TAG],
@@ -425,7 +501,13 @@ const dynamicVariablesApi = createApi({
     getColors: getColors(builder),
     getColorById: getColorById(builder),
     patchColor: patchColor(builder),
-    updateColorStatus: updateColorStatus(builder)
+    updateColorStatus: updateColorStatus(builder),
+
+    createCustomerType: createCustomerType(builder),
+    getCustomerTypes: getCustomerTypes(builder),
+    getCustomerTypeById: getCustomerTypeById(builder),
+    patchCustomerType: patchCustomerType(builder),
+    updateCustomerTypeStatus: updateCustomerTypeStatus(builder)
   })
 })
 
@@ -458,7 +540,13 @@ const {
   useGetColorByIdQuery,
   usePatchColorMutation,
   useUpdateColorStatusMutation,
-  useCreateColorMutation
+  useCreateColorMutation,
+
+  useGetCustomerTypesQuery,
+  useGetCustomerTypeByIdQuery,
+  usePatchCustomerTypeMutation,
+  useUpdateCustomerTypeStatusMutation,
+  useCreateCustomerTypeMutation
 } = dynamicVariablesApi
 
 export {
@@ -487,5 +575,10 @@ export {
   useGetColorByIdQuery,
   usePatchColorMutation,
   useUpdateColorStatusMutation,
-  useCreateColorMutation
+  useCreateColorMutation,
+  useGetCustomerTypesQuery,
+  useGetCustomerTypeByIdQuery,
+  usePatchCustomerTypeMutation,
+  useUpdateCustomerTypeStatusMutation,
+  useCreateCustomerTypeMutation
 }

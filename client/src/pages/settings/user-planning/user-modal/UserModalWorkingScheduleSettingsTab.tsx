@@ -173,9 +173,12 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
   }, [dailyWorkTimeData])
 
   useEffect(() => {
+    console.log(userDailyWorkingHourData)
     if (userDailyWorkingHourData && !userDailyWorkingHourIsLoading) {
       setPayrollDay(userDailyWorkingHourData.payrollDay)
-      setDailyWorkTimeData(userDailyWorkingHourData.workingSchedule)
+      if (userDailyWorkingHourData.workingSchedule) {
+        setDailyWorkTimeData(userDailyWorkingHourData.workingSchedule)
+      }
       setUserDefaultPayrollRate(userDailyWorkingHourData.defaultPayrollRate)
     }
   }, [userDailyWorkingHourData, userDailyWorkingHourIsLoading])
@@ -199,7 +202,7 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
 
                   <Row height="100%" onClick={() => handleCheckboxClick(day)}>
                     <Checkbox
-                      isChecked={dailyWorkTimeData[EDays[day]].isChecked}
+                      isChecked={dailyWorkTimeData[EDays[day]]?.isChecked}
                       onChange={(e: any) => console.log('checkbox changed', e)}
                     />
                     <H1
@@ -280,7 +283,7 @@ const UserModalWorkingScheduleSettingsTab: React.FC<IProps> = ({ userId }) => {
               ) : (
                 <SelectInput
                   selectedOption={payrollDateOptions.filter(
-                    option => +option.value === +payrollDateOptions[payrollDay].value
+                    option => +option?.value === +payrollDateOptions[payrollDay]?.value
                   )}
                   labelText="Payroll Date"
                   name={'payrollDate'}

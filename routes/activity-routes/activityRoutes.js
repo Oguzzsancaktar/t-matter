@@ -14,6 +14,10 @@ router.get('/', (req, res) => {
   return controller.activityController.getAllActivity(req, res)
 })
 
+router.get('/category-counts', (req, res) => {
+  return controller.activityController.getCustomerActivityCategoryCounts(req, res)
+})
+
 router.post(
   '/',
   middlewares.validations.activityValidations.activityCreateValidation,

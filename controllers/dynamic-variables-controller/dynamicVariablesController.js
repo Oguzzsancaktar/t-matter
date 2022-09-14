@@ -289,6 +289,68 @@ const removeColor = async (req, res) => {
   }
 }
 
+// CustomerType
+const createCustomerType = async (req, res) => {
+  const { body } = req
+  try {
+    const createdCustomerType = await dataAccess.customerTypeDataAccess.createCustomerType(body)
+    res.status(StatusCodes.CREATED).send(createdCustomerType)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getCustomerTypes = async (req, res) => {
+  const { search, size, status } = req.query
+
+  try {
+    const customerTypes = await dataAccess.customerTypeDataAccess.getCustomerTypes({ search, size, status })
+    res.status(StatusCodes.OK).json(customerTypes)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getCustomerTypeById = async (req, res) => {
+  const { id } = req.params
+  try {
+    const customerType = await dataAccess.customerTypeDataAccess.findCustomerTypeById(id, '')
+    res.status(StatusCodes.OK).json(customerType)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const updateCustomerType = async (req, res) => {
+  const { _id, ...data } = req.body
+  try {
+    const updatedCustomerType = await dataAccess.customerTypeDataAccess.findByIdAndUpdateCustomerType(
+      _id ? _id : req.params.id,
+      data
+    )
+    res.status(StatusCodes.OK).json(updatedCustomerType)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const removeCustomerType = async (req, res) => {
+  const { id } = req.params
+  try {
+    const updatedCustomerType = await dataAccess.customerTypeDataAccess.findByIdAndUpdateJobTitle(id, {
+      status: STATUS_TYPES.INACTIVE
+    })
+    res.status(StatusCodes.OK).json(updatedCustomerType)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createJobTitle,
   getJobTitles,
@@ -313,6 +375,12 @@ module.exports = {
   getRelativeTypeById,
   updateRelativeType,
   removeRelativeType,
+
+  createCustomerType,
+  getCustomerTypes,
+  getCustomerTypeById,
+  updateCustomerType,
+  removeCustomerType,
 
   createColor,
   getColors,

@@ -45,9 +45,25 @@ const getCustomerActivity = async (req, res) => {
   }
 }
 
+const getCustomerActivityCategoryCounts = async (req, res) => {
+  const { customerId } = req.query
+
+  try {
+    const activityCategoryCounts = await dataAccess.activityDataAccess.getActivityCategoryCounts(customerId)
+    console.log(activityCategoryCounts)
+    res.send(activityCategoryCounts)
+  } catch (e) {
+    console.log(e)
+    res
+      .status(500)
+      .json(utils.errorUtils.errorInstance({ message: 'Error while getting customer activity category counts' }))
+  }
+}
+
 module.exports = {
   createActivity,
   getTaskActivity,
   getAllActivity,
-  getCustomerActivity
+  getCustomerActivity,
+  getCustomerActivityCategoryCounts
 }

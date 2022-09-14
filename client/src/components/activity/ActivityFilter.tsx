@@ -1,6 +1,6 @@
 import colors from '@/constants/colors'
-import { EActivity, IUser } from '@/models'
-import { useGetActivitiesQuery } from '@/services/activityService'
+import { EActivity, ITaskCategory, IUser } from '@/models'
+import { useGetActivitiesQuery, useGetCustomerActivityCategoryCountsQuery } from '@/services/activityService'
 import { selectColorForActivityType } from '@/utils/statusColorUtil'
 import React, { useEffect, useMemo, useState } from 'react'
 import ReactTooltip from 'react-tooltip'
@@ -15,7 +15,7 @@ interface IStyledProps {
 
 interface IProps {
   handleFilterUserChange: (responsible: IUser) => void
-  handleTypeFilter: (activityType: number) => void
+  handleCategoryFilter: (activityType: ITaskCategory['_id']) => void
   userFilter?: IUser
 }
 const FilterBlock = styled.div<IStyledProps>`
@@ -31,65 +31,26 @@ const FilterBlock = styled.div<IStyledProps>`
   cursor: pointer;
 `
 
-const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleTypeFilter, userFilter }) => {
-  const { data: activitiesData, isLoading } = useGetActivitiesQuery({})
+const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleCategoryFilter, userFilter }) => {
+  const { data: activityCategoryCountsData, isLoading: activtyActegoryCountsIsLoading } =
+    useGetCustomerActivityCategoryCountsQuery()
 
-  const activityTypesArr = useMemo(() => Object.keys(EActivity), [EActivity])
-  const activityTypes = [...JSON.parse(JSON.stringify(activityTypesArr))].slice(
-    activityTypesArr.length / 2,
-    activityTypesArr.length
-  )
-  const obj = activityTypes.reduce((o, key) => Object.assign(o, { [key]: 0 }), {})
-
-  const [activityTypeValues, setActivityTypeValues] = useState(obj)
+  const [totalActivity, setTotalActivity] = useState(0)
 
   useEffect(() => {
-    ReactTooltip.rebuild()
-
-    if (activitiesData) {
-      const stepStatusesR = activitiesData.reduce(
-        (acc, activity) => {
-          if (activity.type === EActivity.NORMAL_NOTE) {
-            acc.NORMAL_NOTE++
-          }
-          if (activity.type === EActivity.TASK_CANCELED) {
-            acc.TASK_CANCELED++
-          }
-          if (activity.type === EActivity.TASK_CHECKLIST_CHECKED) {
-            acc.TASK_CHECKLIST_CHECKED++
-          }
-          if (activity.type === EActivity.TASK_FINISHED) {
-            acc.TASK_FINISHED++
-          }
-
-          if (activity.type === EActivity.TASK_POSTPONED) {
-            acc.TASK_POSTPONED++
-          }
-
-          if (activity.type === EActivity.TASK_POSTPONED) {
-            acc.TASK_POSTPONED++
-          }
-
-          if (activity.type === EActivity.TASK_RESPONSIBLE_CHANGED) {
-            acc.TASK_RESPONSIBLE_CHANGED++
-          }
-
-          if (activity.type === EActivity.TASK_STARTED) {
-            acc.TASK_STARTED++
-          }
-          return acc
-        },
-        { ...obj }
-      )
-      setActivityTypeValues(stepStatusesR)
+    if (activityCategoryCountsData) {
+      let total = 0
+      activityCategoryCountsData.forEach(cat => (total += cat.count))
+      setTotalActivity(total)
     }
-  }, [activitiesData])
+    ReactTooltip.rebuild()
+  }, [activityCategoryCountsData])
 
-  if (isLoading) {
+  if (activtyActegoryCountsIsLoading) {
     return <div>Loading...</div>
   }
 
-  if (!activitiesData) {
+  if (!activityCategoryCountsData) {
     return <div>Activiries Loading...</div>
   }
 
@@ -101,17 +62,14 @@ const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleTypeFi
         </ItemContainer>
         <ItemContainer width="calc(100% - 35px - 1rem)" borderRadius="1rem" overflow="hidden" margin="auto">
           <Row width="100%">
-            {activityTypes.map((type, index) => (
+            {activityCategoryCountsData.map((type, index) => (
               <ItemContainer
                 key={index}
-                onClick={() => handleTypeFilter(+EActivity[type])}
-                width={(activityTypeValues[type] / activitiesData.length) * 100 + '%'}
-                margin={activityTypes.length !== index + 1 && index !== 0 ? ' 0 1px' : ''}
+                onClick={() => handleCategoryFilter(type._id?._id)}
+                width={(type.count / totalActivity) * 100 + '%'}
+                margin={totalActivity !== index + 1 && index !== 0 ? ' 0 1px' : ''}
               >
-                <FilterBlock
-                  data-tip={type.split('_').join(' ') + ' - ' + activityTypeValues[type]}
-                  color={selectColorForActivityType(+EActivity[type]) + '90'}
-                ></FilterBlock>
+                <FilterBlock data-tip={type + ' - ' + type.count} color={type._id?.color + '90'}></FilterBlock>
               </ItemContainer>
             ))}
           </Row>

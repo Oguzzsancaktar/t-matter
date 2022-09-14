@@ -1,7 +1,7 @@
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
-import { IActivity, IActivityCreate, IActivityFilter, ICustomer, ITask } from '@/models'
+import { IActivity, IActivityCategoryCounts, IActivityCreate, IActivityFilter, ICustomer, ITask } from '@/models'
 
 const ACTIVITY_API_REDUCER_PATH = 'activityApi'
 const ACTIVITY_TAG = 'activityTag'
@@ -35,16 +35,28 @@ const getActivities = (builder: IBuilder) => {
   })
 }
 
+const getCustomerActivityCategoryCounts = (builder: IBuilder) => {
+  return builder.query<IActivityCategoryCounts[], void>({
+    query() {
+      return {
+        url: '/activity/category-counts',
+        method: 'GET'
+      }
+    }
+  })
+}
+
 const activityApi = createApi({
   reducerPath: ACTIVITY_API_REDUCER_PATH,
   tagTypes: [ACTIVITY_TAG],
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
     createActivity: createActivity(builder),
-    getActivities: getActivities(builder)
+    getActivities: getActivities(builder),
+    getCustomerActivityCategoryCounts: getCustomerActivityCategoryCounts(builder)
   })
 })
 
-const { useCreateActivityMutation, useGetActivitiesQuery } = activityApi
+const { useCreateActivityMutation, useGetActivitiesQuery, useGetCustomerActivityCategoryCountsQuery } = activityApi
 
-export { activityApi, useCreateActivityMutation, useGetActivitiesQuery }
+export { activityApi, useCreateActivityMutation, useGetActivitiesQuery, useGetCustomerActivityCategoryCountsQuery }

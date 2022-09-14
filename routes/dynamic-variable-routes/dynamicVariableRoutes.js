@@ -113,4 +113,26 @@ router.patch(
   controllers.dynamicVariableController.updateColor
 )
 
+// CustomerType
+router.post(
+  '/customer-type',
+  middlewares.validations.dynamicVariableValidations.createCustomerTypeValidation,
+  controllers.dynamicVariableController.createCustomerType
+)
+
+router.get('/customer-type', controllers.dynamicVariableController.getCustomerTypes)
+router.get('/customer-type/:id', controllers.dynamicVariableController.getCustomerTypeById)
+
+router.patch(
+  '/customer-type/:id',
+  middlewares.validations.dynamicVariableValidations.updateCustomerTypeValidation,
+  controllers.dynamicVariableController.updateCustomerType
+)
+
+router.patch(
+  '/customer-type/:id/status',
+  middlewares.validations.generalValidations.statusUpdateValidation,
+  controllers.dynamicVariableController.updateCustomerType
+)
+
 module.exports = router

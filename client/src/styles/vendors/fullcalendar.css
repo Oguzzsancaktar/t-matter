@@ -31,7 +31,7 @@
   flex-wrap: wrap;
 }
 .fc .fc-toolbar .fc-button {
-  padding: 0.438rem 0.5rem;
+  padding: 0.2rem 0.5rem;
 }
 .fc .fc-toolbar .fc-button:active,
 .fc .fc-toolbar .fc-button:focus {
@@ -50,7 +50,7 @@
 }
 .fc .fc-toolbar .fc-button-group .fc-button-primary:not(.fc-prev-button):not(.fc-next-button).fc-button-active,
 .fc .fc-toolbar .fc-button-group .fc-button-primary:not(.fc-prev-button):not(.fc-next-button):hover {
-  background-color: rgba(255, 0, 0, 0.2) !important;
+  background-color: rgba(39, 78, 87, 0.2) !important;
   border-color: #223446 !important;
   color: #223446;
 }
@@ -78,7 +78,7 @@
 .fc .fc-toolbar .fc-button-group .fc-timeGridWeek-button,
 .fc .fc-toolbar .fc-button-group .fc-timeGridDay-button,
 .fc .fc-toolbar .fc-button-group .fc-listMonth-button {
-  padding: 0.55rem 1.5rem;
+  padding: 0.3rem 0.5rem;
 }
 .fc .fc-toolbar .fc-button-group .fc-dayGridMonth-button:last-child,
 .fc .fc-toolbar .fc-button-group .fc-timeGridWeek-button:last-child,
@@ -110,6 +110,7 @@
 }
 
 .fc .fc-toolbar .fc-toolbar-title {
+  font-size: 1.5rem;
   margin-left: 0.25rem;
 }
 .fc .fc-toolbar .fc--button:empty,
@@ -263,7 +264,7 @@
   font-size: 1.45rem;
 }
 .app-calendar .fc-header-toolbar {
-  margin-bottom: 1.75rem !important;
+  margin-bottom: 1rem !important;
 }
 .app-calendar .fc-view-harness {
   margin: 0 -1.6rem;
@@ -300,12 +301,11 @@
   display: flex;
   flex-direction: row;
 }
+*/
 
 .fc-header-toolbar.fc-toolbar {
-  display: flex;
-  flex-direction: column !important;
-  margin: 0 !important;
-} */
+  margin-bottom: 1rem !important;
+}
 
 @media (min-width: 992px) {
   .app-calendar .app-calendar-sidebar {

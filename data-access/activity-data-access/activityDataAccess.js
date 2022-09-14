@@ -102,9 +102,61 @@ const createActivity = data => {
   return Activity.create(data)
 }
 
+const getActivityCategoryCounts = userId => {
+  if (userId) {
+  }
+
+  return Activity.aggregate([
+    {
+      $lookup: {
+        from: 'tasks',
+        localField: 'task',
+        foreignField: '_id',
+        as: 'task'
+      }
+    },
+    {
+      $unwind: {
+        path: '$task',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $project: {
+        step: {
+          $arrayElemAt: ['$task.steps', '$step']
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'workflowcategories',
+        localField: 'step.category',
+        foreignField: '_id',
+        as: 'category'
+      }
+    },
+    {
+      $unwind: {
+        path: '$category',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $group: {
+        _id: '$category',
+        count: {
+          $sum: 1
+        }
+      }
+    }
+  ])
+}
+
 module.exports = {
   getTaskActivity,
   getCustomerActivity,
   getAllActivity,
-  createActivity
+  createActivity,
+  getActivityCategoryCounts
 }

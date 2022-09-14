@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Column, ItemContainer, Row, Tab } from '@components/index'
-import { ClientTypeTab, LocationsTab, RefferedByTab, RelativeTypeTab } from '@/pages'
+import { CustomerTypeTab, LocationsTab, RefferedByTab, RelativeTypeTab } from '@/pages'
 import colors from '@/constants/colors'
 import { JobTitleTab } from './job-title-tab'
 import { ColorsTab } from './colors-tab'
@@ -33,13 +33,7 @@ const CompanyVariables = () => {
               isActive={activeTab === 'relative-type'}
               onClick={() => setActiveTab('relative-type')}
             />
-            {/* <Tab
-            margin="0 0 1rem 0rem"
-            index={2}
-            name="Client Type"
-            isActive={activeTab === 'client-type'}
-            onClick={() => setActiveTab('client-type')}
-          /> */}
+
             <Tab
               margin="0 0 1rem 0rem"
               index={2}
@@ -61,14 +55,20 @@ const CompanyVariables = () => {
               isActive={activeTab === 'colors'}
               onClick={() => setActiveTab('colors')}
             />
+
+            <Tab
+              margin="0 0 1rem 0rem"
+              index={5}
+              name="Customer Type"
+              isActive={activeTab === 'customer-type'}
+              onClick={() => setActiveTab('customer-type')}
+            />
           </Column>
         </ItemContainer>
 
         <Column height="100%">
           {activeTab === 'reffered-by' ? (
             <RefferedByTab />
-          ) : activeTab === 'client-type' ? (
-            <ClientTypeTab />
           ) : activeTab === 'relative-type' ? (
             <RelativeTypeTab />
           ) : activeTab === 'locations' ? (
@@ -77,6 +77,8 @@ const CompanyVariables = () => {
             <JobTitleTab />
           ) : activeTab === 'colors' ? (
             <ColorsTab />
+          ) : activeTab === 'customer-type' ? (
+            <CustomerTypeTab />
           ) : (
             ''
           )}

@@ -56,7 +56,7 @@ const TaskInformations: React.FC<IProps> = ({
 
     Swal.fire({
       title: 'Enter your note message',
-      input: 'text',
+      input: 'textarea',
       inputAttributes: {
         autocapitalize: 'off'
       },

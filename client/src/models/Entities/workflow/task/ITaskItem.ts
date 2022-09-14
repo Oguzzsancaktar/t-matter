@@ -6,7 +6,7 @@ export default interface ITaskItem {
   category: Omit<ITaskCategory, 'status'>
   location: Omit<ILocation, 'status'>
   tabs: string[]
-  responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser
+  responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname' | 'profile_img'> | IUser
   startDate: number
   endDate: number
   stepStatus: number
