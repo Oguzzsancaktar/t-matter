@@ -20,6 +20,13 @@ const Component = {
 const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
   const [activeTab, setActiveTab] = useState('EstimateTab')
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+
+  const handleToggle = (e: React.MouseEvent<Element, MouseEvent>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsHistoryOpen(!isHistoryOpen)
+  }
+
   return (
     <ItemContainer height="100%" minHeight="700px">
       <Column height="100%">
@@ -53,11 +60,14 @@ const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
               </JustifyCenterRow>
             </JustifyBetweenColumn>
           </ItemContainer>
-          <ShowHistory onClick={() => setIsHistoryOpen(true)} />
+          {!isHistoryOpen && <ShowHistory onClick={handleToggle}>Show History</ShowHistory>}
         </ModalHeader>
 
         {React.createElement(Component[activeTab], { customerId })}
-        <SideDrawer onOutsideClick={() => setIsHistoryOpen(false)} isHistoryOpen={isHistoryOpen}></SideDrawer>
+        <SideDrawer
+          onOutsideClick={() => setTimeout(() => setIsHistoryOpen(false), 0)}
+          isHistoryOpen={isHistoryOpen}
+        ></SideDrawer>
       </Column>
     </ItemContainer>
   )
