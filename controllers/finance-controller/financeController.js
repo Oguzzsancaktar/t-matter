@@ -93,7 +93,7 @@ const createInstallment = async (req, res) => {
       invoice.notes.push(body.note)
       await invoice.save()
     }
-    if (deposit == 0) {
+    if (deposit != 0) {
       await dataAccess.financeDataAccess.createInstallment({
         type: INSTALLMENT_TYPES.DEPOSIT,
         invoice: params.invoiceId,
