@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { EActivity, ICustomer, IUser } from '@/models'
+import { EActivity, ICustomer, ITaskCategory, IUser } from '@/models'
 import { ActivityFilter, Column, ItemContainer, JustifyCenterColumn } from '@/components'
 import { useGetActivitiesQuery } from '@services/activityService'
 import ActivityItem from '@components/activity/ActivityItem'
@@ -21,8 +21,8 @@ const CustomerModalActivityTab: React.FC<IProps> = ({ customerId }) => {
     setUserFilter(user)
   }
 
-  const handleTypeFilter = (type: EActivity) => {
-    setActivityFilter({ ...activityFilter, type: type })
+  const handleTypeFilter = (categoryId: ITaskCategory['_id']) => {
+    setActivityFilter({ ...activityFilter, categoryId })
   }
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const CustomerModalActivityTab: React.FC<IProps> = ({ customerId }) => {
           <ActivityFilter
             userFilter={userFilter}
             handleFilterUserChange={handleFilterUserChange}
-            handleTypeFilter={handleTypeFilter}
+            handleCategoryFilter={handleTypeFilter}
           />
         </ItemContainer>
 
