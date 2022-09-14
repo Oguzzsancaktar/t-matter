@@ -102,11 +102,9 @@ const createActivity = data => {
   return Activity.create(data)
 }
 
-const getActivityCategoryCounts = userId => {
-  if (userId) {
-  }
-
-  return Activity.aggregate([
+const getActivityCategoryCounts = categoryId => {
+  const pipeline = []
+  const pipeFirst = [
     {
       $lookup: {
         from: 'tasks',
@@ -139,6 +137,30 @@ const getActivityCategoryCounts = userId => {
     {
       $unwind: {
         path: '$category',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]
+
+  pipeline.push(...pipeFirst)
+  if (categoryId) {
+    console.log('xxxx')
+    pipeline.push({ $match: { 'category._id': mongoose.Types.ObjectId(categoryId) } })
+  }
+
+  return Activity.aggregate([
+    ...pipeline,
+    {
+      $lookup: {
+        from: 'colors',
+        localField: 'category.color',
+        foreignField: '_id',
+        as: 'category.color'
+      }
+    },
+    {
+      $unwind: {
+        path: '$category.color',
         preserveNullAndEmptyArrays: true
       }
     },

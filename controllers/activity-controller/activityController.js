@@ -46,11 +46,10 @@ const getCustomerActivity = async (req, res) => {
 }
 
 const getCustomerActivityCategoryCounts = async (req, res) => {
-  const { customerId } = req.query
+  const { categoryId } = req.query
 
   try {
-    const activityCategoryCounts = await dataAccess.activityDataAccess.getActivityCategoryCounts(customerId)
-    console.log(activityCategoryCounts)
+    const activityCategoryCounts = await dataAccess.activityDataAccess.getActivityCategoryCounts(categoryId)
     res.send(activityCategoryCounts)
   } catch (e) {
     console.log(e)
