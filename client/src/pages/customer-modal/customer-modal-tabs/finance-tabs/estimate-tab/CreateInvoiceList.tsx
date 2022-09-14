@@ -15,8 +15,11 @@ const Item = styled(JustifyBetweenRow)`
   padding: 0.2rem 1rem;
   border-radius: 5px;
   border: 1px solid #e0e0e0;
-  background: ${colors.background.gray.light};
+  background: #e0e0e0;
   margin-bottom: 0.5rem;
+  & h1 {
+    font-size: 13px;
+  }
 `
 
 const ExpiredItem = styled(JustifyBetweenRow)`
@@ -25,6 +28,9 @@ const ExpiredItem = styled(JustifyBetweenRow)`
   border: 1px solid #e0e0e0;
   background: #d08989;
   margin-bottom: 0.5rem;
+  & h1 {
+    font-size: 13px;
+  }
 `
 
 const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks, expiredTaskSteps }) => {
@@ -50,10 +56,10 @@ const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks, expiredTaskSt
                     return (
                       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <ExpiredItem>
-                          <H1 color={colors.black.primary}>
+                          <H1 isEllipsis color={colors.black.primary}>
                             {step.task.name} - Step: {step.stepIndex + 1}
                           </H1>
-                          <H1 color={colors.black.primary} textAlign="end">
+                          <H1 width="fit-content" color={colors.black.primary} textAlign="end">
                             ${+Math.ceil(step.expiredTimePrice)}
                           </H1>
                         </ExpiredItem>
@@ -70,8 +76,10 @@ const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks, expiredTaskSt
                     return (
                       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <Item>
-                          <H1 color={colors.black.primary}>{task.name}</H1>
-                          <H1 color={colors.black.primary} textAlign="end">
+                          <H1 isEllipsis color={colors.black.primary}>
+                            {task.name}
+                          </H1>
+                          <H1 width="fit-content" color={colors.black.primary} textAlign="end">
                             ${+Math.ceil(task.totalPrice || 0)}
                           </H1>
                         </Item>

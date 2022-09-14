@@ -34,18 +34,20 @@ const InvoiceItem = ({ invoice, isOpen: isInvoiceOpen }: { invoice: Invoice; isO
       }}
     >
       <JustifyBetweenRow>
-        <H1 margin="0 0.5rem 0 0" color={colors.black.middle} width="fit-content">
+        <H1 fontSize="12px" margin="0 0.5rem 0 0" color={colors.black.middle} width="fit-content">
           {moment(invoice.createdAt).format('DD/MMM')}
         </H1>
-        <H1 color={colors.black.middle}>{invoice.category.name}</H1>
-        <JustifyBetweenRow>
-          <H1 color={colors.black.middle} textAlign="end">
+        <H1 isEllipsis fontSize="12px" color={colors.black.middle}>
+          {invoice.category.name}
+        </H1>
+        <JustifyBetweenRow width="fit-content">
+          <H1 width="fit-content" fontSize="12px" color={colors.black.middle} textAlign="end">
             ${+Math.ceil(invoice.total)}
           </H1>
           {isOpen ? (
-            <ChevronUp style={{ minWidth: 20 }} size={20} onClick={handleToggle} />
+            <ChevronUp style={{ minWidth: 20, color: colors.black.middle }} size={20} onClick={handleToggle} />
           ) : (
-            <ChevronDown style={{ minWidth: 20 }} size={20} onClick={handleToggle} />
+            <ChevronDown style={{ minWidth: 20, color: colors.black.middle }} size={20} onClick={handleToggle} />
           )}
         </JustifyBetweenRow>
       </JustifyBetweenRow>
@@ -55,8 +57,10 @@ const InvoiceItem = ({ invoice, isOpen: isInvoiceOpen }: { invoice: Invoice; isO
           {invoice?.tasks?.map(task => {
             return (
               <JustifyBetweenRow margin="0 0 0.3rem 0">
-                <H1 color={colors.black.middle}>{task.name}</H1>
-                <H1 color={colors.black.middle} textAlign="end">
+                <H1 isEllipsis fontSize="12px" color={colors.black.middle}>
+                  {task.name}
+                </H1>
+                <H1 width="fit-content" fontSize="12px" color={colors.black.middle} textAlign="end">
                   ${+Math.ceil(task.totalPrice || 0)}
                 </H1>
               </JustifyBetweenRow>
@@ -65,10 +69,10 @@ const InvoiceItem = ({ invoice, isOpen: isInvoiceOpen }: { invoice: Invoice; isO
           {invoice.expiredTaskSteps?.map(step => {
             return (
               <JustifyBetweenRow margin="0 0 0.3rem 0">
-                <H1 color={colors.black.middle}>
+                <H1 isEllipsis fontSize="12px" color={colors.black.middle}>
                   {step.task.name} - Step: {step.stepIndex + 1}
                 </H1>
-                <H1 color={colors.black.middle} textAlign="end">
+                <H1 width="fit-content" fontSize="12px" color={colors.black.middle} textAlign="end">
                   ${+Math.ceil(step.expiredTimePrice)}
                 </H1>
               </JustifyBetweenRow>

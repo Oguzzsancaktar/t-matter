@@ -13,6 +13,9 @@ const H1Styled = styled.h1<Omit<ITextComponentProps, 'children'>>`
   font-weight: ${({ fontWeight }) => (fontWeight ? fontWeight : '0')};
   font-family: ${({ fontFamily }) => (fontFamily ? fontFamily : 'Satoshi-Regular')};
   cursor: ${({ cursor }) => (cursor ? cursor : 'default')};
+  white-space: ${props => (props.isEllipsis ? 'nowrap' : 'unset')};
+  overflow: ${props => (props.isEllipsis ? 'hidden' : 'unset')};
+  text-overflow: ${props => (props.isEllipsis ? 'ellipsis' : 'unset')};
 `
 const H1: React.FC<ITextComponentProps> = ({ children, ...rest }) => {
   return <H1Styled {...rest}>{children}</H1Styled>

@@ -13,9 +13,12 @@ interface IProps {
 const Item = styled(JustifyBetweenRow)`
   padding: 0.2rem 1rem;
   border: 1px solid #e0e0e0;
-  background: ${colors.background.gray.light};
+  background: #e0e0e0;
   margin-bottom: 0.5rem;
   border-radius: 5px;
+  & h1 {
+    font-size: 13px;
+  }
 `
 
 const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
@@ -41,8 +44,10 @@ const NonBillableList: React.FC<IProps> = ({ nonBillableTasks }) => {
                     return (
                       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <Item>
-                          <H1 color={colors.black.primary}>{task.name}</H1>
-                          <H1 color={colors.black.primary} textAlign="end">
+                          <H1 isEllipsis color={colors.black.primary}>
+                            {task.name}
+                          </H1>
+                          <H1 width="fit-content" color={colors.black.primary} textAlign="end">
                             ${+Math.ceil(task.totalPrice || 0)}
                           </H1>
                         </Item>
