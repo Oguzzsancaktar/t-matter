@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { ICustomer } from '@/models'
-import { Column, ItemContainer, JustifyBetweenColumn, JustifyCenterRow, Tab } from '@/components'
+import { Column, ItemContainer, JustifyBetweenColumn, JustifyCenterRow, SideDrawer, Tab } from '@/components'
 import { ModalBody, ModalHeader } from '@components/modals/types'
 import InvoiceTab from '@pages/customer-modal/customer-modal-tabs/finance-tabs/InvoiceTab'
 import EstimateTab from '@pages/customer-modal/customer-modal-tabs/finance-tabs/estimate-tab/EstimateTab'
 import InstallmentTab from '@pages/customer-modal/customer-modal-tabs/finance-tabs/InstallmentTab'
+import ShowHistory from '@components/show-history/ShowHistory'
 
 interface IProps {
   customerId: ICustomer['_id']
@@ -15,11 +16,10 @@ const Component = {
   EstimateTab,
   InstallmentTab
 }
-console.log('Component', Component)
 
 const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
   const [activeTab, setActiveTab] = useState('EstimateTab')
-
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   return (
     <ItemContainer height="100%" minHeight="700px">
       <Column height="100%">
@@ -53,9 +53,11 @@ const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
               </JustifyCenterRow>
             </JustifyBetweenColumn>
           </ItemContainer>
+          <ShowHistory onClick={() => setIsHistoryOpen(true)} />
         </ModalHeader>
 
         {React.createElement(Component[activeTab], { customerId })}
+        <SideDrawer onOutsideClick={() => setIsHistoryOpen(false)} isHistoryOpen={isHistoryOpen}></SideDrawer>
       </Column>
     </ItemContainer>
   )
