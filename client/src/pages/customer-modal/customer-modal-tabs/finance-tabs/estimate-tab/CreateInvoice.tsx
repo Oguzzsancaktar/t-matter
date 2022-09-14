@@ -91,7 +91,7 @@ const CreateInvoice: React.FC<IProps> = ({
             children={<DollarSign size="16px" />}
             name="amount"
             type="number"
-            value={invoice?.amount ? invoice?.amount : undefined}
+            value={invoice?.amount ? +Math.ceil(invoice?.amount) : undefined}
           />
         </JustifyBetweenRow>
       </JustifyBetweenRow>
@@ -104,7 +104,7 @@ const CreateInvoice: React.FC<IProps> = ({
             name="discount"
             type="number"
             onChange={handleInputChange}
-            value={invoice?.discount ? invoice?.discount : undefined}
+            value={invoice?.discount ? +Math.ceil(invoice?.discount) : undefined}
           />
         </JustifyBetweenRow>
         <JustifyBetweenRow margin="0 0 0 0.5rem">
@@ -116,7 +116,7 @@ const CreateInvoice: React.FC<IProps> = ({
             name="total"
             type="number"
             onChange={handleInputChange}
-            value={invoice?.total ? invoice?.total : undefined}
+            value={invoice?.total ? +Math.ceil(invoice?.total) : undefined}
           />
         </JustifyBetweenRow>
       </JustifyBetweenRow>

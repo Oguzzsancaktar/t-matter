@@ -5,6 +5,7 @@ import colors from '@constants/colors'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import JustifyBetweenRow from '@components/layout/JustifyBetweenRow'
 import { ChevronDown, ChevronUp } from 'react-feather'
+import moment from 'moment'
 
 interface IProps {
   invoices?: Invoice[]
@@ -26,19 +27,26 @@ const InvoiceItem = ({ invoice, isOpen: isInvoiceOpen }: { invoice: Invoice; isO
     <div
       style={{
         backgroundColor: '#add8e6',
-        padding: '0.5rem 1rem',
+        padding: '0.2rem 1rem',
         border: '1px solid #e0e0e0',
         marginBottom: '0.5rem',
         borderRadius: '5px'
       }}
     >
       <JustifyBetweenRow>
+        <H1 margin="0 0.5rem 0 0" color={colors.black.middle} width="fit-content">
+          {moment(invoice.createdAt).format('DD/MMM')}
+        </H1>
         <H1 color={colors.black.middle}>{invoice.category.name}</H1>
         <JustifyBetweenRow>
           <H1 color={colors.black.middle} textAlign="end">
-            ${invoice.total?.toFixed(2)}
+            ${+Math.ceil(invoice.total)}
           </H1>
-          {isOpen ? <ChevronUp size={28} onClick={handleToggle} /> : <ChevronDown size={28} onClick={handleToggle} />}
+          {isOpen ? (
+            <ChevronUp style={{ minWidth: 20 }} size={20} onClick={handleToggle} />
+          ) : (
+            <ChevronDown style={{ minWidth: 20 }} size={20} onClick={handleToggle} />
+          )}
         </JustifyBetweenRow>
       </JustifyBetweenRow>
       {isOpen && (
@@ -49,7 +57,7 @@ const InvoiceItem = ({ invoice, isOpen: isInvoiceOpen }: { invoice: Invoice; isO
               <JustifyBetweenRow margin="0 0 0.3rem 0">
                 <H1 color={colors.black.middle}>{task.name}</H1>
                 <H1 color={colors.black.middle} textAlign="end">
-                  ${task.totalPrice?.toFixed(2)}
+                  ${+Math.ceil(task.totalPrice || 0)}
                 </H1>
               </JustifyBetweenRow>
             )
@@ -61,7 +69,7 @@ const InvoiceItem = ({ invoice, isOpen: isInvoiceOpen }: { invoice: Invoice; isO
                   {step.task.name} - Step: {step.stepIndex + 1}
                 </H1>
                 <H1 color={colors.black.middle} textAlign="end">
-                  ${step.expiredTimePrice?.toFixed(2)}
+                  ${+Math.ceil(step.expiredTimePrice)}
                 </H1>
               </JustifyBetweenRow>
             )

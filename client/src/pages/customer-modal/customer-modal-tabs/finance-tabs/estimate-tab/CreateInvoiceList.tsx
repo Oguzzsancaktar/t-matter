@@ -12,14 +12,16 @@ interface IProps {
 }
 
 const Item = styled(JustifyBetweenRow)`
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 1rem;
+  border-radius: 5px;
   border: 1px solid #e0e0e0;
   background: ${colors.background.gray.light};
   margin-bottom: 0.5rem;
 `
 
 const ExpiredItem = styled(JustifyBetweenRow)`
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 1rem;
+  border-radius: 5px;
   border: 1px solid #e0e0e0;
   background: #d08989;
   margin-bottom: 0.5rem;
@@ -52,7 +54,7 @@ const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks, expiredTaskSt
                             {step.task.name} - Step: {step.stepIndex + 1}
                           </H1>
                           <H1 color={colors.black.primary} textAlign="end">
-                            ${step.expiredTimePrice?.toFixed(2)}
+                            ${+Math.ceil(step.expiredTimePrice)}
                           </H1>
                         </ExpiredItem>
                       </div>
@@ -70,7 +72,7 @@ const CreateInvoiceList: React.FC<IProps> = ({ createInvoiceTasks, expiredTaskSt
                         <Item>
                           <H1 color={colors.black.primary}>{task.name}</H1>
                           <H1 color={colors.black.primary} textAlign="end">
-                            ${task.totalPrice?.toFixed(2)}
+                            ${+Math.ceil(task.totalPrice || 0)}
                           </H1>
                         </Item>
                       </div>
