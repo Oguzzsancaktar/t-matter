@@ -17,8 +17,8 @@ const ActivityTimeline = () => {
     setUserFilter(user)
   }
 
-  const handleTypeFilter = (type: EActivity) => {
-    setActivityFilter({ ...activityFilter, type: type })
+  const handleTypeFilter = (categoryId: string) => {
+    setActivityFilter({ ...activityFilter, categoryId })
   }
 
   const { data, isLoading } = useGetActivitiesQuery(activityFilter)
@@ -37,7 +37,7 @@ const ActivityTimeline = () => {
         <ActivityFilter
           userFilter={userFilter}
           handleFilterUserChange={handleFilterUserChange}
-          handleTypeFilter={handleTypeFilter}
+          handleCategoryFilter={handleTypeFilter}
         />
       }
     >

@@ -7,7 +7,7 @@ export const emptyQueryParams: IQueryParams = {
 }
 
 export const emptyActivtyFilter: IActivityFilter = {
-  type: -9,
+  categoryId: '',
   userId: ''
 }
 

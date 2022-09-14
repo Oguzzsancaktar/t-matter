@@ -15,7 +15,7 @@ interface IStyledProps {
 
 interface IProps {
   handleFilterUserChange: (responsible: IUser) => void
-  handleCategoryFilter: (activityType: ITaskCategory['_id']) => void
+  handleCategoryFilter: (categoryId: ITaskCategory['_id']) => void
   userFilter?: IUser
 }
 const FilterBlock = styled.div<IStyledProps>`
