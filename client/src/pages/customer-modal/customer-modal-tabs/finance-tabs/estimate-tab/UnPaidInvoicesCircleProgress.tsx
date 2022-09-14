@@ -23,7 +23,7 @@ const UnPaidInvoicesCircleProgress: React.FC<IProps> = ({ customerId }) => {
       offsetY: 0
     },
     title: {
-      text: 'Un Paid',
+      text: 'Discount',
       align: 'center',
       style: {
         fontSize: '12px',
