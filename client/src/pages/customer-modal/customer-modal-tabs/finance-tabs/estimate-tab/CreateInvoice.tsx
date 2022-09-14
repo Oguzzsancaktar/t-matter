@@ -13,6 +13,7 @@ import { ICustomer, ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
 import { DollarSign } from 'react-feather'
 import { invoiceDefault } from '@constants/finance'
 import { useCreateInvoiceMutation } from '@services/settings/finance-planning/financePlanningService'
+import { toastError } from '@utils/toastUtil'
 
 interface IProps {
   invoiceCategories?: IInvoiceCategory[]
@@ -44,7 +45,7 @@ const CreateInvoice: React.FC<IProps> = ({
   }
 
   const handleCreate = async () => {
-    if (invoice && createInvoiceTasks) {
+    if (invoice && createInvoiceTasks && !!invoice.category.name) {
       const obj = {
         ...invoice,
         category: invoice.category._id,
@@ -56,6 +57,8 @@ const CreateInvoice: React.FC<IProps> = ({
       await createInvoice(obj)
       await refetch()
       setInvoice({ ...invoiceDefault })
+    } else {
+      toastError('Please fill all fields')
     }
   }
 
