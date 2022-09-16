@@ -52,7 +52,8 @@ const createInvoice = async (req, res) => {
       title: 'Invoice Created',
       description: `Invoice: $${invoice.total} has been created`,
       invoice: invoice._id,
-      customer: invoice.customer
+      customer: invoice.customer,
+      user: req.user.userId
     })
     for (const item of req.body.tasks) {
       await dataAccess.taskDataAccess.updateTaskById(item, { isInvoiced: true })
@@ -76,7 +77,8 @@ const createExpiredTaskStep = async (req, res) => {
       type: HISTORY_TYPES.CREATED,
       title: 'Extra Time Created',
       description: `Exp Task Price: $${expiredTaskStep.expiredTimePrice} has been created`,
-      customer: expiredTaskStep.customer
+      customer: expiredTaskStep.customer,
+      user: req.user.userId
     })
     res.json(expiredTaskStep)
   } catch (e) {
@@ -108,7 +110,8 @@ const createInstallment = async (req, res) => {
       title: 'Installment Plan Created',
       description: body.note,
       invoice: params.invoiceId,
-      customer: invoice.customer
+      customer: invoice.customer,
+      user: req.user.userId
     })
     if (body.note) {
       invoice.notes.push(body.note)
@@ -128,7 +131,8 @@ const createInstallment = async (req, res) => {
         description: `Deposit: $${deposit} has been created`,
         invoice: params.invoiceId,
         customer: invoice.customer,
-        installment: installment._id
+        installment: installment._id,
+        user: req.user.userId
       })
     }
     for (let i = 0; i < quantity; i++) {
@@ -146,7 +150,8 @@ const createInstallment = async (req, res) => {
         description: `Payment: $${deposit} has been created`,
         invoice: params.invoiceId,
         customer: invoice.customer,
-        installment: newInstallment._id
+        installment: newInstallment._id,
+        user: req.user.userId
       })
     }
     res.sendStatus(StatusCodes.OK)
@@ -186,7 +191,8 @@ const postponeInstallment = async (req, res) => {
       description: note,
       invoice: invoiceId,
       customer: invoice.customer,
-      installment: installmentId
+      installment: installmentId,
+      user: req.user.userId
     })
     res.sendStatus(StatusCodes.OK)
   } catch (e) {
@@ -224,7 +230,8 @@ const payInstallment = async (req, res) => {
           description: note,
           invoice: invoiceId,
           customer: invoice.customer,
-          installment: ins._id
+          installment: ins._id,
+          user: req.user.userId
         })
       } else {
         const ins = await dataAccess.financeDataAccess.updateInstallment(installmentId, {
@@ -239,7 +246,8 @@ const payInstallment = async (req, res) => {
           description: note,
           invoice: invoiceId,
           customer: invoice.customer,
-          installment: ins._id
+          installment: ins._id,
+          user: req.user.userId
         })
         amount = amount - installment.payAmount
         const installments = await dataAccess.financeDataAccess.getInstallmentsByInvoiceId(invoiceId)
@@ -260,7 +268,8 @@ const payInstallment = async (req, res) => {
               description: note,
               invoice: invoiceId,
               customer: invoice.customer,
-              installment: ins._id
+              installment: ins._id,
+              user: req.user.userId
             })
             amount = amount - rest
           } else {
@@ -276,7 +285,8 @@ const payInstallment = async (req, res) => {
               description: note,
               invoice: invoiceId,
               customer: invoice.customer,
-              installment: ins._id
+              installment: ins._id,
+              user: req.user.userId
             })
             amount = 0
           }
@@ -308,7 +318,8 @@ const payInstallment = async (req, res) => {
         description: note,
         invoice: invoiceId,
         customer: invoice.customer,
-        installment: inst._id
+        installment: inst._id,
+        user: req.user.userId
       })
       const installments = await dataAccess.financeDataAccess.getInstallmentsByInvoiceId(invoiceId)
       let index = installments.findIndex(item => item._id.toString() === installmentId)
@@ -329,7 +340,8 @@ const payInstallment = async (req, res) => {
             description: note,
             invoice: invoiceId,
             customer: invoice.customer,
-            installment: ins._id
+            installment: ins._id,
+            user: req.user.userId
           })
           amount = amount - rest
         } else {
@@ -345,7 +357,8 @@ const payInstallment = async (req, res) => {
             description: note,
             invoice: invoiceId,
             customer: invoice.customer,
-            installment: ins._id
+            installment: ins._id,
+            user: req.user.userId
           })
           amount = 0
         }
@@ -366,7 +379,8 @@ const payInstallment = async (req, res) => {
         description: note,
         invoice: invoiceId,
         customer: invoice.customer,
-        installment: ins._id
+        installment: ins._id,
+        user: req.user.userId
       })
       return res.sendStatus(StatusCodes.OK)
     }
@@ -383,7 +397,8 @@ const payInstallment = async (req, res) => {
         description: note,
         invoice: invoiceId,
         customer: invoice.customer,
-        installment: ins._id
+        installment: ins._id,
+        user: req.user.userId
       })
       return res.sendStatus(StatusCodes.OK)
     }
@@ -404,7 +419,8 @@ const resetInstallments = async (req, res) => {
       title: 'Installment Plan Reset',
       description: '',
       invoice: invoiceId,
-      customer: invoice.customer
+      customer: invoice.customer,
+      user: req.user.userId
     })
     res.sendStatus(StatusCodes.OK)
   } catch (e) {

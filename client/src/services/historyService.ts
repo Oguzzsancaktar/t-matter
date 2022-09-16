@@ -25,10 +25,10 @@ const getFinanceHistory = (builder: IBuilder) => {
   return builder.query<
     IHistory[],
     {
-      customerId: ICustomer['_id']
-      userId: IUser['_id']
-      invoiceId: Invoice['_id']
-      installmentId: IInstallment['_id']
+      customerId?: ICustomer['_id']
+      userId?: IUser['_id']
+      invoiceId?: Invoice['_id']
+      installmentId?: IInstallment['_id']
     }
   >({
     query(params) {

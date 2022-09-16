@@ -35,7 +35,7 @@ router.use('/working-schedule', workingScheduleRoutes)
 router.use('/dynamic-variables', dynamicVariableRoutes)
 router.use('/task', taskRoutes)
 router.use('/activity', activityRoutes)
-router.use('/finance', financeRoutes)
+router.use('/finance', middlewares.authMiddlewares.checkAuth, financeRoutes)
 router.use('/invoice-category', invoiceCategoryRoutes)
 router.use('/history', middlewares.authMiddlewares.checkAuth, historyRoutes)
 module.exports = router

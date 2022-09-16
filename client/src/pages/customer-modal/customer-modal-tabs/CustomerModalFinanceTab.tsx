@@ -32,7 +32,7 @@ const Component = {
 const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
   const [activeTab, setActiveTab] = useState('EstimateTab')
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
-  // const {refetch} = useGetFinanceHistoryQuery({ skip: true })
+  const { data } = useGetFinanceHistoryQuery({ customerId, userId: localStorage.getItem('userId') as string })
 
   const handleToggle = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.preventDefault()
@@ -79,7 +79,7 @@ const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
         {React.createElement(Component[activeTab], { customerId })}
         <SideDrawer onOutsideClick={() => setTimeout(() => setIsHistoryOpen(false), 0)} isHistoryOpen={isHistoryOpen}>
           <Column padding="0.6rem">
-            <JustifyBetweenRow>
+            <JustifyBetweenRow margin="0 0 1rem 0">
               <IconButton
                 // onClick={onHistory}
                 bgColor={colors.orange.primary}
@@ -111,6 +111,16 @@ const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
                 boxShadow="rgba(0, 0, 0, 0.16) 0px 1px 4px"
               />
             </JustifyBetweenRow>
+            <hr />
+            {data?.map((item, index) => (
+              <>
+                <JustifyBetweenRow margin="0.5rem 0 0.5rem 0" key={index}>
+                  <Column>title: {item.title}</Column>
+                  <Column>description: {item.description}</Column>
+                </JustifyBetweenRow>
+                <hr />
+              </>
+            ))}
           </Column>
         </SideDrawer>
       </Column>

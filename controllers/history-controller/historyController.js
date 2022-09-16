@@ -11,7 +11,7 @@ const getFinanceHistoryController = async (req, res) => {
 
 const createHistoryController = async (req, res) => {
   try {
-    const history = await dataAccess.historyDataAccess.createHistory({ ...req.body, user: req.user._id })
+    const history = await dataAccess.historyDataAccess.createHistory({ ...req.body, user: req.user.userId })
     res.status(200).json(history)
   } catch (error) {
     res.status(500).send(error)
