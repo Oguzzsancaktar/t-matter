@@ -26,6 +26,7 @@ export const Container = styled.div<IContainerProps>`
   /* background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : colors.white.secondary)}; */
   border-radius: 0.3rem;
   max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : 'none')};
+  overflow-x: ${({ overflowX }) => (overflowX ? overflowX : 'hidden')};
 `
 
 export const CloseButton = styled.button`

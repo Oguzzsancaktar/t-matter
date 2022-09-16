@@ -7,6 +7,7 @@ const calculateHourlyCompanyFee = require('../../helpers/calculateHourlyCompanyF
 const { INSTALLMENT_TYPES, INSTALLMENT_STATUS } = require('../../constants/finance')
 const moment = require('moment')
 const { errorUtils } = require('../../utils')
+const { HISTORY_TYPES } = require('../../constants/historyConstants')
 
 const getFinancePlanning = async (req, res) => {
   try {
@@ -46,6 +47,13 @@ const getInvoices = async (req, res) => {
 const createInvoice = async (req, res) => {
   try {
     const invoice = await dataAccess.financeDataAccess.createInvoice(req.body)
+    await dataAccess.historyDataAccess.createHistory({
+      type: HISTORY_TYPES.CREATED,
+      title: 'Invoice Created',
+      description: `Invoice: $${invoice.total} has been created`,
+      invoice: invoice._id,
+      customer: invoice.customer
+    })
     for (const item of req.body.tasks) {
       await dataAccess.taskDataAccess.updateTaskById(item, { isInvoiced: true })
     }
@@ -64,6 +72,12 @@ const createExpiredTaskStep = async (req, res) => {
     const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
     req.body.expiredTimePrice = hourlyCompanyFee * (req.body.expiredTime / 3600)
     const expiredTaskStep = await dataAccess.financeDataAccess.createExpiredTaskStep(req.body)
+    await dataAccess.historyDataAccess.createHistory({
+      type: HISTORY_TYPES.CREATED,
+      title: 'Extra Time Created',
+      description: `Exp Task Price: $${expiredTaskStep.expiredTimePrice} has been created`,
+      customer: expiredTaskStep.customer
+    })
     res.json(expiredTaskStep)
   } catch (e) {
     console.log(e)
@@ -88,18 +102,33 @@ const createInstallment = async (req, res) => {
   const { body, params } = req
   try {
     const { startDate, deposit, quantity, payAmount } = body
+    const invoice = await dataAccess.financeDataAccess.getInvoiceById(params.invoiceId)
+    await dataAccess.historyDataAccess.createHistory({
+      type: HISTORY_TYPES.CREATED,
+      title: 'Installment Plan Created',
+      description: body.note,
+      invoice: params.invoiceId,
+      customer: invoice.customer
+    })
     if (body.note) {
-      const invoice = await dataAccess.financeDataAccess.getInvoiceById(params.invoiceId)
       invoice.notes.push(body.note)
       await invoice.save()
     }
     if (deposit != 0) {
-      await dataAccess.financeDataAccess.createInstallment({
+      const installment = await dataAccess.financeDataAccess.createInstallment({
         type: INSTALLMENT_TYPES.DEPOSIT,
         invoice: params.invoiceId,
         payDate: new Date(),
         payAmount: deposit,
         status: INSTALLMENT_STATUS.UN_PAID
+      })
+      await dataAccess.historyDataAccess.createHistory({
+        type: HISTORY_TYPES.CREATED,
+        title: 'Installment Created(deposit)',
+        description: `Deposit: $${deposit} has been created`,
+        invoice: params.invoiceId,
+        customer: invoice.customer,
+        installment: installment._id
       })
     }
     for (let i = 0; i < quantity; i++) {
@@ -110,7 +139,15 @@ const createInstallment = async (req, res) => {
         payAmount,
         status: INSTALLMENT_STATUS.UN_PAID
       }
-      await dataAccess.financeDataAccess.createInstallment(installment)
+      const newInstallment = await dataAccess.financeDataAccess.createInstallment(installment)
+      await dataAccess.historyDataAccess.createHistory({
+        type: HISTORY_TYPES.CREATED,
+        title: 'Installment Created(payment)',
+        description: `Payment: $${deposit} has been created`,
+        invoice: params.invoiceId,
+        customer: invoice.customer,
+        installment: newInstallment._id
+      })
     }
     res.sendStatus(StatusCodes.OK)
   } catch (e) {
@@ -133,6 +170,7 @@ const postponeInstallment = async (req, res) => {
   const { days, oldDate, note } = req.body
   const { invoiceId, installmentId } = req.params
   try {
+    const invoice = await dataAccess.financeDataAccess.getInvoiceById(invoiceId)
     if (note) {
       const installment = await dataAccess.financeDataAccess.getInstallmentById(installmentId)
       installment.notes.push(note)
@@ -142,6 +180,14 @@ const postponeInstallment = async (req, res) => {
     await dataAccess.financeDataAccess.updateManyInstallment({ invoice: invoiceId, payDate: { $gte: oldDate } }, [
       { $set: { payDate: { $dateAdd: { startDate: '$payDate', unit: 'day', amount: days } } } }
     ])
+    await dataAccess.historyDataAccess.createHistory({
+      type: HISTORY_TYPES.UPDATED,
+      title: 'Installment Plan Created',
+      description: note,
+      invoice: invoiceId,
+      customer: invoice.customer,
+      installment: installmentId
+    })
     res.sendStatus(StatusCodes.OK)
   } catch (e) {
     console.log(e)
@@ -153,6 +199,7 @@ const payInstallment = async (req, res) => {
   const { installmentId, invoiceId } = req.params
   let { amount, paidDate, paidMethod, note } = req.body
   try {
+    const invoice = await dataAccess.financeDataAccess.getInvoiceById(invoiceId)
     const installment = await dataAccess.financeDataAccess.getInstallmentById(installmentId)
     if (note) {
       installment.notes.push(note)
@@ -165,18 +212,34 @@ const payInstallment = async (req, res) => {
           .status(StatusCodes.BAD_REQUEST)
           .json(errorUtils.errorInstance({ message: 'Deposit amount is greater than paid amount' }))
       } else if (installment.payAmount === amount) {
-        await dataAccess.financeDataAccess.updateInstallment(installmentId, {
+        const ins = await dataAccess.financeDataAccess.updateInstallment(installmentId, {
           paidDate,
           paidMethod,
           status: INSTALLMENT_STATUS.PAID,
           paidAmount: amount
         })
+        await dataAccess.historyDataAccess.createHistory({
+          type: HISTORY_TYPES.UPDATED,
+          title: `Installment Paid $${amount}`,
+          description: note,
+          invoice: invoiceId,
+          customer: invoice.customer,
+          installment: ins._id
+        })
       } else {
-        await dataAccess.financeDataAccess.updateInstallment(installmentId, {
+        const ins = await dataAccess.financeDataAccess.updateInstallment(installmentId, {
           paidDate,
           paidMethod,
           status: INSTALLMENT_STATUS.PAID,
           paidAmount: installment.payAmount
+        })
+        await dataAccess.historyDataAccess.createHistory({
+          type: HISTORY_TYPES.UPDATED,
+          title: `Installment Paid $${installment.payAmount}`,
+          description: note,
+          invoice: invoiceId,
+          customer: invoice.customer,
+          installment: ins._id
         })
         amount = amount - installment.payAmount
         const installments = await dataAccess.financeDataAccess.getInstallmentsByInvoiceId(invoiceId)
@@ -185,19 +248,35 @@ const payInstallment = async (req, res) => {
           const i = installments[index + 1]
           const rest = i.payAmount + i.suspendedFee + i.lateFee - i.paidAmount
           if (amount >= rest) {
-            await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
+            const ins = await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
               paidDate,
               paidMethod,
               paidAmount: i.payAmount,
               status: INSTALLMENT_STATUS.PAID
             })
+            await dataAccess.historyDataAccess.createHistory({
+              type: HISTORY_TYPES.UPDATED,
+              title: `Installment Paid $${i.payAmount}`,
+              description: note,
+              invoice: invoiceId,
+              customer: invoice.customer,
+              installment: ins._id
+            })
             amount = amount - rest
           } else {
-            await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
+            const ins = await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
               paidDate,
               paidMethod,
               paidAmount: amount,
               status: INSTALLMENT_STATUS.LESS_PAID
+            })
+            await dataAccess.historyDataAccess.createHistory({
+              type: HISTORY_TYPES.UPDATED,
+              title: `Installment Paid $${amount}`,
+              description: note,
+              invoice: invoiceId,
+              customer: invoice.customer,
+              installment: ins._id
             })
             amount = 0
           }
@@ -217,11 +296,19 @@ const payInstallment = async (req, res) => {
 
     const restPay = installment.payAmount + installment.suspendedFee + installment.lateFee - installment.paidAmount
     if (restPay < amount) {
-      await dataAccess.financeDataAccess.updateInstallment(installmentId, {
+      const inst = await dataAccess.financeDataAccess.updateInstallment(installmentId, {
         paidDate,
         paidMethod,
         paidAmount: restPay + installment.paidAmount,
         status: INSTALLMENT_STATUS.PAID
+      })
+      await dataAccess.historyDataAccess.createHistory({
+        type: HISTORY_TYPES.UPDATED,
+        title: `Installment Paid $${restPay + installment.paidAmount}`,
+        description: note,
+        invoice: invoiceId,
+        customer: invoice.customer,
+        installment: inst._id
       })
       const installments = await dataAccess.financeDataAccess.getInstallmentsByInvoiceId(invoiceId)
       let index = installments.findIndex(item => item._id.toString() === installmentId)
@@ -230,19 +317,35 @@ const payInstallment = async (req, res) => {
         const i = installments[index + 1]
         const rest = i.payAmount + i.suspendedFee + i.lateFee - i.paidAmount
         if (amount >= rest) {
-          await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
+          const ins = await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
             paidDate,
             paidMethod,
             paidAmount: i.payAmount,
             status: INSTALLMENT_STATUS.PAID
           })
+          await dataAccess.historyDataAccess.createHistory({
+            type: HISTORY_TYPES.UPDATED,
+            title: `Installment Paid $${i.paidAmount}`,
+            description: note,
+            invoice: invoiceId,
+            customer: invoice.customer,
+            installment: ins._id
+          })
           amount = amount - rest
         } else {
-          await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
+          const ins = await dataAccess.financeDataAccess.updateInstallment(i._id.toString(), {
             paidDate,
             paidMethod,
             paidAmount: amount,
             status: INSTALLMENT_STATUS.LESS_PAID
+          })
+          await dataAccess.historyDataAccess.createHistory({
+            type: HISTORY_TYPES.UPDATED,
+            title: `Installment Paid $${amount}`,
+            description: note,
+            invoice: invoiceId,
+            customer: invoice.customer,
+            installment: ins._id
           })
           amount = 0
         }
@@ -251,20 +354,36 @@ const payInstallment = async (req, res) => {
       return res.sendStatus(StatusCodes.OK)
     }
     if (restPay > amount) {
-      await dataAccess.financeDataAccess.updateInstallment(installmentId, {
+      const ins = await dataAccess.financeDataAccess.updateInstallment(installmentId, {
         paidDate,
         paidMethod,
         paidAmount: amount,
         status: INSTALLMENT_STATUS.LESS_PAID
       })
+      await dataAccess.historyDataAccess.createHistory({
+        type: HISTORY_TYPES.UPDATED,
+        title: `Installment Paid $${amount}`,
+        description: note,
+        invoice: invoiceId,
+        customer: invoice.customer,
+        installment: ins._id
+      })
       return res.sendStatus(StatusCodes.OK)
     }
     if (restPay === amount) {
-      await dataAccess.financeDataAccess.updateInstallment(installmentId, {
+      const ins = await dataAccess.financeDataAccess.updateInstallment(installmentId, {
         paidDate,
         paidMethod,
         paidAmount: installment.payAmount,
         status: INSTALLMENT_STATUS.PAID
+      })
+      await dataAccess.historyDataAccess.createHistory({
+        type: HISTORY_TYPES.UPDATED,
+        title: `Installment Paid $${installment.payAmount}`,
+        description: note,
+        invoice: invoiceId,
+        customer: invoice.customer,
+        installment: ins._id
       })
       return res.sendStatus(StatusCodes.OK)
     }
@@ -278,7 +397,15 @@ const payInstallment = async (req, res) => {
 const resetInstallments = async (req, res) => {
   const { invoiceId } = req.params
   try {
+    const invoice = await dataAccess.financeDataAccess.getInvoiceById(invoiceId)
     await dataAccess.financeDataAccess.deleteManyInstallment({ invoice: invoiceId })
+    await dataAccess.historyDataAccess.createHistory({
+      type: HISTORY_TYPES.DELETED,
+      title: 'Installment Plan Reset',
+      description: '',
+      invoice: invoiceId,
+      customer: invoice.customer
+    })
     res.sendStatus(StatusCodes.OK)
   } catch (e) {
     console.log(e)

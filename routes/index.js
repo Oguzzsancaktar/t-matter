@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
+const middlewares = require('../middlewares')
 //ROUTES
 const authRoutes = require('./auth-routes/authRoutes')
 const salarySettingRoutes = require('./salary-setting-routes/salarySettingRoutes')
@@ -17,7 +17,7 @@ const activityRoutes = require('./activity-routes/activityRoutes')
 const financeRoutes = require('./finance-routes/financeRoutes')
 const invoiceCategoryRoutes = require('./invoice-category-routes/invoiceCategoryRoutes')
 const companyRoutes = require('./company-routes/companyRoutes')
-
+const historyRoutes = require('./history-routes/historyRoutes')
 router.get('/hello', (req, res) => {
   res.send('hello')
 })
@@ -37,5 +37,5 @@ router.use('/task', taskRoutes)
 router.use('/activity', activityRoutes)
 router.use('/finance', financeRoutes)
 router.use('/invoice-category', invoiceCategoryRoutes)
-
+router.use('/history', middlewares.authMiddlewares.checkAuth, historyRoutes)
 module.exports = router

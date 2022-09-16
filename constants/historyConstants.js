@@ -1,0 +1,9 @@
+const HISTORY_TYPES = {
+  CREATED: 'CREATED',
+  UPDATED: 'UPDATED',
+  DELETED: 'DELETED'
+}
+
+module.exports = {
+  HISTORY_TYPES
+}

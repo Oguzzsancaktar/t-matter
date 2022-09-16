@@ -6,6 +6,8 @@ import styled from 'styled-components'
 interface ButtonProps extends IComponentProps {
   bgColor?: string
   onClick?: (a?: any, b?: any) => void
+  borderRadius?: string
+  boxShadow?: string
 }
 
 const ButtonContainer = styled.div<ButtonProps>`
@@ -15,10 +17,11 @@ const ButtonContainer = styled.div<ButtonProps>`
   padding: ${({ padding }) => (padding ? padding : '0')};
   background-color: ${({ bgColor }) => (bgColor ? bgColor : colors.black.middle)};
   cursor: pointer;
-  border-radius: 0.3rem;
+  border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : '0.3rem')};
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: ${({ boxShadow }) => (boxShadow ? boxShadow : 'none')};
 `
 
 const IconButton: React.FC<ButtonProps> = ({ children, ...rest }) => {

@@ -7,4 +7,5 @@ export type IContainerProps = {
   height?: string
   maxWidth?: string
   backgroundColor?: string
+  overflowX?: string
 }

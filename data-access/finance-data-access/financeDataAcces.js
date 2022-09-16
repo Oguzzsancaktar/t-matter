@@ -25,7 +25,7 @@ const updateInvoiceById = (id, data) => {
 }
 
 const getInvoiceById = id => {
-  return Invoice.findById(id)
+  return Invoice.findById(id).exec()
 }
 
 const getInvoicesByCustomerId = customerId => {
@@ -122,7 +122,7 @@ const getInvoicesByCustomerId = customerId => {
 }
 
 const createExpiredTaskStep = data => {
-  return ExpiredTaskStep.create(data)
+  return ExpiredTaskStep.create(data, { new: true }).exec()
 }
 
 const getExpiredTaskStepsByCustomerId = ({ customerId, isInvoiced }) => {
@@ -190,7 +190,7 @@ const createInstallment = data => {
 }
 
 const updateInstallment = (id, data) => {
-  return Installment.findByIdAndUpdate(id, data, { new: true })
+  return Installment.findByIdAndUpdate(id, data, { new: true }).exec()
 }
 
 const getInstallmentsByInvoiceId = invoiceId => {

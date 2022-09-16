@@ -20,6 +20,7 @@ const activityDataAccess = require('./activity-data-access/activityDataAccess')
 const financeDataAccess = require('./finance-data-access/financeDataAcces')
 const invoiceCategoryDataAccess = require('./invoice-category-data-access/invoiceCategoryDataAccess')
 const companyDataAccess = require('./company-data-access/companyDataAccess')
+const historyDataAccess = require('./history-data-access/historyDataAccess')
 
 module.exports = {
   authDataAccess,
@@ -41,5 +42,6 @@ module.exports = {
   invoiceCategoryDataAccess,
   companyDataAccess,
   colorDataAccess,
-  customerTypeDataAccess
+  customerTypeDataAccess,
+  historyDataAccess
 }
