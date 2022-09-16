@@ -108,7 +108,7 @@ const createInstallment = async (req, res) => {
     await dataAccess.historyDataAccess.createHistory({
       type: HISTORY_TYPES.CREATED,
       title: 'Installment Plan Created',
-      description: body.note,
+      description: body.note ? body.note : `Installment Plan has been created`,
       invoice: params.invoiceId,
       customer: invoice.customer,
       user: req.user.userId
@@ -188,7 +188,7 @@ const postponeInstallment = async (req, res) => {
     await dataAccess.historyDataAccess.createHistory({
       type: HISTORY_TYPES.UPDATED,
       title: 'Installment Plan Created',
-      description: note,
+      description: note ? note : 'Installment Plan Postponed',
       invoice: invoiceId,
       customer: invoice.customer,
       installment: installmentId,
@@ -227,7 +227,7 @@ const payInstallment = async (req, res) => {
         await dataAccess.historyDataAccess.createHistory({
           type: HISTORY_TYPES.UPDATED,
           title: `Installment Paid $${amount}`,
-          description: note,
+          description: note ? note : '',
           invoice: invoiceId,
           customer: invoice.customer,
           installment: ins._id,
@@ -243,7 +243,7 @@ const payInstallment = async (req, res) => {
         await dataAccess.historyDataAccess.createHistory({
           type: HISTORY_TYPES.UPDATED,
           title: `Installment Paid $${installment.payAmount}`,
-          description: note,
+          description: note ? note : '',
           invoice: invoiceId,
           customer: invoice.customer,
           installment: ins._id,
@@ -265,7 +265,7 @@ const payInstallment = async (req, res) => {
             await dataAccess.historyDataAccess.createHistory({
               type: HISTORY_TYPES.UPDATED,
               title: `Installment Paid $${i.payAmount}`,
-              description: note,
+              description: note ? note : '',
               invoice: invoiceId,
               customer: invoice.customer,
               installment: ins._id,
@@ -282,7 +282,7 @@ const payInstallment = async (req, res) => {
             await dataAccess.historyDataAccess.createHistory({
               type: HISTORY_TYPES.UPDATED,
               title: `Installment Paid $${amount}`,
-              description: note,
+              description: note ? note : 'Less Paid',
               invoice: invoiceId,
               customer: invoice.customer,
               installment: ins._id,
@@ -315,7 +315,7 @@ const payInstallment = async (req, res) => {
       await dataAccess.historyDataAccess.createHistory({
         type: HISTORY_TYPES.UPDATED,
         title: `Installment Paid $${restPay + installment.paidAmount}`,
-        description: note,
+        description: note ? note : '',
         invoice: invoiceId,
         customer: invoice.customer,
         installment: inst._id,
@@ -337,7 +337,7 @@ const payInstallment = async (req, res) => {
           await dataAccess.historyDataAccess.createHistory({
             type: HISTORY_TYPES.UPDATED,
             title: `Installment Paid $${i.paidAmount}`,
-            description: note,
+            description: note ? note : '',
             invoice: invoiceId,
             customer: invoice.customer,
             installment: ins._id,
@@ -354,7 +354,7 @@ const payInstallment = async (req, res) => {
           await dataAccess.historyDataAccess.createHistory({
             type: HISTORY_TYPES.UPDATED,
             title: `Installment Paid $${amount}`,
-            description: note,
+            description: note ? note : '',
             invoice: invoiceId,
             customer: invoice.customer,
             installment: ins._id,
@@ -376,7 +376,7 @@ const payInstallment = async (req, res) => {
       await dataAccess.historyDataAccess.createHistory({
         type: HISTORY_TYPES.UPDATED,
         title: `Installment Paid $${amount}`,
-        description: note,
+        description: note ? note : '',
         invoice: invoiceId,
         customer: invoice.customer,
         installment: ins._id,
@@ -394,7 +394,7 @@ const payInstallment = async (req, res) => {
       await dataAccess.historyDataAccess.createHistory({
         type: HISTORY_TYPES.UPDATED,
         title: `Installment Paid $${installment.payAmount}`,
-        description: note,
+        description: note ? note : '',
         invoice: invoiceId,
         customer: invoice.customer,
         installment: ins._id,
