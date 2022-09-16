@@ -13,6 +13,7 @@ const SideDrawerStyled = styled.div<{ open?: boolean }>`
   transition: all 0.3s ease-in-out;
   transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(100%)')};
   visibility: ${({ open }) => (open ? 'unset' : 'hidden')};
+  z-index: 2;
 `
 
 const SideDrawer: React.FC<{ isHistoryOpen?: boolean; onOutsideClick: () => void }> = ({
