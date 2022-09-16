@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import colors from '@constants/colors'
-import moment from 'moment'
 import { Link } from 'react-feather'
 import { selectColorForActivityType } from '@/utils/statusColorUtil'
 import { H1 } from '../texts'
@@ -27,15 +26,8 @@ interface IProps {
 
 const BaloonContainer = styled.div<Pick<IProps, 'type'>>`
   width: 100%;
-  height: auto;
-  min-height: 100px;
-  /* background-color: ${({ type }) => (type ? selectColorForActivityType(type) + '70' : '#eff3fe')};
-  */
-
-  background-color: #eff3fe;
-
+  height: 100%;
   border-radius: 4px;
-  padding: 8px 16px;
   display: flex;
   flex-direction: column;
 `
@@ -56,18 +48,6 @@ const BaloonTitle = styled.span`
   cursor: pointer;
 `
 
-const BaloonDate = styled.span`
-  font-size: 12px;
-  font-weight: 400;
-  color: ${colors.gray.light};
-`
-
-const Hr = styled.hr`
-  margin-bottom: 8px;
-  width: 100%;
-  border-top: 1px solid ${colors.gray.light};
-`
-
 const BaloonBody = styled.div`
   display: flex;
   align-items: center;
@@ -75,18 +55,14 @@ const BaloonBody = styled.div`
   flex: 1;
 `
 
-const BaloonHour = styled.span`
-  font-size: 16px;
-  color: ${colors.black.primary};
-  font-weight: 700;
-  margin-left: 1rem;
-`
-
-const BaloonContent = styled.span`
-  font-size: 12px;
+const BaloonContent = styled.div`
+  margin-top: 1rem;
+  height: auto;
+  font-size: 1rem;
   font-weight: 300;
   color: ${colors.text.primary};
   flex: 1;
+  word-break: break-all;
 `
 
 const BaloonLinks = styled.a`
@@ -128,26 +104,19 @@ const Baloon: React.FC<IProps> = ({ task, customer, title, content, date, links,
     <BaloonContainer type={type}>
       <BaloonHeader>
         <BaloonTitle onClick={() => handleOpenTaskModal(task?._id)}>
-          <H1 fontSize="0.8rem" cursor="pointer" width="auto" color={colors.text.primary}>
+          <H1 fontSize="1rem" cursor="pointer" width="auto" color={colors.secondary.middle}>
             {task?.name}
           </H1>
           <H1 cursor="pointer" margin="0 0.2rem" width="auto" color={colors.text.primary}>
             -
           </H1>
-          <H1 cursor="pointer" width="auto" fontSize="0.6rem" color={selectColorForActivityType(type || 0)}>
+          <H1 cursor="pointer" width="auto" fontSize="0.8rem" color={selectColorForActivityType(type || 0)}>
             {title}
           </H1>
         </BaloonTitle>
-        <BaloonDate>{moment(date).format('Do YYYY')}</BaloonDate>
       </BaloonHeader>
-      <Hr />
       <BaloonBody>
         <BaloonContent>{content}</BaloonContent>
-        <BaloonHour>
-          <H1 color={colors.gray.dark} fontSize="0.7rem">
-            {moment(date).format('hh:mm a')}
-          </H1>
-        </BaloonHour>
       </BaloonBody>
       <BaloonFooter>
         {links &&

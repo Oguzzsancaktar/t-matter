@@ -54,8 +54,6 @@ const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleCatego
     return <div>Activiries Loading...</div>
   }
 
-  console.log(activityCategoryCountsData)
-
   return (
     <ItemContainer width="100%" height="100%">
       <JustifyBetweenRow width="100%" height="100%">

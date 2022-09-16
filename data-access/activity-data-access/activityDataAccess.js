@@ -76,10 +76,10 @@ const getCustomerActivity = ({ customer }) => {
   ]).exec()
 }
 
-const getAllActivity = (userId, type) => {
+const getAllActivity = (userId, categoryId) => {
   const tempPipeline = []
 
-  if (userId) {
+  if (userId.trim().length > 0) {
     tempPipeline.push({
       $match: {
         owner: { $eq: mongoose.Types.ObjectId(userId) }
@@ -87,10 +87,10 @@ const getAllActivity = (userId, type) => {
     })
   }
 
-  if (type && type.toString() !== '-9') {
+  if (categoryId.trim().length > 0) {
     tempPipeline.push({
       $match: {
-        type: { $eq: +type }
+        'customer._id': { $eq: mongoose.Types.ObjectId(categoryId) }
       }
     })
   }
@@ -102,7 +102,7 @@ const createActivity = data => {
   return Activity.create(data)
 }
 
-const getActivityCategoryCounts = categoryId => {
+const getActivityCategoryCounts = (categoryId, userId) => {
   const pipeline = []
   const pipeFirst = [
     {
@@ -144,9 +144,12 @@ const getActivityCategoryCounts = categoryId => {
 
   pipeline.push(...pipeFirst)
   if (categoryId) {
-    console.log('xxxx')
     pipeline.push({ $match: { 'category._id': mongoose.Types.ObjectId(categoryId) } })
   }
+
+  // if (userId) {
+  //   pipeline.push({ $match: { 'category._id': mongoose.Types.ObjectId(userId) } })
+  // }
 
   return Activity.aggregate([
     ...pipeline,

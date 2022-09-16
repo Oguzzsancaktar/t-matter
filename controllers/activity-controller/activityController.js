@@ -24,9 +24,9 @@ const getTaskActivity = async (req, res) => {
 }
 
 const getAllActivity = async (req, res) => {
-  const { userId, type } = req.query
+  const { userId, categoryId } = req.query
   try {
-    const activities = await dataAccess.activityDataAccess.getAllActivity(userId, type)
+    const activities = await dataAccess.activityDataAccess.getAllActivity(userId, categoryId)
     res.send(activities)
   } catch (e) {
     console.log(e)
@@ -46,10 +46,10 @@ const getCustomerActivity = async (req, res) => {
 }
 
 const getCustomerActivityCategoryCounts = async (req, res) => {
-  const { categoryId } = req.query
+  const { categoryId, userId } = req.query
 
   try {
-    const activityCategoryCounts = await dataAccess.activityDataAccess.getActivityCategoryCounts(categoryId)
+    const activityCategoryCounts = await dataAccess.activityDataAccess.getActivityCategoryCounts(categoryId, userId)
     res.send(activityCategoryCounts)
   } catch (e) {
     console.log(e)

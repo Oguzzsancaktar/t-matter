@@ -1,9 +1,9 @@
+import React, { useEffect, useState } from 'react'
 import { JustifyBetweenColumn, ItemContainer, ActivityFilter } from '@/components'
 import ActivityItem from '@/components/activity/ActivityItem'
 import { emptyActivtyFilter } from '@/constants/queryParams'
-import { EActivity, IUser } from '@/models'
+import { IUser } from '@/models'
 import { useGetActivitiesQuery } from '@/services/activityService'
-import React, { useEffect, useState } from 'react'
 import ReactTooltip from 'react-tooltip'
 import DashboardCard from './DashboardCard'
 
@@ -41,9 +41,9 @@ const ActivityTimeline = () => {
         />
       }
     >
-      <JustifyBetweenColumn height="100%">
+      <JustifyBetweenColumn>
         {data?.map((activity, index) => (
-          <ItemContainer height="auto" key={index}>
+          <ItemContainer height="auto" key={index} overflow="hidden" minHeight="80px">
             <ActivityItem activity={activity} />
           </ItemContainer>
         ))}
