@@ -41,6 +41,7 @@ const ActivityItem: React.FC<IProps> = ({ activity }) => {
           position="absolute"
           left="50%"
           top="-50px"
+          zIndex="0"
         />
 
         <ItemContainer width="35px">

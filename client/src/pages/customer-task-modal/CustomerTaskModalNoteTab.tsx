@@ -18,7 +18,7 @@ const CustomerTaskModalNoteTab: React.FC<IProps> = ({ task, step }) => {
     <ItemContainer>
       <JustifyCenterColumn>
         {data?.map((activity, index) => (
-          <ItemContainer height="auto" key={index}>
+          <ItemContainer height="auto" key={index} overflow="hidden">
             <ActivityItem activity={activity} />
           </ItemContainer>
         ))}

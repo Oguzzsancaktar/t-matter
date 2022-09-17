@@ -1,8 +1,8 @@
 import { ItemContainer } from '@/components/item-container'
 import { Row } from '@/components/layout'
-import { H1, TaskEventSection, TaskInformations, TaskWizzardNavigation } from '@/components'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { ModalBody, ModalHeader } from '../types'
+import { TaskEventSection, TaskInformations, TaskWizzardNavigation } from '@/components'
+import React, { useCallback, useEffect, useState } from 'react'
+import { ModalBody } from '../types'
 import colors from '@/constants/colors'
 import { useGetTaskByTaskIdQuery, useUpdateTaskMutation } from '@/services/customers/taskService'
 import { EActivity, ETaskStatus, ICustomer, ICustomerTask, ITaskChecklist, IUser } from '@/models'
@@ -15,9 +15,10 @@ import { useCreateExpiredTaskStepMutation } from '@services/settings/finance-pla
 
 interface IProps {
   taskId: string
+  customer: ICustomer
   customerId?: ICustomer['_id']
 }
-const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
+const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) => {
   const { loggedUser } = useAuth()
 
   const [updateTask] = useUpdateTaskMutation()
@@ -394,12 +395,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
     <ItemContainer height="100%" overflow="hidden" borderRadius="0.3rem">
       {taskData && !taskIsLoading && updatedTaskData ? (
         <>
-          <ModalHeader>
-            <H1 margin="0" textAlign="center" fontWeight="700" color={colors.white.primary}>
-              {taskData?.name}
-            </H1>
-          </ModalHeader>
-          <ModalBody height="calc(100% - 63px)" padding="0" withModalFooter={false}>
+          <ModalBody height="calc(100% )" padding="0" withModalFooter={false}>
             <ItemContainer height="100%">
               {!taskIsLoading && taskData && (
                 <Row height="100%">
@@ -413,6 +409,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId }) => {
 
                   <ItemContainer width="400px" height="100%" padding="0 1rem" backgroundColor={colors.white.primary}>
                     <TaskInformations
+                      customer={customer}
                       activeStep={activeStep}
                       taskData={updatedTaskData}
                       isTaskNotStarted={isTaskNotStarted}

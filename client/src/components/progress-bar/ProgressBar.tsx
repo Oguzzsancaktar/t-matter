@@ -21,7 +21,7 @@ const ProgressBarContainer = styled.div`
   width: 100%;
   height: 6px;
   border-radius: 0.3rem;
-  background-color: ${colors.white.primary};
+  background-color: ${colors.gray.dark};
   display: flex;
   position: relative;
   overflow: hidden;

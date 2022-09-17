@@ -6,17 +6,18 @@ import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
 
-import { EActivity, ETaskStatus, ICustomerTask, ITaskChecklist, IUser } from '@/models'
+import { EActivity, ICustomer, ICustomerTask, ITaskChecklist, IUser } from '@/models'
 import { activityApi, useCreateActivityMutation } from '@/services/activityService'
 import React from 'react'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
-import { TaskChecklistCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, TaskUserCard } from '.'
+import { TaskChecklistCard, TaskCustomerCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, TaskUserCard } from '.'
 
 interface IProps {
   taskData: ICustomerTask
   isTaskNotStarted: boolean
   activeStep: number
+  customer: ICustomer
   handleCheckboxClick: (checklistItem: ITaskChecklist, index: number) => void
   handleResponsibleChange: (responsible: IUser) => void
   handlePostponeChange: (value: Date[], dateText: string) => void
@@ -27,9 +28,9 @@ interface IProps {
 
 const InformationCard = styled(ItemContainer)`
   border-radius: 0.3rem;
-  background: ${colors.white.secondary};
+  background: ${'transparent'};
   padding: 1rem;
-  margin: 1rem 0;
+  margin: ${({ margin }) => (margin ? margin : '1rem 0')};
 
   &:not(:first-child) {
     margin-top: 0;
@@ -39,6 +40,7 @@ const TaskInformations: React.FC<IProps> = ({
   taskData,
   activeStep,
   isTaskNotStarted,
+  customer,
   handleCheckboxClick,
   handleResponsibleChange,
   handlePostponeChange,
@@ -98,6 +100,10 @@ const TaskInformations: React.FC<IProps> = ({
     <ItemContainer height="100%">
       {taskData && taskData.steps[activeStep] ? (
         <JustifyBetweenColumn height="100%">
+          <InformationCard height="100px" margin="0">
+            <TaskCustomerCard customer={customer} taskActiveStep={taskData.steps[activeStep]} />
+          </InformationCard>
+
           <InformationCard height="100px">
             <TaskUserCard
               taskActiveStep={taskData.steps[activeStep]}
@@ -108,7 +114,7 @@ const TaskInformations: React.FC<IProps> = ({
             />
           </InformationCard>
 
-          <ItemContainer backgroundColor={colors.white.secondary} borderRadius="0.3rem" margin="0 0 1rem 0">
+          <ItemContainer backgroundColor={'transparent'} borderRadius="0.3rem" margin="0 0 1rem 0">
             <Column height="100%">
               <InformationCard height="80px">
                 <TaskDeadlineCard taskActiveStep={taskData.steps[activeStep]} />

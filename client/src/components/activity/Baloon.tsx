@@ -91,7 +91,7 @@ const Baloon: React.FC<IProps> = ({ task, customer, title, content, date, links,
         openModal({
           id: 'customerTaksModal' + taskId,
           title: 'Customer Task',
-          body: <CustomerTaskModal customerId={customer?._id} taskId={taskId} />,
+          body: <CustomerTaskModal customer={customer} customerId={customer?._id} taskId={taskId} />,
           width: ESize.WXLarge,
           height: ESize.HLarge,
           backgroundColor: colors.gray.light

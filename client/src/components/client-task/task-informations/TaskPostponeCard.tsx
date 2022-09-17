@@ -60,7 +60,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
             </ItemContainer>
           </JustifyBetweenRow>
         </ItemContainer>
-        <ItemContainer>
+        <ItemContainer margin="-0.4rem 0 0 0">
           <ProgressBar
             completionColor={
               taskActiveStep?.usedPostpone > taskActiveStep?.postponeTime ? colors.orange.primary : colors.blue.primary

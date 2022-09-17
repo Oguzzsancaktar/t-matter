@@ -62,7 +62,7 @@ const CalendarModal = () => {
         openModal({
           id: 'customerTaksModal' + taskId,
           title: 'Customer Task',
-          body: <CustomerTaskModal taskId={taskId} />,
+          body: <CustomerTaskModal customer={event.customer} taskId={taskId} />,
           width: ESize.WXLarge,
           height: ESize.HLarge,
           backgroundColor: colors.gray.light
