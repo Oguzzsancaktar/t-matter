@@ -147,7 +147,7 @@ const createInstallment = async (req, res) => {
       await dataAccess.historyDataAccess.createHistory({
         type: HISTORY_TYPES.CREATED,
         title: 'Installment Created(payment)',
-        description: `Payment: $${deposit} has been created`,
+        description: `Payment: $${payAmount} has been created`,
         invoice: params.invoiceId,
         customer: invoice.customer,
         installment: newInstallment._id,
@@ -417,7 +417,7 @@ const resetInstallments = async (req, res) => {
     await dataAccess.historyDataAccess.createHistory({
       type: HISTORY_TYPES.DELETED,
       title: 'Installment Plan Reset',
-      description: '',
+      description: 'Installment Plan removed',
       invoice: invoiceId,
       customer: invoice.customer,
       user: req.user.userId

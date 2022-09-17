@@ -4,7 +4,7 @@ import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { ICustomer, IHistory, IHistoryCreateDTO, IInstallment, Invoice, IUser } from '@/models'
 
 const HISTORY_API_REDUCER_PATH = 'historyApi'
-const HISTORY_TAG = 'historyTag'
+export const HISTORY_TAG = 'historyTag'
 
 type IBuilder = EndpointBuilder<IAxiosBaseQueryFn, typeof HISTORY_TAG, typeof HISTORY_API_REDUCER_PATH>
 
@@ -29,6 +29,7 @@ const getFinanceHistory = (builder: IBuilder) => {
       userId?: IUser['_id']
       invoiceId?: Invoice['_id']
       installmentId?: IInstallment['_id']
+      historyType?: string
     }
   >({
     query(params) {
