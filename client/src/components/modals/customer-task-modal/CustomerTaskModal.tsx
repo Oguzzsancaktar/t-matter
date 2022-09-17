@@ -399,7 +399,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
             <ItemContainer height="100%">
               {!taskIsLoading && taskData && (
                 <Row height="100%">
-                  <ItemContainer width="calc(30px + 2rem)" height="100%" backgroundColor={colors.primary.light}>
+                  <ItemContainer width="calc(30px + 2rem)" height="100%" backgroundColor={colors.primary.dark}>
                     <TaskWizzardNavigation
                       activeStep={activeStep}
                       taskData={updatedTaskData}

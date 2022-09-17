@@ -182,8 +182,6 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
     setActiveSliderIndex(index)
   }
 
-  console.log('customerData', customerData)
-
   return (
     <ItemContainer borderRadius="0.3rem" overflow="visible" height="100%">
       <JustifyBetweenRow height="100%">

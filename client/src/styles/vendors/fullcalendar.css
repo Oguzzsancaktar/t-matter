@@ -303,9 +303,9 @@
 }
 */
 
-.fc-header-toolbar.fc-toolbar {
+/* .fc-header-toolbar.fc-toolbar {
   margin-bottom: 1rem !important;
-}
+} */
 
 @media (min-width: 992px) {
   .app-calendar .app-calendar-sidebar {

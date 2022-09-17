@@ -120,7 +120,7 @@ const CustomersPage = () => {
         title: 'Customer / ' + customer.firstname + ' ' + customer.lastname,
         body: <ReadCustomerModal customer={customer} />,
         width: ESize.WXLarge,
-        height: ESize.HLarge,
+        height: `calc(${ESize.HLarge} - 2rem )`,
         backgroundColor: 'transparent'
       })
     )
