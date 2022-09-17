@@ -68,9 +68,7 @@ const DefaultCalendarOptions = () => {
     customButtons: {
       sidebarToggle: {
         text: <Menu />,
-        click: () => {
-          console.log('first')
-        }
+        click: () => {}
       }
     },
 

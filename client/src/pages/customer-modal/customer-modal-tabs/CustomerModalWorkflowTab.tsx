@@ -103,6 +103,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
         body: <CustomerTaskModal customer={customer} customerId={customer._id} taskId={taskId} />,
         width: ESize.WXLarge,
         height: ESize.HLarge,
+        maxWidth: ESize.WXLarge,
         backgroundColor: colors.gray.light
       })
     )

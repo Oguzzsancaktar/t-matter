@@ -21,11 +21,18 @@ interface IProps {
 const StyledReactTooltip = styled(ReactTooltip)`
   border-radius: 0.3rem !important;
   padding: 0.3rem 0.5rem !important;
-  background-color: ${colors.gray.secondary} !important;
+  background-color: ${colors.primary.dark} !important;
   border: 2px solid ${colors.white.secondary} !important;
+  transition: 0s;
+
+  border-radius: 0.3rem !important;
+  padding: 0.3rem 0.5rem !important;
+  background-color: ${colors.primary.dark} !important;
+  border: 2px solid ${colors.white.secondary} !important;
+  border-bottom: 10px solid ${colors.secondary.middle}!important;
   opacity: 1 !important;
   overflow: hidden;
-  transition: 0s;
+
   &:after {
     border-top-color: ${colors.gray.secondary} !important;
   }
@@ -101,18 +108,18 @@ const TaskProgress: React.FC<IProps> = ({ taskStatus, taskSteps, workflowName, t
             <UserImage width="40px" height="40px" src={taskSteps[activeStep]?.responsibleUser.profile_img}></UserImage>
           </ItemContainer>
           <Column>
-            <H1 color={colors.text.primary} width="max-content">
+            <H1 color={colors.white.secondary} width="max-content">
               {taskSteps[activeStep]?.category.name}
             </H1>
 
             <Row>
-              <H1 color={colors.text.primary} width="max-content">
+              <H1 color={colors.white.secondary} width="max-content">
                 {taskSteps.length} Steps{' '}
               </H1>
-              <H1 color={colors.text.primary} margin="0 0.3rem" width="max-content">
+              <H1 color={colors.white.secondary} margin="0 0.3rem" width="max-content">
                 -
               </H1>
-              <H1 color={colors.text.primary} width="max-content">
+              <H1 color={colors.white.secondary} width="max-content">
                 {activeStep + 1}/{taskSteps.length}
               </H1>
             </Row>

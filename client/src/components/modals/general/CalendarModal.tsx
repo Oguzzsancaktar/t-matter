@@ -18,7 +18,7 @@ import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import moment from 'moment'
-import { secondsToHourMin } from '@/utils/timeUtils'
+import { selectColorForTaskStatus } from '@/utils/statusColorUtil'
 
 const EventInner = styled(Button)`
   display: flex;
@@ -34,6 +34,16 @@ function calendarFiltersReducer(state, action) {
       return { ...state, category: action.payload }
   }
 }
+
+const DAssakWrapper = styled.div`
+  display: flex;
+  .fc-daygrid-body {
+    width: 100%;
+    table {
+      width: 100%;
+    }
+  }
+`
 
 const CalendarModal = () => {
   const { useAppDispatch } = useAccessStore()
@@ -57,12 +67,14 @@ const CalendarModal = () => {
 
   const handleOpenTaskModal = ({ event }) => {
     const taskId = event.id
+    const task = event._def.extendedProps.task
+
     if (taskId) {
       dispatch(
         openModal({
           id: 'customerTaksModal' + taskId,
           title: 'Customer Task',
-          body: <CustomerTaskModal customer={event.customer} taskId={taskId} />,
+          body: <CustomerTaskModal customer={task?.customer} taskId={taskId} />,
           width: ESize.WXLarge,
           height: ESize.HLarge,
           maxWidth: ESize.WXLarge,
@@ -73,15 +85,22 @@ const CalendarModal = () => {
   }
 
   calendarOptions.eventClick = handleOpenTaskModal
-  calendarOptions.customButtons.sidebarToggle.click = () => setIsFiltersOpen(!isFiltersOpen)
+  calendarOptions.customButtons.sidebarToggle.click = () => {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+    }, 400)
+    setIsFiltersOpen(!isFiltersOpen)
+  }
 
   const StyledReactTooltip = styled(ReactTooltip)`
     border-radius: 0.3rem !important;
     padding: 0.3rem 0.5rem !important;
-    background-color: ${colors.gray.secondary} !important;
+    background-color: ${colors.primary.dark} !important;
     border: 2px solid ${colors.white.secondary} !important;
+    border-bottom: 10px solid ${colors.secondary.middle}!important;
     opacity: 1 !important;
     overflow: hidden;
+    width: 300px;
 
     &:after {
       border-top-color: ${colors.gray.dark} !important;
@@ -227,27 +246,43 @@ const CalendarModal = () => {
                           <H1 fontSize="0.7rem" color={colors.white.secondary}>
                             {step.category.name}
                           </H1>
-                          <H1 fontSize="0.7rem" width="auto" color={colors.white.secondary}>
-                            {secondsToHourMin(task.totalDuration, true)}
-                          </H1>
                         </JustifyBetweenRow>
                       </EventInner>
 
                       <StyledReactTooltip id={'taskProgressTooltip-' + props.event.id} effect="solid">
                         <JustifyCenterColumn>
-                          <H1 textAlign="center" margin="0.3rem 0" color={colors.blue.primary} width="max-content">
-                            {task.customer.firstname + ' ' + task.customer.lastname}
-                          </H1>
-                          <H1 textAlign="center" margin="0.3rem 0" color={colors.text.primary} width="max-content">
+                          <Row>
+                            <ItemContainer margin="0.3rem" width="40px" transition="0s">
+                              <UserImage
+                                src={step.responsibleUser?.profile_img}
+                                padding="0"
+                                width="40px"
+                                height="40px"
+                              />
+                            </ItemContainer>
+                            <H1
+                              textAlign="center"
+                              margin="0.3rem 0"
+                              color={colors.secondary.middle}
+                              width="calc(100% - 40px - 0.5rem)"
+                            >
+                              {task.customer.firstname + ' ' + task.customer.lastname}
+                            </H1>
+                          </Row>
+
+                          <H1 textAlign="center" margin="0.5rem 0" color={colors.white.secondary} width="max-content">
                             {moment(task.startDate).format('hh:mm A')}
                           </H1>
-                          <H1 margin="0 0.3rem" textAlign="center" color={colors.text.primary} width="max-content">
+                          <H1
+                            margin="0.5rem "
+                            textAlign="center"
+                            color={selectColorForTaskStatus(task.status)}
+                            width="max-content"
+                          >
                             {ETaskStatus[task.status].replace('_', ' ')}
                           </H1>
-                          <ItemContainer margin="0.3rem" width="max-content" transition="0s">
-                            <UserImage src={step.responsibleUser?.profile_img} width="40px" height="40px" />
-                          </ItemContainer>
-                          <H1 textAlign="center" margin="0.3rem 0" color={colors.text.primary} width="max-content">
+
+                          <H1 textAlign="center" margin="0.5rem 0" color={colors.white.secondary} width="max-content">
                             {task.name}
                           </H1>
                         </JustifyCenterColumn>

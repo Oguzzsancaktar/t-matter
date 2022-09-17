@@ -8,7 +8,6 @@ import {
   WizzardButtons,
   WizzardNavigation
 } from '@/components'
-import ClientAddNewContactsStep from './ClientAddNewContactsStep'
 import ClientExtraInformationsStep from './ClientExtraInformationsStep'
 import ClientInformationsStep from './ClientInformationsStep'
 import ClientSearchInCompanyStep from './ClientSearchInCompanyStep'
@@ -37,8 +36,7 @@ const CreateClientTab = () => {
   const [clientWizzardSteps, setClientWizzardSteps] = useState([
     { stepName: 'Client Informations', stepIndex: 0 },
     { stepName: 'Detailed Informations', stepIndex: 1 },
-    { stepName: 'Search Relative', stepIndex: 2 },
-    { stepName: 'Add New Contacts', stepIndex: 3 }
+    { stepName: 'Search Relative', stepIndex: 2 }
   ])
 
   const [birthday, setBirthday] = useState('')
@@ -94,14 +92,7 @@ const CreateClientTab = () => {
             onRemove={handleRemoveClient}
           />
         )
-      case 3:
-        return (
-          <ClientAddNewContactsStep
-            newContactList={createClientDTO.createContact || []}
-            onAdd={handleAddNewContact}
-            onRemove={handleRemoveNewContact}
-          />
-        )
+
       default:
         return (
           <ClientInformationsStep
@@ -289,34 +280,6 @@ const CreateClientTab = () => {
       })
     }
   }
-  const handleRemoveNewContact = (customer: ICustomerAddNew) => {
-    if (createClientDTO.createContact) {
-      setCreateClientDTO({
-        ...createClientDTO,
-        createContact: createClientDTO.createContact.filter(reliable => reliable._id !== customer._id)
-      })
-    }
-  }
-  const handleAddNewContact = (customer: ICustomerAddNew) => {
-    if (createClientDTO.createContact) {
-      dispatch(
-        openModal({
-          id: `addRelateByModal-${customer.email}`,
-          title: `Are you sure to inactivate ${customer.firstname}?`,
-          body: (
-            <RelateByModal
-              modalId={`addRelateByModal-${customer.email}`}
-              title={`Choose relate by for ${customer.firstname} ${customer.lastname} ?`}
-              onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
-            />
-          ),
-          width: ESize.WLarge,
-          height: ESize.HAuto,
-          maxWidth: ESize.WSmall
-        })
-      )
-    }
-  }
 
   const handleConfirmAddReliable = (customer: ICustomer, relativeType?: IRelativeType) => {
     setCreateClientDTO({
@@ -324,17 +287,6 @@ const CreateClientTab = () => {
       reliableInCompany: createClientDTO.reliableInCompany?.concat({ ...customer, relativeType: relativeType })
     })
     dispatch(closeModal(`addRelateByModal-${customer._id}`))
-  }
-
-  const handleConfirmAddContact = (customer: ICustomerAddNew, relativeType: IRelativeType) => {
-    setCreateClientDTO({
-      ...createClientDTO,
-      createContact: createClientDTO.createContact?.concat({
-        ...customer,
-        relativeType: { ...relativeType, fromOrTo: 1 }
-      })
-    })
-    dispatch(closeModal(`addRelateByModal-${customer.email}`))
   }
 
   const handleNext = () => {

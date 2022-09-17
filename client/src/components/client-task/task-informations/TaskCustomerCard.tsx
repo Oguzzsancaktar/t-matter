@@ -14,6 +14,7 @@ interface IProps {
   customer: ICustomer
 }
 const TaskCustomerCard: React.FC<IProps> = ({ taskActiveStep, customer }) => {
+  console.log('customer', customer)
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -22,7 +23,7 @@ const TaskCustomerCard: React.FC<IProps> = ({ taskActiveStep, customer }) => {
       dispatch(
         openModal({
           id: `customerDetailModal-${customer._id}`,
-          title: 'Customer / ' + customer.firstname + ' ' + customer.lastname,
+          title: 'Customer / ' + customer?.firstname + ' ' + customer?.lastname,
           body: <ReadCustomerModal customer={customer} />,
           width: ESize.WXLarge,
           height: ESize.HLarge,

@@ -8,7 +8,6 @@ import {
   WizzardButtons,
   WizzardNavigation
 } from '@/components'
-import ContactAddNewContactsStep from './ContactAddNewContactsStep'
 import ContactInformationsStep from './ContactInformationsStep'
 import ContactSearchInCompanyStep from './ContactSearchInCompanyStep'
 import { ECustomerType, ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
@@ -36,8 +35,7 @@ const CreateContactTab = () => {
   const [activeWizzardStep, setActiveWizzardStep] = useState(0)
   const [contactWizzardSteps] = useState([
     { stepName: 'Contact Informations', stepIndex: 0 },
-    { stepName: 'Search Relative', stepIndex: 1 },
-    { stepName: 'Add New Contacts', stepIndex: 2 }
+    { stepName: 'Search Relative', stepIndex: 1 }
   ])
 
   const [createContactDTO, setCreateContactDTO] =
@@ -75,14 +73,6 @@ const CreateContactTab = () => {
             reliableInCompanyList={createContactDTO.reliableInCompany || []}
             onAdd={handleAddReliable}
             onRemove={handleRemoveReliable}
-          />
-        )
-      case 2:
-        return (
-          <ContactAddNewContactsStep
-            newContactList={createContactDTO.createContact || []}
-            onAdd={handleAddNewContact}
-            onRemove={handleRemoveNewContact}
           />
         )
       default:
@@ -219,36 +209,6 @@ const CreateContactTab = () => {
     }
   }
 
-  const handleRemoveNewContact = (customer: ICustomerAddNew) => {
-    if (createContactDTO.createContact) {
-      setCreateContactDTO({
-        ...createContactDTO,
-        createContact: createContactDTO.createContact.filter(reliable => reliable._id !== customer._id)
-      })
-    }
-  }
-
-  const handleAddNewContact = (customer: ICustomerAddNew) => {
-    if (createContactDTO.createContact) {
-      dispatch(
-        openModal({
-          id: `addRelateByModal-${customer.email}`,
-          title: `Are you sure to inactivate ${customer.firstname}?`,
-          body: (
-            <RelateByModal
-              modalId={`addRelateByModal-${customer.email}`}
-              title={`Choose relate by for ${customer.firstname} ${customer.lastname} ?`}
-              onConfirm={relativeType => handleConfirmAddContact(customer, relativeType)}
-            />
-          ),
-          width: ESize.WLarge,
-          height: ESize.HAuto,
-          maxWidth: ESize.WSmall
-        })
-      )
-    }
-  }
-
   const handleConfirmAddReliable = (customer: ICustomer, relativeType: IRelativeType) => {
     setCreateContactDTO({
       ...createContactDTO,
@@ -258,18 +218,6 @@ const CreateContactTab = () => {
       })
     })
     dispatch(closeModal(`addRelateByModal-${customer._id}`))
-  }
-
-  const handleConfirmAddContact = (customer: ICustomerAddNew, relativeType?: IRelativeType) => {
-    setCreateContactDTO({
-      ...createContactDTO,
-      createContact: createContactDTO.createContact?.concat({
-        ...customer,
-        _id: Date.now().toString(),
-        relativeType: relativeType
-      })
-    })
-    dispatch(closeModal(`addRelateByModal-${customer.email}`))
   }
 
   const handleNext = () => {
