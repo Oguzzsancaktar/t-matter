@@ -11,6 +11,7 @@ import moment from 'moment'
 interface IProps {
   onFilter: React.Dispatch<React.SetStateAction<undefined | string>>
   history?: IHistory[]
+  selectedFilter?: string
 }
 
 const getIcon = (type: string) => {
@@ -41,7 +42,9 @@ const History: React.FC<IProps> = props => {
           margin="0 .2rem 0 0"
           children={<Plus size={'20px'} color="#fff" />}
           borderRadius="50%"
-          boxShadow="rgba(0, 0, 0, 0.16) 0px 1px 4px"
+          boxShadow={`0 0 0 4px ${
+            props.selectedFilter === HISTORY_TYPES.CREATED ? '#dedddd' : '#fff'
+          }, inset 0 2px 0 rgb(0 0 0 / 8%), 0 3px 0 4px rgb(0 0 0 / 5%)`}
         />
         <IconButton
           onClick={props.onFilter.bind(this, HISTORY_TYPES.UPDATED)}
@@ -51,7 +54,9 @@ const History: React.FC<IProps> = props => {
           margin="0 .2rem 0 0"
           children={<Edit2 size={'20px'} color="#fff" />}
           borderRadius="50%"
-          boxShadow="rgba(0, 0, 0, 0.16) 0px 1px 4px"
+          boxShadow={`0 0 0 4px ${
+            props.selectedFilter === HISTORY_TYPES.UPDATED ? '#dedddd' : '#fff'
+          }, inset 0 2px 0 rgb(0 0 0 / 8%), 0 3px 0 4px rgb(0 0 0 / 5%)`}
         />
         <IconButton
           onClick={props.onFilter.bind(this, HISTORY_TYPES.DELETED)}
@@ -61,7 +66,9 @@ const History: React.FC<IProps> = props => {
           margin="0 .2rem 0 0"
           children={<Trash2 size={'20px'} color="#fff" />}
           borderRadius="50%"
-          boxShadow="rgba(0, 0, 0, 0.16) 0px 1px 4px"
+          boxShadow={`0 0 0 4px ${
+            props.selectedFilter === HISTORY_TYPES.DELETED ? '#dedddd' : '#fff'
+          }, inset 0 2px 0 rgb(0 0 0 / 8%), 0 3px 0 4px rgb(0 0 0 / 5%)`}
         />
         <IconButton
           onClick={props.onFilter.bind(this, undefined)}
@@ -71,7 +78,9 @@ const History: React.FC<IProps> = props => {
           margin="0 .2rem 0 0"
           children={<Database size={'20px'} color="#fff" />}
           borderRadius="50%"
-          boxShadow="rgba(0, 0, 0, 0.16) 0px 1px 4px"
+          boxShadow={`0 0 0 4px ${
+            props.selectedFilter === undefined ? '#dedddd' : '#fff'
+          }, inset 0 2px 0 rgb(0 0 0 / 8%), 0 3px 0 4px rgb(0 0 0 / 5%)`}
         />
       </JustifyBetweenRow>
       <div style={{ overflowY: 'auto' }}>

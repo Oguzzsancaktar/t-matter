@@ -17,6 +17,7 @@ import InstallmentTab from '@pages/customer-modal/customer-modal-tabs/finance-ta
 import ShowHistory from '@components/show-history/ShowHistory'
 import { useGetFinanceHistoryQuery } from '@services/historyService'
 import { History } from '@components/history'
+import history from '@components/history/History'
 
 interface IProps {
   customerId: ICustomer['_id']
@@ -88,7 +89,7 @@ const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
 
         {React.createElement(Component[activeTab], { customerId })}
         <SideDrawer onOutsideClick={() => setTimeout(() => setIsHistoryOpen(false), 0)} isHistoryOpen={isHistoryOpen}>
-          <History onFilter={setHistoryType} history={data} />
+          <History selectedFilter={historyType} onFilter={setHistoryType} history={data} />
         </SideDrawer>
       </Column>
     </ItemContainer>
