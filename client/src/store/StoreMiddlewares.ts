@@ -12,6 +12,7 @@ import { taskApi } from '@/services/customers/taskService'
 import { activityApi } from '@/services/activityService'
 import { financePlanningApi } from '@services/settings/finance-planning/financePlanningService'
 import { companyInfoApi } from '@services/settings/company-info/companyInfoService'
+import { historyApi } from '@services/historyService'
 
 const StoreMiddlewares = [
   authApi.middleware,
@@ -26,6 +27,7 @@ const StoreMiddlewares = [
   customerApi.middleware,
   taskApi.middleware,
   activityApi.middleware,
+  historyApi.middleware,
   financePlanningApi.middleware
 ]
 

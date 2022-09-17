@@ -15,6 +15,7 @@ import { activityApi } from '@/services/activityService'
 import { financePlanningApi } from '@services/settings/finance-planning/financePlanningService'
 import { companyInfoApi } from '@services/settings/company-info/companyInfoService'
 
+import { historyApi } from '@services/historyService'
 const rootReducer = combineReducers({
   auth: AuthReducer,
   modal: ModalReducer,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   [customerApi.reducerPath]: customerApi.reducer,
   [taskApi.reducerPath]: taskApi.reducer,
   [activityApi.reducerPath]: activityApi.reducer,
+  [historyApi.reducerPath]: historyApi.reducer,
   [financePlanningApi.reducerPath]: financePlanningApi.reducer
 })
 
