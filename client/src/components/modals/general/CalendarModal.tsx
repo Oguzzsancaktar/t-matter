@@ -65,6 +65,7 @@ const CalendarModal = () => {
           body: <CustomerTaskModal customer={event.customer} taskId={taskId} />,
           width: ESize.WXLarge,
           height: ESize.HLarge,
+          maxWidth: ESize.WXLarge,
           backgroundColor: colors.gray.light
         })
       )
