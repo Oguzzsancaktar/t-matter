@@ -61,17 +61,6 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
         </ItemContainer>
       )
     },
-    // {
-    //   name: 'User',
-    //   width: '200px',
-    //   selector: row => row.steps,
-    //   sortable: true,
-    //   cell: data => (
-    //     <ItemContainer onClick={() => openCustomerTaskModal(data._id)}>
-    //       <TaskActiveStepUser taskSteps={data.steps} />
-    //     </ItemContainer>
-    //   )
-    // },
 
     {
       name: 'Actions',

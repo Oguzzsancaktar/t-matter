@@ -29,7 +29,9 @@ const StyledReactTooltip = styled(ReactTooltip)`
   padding: 0.3rem 0.5rem !important;
   background-color: ${colors.primary.dark} !important;
   border: 2px solid ${colors.white.secondary} !important;
-  border-bottom: 10px solid ${colors.secondary.middle}!important;
+
+  border-bottom: 4px solid ${colors.orange.primary}!important;
+
   opacity: 1 !important;
   overflow: hidden;
 
@@ -103,28 +105,32 @@ const TaskProgress: React.FC<IProps> = ({ taskStatus, taskSteps, workflowName, t
       ></ProgressBar>
 
       <StyledReactTooltip id={'taskProgressTooltip-' + taskId} effect="solid">
-        <Row>
-          <ItemContainer margin="0 0.5rem 0 0" transition="none">
-            <UserImage width="40px" height="40px" src={taskSteps[activeStep]?.responsibleUser.profile_img}></UserImage>
-          </ItemContainer>
-          <Column>
+        <Column margin="1rem 0">
+          <Row>
+            <ItemContainer margin="0 0.5rem 0 0" transition="none" width="40px">
+              <UserImage
+                width="40px"
+                height="40px"
+                src={taskSteps[activeStep]?.responsibleUser.profile_img}
+              ></UserImage>
+            </ItemContainer>
             <H1 color={colors.white.secondary} width="max-content">
               {taskSteps[activeStep]?.category.name}
             </H1>
+          </Row>
 
-            <Row>
-              <H1 color={colors.white.secondary} width="max-content">
-                {taskSteps.length} Steps{' '}
-              </H1>
-              <H1 color={colors.white.secondary} margin="0 0.3rem" width="max-content">
-                -
-              </H1>
-              <H1 color={colors.white.secondary} width="max-content">
-                {activeStep + 1}/{taskSteps.length}
-              </H1>
-            </Row>
-          </Column>
-        </Row>
+          <Row margin="1rem auto" width="auto">
+            <H1 color={colors.white.secondary} width="max-content">
+              {taskSteps.length} Steps{' '}
+            </H1>
+            <H1 color={colors.white.secondary} margin="0 0.3rem" width="max-content">
+              -
+            </H1>
+            <H1 color={colors.white.secondary} width="max-content">
+              {activeStep + 1}/{taskSteps.length}
+            </H1>
+          </Row>
+        </Column>
       </StyledReactTooltip>
     </ItemContainer>
   )

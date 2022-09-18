@@ -18,6 +18,10 @@ const DefaultCalendarOptions = () => {
       start: 'sidebarToggle, prev,next, title',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
+    // slotMinTime: '08:00:00',
+    // slotMaxTime: '18:00:00',
+    allDaySlot: false,
+    contentHeight: '100%',
     /*
       Enable dragging and resizing event
       ? Docs: https://fullcalendar.io/docs/editable

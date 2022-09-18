@@ -23,6 +23,7 @@ import { selectColorForTaskStatus } from '@/utils/statusColorUtil'
 const EventInner = styled(Button)`
   display: flex;
   align-items: center;
+  height: ${({ height }) => height};
 `
 function calendarFiltersReducer(state, action) {
   switch (action.type) {
@@ -35,17 +36,22 @@ function calendarFiltersReducer(state, action) {
   }
 }
 
-const DAssakWrapper = styled.div`
-  display: flex;
-  .fc-daygrid-body {
-    width: 100%;
-    table {
-      width: 100%;
-    }
-  }
-`
-
 const CalendarModal = () => {
+  const StyledReactTooltip = styled(ReactTooltip)`
+    border-radius: 0.3rem !important;
+    padding: 0.3rem 0.5rem !important;
+    background-color: ${colors.primary.dark} !important;
+    border: 2px solid ${colors.white.secondary} !important;
+    border-bottom: 4px solid ${colors.orange.primary}!important;
+    opacity: 1 !important;
+    overflow: hidden;
+    width: 300px;
+
+    &:after {
+      border-top-color: ${colors.gray.dark} !important;
+    }
+  `
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -92,21 +98,6 @@ const CalendarModal = () => {
     setIsFiltersOpen(!isFiltersOpen)
   }
 
-  const StyledReactTooltip = styled(ReactTooltip)`
-    border-radius: 0.3rem !important;
-    padding: 0.3rem 0.5rem !important;
-    background-color: ${colors.primary.dark} !important;
-    border: 2px solid ${colors.white.secondary} !important;
-    border-bottom: 10px solid ${colors.secondary.middle}!important;
-    opacity: 1 !important;
-    overflow: hidden;
-    width: 300px;
-
-    &:after {
-      border-top-color: ${colors.gray.dark} !important;
-    }
-  `
-
   const handleCategoryChange = (option: IOption) => {
     if (option) {
       const selectedCategory = {
@@ -143,8 +134,9 @@ const CalendarModal = () => {
               allDay: false,
               backgroundColor: step.category.color.color,
               start: step.startDate,
+              end: step.startDate + 36000,
+
               color: step.category.color.color,
-              end: step.startDate + (task?.totalDuration || 0),
               title: task.name,
               extendedProps: { task, step }
             })
@@ -236,12 +228,8 @@ const CalendarModal = () => {
                   const step = props.event._def.extendedProps.step
 
                   return (
-                    <ItemContainer width="100%" height="100%">
-                      <EventInner
-                        width="100%"
-                        color={props.backgroundColor}
-                        padding={task.totalDuration / 60 / 60 > task.totalDuration ? '0' : '0.25rem 0.5rem'}
-                      >
+                    <ItemContainer width="100%">
+                      <EventInner width="100%" color={props.backgroundColor}>
                         <JustifyBetweenRow width="100%">
                           <H1 fontSize="0.7rem" color={colors.white.secondary}>
                             {step.category.name}

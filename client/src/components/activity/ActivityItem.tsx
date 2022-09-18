@@ -3,20 +3,14 @@ import { Baloon, H1, ItemContainer, JustifyCenterColumn, JustifyCenterRow, UserI
 import { IActivity } from '@/models'
 import colors from '@/constants/colors'
 import moment from 'moment'
-import styled from 'styled-components'
 
 interface IProps {
   activity: IActivity
 }
 
 const ActivityItem: React.FC<IProps> = ({ activity }) => {
-  const CustomItemContainer = styled(JustifyCenterRow)`
-    align-items: baseline;
-    /* max-height: 200px; */
-    /* overflow: auto; */
-  `
   return (
-    <CustomItemContainer width="100%" margin="0 0 16px 0" height="auto">
+    <JustifyCenterRow width="100%" margin="0 0 16px 0" height="auto">
       <ItemContainer width="100px" height="100%">
         <JustifyCenterColumn width="auto">
           <H1 textAlign="center" fontSize="0.8rem" fontWeight="900" color={colors.text.primary}>
@@ -66,7 +60,7 @@ const ActivityItem: React.FC<IProps> = ({ activity }) => {
           links={activity.links}
         />
       </ItemContainer>
-    </CustomItemContainer>
+    </JustifyCenterRow>
   )
 }
 
