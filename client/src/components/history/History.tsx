@@ -90,12 +90,12 @@ const History: React.FC<IProps> = props => {
               className="vertical-timeline-element--work"
               contentStyle={{ border: '1px solid #ccc' }}
               contentArrowStyle={{ borderRight: '7px solid #ccc' }}
-              date={moment(item.createdAt).format('DD/MM/YYYY HH:mm')}
+              date={moment(item.createdAt).format('MM/DD/YYYY HH:mm')}
               iconStyle={{ background: getIcon(item.type).color, color: '#fff', width: 40, height: 40, top: 11 }}
               icon={getIcon(item.type).icon}
             >
               <h3 className="vertical-timeline-element-title">{item.title}</h3>
-              <h4 className="vertical-timeline-element-subtitle">{item.description}</h4>
+              <p style={{ width: '100%', wordBreak: 'break-all' }}>{item.description}</p>
               <p>{item.user.firstname + ' ' + item.user.lastname}</p>
             </VerticalTimelineElement>
           ))}

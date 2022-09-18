@@ -9,7 +9,7 @@ const SideDrawerStyled = styled.div<{ open?: boolean }>`
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 40%;
+  width: 20%;
   transition: all 0.3s ease-in-out;
   transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(100%)')};
   visibility: ${({ open }) => (open ? 'unset' : 'hidden')};
