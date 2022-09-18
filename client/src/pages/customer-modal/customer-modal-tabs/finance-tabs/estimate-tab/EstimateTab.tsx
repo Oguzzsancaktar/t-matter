@@ -43,7 +43,13 @@ interface IState {
   nonBillableTasks: ICustomerTask[]
 }
 
-const EstimateTab = ({ customerId }) => {
+interface IProps {
+  customerId: string
+  selectedInvoice?: Invoice
+  handleSelectedInvoiceChange: (invoice: Invoice) => void
+}
+
+const EstimateTab: React.FC<IProps> = ({ customerId, selectedInvoice, handleSelectedInvoiceChange }) => {
   const {
     data: customerTasksData,
     isLoading: customerTasksIsLoading,
@@ -72,7 +78,6 @@ const EstimateTab = ({ customerId }) => {
   })
 
   const [invoice, setInvoice] = useState<Invoice>({ ...invoiceDefault })
-  const [openInvoice, setOpenInvoice] = useState<Invoice>()
 
   const refetch = () => {
     r1()
@@ -202,7 +207,11 @@ const EstimateTab = ({ customerId }) => {
       <JustifyCenterRow margin="0 0 1rem 0" height="235px">
         <Bordered width="100%">
           <JustifyBetweenRow height="100%">
-            <InvoicesDonut onSelect={i => setOpenInvoice(i)} customerId={customerId} />
+            <InvoicesDonut
+              selectedInvoice={selectedInvoice}
+              onSelect={handleSelectedInvoiceChange}
+              customerId={customerId}
+            />
             <AdditionalTimeDonut customerId={customerId} />
             <NonBillableCircleProgress customerId={customerId} />
             <UnPaidInvoicesCircleProgress customerId={customerId} />
@@ -213,7 +222,7 @@ const EstimateTab = ({ customerId }) => {
         <DragDropContext key="context" onDragEnd={onDragEnd}>
           <Bordered margin="0 12px 0 0" width="33%">
             <H1 color={colors.text.primary}>Invoiced</H1>
-            <InvoicedList openInvoice={openInvoice} invoices={invoices} />
+            <InvoicedList openInvoice={selectedInvoice} invoices={invoices} />
           </Bordered>
           <div style={{ margin: '0 12px 0 0', width: '33%' }}>
             <Bordered style={{ marginBottom: 8 }}>

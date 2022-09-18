@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 import { ICustomer, Invoice } from '@/models'
 import { useGetInvoicesQuery } from '@services/settings/finance-planning/financePlanningService'
 import colors from '@constants/colors'
 import moment from 'moment'
 import { H1 } from '@/components'
+import { ref } from 'joi'
 
 interface IProps {
   customerId: ICustomer['_id']
   onSelect: (invoice: Invoice) => void
+  selectedInvoice?: Invoice
 }
 
-const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect }) => {
+const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice }) => {
   const { data: invoices, isLoading: isInvoicesLoading } = useGetInvoicesQuery(customerId)
 
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({

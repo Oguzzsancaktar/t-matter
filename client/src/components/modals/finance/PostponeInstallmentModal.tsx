@@ -23,7 +23,7 @@ import moment from 'moment'
 interface IProps {
   installment: IInstallment
   selectedInvoice: Invoice
-  setSelectedInvoice: React.Dispatch<React.SetStateAction<Invoice | undefined>>
+  setSelectedInvoice: (invoice: Invoice) => void
 }
 
 const PostponeInstallmentModal: React.FC<IProps> = ({ installment, selectedInvoice, setSelectedInvoice }) => {

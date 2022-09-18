@@ -55,12 +55,19 @@ const Bordered = styled.div<{ margin?: string; width?: string }>`
 
 interface IProps {
   customerId: string
+  selectedInvoice?: Invoice
+  handleSelectedInvoiceChange: (invoice: Invoice) => void
+  handleSelectedInstallmentChange: (installment: IInstallment) => void
 }
 
-const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
+const InstallmentTab: React.FC<IProps> = ({
+  customerId,
+  selectedInvoice,
+  handleSelectedInvoiceChange,
+  handleSelectedInstallmentChange
+}) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-  const [selectedInvoice, setSelectedInvoice] = useState<Invoice>()
   const { data: installments, isLoading: isInstallmentsLoading } = useGetInstallmentsQuery(selectedInvoice?._id, {
     skip: !selectedInvoice
   })
@@ -122,7 +129,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
             <PostponeInstallmentModal
               installment={row}
               selectedInvoice={selectedInvoice}
-              setSelectedInvoice={setSelectedInvoice}
+              setSelectedInvoice={handleSelectedInvoiceChange}
             />
           ),
           width: ESize.WSmall,
@@ -280,7 +287,7 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
                 />
               )}
             <IconButton
-              onClick={() => {}}
+              onClick={handleSelectedInstallmentChange.bind(this, data)}
               bgColor={colors.background.gray.light}
               margin="0 .2rem 0 0"
               children={<FileText size={'16px'} color={colors.text.primary} />}
@@ -302,7 +309,11 @@ const InstallmentTab: React.FC<IProps> = ({ customerId }) => {
       <JustifyCenterRow margin="0 0 1rem 0" height="235px">
         <Bordered margin="0 0 0 8px" width="100%">
           <JustifyBetweenRow height="100%">
-            <InvoicesDonut onSelect={setSelectedInvoice} customerId={customerId} />
+            <InvoicesDonut
+              selectedInvoice={selectedInvoice}
+              onSelect={handleSelectedInvoiceChange}
+              customerId={customerId}
+            />
             <AdditionalTimeDonut customerId={customerId} />
             <NonBillableCircleProgress customerId={customerId} />
             <UnPaidInvoicesCircleProgress customerId={customerId} />

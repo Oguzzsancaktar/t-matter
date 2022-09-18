@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ICustomer } from '@/models'
+import { ICustomer, IInstallment, Invoice } from '@/models'
 import {
   Column,
   IconButton,
@@ -33,16 +33,30 @@ const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
   const [activeTab, setActiveTab] = useState('EstimateTab')
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [historyType, setHistoryType] = useState<undefined | string>(undefined)
+  const [selectedInvoice, setSelectedInvoice] = useState<undefined | Invoice>()
+  const [selectedInstallment, setSelectedInstallment] = useState<undefined | IInstallment>()
+
   const { data, refetch } = useGetFinanceHistoryQuery({
     customerId,
     userId: localStorage.getItem('userId') as string,
-    historyType
+    historyType,
+    invoiceId: selectedInvoice?._id,
+    installmentId: selectedInstallment?._id
   })
 
   const handleToggle = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.preventDefault()
     e.stopPropagation()
     setIsHistoryOpen(!isHistoryOpen)
+  }
+
+  const handleSelectedInvoiceChange = (invoice: Invoice) => {
+    setSelectedInvoice(invoice)
+  }
+
+  const handleSelectedInstallmentChange = (installment: IInstallment) => {
+    setSelectedInstallment(installment)
+    setIsHistoryOpen(true)
   }
 
   useEffect(() => {
@@ -87,8 +101,21 @@ const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
           {!isHistoryOpen && <ShowHistory onClick={handleToggle}>Show History</ShowHistory>}
         </ModalHeader>
 
-        {React.createElement(Component[activeTab], { customerId })}
-        <SideDrawer onOutsideClick={() => setTimeout(() => setIsHistoryOpen(false), 0)} isHistoryOpen={isHistoryOpen}>
+        {React.createElement(Component[activeTab], {
+          customerId,
+          selectedInvoice,
+          handleSelectedInvoiceChange,
+          handleSelectedInstallmentChange
+        })}
+        <SideDrawer
+          onOutsideClick={() => {
+            setSelectedInstallment(undefined)
+            setTimeout(() => {
+              setIsHistoryOpen(false)
+            }, 0)
+          }}
+          isHistoryOpen={isHistoryOpen}
+        >
           <History selectedFilter={historyType} onFilter={setHistoryType} history={data} />
         </SideDrawer>
       </Column>

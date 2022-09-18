@@ -24,17 +24,21 @@ const Bordered = styled.div<{ margin?: string; width?: string }>`
 `
 interface IProps {
   customerId: string
+  selectedInvoice?: Invoice
+  handleSelectedInvoiceChange: (invoice: Invoice) => void
 }
 
-const InvoiceTab: React.FC<IProps> = ({ customerId }) => {
-  const [selectedInvoice, setSelectedInvoice] = useState<Invoice>()
-
+const InvoiceTab: React.FC<IProps> = ({ customerId, handleSelectedInvoiceChange, selectedInvoice }) => {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1rem' }}>
       <JustifyCenterRow margin="0 0 1rem 0" height="235px">
         <Bordered margin="0 0 0 8px" width="100%">
           <JustifyBetweenRow height="100%">
-            <InvoicesDonut onSelect={setSelectedInvoice} customerId={customerId} />
+            <InvoicesDonut
+              selectedInvoice={selectedInvoice}
+              onSelect={handleSelectedInvoiceChange}
+              customerId={customerId}
+            />
             <AdditionalTimeDonut customerId={customerId} />
             <NonBillableCircleProgress customerId={customerId} />
             <UnPaidInvoicesCircleProgress customerId={customerId} />
