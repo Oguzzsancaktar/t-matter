@@ -187,7 +187,7 @@ const postponeInstallment = async (req, res) => {
     ])
     await dataAccess.historyDataAccess.createHistory({
       type: HISTORY_TYPES.UPDATED,
-      title: 'Installment Plan Created',
+      title: `Installment Postponed${days}`,
       description: note ? note : 'Installment Plan Postponed',
       invoice: invoiceId,
       customer: invoice.customer,
