@@ -50,12 +50,14 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
         })
         return
       }
+      const quantity = Math.floor(+Math.ceil(totalPayment) / financePlanning.minInstallmentAmount.value)
+      const payAmount = +Math.ceil(totalPayment / quantity)
       setState({
         invoiceId: invoice._id as string,
         startDate: moment().add(1, 'months').toDate(),
         deposit,
-        payAmount: +Math.ceil(totalPayment),
-        quantity: 1
+        payAmount,
+        quantity
       })
     }
   }, [financePlanning])
