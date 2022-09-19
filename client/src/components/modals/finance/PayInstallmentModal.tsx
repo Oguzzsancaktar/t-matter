@@ -74,7 +74,11 @@ const PayInstallment: React.FC<IProps> = ({ invoice, installment }) => {
               children={<DollarSign size="16px" />}
               name="amount"
               type="number"
-              onChange={handleInputChange}
+              onChange={e => {
+                if (+e.target.value >= 0) {
+                  handleInputChange(e)
+                }
+              }}
               value={state.amount}
             />
           </JustifyCenterRow>

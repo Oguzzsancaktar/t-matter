@@ -49,8 +49,8 @@ const createInvoice = async (req, res) => {
     const invoice = await dataAccess.financeDataAccess.createInvoice(req.body)
     await dataAccess.historyDataAccess.createHistory({
       type: HISTORY_TYPES.CREATED,
-      title: 'Invoice Created',
-      description: `Invoice: $${invoice.total} has been created`,
+      title: `Invoice Created`,
+      description: `Invoice: $${Math.ceil(invoice.total)} has been created`,
       invoice: invoice._id,
       customer: invoice.customer,
       user: req.user.userId
@@ -76,7 +76,7 @@ const createExpiredTaskStep = async (req, res) => {
     await dataAccess.historyDataAccess.createHistory({
       type: HISTORY_TYPES.CREATED,
       title: 'Extra Time Created',
-      description: `Exp Task Price: $${expiredTaskStep.expiredTimePrice} has been created`,
+      description: `Exp Task Price: $${Math.ceil(expiredTaskStep.expiredTimePrice)} has been created`,
       customer: expiredTaskStep.customer,
       user: req.user.userId
     })
@@ -227,7 +227,7 @@ const payInstallment = async (req, res) => {
         await dataAccess.historyDataAccess.createHistory({
           type: HISTORY_TYPES.UPDATED,
           title: `Installment Paid $${amount}`,
-          description: note ? note : '',
+          description: note ? note : 'paid',
           invoice: invoiceId,
           customer: invoice.customer,
           installment: ins._id,
@@ -243,7 +243,7 @@ const payInstallment = async (req, res) => {
         await dataAccess.historyDataAccess.createHistory({
           type: HISTORY_TYPES.UPDATED,
           title: `Installment Paid $${installment.payAmount}`,
-          description: note ? note : '',
+          description: note ? note : 'paid',
           invoice: invoiceId,
           customer: invoice.customer,
           installment: ins._id,
@@ -265,7 +265,7 @@ const payInstallment = async (req, res) => {
             await dataAccess.historyDataAccess.createHistory({
               type: HISTORY_TYPES.UPDATED,
               title: `Installment Paid $${i.payAmount}`,
-              description: note ? note : '',
+              description: note ? note : 'paid',
               invoice: invoiceId,
               customer: invoice.customer,
               installment: ins._id,
@@ -315,7 +315,7 @@ const payInstallment = async (req, res) => {
       await dataAccess.historyDataAccess.createHistory({
         type: HISTORY_TYPES.UPDATED,
         title: `Installment Paid $${restPay + installment.paidAmount}`,
-        description: note ? note : '',
+        description: note ? note : 'paid',
         invoice: invoiceId,
         customer: invoice.customer,
         installment: inst._id,
@@ -337,7 +337,7 @@ const payInstallment = async (req, res) => {
           await dataAccess.historyDataAccess.createHistory({
             type: HISTORY_TYPES.UPDATED,
             title: `Installment Paid $${i.paidAmount}`,
-            description: note ? note : '',
+            description: note ? note : 'paid',
             invoice: invoiceId,
             customer: invoice.customer,
             installment: ins._id,
@@ -354,7 +354,7 @@ const payInstallment = async (req, res) => {
           await dataAccess.historyDataAccess.createHistory({
             type: HISTORY_TYPES.UPDATED,
             title: `Installment Paid $${amount}`,
-            description: note ? note : '',
+            description: note ? note : 'paid',
             invoice: invoiceId,
             customer: invoice.customer,
             installment: ins._id,
@@ -376,7 +376,7 @@ const payInstallment = async (req, res) => {
       await dataAccess.historyDataAccess.createHistory({
         type: HISTORY_TYPES.UPDATED,
         title: `Installment Paid $${amount}`,
-        description: note ? note : '',
+        description: note ? note : 'paid',
         invoice: invoiceId,
         customer: invoice.customer,
         installment: ins._id,
@@ -394,7 +394,7 @@ const payInstallment = async (req, res) => {
       await dataAccess.historyDataAccess.createHistory({
         type: HISTORY_TYPES.UPDATED,
         title: `Installment Paid $${installment.payAmount}`,
-        description: note ? note : '',
+        description: note ? note : 'paid',
         invoice: invoiceId,
         customer: invoice.customer,
         installment: ins._id,
@@ -413,15 +413,32 @@ const resetInstallments = async (req, res) => {
   const { invoiceId } = req.params
   try {
     const invoice = await dataAccess.financeDataAccess.getInvoiceById(invoiceId)
+    const category = await dataAccess.invoiceCategoryDataAccess.getInvoiceCategory(invoice.category)
+    const installments = await dataAccess.financeDataAccess.getInstallmentsByInvoiceId(invoiceId)
     await dataAccess.financeDataAccess.deleteManyInstallment({ invoice: invoiceId })
+    let deposit = 0
+    let payAmount = 0
+    let qty = 0
+    if (installments) {
+      const depositInstallment = installments.find(item => item.type === INSTALLMENT_TYPES.DEPOSIT)
+      if (depositInstallment) {
+        deposit = depositInstallment.payAmount
+      }
+      const paymentInstallment = installments.find(item => item.type === INSTALLMENT_TYPES.PAYMENT)
+      if (paymentInstallment) {
+        payAmount = paymentInstallment.payAmount
+        qty = depositInstallment ? installments.length - 1 : installments.length
+      }
+    }
     await dataAccess.historyDataAccess.createHistory({
       type: HISTORY_TYPES.DELETED,
-      title: 'Installment Plan Reset',
-      description: 'Installment Plan removed',
+      title: 'Installment Plan Removed',
+      description: `Name: ${category.name} Deposit: $${deposit}, Payment: $${payAmount}, Qty: $${qty}`,
       invoice: invoiceId,
       customer: invoice.customer,
       user: req.user.userId
     })
+    await dataAccess.historyDataAccess.removeManyHistory({ invoice: invoiceId, installment: { $exists: true } })
     res.sendStatus(StatusCodes.OK)
   } catch (e) {
     console.log(e)
