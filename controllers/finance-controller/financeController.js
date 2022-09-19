@@ -455,8 +455,8 @@ const editInstallment = async (req, res) => {
       type: HISTORY_TYPES.UPDATED,
       title: `Installment ${moment(installment.payDate).format('MM/DD/YY')} Updated`,
       description: `Amount: $${installment.payAmount}, Suspended Fee: $${installment.suspendedFee}, Late Fee: $${installment.lateFee}, Status: ${installment.status}, Payment Method: ${installment.paidMethod}`,
-      invoice: installment.invoice,
-      customer: installment.customer,
+      invoice: installment.invoice._id,
+      customer: installment.invoice.customer,
       installment: inst._id,
       user: req.user.userId
     })
