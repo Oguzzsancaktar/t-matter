@@ -76,10 +76,10 @@ const getCustomerActivity = ({ customer }) => {
   ]).exec()
 }
 
-const getAllActivity = (userId, categoryId) => {
+const getAllActivity = (userId, customerId) => {
   const tempPipeline = []
 
-  if (userId.trim().length > 0) {
+  if (userId && userId?.trim().length > 0) {
     tempPipeline.push({
       $match: {
         owner: { $eq: mongoose.Types.ObjectId(userId) }
@@ -87,10 +87,10 @@ const getAllActivity = (userId, categoryId) => {
     })
   }
 
-  if (categoryId.trim().length > 0) {
+  if (customerId && customerId?.trim().length > 0) {
     tempPipeline.push({
       $match: {
-        'customer._id': { $eq: mongoose.Types.ObjectId(categoryId) }
+        'customer._id': { $eq: mongoose.Types.ObjectId(customerId) }
       }
     })
   }

@@ -179,6 +179,7 @@
 }
 .fc .fc-timegrid .fc-timegrid-slots .fc-timegrid-slot .fc-timegrid-slot-label-frame .fc-timegrid-slot-label-cushion {
   text-transform: uppercase;
+  height: 70px;
 }
 .fc .fc-timegrid .fc-timegrid-divider {
   display: none;

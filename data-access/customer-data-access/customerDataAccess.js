@@ -79,6 +79,20 @@ const findCustomerById = async (id, populate = '') => {
       }
     },
     {
+      $lookup: {
+        from: 'colors',
+        localField: 'refferedBy.color',
+        foreignField: '_id',
+        as: 'refferedBy.color'
+      }
+    },
+    {
+      $unwind: {
+        path: '$refferedBy.color',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
       $unwind: {
         path: '$reliableCustomers',
         preserveNullAndEmptyArrays: true
@@ -178,6 +192,20 @@ const findCustomerWithFiltersAndPopulate = ({ search, size, status }) => {
     {
       $unwind: {
         path: '$refferedBy',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'colors',
+        localField: 'refferedBy.color',
+        foreignField: '_id',
+        as: 'refferedBy.color'
+      }
+    },
+    {
+      $unwind: {
+        path: '$refferedBy.color',
         preserveNullAndEmptyArrays: true
       }
     }

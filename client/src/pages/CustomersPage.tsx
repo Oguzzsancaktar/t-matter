@@ -78,7 +78,7 @@ const CustomersPage = () => {
       sortable: true,
       cell: data => (
         <ItemContainer onClick={() => handleRead(data)} cursorType="pointer" width="auto">
-          <Badge color={data.refferedBy.color}>{data.refferedBy.name} </Badge>
+          <Badge color={data.refferedBy.color.color}>{data.refferedBy.name}</Badge>
         </ItemContainer>
       )
     },

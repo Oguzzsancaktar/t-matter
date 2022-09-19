@@ -24,9 +24,9 @@ const getTaskActivity = async (req, res) => {
 }
 
 const getAllActivity = async (req, res) => {
-  const { userId, categoryId } = req.query
+  const { customerId, categoryId } = req.query
   try {
-    const activities = await dataAccess.activityDataAccess.getAllActivity(userId, categoryId)
+    const activities = await dataAccess.activityDataAccess.getAllActivity(customerId, categoryId)
     res.send(activities)
   } catch (e) {
     console.log(e)

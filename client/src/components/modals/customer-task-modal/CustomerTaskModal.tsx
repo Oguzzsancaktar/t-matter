@@ -339,15 +339,15 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
         setUpdatedTaskData(tempUpdatedTaskData)
 
         await updateTask(tempUpdatedTaskData)
-        await createActivity({
-          title: 'Task Started',
-          content: 'Task Started ',
-          customer: tempUpdatedTaskData.customer._id,
-          task: tempUpdatedTaskData._id,
-          owner: loggedUser.user?._id || '',
-          step: 0,
-          type: EActivity.TASK_STARTED
-        })
+        // await createActivity({
+        //   title: 'Task Started',
+        //   content: 'Task Started ',
+        //   customer: tempUpdatedTaskData.customer._id,
+        //   task: tempUpdatedTaskData._id,
+        //   owner: loggedUser.user?._id || '',
+        //   step: 0,
+        //   type: EActivity.TASK_STARTED
+        // })
         dispatch(activityApi.util.resetApiState())
       } else {
         setUpdatedTaskData(taskData)

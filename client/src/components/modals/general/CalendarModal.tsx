@@ -131,11 +131,10 @@ const CalendarModal = () => {
           if (calendarFilters.category?._id === undefined || calendarFilters.category?._id === step.category._id) {
             allTaskSteps.push({
               id: task._id,
-              allDay: false,
+              // allDay: false,
               backgroundColor: step.category.color.color,
               start: step.startDate,
               end: step.startDate + 36000,
-
               color: step.category.color.color,
               title: task.name,
               extendedProps: { task, step }
@@ -148,7 +147,7 @@ const CalendarModal = () => {
   }, [taskData, taskDataIsLoading])
 
   return (
-    <JustifyBetweenColumn height="100%">
+    <ItemContainer borderRadius="0.3rem" overflow="hidden" height="100%">
       <ModalBody height="100% ">
         <Row height="100%">
           <ItemContainer height="100%" overflow="hidden" width={isFiltersOpen ? '250px' : '0'} margin="0 1rem 0 0">
@@ -221,7 +220,6 @@ const CalendarModal = () => {
             {calendarEvents && !taskDataIsLoading ? (
               // @ts-ignore
               <FullCalendar
-                height="100%"
                 {...calendarOptions}
                 eventContent={props => {
                   const task = props.event._def.extendedProps.task
@@ -293,7 +291,7 @@ const CalendarModal = () => {
           </ItemContainer>
         </Row>
       </ModalBody>
-    </JustifyBetweenColumn>
+    </ItemContainer>
   )
 }
 

@@ -88,6 +88,7 @@ const SideBar = () => {
       openModal({
         id: `calendarModal`,
         title: 'Calendar Modal',
+
         body: <CalendarModal />,
         width: ESize.WXLarge,
         height: ESize.HLarge,

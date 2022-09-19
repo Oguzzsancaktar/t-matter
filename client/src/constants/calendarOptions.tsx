@@ -10,7 +10,7 @@ const DefaultCalendarOptions = () => {
 
   return {
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
-    initialView: 'dayGridMonth',
+    initialView: 'timeGridDay',
     nowIndicator: true,
     now: Date.now(),
     displayEventTime: false,
@@ -18,10 +18,12 @@ const DefaultCalendarOptions = () => {
       start: 'sidebarToggle, prev,next, title',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
-    // slotMinTime: '08:00:00',
-    // slotMaxTime: '18:00:00',
+    slotMinTime: '08:00:00',
+    slotMaxTime: '18:00:00',
+    slotDuration: { hours: 1 },
     allDaySlot: false,
     contentHeight: '100%',
+    height: '100%',
     /*
       Enable dragging and resizing event
       ? Docs: https://fullcalendar.io/docs/editable
