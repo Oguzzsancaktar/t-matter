@@ -23,6 +23,7 @@ const RelativeContainer = styled.div`
 `
 
 const UserList = styled.ul`
+  z-index: 99;
   width: 250px;
   border-radius: 0.3rem;
   position: absolute;
