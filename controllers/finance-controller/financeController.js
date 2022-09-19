@@ -433,7 +433,7 @@ const resetInstallments = async (req, res) => {
     await dataAccess.historyDataAccess.createHistory({
       type: HISTORY_TYPES.DELETED,
       title: 'Installment Plan Removed',
-      description: `Name: ${category.name} Deposit: $${deposit}, Payment: $${payAmount}, Qty: $${qty}`,
+      description: `Name: ${category.name} Deposit: $${deposit}, Payment: $${payAmount}, Qty: ${qty}`,
       invoice: invoiceId,
       customer: invoice.customer,
       user: req.user.userId
