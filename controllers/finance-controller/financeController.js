@@ -446,6 +446,27 @@ const resetInstallments = async (req, res) => {
   }
 }
 
+const editInstallment = async (req, res) => {
+  try {
+    const { installmentId } = req.params
+    const installment = req.body
+    const inst = await dataAccess.financeDataAccess.updateInstallment(installmentId, installment)
+    await dataAccess.historyDataAccess.createHistory({
+      type: HISTORY_TYPES.UPDATED,
+      title: `Installment ${moment(installment.payDate).format('MM/DD/YY')} Updated`,
+      description: `Amount: $${installment.payAmount}, Suspended Fee: $${installment.suspendedFee}, Late Fee: $${installment.lateFee}, Status: ${installment.status}, Payment Method: ${installment.paidMethod}`,
+      invoice: installment.invoice,
+      customer: installment.customer,
+      installment: inst._id,
+      user: req.user.userId
+    })
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   getFinancePlanning,
   updateFinancePlanning,
@@ -457,5 +478,6 @@ module.exports = {
   getInstallments,
   postponeInstallment,
   payInstallment,
-  resetInstallments
+  resetInstallments,
+  editInstallment
 }

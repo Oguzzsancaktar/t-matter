@@ -6,6 +6,7 @@ import {
   CircleColor,
   Column,
   CreateInstallmentModal,
+  EditInstallmentModal,
   H1,
   IconButton,
   InputWithIcon,
@@ -177,6 +178,21 @@ const InstallmentTab: React.FC<IProps> = ({
     } catch (e) {}
   }
 
+  const handleEditInstallment = (row: IInstallment) => {
+    if (selectedInvoice) {
+      dispatch(
+        openModal({
+          id: `editInstallment`,
+          title: 'Edit Installment Modal',
+          body: <EditInstallmentModal installment={row} />,
+          width: ESize.WSmall,
+          height: ESize.WSmall,
+          maxWidth: ESize.WSmall
+        })
+      )
+    }
+  }
+
   const dateFormat = date => {
     return moment(date).format('MMM DD YY')
   }
@@ -310,6 +326,12 @@ const InstallmentTab: React.FC<IProps> = ({
               bgColor={colors.background.gray.light}
               margin="0 .2rem 0 0"
               children={<Printer size={'16px'} color={colors.text.primary} />}
+            />
+            <IconButton
+              onClick={handleEditInstallment.bind(this, data)}
+              bgColor={colors.background.gray.light}
+              margin="0 .2rem 0 0"
+              children={<Edit size={'16px'} color={colors.text.primary} />}
             />
           </Row>
         )
