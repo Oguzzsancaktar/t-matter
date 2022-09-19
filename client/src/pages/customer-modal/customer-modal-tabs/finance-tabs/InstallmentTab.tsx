@@ -6,6 +6,7 @@ import {
   CircleColor,
   Column,
   CreateInstallmentModal,
+  EditInstallmentModal,
   H1,
   IconButton,
   InputWithIcon,
@@ -177,6 +178,21 @@ const InstallmentTab: React.FC<IProps> = ({
     } catch (e) {}
   }
 
+  const handleEditInstallment = (row: IInstallment) => {
+    if (selectedInvoice) {
+      dispatch(
+        openModal({
+          id: `editInstallment`,
+          title: 'Edit Installment Modal',
+          body: <EditInstallmentModal installment={row} />,
+          width: ESize.WSmall,
+          height: ESize.WSmall,
+          maxWidth: ESize.WSmall
+        })
+      )
+    }
+  }
+
   const dateFormat = date => {
     return moment(date).format('MMM DD YY')
   }
@@ -240,6 +256,13 @@ const InstallmentTab: React.FC<IProps> = ({
         cell: data => <div>${data.suspendedFee}</div>
       },
       {
+        name: 'Method',
+        width: '120px',
+        selector: row => row.paidMethod,
+        sortable: true,
+        cell: data => <div>{constantToLabel(data.paidMethod)}</div>
+      },
+      {
         name: 'Status',
         width: '120px',
         selector: row => row.status,
@@ -271,12 +294,18 @@ const InstallmentTab: React.FC<IProps> = ({
         header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
         cell: (data: IInstallment, i: number) => (
           <Row>
-            <IconButton
-              onClick={showPayInstallment.bind(this, data)}
-              bgColor={colors.background.gray.light}
-              margin="0 .2rem 0 0"
-              children={<DollarSign size={'16px'} color={colors.text.primary} />}
-            />
+            {installments &&
+              data.status !== INSTALLMENT_STATUS.PAID &&
+              (installments[i - 1]?.status === INSTALLMENT_STATUS.PAID || installments[i - 1]?.status === undefined) &&
+              (installments[i + 1]?.status === INSTALLMENT_STATUS.UN_PAID ||
+                installments[i + 1]?.status === undefined) && (
+                <IconButton
+                  onClick={showPayInstallment.bind(this, data)}
+                  bgColor={colors.background.gray.light}
+                  margin="0 .2rem 0 0"
+                  children={<DollarSign size={'16px'} color={colors.text.primary} />}
+                />
+              )}
             {data.type === INSTALLMENT_TYPES.PAYMENT &&
               selectedInvoice?.postponeCount < (financePlanning?.installmentPostponeLimit?.value as number) && (
                 <IconButton
@@ -297,6 +326,12 @@ const InstallmentTab: React.FC<IProps> = ({
               bgColor={colors.background.gray.light}
               margin="0 .2rem 0 0"
               children={<Printer size={'16px'} color={colors.text.primary} />}
+            />
+            <IconButton
+              onClick={handleEditInstallment.bind(this, data)}
+              bgColor={colors.background.gray.light}
+              margin="0 .2rem 0 0"
+              children={<Edit size={'16px'} color={colors.text.primary} />}
             />
           </Row>
         )
@@ -352,11 +387,13 @@ const InstallmentTab: React.FC<IProps> = ({
                     </Row>
                   </Row>
                   <Row width="auto">
-                    <JustifyCenterRow margin="0 1rem 0 0">
-                      <Button color={colors.red.primary} width="200px" onClick={handleResetInstallments}>
-                        Reset
-                      </Button>
-                    </JustifyCenterRow>
+                    {installments[0].paidAmount === 0 && (
+                      <JustifyCenterRow margin="0 1rem 0 0">
+                        <Button color={colors.red.primary} width="200px" onClick={handleResetInstallments}>
+                          Reset
+                        </Button>
+                      </JustifyCenterRow>
+                    )}
                     <JustifyCenterRow>
                       <Button width="200px" onClick={showRePlanningInstallment}>
                         Re Planning Installment

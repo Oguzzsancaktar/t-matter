@@ -62,6 +62,7 @@ const getCustomerFinanceHistory = ({ customerId, installmentId, invoiceId, userI
   }
 
   aggregate.unshift({ $match })
+  aggregate.push({ $sort: { createdAt: -1 } })
   return History.aggregate(aggregate)
 }
 
@@ -69,7 +70,12 @@ const createHistory = body => {
   return History.create(body)
 }
 
+const removeManyHistory = filter => {
+  return History.deleteMany(filter)
+}
+
 module.exports = {
   getCustomerFinanceHistory,
-  createHistory
+  createHistory,
+  removeManyHistory
 }

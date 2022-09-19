@@ -3,3 +3,4 @@ export { default as RePlanningInstallmentModal } from './RePlanningInstallmentMo
 export { default as PayInstallmentModal } from './PayInstallmentModal'
 export { default as PostponeInstallmentModal } from './PostponeInstallmentModal'
 export { default as InstallmentPrintModal } from './InstallmentPrintModal'
+export { default as EditInstallmentModal } from './EditInstallmentModal'
