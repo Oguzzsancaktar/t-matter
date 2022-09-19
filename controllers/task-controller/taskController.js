@@ -2,6 +2,7 @@ const utils = require('../../utils')
 const { StatusCodes } = require('http-status-codes')
 const mongoose = require('mongoose')
 const dataAccess = require('../../data-access')
+const Task = require('../../models/task')
 
 const createTask = async (req, res) => {
   const { body } = req
@@ -61,6 +62,31 @@ const getTask = async (req, res) => {
   }
 }
 
+const postponeTask = async (req, res) => {
+  const { taskId, postponeDate, step } = req.body
+
+  try {
+    const task = await Task.findById(taskId)
+    if (task) {
+      const steps = [...task.steps]
+      steps[step].usedPostpone = (+steps[step].usedPostpone + 1).toString()
+      steps[step].postponedDate = postponeDate
+
+      const tempTask = {
+        ...task,
+        steps
+      }
+      const updatedTask = await dataAccess.taskDataAccess.updateTaskById(taskId, tempTask)
+      console.log(updatedTask)
+      res.status(200).json(updatedTask)
+    }
+    res.status(404).json('TASK not found')
+  } catch (error) {
+    console.log(error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
 const updateTask = async (req, res) => {
   const { taskId } = req.params
   const { body } = req
@@ -96,5 +122,6 @@ module.exports = {
   getTask,
   updateTask,
   reorderTasks,
-  getAllTaskList
+  getAllTaskList,
+  postponeTask
 }

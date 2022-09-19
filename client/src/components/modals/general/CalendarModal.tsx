@@ -46,7 +46,7 @@ const CalendarModal = () => {
     opacity: 1 !important;
     overflow: hidden;
     width: 300px;
-
+    z-index: 9999999999;
     &:after {
       border-top-color: ${colors.gray.dark} !important;
     }
@@ -128,13 +128,14 @@ const CalendarModal = () => {
     if (taskData) {
       taskData.forEach(task => {
         task.steps.forEach(step => {
+          console.log(step)
           if (calendarFilters.category?._id === undefined || calendarFilters.category?._id === step.category._id) {
             allTaskSteps.push({
               id: task._id,
               // allDay: false,
               backgroundColor: step.category.color.color,
-              start: step.startDate,
-              end: step.startDate + 36000,
+              start: step?.postponedDate?.toString().trim().length > 0 ? step?.postponedDate : step.startDate,
+              end: step?.postponedDate?.toString().trim().length > 0 ? step?.postponedDate : step.startDate,
               color: step.category.color.color,
               title: task.name,
               extendedProps: { task, step }

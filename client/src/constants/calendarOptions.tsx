@@ -4,9 +4,24 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { Menu } from 'react-feather'
 import { useRef } from 'react'
+import { usePostponeTaskMutation } from '@/services/customers/taskService'
+import { EActivity } from '@/models'
+import { activityApi, useCreateActivityMutation } from '@/services/activityService'
+import Swal from 'sweetalert2'
+import useAccessStore from '@/hooks/useAccessStore'
+import { useAuth } from '@/hooks/useAuth'
+import moment from 'moment'
 
 const DefaultCalendarOptions = () => {
+  const { loggedUser } = useAuth()
+
+  const [createActivity] = useCreateActivityMutation()
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   const calendarRef = useRef(null)
+
+  const [postponeTask] = usePostponeTaskMutation()
 
   return {
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
@@ -24,12 +39,13 @@ const DefaultCalendarOptions = () => {
     allDaySlot: false,
     contentHeight: '100%',
     height: '100%',
+    droppable: true,
+    nextDayThreshold: '09:00:00',
     /*
       Enable dragging and resizing event
       ? Docs: https://fullcalendar.io/docs/editable
     */
-    editable: false,
-
+    editable: true,
     /*
       Enable resizing event from start
       ? Docs: https://fullcalendar.io/docs/eventResizableFromStart
@@ -82,19 +98,66 @@ const DefaultCalendarOptions = () => {
       console.log('ingo', info)
     },
 
-    /*
-      Handle event drop (Also include dragged event)
-      ? Docs: https://fullcalendar.io/docs/eventDrop
-      ? We can use `eventDragStop` but it doesn't return updated event so we have to use `eventDrop` which returns updated event
-    */
-    eventDrop({ event: droppedEvent }) {
-      console.log('droppedEvent', droppedEvent)
+    eventDrop: async ({ event: droppedEvent }) => {
+      const task = droppedEvent._def.extendedProps.task
+      const date = droppedEvent._instance.range.start
+
+      try {
+        Swal.fire({
+          title: 'Enter your postpone message',
+          input: 'textarea',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Postponed',
+          showLoaderOnConfirm: true,
+          preConfirm: login => {
+            return login
+          },
+          allowOutsideClick: () => !Swal.isLoading()
+        }).then(async result => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: `Task Postponed`,
+              text: result.value
+            })
+
+            console.log(droppedEvent)
+            await postponeTask({
+              _id: task._id,
+              postponedDate: moment(date).subtract(1, 'd').valueOf(),
+              step: task?.index || 0
+            })
+            await createActivity({
+              title: 'Task Postponed',
+              content: result.value || ' ',
+              customer: task.customer._id,
+              task: task._id,
+              owner: loggedUser.user?._id || '',
+              step: task?.index || 0,
+              type: EActivity.TASK_POSTPONED
+            })
+            dispatch(activityApi.util.resetApiState())
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Cancelled'
+            })
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
     },
 
-    /*
-      Handle event resize
-      ? Docs: https://fullcalendar.io/docs/eventResize
-    */
+    eventRender: function (event, element) {
+      element.bind('dblclick', function () {
+        alert('double click!')
+      })
+    },
+
     eventResize({ event: resizedEvent }) {
       console.log('resizedEvent', resizedEvent)
     },

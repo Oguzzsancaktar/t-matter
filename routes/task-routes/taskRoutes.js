@@ -4,6 +4,7 @@ const middlewares = require('../../middlewares')
 const controllers = require('../../controllers')
 
 router.put('/reorder', controllers.taskController.reorderTasks)
+router.post('/postpone', controllers.taskController.postponeTask)
 
 router.post(
   '/:customerId',
