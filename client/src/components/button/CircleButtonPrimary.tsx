@@ -8,7 +8,7 @@ interface Props {
 }
 
 const CircleButtonSC = styled.button`
-  font-family: 'Chillax-Regular';
+  font-family: 'Satoshi-Light';
   cursor: pointer;
   padding: 0.4rem 0.6rem;
   border-radius: 0.3rem;

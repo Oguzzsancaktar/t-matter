@@ -59,6 +59,7 @@ const BaloonContent = styled.div`
   height: auto;
   font-size: 1rem;
   font-weight: 300;
+  font-family: 'Satoshi-Light';
   color: ${colors.text.primary};
   flex: 1;
   word-break: break-all;
