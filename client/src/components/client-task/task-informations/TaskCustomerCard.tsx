@@ -14,7 +14,6 @@ interface IProps {
   customer: ICustomer
 }
 const TaskCustomerCard: React.FC<IProps> = ({ taskActiveStep, customer }) => {
-  console.log('customer', customer)
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 

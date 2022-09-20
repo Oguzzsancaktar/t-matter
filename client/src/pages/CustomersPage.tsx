@@ -217,7 +217,7 @@ const CustomersPage = () => {
     setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
   }
   return (
-    <JustifyBetweenColumn height="100%" padding="1rem">
+    <JustifyBetweenColumn height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
         <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>

@@ -17,19 +17,25 @@ import { emptyQueryParams } from '@/constants/queryParams'
 import { H1 } from '@/components/texts'
 import { DatePicker } from '@/components/date-picker'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
+import { useGetCustomersQuery } from '@/services/customers/customerService'
 
 interface IProps {
-  customer: ICustomer
+  customer?: ICustomer
+  date?: number
 }
 
-const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
+const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
+  console.log(date)
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const [createTask] = useCreateTaskMutation()
 
+  const [taskCustomer, setTaskCustomer] = useState(customer)
+
   const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery(emptyQueryParams)
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(emptyQueryParams)
+  const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(emptyQueryParams)
 
   const [selectedWorkflowPlanId, setSelectedWorkflowPlanId] = useState('')
   const { data: workflowData, isLoading: workflowIsLoading } = useGetPlanByIdQuery(selectedWorkflowPlanId)
@@ -41,12 +47,13 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
   })
 
   const [firstStepResponsibleUser, setFirstStepResponsibleUser] = useState(selectedWorkflow?.steps[0]?.responsibleUser)
-  const [startDate, setStartDate] = useState<number>(moment.now())
+  const [startDate, setStartDate] = useState<number>(date || 0)
 
   const [creationErrors, setCreationErrors] = useState({
     workflowError: false,
     responsibleUserError: false,
-    startDateError: false
+    startDateError: false,
+    customerError: false
   })
 
   const handleStartDateChange = (value: Date[], dateText: string) => {
@@ -111,7 +118,16 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
     const tempErrors = {
       workflowError: false,
       responsibleUserError: false,
-      startDateError: false
+      startDateError: false,
+      customerError: false
+    }
+
+    if (!customer && !isValueNull(taskCustomer?._id)) {
+      console.log(taskCustomer)
+      tempErrors.customerError = true
+      setCreationErrors(tempErrors)
+      toastError('Please select customer')
+      return false
     }
 
     if (!isValueNull(selectedWorkflowPlanId)) {
@@ -140,10 +156,10 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
 
   const handleSubmit = async () => {
     const calidationResult = validateFields()
-    if (calidationResult) {
+    if (calidationResult && taskCustomer) {
       try {
         const task: ICustomerTask = {
-          customer,
+          customer: taskCustomer,
           startDate: startDate,
           name: selectedWorkflow.name,
           steps: [],
@@ -198,7 +214,11 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
 
         await createTask(task)
         toastSuccess(`User tasl ${selectedWorkflow.name} created successfully`)
-        dispatch(closeModal(`selectTaskWorkflowModal-${customer._id}`))
+        if (customer) {
+          dispatch(closeModal(`selectTaskWorkflowModal-${customer?._id}`))
+        } else {
+          dispatch(closeModal(`selectTaskWorkflowModalForCalendar`))
+        }
       } catch (error) {
         console.log(error)
       }
@@ -231,6 +251,22 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer }) => {
 
       <ModalBody>
         <JustifyBetweenColumn height="100%">
+          {!customer && (
+            <ItemContainer margin="0.5rem 0">
+              <SelectInput
+                isLoading={workflowPlanIsLoading}
+                name="Task Custumer"
+                onChange={option => setTaskCustomer(option.value)}
+                options={(filteredCustomers || []).map(user => ({
+                  value: user._id,
+                  label: user.firstname + ' ' + user.lastname
+                }))}
+                labelText="Select Customer"
+                validationError={creationErrors.customerError}
+              />
+            </ItemContainer>
+          )}
+
           <ItemContainer margin="0.5rem 0">
             <SelectInput
               isLoading={workflowPlanIsLoading}

@@ -1,8 +1,9 @@
 import colors from '@/constants/colors'
-import { EActivity, ITaskCategory, IUser } from '@/models'
-import { useGetActivitiesQuery, useGetCustomerActivityCategoryCountsQuery } from '@/services/activityService'
-import { selectColorForActivityType } from '@/utils/statusColorUtil'
-import React, { useEffect, useMemo, useState } from 'react'
+import { initialCategoryCountsFilter } from '@/constants/initialValues'
+import { ICustomer, ITaskCategory, IUser } from '@/models'
+import { useGetCustomerActivityCategoryCountsQuery } from '@/services/activityService'
+import React, { useEffect, useState } from 'react'
+import { X, XSquare } from 'react-feather'
 import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import { ItemContainer } from '../item-container'
@@ -16,7 +17,9 @@ interface IStyledProps {
 interface IProps {
   handleFilterUserChange: (responsible: IUser) => void
   handleCategoryFilter: (categoryId: ITaskCategory['_id']) => void
+  handleRemoveFilters: () => void
   userFilter?: IUser
+  customerId?: ICustomer['_id']
 }
 const FilterBlock = styled.div<IStyledProps>`
   height: 8px;
@@ -31,9 +34,33 @@ const FilterBlock = styled.div<IStyledProps>`
   cursor: pointer;
 `
 
-const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleCategoryFilter, userFilter }) => {
+const ActivityFilter: React.FC<IProps> = ({
+  handleFilterUserChange,
+  handleCategoryFilter,
+  handleRemoveFilters,
+  userFilter,
+  customerId
+}) => {
+  const [categoryCountsFilter, setCategoryCountsFilter] = useState(initialCategoryCountsFilter)
+
   const { data: activityCategoryCountsData, isLoading: activtyActegoryCountsIsLoading } =
-    useGetCustomerActivityCategoryCountsQuery()
+    useGetCustomerActivityCategoryCountsQuery(categoryCountsFilter)
+
+  const onHandleFilterUserChange = (responsible: IUser) => {
+    const tempFilter = { ...categoryCountsFilter }
+    tempFilter.userId = responsible._id
+    handleFilterUserChange(responsible)
+    setCategoryCountsFilter(tempFilter)
+  }
+
+  const onHandleRemoveFilters = () => {
+    const tempFilter = { ...initialCategoryCountsFilter }
+    if (customerId) {
+      tempFilter.customerId = customerId
+    }
+    setCategoryCountsFilter(tempFilter)
+    handleRemoveFilters()
+  }
 
   const [totalActivity, setTotalActivity] = useState(0)
 
@@ -45,6 +72,14 @@ const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleCatego
     }
     ReactTooltip.rebuild()
   }, [activityCategoryCountsData])
+
+  useEffect(() => {
+    if (customerId) {
+      const tempFilter = { ...categoryCountsFilter }
+      tempFilter.customerId = customerId
+      setCategoryCountsFilter(tempFilter)
+    }
+  }, [customerId])
 
   if (activtyActegoryCountsIsLoading) {
     return <div>Loading...</div>
@@ -58,24 +93,35 @@ const ActivityFilter: React.FC<IProps> = ({ handleFilterUserChange, handleCatego
     <ItemContainer width="100%" height="100%">
       <JustifyBetweenRow width="100%" height="100%">
         <ItemContainer width="35px" height="35px">
-          <UserSelect selectedUser={userFilter} onResponsibleChange={handleFilterUserChange} />
+          <UserSelect selectedUser={userFilter} onResponsibleChange={onHandleFilterUserChange} />
         </ItemContainer>
-        <ItemContainer width="calc(100% - 35px - 1rem)" borderRadius="1rem" overflow="hidden" margin="auto">
-          <Row width="100%">
-            {activityCategoryCountsData.map((type, index) => (
-              <ItemContainer
-                key={index}
-                onClick={() => handleCategoryFilter(type._id?._id)}
-                width={(type.count / totalActivity) * 100 + '%'}
-                margin={totalActivity !== index + 1 && index !== 0 ? ' 0 1px' : ''}
-              >
-                <FilterBlock
-                  data-tip={type._id?.name + ' - ' + type.count}
-                  color={type._id?.color?.color + '90'}
-                ></FilterBlock>
-              </ItemContainer>
-            ))}
-          </Row>
+        {activityCategoryCountsData.length > 0 && (
+          <ItemContainer
+            width="calc(100% - 35px - 1rem - 25px)"
+            borderRadius="1rem"
+            overflow="hidden"
+            margin="0 0.5rem"
+          >
+            <Row width="100%">
+              {activityCategoryCountsData.map((type, index) => (
+                <ItemContainer
+                  key={index}
+                  onClick={() => handleCategoryFilter(type._id?._id)}
+                  width={(type.count / totalActivity) * 100 + '%'}
+                  margin={totalActivity !== index + 1 && index !== 0 ? ' 0 1px' : ''}
+                >
+                  <FilterBlock
+                    data-tip={type._id?.name + ' - ' + type.count}
+                    color={type._id?.color?.color + '90'}
+                  ></FilterBlock>
+                </ItemContainer>
+              ))}
+            </Row>
+          </ItemContainer>
+        )}
+
+        <ItemContainer width="25px" cursorType="pointer" onClick={onHandleRemoveFilters}>
+          <XSquare size="25px" color={colors.red.primary} />
         </ItemContainer>
       </JustifyBetweenRow>
     </ItemContainer>

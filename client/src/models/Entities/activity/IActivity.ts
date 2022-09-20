@@ -1,4 +1,4 @@
-import { ICustomer, ITask, IUser } from '@/models'
+import { ICustomer, ITask, ITaskCategory, IUser } from '@/models'
 
 export default interface IActivity {
   _id: string
@@ -9,6 +9,7 @@ export default interface IActivity {
   owner: IUser
   type: number
   step?: number
+  stepCategory: ITaskCategory['_id']
   createdAt: Date
   updatedAt: Date
   links?: [

@@ -65,7 +65,7 @@ const UserSelect: React.FC<IProps> = ({ selectedUser, disabled, onResponsibleCha
       <RelativeContainer>
         <ItemContainer width="100%" height="100%" onClick={handleUserList} cursorType="pointer">
           <JustifyCenterRow data-tip={selectedUser?.firstname + ' ' + selectedUser?.lastname}>
-            <UserImage src={selectedUser?.profile_img} width="100%" height="100%" />
+            <UserImage padding="0" src={selectedUser?.profile_img} width="100%" height="100%" />
           </JustifyCenterRow>
         </ItemContainer>
         {showUserList && !userListIsLoading && userListData && (

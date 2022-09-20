@@ -1,40 +1,39 @@
 import React from 'react'
-import { Baloon, H1, ItemContainer, JustifyCenterColumn, JustifyCenterRow, UserImage } from '@/components'
+import { Baloon, H1, ItemContainer, Row, UserImage } from '@/components'
 import { IActivity } from '@/models'
 import colors from '@/constants/colors'
 import moment from 'moment'
+import styled from 'styled-components'
 
 interface IProps {
   activity: IActivity
 }
 
 const ActivityItem: React.FC<IProps> = ({ activity }) => {
+  const RowBaseline = styled(Row)`
+    align-items: flex-start;
+    overflow: hidden;
+  `
+
   return (
-    <JustifyCenterRow width="100%" margin="0 0 16px 0" height="auto">
+    <RowBaseline width="100%" padding="1rem 0" height="auto">
       <ItemContainer width="100px" height="100%">
-        <JustifyCenterColumn width="auto">
-          <H1 textAlign="center" fontSize="0.8rem" fontWeight="900" color={colors.text.primary}>
-            {moment(activity.createdAt).format('Do YYYY')}
-          </H1>
-          <H1 textAlign="center" fontSize="0.7rem" color={colors.text.primary} width="max-content">
-            {moment(activity.createdAt).fromNow()}
-          </H1>
-        </JustifyCenterColumn>
+        <H1 textAlign="center" fontSize="0.8rem" width="100%" fontWeight="900" color={colors.text.primary}>
+          {moment(activity.createdAt).format('Do YYYY')}
+        </H1>
+        <H1 textAlign="center" fontSize="0.7rem" color={colors.text.primary} width="100%">
+          {moment(activity.createdAt).fromNow()}
+        </H1>
       </ItemContainer>
-      <ItemContainer
-        transform="translate(0%, 35%);"
-        margin="1rem 0.5rem 0 0.5rem"
-        width="auto"
-        height="100%"
-        position="relative"
-      >
+
+      <ItemContainer margin="0rem 0.5rem" width="auto" height="100%" position="relative">
         <ItemContainer
           width="1px"
-          height="100vh"
+          height="200vh"
           backgroundColor={colors.gray.disabled}
           position="absolute"
+          top="-1rem"
           left="50%"
-          top="-50px"
           zIndex="0"
         />
 
@@ -44,6 +43,7 @@ const ActivityItem: React.FC<IProps> = ({ activity }) => {
             height="35px"
             src={activity.owner?.profile_img}
             padding="0"
+            margin="0"
             data-tip={activity.owner.firstname + ' ' + activity.owner.lastname}
           />
         </ItemContainer>
@@ -60,7 +60,7 @@ const ActivityItem: React.FC<IProps> = ({ activity }) => {
           links={activity.links}
         />
       </ItemContainer>
-    </JustifyCenterRow>
+    </RowBaseline>
   )
 }
 

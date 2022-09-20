@@ -7,9 +7,9 @@ interface IProps extends IComponentProps {
   src?: string
 }
 
-const UserImage: React.FC<IProps> = ({ src = 'https://source.unsplash.com/user/c_v_r/100x100', ...rest }) => {
+const UserImage: React.FC<IProps> = ({ src = 'https://source.unsplash.com/user/c_v_r/100x100', margin, ...rest }) => {
   return (
-    <ImageContainer {...rest}>
+    <ImageContainer margin={margin} {...rest}>
       <Figure>
         <Picture>
           <Image src={src} />

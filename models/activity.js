@@ -15,6 +15,11 @@ const activitySchema = new Schema(
     step: {
       type: Number
     },
+    stepCategory: {
+      type: Schema.Types.ObjectId,
+      ref: 'Categories'
+    },
+
     task: {
       type: Schema.Types.ObjectId,
       ref: 'Tasks'

@@ -23,6 +23,10 @@ const ActivityTimeline = () => {
 
   const { data, isLoading } = useGetActivitiesQuery(activityFilter)
 
+  const handleRemoveFilters = () => {
+    setActivityFilter(emptyActivtyFilter)
+  }
+
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [data])
@@ -38,6 +42,7 @@ const ActivityTimeline = () => {
           userFilter={userFilter}
           handleFilterUserChange={handleFilterUserChange}
           handleCategoryFilter={handleTypeFilter}
+          handleRemoveFilters={handleRemoveFilters}
         />
       }
     >

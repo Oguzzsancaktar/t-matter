@@ -1,10 +1,16 @@
-import { ICustomerCreateDTO } from '@models/index'
+import { IActivityCategoryCountsFilter, ICustomerCreateDTO } from '@models/index'
 import { IColor, EStatus } from '@/models'
 
 export const initialColor: IColor = {
   _id: '',
   color: '',
   status: EStatus.Active
+}
+
+export const initialCategoryCountsFilter: IActivityCategoryCountsFilter = {
+  userId: '',
+  categoryId: '',
+  customerId: ''
 }
 
 export const initialCreateCustomer: ICustomerCreateDTO = {

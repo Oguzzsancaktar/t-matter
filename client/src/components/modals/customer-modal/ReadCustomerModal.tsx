@@ -182,6 +182,8 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
     setActiveSliderIndex(index)
   }
 
+  console.log('customerData', customerData?.birthday)
+
   return (
     <ItemContainer borderRadius="0.3rem" overflow="visible" height="100%">
       <JustifyBetweenRow height="100%">
@@ -292,13 +294,16 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
                       </H1>
                     </ItemContainer>
                   </ItemContainer>
-                  <ItemContainer margin="0.5rem 0">
-                    <ItemContainer>
-                      <H1 fontSize="12px" color={colors.black.light} textAlign="center">
-                        {moment(customerData.birthday).format('MMMM-DD-YYYY')}
-                      </H1>
+
+                  {customerData?.birthday && (
+                    <ItemContainer margin="0.5rem 0">
+                      <ItemContainer>
+                        <H1 fontSize="12px" color={colors.black.light} textAlign="center">
+                          {moment(customerData.birthday).format('MMMM-DD-YYYY')}
+                        </H1>
+                      </ItemContainer>
                     </ItemContainer>
-                  </ItemContainer>
+                  )}
                   <ItemContainer margin="0.5rem 0">
                     <ItemContainer>
                       <H1 fontSize="12px" color={colors.black.light} textAlign="center">

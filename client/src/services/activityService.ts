@@ -1,7 +1,15 @@
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
-import { IActivity, IActivityCategoryCounts, IActivityCreate, IActivityFilter, ICustomer, ITask } from '@/models'
+import {
+  IActivity,
+  IActivityCategoryCounts,
+  IActivityCategoryCountsFilter,
+  IActivityCreate,
+  IActivityFilter,
+  ICustomer,
+  ITask
+} from '@/models'
 
 const ACTIVITY_API_REDUCER_PATH = 'activityApi'
 const ACTIVITY_TAG = 'activityTag'
@@ -36,11 +44,14 @@ const getActivities = (builder: IBuilder) => {
 }
 
 const getCustomerActivityCategoryCounts = (builder: IBuilder) => {
-  return builder.query<IActivityCategoryCounts[], void>({
-    query() {
+  return builder.query<IActivityCategoryCounts[], IActivityCategoryCountsFilter>({
+    query(dto) {
       return {
         url: '/activity/category-counts',
-        method: 'GET'
+        method: 'GET',
+        params: {
+          ...dto
+        }
       }
     }
   })

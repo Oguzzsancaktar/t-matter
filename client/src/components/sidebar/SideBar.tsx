@@ -11,6 +11,7 @@ import { openModal } from '@/store'
 import useAccessStore from '@/hooks/useAccessStore'
 import CalendarModal from '../modals/general/CalendarModal'
 import { FinanceModal } from '@/components'
+import CustomerModal from '../modals/general/CustomerModal'
 
 const SidebarShowWhenHover = styled.div`
   color: ${colors.white.bg};
@@ -97,6 +98,20 @@ const SideBar = () => {
     )
   }
 
+  const handleOpenCustomers = () => {
+    dispatch(
+      openModal({
+        id: `customerModal`,
+        title: 'Customer Modal',
+
+        body: <CustomerModal />,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
+        maxWidth: ESize.WXLarge
+      })
+    )
+  }
+
   const handleOpenFinance = () => {
     dispatch(
       openModal({
@@ -154,23 +169,35 @@ const SideBar = () => {
 
               <ItemContainer>
                 <Column>
-                  <ItemContainer margin="0 0 0.5rem 0">
-                    <Link to="/customers">
-                      <Row width="100%">
-                        <SidebarIcon>
-                          <UserCheck size={20} />
-                        </SidebarIcon>
-                        <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
-                          <SidebarShowWhenHover className="sidebar__hover_hide_show">
-                            <H1 cursor="pointer" color="white">
-                              Customers
-                            </H1>
-                          </SidebarShowWhenHover>
-                        </ItemContainer>
-                      </Row>
-                    </Link>
+                  <ItemContainer margin="0 0 0.5rem 0" onClick={handleOpenCalendar}>
+                    <Row width="100%">
+                      <SidebarIcon>
+                        <Calendar size={20} />
+                      </SidebarIcon>
+                      <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
+                        <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                          <H1 cursor="pointer" color="white">
+                            Calendar
+                          </H1>
+                        </SidebarShowWhenHover>
+                      </ItemContainer>
+                    </Row>
                   </ItemContainer>
 
+                  <ItemContainer margin="0 0 0.5rem 0" onClick={handleOpenCustomers}>
+                    <Row width="100%">
+                      <SidebarIcon>
+                        <UserCheck size={20} />
+                      </SidebarIcon>
+                      <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
+                        <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                          <H1 cursor="pointer" color="white">
+                            Customers
+                          </H1>
+                        </SidebarShowWhenHover>
+                      </ItemContainer>
+                    </Row>
+                  </ItemContainer>
                   <ItemContainer margin="0 0 0.5rem 0">
                     <Link to="/workflow">
                       <Row width="100%">
@@ -187,23 +214,7 @@ const SideBar = () => {
                       </Row>
                     </Link>
                   </ItemContainer>
-
-                  <ItemContainer margin="0 0 0.5rem 0" onClick={handleOpenCalendar}>
-                    <Row width="100%">
-                      <SidebarIcon>
-                        <Calendar size={20} />
-                      </SidebarIcon>
-                      <ItemContainer margin="0 0 0 0.5rem" width="calc(100% - 40px - 0.5rem)">
-                        <SidebarShowWhenHover className="sidebar__hover_hide_show">
-                          <H1 cursor="pointer" color="white">
-                            Calendar
-                          </H1>
-                        </SidebarShowWhenHover>
-                      </ItemContainer>
-                    </Row>
-                  </ItemContainer>
-
-                  <ItemContainer margin="0 0 0.5rem 0">
+                  {/* <ItemContainer margin="0 0 0.5rem 0">
                     <Link to="/location">
                       <Row width="100%">
                         <SidebarIcon>
@@ -218,8 +229,7 @@ const SideBar = () => {
                         </ItemContainer>
                       </Row>
                     </Link>
-                  </ItemContainer>
-
+                  </ItemContainer> */}
                   <ItemContainer margin="0 0 0.5rem 0" onClick={handleOpenFinance}>
                     <Link to="/finance">
                       <Row width="100%">
@@ -236,8 +246,7 @@ const SideBar = () => {
                       </Row>
                     </Link>
                   </ItemContainer>
-
-                  <ItemContainer margin="0 0 0.5rem 0">
+                  {/* <ItemContainer margin="0 0 0.5rem 0">
                     <Link to="/file">
                       <Row width="100%">
                         <SidebarIcon>
@@ -252,7 +261,7 @@ const SideBar = () => {
                         </ItemContainer>
                       </Row>
                     </Link>
-                  </ItemContainer>
+                  </ItemContainer> */}
                 </Column>
               </ItemContainer>
 

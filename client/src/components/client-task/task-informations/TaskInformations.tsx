@@ -81,6 +81,7 @@ const TaskInformations: React.FC<IProps> = ({
           title: 'Note Added',
           content: result.value || ' ',
           customer: taskData.customer._id,
+          stepCategory: taskData.steps[activeStep].category._id,
           task: taskData._id,
           owner: loggedUser.user?._id || '',
           step: activeStep,

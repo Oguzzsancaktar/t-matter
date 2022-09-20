@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { EActivity, ICustomer, ITaskCategory, IUser } from '@/models'
-import { ActivityFilter, Column, ItemContainer, JustifyCenterColumn } from '@/components'
+import { ActivityFilter, Column, ItemContainer, JustifyCenterColumn, NoTableData } from '@/components'
 import { useGetActivitiesQuery } from '@services/activityService'
 import ActivityItem from '@components/activity/ActivityItem'
 import ReactTooltip from 'react-tooltip'
@@ -25,6 +25,10 @@ const CustomerModalActivityTab: React.FC<IProps> = ({ customerId }) => {
     setActivityFilter({ ...activityFilter, categoryId })
   }
 
+  const handleRemoveFilters = () => {
+    setActivityFilter({ ...emptyActivtyFilter, customerId })
+  }
+
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [data])
@@ -41,15 +45,21 @@ const CustomerModalActivityTab: React.FC<IProps> = ({ customerId }) => {
             userFilter={userFilter}
             handleFilterUserChange={handleFilterUserChange}
             handleCategoryFilter={handleTypeFilter}
+            handleRemoveFilters={handleRemoveFilters}
+            customerId={customerId}
           />
         </ItemContainer>
 
         <ItemContainer height="100%" margin="1rem 0 0 0" overflow="auto">
-          {data?.map((activity, index) => (
-            <ItemContainer height="auto" key={index}>
-              <ActivityItem activity={activity} />
-            </ItemContainer>
-          ))}
+          {!data || data?.length === 0 ? (
+            <NoTableData />
+          ) : (
+            data?.map((activity, index) => (
+              <ItemContainer height="auto" key={index}>
+                <ActivityItem activity={activity} />
+              </ItemContainer>
+            ))
+          )}
         </ItemContainer>
       </Column>
     </ItemContainer>

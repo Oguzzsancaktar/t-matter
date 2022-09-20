@@ -76,7 +76,7 @@ const getCustomerActivity = ({ customer }) => {
   ]).exec()
 }
 
-const getAllActivity = (userId, customerId) => {
+const getAllActivity = (userId, customerId, categoryId) => {
   const tempPipeline = []
 
   if (userId && userId?.trim().length > 0) {
@@ -90,7 +90,15 @@ const getAllActivity = (userId, customerId) => {
   if (customerId && customerId?.trim().length > 0) {
     tempPipeline.push({
       $match: {
-        'customer._id': { $eq: mongoose.Types.ObjectId(customerId) }
+        customer: { $eq: mongoose.Types.ObjectId(customerId) }
+      }
+    })
+  }
+
+  if (categoryId && categoryId?.trim().length > 0) {
+    tempPipeline.push({
+      $match: {
+        stepCategory: { $eq: mongoose.Types.ObjectId(categoryId) }
       }
     })
   }
@@ -102,8 +110,25 @@ const createActivity = data => {
   return Activity.create(data)
 }
 
-const getActivityCategoryCounts = (categoryId, userId) => {
+const getActivityCategoryCounts = (categoryId, customerId, userId) => {
+  console.log(111, customerId)
   const pipeline = []
+
+  if (userId && userId?.trim().length > 0) {
+    pipeline.push({
+      $match: {
+        owner: { $eq: mongoose.Types.ObjectId(userId) }
+      }
+    })
+  }
+
+  if (customerId && customerId?.trim().length > 0) {
+    pipeline.push({
+      $match: {
+        customer: { $eq: mongoose.Types.ObjectId(customerId) }
+      }
+    })
+  }
   const pipeFirst = [
     {
       $lookup: {

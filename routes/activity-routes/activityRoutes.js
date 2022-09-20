@@ -8,9 +8,7 @@ router.get('/', (req, res) => {
   if (task) {
     return controller.activityController.getTaskActivity(req, res)
   }
-  if (customerId) {
-    return controller.activityController.getCustomerActivity(req, res)
-  }
+
   return controller.activityController.getAllActivity(req, res)
 })
 

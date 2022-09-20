@@ -5,12 +5,15 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { Menu } from 'react-feather'
 import { useRef } from 'react'
 import { usePostponeTaskMutation } from '@/services/customers/taskService'
-import { EActivity } from '@/models'
+import { EActivity, ESize } from '@/models'
 import { activityApi, useCreateActivityMutation } from '@/services/activityService'
 import Swal from 'sweetalert2'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
 import moment from 'moment'
+import { SelectTaskWorkflowModal } from '@/components'
+import { openModal } from '@/store'
+import colors from './colors'
 
 const DefaultCalendarOptions = () => {
   const { loggedUser } = useAuth()
@@ -95,7 +98,17 @@ const DefaultCalendarOptions = () => {
     },
 
     dateClick(info) {
-      console.log('ingo', info)
+      dispatch(
+        openModal({
+          id: 'selectTaskWorkflowModalForCalendar',
+          title: 'Customer Task',
+          body: <SelectTaskWorkflowModal date={moment(info.date).valueOf()} />,
+          width: ESize.WSmall,
+          height: ESize.HMedium,
+          maxWidth: ESize.WSmall,
+          backgroundColor: colors.gray.light
+        })
+      )
     },
 
     eventDrop: async ({ event: droppedEvent }) => {
@@ -127,13 +140,14 @@ const DefaultCalendarOptions = () => {
             console.log(droppedEvent)
             await postponeTask({
               _id: task._id,
-              postponedDate: moment(date).subtract(1, 'd').valueOf(),
+              postponedDate: moment(date).valueOf(),
               step: task?.index || 0
             })
             await createActivity({
               title: 'Task Postponed',
               content: result.value || ' ',
               customer: task.customer._id,
+              stepCategory: task.steps[task?.index || 0].category._id,
               task: task._id,
               owner: loggedUser.user?._id || '',
               step: task?.index || 0,

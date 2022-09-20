@@ -79,6 +79,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
             await updateTask(tempUpdatedTaskData)
             await createActivity({
               title: 'Task Canceled',
+              stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
               content: result.value || ' ',
               customer: tempUpdatedTaskData.customer._id,
               task: tempUpdatedTaskData._id,
@@ -151,6 +152,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
             await createActivity({
               title: 'Task Postponed',
               content: result.value || ' ',
+              stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
+
               customer: tempUpdatedTaskData.customer._id,
               task: tempUpdatedTaskData._id,
               owner: loggedUser.user?._id || '',
@@ -205,6 +208,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
             await createActivity({
               title: 'Task Responsible Changed',
               content: result.value.toString() || ' ',
+              stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
+
               customer: tempUpdatedTaskData.customer._id,
               task: tempUpdatedTaskData._id,
               owner: loggedUser.user?._id || '',
@@ -230,6 +235,18 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const handleAllChecklistCheck = async (tempUpdatedTaskData, index: number, activityContent: string) => {
     const tempChecklist = JSON.parse(JSON.stringify(tempUpdatedTaskData.steps[activeStep].checklistItems))
     tempChecklist.pop()
+
+    await createActivity({
+      title: 'Task Checklist Completed',
+      content: activityContent || ' ',
+      stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
+      customer: tempUpdatedTaskData.customer._id,
+      task: tempUpdatedTaskData._id,
+      owner: loggedUser.user?._id || '',
+      step: activeStep,
+      type: EActivity.TASK_CHECKLIST_CHECKED
+    })
+
     if (
       (tempChecklist.length === index && tempChecklist.every(checklist => checklist.isChecked)) ||
       tempChecklist.length === 0
@@ -256,34 +273,25 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
         tempUpdatedTaskData.status = ETaskStatus.Progress
         tempUpdatedTaskData.steps[activeStep + 1].stepStatus = ETaskStatus.Progress
         setActiveStep(activeStep + 1)
-
-        await createActivity({
-          title: 'Task Checklist Completed',
-          content: activityContent || ' ',
-          customer: tempUpdatedTaskData.customer._id,
-          task: tempUpdatedTaskData._id,
-          owner: loggedUser.user?._id || '',
-          step: activeStep,
-          type: EActivity.TASK_CHECKLIST_CHECKED
-        })
-        dispatch(activityApi.util.resetApiState())
       } else {
         await createActivity({
-          title: 'Task Step Completed',
+          title: 'Task Completed',
           content: activityContent || ' ',
+          stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
           customer: tempUpdatedTaskData.customer._id,
           task: tempUpdatedTaskData._id,
           owner: loggedUser.user?._id || '',
           step: activeStep,
           type: EActivity.TASK_FINISHED
         })
-        dispatch(activityApi.util.resetApiState())
 
         tempUpdatedTaskData.status = ETaskStatus.Completed
       }
       setUpdatedTaskData({ ...tempUpdatedTaskData })
       updateTask(tempUpdatedTaskData)
     }
+
+    dispatch(activityApi.util.resetApiState())
   }
 
   const handleCheckboxClick = (checklistItem: ITaskChecklist, index: number) => {
