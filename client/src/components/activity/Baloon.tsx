@@ -41,6 +41,7 @@ const BaloonHeader = styled.div`
 
 const BaloonTitle = styled.span`
   font-size: 16px;
+  height: 35px;
   font-weight: 700;
   color: ${colors.black.primary};
   display: flex;
