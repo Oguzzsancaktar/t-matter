@@ -135,12 +135,16 @@ const createInstallment = async (req, res) => {
         user: req.user.userId
       })
     }
-    for (let i = 0; i < quantity; i++) {
+    for (let i = 0; i < Math.floor(quantity); i++) {
+      const pA =
+        i + 1 === Math.floor(quantity)
+          ? Math.ceil(payAmount + payAmount * (quantity - Math.floor(quantity)))
+          : payAmount
       const installment = {
         type: INSTALLMENT_TYPES.PAYMENT,
         invoice: params.invoiceId,
         payDate: moment(startDate).add(i, 'months').toDate(),
-        payAmount,
+        payAmount: pA,
         status: INSTALLMENT_STATUS.UN_PAID
       }
       const newInstallment = await dataAccess.financeDataAccess.createInstallment(installment)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   Button,
   Column,
@@ -22,6 +22,7 @@ import { DollarSign } from 'react-feather'
 import useAccessStore from '@hooks/useAccessStore'
 import { closeModal } from '@/store'
 import { toastError } from '@utils/toastUtil'
+import { isFloat } from '@utils/numberUtils'
 
 interface IProps {
   invoice: Invoice
@@ -36,10 +37,24 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
 
   const [state, setState] = useState<IInstallmentCreateDTO>()
 
-  useEffect(() => {
+  const { deposit, totalPayment, quantity, payAmount } = useMemo(() => {
     if (financePlanning) {
       const deposit = +Math.ceil((invoice.total * financePlanning.minDepositAmount.value) / 100)
       const totalPayment = invoice.total - deposit
+      const quantity = totalPayment / financePlanning.minInstallmentAmount.value
+      const payAmount = +Math.ceil(totalPayment / quantity)
+      return {
+        deposit,
+        totalPayment,
+        quantity,
+        payAmount
+      }
+    }
+    return {}
+  }, [financePlanning])
+
+  useEffect(() => {
+    if (financePlanning && deposit && totalPayment && quantity && payAmount) {
       if (totalPayment <= financePlanning.minInstallmentAmount.value) {
         setState({
           invoiceId: invoice._id as string,
@@ -50,8 +65,6 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
         })
         return
       }
-      const quantity = Math.floor(+Math.ceil(totalPayment) / financePlanning.minInstallmentAmount.value)
-      const payAmount = +Math.ceil(totalPayment / quantity)
       setState({
         invoiceId: invoice._id as string,
         startDate: moment().add(1, 'months').toDate(),
@@ -61,14 +74,6 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
       })
     }
   }, [financePlanning])
-
-  useEffect(() => {
-    if (state) {
-      const totalPayment = invoice.total - state.deposit
-      const payAmount = +Math.ceil(totalPayment / state.quantity)
-      setState({ ...state, payAmount, quantity: +state.quantity })
-    }
-  }, [state?.deposit, state?.quantity])
 
   const handleCreate = () => {
     if (state && financePlanning) {
@@ -135,7 +140,23 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
               name="deposit"
               type="number"
               value={state?.deposit}
-              onChange={handleInputChange}
+              onChange={e => {
+                if (!state) {
+                  return
+                }
+                const d = +e.target.value
+                // UP -> effect to quantity
+                if (d >= (deposit as number)) {
+                  const quantity = (invoice.total - d) / (state?.payAmount as number)
+                  if (quantity < 1) {
+                    setState({ ...state, deposit: d, quantity: 1, payAmount: Math.ceil(invoice.total - d) })
+                    return
+                  }
+                  setState({ ...state, deposit: d, quantity })
+                } else {
+                  toastError('Deposit amount is less than minimum amount')
+                }
+              }}
             />
           </JustifyCenterRow>
           <JustifyCenterRow margin="0 0 0.5rem 0">
@@ -148,7 +169,6 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
               name="payAmount"
               type="number"
               value={state?.payAmount}
-              onChange={handleInputChange}
             />
           </JustifyCenterRow>
           <JustifyCenterRow margin="0 0 0.5rem 0">
@@ -156,11 +176,40 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
               labelText="Quantity"
               placeholder="Quantity"
               onBlur={() => console.log('blue')}
-              children={<DollarSign size="16px" />}
+              // children={<DollarSign size="16px" />}
               name="quantity"
               type="number"
               value={state?.quantity}
-              onChange={handleInputChange}
+              onChange={e => {
+                if (!state || !financePlanning || !quantity) {
+                  return
+                }
+                const q = +e.target.value
+                // UP
+                if (q > state.quantity) {
+                  if (state?.payAmount <= financePlanning?.minInstallmentAmount.value) {
+                    toastError('Pay amount is less than minimum amount')
+                    return
+                  }
+                  const qty = isFloat(state.quantity) ? Math.ceil(state.quantity) : Math.ceil(q)
+                  const payAmount = +Math.ceil((invoice.total - state.deposit) / qty)
+                  if (payAmount < financePlanning?.minInstallmentAmount.value) {
+                    setState({
+                      ...state,
+                      quantity: (invoice.total - state.deposit) / financePlanning?.minInstallmentAmount.value,
+                      payAmount: financePlanning?.minInstallmentAmount.value
+                    })
+                    return
+                  }
+                  setState({ ...state, quantity: qty, payAmount })
+                }
+                // DOWN -> effect to payAmount
+                if (q < state.quantity) {
+                  const quantity = isFloat(state.quantity) ? Math.floor(state.quantity) : Math.floor(q)
+                  const payAmount = +Math.ceil((invoice.total - state.deposit) / quantity)
+                  setState({ ...state, quantity, payAmount })
+                }
+              }}
             />
           </JustifyCenterRow>
           <JustifyCenterRow margin="0 0 0.5rem 0">
