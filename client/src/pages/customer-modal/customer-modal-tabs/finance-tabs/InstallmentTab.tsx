@@ -306,7 +306,8 @@ const InstallmentTab: React.FC<IProps> = ({
                   children={<DollarSign size={'16px'} color={colors.text.primary} />}
                 />
               )}
-            {data.type === INSTALLMENT_TYPES.PAYMENT &&
+            {data.status !== INSTALLMENT_STATUS.PAID &&
+              data.type === INSTALLMENT_TYPES.PAYMENT &&
               selectedInvoice?.postponeCount < (financePlanning?.installmentPostponeLimit?.value as number) && (
                 <IconButton
                   onClick={showPostponeInstallment.bind(this, data)}
