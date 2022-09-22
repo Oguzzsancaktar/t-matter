@@ -1,20 +1,20 @@
 import React from 'react'
-import { Baloon, H1, ItemContainer, Row, UserImage } from '@/components'
+import { Baloon, H1, ItemContainer, UserImage } from '@/components'
 import { IActivity } from '@/models'
 import colors from '@/constants/colors'
 import moment from 'moment'
 import styled from 'styled-components'
+import { RowStyled } from '@/shared'
 
 interface IProps {
   activity: IActivity
 }
 
+const RowBaseline = styled(RowStyled)`
+  align-items: flex-start;
+  overflow: hidden;
+`
 const ActivityItem: React.FC<IProps> = ({ activity }) => {
-  const RowBaseline = styled(Row)`
-    align-items: flex-start;
-    overflow: hidden;
-  `
-
   return (
     <RowBaseline width="100%" padding="1rem 0" height="auto">
       <ItemContainer width="100px" height="100%">

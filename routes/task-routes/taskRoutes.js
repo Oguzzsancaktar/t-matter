@@ -20,6 +20,8 @@ router.get(
   controllers.taskController.getTasks
 )
 
+router.delete('/', controllers.taskController.removeTask)
+
 router.get('/:taskId', middlewares.validations.taskValidations.getTaskValidation, controllers.taskController.getTask)
 
 router.put('/:taskId', controllers.taskController.updateTask)

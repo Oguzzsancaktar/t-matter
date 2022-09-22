@@ -67,8 +67,12 @@ const SelectInput: React.FC<IProps> = ({
         formatOptionLabel={data => (
           <ItemContainer>
             <JustifyBetweenRow>
-              <H1 color={colors.text.primary}>{data.label}</H1>
-              <CircleColor color={data.color?.color} />
+              <H1 width="calc(100% - 20px)" color={colors.text.primary}>
+                {data.label}
+              </H1>
+              <ItemContainer width="20px">
+                <CircleColor color={data.color?.color} />
+              </ItemContainer>
             </JustifyBetweenRow>
           </ItemContainer>
         )}

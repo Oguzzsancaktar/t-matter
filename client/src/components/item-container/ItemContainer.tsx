@@ -21,7 +21,7 @@ interface IProps extends IComponentProps {
   top?: string
   right?: string
   bottom?: string
-
+  boxShadow?: string
   transform?: string
   transition?: string
   onClick?: (e: React.MouseEvent) => void
@@ -53,7 +53,8 @@ const Item = styled.div<IProps>`
   transform: ${({ transform }) => (transform ? transform : '')};
   right: ${({ right }) => (right ? right : '')};
   bottom: ${({ bottom }) => (bottom ? bottom : '')};
-  transition: ${({ transition }) => (transition ? transition : 'all 0.3s ease-in-out')}; ;
+  transition: ${({ transition }) => (transition ? transition : 'all 0.3s ease-in-out')};
+  box-shadow: ${({ boxShadow }) => (boxShadow ? boxShadow : 'none')};
 `
 
 const ItemContainer: React.FC<IProps> = ({ children, ...rest }) => {

@@ -31,7 +31,7 @@ const StyledReactTooltip = styled(ReactTooltip)`
   border: 2px solid ${colors.white.secondary} !important;
 
   border-bottom: 4px solid ${colors.orange.primary}!important;
-
+  width: 200px;
   opacity: 1 !important;
   overflow: hidden;
 
@@ -114,7 +114,7 @@ const TaskProgress: React.FC<IProps> = ({ taskStatus, taskSteps, workflowName, t
                 src={taskSteps[activeStep]?.responsibleUser.profile_img}
               ></UserImage>
             </ItemContainer>
-            <H1 color={colors.white.secondary} width="max-content">
+            <H1 textAlign="center" color={colors.white.secondary} width="calc(100% - 1rem - 40px)">
               {taskSteps[activeStep]?.category.name}
             </H1>
           </Row>

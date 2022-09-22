@@ -7,10 +7,14 @@
   display: inline-block;
   background-color: transparent;
   border-color: transparent;
+  width: 25px;
 }
 .fc .fc-toolbar .fc-prev-button .fc-icon,
 .fc .fc-toolbar .fc-next-button .fc-icon {
   color: #6e6b7b;
+}
+.fc .fc-toolbar .fc-prev-button .fc-icon {
+  margin-left: 0 !important;
 }
 .fc .fc-toolbar .fc-prev-button:hover,
 .fc .fc-toolbar .fc-next-button:hover,
@@ -25,6 +29,30 @@
 .fc .fc-toolbar .fc-prev-button {
   padding-left: 0 !important;
 }
+
+.fc-categoryFilter-button,
+.fc-showFullDay-button,
+.fc-userFilter-button,
+.fc-statusFilter-button {
+  padding: 0 !important;
+  border: none !important;
+  z-index: 99999999999 !important;
+}
+
+.fc-statusFilter-button {
+  width: 180px;
+}
+
+.fc-showFullDay-button {
+  border-radius: 0.3rem;
+  font-size: 0.8rem !important;
+  width: 120px !important;
+}
+
+.fc-userFilter-button {
+  margin: 0 0.5rem !important;
+}
+
 .fc .fc-toolbar .fc-toolbar-chunk:first-child {
   display: flex;
   align-items: center;
@@ -110,7 +138,8 @@
 }
 
 .fc .fc-toolbar .fc-toolbar-title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  color: #566a7f;
   margin-left: 0.25rem;
 }
 .fc .fc-toolbar .fc--button:empty,
@@ -306,6 +335,10 @@
 
 /* .fc-header-toolbar.fc-toolbar {
   margin-bottom: 1rem !important;
+} */
+
+/* .fc-timegrid-event-harness-inset {
+  height: 33px !important;
 } */
 
 @media (min-width: 992px) {

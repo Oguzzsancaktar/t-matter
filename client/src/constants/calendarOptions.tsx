@@ -2,7 +2,7 @@ import listPlugin from '@fullcalendar/list'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { Menu } from 'react-feather'
+import { Menu, User } from 'react-feather'
 import { useRef } from 'react'
 import { usePostponeTaskMutation } from '@/services/customers/taskService'
 import { EActivity, ESize } from '@/models'
@@ -11,11 +11,11 @@ import Swal from 'sweetalert2'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
 import moment from 'moment'
-import { SelectTaskWorkflowModal } from '@/components'
+import { Button, SelectInput, SelectTaskWorkflowModal } from '@/components'
 import { openModal } from '@/store'
 import colors from './colors'
 
-const DefaultCalendarOptions = () => {
+const DefaultCalendarOptions = (): any => {
   const { loggedUser } = useAuth()
 
   const [createActivity] = useCreateActivityMutation()
@@ -33,44 +33,28 @@ const DefaultCalendarOptions = () => {
     now: Date.now(),
     displayEventTime: false,
     headerToolbar: {
-      start: 'sidebarToggle, prev,next, title',
+      start: 'sidebarToggle,showFullDay, prev,next, title',
+      center: 'categoryFilter,userFilter,statusFilter',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
-    slotMinTime: '08:00:00',
-    slotMaxTime: '18:00:00',
-    slotDuration: { hours: 1 },
+    // businessHours: true, // display business hours
+    // slotDuration: { hours: 1 },
+    timezone: 'America/New_York',
+    slotDuration: '01:00',
+    snapDuration: '00:01',
     allDaySlot: false,
-    contentHeight: '100%',
     height: '100%',
     droppable: true,
     nextDayThreshold: '09:00:00',
-    /*
-      Enable dragging and resizing event
-      ? Docs: https://fullcalendar.io/docs/editable
-    */
+    slotLabelInterval: { hours: 0.25 },
+    contentHeight: 1,
     editable: true,
-    /*
-      Enable resizing event from start
-      ? Docs: https://fullcalendar.io/docs/eventResizableFromStart
-    */
-    eventResizableFromStart: true,
+    eventResizableFromStart: false,
 
-    /*
-      Automatically scroll the scroll-containers during event drag-and-drop and date selecting
-      ? Docs: https://fullcalendar.io/docs/dragScroll
-    */
     dragScroll: true,
 
-    /*
-      Max number of events within a given day
-      ? Docs: https://fullcalendar.io/docs/dayMaxEvents
-    */
     dayMaxEvents: 2,
 
-    /*
-      Determines if day names and week names are clickable
-      ? Docs: https://fullcalendar.io/docs/navLinks
-    */
     navLinks: true,
 
     eventClassNames({ event: calendarEvent }) {
@@ -93,6 +77,22 @@ const DefaultCalendarOptions = () => {
     customButtons: {
       sidebarToggle: {
         text: <Menu />,
+        click: () => {}
+      },
+      showFullDay: {
+        text: <Button>Show All Hours</Button>,
+        click: () => {}
+      },
+      categoryFilter: {
+        text: '',
+        click: () => {}
+      },
+      userFilter: {
+        text: '',
+        click: () => {}
+      },
+      statusFilter: {
+        text: '',
         click: () => {}
       }
     },
@@ -164,12 +164,6 @@ const DefaultCalendarOptions = () => {
       } catch (error) {
         console.log(error)
       }
-    },
-
-    eventRender: function (event, element) {
-      element.bind('dblclick', function () {
-        alert('double click!')
-      })
     },
 
     eventResize({ event: resizedEvent }) {

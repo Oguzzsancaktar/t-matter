@@ -49,7 +49,13 @@ const TaskEventSection: React.FC<IProps> = ({ task, activeStepNumber, taskData }
         </ItemContainer>
 
         <ModalBody backgroundColor="transparent" padding="0" height="calc(100% - 62px - 2rem)">
-          <ItemContainer height="100%" borderRadius="0.3rem" backgroundColor={colors.white.secondary} padding="1rem">
+          <ItemContainer
+            height="100%"
+            borderRadius="0.3rem"
+            overflow="auto"
+            backgroundColor={colors.white.secondary}
+            padding="1rem"
+          >
             {activeTab === 'note' ? (
               <CustomerTaskModalNoteTab task={task} step={activeStepNumber} />
             ) : activeTab === 'workflow-checklist' ? (

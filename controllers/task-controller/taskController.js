@@ -31,10 +31,21 @@ const createTask = async (req, res) => {
 }
 
 const getAllTaskList = async (req, res) => {
-  const { categoryId } = req.query
+  const { categoryId, userId, status } = req.query
   try {
-    const tasks = await dataAccess.taskDataAccess.getCustomerTasks({ categoryId })
+    const tasks = await dataAccess.taskDataAccess.getCustomerTasks({ categoryId, userId, status })
     res.status(200).json(tasks)
+  } catch (error) {
+    console.log(error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
+const removeTask = async (req, res) => {
+  const { taskId } = req.params
+  try {
+    const deletedTask = await dataAccess.taskDataAccess.deleteTaskById(taskId)
+    res.status(200).json(deletedTask)
   } catch (error) {
     console.log(error)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
@@ -123,5 +134,6 @@ module.exports = {
   updateTask,
   reorderTasks,
   getAllTaskList,
-  postponeTask
+  postponeTask,
+  removeTask
 }

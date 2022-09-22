@@ -8,6 +8,7 @@ import { ESize, ICustomer, ITask } from '@/models'
 import useAccessStore from '@/hooks/useAccessStore'
 import { openModal } from '@/store'
 import { CustomerTaskModal } from '../modals'
+import { Column } from '../layout'
 
 interface IProps {
   title: string
@@ -105,17 +106,20 @@ const Baloon: React.FC<IProps> = ({ task, customer, title, content, date, links,
   return (
     <BaloonContainer type={type}>
       <BaloonHeader>
-        <BaloonTitle onClick={() => handleOpenTaskModal(task?._id)}>
-          <H1 fontSize="1rem" cursor="pointer" width="auto" color={colors.secondary.middle}>
-            {task?.name}
-          </H1>
-          <H1 cursor="pointer" margin="0 0.2rem" width="auto" color={colors.text.primary}>
-            -
-          </H1>
-          <H1 cursor="pointer" width="auto" fontSize="0.8rem" color={selectColorForActivityType(type || 0)}>
-            {title}
-          </H1>
-        </BaloonTitle>
+        <Column>
+          <H1>{customer?.firstname + ' ' + customer?.lastname}</H1>
+          <BaloonTitle onClick={() => handleOpenTaskModal(task?._id)}>
+            <H1 fontSize="1rem" cursor="pointer" width="auto" color={colors.secondary.middle}>
+              {task?.name}
+            </H1>
+            <H1 cursor="pointer" margin="0 0.2rem" width="auto" color={colors.text.primary}>
+              -
+            </H1>
+            <H1 cursor="pointer" width="auto" fontSize="0.8rem" color={selectColorForActivityType(type || 0)}>
+              {title}
+            </H1>
+          </BaloonTitle>
+        </Column>
       </BaloonHeader>
       <BaloonBody>
         <BaloonContent>{content}</BaloonContent>

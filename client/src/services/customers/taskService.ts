@@ -49,12 +49,14 @@ const postponeTask = (builder: IBuilder) => {
 
 const getAllTaskList = (builder: IBuilder) => {
   return builder.query<ICustomerTask[], ITaskFilter>({
-    query({ category }) {
+    query({ category, user, status }) {
       return {
         url: `/task`,
         method: 'GET',
         params: {
-          categoryId: category?._id
+          categoryId: category?._id,
+          userId: user?._id,
+          status: status?.value
         }
       }
     },

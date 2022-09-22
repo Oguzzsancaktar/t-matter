@@ -90,14 +90,23 @@ const createTask = data => {
   return Task.create(data)
 }
 
-const getCustomerTasks = ({ customerId, isInvoiced, search, size, status }) => {
+const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId, categoryId }) => {
+  console.log(categoryId, customerId, isInvoiced, search, size, status, userId)
   const $match = {}
 
-  if (customerId) {
+  if (customerId && customerId.trim().length > 0) {
     $match.customer = mongoose.Types.ObjectId(customerId)
   }
 
-  if (search) {
+  if (categoryId && categoryId.trim().length > 0) {
+    $match.customer = mongoose.Types.ObjectId(categoryId)
+  }
+
+  if (userId && userId.trim().length > 0) {
+    $match.customer = mongoose.Types.ObjectId(userId)
+  }
+
+  if (search && search.trim().length > 0) {
     $match.name = { $regex: search, $options: 'i' }
   }
   if (status && status !== '-9') {
@@ -127,6 +136,10 @@ const getTaskById = taskId => {
   ]).exec()
 }
 
+const deleteTaskById = taskId => {
+  return Task.findByIdAndDelete(taskId)
+}
+
 const updateTaskById = (taskId, data) => {
   return Task.findByIdAndUpdate(taskId, data, { new: true }).exec()
 }
@@ -135,5 +148,6 @@ module.exports = {
   createTask,
   getCustomerTasks,
   getTaskById,
-  updateTaskById
+  updateTaskById,
+  deleteTaskById
 }

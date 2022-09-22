@@ -3,7 +3,7 @@ import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, Row } from '@/components/layout'
 import FullCalendar from '@fullcalendar/react'
 import colors from '@/constants/colors'
-import { SelectInput } from '@/components/input'
+import { SelectDopdown, SelectInput } from '@/components/input'
 import { emptyQueryParams, emptyTaskFilter } from '@/constants/queryParams'
 import { ESize, ETaskStatus, IOption, ITaskCategory, IUser } from '@/models'
 import { useGetCategoriesQuery } from '@/services/settings/workflow-planning/workflowService'
@@ -30,28 +30,27 @@ function calendarFiltersReducer(state, action) {
     case 'CHANGE_CATEGORY':
       return { ...state, category: action.payload }
     case 'CHANGE_USER':
-      return { ...state, category: action.payload }
+      return { ...state, user: action.payload }
     case 'CHANGE_STATUS':
-      return { ...state, category: action.payload }
+      return { ...state, status: action.payload }
   }
 }
 
+const StyledReactTooltip = styled(ReactTooltip)`
+  border-radius: 0.3rem !important;
+  padding: 0.3rem 0.5rem !important;
+  background-color: ${colors.primary.dark} !important;
+  border: 2px solid ${colors.white.secondary} !important;
+  border-bottom: 4px solid ${colors.orange.primary}!important;
+  opacity: 1 !important;
+  overflow: hidden;
+  width: 300px;
+  z-index: 9999999999;
+  &:after {
+    border-top-color: ${colors.gray.dark} !important;
+  }
+`
 const CalendarModal = () => {
-  const StyledReactTooltip = styled(ReactTooltip)`
-    border-radius: 0.3rem !important;
-    padding: 0.3rem 0.5rem !important;
-    background-color: ${colors.primary.dark} !important;
-    border: 2px solid ${colors.white.secondary} !important;
-    border-bottom: 4px solid ${colors.orange.primary}!important;
-    opacity: 1 !important;
-    overflow: hidden;
-    width: 300px;
-    z-index: 9999999999;
-    &:after {
-      border-top-color: ${colors.gray.dark} !important;
-    }
-  `
-
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -61,13 +60,15 @@ const CalendarModal = () => {
   const defaultOptions = DefaultCalendarOptions()
 
   const [calendarFilters, calendarFiltersDispatch] = useReducer(calendarFiltersReducer, {
-    emptyTaskFilter
+    ...emptyTaskFilter
   })
 
   const { data: taskData, isLoading: taskDataIsLoading } = useGetAllTaskListQuery(calendarFilters)
 
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false)
   const [calendarEvents, setCalendarEvents] = useState<any>(null)
+
+  const [isSlotFull, setIsSlotFull] = useState<boolean>(false)
 
   const calendarOptions = { ...defaultOptions }
 
@@ -88,14 +89,6 @@ const CalendarModal = () => {
         })
       )
     }
-  }
-
-  calendarOptions.eventClick = handleOpenTaskModal
-  calendarOptions.customButtons.sidebarToggle.click = () => {
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'))
-    }, 400)
-    setIsFiltersOpen(!isFiltersOpen)
   }
 
   const handleCategoryChange = (option: IOption) => {
@@ -123,12 +116,117 @@ const CalendarModal = () => {
     }
   }
 
+  const handleStatusChange = (option: IOption) => {
+    if (option) {
+      const selectedStatus = {
+        value: option.value,
+        label: option.label
+      }
+      calendarFiltersDispatch({ type: 'CHANGE_STATUS', payload: selectedStatus })
+    } else {
+      calendarFiltersDispatch({ type: 'CHANGE_STATUS', payload: undefined })
+    }
+  }
+
+  calendarOptions.eventClick = handleOpenTaskModal
+  calendarOptions.customButtons.showFullDay.text = isSlotFull ? 'All Hours' : 'Working Hours'
+  calendarOptions.slotMinTime = isSlotFull ? '00:00:00' : '08:00:00'
+  calendarOptions.slotMaxTime = isSlotFull ? '24:00:00' : '18:00:00'
+
+  calendarOptions.customButtons.showFullDay.click = () => {
+    setIsSlotFull(!isSlotFull)
+  }
+
+  calendarOptions.customButtons.sidebarToggle.click = () => {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+    }, 400)
+    setIsFiltersOpen(!isFiltersOpen)
+  }
+
+  calendarOptions.customButtons.categoryFilter.text = (
+    <SelectDopdown
+      options={(categoriesData || []).map((category: ITaskCategory) => ({
+        label: category.name,
+        value: category._id,
+        color: category.color
+      }))}
+    />
+  )
+
+  //  <SelectInput
+  //   isMulti={true}
+  //   isClearable={true}
+  //   name={'stepCategory'}
+  //   placeHolder="Workflow Category"
+  //   // selectedOption={[
+  //   //   {
+  //   //     value: calendarFilters.category?._id,
+  //   //     label: calendarFilters.category?.name,
+  //   //     color: calendarFilters.category?.color
+  //   //   }
+  //   // ]}
+  //   options={(categoriesData || []).map((category: ITaskCategory) => ({
+  //     label: category.name,
+  //     value: category._id,
+  //     color: category.color
+  //   }))}
+  //   onChange={handleCategoryChange}
+  //   isLoading={isCategoriesLoading}
+  // />
+
+  calendarOptions.customButtons.userFilter.text = (
+    <SelectInput
+      isClearable={true}
+      name={'responsibleUser'}
+      placeHolder="Responsible User"
+      selectedOption={[
+        {
+          value: calendarFilters.user?._id,
+          label: calendarFilters.user?.firstname + ' ' + calendarFilters.user?.lastname
+        }
+      ]}
+      options={(usersData || []).map((user: IUser) => ({
+        label: user.firstname + ' ' + user.lastname,
+        value: user._id
+      }))}
+      onChange={handleUserChange}
+      isLoading={isUsersDataLoading}
+    />
+  )
+
+  calendarOptions.customButtons.statusFilter.text = (
+    <SelectInput
+      isClearable={true}
+      name={'stepStatus'}
+      placeHolder="Step Status"
+      selectedOption={[
+        {
+          value: calendarFilters.status?.value,
+          label: calendarFilters.status?.label
+        }
+      ]}
+      options={taskStatusOptions.map((status: IOption) => ({
+        label: status.label,
+        value: status.value
+      }))}
+      onChange={handleStatusChange}
+      isLoading={isCategoriesLoading}
+    />
+  )
+
   useEffect(() => {
     let allTaskSteps: any[] = []
     if (taskData) {
-      taskData.forEach(task => {
-        task.steps.forEach(step => {
-          console.log(step)
+      taskData.forEach((task, i) => {
+        task.steps.forEach((step, index) => {
+          if (i === 0 && index === 0) {
+            console.log(
+              moment(step?.postponedDate?.toString().trim().length > 0 ? step?.postponedDate : step.startDate).format(
+                'DD-MM-yyyy hh:mm'
+              )
+            )
+          }
           if (calendarFilters.category?._id === undefined || calendarFilters.category?._id === step.category._id) {
             allTaskSteps.push({
               id: task._id,
@@ -153,68 +251,11 @@ const CalendarModal = () => {
         <Row height="100%">
           <ItemContainer height="100%" overflow="hidden" width={isFiltersOpen ? '250px' : '0'} margin="0 1rem 0 0">
             <JustifyBetweenColumn height="100%">
-              <ItemContainer>
-                <SelectInput
-                  isClearable={true}
-                  name={'stepCategory'}
-                  labelText="Workflow Category"
-                  selectedOption={[
-                    {
-                      value: calendarFilters.category?._id,
-                      label: calendarFilters.category?.name,
-                      color: calendarFilters.category?.color
-                    }
-                  ]}
-                  options={(categoriesData || []).map((category: ITaskCategory) => ({
-                    label: category.name,
-                    value: category._id,
-                    color: category.color
-                  }))}
-                  onChange={handleCategoryChange}
-                  isLoading={isCategoriesLoading}
-                />
-              </ItemContainer>
+              <ItemContainer>area 1</ItemContainer>
 
-              <ItemContainer>
-                <SelectInput
-                  isClearable={true}
-                  name={'responsibleUser'}
-                  labelText="Responsible User"
-                  selectedOption={[
-                    {
-                      value: calendarFilters.user?._id,
-                      label: calendarFilters.user?.firstname + ' ' + calendarFilters.user?.lastname
-                    }
-                  ]}
-                  options={(usersData || []).map((user: IUser) => ({
-                    label: user.firstname + ' ' + user.lastname,
-                    value: user._id
-                  }))}
-                  onChange={handleUserChange}
-                  isLoading={isUsersDataLoading}
-                />
-              </ItemContainer>
+              <ItemContainer>area 2</ItemContainer>
 
-              <ItemContainer>
-                <SelectInput
-                  isClearable={true}
-                  name={'stepCategory'}
-                  labelText="Step Status"
-                  selectedOption={[
-                    {
-                      value: calendarFilters.category?._id,
-                      label: calendarFilters.category?.name,
-                      color: calendarFilters.category?.color
-                    }
-                  ]}
-                  options={taskStatusOptions.map((status: IOption) => ({
-                    label: status.label,
-                    value: status.value
-                  }))}
-                  onChange={handleCategoryChange}
-                  isLoading={isCategoriesLoading}
-                />
-              </ItemContainer>
+              <ItemContainer>area 3</ItemContainer>
             </JustifyBetweenColumn>
           </ItemContainer>
           <ItemContainer height="100%" width={isFiltersOpen ? 'calc(100% - 250px)' : '100%'}>
