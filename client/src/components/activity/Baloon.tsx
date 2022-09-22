@@ -7,8 +7,9 @@ import { H1 } from '../texts'
 import { ESize, ICustomer, ITask } from '@/models'
 import useAccessStore from '@/hooks/useAccessStore'
 import { openModal } from '@/store'
-import { CustomerTaskModal } from '../modals'
+import { CustomerTaskModal, ReadCustomerModal } from '../modals'
 import { Column } from '../layout'
+import { ItemContainer } from '../item-container'
 
 interface IProps {
   title: string
@@ -103,22 +104,41 @@ const Baloon: React.FC<IProps> = ({ task, customer, title, content, date, links,
     }
   }
 
+  const handleOpenCustomerModal = (customer?: ICustomer) => {
+    if (customer) {
+      dispatch(
+        openModal({
+          id: `customerDetailModal-${customer._id}`,
+          title: 'Customer / ' + customer.firstname + ' ' + customer.lastname,
+          body: <ReadCustomerModal customer={customer} />,
+          width: ESize.WXLarge,
+          height: `calc(${ESize.HLarge} - 2rem )`,
+          backgroundColor: 'transparent'
+        })
+      )
+    }
+  }
+
   return (
     <BaloonContainer type={type}>
       <BaloonHeader>
         <Column>
-          <H1>{customer?.firstname + ' ' + customer?.lastname}</H1>
-          <BaloonTitle onClick={() => handleOpenTaskModal(task?._id)}>
-            <H1 fontSize="1rem" cursor="pointer" width="auto" color={colors.secondary.middle}>
-              {task?.name}
-            </H1>
-            <H1 cursor="pointer" margin="0 0.2rem" width="auto" color={colors.text.primary}>
-              -
-            </H1>
-            <H1 cursor="pointer" width="auto" fontSize="0.8rem" color={selectColorForActivityType(type || 0)}>
-              {title}
-            </H1>
-          </BaloonTitle>
+          <ItemContainer cursorType="pointer" onClick={() => handleOpenCustomerModal(customer)}>
+            <H1>{customer?.firstname + ' ' + customer?.lastname}</H1>
+          </ItemContainer>
+          <ItemContainer height="20px" margin="-0.5rem 0 0 0">
+            <BaloonTitle onClick={() => handleOpenTaskModal(task?._id)}>
+              <H1 fontSize="1rem" cursor="pointer" width="auto" color={colors.secondary.middle}>
+                {task?.name}
+              </H1>
+              <H1 cursor="pointer" margin="0 0.2rem" width="auto" color={colors.text.primary}>
+                -
+              </H1>
+              <H1 cursor="pointer" width="auto" fontSize="0.8rem" color={selectColorForActivityType(type || 0)}>
+                {title}
+              </H1>
+            </BaloonTitle>
+          </ItemContainer>
         </Column>
       </BaloonHeader>
       <BaloonBody>
