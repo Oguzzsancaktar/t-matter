@@ -22,7 +22,7 @@ const TextAreaStyled = styled.textarea<IStyledProps>`
   background-color: transparent;
   transition: border 0.3s ease-in-out;
   outline: none;
-  padding: 0rem 0.4rem;
+  padding: 0.4rem;
   border-radius: 0.3rem;
   font-weight: 400;
   &:hover,

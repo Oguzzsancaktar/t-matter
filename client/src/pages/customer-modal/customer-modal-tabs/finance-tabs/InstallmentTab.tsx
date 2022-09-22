@@ -24,7 +24,13 @@ import {
   UserBadge
 } from '@/components'
 import colors from '@constants/colors'
-import { AdditionalTimeDonut, InvoicesDonut, NonBillableCircleProgress, UnPaidInvoicesCircleProgress } from '@/pages'
+import {
+  AdditionalTimeDonut,
+  DiscountedInvoicesDonut,
+  InvoicesDonut,
+  NonBillableCircleProgress,
+  UnPaidInvoicesCircleProgress
+} from '@/pages'
 import styled from 'styled-components'
 import useAccessStore from '@hooks/useAccessStore'
 import { openModal } from '@/store'
@@ -350,9 +356,13 @@ const InstallmentTab: React.FC<IProps> = ({
               onSelect={handleSelectedInvoiceChange}
               customerId={customerId}
             />
-            <AdditionalTimeDonut customerId={customerId} />
+            <DiscountedInvoicesDonut
+              selectedInvoice={selectedInvoice}
+              onSelect={handleSelectedInvoiceChange}
+              customerId={customerId}
+            />
             <NonBillableCircleProgress customerId={customerId} />
-            <UnPaidInvoicesCircleProgress customerId={customerId} />
+            <AdditionalTimeDonut customerId={customerId} />
           </JustifyBetweenRow>
         </Bordered>
       </JustifyCenterRow>

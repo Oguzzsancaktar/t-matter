@@ -9,3 +9,4 @@ export { default as NonBillableCircleProgress } from './NonBillableCircleProgres
 export { default as UnPaidInvoicesCircleProgress } from './UnPaidInvoicesCircleProgress'
 export { default as InvoicesDonut } from './InvoicesDonut'
 export { default as AdditionalTimeDonut } from './AdditionalTimeDonut'
+export { default as DiscountedInvoicesDonut } from './DiscountedInvoicesDonut'

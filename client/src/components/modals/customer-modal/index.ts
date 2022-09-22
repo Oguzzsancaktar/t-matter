@@ -6,3 +6,4 @@ export { default as updateContactCustomerSearchModal } from './UpdateContactCust
 export { default as SelectTaskWorkflowModal } from './SelectTaskWorkflowModal'
 export { default as MakeContactToClientModal } from './MakeContactToClientModal'
 export { default as AddOrChangeCustomerImageModal } from './AddOrChangeCustomerImageModal'
+export { default as InvoiceMailModal } from './InvoiceMailModal'

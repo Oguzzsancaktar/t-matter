@@ -1,12 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
-import ReactApexChart from 'react-apexcharts'
+import React, { useEffect, useState } from 'react'
 import { ESize, ICustomer, Invoice } from '@/models'
 import { useGetInvoicesQuery } from '@services/settings/finance-planning/financePlanningService'
 import colors from '@constants/colors'
-import moment from 'moment'
-import { H1, IconButton, InvoiceMailModal } from '@/components'
-import { ref } from 'joi'
-import { ExternalLink, Mail } from 'react-feather'
+import moment from 'moment/moment'
+import { H1, IconButton, InvoiceMailModal, UpdateWorkflowPlanModal } from '@/components'
+import ReactApexChart from 'react-apexcharts'
+import { ExternalLink, Mail, Trash2 } from 'react-feather'
 import useAccessStore from '@hooks/useAccessStore'
 import { openModal } from '@/store'
 
@@ -16,7 +15,7 @@ interface IProps {
   selectedInvoice?: Invoice
 }
 
-const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice }) => {
+const DiscountedInvoicesDonut: React.FC<IProps> = ({ customerId, onSelect }) => {
   const { data: invoices, isLoading: isInvoicesLoading } = useGetInvoicesQuery(customerId)
 
   const { useAppDispatch } = useAccessStore()
@@ -65,7 +64,7 @@ const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice
       }
     ],
     noData: {
-      text: 'No invoices',
+      text: 'No Discounted invoices',
       style: {
         color: colors.text.primary
       }
@@ -75,7 +74,7 @@ const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice
 
   useEffect(() => {
     if (invoices) {
-      setSeries(invoices.map(invoice => +Math.ceil(invoice.total)))
+      setSeries(invoices.map(invoice => +Math.ceil(invoice.discount)))
       setOptions({
         ...options,
         labels: invoices.map(invoice => invoice.category.name + ' - ' + moment(invoice.createdAt).format('DD/MMM/YYYY'))
@@ -97,9 +96,9 @@ const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice
   }
 
   return (
-    <div style={{ position: 'relative', height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
       <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}>
-        Invoices
+        Discounted invoices
       </H1>
       <ReactApexChart options={options} series={series} type="donut" height={160} width={160} />
       <div style={{ position: 'absolute', top: '50%', right: '40%' }}>
@@ -116,4 +115,4 @@ const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice
   )
 }
 
-export default InvoicesDonut
+export default DiscountedInvoicesDonut

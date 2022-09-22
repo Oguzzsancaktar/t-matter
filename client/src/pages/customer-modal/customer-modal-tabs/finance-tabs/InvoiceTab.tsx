@@ -4,6 +4,7 @@ import colors from '@constants/colors'
 import {
   AdditionalTimeDonut,
   AgreementDoc,
+  DiscountedInvoicesDonut,
   InstallmentDoc,
   InvoiceDoc,
   InvoicesDonut,
@@ -39,9 +40,13 @@ const InvoiceTab: React.FC<IProps> = ({ customerId, handleSelectedInvoiceChange,
               onSelect={handleSelectedInvoiceChange}
               customerId={customerId}
             />
-            <AdditionalTimeDonut customerId={customerId} />
+            <DiscountedInvoicesDonut
+              selectedInvoice={selectedInvoice}
+              onSelect={handleSelectedInvoiceChange}
+              customerId={customerId}
+            />
             <NonBillableCircleProgress customerId={customerId} />
-            <UnPaidInvoicesCircleProgress customerId={customerId} />
+            <AdditionalTimeDonut customerId={customerId} />
           </JustifyBetweenRow>
         </Bordered>
       </JustifyCenterRow>
