@@ -47,6 +47,20 @@ const postponeTask = (builder: IBuilder) => {
   })
 }
 
+const deleteTask = (builder: IBuilder) => {
+  return builder.mutation<ITask, ITask['_id']>({
+    query(taskCreateDto) {
+      return {
+        url: `/task/${taskCreateDto}`,
+        method: 'DELETE'
+      }
+    },
+    invalidatesTags() {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const getAllTaskList = (builder: IBuilder) => {
   return builder.query<ICustomerTask[], ITaskFilter>({
     query({ category, user, status }) {
@@ -156,7 +170,8 @@ const taskApi = createApi({
     updateTask: updateTask(builder),
     reorderTasks: reorderTasks(builder),
     getAllTaskList: getAllTaskList(builder),
-    postponeTask: postponeTask(builder)
+    postponeTask: postponeTask(builder),
+    deleteTask: deleteTask(builder)
   })
 })
 
@@ -167,7 +182,8 @@ const {
   useUpdateTaskMutation,
   useReorderTasksMutation,
   useGetAllTaskListQuery,
-  usePostponeTaskMutation
+  usePostponeTaskMutation,
+  useDeleteTaskMutation
 } = taskApi
 export {
   taskApi,
@@ -177,5 +193,6 @@ export {
   useUpdateTaskMutation,
   useReorderTasksMutation,
   useGetAllTaskListQuery,
-  usePostponeTaskMutation
+  usePostponeTaskMutation,
+  useDeleteTaskMutation
 }

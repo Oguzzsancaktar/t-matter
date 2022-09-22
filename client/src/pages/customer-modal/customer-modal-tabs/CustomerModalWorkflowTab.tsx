@@ -1,6 +1,7 @@
 import {
   ActionButtons,
   Column,
+  ConfirmModal,
   CustomerTaskModal,
   DataTableHeader,
   ItemContainer,
@@ -16,9 +17,10 @@ import colors from '@/constants/colors'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { taskStatusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ESize, EStatus, ICustomer } from '@/models'
-import { useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
-import { openModal } from '@/store'
+import { ESize, EStatus, ETaskStatus, ICustomer, ITask } from '@/models'
+import { useDeleteTaskMutation, useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
+import { closeModal, openModal } from '@/store'
+import { toastError, toastSuccess } from '@/utils/toastUtil'
 import moment from 'moment'
 import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
@@ -30,6 +32,8 @@ interface IProps {
 const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const [deleteTask] = useDeleteTaskMutation()
 
   const [searchQueryParams, setSearchQueryParams] = useState({ ...emptyQueryParams, status: -9 })
   const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
@@ -69,17 +73,24 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
       right: true,
       header: ({ title }) => <div style={{ textAlign: 'center', color: 'red' }}>{title}</div>,
       cell: data => (
-        <ActionButtons
-          onEdit={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-          onHistory={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-          onDelete={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-        />
+        <>
+          {data.status === ETaskStatus.Not_Started ? (
+            <ActionButtons
+              status={data.status === ETaskStatus.Not_Started ? 1 : 0}
+              onHistory={function (): void {
+                throw new Error('Function not implemented.')
+              }}
+              onDelete={() => handleDelete(data)}
+            />
+          ) : (
+            <ActionButtons
+              status={data.status === ETaskStatus.Not_Started ? 1 : 0}
+              onHistory={function (): void {
+                throw new Error('Function not implemented.')
+              }}
+            />
+          )}
+        </>
       )
     }
   ]
@@ -112,6 +123,37 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
     )
   }
 
+  const handleDelete = (task: ITask) => {
+    dispatch(
+      openModal({
+        id: `deleteCustomerTaskModal-${task._id}`,
+        title: `Are you sure to delete ${task.name}?`,
+        body: (
+          <ConfirmModal
+            modalId={`deleteCustomerTaskModal-${task._id}`}
+            title={`Are you sure to delete ${task.name}?`}
+            onConfirm={() => handleOnConfirmDelete(task)}
+          />
+        ),
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
+      })
+    )
+  }
+
+  const handleOnConfirmDelete = async (task: ITask) => {
+    console.log('task', task)
+    try {
+      await deleteTask(task._id)
+      toastSuccess('Plan ' + task.name + ' inactivated successfully')
+      dispatch(closeModal(`deleteCustomerTaskModal-${task._id}`))
+    } catch (error) {
+      toastError('Error removing task')
+    }
+  }
+
+  console.log(customerTasksData)
   const handleStatusFilter = (status: EStatus) => {
     setSearchQueryParams({ ...searchQueryParams, status })
   }

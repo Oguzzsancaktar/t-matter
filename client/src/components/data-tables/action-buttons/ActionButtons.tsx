@@ -39,14 +39,16 @@ const ActionButtons: React.FC<IProps> = ({
         />
       )} */}
 
-      <IconButton
-        onClick={onEdit}
-        bgColor={colors.background.gray.light}
-        width={buttonWidth || iconSize}
-        height={iconSize}
-        margin="0 .2rem 0 0"
-        children={<Edit size={'16px'} color={colors.text.primary} />}
-      />
+      {onEdit && (
+        <IconButton
+          onClick={onEdit}
+          bgColor={colors.background.gray.light}
+          width={buttonWidth || iconSize}
+          height={iconSize}
+          margin="0 .2rem 0 0"
+          children={<Edit size={'16px'} color={colors.text.primary} />}
+        />
+      )}
       <IconButton
         onClick={onHistory}
         bgColor={colors.background.gray.light}
