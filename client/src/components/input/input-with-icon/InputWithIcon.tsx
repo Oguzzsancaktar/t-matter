@@ -15,7 +15,7 @@ interface Props {
   labelText?: string | null
   isPasswordVisible?: boolean
   disabled?: boolean
-
+  step?: string
   handleVisibility?: (isVisible: boolean) => void
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void

@@ -140,6 +140,7 @@ const CreateInstallmentModal: React.FC<IProps> = ({ invoice }) => {
               name="deposit"
               type="number"
               value={state?.deposit}
+              step="50"
               onChange={e => {
                 if (!state) {
                   return
