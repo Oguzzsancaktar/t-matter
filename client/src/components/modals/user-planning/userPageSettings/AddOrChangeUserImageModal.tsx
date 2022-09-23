@@ -28,8 +28,7 @@ const AddOrChangeUserImageModal: React.FC<IProps> = ({ user }) => {
 
     if (typeof file === 'string') {
       try {
-        const result = await base64ToJpeg(file, `profile_image-${user._id}.jpeg`)
-        tempFormData.append('file', result)
+        tempFormData.append('file', file)
         setImage(file)
       } catch (error) {
         console.log(error)
