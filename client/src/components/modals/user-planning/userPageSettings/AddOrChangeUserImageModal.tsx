@@ -12,6 +12,8 @@ import { UserImage } from '@/components/image'
 import { getBase64 } from '@/utils/imageConvert'
 import { ModalHeader, ModalBody } from '../../types'
 import { useAddOrUpdateUserImageMutation, userApi } from '@/services/settings/user-planning/userService'
+import { toastError, toastSuccess } from '@/utils/toastUtil'
+import { closeModal } from '@/store'
 
 interface IProps {
   user: IUser
@@ -45,7 +47,6 @@ const AddOrChangeUserImageModal: React.FC<IProps> = ({ user }) => {
     }
 
     setShowCamera(false)
-
     setFormData(tempFormData)
   }
 
@@ -53,7 +54,10 @@ const AddOrChangeUserImageModal: React.FC<IProps> = ({ user }) => {
     try {
       await addOrUpdateUserImage({ _id: user._id, file: formData })
       userApi.util.resetApiState()
+      toastSuccess(user.firstname + ' ' + user.lastname + 'profile image saved successfully')
+      closeModal(`openAddOrChangeImageModal-${user?._id}`)
     } catch (error) {
+      toastError(user.firstname + ' ' + user.lastname + 'profile image didnot saved')
       console.log(error)
     }
   }

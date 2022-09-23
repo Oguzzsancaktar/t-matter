@@ -12,13 +12,15 @@ import { WebcamCapture } from '@/components/camera'
 import { Button } from '@/components/button'
 import { UserImage } from '@/components/image'
 import { getBase64 } from '@/utils/imageConvert'
+import { closeModal } from '@/store'
+import { toastError, toastSuccess } from '@/utils/toastUtil'
 
 interface IProps {
   customer: ICustomer
 }
 
 const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
-  const [addOrUpdateCustomerImage] = useAddOrUpdateCustomerImageMutation()
+  const [addOrUpdateCustomerImage, { isLoading: customerImageUpdateIsLoading }] = useAddOrUpdateCustomerImageMutation()
   const [formData, setFormData] = useState<FormData>(new FormData())
   const [image, setImage] = useState(customer?.profile_img || 'https://via.placeholder.com/150')
   const [showCamera, setShowCamera] = useState<boolean>(false)
@@ -27,7 +29,6 @@ const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
     const tempFormData = new FormData()
 
     if (typeof file === 'string') {
-      console.log(file)
       try {
         tempFormData.append('file', file)
         setImage(file)
@@ -54,7 +55,10 @@ const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
     try {
       await addOrUpdateCustomerImage({ _id: customer._id, file: formData })
       customerApi.util.resetApiState()
+      toastSuccess(customer.firstname + ' ' + customer.lastname + 'profile image saved successfully')
+      closeModal(`openAddOrChangeImageModal-${customer?._id}`)
     } catch (error) {
+      toastError(customer.firstname + ' ' + customer.lastname + 'profile image didnot saved')
       console.log(error)
     }
   }
