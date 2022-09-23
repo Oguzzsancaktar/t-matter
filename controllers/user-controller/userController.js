@@ -68,9 +68,14 @@ const addOrChangeUserProfileImage = async (req, res) => {
   const { id } = req.params
   try {
     const user = await User.findById(id)
+    var result
 
     if (user) {
-      const result = await cloudinary.uploader.upload(req.file.path)
+      if (req.body.file) {
+        result = await cloudinary.uploader.upload(req.body.file)
+      } else {
+        result = await cloudinary.uploader.upload(req.file.path)
+      }
 
       user.cloudinary_id = result.public_id
       user.profile_img = result.secure_url

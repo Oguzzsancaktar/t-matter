@@ -129,9 +129,14 @@ const addOrChangeCustomerProfileImage = async (req, res) => {
   const { id } = req.params
   try {
     const customer = await Customer.findById(id)
+    var result
 
     if (customer) {
-      const result = await cloudinary.uploader.upload(req.file.path)
+      if (req.body.file) {
+        result = await cloudinary.uploader.upload(req.body.file)
+      } else {
+        result = await cloudinary.uploader.upload(req.file.path)
+      }
 
       customer.cloudinary_id = result.public_id
       customer.profile_img = result.secure_url

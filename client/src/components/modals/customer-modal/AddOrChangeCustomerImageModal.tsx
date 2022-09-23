@@ -11,7 +11,7 @@ import { ModalHeader, ModalBody } from '../types'
 import { WebcamCapture } from '@/components/camera'
 import { Button } from '@/components/button'
 import { UserImage } from '@/components/image'
-import { base64ToJpeg, getBase64 } from '@/utils/imageConvert'
+import { getBase64 } from '@/utils/imageConvert'
 
 interface IProps {
   customer: ICustomer
@@ -27,9 +27,9 @@ const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
     const tempFormData = new FormData()
 
     if (typeof file === 'string') {
+      console.log(file)
       try {
-        const result = await base64ToJpeg(file, `profile_image-${customer._id}.jpeg`)
-        tempFormData.append('file', result)
+        tempFormData.append('file', file)
         setImage(file)
       } catch (error) {
         console.log(error)

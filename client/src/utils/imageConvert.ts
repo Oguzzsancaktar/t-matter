@@ -7,11 +7,3 @@ export function getBase64(file) {
     return reader.result
   })
 }
-
-export function base64ToJpeg(file, fileName: string) {
-  return fetch(file)
-    .then(res => res.blob())
-    .then(blob => {
-      return new File([blob], fileName, { type: 'image/jpeg' })
-    })
-}

@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { WebcamCapture } from '@/components/camera'
 import { Button } from '@/components/button'
 import { UserImage } from '@/components/image'
-import { base64ToJpeg, getBase64 } from '@/utils/imageConvert'
+import { getBase64 } from '@/utils/imageConvert'
 import { ModalHeader, ModalBody } from '../../types'
 import { useAddOrUpdateUserImageMutation, userApi } from '@/services/settings/user-planning/userService'
 
