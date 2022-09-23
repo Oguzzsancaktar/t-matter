@@ -144,10 +144,39 @@ const updateTaskById = (taskId, data) => {
   return Task.findByIdAndUpdate(taskId, data, { new: true }).exec()
 }
 
+const getUsedTaskWorkflowCounts = (taskId, data) => {
+  const pipeline = [
+    {
+      $group: {
+        _id: '$workflowId',
+        count: {
+          $sum: 1
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'workflowplans',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'workflow'
+      }
+    },
+    {
+      $unwind: {
+        path: '$workflow',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]
+  return Task.aggregate(pipeline).exec()
+}
+
 module.exports = {
   createTask,
   getCustomerTasks,
   getTaskById,
   updateTaskById,
-  deleteTaskById
+  deleteTaskById,
+  getUsedTaskWorkflowCounts
 }

@@ -1,4 +1,4 @@
-import { ICustomer, IQueryParams, ITaskFilter } from '@models/index'
+import { ICustomer, IQueryParams, ITaskFilter, IUsedTaskAnalysisData } from '@models/index'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
@@ -159,6 +159,20 @@ const reorderTasks = (builder: IBuilder) => {
   })
 }
 
+const getUsedTaskWorkflowCounts = (builder: IBuilder) => {
+  return builder.query<IUsedTaskAnalysisData[], void>({
+    query() {
+      return {
+        url: `/task/chart/most-used-workflow`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const taskApi = createApi({
   reducerPath: TASK_REDUCER_PATH,
   tagTypes: [TASK_TAG_TYPE],
@@ -171,7 +185,8 @@ const taskApi = createApi({
     reorderTasks: reorderTasks(builder),
     getAllTaskList: getAllTaskList(builder),
     postponeTask: postponeTask(builder),
-    deleteTask: deleteTask(builder)
+    deleteTask: deleteTask(builder),
+    getUsedTaskWorkflowCounts: getUsedTaskWorkflowCounts(builder)
   })
 })
 
@@ -183,7 +198,8 @@ const {
   useReorderTasksMutation,
   useGetAllTaskListQuery,
   usePostponeTaskMutation,
-  useDeleteTaskMutation
+  useDeleteTaskMutation,
+  useGetUsedTaskWorkflowCountsQuery
 } = taskApi
 export {
   taskApi,
@@ -194,5 +210,6 @@ export {
   useReorderTasksMutation,
   useGetAllTaskListQuery,
   usePostponeTaskMutation,
-  useDeleteTaskMutation
+  useDeleteTaskMutation,
+  useGetUsedTaskWorkflowCountsQuery
 }

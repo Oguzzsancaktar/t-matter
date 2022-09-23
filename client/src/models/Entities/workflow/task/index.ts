@@ -11,3 +11,5 @@ export type { default as ITaskCategoryUpdateDTO } from './ITaskCategoryUpdateDTO
 export type { default as ITaskChecklist } from './ITaskChecklist'
 export type { default as ITaskChecklistCreateDTO } from './ITaskChecklistCreateDTO'
 export type { default as ITaskChecklistUpdateDTO } from './ITaskChecklistUpdateDTO'
+
+export type { default as IUsedTaskAnalysisData } from './IUsedTaskAnalysisData'

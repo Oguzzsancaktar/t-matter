@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import { JustifyCenterRow, H1, Column, ProgressBar, JustifyCenterColumn, JustifyBetweenRow } from '@/components'
+import { JustifyCenterRow, H1, JustifyBetweenRow } from '@/components'
 import styled from 'styled-components'
 import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd'
 import colors from '@constants/colors'
 import {
-  InvoicesBarChart,
   CreateInvoiceList,
   InvoicedList,
   NonBillableList,
   CreateInvoice,
   ExpiredTaskStepList,
   NonBillableCircleProgress,
-  UnPaidInvoicesCircleProgress,
   InvoicesDonut,
   AdditionalTimeDonut,
   DiscountedInvoicesDonut
 } from '@/pages'
 import { useGetTasksByCustomerIdQuery, useReorderTasksMutation } from '@services/customers/taskService'
 import { ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
-import { arrayMoveImmutable } from 'array-move'
 import {
   useGetExpiredTaskStepsQuery,
-  useGetFinancePlanningQuery,
   useGetInvoiceCategoriesQuery,
   useGetInvoicesQuery
 } from '@services/settings/finance-planning/financePlanningService'
 import { emptyQueryParams } from '@constants/queryParams'
 import { invoiceDefault } from '@constants/finance'
-import invoicesDonut from '@pages/customer-modal/customer-modal-tabs/finance-tabs/estimate-tab/InvoicesDonut'
 
 const Bordered = styled.div<{ margin?: string; width?: string }>`
   border: 1px solid #ccc;

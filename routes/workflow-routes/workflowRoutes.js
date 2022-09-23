@@ -3,6 +3,7 @@ const router = express.Router()
 const middlewares = require('../../middlewares')
 const controllers = require('../../controllers')
 
+// Category
 router.post(
   '/category',
   middlewares.validations.workflowValidations.createWorkflowCategoryValidation,
@@ -67,5 +68,9 @@ router.patch(
   middlewares.validations.generalValidations.statusUpdateValidation,
   controllers.workflowController.updatePlan
 )
+
+// Charts
+router.get('/chart/plan/used-user-counts', controllers.workflowController.getWorkflowPlanUsedUserData)
+router.get('/chart/monthly-created-counts', controllers.workflowController.getWorkflowCountForMonths)
 
 module.exports = router

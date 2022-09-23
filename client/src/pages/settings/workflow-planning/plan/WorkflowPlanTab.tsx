@@ -14,6 +14,11 @@ import {
   UpdateWorkflowPlanModal
 } from '@/components'
 import { Badge } from '@/components/badge'
+import {
+  MostUsedUserAtWorkflowPlansChart,
+  MostUsedWorkflowPlansChart,
+  WorkflowCreateTimeAnalysisChart
+} from '@/components/charts'
 import { emptyQueryParams } from '@/constants/queryParams'
 
 import { statusOptions } from '@/constants/statuses'
@@ -188,9 +193,15 @@ const WorkflowPlanTab = () => {
   return (
     <JustifyBetweenColumn height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        <JustifyCenterColumn height="100%" width="200px">
+          <MostUsedUserAtWorkflowPlansChart />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn width="calc(100% - 200px - 200px - 1rem)">
+          <WorkflowCreateTimeAnalysisChart />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn width="200px">
+          <MostUsedWorkflowPlansChart />
+        </JustifyCenterColumn>
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px - 1rem)">
         <DataTableHeader

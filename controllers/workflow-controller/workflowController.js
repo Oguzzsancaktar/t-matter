@@ -173,6 +173,26 @@ const removePlan = async (req, res) => {
   }
 }
 
+const getWorkflowPlanUsedUserData = async (req, res) => {
+  try {
+    const workflowPlans = await dataAccess.workflowDataAccess.getWorkflowPlanUsedUserData()
+    res.status(StatusCodes.OK).json(workflowPlans)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getWorkflowCountForMonths = async (req, res) => {
+  try {
+    const workflowPlans = await dataAccess.workflowDataAccess.getWorkflowCountForMonthsData()
+    res.status(StatusCodes.OK).json(workflowPlans)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createWorkflowCategory,
   getWorkflowCategories,
@@ -190,5 +210,7 @@ module.exports = {
   getWorkflowPlans,
   getWorkflowPlanById,
   updatePlan,
-  removePlan
+  removePlan,
+  getWorkflowPlanUsedUserData,
+  getWorkflowCountForMonths
 }

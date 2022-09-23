@@ -293,7 +293,61 @@ const getWorkflowPlans = async ({ search, size, status }) => {
   return WorkflowPlan.aggregate([...pipeline, ...pipelineData(hourlyCompanyFee)]).exec()
 }
 
-// TODO wf sıralam bozuluyor
+const getWorkflowPlanUsedUserData = async () => {
+  const pipeline = [
+    {
+      $match: {
+        status: {
+          $eq: 1
+        }
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $group: {
+        _id: '$steps.responsibleUser',
+        count: {
+          $sum: 1
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    {
+      $unwind: {
+        path: '$user',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]
+
+  return WorkflowPlan.aggregate(pipeline).exec()
+}
+
+const getWorkflowCountForMonthsData = async () => {
+  const pipeline = [
+    {
+      $group: {
+        _id: { $month: '$createdAt' },
+        count: { $sum: 1 }
+      }
+    }
+  ]
+
+  return WorkflowPlan.aggregate(pipeline).exec()
+}
+
 const findWorkflowPlanById = async id => {
   const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
 
@@ -326,5 +380,7 @@ module.exports = {
   createWorkflowPlan,
   getWorkflowPlans,
   findWorkflowPlanById,
-  findByIdAndUpdateWorkflowPlan
+  findByIdAndUpdateWorkflowPlan,
+  getWorkflowPlanUsedUserData,
+  getWorkflowCountForMonthsData
 }

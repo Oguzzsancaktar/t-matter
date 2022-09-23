@@ -18,7 +18,7 @@ export const ImageContainer = styled.div<IComponentProps>`
 
 const CircleImage: React.FC<IProps> = ({ imageUrl, ...rest }) => {
   return (
-    <ImageContainer {...rest}>
+    <ImageContainer height="100%" {...rest}>
       <Figure>
         <Picture>
           <Image src={imageUrl} />

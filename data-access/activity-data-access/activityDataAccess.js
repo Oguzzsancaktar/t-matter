@@ -111,7 +111,6 @@ const createActivity = data => {
 }
 
 const getActivityCategoryCounts = (categoryId, customerId, userId) => {
-  console.log(111, customerId)
   const pipeline = []
 
   if (userId && userId?.trim().length > 0) {

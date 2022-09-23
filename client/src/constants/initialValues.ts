@@ -1,5 +1,6 @@
-import { IActivityCategoryCountsFilter, ICustomerCreateDTO } from '@models/index'
+import { IActivityCategoryCountsFilter, ICustomerCreateDTO, IRole, IUser, IWorkflow } from '@models/index'
 import { IColor, EStatus } from '@/models'
+import { ApexOptions } from 'apexcharts'
 
 export const initialColor: IColor = {
   _id: '',
@@ -40,4 +41,137 @@ export const initialCreateCustomer: ICustomerCreateDTO = {
   gender: 0,
   reliableInCompany: [],
   createContact: []
+}
+
+export const initialWorkflow: IWorkflow = {
+  _id: '',
+  name: '',
+  steps: []
+}
+
+export const initialRole: IRole = {
+  _id: '',
+  name: '',
+  status: 0
+}
+
+export const initialUser: IUser = {
+  _id: '',
+  firstname: '',
+  lastname: '',
+  email: '',
+  phone: '',
+  birthday: '',
+  birthplace: '',
+  country: '',
+  city: '',
+  state: '',
+  zipcode: '',
+  address: '',
+  role: { ...initialRole },
+  gender: 0,
+  password: '',
+  status: 0
+}
+
+export const initialDonutChartOptions: ApexOptions = {
+  chart: {
+    type: 'donut',
+    height: '200%'
+  },
+
+  dataLabels: {
+    enabled: false
+  },
+  legend: {
+    show: false
+  },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: '85%'
+      }
+    }
+  },
+
+  responsive: [
+    {
+      breakpoint: undefined
+    }
+  ]
+}
+
+export const initialColumnChartOptions: ApexOptions = {
+  chart: {
+    height: '100%',
+    type: 'bar'
+  },
+
+  plotOptions: {
+    bar: {
+      borderRadius: 3,
+      horizontal: false,
+      columnWidth: '30%',
+      dataLabels: {
+        position: 'top' // top, center, bottom
+      }
+    }
+  },
+  dataLabels: {
+    enabled: false,
+    formatter: function (val) {
+      return val + ''
+    },
+    offsetY: -20,
+    style: {
+      fontSize: '12px',
+      colors: ['#304758']
+    }
+  },
+
+  stroke: {
+    show: true,
+    width: 2,
+    colors: ['transparent']
+  },
+
+  xaxis: {
+    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    position: 'bottom',
+    axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
+    },
+    crosshairs: {
+      fill: {
+        type: 'gradient',
+        gradient: {
+          colorFrom: '#D8E3F0',
+          colorTo: '#BED1E6',
+          stops: [0, 100],
+          opacityFrom: 0.4,
+          opacityTo: 0.5
+        }
+      }
+    },
+    tooltip: {
+      enabled: true
+    }
+  },
+  yaxis: {
+    axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
+    },
+    labels: {
+      show: false,
+      formatter: function (val) {
+        return val + ''
+      }
+    }
+  }
 }

@@ -12,6 +12,7 @@ import ReactTooltip from 'react-tooltip'
 
 import './styles/vendors/fullcalendar.css'
 import './styles/vendors/react-drag-drop-file.css'
+import './styles/vendors/apex.css'
 
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
@@ -20,8 +21,7 @@ const CustomersPage = lazy(() => import('./pages/CustomersPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 
 function App() {
-  const { useAppDispatch, useAppSelector } = useAccessStore()
-  const dispatch = useAppDispatch()
+  const { useAppSelector } = useAccessStore()
   const { loggedUser } = useAuth()
   const openModals = useAppSelector(selectOpenModals)
   const minimizedModals = useAppSelector(selectMinimizedModals)

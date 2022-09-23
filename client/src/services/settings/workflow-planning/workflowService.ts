@@ -1,3 +1,4 @@
+import { IUser } from '@models/index'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
@@ -246,6 +247,34 @@ const updatePlanStatus = (builder: IBuilder) => {
   })
 }
 
+const getWorkflowPlanUsedUserData = (builder: IBuilder) => {
+  return builder.query<{ _id: IUser['_id']; user: IUser; count: number }[], void>({
+    query() {
+      return {
+        url: `/workflow/chart/plan/used-user-counts`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getWorkflowCountForMonthsData = (builder: IBuilder) => {
+  return builder.query<{ _id: string; count: number }[], void>({
+    query() {
+      return {
+        url: `/workflow/chart/monthly-created-counts`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: WORKFLOW_TAG, id: 'LIST' }]
+    }
+  })
+}
+
 const workflowApi = createApi({
   reducerPath: WORKFLOW_API_REDUCER_PATH,
   tagTypes: [WORKFLOW_TAG],
@@ -267,7 +296,10 @@ const workflowApi = createApi({
     getPlans: getPlans(builder),
     getPlanById: getPlanById(builder),
     patchWorkflowPlan: patchWorkflowPlan(builder),
-    updatePlanStatus: updatePlanStatus(builder)
+    updatePlanStatus: updatePlanStatus(builder),
+
+    getWorkflowPlanUsedUserData: getWorkflowPlanUsedUserData(builder),
+    getWorkflowCountForMonthsData: getWorkflowCountForMonthsData(builder)
   })
 })
 
@@ -288,7 +320,10 @@ const {
   useCreatePlanMutation,
   useGetPlanByIdQuery,
   usePatchWorkflowPlanMutation,
-  useUpdatePlanStatusMutation
+  useUpdatePlanStatusMutation,
+
+  useGetWorkflowPlanUsedUserDataQuery,
+  useGetWorkflowCountForMonthsDataQuery
 } = workflowApi
 
 export {
@@ -307,5 +342,7 @@ export {
   useCreatePlanMutation,
   useGetPlanByIdQuery,
   usePatchWorkflowPlanMutation,
-  useUpdatePlanStatusMutation
+  useUpdatePlanStatusMutation,
+  useGetWorkflowPlanUsedUserDataQuery,
+  useGetWorkflowCountForMonthsDataQuery
 }

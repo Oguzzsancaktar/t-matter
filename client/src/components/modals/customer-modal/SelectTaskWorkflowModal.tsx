@@ -25,7 +25,6 @@ interface IProps {
 }
 
 const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
-  console.log(date)
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -159,6 +158,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
     if (calidationResult && taskCustomer) {
       try {
         const task: ICustomerTask = {
+          workflowId: selectedWorkflow._id,
           customer: taskCustomer,
           startDate: startDate,
           name: selectedWorkflow.name,
@@ -213,7 +213,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
         }
 
         await createTask(task)
-        toastSuccess(`User tasl ${selectedWorkflow.name} created successfully`)
+        toastSuccess(`User task ${selectedWorkflow.name} created successfully`)
         if (customer) {
           dispatch(closeModal(`selectTaskWorkflowModal-${customer?._id}`))
         } else {

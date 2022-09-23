@@ -9,6 +9,7 @@ const createTask = async (req, res) => {
   const { customerId } = req.params
   try {
     const task = {
+      workflowId: body.workflowId,
       startDate: body.startDate,
       name: body.name,
       steps: body.steps.map(step => ({
@@ -127,6 +128,15 @@ const reorderTasks = async (req, res) => {
   }
 }
 
+const usedTaskWorkflowCounts = async (req, res) => {
+  try {
+    const data = await dataAccess.taskDataAccess.getUsedTaskWorkflowCounts()
+    res.status(200).json(data)
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
@@ -135,5 +145,6 @@ module.exports = {
   reorderTasks,
   getAllTaskList,
   postponeTask,
-  removeTask
+  removeTask,
+  usedTaskWorkflowCounts
 }

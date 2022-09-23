@@ -20,6 +20,11 @@ const taskSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Customers'
     },
+    workflowId: {
+      required: true,
+      type: Schema.Types.ObjectId,
+      ref: 'Workflows'
+    },
     totalDuration: {
       type: Number
     },

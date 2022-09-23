@@ -38,7 +38,10 @@ const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice
     plotOptions: {
       pie: {
         startAngle: -90,
-        endAngle: 270
+        endAngle: 270,
+        donut: {
+          size: '80%'
+        }
       }
     },
     dataLabels: {
