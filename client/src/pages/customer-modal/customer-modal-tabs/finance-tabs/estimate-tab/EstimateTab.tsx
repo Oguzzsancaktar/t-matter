@@ -13,7 +13,8 @@ import {
   NonBillableCircleProgress,
   UnPaidInvoicesCircleProgress,
   InvoicesDonut,
-  AdditionalTimeDonut
+  AdditionalTimeDonut,
+  DiscountedInvoicesDonut
 } from '@/pages'
 import { useGetTasksByCustomerIdQuery, useReorderTasksMutation } from '@services/customers/taskService'
 import { ICustomerTask, IExpiredTaskStep, Invoice } from '@/models'
@@ -212,9 +213,13 @@ const EstimateTab: React.FC<IProps> = ({ customerId, selectedInvoice, handleSele
               onSelect={handleSelectedInvoiceChange}
               customerId={customerId}
             />
-            <AdditionalTimeDonut customerId={customerId} />
+            <DiscountedInvoicesDonut
+              selectedInvoice={selectedInvoice}
+              onSelect={handleSelectedInvoiceChange}
+              customerId={customerId}
+            />
             <NonBillableCircleProgress customerId={customerId} />
-            <UnPaidInvoicesCircleProgress customerId={customerId} />
+            <AdditionalTimeDonut customerId={customerId} />
           </JustifyBetweenRow>
         </Bordered>
       </JustifyCenterRow>
