@@ -19,5 +19,6 @@ router.put('/installment/:invoiceId/postpone/:installmentId', controllers.financ
 router.put('/installment/:invoiceId/pay/:installmentId', controllers.financeController.payInstallment)
 router.put('/installment/:invoiceId/reset', controllers.financeController.resetInstallments)
 router.put('/installment/:installmentId/edit', controllers.financeController.editInstallment)
+router.get('/installment/dashboard/chart', controllers.financeController.getInstallmentDashboardChart)
 
 module.exports = router

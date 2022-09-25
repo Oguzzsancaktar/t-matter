@@ -1,1 +1,1 @@
-export { default as FinanceDashboardCard } from './financeDashboardCard'
+export { default as FinanceDashboardCard } from './FinanceDashboardCard'

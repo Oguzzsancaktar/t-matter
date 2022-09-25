@@ -471,6 +471,16 @@ const editInstallment = async (req, res) => {
   }
 }
 
+const getInstallmentDashboardChart = async (req, res) => {
+  try {
+    const installments = await dataAccess.financeDataAccess.getDailyGroupedInstallments()
+    res.send(installments)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   getFinancePlanning,
   updateFinancePlanning,
@@ -483,5 +493,6 @@ module.exports = {
   postponeInstallment,
   payInstallment,
   resetInstallments,
-  editInstallment
+  editInstallment,
+  getInstallmentDashboardChart
 }

@@ -20,6 +20,7 @@ const INVOICE_CATEGORY_TAG_TYPE = 'invoiceCategoryTag' as const
 const INVOICE_TAG_TYPE = 'invoiceTag' as const
 const EXPIRED_INVOICE_TAG_TYPE = 'expiredInvoiceTag' as const
 const INSTALLMENT_TAG_TYPE = 'installmentTag' as const
+const INSTALLMENT_DASHBOARD_TAG_TYPE = 'installmentDashboardTag' as const
 
 type IBuilder = EndpointBuilder<
   IAxiosBaseQueryFn,
@@ -27,7 +28,8 @@ type IBuilder = EndpointBuilder<
   | typeof INVOICE_CATEGORY_TAG_TYPE
   | typeof INVOICE_TAG_TYPE
   | typeof EXPIRED_INVOICE_TAG_TYPE
-  | typeof INSTALLMENT_TAG_TYPE,
+  | typeof INSTALLMENT_TAG_TYPE
+  | typeof INSTALLMENT_DASHBOARD_TAG_TYPE,
   typeof FINANCE_PLANNING_REDUCER_PATH
 >
 
@@ -196,7 +198,7 @@ const createInstallment = (builder: IBuilder) => {
       }
     },
     invalidatesTags(result) {
-      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }, INSTALLMENT_DASHBOARD_TAG_TYPE]
     }
   })
 }
@@ -232,7 +234,7 @@ const postponeInstallment = (builder: IBuilder) => {
       }
     },
     invalidatesTags(result) {
-      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }, INSTALLMENT_DASHBOARD_TAG_TYPE]
     }
   })
 }
@@ -262,7 +264,7 @@ const payInstallment = (builder: IBuilder) => {
       }
     },
     invalidatesTags(result) {
-      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
+      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }, INSTALLMENT_DASHBOARD_TAG_TYPE]
     }
   })
 }
@@ -313,6 +315,31 @@ const editInstallment = (builder: IBuilder) => {
   })
 }
 
+const getInstallmentDashboardChart = (builder: IBuilder) => {
+  return builder.query<
+    {
+      unpaidCount: number
+      paidCount: number
+      paidAmount: number
+      unpaidAmount: number
+      totalAmount: number
+      totalCount: number
+      _id: string
+    }[],
+    void
+  >({
+    query(args) {
+      return {
+        url: `/finance/installment/dashboard/chart`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [INSTALLMENT_DASHBOARD_TAG_TYPE]
+    }
+  })
+}
+
 const financePlanningApi = createApi({
   reducerPath: FINANCE_PLANNING_REDUCER_PATH,
   tagTypes: [FINANCE_PLANNING_TAG_TYPE, INVOICE_CATEGORY_TAG_TYPE, INVOICE_TAG_TYPE, EXPIRED_INVOICE_TAG_TYPE],
@@ -334,7 +361,8 @@ const financePlanningApi = createApi({
     payInstallment: payInstallment(builder),
     resetInstallments: resetInstallments(builder),
     uploadPdfToInvoiceCategory: uploadPdfToInvoiceCategory(builder),
-    editInstallment: editInstallment(builder)
+    editInstallment: editInstallment(builder),
+    getInstallmentDashboardChart: getInstallmentDashboardChart(builder)
   })
 })
 
@@ -355,7 +383,8 @@ const {
   usePayInstallmentMutation,
   useResetInstallmentsMutation,
   useUploadPdfToInvoiceCategoryMutation,
-  useEditInstallmentMutation
+  useEditInstallmentMutation,
+  useGetInstallmentDashboardChartQuery
 } = financePlanningApi
 
 export {
@@ -376,5 +405,6 @@ export {
   usePayInstallmentMutation,
   useResetInstallmentsMutation,
   useUploadPdfToInvoiceCategoryMutation,
-  useEditInstallmentMutation
+  useEditInstallmentMutation,
+  useGetInstallmentDashboardChartQuery
 }

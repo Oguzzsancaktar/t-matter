@@ -3,6 +3,7 @@ const Invoice = require('../../models/invoice')
 const FinancePlanning = require('../../models/financePlanning')
 const ExpiredTaskStep = require('../../models/expiredTaskStep')
 const Installment = require('../../models/installment')
+const { INSTALLMENT_STATUS } = require('../../constants/finance')
 
 const createFinancePlanning = data => {
   return FinancePlanning.create(data)
@@ -236,6 +237,53 @@ const deleteManyInstallment = query => {
   return Installment.deleteMany(query)
 }
 
+const getDailyGroupedInstallments = () => {
+  const agg = () => [
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            format: '%Y-%m-%d',
+            date: '$payDate'
+          }
+        },
+        unpaidAmount: {
+          $sum: {
+            $cond: [{ $ne: ['$status', INSTALLMENT_STATUS.PAID] }, '$payAmount', 0]
+          }
+        },
+        paidAmount: {
+          $sum: {
+            $cond: [{ $eq: ['$status', INSTALLMENT_STATUS.PAID] }, '$payAmount', 0]
+          }
+        },
+        paidCount: {
+          $sum: {
+            $cond: [{ $eq: ['$status', INSTALLMENT_STATUS.PAID] }, 1, 0]
+          }
+        },
+        unpaidCount: {
+          $sum: {
+            $cond: [{ $ne: ['$status', INSTALLMENT_STATUS.PAID] }, 1, 0]
+          }
+        },
+        totalAmount: {
+          $sum: '$payAmount'
+        },
+        totalCount: {
+          $sum: 1
+        }
+      }
+    },
+    {
+      $sort: {
+        _id: 1
+      }
+    }
+  ]
+  return Installment.aggregate(agg()).exec()
+}
+
 module.exports = {
   updateFinancePlanning,
   getFinancePlanning,
@@ -252,5 +300,6 @@ module.exports = {
   updateInvoiceById,
   updateManyInstallment,
   deleteManyInstallment,
-  getInvoiceById
+  getInvoiceById,
+  getDailyGroupedInstallments
 }
