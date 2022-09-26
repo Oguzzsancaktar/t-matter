@@ -99,8 +99,8 @@ const FinanceDashboardBarChart: React.FC<IProps> = ({ onSelectBar }) => {
   }
 
   return (
-    <div id="chart">
-      <ReactApexChart options={config} series={series} type="bar" height={230} />
+    <div style={{ height: '100%' }} id="chart">
+      <ReactApexChart options={config} series={series} type="bar" height={'100%'} />
     </div>
   )
 }
