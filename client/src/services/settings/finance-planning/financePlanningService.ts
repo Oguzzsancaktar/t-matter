@@ -13,6 +13,7 @@ import {
 } from '@/models'
 import IInvoiceCategory from '@models/Entities/finance-plannin/IInvoiceCategory'
 import IInvoiceCreateDTO from '@models/Entities/finance/IInvoiceCreateDTO'
+import { PERIODS, TPeriod } from '@constants/dates'
 
 const FINANCE_PLANNING_REDUCER_PATH = 'financePlanningApi'
 const FINANCE_PLANNING_TAG_TYPE = 'financePlanningTag' as const
@@ -326,12 +327,15 @@ const getInstallmentDashboardChart = (builder: IBuilder) => {
       totalCount: number
       _id: string
     }[],
-    void
+    { period?: TPeriod }
   >({
     query(args) {
       return {
         url: `/finance/installment/dashboard/chart`,
-        method: 'GET'
+        method: 'GET',
+        params: {
+          period: args.period
+        }
       }
     },
     providesTags(result) {

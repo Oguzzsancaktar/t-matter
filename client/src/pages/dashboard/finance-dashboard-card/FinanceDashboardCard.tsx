@@ -7,6 +7,7 @@ import colors from '@constants/colors'
 import { useGetInstallmentDashboardChartQuery } from '@services/settings/finance-planning/financePlanningService'
 import moment from 'moment'
 import { BiReset } from 'react-icons/bi'
+import { PERIODS } from '@constants/dates'
 
 interface IGroupedInstallment {
   unpaidCount: number
@@ -67,7 +68,7 @@ const Head: React.FC<{
 
 const FinanceDashboardCard: React.FC<IProps> = props => {
   const {} = props
-  const { data } = useGetInstallmentDashboardChartQuery()
+  const { data } = useGetInstallmentDashboardChartQuery({ period: PERIODS.WEEKLY })
   const [selectedDate, setSelectedDate] = useState('')
 
   const selectedData: IGroupedInstallment = useMemo(() => {

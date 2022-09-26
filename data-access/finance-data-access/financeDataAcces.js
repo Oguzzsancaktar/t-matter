@@ -4,6 +4,9 @@ const FinancePlanning = require('../../models/financePlanning')
 const ExpiredTaskStep = require('../../models/expiredTaskStep')
 const Installment = require('../../models/installment')
 const { INSTALLMENT_STATUS } = require('../../constants/finance')
+const { PERIODS } = require('../../constants/constants')
+const moment = require('moment')
+const { getISODate } = require('../../helpers/dateHelpers')
 
 const createFinancePlanning = data => {
   return FinancePlanning.create(data)
@@ -237,8 +240,34 @@ const deleteManyInstallment = query => {
   return Installment.deleteMany(query)
 }
 
-const getDailyGroupedInstallments = () => {
+const getDailyGroupedInstallments = ({ period }) => {
+  const $match = {}
+  if (period === PERIODS.DAILY) {
+    $match.payDate = {
+      $gte: getISODate(moment().startOf('day')),
+      $lte: getISODate(moment().endOf('day'))
+    }
+  }
+  if (period === PERIODS.WEEKLY) {
+    $match.payDate = {
+      $gte: getISODate(moment().startOf('isoWeek')),
+      $lte: getISODate(moment().endOf('isoWeek'))
+    }
+  }
+  if (period === PERIODS.MONTHLY) {
+    $match.payDate = {
+      $gte: getISODate(moment().startOf('month')),
+      $lte: getISODate(moment().endOf('month'))
+    }
+  }
+  if (period === PERIODS.YEARLY) {
+    $match.payDate = {
+      $gte: getISODate(moment().startOf('year')),
+      $lte: getISODate(moment().endOf('year'))
+    }
+  }
   const agg = () => [
+    { $match },
     {
       $group: {
         _id: {
@@ -281,6 +310,7 @@ const getDailyGroupedInstallments = () => {
       }
     }
   ]
+
   return Installment.aggregate(agg()).exec()
 }
 
