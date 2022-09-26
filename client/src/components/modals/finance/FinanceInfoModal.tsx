@@ -17,33 +17,17 @@ const FinanceInfoModal = () => {
                 <Tab
                   margin="0 1rem 0 0rem"
                   index={0}
-                  name="Paid"
-                  isActive={activeTab === 'PaidTab'}
-                  onClick={() => setActiveTab('PaidTab')}
+                  name="Installments"
+                  isActive={activeTab === 'InstallmentsTab'}
+                  onClick={() => setActiveTab('InstallmentsTab')}
                 />
 
                 <Tab
                   margin="0 1rem 0 0rem"
                   index={1}
-                  name="Unpaid"
-                  isActive={activeTab === 'UnpaidTab'}
-                  onClick={() => setActiveTab('UnpaidTab')}
-                />
-
-                <Tab
-                  margin="0 1rem 0 0rem"
-                  index={2}
-                  name="Additional"
-                  isActive={activeTab === 'AdditionalTab'}
-                  onClick={() => setActiveTab('AdditionalTab')}
-                />
-
-                <Tab
-                  margin="0 1rem 0 0rem"
-                  index={3}
-                  name="Non Billable"
-                  isActive={activeTab === 'NonBillableTab'}
-                  onClick={() => setActiveTab('NonBillableTab')}
+                  name="Notifications"
+                  isActive={activeTab === 'NotificationsTab'}
+                  onClick={() => setActiveTab('NotificationsTab')}
                 />
               </JustifyCenterRow>
             </JustifyBetweenColumn>
