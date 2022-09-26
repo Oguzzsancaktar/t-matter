@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { DashboardCard } from '@/pages'
-import { FinanceDashboardChart, IconButton, JustifyCenterRow } from '@/components'
+import { FinanceDashboardChart, FinanceInfoModal, IconButton, JustifyCenterRow, ReadCustomerModal } from '@/components'
 import { RiWallet3Fill, RiWallet3Line } from 'react-icons/ri'
 import { BsTriangleFill } from 'react-icons/bs'
 import colors from '@constants/colors'
@@ -8,6 +8,9 @@ import { useGetInstallmentDashboardChartQuery } from '@services/settings/finance
 import moment from 'moment'
 import { BiReset } from 'react-icons/bi'
 import { PERIODS } from '@constants/dates'
+import useAccessStore from '@hooks/useAccessStore'
+import { openModal } from '@/store'
+import { ESize } from '@/models'
 
 interface IGroupedInstallment {
   unpaidCount: number
@@ -26,6 +29,21 @@ const Head: React.FC<{
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>
 }> = props => {
   const { unpaidCount, paidCount, paidAmount, totalCount } = props.data
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+  const handleShowFinanceInfoModal = () => {
+    dispatch(
+      openModal({
+        id: `financeInfoModal`,
+        title: 'Finance Info',
+        body: <FinanceInfoModal />,
+        width: ESize.WXLarge,
+        height: ESize.WXLarge,
+        backgroundColor: 'transparent'
+      })
+    )
+  }
+
   return (
     <div
       style={{
@@ -47,11 +65,11 @@ const Head: React.FC<{
           <BiReset />
         </IconButton>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', marginRight: 16 }}>
+      <div onClick={handleShowFinanceInfoModal} style={{ display: 'flex', alignItems: 'center', marginRight: 16 }}>
         <span style={{ marginRight: 4 }}>{unpaidCount}</span>
         <RiWallet3Line />
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', marginRight: 16 }}>
+      <div onClick={handleShowFinanceInfoModal} style={{ display: 'flex', alignItems: 'center', marginRight: 16 }}>
         <span style={{ marginRight: 4 }}>{paidCount}</span>
         <RiWallet3Fill />
       </div>
