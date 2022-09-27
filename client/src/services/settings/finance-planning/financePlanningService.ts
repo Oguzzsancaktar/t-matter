@@ -22,6 +22,8 @@ const INVOICE_TAG_TYPE = 'invoiceTag' as const
 const EXPIRED_INVOICE_TAG_TYPE = 'expiredInvoiceTag' as const
 const INSTALLMENT_TAG_TYPE = 'installmentTag' as const
 const INSTALLMENT_DASHBOARD_TAG_TYPE = 'installmentDashboardTag' as const
+const ADDITIONAL_TIME_TAG_TYPE = 'additionalTimeTag' as const
+const NON_BILLABLE_TAG_TYPE = 'nonBillableTag' as const
 
 type IBuilder = EndpointBuilder<
   IAxiosBaseQueryFn,
@@ -30,7 +32,9 @@ type IBuilder = EndpointBuilder<
   | typeof INVOICE_TAG_TYPE
   | typeof EXPIRED_INVOICE_TAG_TYPE
   | typeof INSTALLMENT_TAG_TYPE
-  | typeof INSTALLMENT_DASHBOARD_TAG_TYPE,
+  | typeof INSTALLMENT_DASHBOARD_TAG_TYPE
+  | typeof ADDITIONAL_TIME_TAG_TYPE
+  | typeof NON_BILLABLE_TAG_TYPE,
   typeof FINANCE_PLANNING_REDUCER_PATH
 >
 
@@ -138,7 +142,7 @@ const createInvoice = (builder: IBuilder) => {
       }
     },
     invalidatesTags(result) {
-      return [{ type: INVOICE_TAG_TYPE, id: 'LIST' }]
+      return [{ type: INVOICE_TAG_TYPE, id: 'LIST' }, NON_BILLABLE_TAG_TYPE, ADDITIONAL_TIME_TAG_TYPE]
     }
   })
 }
@@ -184,7 +188,7 @@ const createExpiredTaskStep = (builder: IBuilder) => {
       }
     },
     invalidatesTags(result) {
-      return [{ type: EXPIRED_INVOICE_TAG_TYPE, id: 'LIST' }]
+      return [{ type: EXPIRED_INVOICE_TAG_TYPE, id: 'LIST' }, NON_BILLABLE_TAG_TYPE, ADDITIONAL_TIME_TAG_TYPE]
     }
   })
 }
@@ -344,9 +348,44 @@ const getInstallmentDashboardChart = (builder: IBuilder) => {
   })
 }
 
+const getAdditionalTimePassedCustomers = (builder: IBuilder) => {
+  return builder.query<{ customer: ICustomer; total: number; _id: ICustomer['_id'] }[], void>({
+    query(args) {
+      return {
+        url: '/finance/additional-time-passed-customers',
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: ADDITIONAL_TIME_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
+const getNonBillablePassedCustomers = (builder: IBuilder) => {
+  return builder.query<{ customer: ICustomer; total: number; _id: ICustomer['_id'] }[], void>({
+    query(args) {
+      return {
+        url: '/finance/non-billable-passed-customers',
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: NON_BILLABLE_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const financePlanningApi = createApi({
   reducerPath: FINANCE_PLANNING_REDUCER_PATH,
-  tagTypes: [FINANCE_PLANNING_TAG_TYPE, INVOICE_CATEGORY_TAG_TYPE, INVOICE_TAG_TYPE, EXPIRED_INVOICE_TAG_TYPE],
+  tagTypes: [
+    FINANCE_PLANNING_TAG_TYPE,
+    INVOICE_CATEGORY_TAG_TYPE,
+    INVOICE_TAG_TYPE,
+    EXPIRED_INVOICE_TAG_TYPE,
+    ADDITIONAL_TIME_TAG_TYPE,
+    NON_BILLABLE_TAG_TYPE
+  ],
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
     getFinancePlanning: getFinancePlanning(builder),
@@ -366,7 +405,9 @@ const financePlanningApi = createApi({
     resetInstallments: resetInstallments(builder),
     uploadPdfToInvoiceCategory: uploadPdfToInvoiceCategory(builder),
     editInstallment: editInstallment(builder),
-    getInstallmentDashboardChart: getInstallmentDashboardChart(builder)
+    getInstallmentDashboardChart: getInstallmentDashboardChart(builder),
+    getAdditionalTimePassedCustomers: getAdditionalTimePassedCustomers(builder),
+    getNonBillablePassedCustomers: getNonBillablePassedCustomers(builder)
   })
 })
 
@@ -388,7 +429,9 @@ const {
   useResetInstallmentsMutation,
   useUploadPdfToInvoiceCategoryMutation,
   useEditInstallmentMutation,
-  useGetInstallmentDashboardChartQuery
+  useGetInstallmentDashboardChartQuery,
+  useGetAdditionalTimePassedCustomersQuery,
+  useGetNonBillablePassedCustomersQuery
 } = financePlanningApi
 
 export {
@@ -410,5 +453,7 @@ export {
   useResetInstallmentsMutation,
   useUploadPdfToInvoiceCategoryMutation,
   useEditInstallmentMutation,
-  useGetInstallmentDashboardChartQuery
+  useGetInstallmentDashboardChartQuery,
+  useGetAdditionalTimePassedCustomersQuery,
+  useGetNonBillablePassedCustomersQuery
 }

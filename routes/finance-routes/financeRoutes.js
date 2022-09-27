@@ -20,5 +20,7 @@ router.put('/installment/:invoiceId/pay/:installmentId', controllers.financeCont
 router.put('/installment/:invoiceId/reset', controllers.financeController.resetInstallments)
 router.put('/installment/:installmentId/edit', controllers.financeController.editInstallment)
 router.get('/installment/dashboard/chart', controllers.financeController.getInstallmentDashboardChart)
+router.get('/additional-time-passed-customers', controllers.financeController.getAdditionalTimePassedCustomers)
+router.get('/non-billable-passed-customers', controllers.financeController.getNonBillablePassedCustomers)
 
 module.exports = router

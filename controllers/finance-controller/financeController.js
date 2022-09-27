@@ -482,6 +482,26 @@ const getInstallmentDashboardChart = async (req, res) => {
   }
 }
 
+const getAdditionalTimePassedCustomers = async (req, res) => {
+  try {
+    const customers = await dataAccess.financeDataAccess.getPassedExpiredTasksStepsGroupedByCustomer()
+    res.send(customers)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getNonBillablePassedCustomers = async (req, res) => {
+  try {
+    const customers = await dataAccess.financeDataAccess.getPassedNonBillableTasksGroupedByCustomer()
+    res.send(customers)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   getFinancePlanning,
   updateFinancePlanning,
@@ -495,5 +515,7 @@ module.exports = {
   payInstallment,
   resetInstallments,
   editInstallment,
-  getInstallmentDashboardChart
+  getInstallmentDashboardChart,
+  getAdditionalTimePassedCustomers,
+  getNonBillablePassedCustomers
 }

@@ -3,6 +3,7 @@ import ReactApexChart from 'react-apexcharts'
 import { useGetInstallmentDashboardChartQuery } from '@services/settings/finance-planning/financePlanningService'
 import { PERIODS } from '@constants/dates'
 import moment from 'moment'
+import colors from '@constants/colors'
 
 interface IProps {
   onSelectBar: (date: string) => void
@@ -55,12 +56,13 @@ const FinanceDashboardBarChart: React.FC<IProps> = ({ onSelectBar }) => {
   ]
 
   const config: ApexCharts.ApexOptions = {
+    colors: [colors.green.primary, colors.red.primary],
     chart: {
       type: 'bar',
       height: 230,
       events: {
         dataPointSelection: (event, chartContext, config) => {
-          onSelectBar(data[config.dataPointIndex]._id)
+          onSelectBar(config.w.config.series[config.seriesIndex].data[config.dataPointIndex]?.x)
         }
       }
     },
