@@ -1,4 +1,5 @@
 import { Button } from '@/components/button'
+import { TaskNoteCounter } from '@/components/counter'
 import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenColumn } from '@/components/layout'
 import { H1 } from '@/components/texts'
@@ -8,11 +9,13 @@ import { useAuth } from '@/hooks/useAuth'
 
 import { EActivity, ICustomer, ICustomerTask, ITaskChecklist, IUser } from '@/models'
 import { activityApi, useCreateActivityMutation } from '@/services/activityService'
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import { TaskChecklistCard, TaskCustomerCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, TaskUserCard } from '.'
 
+const SwalReactContent = withReactContent(Swal)
 interface IProps {
   taskData: ICustomerTask
   isTaskNotStarted: boolean
@@ -53,15 +56,25 @@ const TaskInformations: React.FC<IProps> = ({
   const dispatch = useAppDispatch()
   const [createActivity] = useCreateActivityMutation()
 
+  const isResponsibleUserLoggedUser = useMemo(
+    () => loggedUser.user?._id === taskData.steps[activeStep].responsibleUser._id,
+    [loggedUser.user, taskData.steps[activeStep].responsibleUser]
+  )
+
+  const handleNonResponsibleNewNoteCounter = (value: number) => {
+    console.log('value from new counter', value)
+  }
+
   const handleAddNewNote = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
 
-    Swal.fire({
+    SwalReactContent.fire({
       title: 'Enter your note message',
       input: 'textarea',
       inputAttributes: {
         autocapitalize: 'off'
       },
+      html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
       showCancelButton: true,
       confirmButtonText: 'Add Note',
       showLoaderOnConfirm: true,
@@ -145,7 +158,7 @@ const TaskInformations: React.FC<IProps> = ({
 
           <ItemContainer margin="0 0 1rem 0">
             <Button onClick={handleAddNewNote} color={colors.gray.middle}>
-              <H1 textAlign="center" color={colors.primary.dark}>
+              <H1 cursor="pointer" textAlign="center" color={colors.primary.dark}>
                 Add Note
               </H1>
             </Button>

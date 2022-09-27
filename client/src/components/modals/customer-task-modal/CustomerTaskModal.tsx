@@ -1,7 +1,7 @@
 import { ItemContainer } from '@/components/item-container'
 import { Row } from '@/components/layout'
-import { TaskEventSection, TaskInformations, TaskWizzardNavigation } from '@/components'
-import React, { useCallback, useEffect, useState } from 'react'
+import { TaskEventSection, TaskInformations, TaskNoteCounter, TaskWizzardNavigation } from '@/components'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ModalBody } from '../types'
 import colors from '@/constants/colors'
 import { useGetTaskByTaskIdQuery, useUpdateTaskMutation } from '@/services/customers/taskService'
@@ -12,6 +12,9 @@ import { activityApi, useCreateActivityMutation } from '@/services/activityServi
 import useAccessStore from '@hooks/useAccessStore'
 import { setModalOnClose } from '@/store'
 import { useCreateExpiredTaskStepMutation } from '@services/settings/finance-planning/financePlanningService'
+import withReactContent from 'sweetalert2-react-content'
+
+const SwalReactContent = withReactContent(Swal)
 
 interface IProps {
   taskId: string
@@ -29,6 +32,11 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const [updatedTaskData, setUpdatedTaskData] = useState<ICustomerTask>()
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const isResponsibleUserLoggedUser = useMemo(
+    () => loggedUser.user?._id === taskData?.steps[activeStep].responsibleUser._id,
+    [loggedUser.user, taskData?.steps[activeStep].responsibleUser]
+  )
 
   const [isTaskNotStarted, setIsTaskNotStarted] = useState(
     updatedTaskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length ===
@@ -50,9 +58,10 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const handleCancelTask = async () => {
     try {
       if (updatedTaskData) {
-        Swal.fire({
+        SwalReactContent.fire({
           title: 'Enter your cancel message',
           input: 'textarea',
+          html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
           inputAttributes: {
             autocapitalize: 'off'
           },
@@ -120,9 +129,10 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const handlePostponeChange = async (value: Date[], dateText: string) => {
     try {
       if (updatedTaskData) {
-        Swal.fire({
+        SwalReactContent.fire({
           title: 'Enter your postpone message',
           input: 'textarea',
+          html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
           inputAttributes: {
             autocapitalize: 'off'
           },
@@ -179,12 +189,14 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const handleResponsibleChange = (responsible: IUser) => {
     try {
       if (updatedTaskData) {
-        Swal.fire({
+        SwalReactContent.fire({
           title: 'Enter your responsible change message',
           input: 'textarea',
+          html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
           inputAttributes: {
             autocapitalize: 'off'
           },
+
           showCancelButton: true,
           confirmButtonText: 'Change Responsible',
           showLoaderOnConfirm: true,
@@ -302,9 +314,10 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
   const handleCheckboxClick = (checklistItem: ITaskChecklist, index: number) => {
     if (!checklistItem.isChecked && updatedTaskData) {
-      Swal.fire({
+      SwalReactContent.fire({
         title: 'Enter your complete message',
         input: 'textarea',
+        html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
         inputAttributes: {
           autocapitalize: 'off'
         },

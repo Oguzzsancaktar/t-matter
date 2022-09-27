@@ -86,14 +86,7 @@ const TaskUserCard: React.FC<IProps> = ({
             </ItemContainer>
 
             <ItemContainer width="auto">
-              <Button
-                padding="0"
-                width="30px"
-                height="30px"
-                color={colors.red.primary}
-                disabled={!canTaskCancel}
-                onClick={handleCancelTask}
-              >
+              <Button padding="0" width="30px" height="30px" color={colors.red.primary} onClick={handleCancelTask}>
                 <XCircle size={20} />
               </Button>
             </ItemContainer>

@@ -2,11 +2,10 @@ import { Checkbox } from '@/components/input'
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenRow, Row } from '@/components/layout'
 import { ITaskChecklist } from '@/models'
-import { useGetCompanyPricingQuery } from '@/services/settings/company-planning/companyPricingService'
 import { SummaryCardText, SummaryCardValue } from '@/shared'
 import { secondsToHourMin } from '@/utils/timeUtils'
 import { toastError } from '@/utils/toastUtil'
-import React, { useState } from 'react'
+import React from 'react'
 
 interface IProps {
   checklistItem: ITaskChecklist
@@ -15,14 +14,14 @@ interface IProps {
 }
 
 const TaskChecklistItem: React.FC<IProps> = ({ checklistItem, disabled, onCheckboxClick }) => {
-  const { data: companyPricingData, isLoading: isCompanyPricingDataLoading } = useGetCompanyPricingQuery()
-
   const handleOnCheckboxClick = (checklistItem: ITaskChecklist) => {
-    if (!disabled) {
-      onCheckboxClick(checklistItem)
-    } else {
-      toastError('You cant check checklist item right now!')
-    }
+    onCheckboxClick(checklistItem)
+
+    // if (!disabled) {
+    //   onCheckboxClick(checklistItem)
+    // } else {
+    //   toastError('You cant check checklist item right now!')
+    // }
   }
 
   return (
