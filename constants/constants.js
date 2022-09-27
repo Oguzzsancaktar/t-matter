@@ -43,6 +43,13 @@ const feeCalculationType = {
   PAYMENT: 'PAYMENT'
 }
 
+const PERIODS = {
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY'
+}
+
 module.exports = {
   GENDER_TYPES,
   STATUS_TYPES,
@@ -52,5 +59,6 @@ module.exports = {
   AUTH_COOKIE_OPTIONS,
   CHECKLIST_STATUSES,
   ACTIVITY_TYPES,
-  feeCalculationType
+  feeCalculationType,
+  PERIODS
 }

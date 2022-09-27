@@ -1,6 +1,7 @@
 import { ItemContainer, JustifyBetweenColumn, JustifyBetweenRow } from '@/components'
 import React from 'react'
 import { ActiveTasksCard, ActivityTimelineCard, DashboardCard } from '.'
+import { FinanceDashboardCard } from '@pages/dashboard/finance-dashboard-card'
 
 const DashboardPage: React.FC = () => {
   return (
@@ -16,7 +17,7 @@ const DashboardPage: React.FC = () => {
           </ItemContainer>
 
           <ItemContainer width="100%" height="calc((100% - 2rem)/3)">
-            <DashboardCard head={'test'}>incoming chart</DashboardCard>
+            <FinanceDashboardCard />
           </ItemContainer>
         </ItemContainer>
 

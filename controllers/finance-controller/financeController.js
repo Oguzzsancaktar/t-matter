@@ -121,7 +121,7 @@ const createInstallment = async (req, res) => {
       const installment = await dataAccess.financeDataAccess.createInstallment({
         type: INSTALLMENT_TYPES.DEPOSIT,
         invoice: params.invoiceId,
-        payDate: new Date(),
+        payDate: moment().format('YYYY-MM-DD'),
         payAmount: deposit,
         status: INSTALLMENT_STATUS.UN_PAID
       })
@@ -143,7 +143,7 @@ const createInstallment = async (req, res) => {
       const installment = {
         type: INSTALLMENT_TYPES.PAYMENT,
         invoice: params.invoiceId,
-        payDate: moment(startDate).add(i, 'months').toDate(),
+        payDate: moment(startDate).add(i, 'months').format('YYYY-MM-DD'),
         payAmount: pA,
         status: INSTALLMENT_STATUS.UN_PAID
       }
@@ -471,6 +471,37 @@ const editInstallment = async (req, res) => {
   }
 }
 
+const getInstallmentDashboardChart = async (req, res) => {
+  try {
+    const { period } = req.query
+    const installments = await dataAccess.financeDataAccess.getDailyGroupedInstallments({ period })
+    res.send(installments)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getAdditionalTimePassedCustomers = async (req, res) => {
+  try {
+    const customers = await dataAccess.financeDataAccess.getPassedExpiredTasksStepsGroupedByCustomer()
+    res.send(customers)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getNonBillablePassedCustomers = async (req, res) => {
+  try {
+    const customers = await dataAccess.financeDataAccess.getPassedNonBillableTasksGroupedByCustomer()
+    res.send(customers)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   getFinancePlanning,
   updateFinancePlanning,
@@ -483,5 +514,8 @@ module.exports = {
   postponeInstallment,
   payInstallment,
   resetInstallments,
-  editInstallment
+  editInstallment,
+  getInstallmentDashboardChart,
+  getAdditionalTimePassedCustomers,
+  getNonBillablePassedCustomers
 }

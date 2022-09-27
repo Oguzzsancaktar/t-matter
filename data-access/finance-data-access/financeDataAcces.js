@@ -3,6 +3,11 @@ const Invoice = require('../../models/invoice')
 const FinancePlanning = require('../../models/financePlanning')
 const ExpiredTaskStep = require('../../models/expiredTaskStep')
 const Installment = require('../../models/installment')
+const Task = require('../../models/task')
+const { INSTALLMENT_STATUS } = require('../../constants/finance')
+const { PERIODS } = require('../../constants/constants')
+const moment = require('moment')
+const { getISODate } = require('../../helpers/dateHelpers')
 
 const createFinancePlanning = data => {
   return FinancePlanning.create(data)
@@ -126,8 +131,9 @@ const createExpiredTaskStep = data => {
 }
 
 const getExpiredTaskStepsByCustomerId = ({ customerId, isInvoiced }) => {
-  const $match = {
-    customer: mongoose.Types.ObjectId(customerId)
+  const $match = {}
+  if (customerId) {
+    $match.customer = mongoose.Types.ObjectId(customerId)
   }
   if (isInvoiced) {
     $match.isInvoiced = { $eq: isInvoiced === 'true' }
@@ -179,6 +185,80 @@ const getExpiredTaskStepsByCustomerId = ({ customerId, isInvoiced }) => {
       }
     }
   ])
+}
+
+const getPassedExpiredTasksStepsGroupedByCustomer = async () => {
+  const financePlanning = await getFinancePlanning()
+
+  return ExpiredTaskStep.aggregate([
+    {
+      $match: {
+        isInvoiced: false
+      }
+    },
+    {
+      $group: {
+        _id: '$customer',
+        total: { $sum: '$expiredTimePrice' }
+      }
+    },
+    {
+      $match: {
+        total: { $gte: financePlanning.inactiveTimeSlipAmount.value }
+      }
+    },
+    {
+      $lookup: {
+        from: 'customers',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'customer'
+      }
+    },
+    {
+      $unwind: {
+        path: '$customer',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]).exec()
+}
+
+const getPassedNonBillableTasksGroupedByCustomer = async () => {
+  const financePlanning = await getFinancePlanning()
+
+  return Task.aggregate([
+    {
+      $match: {
+        isInvoiced: false
+      }
+    },
+    {
+      $group: {
+        _id: '$customer',
+        total: { $sum: '$totalPrice' }
+      }
+    },
+    {
+      $match: {
+        total: { $gte: financePlanning.activeTimeSlipAmount.value }
+      }
+    },
+    {
+      $lookup: {
+        from: 'customers',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'customer'
+      }
+    },
+    {
+      $unwind: {
+        path: '$customer',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]).exec()
 }
 
 const updateExpiredTaskStepById = (id, data) => {
@@ -236,6 +316,80 @@ const deleteManyInstallment = query => {
   return Installment.deleteMany(query)
 }
 
+const getDailyGroupedInstallments = ({ period }) => {
+  const $match = {}
+  if (period === PERIODS.DAILY) {
+    $match.payDate = {
+      $gte: getISODate(moment().startOf('day')),
+      $lte: getISODate(moment().endOf('day'))
+    }
+  }
+  if (period === PERIODS.WEEKLY) {
+    $match.payDate = {
+      $gte: getISODate(moment().startOf('isoWeek')),
+      $lte: getISODate(moment().endOf('isoWeek'))
+    }
+  }
+  if (period === PERIODS.MONTHLY) {
+    $match.payDate = {
+      $gte: getISODate(moment().startOf('month')),
+      $lte: getISODate(moment().endOf('month'))
+    }
+  }
+  if (period === PERIODS.YEARLY) {
+    $match.payDate = {
+      $gte: getISODate(moment().startOf('year')),
+      $lte: getISODate(moment().endOf('year'))
+    }
+  }
+  const agg = () => [
+    { $match },
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            format: '%Y-%m-%d',
+            date: '$payDate'
+          }
+        },
+        unpaidAmount: {
+          $sum: {
+            $cond: [{ $ne: ['$status', INSTALLMENT_STATUS.PAID] }, '$payAmount', 0]
+          }
+        },
+        paidAmount: {
+          $sum: {
+            $cond: [{ $eq: ['$status', INSTALLMENT_STATUS.PAID] }, '$payAmount', 0]
+          }
+        },
+        paidCount: {
+          $sum: {
+            $cond: [{ $eq: ['$status', INSTALLMENT_STATUS.PAID] }, 1, 0]
+          }
+        },
+        unpaidCount: {
+          $sum: {
+            $cond: [{ $ne: ['$status', INSTALLMENT_STATUS.PAID] }, 1, 0]
+          }
+        },
+        totalAmount: {
+          $sum: '$payAmount'
+        },
+        totalCount: {
+          $sum: 1
+        }
+      }
+    },
+    {
+      $sort: {
+        _id: 1
+      }
+    }
+  ]
+
+  return Installment.aggregate(agg()).exec()
+}
+
 module.exports = {
   updateFinancePlanning,
   getFinancePlanning,
@@ -252,5 +406,8 @@ module.exports = {
   updateInvoiceById,
   updateManyInstallment,
   deleteManyInstallment,
-  getInvoiceById
+  getInvoiceById,
+  getDailyGroupedInstallments,
+  getPassedExpiredTasksStepsGroupedByCustomer,
+  getPassedNonBillableTasksGroupedByCustomer
 }
