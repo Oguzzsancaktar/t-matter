@@ -137,6 +137,16 @@ const usedTaskWorkflowCounts = async (req, res) => {
   }
 }
 
+const getTaskCountForMonths = async (req, res) => {
+  try {
+    const workflowPlans = await dataAccess.taskDataAccess.getTaskCountForMonthsData()
+    res.status(StatusCodes.OK).json(workflowPlans)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
@@ -146,5 +156,6 @@ module.exports = {
   getAllTaskList,
   postponeTask,
   removeTask,
-  usedTaskWorkflowCounts
+  usedTaskWorkflowCounts,
+  getTaskCountForMonths
 }

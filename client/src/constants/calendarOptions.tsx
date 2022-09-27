@@ -2,7 +2,7 @@ import listPlugin from '@fullcalendar/list'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { Menu, User } from 'react-feather'
+import { Menu } from 'react-feather'
 import { useRef } from 'react'
 import { usePostponeTaskMutation } from '@/services/customers/taskService'
 import { EActivity, ESize } from '@/models'
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
 import moment from 'moment'
-import { Button, SelectInput, SelectTaskWorkflowModal } from '@/components'
+import { Button, SelectTaskWorkflowModal } from '@/components'
 import { openModal } from '@/store'
 import colors from './colors'
 
@@ -39,14 +39,14 @@ const DefaultCalendarOptions = (): any => {
     },
     // businessHours: true, // display business hours
     // slotDuration: { hours: 1 },
-    timezone: 'America/New_York',
+    timezone: 'local',
     slotDuration: '01:00',
     snapDuration: '00:01',
     allDaySlot: false,
+    slotLabelInterval: { hours: 0.25 },
     height: '100%',
     droppable: true,
     nextDayThreshold: '09:00:00',
-    slotLabelInterval: { hours: 0.25 },
     contentHeight: 1,
     editable: true,
     eventResizableFromStart: false,
@@ -102,7 +102,7 @@ const DefaultCalendarOptions = (): any => {
         openModal({
           id: 'selectTaskWorkflowModalForCalendar',
           title: 'Customer Task',
-          body: <SelectTaskWorkflowModal date={moment(info.date).valueOf()} />,
+          body: <SelectTaskWorkflowModal date={moment(info.dateStr).valueOf()} />,
           width: ESize.WSmall,
           height: ESize.HMedium,
           maxWidth: ESize.WSmall,
@@ -137,7 +137,6 @@ const DefaultCalendarOptions = (): any => {
               text: result.value
             })
 
-            console.log(droppedEvent)
             await postponeTask({
               _id: task._id,
               postponedDate: moment(date).valueOf(),

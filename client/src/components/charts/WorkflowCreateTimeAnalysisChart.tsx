@@ -3,16 +3,16 @@ import { ItemContainer } from '../item-container'
 import ReactApexChart from 'react-apexcharts'
 import { ApexOptions } from 'apexcharts'
 import { initialColumnChartOptions } from '@/constants/initialValues'
-import { useGetWorkflowCountForMonthsDataQuery } from '@/services/settings/workflow-planning/workflowService'
+import { useGetTaskCountForMonthsDataQuery } from '@/services/customers/taskService'
 
 const WorkflowCreateTimeAnalysisChart = () => {
-  const { data: workflowCountForMonthsData } = useGetWorkflowCountForMonthsDataQuery()
-  console.log(workflowCountForMonthsData)
+  const { data: taskCountForMonthsData } = useGetTaskCountForMonthsDataQuery()
+  console.log(taskCountForMonthsData)
   const chartSetup: { options: ApexOptions; series: any } = useMemo(() => {
     let monthlyAddedCounts: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    if (workflowCountForMonthsData) {
-      for (let obj of workflowCountForMonthsData) {
+    if (taskCountForMonthsData) {
+      for (let obj of taskCountForMonthsData) {
         monthlyAddedCounts[+obj?._id - 1] = obj.count
       }
     }
@@ -28,7 +28,7 @@ const WorkflowCreateTimeAnalysisChart = () => {
         }
       ]
     }
-  }, [workflowCountForMonthsData, initialColumnChartOptions])
+  }, [taskCountForMonthsData, initialColumnChartOptions])
 
   return (
     <ItemContainer position="relative" height="200px">

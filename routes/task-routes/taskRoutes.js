@@ -27,5 +27,6 @@ router.get('/:taskId', middlewares.validations.taskValidations.getTaskValidation
 router.put('/:taskId', controllers.taskController.updateTask)
 
 router.get('/chart/most-used-workflow', controllers.taskController.usedTaskWorkflowCounts)
+router.get('/chart/task-workflow-added-monthly-analysis', controllers.taskController.getTaskCountForMonths)
 
 module.exports = router

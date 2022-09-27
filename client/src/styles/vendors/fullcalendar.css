@@ -341,6 +341,10 @@
   height: 33px !important;
 } */
 
+.fc-event {
+  height: 30px;
+}
+
 @media (min-width: 992px) {
   .app-calendar .app-calendar-sidebar {
     position: static;

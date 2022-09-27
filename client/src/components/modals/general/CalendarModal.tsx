@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, Row } from '@/components/layout'
-import FullCalendar from '@fullcalendar/react'
+import FullCalendar, { EventSourceInput } from '@fullcalendar/react'
 import colors from '@/constants/colors'
 import { SelectDopdown, SelectInput } from '@/components/input'
 import { emptyQueryParams, emptyTaskFilter } from '@/constants/queryParams'
@@ -45,7 +45,7 @@ const StyledReactTooltip = styled(ReactTooltip)`
   opacity: 1 !important;
   overflow: hidden;
   width: 300px;
-  z-index: 9999999999;
+  z-index: 99999999999999999;
   &:after {
     border-top-color: ${colors.gray.dark} !important;
   }
@@ -220,15 +220,10 @@ const CalendarModal = () => {
     if (taskData) {
       taskData.forEach((task, i) => {
         task.steps.forEach((step, index) => {
-          if (i === 0 && index === 0) {
-            console.log(
-              moment(step?.postponedDate?.toString().trim().length > 0 ? step?.postponedDate : step.startDate).format(
-                'DD-MM-yyyy hh:mm'
-              )
-            )
-          }
           if (calendarFilters.category?._id === undefined || calendarFilters.category?._id === step.category._id) {
-            allTaskSteps.push({
+            let eventDate = step?.postponedDate?.toString().trim().length > 0 ? step?.postponedDate : step.startDate
+
+            let event: EventSourceInput | any = {
               id: task._id,
               // allDay: false,
               backgroundColor: step.category.color.color,
@@ -237,7 +232,8 @@ const CalendarModal = () => {
               color: step.category.color.color,
               title: task.name,
               extendedProps: { task, step }
-            })
+            }
+            allTaskSteps.push(event)
           }
         })
       })

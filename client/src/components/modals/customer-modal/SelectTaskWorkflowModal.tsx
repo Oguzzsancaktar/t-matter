@@ -18,6 +18,7 @@ import { H1 } from '@/components/texts'
 import { DatePicker } from '@/components/date-picker'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import { useGetCustomersQuery } from '@/services/customers/customerService'
+import { initialCreateCustomer } from '@/constants/initialValues'
 
 interface IProps {
   customer?: ICustomer
@@ -46,7 +47,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
   })
 
   const [firstStepResponsibleUser, setFirstStepResponsibleUser] = useState(selectedWorkflow?.steps[0]?.responsibleUser)
-  const [startDate, setStartDate] = useState<number>(date || 0)
+  const [startDate, setStartDate] = useState<number>(date || Date.now())
 
   const [creationErrors, setCreationErrors] = useState({
     workflowError: false,
@@ -122,7 +123,6 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
     }
 
     if (!customer && !isValueNull(taskCustomer?._id)) {
-      console.log(taskCustomer)
       tempErrors.customerError = true
       setCreationErrors(tempErrors)
       toastError('Please select customer')
@@ -256,7 +256,9 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
               <SelectInput
                 isLoading={workflowPlanIsLoading}
                 name="Task Custumer"
-                onChange={option => setTaskCustomer(option.value)}
+                onChange={option =>
+                  setTaskCustomer({ ...initialCreateCustomer, reliableCustomers: [], status: 0, _id: option.value })
+                }
                 options={(filteredCustomers || []).map(user => ({
                   value: user._id,
                   label: user.firstname + ' ' + user.lastname

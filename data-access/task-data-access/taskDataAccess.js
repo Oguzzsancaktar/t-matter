@@ -172,11 +172,25 @@ const getUsedTaskWorkflowCounts = (taskId, data) => {
   return Task.aggregate(pipeline).exec()
 }
 
+const getTaskCountForMonthsData = async () => {
+  const pipeline = [
+    {
+      $group: {
+        _id: { $month: '$createdAt' },
+        count: { $sum: 1 }
+      }
+    }
+  ]
+
+  return Task.aggregate(pipeline).exec()
+}
+
 module.exports = {
   createTask,
   getCustomerTasks,
   getTaskById,
   updateTaskById,
   deleteTaskById,
-  getUsedTaskWorkflowCounts
+  getUsedTaskWorkflowCounts,
+  getTaskCountForMonthsData
 }
