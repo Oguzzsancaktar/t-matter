@@ -9,19 +9,24 @@ import {
   JustifyBetweenRow,
   JustifyCenterColumn,
   NoTableData,
+  ReadCustomerModal,
   Row,
   TableSkeltonLoader,
   TaskNoteCounter
 } from '@/components'
 import { useGetInstallmentsQuery } from '@services/settings/finance-planning/financePlanningService'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { IInstallment } from '@/models'
+import { ESize, ICustomer, IInstallment } from '@/models'
 import moment from 'moment'
 import { INSTALLMENT_STATUS } from '@constants/finance'
 import colors from '@constants/colors'
 import constantToLabel from '@utils/constantToLabel'
+import { openModal } from '@/store'
+import useAccessStore from '@hooks/useAccessStore'
 
 const FinanceInfoInstallmentTab = () => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
   const { data, isLoading } = useGetInstallmentsQuery(undefined)
   const [dateRange, setDateRange] = useState({
     startDate: moment().subtract(1, 'year').toDate(),
@@ -78,6 +83,19 @@ const FinanceInfoInstallmentTab = () => {
     }
   ]
 
+  const handleRowClicked = (installment: IInstallment) => {
+    dispatch(
+      openModal({
+        id: `customerDetailModal-${installment.invoice.customer._id}`,
+        title: 'Customer / ' + installment.invoice.customer.firstname + ' ' + installment.invoice.customer.lastname,
+        body: <ReadCustomerModal defaultActiveTab="finance" customer={installment.invoice.customer} />,
+        width: ESize.WXLarge,
+        height: `calc(${ESize.HLarge} - 2rem )`,
+        backgroundColor: 'transparent'
+      })
+    )
+  }
+
   return (
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
@@ -111,7 +129,13 @@ const FinanceInfoInstallmentTab = () => {
             <TableSkeltonLoader count={13} />
           </ItemContainer>
         ) : data && data.length > 0 ? (
-          <DataTable className="data-table" fixedHeader columns={columns} data={data || []} />
+          <DataTable
+            className="data-table"
+            fixedHeader
+            columns={columns}
+            data={data || []}
+            onRowClicked={handleRowClicked}
+          />
         ) : (
           <NoTableData />
         )}
