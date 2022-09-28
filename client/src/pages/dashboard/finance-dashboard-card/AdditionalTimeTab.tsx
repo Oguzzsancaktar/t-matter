@@ -16,7 +16,7 @@ const AdditionalTimeTab = () => {
   ]
 
   return (
-    <ItemContainer height="calc(100% - 40px - 0.5rem)">
+    <ItemContainer padding="1rem" height="100%">
       {isLoading ? (
         <ItemContainer height="100%">
           <TableSkeltonLoader count={13} />

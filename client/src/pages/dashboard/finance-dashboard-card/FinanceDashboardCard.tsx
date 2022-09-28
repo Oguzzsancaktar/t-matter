@@ -42,7 +42,8 @@ const Head: React.FC<{
         id: `financeInfoModal`,
         title: 'Finance Info',
         body: <FinanceInfoModal page={page} />,
-        width: ESize.WXLarge,
+        width: ESize.WLarge,
+        maxWidth: ESize.WLarge,
         height: ESize.WXLarge,
         backgroundColor: 'transparent'
       })

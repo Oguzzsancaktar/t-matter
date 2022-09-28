@@ -29,9 +29,10 @@ import UpdateCustomerModal from './UpdateCustomerModal'
 
 interface IProps {
   customer: ICustomer
+  defaultActiveTab?: string
 }
 
-const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
+const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
   const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customer._id)
@@ -39,7 +40,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer }) => {
 
   const [updateCustomer] = useUpdateCustomerMutation()
 
-  const [activeTab, setActiveTab] = useState('activity')
+  const [activeTab, setActiveTab] = useState(defaultActiveTab ? defaultActiveTab : 'activity')
   const [activeSliderIndex, setActiveSliderIndex] = useState(0)
 
   const handleEdit = (customer: ICustomer) => {
