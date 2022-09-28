@@ -10,6 +10,7 @@ const GlobalStyle = createGlobalStyle`
   
   .data-table {
     height: 100%;
+    overflow-y: auto;
   }
   
   #side-drawer-root {

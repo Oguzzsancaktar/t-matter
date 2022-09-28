@@ -297,6 +297,34 @@ const getInstallmentsByInvoiceId = invoiceId => {
       }
     },
     {
+      $lookup: {
+        from: 'customers',
+        localField: 'invoice.customer',
+        foreignField: '_id',
+        as: 'invoice.customer'
+      }
+    },
+    {
+      $unwind: {
+        path: '$invoice.customer',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'invoicecategories',
+        localField: 'invoice.category',
+        foreignField: '_id',
+        as: 'invoice.category'
+      }
+    },
+    {
+      $unwind: {
+        path: '$invoice.category',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
       $sort: {
         payDate: 1
       }

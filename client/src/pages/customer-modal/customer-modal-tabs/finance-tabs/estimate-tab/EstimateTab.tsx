@@ -73,6 +73,7 @@ const EstimateTab: React.FC<IProps> = ({ customerId, selectedInvoice, handleSele
     createInvoice: []
   })
 
+  // @ts-ignore
   const [invoice, setInvoice] = useState<Invoice>({ ...invoiceDefault })
 
   const refetch = () => {

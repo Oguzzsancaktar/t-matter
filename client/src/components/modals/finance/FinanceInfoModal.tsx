@@ -46,7 +46,7 @@ const FinanceInfoModal: React.FC<{ page: string }> = ({ page }) => {
             </JustifyBetweenColumn>
           </ItemContainer>
         </ModalHeader>
-        <ModalBody backgroundColor="white" padding="0" height="100%">
+        <ModalBody backgroundColor="white" padding="0" height="calc(100% - 63px)">
           {React.createElement(Component[activeTab], {})}
         </ModalBody>
       </Column>

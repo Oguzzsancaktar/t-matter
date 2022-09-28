@@ -9,7 +9,12 @@ const invoiceDefault = {
   discount: 0,
   addition: 0,
   additionReason: '',
-  postponeCount: 0
+  postponeCount: 0,
+  customer: {
+    firstname: '',
+    lastname: '',
+    _id: ''
+  }
 }
 
 const INSTALLMENT_TYPES = {
