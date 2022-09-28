@@ -7,6 +7,11 @@ const GlobalStyle = createGlobalStyle`
       display: none !important;
     }
   }
+  
+  .data-table {
+    height: 100%;
+  }
+  
   #side-drawer-root {
     height: 100%;
     background: white;
