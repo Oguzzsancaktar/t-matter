@@ -100,18 +100,18 @@ const FinanceInfoInstallmentTab = props => {
   return (
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-        <JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
           <FinanceInfoPaidTypeDonutChart dateRange={dateRange} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
           <FinanceInfoInstallmentBarChart dateRange={dateRange} />
         </JustifyCenterColumn>
-        <JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
           <FinanceInfoPaidDonutPercentage dateRange={dateRange} />
         </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">
-        <JustifyBetweenRow width="300px">
+        <JustifyBetweenRow width="330px">
           <div style={{ marginRight: 8 }}>
             <DatePicker
               labelText="Start Date"

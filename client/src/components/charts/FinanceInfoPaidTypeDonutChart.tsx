@@ -27,7 +27,27 @@ const FinanceInfoPaidTypeDonutChart: React.FC<IProps> = ({ dateRange }) => {
     plotOptions: {
       pie: {
         startAngle: -90,
-        endAngle: 270
+        endAngle: 270,
+        donut: {
+          size: '85%',
+          labels: {
+            show: true,
+            name: {
+              offsetY: 10
+            },
+            total: {
+              show: true,
+              showAlways: true,
+              fontSize: '22px',
+              fontWeight: 500,
+              label: 'Method',
+              color: colors.text.primary,
+              formatter: function (w) {
+                return ''
+              }
+            }
+          }
+        }
       }
     },
     dataLabels: {
@@ -82,9 +102,8 @@ const FinanceInfoPaidTypeDonutChart: React.FC<IProps> = ({ dateRange }) => {
   }, [data])
 
   return (
-    <div style={{ height: '100%', position: 'relative' }}>
-      <span style={{ position: 'absolute', left: 'calc(50% - 24px)', top: 'calc(50% - 24px)' }}>Method</span>
-      <ReactApexChart width={200} options={options} series={series} type="donut" height={'100%'} />
+    <div style={{ height: '100%' }}>
+      <ReactApexChart width="100%" options={options} series={series} type="donut" height={170} />
     </div>
   )
 }

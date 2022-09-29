@@ -17,65 +17,62 @@ const FinanceInfoPaidDonutPercentage: React.FC<IProps> = ({ dateRange }) => {
   const { data, isLoading } = useGetInstallmentsQuery({ ...dateRange, invoice: undefined })
 
   const [series, setSeries] = useState([0])
+
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
-      height: 200,
-      type: 'radialBar',
-      offsetY: 0,
-      width: 200
+      height: 350,
+      type: 'radialBar'
     },
-    title: {},
     plotOptions: {
       radialBar: {
-        startAngle: -135,
-        endAngle: 135,
+        hollow: {
+          size: '70%'
+        },
         dataLabels: {
           name: {
-            fontSize: '12px',
+            show: true,
             color: colors.text.primary,
-            offsetY: 90
+            fontWeight: 500,
+            fontSize: '22px'
           },
           value: {
-            offsetY: 50,
-            fontSize: '22px',
+            show: true,
             color: colors.text.primary,
-            formatter: function (val) {
-              return val + '%'
-            }
+            fontWeight: 500,
+            fontSize: '22px',
+            offsetY: 5
           }
         }
       }
     },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shade: 'dark',
-        shadeIntensity: 0.15,
-        inverseColors: false,
-        opacityFrom: 1,
-        opacityTo: 1,
-        stops: [0, 50, 65, 91]
-      }
-    },
-    stroke: {
-      dashArray: 4
-    },
-    labels: ['']
+    labels: ['Paid'],
+    tooltip: {
+      enabled: true
+    }
   })
-
   useEffect(() => {
     if (data) {
       const total = data.reduce((acc, curr) => acc + curr.payAmount, 0)
       const paid = data.reduce((acc, curr) => acc + curr.paidAmount, 0)
       const percentage = (paid / total) * 100
       setSeries([+Math.ceil(percentage)])
+      setOptions({
+        ...options,
+        tooltip: {
+          ...options.tooltip,
+          y: {
+            formatter(val: number, opts?: any): string {
+              return `$${paid} / $${total}`
+            }
+          }
+        }
+      })
     }
   }, [data])
 
   return (
-    <div style={{ height: '100%', position: 'relative' }}>
-      <span style={{ position: 'absolute', left: 'calc(50% - 16px)', top: 'calc(50% - 24px)' }}>Paid</span>
-      <ReactApexChart width={200} options={options} series={series} type="radialBar" height={'100%'} />
+    <div style={{ height: '100%', width: '100%' }}>
+      <ReactApexChart options={options} series={series} type="radialBar" width={'100%'} height={200} />
     </div>
   )
 }

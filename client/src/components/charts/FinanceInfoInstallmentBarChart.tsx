@@ -50,7 +50,7 @@ const FinanceInfoInstallmentBarChart: React.FC<IProps> = ({ dateRange }) => {
       bar: {
         horizontal: false,
         columnWidth: '55%',
-        borderRadius: 4
+        borderRadius: 2
       }
     },
     dataLabels: {
@@ -58,7 +58,7 @@ const FinanceInfoInstallmentBarChart: React.FC<IProps> = ({ dateRange }) => {
     },
     stroke: {
       show: true,
-      width: 10,
+      width: 4,
       colors: ['transparent']
     },
     xaxis: {
@@ -80,8 +80,8 @@ const FinanceInfoInstallmentBarChart: React.FC<IProps> = ({ dateRange }) => {
   }
 
   return (
-    <div style={{ height: '100%' }} id="chart">
-      <ReactApexChart options={config} series={series} type="bar" height={'100%'} />
+    <div style={{ height: '100%', width: '100%' }} id="chart">
+      <ReactApexChart options={config} series={series} type="bar" width={'100%'} height={'100%'} />
     </div>
   )
 }
