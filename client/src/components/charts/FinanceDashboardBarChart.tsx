@@ -6,7 +6,7 @@ import moment from 'moment'
 import colors from '@constants/colors'
 
 interface IProps {
-  onSelectBar: (date: string) => void
+  onSelectBar: (date: { x: string; y: number }) => void
 }
 
 const FinanceDashboardBarChart: React.FC<IProps> = ({ onSelectBar }) => {
@@ -62,7 +62,7 @@ const FinanceDashboardBarChart: React.FC<IProps> = ({ onSelectBar }) => {
       height: 230,
       events: {
         dataPointSelection: (event, chartContext, config) => {
-          onSelectBar(config.w.config.series[config.seriesIndex].data[config.dataPointIndex]?.x)
+          onSelectBar(config.w.config.series[config.seriesIndex].data[config.dataPointIndex])
         }
       }
     },

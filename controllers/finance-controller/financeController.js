@@ -167,7 +167,7 @@ const createInstallment = async (req, res) => {
 
 const getInstallments = async (req, res) => {
   try {
-    const installments = await dataAccess.financeDataAccess.getInstallmentsByInvoiceId(req.params.invoiceId)
+    const installments = await dataAccess.financeDataAccess.getInstallmentsByInvoiceId({ ...req.params, ...req.query })
     res.json(installments)
   } catch (e) {
     console.log(e)
@@ -473,8 +473,7 @@ const editInstallment = async (req, res) => {
 
 const getInstallmentDashboardChart = async (req, res) => {
   try {
-    const { period } = req.query
-    const installments = await dataAccess.financeDataAccess.getDailyGroupedInstallments({ period })
+    const installments = await dataAccess.financeDataAccess.getDailyGroupedInstallments({ ...req.query })
     res.send(installments)
   } catch (e) {
     console.log(e)

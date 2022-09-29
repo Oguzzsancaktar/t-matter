@@ -209,11 +209,15 @@ const createInstallment = (builder: IBuilder) => {
 }
 
 const getInstallments = (builder: IBuilder) => {
-  return builder.query<IInstallment[], Invoice['_id']>({
+  return builder.query<IInstallment[], { invoice: Invoice['_id']; startDate?: Date; endDate?: Date }>({
     query(args) {
       return {
-        url: `/finance/installment${args ? '/' + args : ''}`,
-        method: 'GET'
+        url: `/finance/installment${args.invoice ? '/' + args.invoice : ''}`,
+        method: 'GET',
+        params: {
+          startDate: args?.startDate?.toDateString(),
+          endDate: args?.endDate?.toDateString()
+        }
       }
     },
     providesTags(result) {
@@ -331,14 +335,16 @@ const getInstallmentDashboardChart = (builder: IBuilder) => {
       totalCount: number
       _id: string
     }[],
-    { period?: TPeriod }
+    { period?: TPeriod; startDate?: Date; endDate?: Date }
   >({
     query(args) {
       return {
         url: `/finance/installment/dashboard/chart`,
         method: 'GET',
         params: {
-          period: args.period
+          period: args.period,
+          startDate: args.startDate?.toDateString(),
+          endDate: args.endDate?.toDateString()
         }
       }
     },
@@ -424,6 +430,7 @@ const {
   useCreateExpiredTaskStepMutation,
   useCreateInstallmentMutation,
   useGetInstallmentsQuery,
+  useLazyGetInstallmentsQuery,
   usePostponeInstallmentMutation,
   usePayInstallmentMutation,
   useResetInstallmentsMutation,
@@ -455,5 +462,6 @@ export {
   useEditInstallmentMutation,
   useGetInstallmentDashboardChartQuery,
   useGetAdditionalTimePassedCustomersQuery,
-  useGetNonBillablePassedCustomersQuery
+  useGetNonBillablePassedCustomersQuery,
+  useLazyGetInstallmentsQuery
 }

@@ -27,10 +27,7 @@ interface IGroupedInstallment {
 
 interface IProps {}
 
-const Head: React.FC<{
-  data: IGroupedInstallment
-}> = props => {
-  const { unpaidCount, paidCount, paidAmount, totalCount } = props.data
+const Head: React.FC<IProps> = props => {
   const { data: nonBillablePassedCustomers } = useGetNonBillablePassedCustomersQuery()
   const { data: additionalTimePassedCustomers } = useGetAdditionalTimePassedCustomersQuery()
 
@@ -62,20 +59,6 @@ const Head: React.FC<{
       }}
     >
       <div
-        onClick={handleShowFinanceInfoModal.bind(this, 'FinanceInfoInstallmentTab')}
-        style={{ display: 'flex', alignItems: 'center', marginRight: 16, cursor: 'pointer' }}
-      >
-        <FcHighPriority />
-        <span style={{ marginLeft: 4 }}>{unpaidCount}</span>
-      </div>
-      <div
-        onClick={handleShowFinanceInfoModal.bind(this, 'FinanceInfoInstallmentTab')}
-        style={{ display: 'flex', alignItems: 'center', marginRight: 16, cursor: 'pointer' }}
-      >
-        <FcMoneyTransfer />
-        <span style={{ marginLeft: 4 }}>{paidCount}</span>
-      </div>
-      <div
         onClick={handleShowFinanceInfoModal.bind(this, 'NonBillableTab')}
         style={{ display: 'flex', alignItems: 'center', marginRight: 16, cursor: 'pointer' }}
       >
@@ -100,36 +83,32 @@ const Head: React.FC<{
 const FinanceDashboardCard: React.FC<IProps> = props => {
   const {} = props
   const { data } = useGetInstallmentDashboardChartQuery({ period: PERIODS.WEEKLY })
-
-  const [selectedData, setSelectedData] = useState<IGroupedInstallment>({
-    unpaidCount: 0,
-    paidCount: 0,
-    paidAmount: 0,
-    unpaidAmount: 0,
-    totalAmount: 0,
-    totalCount: 0,
-    _id: ''
-  })
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
 
   if (!data) return <div>...Loading</div>
 
-  const handleSelectBar = (date: string) => {
-    const d = data?.find(i => i._id === (date ? moment().format('YYYY-MM-DD') : date))
-    setSelectedData(
-      d || {
-        unpaidCount: 0,
-        paidCount: 0,
-        paidAmount: 0,
-        unpaidAmount: 0,
-        totalAmount: 0,
-        totalCount: 0,
-        _id: ''
-      }
+  const handleSelectBar = (bar: { x: string; y: number }) => {
+    dispatch(
+      openModal({
+        id: `financeInfoModal`,
+        title: 'Finance Info',
+        body: (
+          <FinanceInfoModal
+            page="FinanceInfoInstallmentTab"
+            dateRange={{ startDate: moment(bar.x).toDate(), endDate: moment(bar.x).toDate() }}
+          />
+        ),
+        width: ESize.WLarge,
+        maxWidth: ESize.WLarge,
+        height: ESize.WXLarge,
+        backgroundColor: 'transparent'
+      })
     )
   }
 
   return (
-    <DashboardCard head={<Head data={selectedData} />}>
+    <DashboardCard head={<Head />}>
       <FinanceDashboardChart onSelectBar={handleSelectBar} />
     </DashboardCard>
   )

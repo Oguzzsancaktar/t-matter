@@ -40,8 +40,15 @@ const secondsToTimeWithDisplay = second => {
   return hDisplay + mDisplay + sDisplay
 }
 
+const withoutTimezone = date => {
+  let d = new Date(date)
+  let userTimezoneOffset = d.getTimezoneOffset() * 60000
+  return new Date(d.getTime() - userTimezoneOffset)
+}
+
 module.exports = {
   clockToSeconds,
   secondsToTimeWithDisplay,
-  timeToSeconds
+  timeToSeconds,
+  withoutTimezone
 }
