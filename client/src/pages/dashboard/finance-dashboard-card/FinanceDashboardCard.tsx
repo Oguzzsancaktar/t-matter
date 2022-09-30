@@ -58,6 +58,10 @@ const Head: React.FC<IProps> = props => {
         height: '100%'
       }}
     >
+      <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', left: 0 }}>
+        <span style={{ marginRight: 2, fontSize: 10 }}>Avg:</span>
+        <span style={{ fontSize: 12 }}>$450</span>
+      </div>
       <div
         onClick={handleShowFinanceInfoModal.bind(this, 'NonBillableTab')}
         style={{ display: 'flex', alignItems: 'center', marginRight: 16, cursor: 'pointer' }}
