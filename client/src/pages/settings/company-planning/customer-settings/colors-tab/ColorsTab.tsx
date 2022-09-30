@@ -190,7 +190,13 @@ const ColorsTab = () => {
             <TableSkeltonLoader count={13} />
           </ItemContainer>
         ) : colorData && colorData.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={colorData || []} onRowClicked={handleRead} />
+          <DataTable
+            className="data-table"
+            fixedHeader
+            columns={columns}
+            data={colorData || []}
+            onRowClicked={handleRead}
+          />
         ) : (
           <NoTableData />
         )}

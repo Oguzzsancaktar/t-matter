@@ -91,7 +91,7 @@ const UpdateContactCustomerSearchModal: React.FC<IProps> = ({ handleAdd }) => {
                 <TableSkeltonLoader count={13} />
               </ItemContainer>
             ) : filteredCustomers && filteredCustomers.length > 0 ? (
-              <DataTable fixedHeader columns={columns} data={filteredCustomers || []} />
+              <DataTable className="data-table" fixedHeader columns={columns} data={filteredCustomers || []} />
             ) : (
               <NoTableData />
             )}

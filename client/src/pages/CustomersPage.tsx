@@ -237,7 +237,13 @@ const CustomersPage = () => {
               <TableSkeltonLoader count={13} />
             </ItemContainer>
           ) : customersData && customersData.length > 0 ? (
-            <DataTable fixedHeader columns={columns} data={customersData || []} onRowClicked={handleRead} />
+            <DataTable
+              className="data-table"
+              fixedHeader
+              columns={columns}
+              data={customersData || []}
+              onRowClicked={handleRead}
+            />
           ) : (
             <NoTableData />
           )}

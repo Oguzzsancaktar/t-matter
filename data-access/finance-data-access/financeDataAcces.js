@@ -8,6 +8,7 @@ const { INSTALLMENT_STATUS } = require('../../constants/finance')
 const { PERIODS } = require('../../constants/constants')
 const moment = require('moment')
 const { getISODate } = require('../../helpers/dateHelpers')
+const { withoutTimezone } = require('../../utils/date-utils/dateUtils')
 
 const createFinancePlanning = data => {
   return FinancePlanning.create(data)
@@ -273,10 +274,18 @@ const updateInstallment = (id, data) => {
   return Installment.findByIdAndUpdate(id, data, { new: true }).exec()
 }
 
-const getInstallmentsByInvoiceId = invoiceId => {
-  const $match = {}
+const getInstallmentsByInvoiceId = ({ invoiceId, startDate, endDate }) => {
+  const $match = {
+    $and: []
+  }
   if (invoiceId) {
-    $match.invoice = mongoose.Types.ObjectId(invoiceId)
+    $match.$and.push({ invoice: { $eq: mongoose.Types.ObjectId(invoiceId) } })
+  }
+  if (startDate) {
+    $match.$and.push({ payDate: { $gte: withoutTimezone(startDate) } })
+  }
+  if (endDate) {
+    $match.$and.push({ payDate: { $lte: withoutTimezone(endDate) } })
   }
   return Installment.aggregate([
     {
@@ -344,7 +353,7 @@ const deleteManyInstallment = query => {
   return Installment.deleteMany(query)
 }
 
-const getDailyGroupedInstallments = ({ period }) => {
+const getDailyGroupedInstallments = ({ period, startDate, endDate }) => {
   const $match = {}
   if (period === PERIODS.DAILY) {
     $match.payDate = {
@@ -368,6 +377,12 @@ const getDailyGroupedInstallments = ({ period }) => {
     $match.payDate = {
       $gte: getISODate(moment().startOf('year')),
       $lte: getISODate(moment().endOf('year'))
+    }
+  }
+  if (startDate && endDate) {
+    $match.payDate = {
+      $gte: withoutTimezone(startDate),
+      $lte: withoutTimezone(endDate)
     }
   }
   const agg = () => [

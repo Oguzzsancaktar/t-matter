@@ -200,7 +200,13 @@ const WorkflowCategory = () => {
             <TableSkeltonLoader count={13} />
           </ItemContainer>
         ) : categoriesData && categoriesData.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={categoriesData || []} onRowClicked={handleRead} />
+          <DataTable
+            className="data-table"
+            fixedHeader
+            columns={columns}
+            data={categoriesData || []}
+            onRowClicked={handleRead}
+          />
         ) : (
           <NoTableData />
         )}

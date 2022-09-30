@@ -1,42 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-  Button,
-  Column,
   DatePicker,
-  IconButton,
-  InstallmentPrintModal,
+  FinanceInfoInstallmentBarChart,
+  FinanceInfoPaidTypeDonutChart,
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterColumn,
   NoTableData,
   ReadCustomerModal,
-  Row,
-  TableSkeltonLoader,
-  TaskNoteCounter
+  TableSkeltonLoader
 } from '@/components'
-import { useGetInstallmentsQuery } from '@services/settings/finance-planning/financePlanningService'
+import { useLazyGetInstallmentsQuery } from '@services/settings/finance-planning/financePlanningService'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { ESize, ICustomer, IInstallment } from '@/models'
+import { ESize, IInstallment } from '@/models'
 import moment from 'moment'
 import { INSTALLMENT_STATUS } from '@constants/finance'
 import colors from '@constants/colors'
 import constantToLabel from '@utils/constantToLabel'
 import { openModal } from '@/store'
 import useAccessStore from '@hooks/useAccessStore'
+import FinanceInfoPaidDonutPercentage from '../../../components/charts/FinanceInfoPaidDonutPercentage'
 
-const FinanceInfoInstallmentTab = () => {
+const FinanceInfoInstallmentTab = props => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-  const { data, isLoading } = useGetInstallmentsQuery(undefined)
+  const [fetch, { data, isLoading }] = useLazyGetInstallmentsQuery()
   const [dateRange, setDateRange] = useState({
-    startDate: moment().subtract(1, 'year').toDate(),
-    endDate: moment().toDate()
+    startDate: props.dateRange ? props.dateRange.startDate : moment().subtract(1, 'year').toDate(),
+    endDate: props.dateRange ? props.dateRange.endDate : moment().toDate()
   })
+
+  useEffect(() => {
+    fetch({ ...dateRange, invoice: undefined })
+  }, [dateRange])
 
   const columns: TableColumn<IInstallment>[] = [
     {
       name: 'Payment Date',
-      selector: row => moment(row.payDate).toISOString(),
+      selector: row => moment(row.payDate).toString(),
       sortable: true,
       cell: d => moment(d.payDate).format('MMM/DD/YYYY')
     },
@@ -54,9 +55,9 @@ const FinanceInfoInstallmentTab = () => {
     },
     {
       name: 'Payment',
-      selector: row => '$' + row.payAmount,
+      selector: row => row.payAmount,
       sortable: true,
-      cell: d => d.payAmount
+      cell: d => '$' + d.payAmount
     },
     {
       name: 'Status',
@@ -99,12 +100,18 @@ const FinanceInfoInstallmentTab = () => {
   return (
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
+          <FinanceInfoPaidTypeDonutChart dateRange={dateRange} />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn>
+          <FinanceInfoInstallmentBarChart dateRange={dateRange} />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
+          <FinanceInfoPaidDonutPercentage dateRange={dateRange} />
+        </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">
-        <JustifyBetweenRow width="300px">
+        <JustifyBetweenRow width="330px">
           <div style={{ marginRight: 8 }}>
             <DatePicker
               labelText="Start Date"

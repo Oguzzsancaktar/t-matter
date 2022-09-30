@@ -191,7 +191,13 @@ const JobTitleTab = () => {
             <TableSkeltonLoader count={13} />
           </ItemContainer>
         ) : jobTitleData && jobTitleData.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={jobTitleData || []} onRowClicked={handleRead} />
+          <DataTable
+            className="data-table"
+            fixedHeader
+            columns={columns}
+            data={jobTitleData || []}
+            onRowClicked={handleRead}
+          />
         ) : (
           <NoTableData />
         )}

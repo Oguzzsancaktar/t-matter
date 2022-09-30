@@ -72,6 +72,7 @@ const AdditionalTimeTab = () => {
         </ItemContainer>
       ) : data && data.length > 0 ? (
         <DataTable
+          className="data-table"
           fixedHeader
           columns={columns}
           data={data?.map(d => d.customer) || []}

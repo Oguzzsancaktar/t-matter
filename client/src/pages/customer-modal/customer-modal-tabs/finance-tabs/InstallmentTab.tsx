@@ -75,9 +75,12 @@ const InstallmentTab: React.FC<IProps> = ({
 }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-  const { data: installments, isLoading: isInstallmentsLoading } = useGetInstallmentsQuery(selectedInvoice?._id, {
-    skip: !selectedInvoice
-  })
+  const { data: installments, isLoading: isInstallmentsLoading } = useGetInstallmentsQuery(
+    { invoice: selectedInvoice?._id },
+    {
+      skip: !selectedInvoice
+    }
+  )
   const { data: financePlanning, isLoading: isFinancePlanningLoading } = useGetFinancePlanningQuery()
   const [resetInstallments] = useResetInstallmentsMutation()
 
@@ -420,7 +423,13 @@ const InstallmentTab: React.FC<IProps> = ({
                   <TableSkeltonLoader count={13} />
                 </ItemContainer>
               ) : installments && installments.length > 0 ? (
-                <DataTable responsive fixedHeader columns={columns()} data={installments || []} />
+                <DataTable
+                  className="data-table"
+                  responsive
+                  fixedHeader
+                  columns={columns()}
+                  data={installments || []}
+                />
               ) : (
                 <NoTableData />
               )}

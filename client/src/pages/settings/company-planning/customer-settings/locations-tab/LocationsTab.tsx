@@ -185,7 +185,13 @@ const LocationsTab = () => {
             <TableSkeltonLoader count={13} />
           </ItemContainer>
         ) : locationsData && locationsData.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={locationsData || []} onRowClicked={handleRead} />
+          <DataTable
+            className="data-table"
+            fixedHeader
+            columns={columns}
+            data={locationsData || []}
+            onRowClicked={handleRead}
+          />
         ) : (
           <NoTableData />
         )}

@@ -9,7 +9,10 @@ const Component = {
   NonBillableTab
 }
 
-const FinanceInfoModal: React.FC<{ page: string }> = ({ page }) => {
+const FinanceInfoModal: React.FC<{ page: string; dateRange?: { startDate: Date; endDate: Date } }> = ({
+  page,
+  dateRange
+}) => {
   const [activeTab, setActiveTab] = useState(page)
 
   return (
@@ -47,7 +50,7 @@ const FinanceInfoModal: React.FC<{ page: string }> = ({ page }) => {
           </ItemContainer>
         </ModalHeader>
         <ModalBody backgroundColor="white" padding="0" height="calc(100% - 63px)">
-          {React.createElement(Component[activeTab], {})}
+          {React.createElement(Component[activeTab], { dateRange })}
         </ModalBody>
       </Column>
     </ItemContainer>

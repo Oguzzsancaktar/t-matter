@@ -221,7 +221,13 @@ const UserPageSettingsTab = () => {
               <TableSkeltonLoader count={13} />
             </ItemContainer>
           ) : usersData && usersData.length > 0 ? (
-            <DataTable fixedHeader columns={columns} data={usersData || []} onRowClicked={handleRead} />
+            <DataTable
+              className="data-table"
+              fixedHeader
+              columns={columns}
+              data={usersData || []}
+              onRowClicked={handleRead}
+            />
           ) : (
             <NoTableData />
           )}

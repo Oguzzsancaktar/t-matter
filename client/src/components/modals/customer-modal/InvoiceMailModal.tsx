@@ -90,7 +90,7 @@ const InvoiceMailModal: React.FC<{ customerId: ICustomer['_id'] }> = ({ customer
                 <TableSkeltonLoader count={13} />
               </ItemContainer>
             ) : invoices && invoices.length > 0 ? (
-              <DataTable fixedHeader columns={columns} data={invoices || []} />
+              <DataTable className="data-table" fixedHeader columns={columns} data={invoices || []} />
             ) : (
               <NoTableData />
             )}

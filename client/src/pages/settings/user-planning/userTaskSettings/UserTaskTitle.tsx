@@ -75,7 +75,7 @@ const UserTaskTitle = () => {
   return (
     <ItemContainer>
       <DataTableHeader handleAddNew={openCreateRoleModal} />
-      <DataTable fixedHeader columns={columns} data={data} />
+      <DataTable className="data-table" fixedHeader columns={columns} data={data} />
     </ItemContainer>
   )
 }

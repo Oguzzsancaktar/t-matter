@@ -83,7 +83,7 @@ const InstallmentDoc: React.FC<IProps> = ({ invoice, customerId }) => {
   const { data: companyInfo } = useGetCompanyInfoQuery()
   const { data: customer } = useGetCustomerByIdQuery(customerId)
 
-  const { data: installments } = useGetInstallmentsQuery(invoice._id)
+  const { data: installments } = useGetInstallmentsQuery({ invoice: invoice._id })
   const ref = useRef(null)
 
   const handlePrint = useReactToPrint({
