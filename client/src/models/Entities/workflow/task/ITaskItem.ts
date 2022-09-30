@@ -12,7 +12,7 @@ export default interface ITaskItem {
   stepStatus: number
 
   expireDuration: number
-  passedTime: number
+  passedTime: { user: IUser; time: number }[]
 
   postponeTime: number
   usedPostpone: number

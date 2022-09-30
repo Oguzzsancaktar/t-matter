@@ -3,10 +3,11 @@ import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenRow, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
+import { useAnimationFrame } from '@/hooks/useAnimationFrame'
 import { useAuth } from '@/hooks/useAuth'
-import { EStatus, ETaskStatus, ITaskItem } from '@/models'
+import { ITaskItem } from '@/models'
 import { secondsToHourMin } from '@/utils/timeUtils'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Calendar } from 'react-feather'
 
 interface IProps {
@@ -14,38 +15,46 @@ interface IProps {
   isTaskNotStarted: boolean
   handleTaskTimerChange: (timerValue: number) => void
 }
-const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, handleTaskTimerChange }) => {
-  let timer
-  const { loggedUser } = useAuth()
-  const [passedTime, setPassedTime] = useState(taskActiveStep?.passedTime)
 
-  const [totalDuration, setTotalDuration] = useState(
-    taskActiveStep?.checklistItems.reduce((acc, item) => acc + item?.duration, 0)
+const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, handleTaskTimerChange }) => {
+  const { loggedUser } = useAuth()
+
+  const findActiveWorker = useCallback(
+    () => taskActiveStep.passedTime.find(work => work.user._id === taskActiveStep.responsibleUser._id),
+    []
   )
 
-  const updateCount = () => {
-    timer =
-      !timer &&
-      setInterval(() => {
-        setPassedTime(prevCount => {
-          handleTaskTimerChange(prevCount + 1)
-          return prevCount + 1
-        })
-      }, 1000)
-  }
+  const [workerData, setWorkerData] = useState(findActiveWorker)
+
+  const [willTimerWork, setWillTimerWork] = useState<boolean>(
+    loggedUser.user?._id === taskActiveStep.responsibleUser._id && !isTaskNotStarted
+  )
+
+  const [passedTime, setPassedTime] = useState(workerData?.time || 0)
+
+  const totalDuration = useMemo(
+    () => taskActiveStep?.checklistItems.reduce((acc, item) => acc + item?.duration, 0),
+    [taskActiveStep]
+  )
+
+  useAnimationFrame(deltaTime => {
+    console.log(willTimerWork)
+    setPassedTime(prevCount => {
+      if (willTimerWork) {
+        console.log(1)
+        return prevCount + deltaTime * 0.001
+      } else {
+        console.log(2)
+        return prevCount
+      }
+    })
+  })
+
+  console.log(workerData)
 
   useEffect(() => {
-    setTotalDuration(taskActiveStep?.checklistItems.reduce((acc, item) => acc + item?.duration, 0))
-    setPassedTime(taskActiveStep?.passedTime)
-    if (
-      loggedUser.user?._id === taskActiveStep?.responsibleUser?._id &&
-      !isTaskNotStarted &&
-      taskActiveStep.stepStatus === ETaskStatus['Progress']
-    ) {
-      updateCount()
-    }
-    return () => clearInterval(timer)
-  }, [loggedUser, taskActiveStep, timer])
+    setWillTimerWork(loggedUser.user?._id === taskActiveStep.responsibleUser._id && !isTaskNotStarted)
+  }, [taskActiveStep.responsibleUser._id])
 
   return (
     <ItemContainer>
