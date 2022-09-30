@@ -67,7 +67,7 @@ const UserSelect: React.FC<IProps> = ({ selectedUser, disabled, onResponsibleCha
   }
 
   return (
-    <div ref={userSelectRef}>
+    <div style={{ height: '100%' }} ref={userSelectRef}>
       <ItemContainer width="100%" height="100%">
         <RelativeContainer>
           <ItemContainer width="100%" height="100%" onClick={handleUserList} cursorType="pointer">

@@ -1,18 +1,21 @@
+import { TaskWizzardNavigation } from '@components/client-task'
+import { TaskNoteCounter } from '@/components/counter'
 import { ItemContainer } from '@/components/item-container'
 import { Row } from '@/components/layout'
-import { TaskEventSection, TaskInformations, TaskNoteCounter, TaskWizzardNavigation } from '@/components'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { ModalBody } from '../types'
 import colors from '@/constants/colors'
-import { useGetTaskByTaskIdQuery, useUpdateTaskMutation } from '@/services/customers/taskService'
-import { EActivity, ETaskStatus, ICustomer, ICustomerTask, ITaskChecklist, IUser } from '@/models'
-import Swal from 'sweetalert2'
+import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
-import { activityApi, useCreateActivityMutation } from '@/services/activityService'
-import useAccessStore from '@hooks/useAccessStore'
+import { ICustomer, ICustomerTask, ETaskStatus, EActivity, IUser, ITaskChecklist } from '@/models'
+import { useCreateActivityMutation, activityApi } from '@/services/activityService'
+import { useUpdateTaskMutation, useGetTaskByTaskIdQuery } from '@/services/customers/taskService'
+import { useCreateExpiredTaskStepMutation } from '@/services/settings/finance-planning/financePlanningService'
 import { setModalOnClose } from '@/store'
-import { useCreateExpiredTaskStepMutation } from '@services/settings/finance-planning/financePlanningService'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { ModalBody } from '../types'
+import TaskInformations from '@/components/client-task/task-informations/TaskInformations'
+import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
 
 const SwalReactContent = withReactContent(Swal)
 
@@ -51,7 +54,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
   const handleTaskTimerChange = (timerValue: number) => {
     const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
-    tempUpdatedTaskData.steps[activeStep].passedTime = timerValue
+    // tempUpdatedTaskData.steps[activeStep].passedTime = timerValue
     setUpdatedTaskData(tempUpdatedTaskData)
   }
 

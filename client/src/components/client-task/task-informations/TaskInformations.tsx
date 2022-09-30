@@ -1,7 +1,7 @@
 import { Button } from '@/components/button'
 import { TaskNoteCounter } from '@/components/counter'
 import { ItemContainer } from '@/components/item-container'
-import { Column, JustifyBetweenColumn } from '@/components/layout'
+import { JustifyBetweenColumn, Column } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
@@ -13,7 +13,12 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { TaskChecklistCard, TaskCustomerCard, TaskDeadlineCard, TaskPostponeCard, TaskTimerCard, TaskUserCard } from '.'
+import TaskChecklistCard from './TaskChecklistCard'
+import TaskCustomerCard from './TaskCustomerCard'
+import TaskDeadlineCard from './TaskDeadlineCard'
+import TaskPostponeCard from './TaskPostponeCard'
+import TaskTimerCard from './TaskTimerCard'
+import TaskUserCard from './TaskUserCard'
 
 const SwalReactContent = withReactContent(Swal)
 interface IProps {
@@ -115,7 +120,7 @@ const TaskInformations: React.FC<IProps> = ({
       {taskData && taskData.steps[activeStep] ? (
         <JustifyBetweenColumn height="100%">
           <InformationCard height="100px" margin="0">
-            <TaskCustomerCard customer={customer} taskActiveStep={taskData.steps[activeStep]} />
+            <TaskCustomerCard customer={customer} taskData={taskData} />
           </InformationCard>
 
           <InformationCard height="100px">

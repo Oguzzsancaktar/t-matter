@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { store } from './store/index'
 import AppRoute from './routes/AppRouter'
@@ -9,11 +9,12 @@ import './styles/vendors/react-select.css'
 import './styles/vendors/timekeeper.css'
 import './styles/vendors/react-data-table.css'
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+
+root.render(
   <React.StrictMode>
     <Provider store={store}>
       <AppRoute />
     </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 )
