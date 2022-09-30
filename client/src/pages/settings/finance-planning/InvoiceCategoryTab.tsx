@@ -225,7 +225,13 @@ const InvoiceCategoryTab = () => {
               <TableSkeltonLoader count={13} />
             </ItemContainer>
           ) : data && data.length > 0 ? (
-            <DataTable fixedHeader columns={columns} data={data || []} onRowClicked={handleRead} />
+            <DataTable
+              className="data-table"
+              fixedHeader
+              columns={columns}
+              data={data || []}
+              onRowClicked={handleRead}
+            />
           ) : (
             <NoTableData />
           )}

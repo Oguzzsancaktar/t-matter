@@ -213,7 +213,13 @@ const WorkflowChecklist = () => {
               <TableSkeltonLoader count={13} />
             </ItemContainer>
           ) : checklistsData && checklistsData.length > 0 ? (
-            <DataTable fixedHeader columns={columns} data={checklistsData || []} onRowClicked={handleRead} />
+            <DataTable
+              className="data-table"
+              fixedHeader
+              columns={columns}
+              data={checklistsData || []}
+              onRowClicked={handleRead}
+            />
           ) : (
             <NoTableData />
           )}

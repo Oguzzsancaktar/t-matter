@@ -186,6 +186,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
               </ItemContainer>
             ) : customerTasksData && customerTasksData.length > 0 ? (
               <DataTable
+                className="data-table"
                 fixedHeader
                 columns={columns}
                 data={customerTasksData || []}

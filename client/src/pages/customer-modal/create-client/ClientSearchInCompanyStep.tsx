@@ -82,7 +82,7 @@ const ClientSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, on
             <TableSkeltonLoader count={13} />
           </ItemContainer>
         ) : filteredCustomers && filteredCustomers.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={filteredCustomers || []} />
+          <DataTable className="data-table" fixedHeader columns={columns} data={filteredCustomers || []} />
         ) : (
           <NoTableData />
         )}

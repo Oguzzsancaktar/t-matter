@@ -217,7 +217,13 @@ const WorkflowPlanTab = () => {
               <TableSkeltonLoader count={13} />
             </ItemContainer>
           ) : workflowPlans && workflowPlans.length > 0 ? (
-            <DataTable fixedHeader columns={columns} data={workflowPlans || []} onRowClicked={handleRead} />
+            <DataTable
+              className="data-table"
+              fixedHeader
+              columns={columns}
+              data={workflowPlans || []}
+              onRowClicked={handleRead}
+            />
           ) : (
             <NoTableData />
           )}

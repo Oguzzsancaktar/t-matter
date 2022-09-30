@@ -197,7 +197,13 @@ const RefferedByTab = () => {
             <TableSkeltonLoader count={13} />
           </ItemContainer>
         ) : refferedByData && refferedByData.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={refferedByData || []} onRowClicked={handleRead} />
+          <DataTable
+            className="data-table"
+            fixedHeader
+            columns={columns}
+            data={refferedByData || []}
+            onRowClicked={handleRead}
+          />
         ) : (
           <NoTableData />
         )}

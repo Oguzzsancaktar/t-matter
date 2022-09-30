@@ -199,7 +199,13 @@ const CustomerTypeTab = () => {
             <TableSkeltonLoader count={13} />
           </ItemContainer>
         ) : customerTypeData && customerTypeData.length > 0 ? (
-          <DataTable fixedHeader columns={columns} data={customerTypeData || []} onRowClicked={handleRead} />
+          <DataTable
+            className="data-table"
+            fixedHeader
+            columns={columns}
+            data={customerTypeData || []}
+            onRowClicked={handleRead}
+          />
         ) : (
           <NoTableData />
         )}

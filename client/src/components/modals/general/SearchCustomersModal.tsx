@@ -121,7 +121,13 @@ const SearchCustomersModal = () => {
               <TableSkeltonLoader count={13} />
             </ItemContainer>
           ) : filteredCustomers && filteredCustomers.length > 0 ? (
-            <DataTable fixedHeader columns={columns} data={filteredCustomers || []} onRowClicked={handleRead} />
+            <DataTable
+              className="data-table"
+              fixedHeader
+              columns={columns}
+              data={filteredCustomers || []}
+              onRowClicked={handleRead}
+            />
           ) : (
             <NoTableData />
           )}

@@ -191,7 +191,13 @@ const UserRoleSettings = () => {
               <TableSkeltonLoader count={13} />
             </ItemContainer>
           ) : roleData && roleData.length > 0 ? (
-            <DataTable fixedHeader columns={columns} data={roleData || []} onRowClicked={handleRead} />
+            <DataTable
+              className="data-table"
+              fixedHeader
+              columns={columns}
+              data={roleData || []}
+              onRowClicked={handleRead}
+            />
           ) : (
             <NoTableData />
           )}

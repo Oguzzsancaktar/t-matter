@@ -423,7 +423,13 @@ const InstallmentTab: React.FC<IProps> = ({
                   <TableSkeltonLoader count={13} />
                 </ItemContainer>
               ) : installments && installments.length > 0 ? (
-                <DataTable responsive fixedHeader columns={columns()} data={installments || []} />
+                <DataTable
+                  className="data-table"
+                  responsive
+                  fixedHeader
+                  columns={columns()}
+                  data={installments || []}
+                />
               ) : (
                 <NoTableData />
               )}
