@@ -355,6 +355,10 @@ const deleteManyInstallment = query => {
 
 const getDailyGroupedInstallments = ({ period, startDate, endDate }) => {
   const $match = {}
+  const $dateToString = {
+    format: '%Y-%m-%d',
+    date: '$payDate'
+  }
   if (period === PERIODS.DAILY) {
     $match.payDate = {
       $gte: getISODate(moment().startOf('day')),
@@ -372,12 +376,14 @@ const getDailyGroupedInstallments = ({ period, startDate, endDate }) => {
       $gte: getISODate(moment().startOf('month')),
       $lte: getISODate(moment().endOf('month'))
     }
+    $dateToString.format = '%Y-%m'
   }
   if (period === PERIODS.YEARLY) {
     $match.payDate = {
       $gte: getISODate(moment().startOf('year')),
       $lte: getISODate(moment().endOf('year'))
     }
+    $dateToString.format = '%Y'
   }
   if (startDate && endDate) {
     $match.payDate = {
@@ -390,10 +396,7 @@ const getDailyGroupedInstallments = ({ period, startDate, endDate }) => {
     {
       $group: {
         _id: {
-          $dateToString: {
-            format: '%Y-%m-%d',
-            date: '$payDate'
-          }
+          $dateToString
         },
         unpaidAmount: {
           $sum: {
@@ -420,6 +423,9 @@ const getDailyGroupedInstallments = ({ period, startDate, endDate }) => {
         },
         totalCount: {
           $sum: 1
+        },
+        payDate: {
+          $first: '$payDate'
         }
       }
     },

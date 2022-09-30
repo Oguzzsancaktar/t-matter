@@ -437,6 +437,7 @@ const {
   useUploadPdfToInvoiceCategoryMutation,
   useEditInstallmentMutation,
   useGetInstallmentDashboardChartQuery,
+  useLazyGetInstallmentDashboardChartQuery,
   useGetAdditionalTimePassedCustomersQuery,
   useGetNonBillablePassedCustomersQuery
 } = financePlanningApi
@@ -463,5 +464,6 @@ export {
   useGetInstallmentDashboardChartQuery,
   useGetAdditionalTimePassedCustomersQuery,
   useGetNonBillablePassedCustomersQuery,
-  useLazyGetInstallmentsQuery
+  useLazyGetInstallmentsQuery,
+  useLazyGetInstallmentDashboardChartQuery
 }

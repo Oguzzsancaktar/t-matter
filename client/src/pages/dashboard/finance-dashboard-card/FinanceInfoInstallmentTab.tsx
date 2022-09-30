@@ -26,8 +26,8 @@ const FinanceInfoInstallmentTab = props => {
   const dispatch = useAppDispatch()
   const [fetch, { data, isLoading }] = useLazyGetInstallmentsQuery()
   const [dateRange, setDateRange] = useState({
-    startDate: props.dateRange ? props.dateRange.startDate : moment().subtract(1, 'year').toDate(),
-    endDate: props.dateRange ? props.dateRange.endDate : moment().toDate()
+    startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('year').toDate(),
+    endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
   })
 
   useEffect(() => {
