@@ -274,7 +274,7 @@ const updateInstallment = (id, data) => {
   return Installment.findByIdAndUpdate(id, data, { new: true }).exec()
 }
 
-const getInstallmentsByInvoiceId = ({ invoiceId, startDate, endDate }) => {
+const getInstallmentsByInvoiceId = ({ invoiceId, startDate, endDate, status }) => {
   const $match = {
     $and: []
   }
@@ -286,6 +286,9 @@ const getInstallmentsByInvoiceId = ({ invoiceId, startDate, endDate }) => {
   }
   if (endDate) {
     $match.$and.push({ payDate: { $lte: withoutTimezone(endDate) } })
+  }
+  if (status && status !== 'ALL') {
+    $match.$and.push({ status: { $eq: status } })
   }
   return Installment.aggregate([
     {
