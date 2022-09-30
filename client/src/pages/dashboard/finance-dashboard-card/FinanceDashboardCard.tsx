@@ -72,10 +72,10 @@ const Head: React.FC<IProps> = props => {
         <FcAdvertising />
         <span style={{ marginLeft: 4 }}>{additionalTimePassedCustomers?.length}</span>
       </div>
-      {/*<div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: 0 }}>*/}
-      {/*  {true ? <FcBearish /> : <FcBullish />}*/}
-      {/*  <span style={{ marginLeft: 4 }}>12%</span>*/}
-      {/*</div>*/}
+      <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: 0 }}>
+        {true ? <FcBearish /> : <FcBullish />}
+        <span style={{ marginLeft: 4 }}>12%</span>
+      </div>
     </div>
   )
 }
