@@ -290,6 +290,9 @@ const getInstallmentsByInvoiceId = ({ invoiceId, startDate, endDate, status }) =
   if (status && status !== 'ALL') {
     $match.$and.push({ status: { $eq: status } })
   }
+  if ($match.$and.length === 0) {
+    delete $match.$and
+  }
   return Installment.aggregate([
     {
       $match
