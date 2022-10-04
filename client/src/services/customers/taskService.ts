@@ -187,6 +187,20 @@ const getTaskCountForMonthsData = (builder: IBuilder) => {
   })
 }
 
+const getTaskStepMonthlyAnalysisData = (builder: IBuilder) => {
+  return builder.query<{ _id: string; monthlyPrice: number; monthlyDuration: number }[], void>({
+    query() {
+      return {
+        url: `/task/chart/task-step-monthly-analysis`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const taskApi = createApi({
   reducerPath: TASK_REDUCER_PATH,
   tagTypes: [TASK_TAG_TYPE],
@@ -201,7 +215,8 @@ const taskApi = createApi({
     postponeTask: postponeTask(builder),
     deleteTask: deleteTask(builder),
     getUsedTaskWorkflowCounts: getUsedTaskWorkflowCounts(builder),
-    getTaskCountForMonthsData: getTaskCountForMonthsData(builder)
+    getTaskCountForMonthsData: getTaskCountForMonthsData(builder),
+    getTaskStepMonthlyAnalysisData: getTaskStepMonthlyAnalysisData(builder)
   })
 })
 
@@ -215,7 +230,8 @@ const {
   usePostponeTaskMutation,
   useDeleteTaskMutation,
   useGetUsedTaskWorkflowCountsQuery,
-  useGetTaskCountForMonthsDataQuery
+  useGetTaskCountForMonthsDataQuery,
+  useGetTaskStepMonthlyAnalysisDataQuery
 } = taskApi
 export {
   taskApi,
@@ -228,5 +244,6 @@ export {
   usePostponeTaskMutation,
   useDeleteTaskMutation,
   useGetUsedTaskWorkflowCountsQuery,
-  useGetTaskCountForMonthsDataQuery
+  useGetTaskCountForMonthsDataQuery,
+  useGetTaskStepMonthlyAnalysisDataQuery
 }

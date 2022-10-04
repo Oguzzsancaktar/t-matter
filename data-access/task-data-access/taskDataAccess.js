@@ -1,5 +1,7 @@
 const Task = require('../../models/task')
 const mongoose = require('mongoose')
+const calculateHourlyCompanyFee = require('../../helpers/calculateHourlyCompanyFee')
+const moment = require('moment')
 
 const taskPopulatePipe = [
   {
@@ -185,6 +187,69 @@ const getTaskCountForMonthsData = async () => {
   return Task.aggregate(pipeline).exec()
 }
 
+const getTaskStepMonthlyAnalysisData = async ({ responsibleUserId }) => {
+  const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
+
+  const pipeline = [
+    {
+      $unwind: {
+        path: '$steps',
+        preserveNullAndEmptyArrays: true,
+        includeArrayIndex: 'stepIndex'
+      }
+    },
+    {
+      $match: {
+        'steps.responsibleUser': mongoose.Types.ObjectId(responsibleUserId)
+      }
+    },
+    {
+      $addFields: {
+        stepDuration: {
+          $sum: '$steps.checklistItems.duration'
+        }
+      }
+    },
+    {
+      $addFields: {
+        stepPrice: {
+          $multiply: ['$stepDuration', hourlyCompanyFee]
+        }
+      }
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            format: '%Y-%m',
+            date: {
+              $toDate: '$steps.startDate'
+            }
+          }
+        },
+        monthlyDuration: {
+          $sum: '$stepDuration'
+        },
+        monthlyPrice: { $sum: '$stepPrice' }
+      }
+    }
+  ]
+
+  let steps = await Task.aggregate(pipeline).exec()
+  steps = Array.from(new Array(12)).map((_, index) => {
+    const i = steps.findIndex(s => moment(s._id).month() === index)
+    if (i > -1) {
+      return steps[i]
+    }
+    return {
+      _id: moment().month(index).format('YYYY-MM'),
+      monthlyDuration: 0,
+      monthlyPrice: 0
+    }
+  })
+  return steps
+}
+
 module.exports = {
   createTask,
   getCustomerTasks,
@@ -192,5 +257,6 @@ module.exports = {
   updateTaskById,
   deleteTaskById,
   getUsedTaskWorkflowCounts,
-  getTaskCountForMonthsData
+  getTaskCountForMonthsData,
+  getTaskStepMonthlyAnalysisData
 }
