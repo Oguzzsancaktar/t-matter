@@ -28,11 +28,11 @@ const DashboardPage: React.FC = () => {
               <TaskDashboardCard />
             </ItemContainer>
 
-            {/*<ItemContainer width="100%" height="100%" margin="1rem 0">*/}
-            {/*  <DashboardCard head={'test'}>incoming chart</DashboardCard>*/}
-            {/*</ItemContainer>*/}
+            <ItemContainer width="100%" height="50%" margin="1rem 0">
+              <DashboardCard head={'test'}>incoming chart</DashboardCard>
+            </ItemContainer>
 
-            <ItemContainer width="100%" height="100%">
+            <ItemContainer width="100%" height="50%">
               <DashboardCard head={'test'}>incoming chart</DashboardCard>
             </ItemContainer>
           </JustifyBetweenColumn>

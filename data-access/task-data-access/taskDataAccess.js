@@ -250,6 +250,80 @@ const getTaskStepMonthlyAnalysisData = async ({ responsibleUserId }) => {
   return steps
 }
 
+const getTaskStepsData = async ({ responsibleUserId, startDate, endDate }) => {
+  const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
+
+  const $match = {}
+
+  if (responsibleUserId) {
+    $match['steps.responsibleUser'] = mongoose.Types.ObjectId(responsibleUserId)
+  }
+
+  if (startDate && endDate) {
+    $match['steps.startDate'] = {
+      $gte: +new Date(startDate),
+      $lte: +new Date(endDate)
+    }
+  }
+
+  const pipeline = [
+    {
+      $unwind: {
+        path: '$steps',
+        preserveNullAndEmptyArrays: true,
+        includeArrayIndex: 'stepIndex'
+      }
+    },
+    {
+      $match
+    },
+    {
+      $addFields: {
+        stepDuration: {
+          $sum: '$steps.checklistItems.duration'
+        }
+      }
+    },
+    {
+      $addFields: {
+        stepPrice: {
+          $multiply: ['$stepDuration', hourlyCompanyFee]
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'customers',
+        localField: 'customer',
+        foreignField: '_id',
+        as: 'customer'
+      }
+    },
+    {
+      $unwind: {
+        path: '$customer',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'workflowcategories',
+        localField: 'steps.category',
+        foreignField: '_id',
+        as: 'steps.category'
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps.category',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]
+
+  return Task.aggregate(pipeline).exec()
+}
+
 module.exports = {
   createTask,
   getCustomerTasks,
@@ -258,5 +332,6 @@ module.exports = {
   deleteTaskById,
   getUsedTaskWorkflowCounts,
   getTaskCountForMonthsData,
-  getTaskStepMonthlyAnalysisData
+  getTaskStepMonthlyAnalysisData,
+  getTaskStepsData
 }

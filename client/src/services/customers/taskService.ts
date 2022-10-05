@@ -3,6 +3,7 @@ import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { ICustomerTask, ITask } from '@/models'
+import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 
 const TASK_REDUCER_PATH = 'taskApi'
 const TASK_TAG_TYPE = 'taskTag' as const
@@ -201,6 +202,24 @@ const getTaskStepMonthlyAnalysisData = (builder: IBuilder) => {
   })
 }
 
+const getTaskSteps = (builder: IBuilder) => {
+  return builder.query<ITaskStep[], { startDate?: Date; endDate?: Date }>({
+    query({ startDate, endDate }) {
+      return {
+        url: `/task/steps`,
+        method: 'GET',
+        params: {
+          startDate: startDate?.toDateString(),
+          endDate: endDate?.toDateString()
+        }
+      }
+    },
+    providesTags(result) {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const taskApi = createApi({
   reducerPath: TASK_REDUCER_PATH,
   tagTypes: [TASK_TAG_TYPE],
@@ -216,7 +235,8 @@ const taskApi = createApi({
     deleteTask: deleteTask(builder),
     getUsedTaskWorkflowCounts: getUsedTaskWorkflowCounts(builder),
     getTaskCountForMonthsData: getTaskCountForMonthsData(builder),
-    getTaskStepMonthlyAnalysisData: getTaskStepMonthlyAnalysisData(builder)
+    getTaskStepMonthlyAnalysisData: getTaskStepMonthlyAnalysisData(builder),
+    getTaskSteps: getTaskSteps(builder)
   })
 })
 
@@ -231,7 +251,8 @@ const {
   useDeleteTaskMutation,
   useGetUsedTaskWorkflowCountsQuery,
   useGetTaskCountForMonthsDataQuery,
-  useGetTaskStepMonthlyAnalysisDataQuery
+  useGetTaskStepMonthlyAnalysisDataQuery,
+  useGetTaskStepsQuery
 } = taskApi
 export {
   taskApi,
@@ -245,5 +266,6 @@ export {
   useDeleteTaskMutation,
   useGetUsedTaskWorkflowCountsQuery,
   useGetTaskCountForMonthsDataQuery,
-  useGetTaskStepMonthlyAnalysisDataQuery
+  useGetTaskStepMonthlyAnalysisDataQuery,
+  useGetTaskStepsQuery
 }
