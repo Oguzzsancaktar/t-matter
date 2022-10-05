@@ -43,7 +43,7 @@ const NewTasksTab = props => {
       name: 'Task name',
       selector: row => row.name + ' ' + row.steps.category.name,
       sortable: true,
-      cell: d => d.name + ' ' + d.steps.category.name
+      cell: d => d.name + ' - ' + d.steps.category.name
     }
   ]
 
