@@ -3,13 +3,11 @@ import { ModalHeader, ModalBody } from '@components/modals/types'
 import React, { useState } from 'react'
 import NewTasksTab from '@pages/dashboard/task-dashboard-card/NewTasksTab'
 import CompletedTasksTab from '@pages/dashboard/task-dashboard-card/CompletedTasksTab'
-import PostponedTasksTab from '@pages/dashboard/task-dashboard-card/PostponedTasksTab'
 import CancelledTasksTab from '@pages/dashboard/task-dashboard-card/CancelledTasksTab'
 
 const Component = {
   NewTasksTab,
   CompletedTasksTab,
-  PostponedTasksTab,
   CancelledTasksTab
 }
 
@@ -45,14 +43,6 @@ const TaskDashboardInfoModal: React.FC<{ page: string; dateRange?: { startDate: 
                 <Tab
                   margin="0 1rem 0 0rem"
                   index={2}
-                  name="Postponed"
-                  isActive={activeTab === 'PostponedTasksTab'}
-                  onClick={() => setActiveTab('PostponedTasksTab')}
-                />
-
-                <Tab
-                  margin="0 1rem 0 0rem"
-                  index={3}
                   name="Cancelled"
                   isActive={activeTab === 'CancelledTasksTab'}
                   onClick={() => setActiveTab('CancelledTasksTab')}
