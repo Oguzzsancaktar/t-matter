@@ -14,3 +14,17 @@ export default interface ICustomerTask {
   index?: number
   status?: number
 }
+
+export interface ITaskStep {
+  _id?: string
+  workflowId: IWorkflow['_id']
+  customer: ICustomer
+  startDate: number
+  name: string
+  steps: ITaskItem
+  totalDuration?: number
+  totalPrice?: number
+  isInvoiced?: boolean
+  index?: number
+  status?: number
+}

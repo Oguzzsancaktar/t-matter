@@ -209,21 +209,24 @@ const createInstallment = (builder: IBuilder) => {
 }
 
 const getInstallments = (builder: IBuilder) => {
-  return builder.query<IInstallment[], { invoice: Invoice['_id']; startDate?: Date; endDate?: Date }>({
-    query(args) {
-      return {
-        url: `/finance/installment${args.invoice ? '/' + args.invoice : ''}`,
-        method: 'GET',
-        params: {
-          startDate: args?.startDate?.toDateString(),
-          endDate: args?.endDate?.toDateString()
+  return builder.query<IInstallment[], { invoice?: Invoice['_id']; startDate?: Date; endDate?: Date; status?: string }>(
+    {
+      query(args) {
+        return {
+          url: `/finance/installment${args.invoice ? '/' + args.invoice : ''}`,
+          method: 'GET',
+          params: {
+            startDate: args?.startDate?.toDateString(),
+            endDate: args?.endDate?.toDateString(),
+            status: args?.status
+          }
         }
+      },
+      providesTags(result) {
+        return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
       }
-    },
-    providesTags(result) {
-      return [{ type: INSTALLMENT_TAG_TYPE, id: 'LIST' }]
     }
-  })
+  )
 }
 
 const postponeInstallment = (builder: IBuilder) => {
@@ -437,6 +440,7 @@ const {
   useUploadPdfToInvoiceCategoryMutation,
   useEditInstallmentMutation,
   useGetInstallmentDashboardChartQuery,
+  useLazyGetInstallmentDashboardChartQuery,
   useGetAdditionalTimePassedCustomersQuery,
   useGetNonBillablePassedCustomersQuery
 } = financePlanningApi
@@ -463,5 +467,6 @@ export {
   useGetInstallmentDashboardChartQuery,
   useGetAdditionalTimePassedCustomersQuery,
   useGetNonBillablePassedCustomersQuery,
-  useLazyGetInstallmentsQuery
+  useLazyGetInstallmentsQuery,
+  useLazyGetInstallmentDashboardChartQuery
 }

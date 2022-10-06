@@ -4,7 +4,8 @@
     "start:dev": "NODE_ENV=development env-cmd -f .env.development nodemon app.js",
     "start:prod": "env-cmd -f .env.production node app.js",
     "heroku-postbuild": "cd client && npm i && npm run build",
-    "script:task-steps-objectid-fix": "env-cmd -f .env.production node scripts/task-steps-objectid-fix.js"
+    "script:task-steps-objectid-fix": "env-cmd -f .env.production node scripts/task-steps-objectid-fix.js",
+    "script:remove-all-task-and-invoice-data": "env-cmd -f .env.production node scripts/remove-all-task-and-invoice-data.js"
   },
   "engines": {
     "node": "18.4.0"

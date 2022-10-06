@@ -2,6 +2,7 @@ import { ItemContainer, JustifyBetweenColumn, JustifyBetweenRow } from '@/compon
 import React from 'react'
 import { ActiveTasksCard, ActivityTimelineCard, DashboardCard } from '.'
 import { FinanceDashboardCard } from '@pages/dashboard/finance-dashboard-card'
+import TaskDashboardCard from '@pages/dashboard/task-dashboard-card/TaskDashboardCard'
 
 const DashboardPage: React.FC = () => {
   return (
@@ -24,14 +25,14 @@ const DashboardPage: React.FC = () => {
         <ItemContainer width="35%" height="100%">
           <JustifyBetweenColumn height="100%">
             <ItemContainer width="100%" height="100%">
+              <TaskDashboardCard />
+            </ItemContainer>
+
+            <ItemContainer width="100%" height="50%" margin="1rem 0">
               <DashboardCard head={'test'}>incoming chart</DashboardCard>
             </ItemContainer>
 
-            <ItemContainer width="100%" height="100%" margin="1rem 0">
-              <DashboardCard head={'test'}>incoming chart</DashboardCard>
-            </ItemContainer>
-
-            <ItemContainer width="100%" height="100%">
+            <ItemContainer width="100%" height="50%">
               <DashboardCard head={'test'}>incoming chart</DashboardCard>
             </ItemContainer>
           </JustifyBetweenColumn>

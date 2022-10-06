@@ -3,6 +3,7 @@ const router = express.Router()
 const middlewares = require('../../middlewares')
 const controllers = require('../../controllers')
 
+router.get('/steps', middlewares.authMiddlewares.checkAuth, controllers.taskController.getTaskSteps)
 router.put('/reorder', controllers.taskController.reorderTasks)
 router.post('/postpone', controllers.taskController.postponeTask)
 
@@ -28,5 +29,10 @@ router.put('/:taskId', controllers.taskController.updateTask)
 
 router.get('/chart/most-used-workflow', controllers.taskController.usedTaskWorkflowCounts)
 router.get('/chart/task-workflow-added-monthly-analysis', controllers.taskController.getTaskCountForMonths)
+router.get(
+  '/chart/task-step-monthly-analysis',
+  middlewares.authMiddlewares.checkAuth,
+  controllers.taskController.getTaskStepMonthlyAnalysis
+)
 
 module.exports = router

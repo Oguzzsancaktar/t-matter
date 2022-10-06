@@ -3,6 +3,7 @@ import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { ICustomerTask, ITask } from '@/models'
+import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 
 const TASK_REDUCER_PATH = 'taskApi'
 const TASK_TAG_TYPE = 'taskTag' as const
@@ -192,6 +193,38 @@ const getTaskCountForMonthsData = (builder: IBuilder) => {
   })
 }
 
+const getTaskStepMonthlyAnalysisData = (builder: IBuilder) => {
+  return builder.query<{ _id: string; monthlyPrice: number; monthlyDuration: number }[], void>({
+    query() {
+      return {
+        url: `/task/chart/task-step-monthly-analysis`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
+const getTaskSteps = (builder: IBuilder) => {
+  return builder.query<ITaskStep[], { startDate?: Date; endDate?: Date }>({
+    query({ startDate, endDate }) {
+      return {
+        url: `/task/steps`,
+        method: 'GET',
+        params: {
+          startDate: startDate?.toDateString(),
+          endDate: endDate?.toDateString()
+        }
+      }
+    },
+    providesTags(result) {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const taskApi = createApi({
   reducerPath: TASK_REDUCER_PATH,
   tagTypes: [TASK_TAG_TYPE],
@@ -206,7 +239,9 @@ const taskApi = createApi({
     postponeTask: postponeTask(builder),
     deleteTask: deleteTask(builder),
     getUsedTaskWorkflowCounts: getUsedTaskWorkflowCounts(builder),
-    getTaskCountForMonthsData: getTaskCountForMonthsData(builder)
+    getTaskCountForMonthsData: getTaskCountForMonthsData(builder),
+    getTaskStepMonthlyAnalysisData: getTaskStepMonthlyAnalysisData(builder),
+    getTaskSteps: getTaskSteps(builder)
   })
 })
 
@@ -220,7 +255,9 @@ const {
   usePostponeTaskMutation,
   useDeleteTaskMutation,
   useGetUsedTaskWorkflowCountsQuery,
-  useGetTaskCountForMonthsDataQuery
+  useGetTaskCountForMonthsDataQuery,
+  useGetTaskStepMonthlyAnalysisDataQuery,
+  useGetTaskStepsQuery
 } = taskApi
 export {
   taskApi,
@@ -233,5 +270,7 @@ export {
   usePostponeTaskMutation,
   useDeleteTaskMutation,
   useGetUsedTaskWorkflowCountsQuery,
-  useGetTaskCountForMonthsDataQuery
+  useGetTaskCountForMonthsDataQuery,
+  useGetTaskStepMonthlyAnalysisDataQuery,
+  useGetTaskStepsQuery
 }

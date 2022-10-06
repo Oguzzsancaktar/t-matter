@@ -58,6 +58,10 @@ const Head: React.FC<IProps> = props => {
         height: '100%'
       }}
     >
+      <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', left: 0 }}>
+        <span style={{ marginRight: 2, fontSize: 10 }}>Avg:</span>
+        <span style={{ fontSize: 12 }}>$450</span>
+      </div>
       <div
         onClick={handleShowFinanceInfoModal.bind(this, 'NonBillableTab')}
         style={{ display: 'flex', alignItems: 'center', marginRight: 16, cursor: 'pointer' }}
@@ -72,10 +76,10 @@ const Head: React.FC<IProps> = props => {
         <FcAdvertising />
         <span style={{ marginLeft: 4 }}>{additionalTimePassedCustomers?.length}</span>
       </div>
-      {/*<div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: 0 }}>*/}
-      {/*  {true ? <FcBearish /> : <FcBullish />}*/}
-      {/*  <span style={{ marginLeft: 4 }}>12%</span>*/}
-      {/*</div>*/}
+      <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: 0 }}>
+        {true ? <FcBearish /> : <FcBullish />}
+        <span style={{ marginLeft: 4 }}>12%</span>
+      </div>
     </div>
   )
 }

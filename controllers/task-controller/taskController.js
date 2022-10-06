@@ -190,6 +190,31 @@ const getTaskCountForMonths = async (req, res) => {
   }
 }
 
+const getTaskStepMonthlyAnalysis = async (req, res) => {
+  try {
+    const steps = await dataAccess.taskDataAccess.getTaskStepMonthlyAnalysisData({ responsibleUserId: req.user.userId })
+    res.status(StatusCodes.OK).json(steps)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getTaskSteps = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query
+    const steps = await dataAccess.taskDataAccess.getTaskStepsData({
+      responsibleUserId: req.user.userId,
+      startDate,
+      endDate
+    })
+    res.status(StatusCodes.OK).json(steps)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
@@ -200,5 +225,7 @@ module.exports = {
   postponeTask,
   removeTask,
   usedTaskWorkflowCounts,
-  getTaskCountForMonths
+  getTaskCountForMonths,
+  getTaskStepMonthlyAnalysis,
+  getTaskSteps
 }

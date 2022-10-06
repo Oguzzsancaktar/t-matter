@@ -274,7 +274,7 @@ const updateInstallment = (id, data) => {
   return Installment.findByIdAndUpdate(id, data, { new: true }).exec()
 }
 
-const getInstallmentsByInvoiceId = ({ invoiceId, startDate, endDate }) => {
+const getInstallmentsByInvoiceId = ({ invoiceId, startDate, endDate, status }) => {
   const $match = {
     $and: []
   }
@@ -286,6 +286,12 @@ const getInstallmentsByInvoiceId = ({ invoiceId, startDate, endDate }) => {
   }
   if (endDate) {
     $match.$and.push({ payDate: { $lte: withoutTimezone(endDate) } })
+  }
+  if (status && status !== 'ALL') {
+    $match.$and.push({ status: { $eq: status } })
+  }
+  if ($match.$and.length === 0) {
+    delete $match.$and
   }
   return Installment.aggregate([
     {
@@ -355,6 +361,10 @@ const deleteManyInstallment = query => {
 
 const getDailyGroupedInstallments = ({ period, startDate, endDate }) => {
   const $match = {}
+  const $dateToString = {
+    format: '%Y-%m-%d',
+    date: '$payDate'
+  }
   if (period === PERIODS.DAILY) {
     $match.payDate = {
       $gte: getISODate(moment().startOf('day')),
@@ -372,12 +382,14 @@ const getDailyGroupedInstallments = ({ period, startDate, endDate }) => {
       $gte: getISODate(moment().startOf('month')),
       $lte: getISODate(moment().endOf('month'))
     }
+    $dateToString.format = '%Y-%m'
   }
   if (period === PERIODS.YEARLY) {
     $match.payDate = {
       $gte: getISODate(moment().startOf('year')),
       $lte: getISODate(moment().endOf('year'))
     }
+    $dateToString.format = '%Y'
   }
   if (startDate && endDate) {
     $match.payDate = {
@@ -390,10 +402,7 @@ const getDailyGroupedInstallments = ({ period, startDate, endDate }) => {
     {
       $group: {
         _id: {
-          $dateToString: {
-            format: '%Y-%m-%d',
-            date: '$payDate'
-          }
+          $dateToString
         },
         unpaidAmount: {
           $sum: {
@@ -420,6 +429,9 @@ const getDailyGroupedInstallments = ({ period, startDate, endDate }) => {
         },
         totalCount: {
           $sum: 1
+        },
+        payDate: {
+          $first: '$payDate'
         }
       }
     },
