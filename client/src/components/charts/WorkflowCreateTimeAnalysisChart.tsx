@@ -7,7 +7,7 @@ import { useGetTaskCountForMonthsDataQuery } from '@/services/customers/taskServ
 
 const WorkflowCreateTimeAnalysisChart = () => {
   const { data: taskCountForMonthsData } = useGetTaskCountForMonthsDataQuery()
-  console.log(taskCountForMonthsData)
+
   const chartSetup: { options: ApexOptions; series: any } = useMemo(() => {
     let monthlyAddedCounts: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 

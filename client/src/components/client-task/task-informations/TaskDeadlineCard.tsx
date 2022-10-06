@@ -4,9 +4,12 @@ import { Column, JustifyBetweenRow, Row } from '@/components/layout'
 import { ProgressBar } from '@/components/progress-bar'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
+import { initialRadialChartOptions } from '@/constants/initialValues'
 import { ITaskItem } from '@/models'
+import { ApexOptions } from 'apexcharts'
 import moment from 'moment'
 import React from 'react'
+import ReactApexChart from 'react-apexcharts'
 import { Calendar } from 'react-feather'
 
 interface IProps {
@@ -18,9 +21,40 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
       moment(taskActiveStep.endDate).diff(moment(taskActiveStep.startDate))) *
     100
 
+  const radialChartOptions: ApexOptions = {
+    ...initialRadialChartOptions,
+    plotOptions: {
+      radialBar: {
+        track: {
+          background: '#ffffff'
+        },
+        startAngle: -135,
+        endAngle: 135,
+        dataLabels: {
+          name: {
+            show: false,
+            fontSize: '16px',
+            color: undefined,
+            offsetY: 120
+          },
+          value: {
+            offsetY: 60,
+            fontSize: '3px',
+            color: colors.text.primary,
+            formatter: function (val) {
+              return moment(taskActiveStep.startDate).format('MMM/DD/YY  HH:mm')
+            }
+          }
+        }
+      }
+    }
+  }
+
   return (
-    <ItemContainer>
-      <Column>
+    <ItemContainer height="100%">
+      <ReactApexChart options={radialChartOptions} series={[percentage]} type="radialBar" height={'100%'} />
+
+      {/* <Column>
         <ItemContainer>
           <JustifyBetweenRow>
             <Row>
@@ -47,7 +81,7 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
             // endLabel="Expire Date"
           />
         </ItemContainer>
-      </Column>
+      </Column> */}
     </ItemContainer>
   )
 }

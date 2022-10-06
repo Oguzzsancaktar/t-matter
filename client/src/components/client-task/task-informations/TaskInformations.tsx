@@ -1,7 +1,7 @@
 import { Button } from '@/components/button'
 import { TaskNoteCounter } from '@/components/counter'
 import { ItemContainer } from '@/components/item-container'
-import { JustifyBetweenColumn, Column } from '@/components/layout'
+import { JustifyBetweenColumn, Column, JustifyBetweenRow } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
@@ -132,15 +132,18 @@ const TaskInformations: React.FC<IProps> = ({
 
           <ItemContainer backgroundColor={'transparent'} borderRadius="0.3rem" margin="0 0 1rem 0">
             <Column height="100%">
-              <InformationCard height="80px">
-                <TaskDeadlineCard taskActiveStep={taskData.steps[activeStep]} />
+              <InformationCard height="100%">
+                <JustifyBetweenRow width="100%" height="200px">
+                  <TaskDeadlineCard taskActiveStep={taskData.steps[activeStep]} />
+
+                  <TaskPostponeCard
+                    taskActiveStep={taskData.steps[activeStep]}
+                    onPostponeChange={handlePostponeChange}
+                  />
+                </JustifyBetweenRow>
               </InformationCard>
 
-              <InformationCard height="80px">
-                <TaskPostponeCard taskActiveStep={taskData.steps[activeStep]} onPostponeChange={handlePostponeChange} />
-              </InformationCard>
-
-              <InformationCard height="80px">
+              <InformationCard height="30px">
                 <TaskTimerCard
                   taskActiveStep={taskData.steps[activeStep]}
                   isTaskNotStarted={isTaskNotStarted}
@@ -150,7 +153,7 @@ const TaskInformations: React.FC<IProps> = ({
             </Column>
           </ItemContainer>
 
-          <InformationCard height="calc(100% - 100px - 80px - 80px - 80px - 6rem)">
+          <InformationCard height="calc(100% - 100px - 200px - 30px - 6rem)">
             <TaskChecklistCard
               taskActiveStep={taskData.steps[activeStep]}
               handleCheckboxClick={handleCheckboxClick}
