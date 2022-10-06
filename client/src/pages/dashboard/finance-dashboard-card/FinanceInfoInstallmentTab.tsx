@@ -164,7 +164,7 @@ const FinanceInfoInstallmentTab = props => {
             options={[...INSTALLMENT_STATUS_OPTIONS, { label: 'All', value: 'ALL' }]}
           />
         </div>
-        <div style={{ display: 'flex', alignItems: 'flex-end', width: '100%', height: '100%', paddingBottom: 3 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', height: '100%', flex: 1, paddingBottom: 3 }}>
           <div
             style={{
               width: '100%',

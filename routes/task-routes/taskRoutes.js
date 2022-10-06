@@ -9,6 +9,7 @@ router.post('/postpone', controllers.taskController.postponeTask)
 
 router.post(
   '/:customerId',
+  middlewares.authMiddlewares.checkAuth,
   middlewares.validations.taskValidations.createTaskValidation,
   controllers.taskController.createTask
 )

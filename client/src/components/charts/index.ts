@@ -6,3 +6,6 @@ export { default as FinanceInfoInstallmentBarChart } from './FinanceInfoInstallm
 export { default as FinanceInfoPaidDonutPercentage } from './FinanceInfoPaidDonutPercentage'
 export { default as FinanceInfoPaidTypeDonutChart } from './FinanceInfoPaidTypeDonutChart'
 export { default as TaskStepMonthlyAnalysisDashboardChart } from './TaskStepMonthlyAnalysisDashboardChart'
+export { default as TaskStepWorkFlowDonutChart } from './TaskStepWorkFlowDonutChart'
+export { default as TaskStepMostlyAddedUser } from './TaskStepMostlyAddedUser'
+export { default as TaskStepYearlyCountBarChart } from './TaskStepYearlyCountBarChart'

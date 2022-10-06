@@ -10,7 +10,10 @@ import {
   JustifyCenterColumn,
   NoTableData,
   SelectInput,
-  TableSkeltonLoader
+  TableSkeltonLoader,
+  TaskStepMostlyAddedUser,
+  TaskStepWorkFlowDonutChart,
+  TaskStepYearlyCountBarChart
 } from '@/components'
 import { INSTALLMENT_STATUS_OPTIONS } from '@constants/finance'
 import colors from '@constants/colors'
@@ -28,6 +31,22 @@ const NewTasksTab = props => {
 
   const columns: TableColumn<ITaskStep>[] = [
     {
+      name: 'Added',
+      selector: row => {
+        if (row.steps.addedFrom) {
+          return row.steps.addedFrom?.firstname + ' ' + row.steps.addedFrom?.lastname
+        }
+        return ''
+      },
+      sortable: true,
+      cell: row => {
+        if (row.steps.addedFrom) {
+          return row.steps.addedFrom?.firstname + ' ' + row.steps.addedFrom?.lastname
+        }
+        return ''
+      }
+    },
+    {
       name: 'Date',
       selector: row => moment(row.steps.startDate).toString(),
       sortable: true,
@@ -44,15 +63,24 @@ const NewTasksTab = props => {
       selector: row => row.name + ' ' + row.steps.category.name,
       sortable: true,
       cell: d => d.name + ' - ' + d.steps.category.name
+    },
+    {
+      name: 'Conditions'
     }
   ]
 
   return (
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-        <JustifyCenterColumn width="280px">incoming charts....</JustifyCenterColumn>
-        <JustifyCenterColumn>incoming charts....</JustifyCenterColumn>
-        <JustifyCenterColumn width="280px">incoming charts....</JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
+          <TaskStepWorkFlowDonutChart dateRange={dateRange} />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn>
+          <TaskStepYearlyCountBarChart dateRange={dateRange} />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
+          <TaskStepMostlyAddedUser dateRange={dateRange} />
+        </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">
         <div style={{ minWidth: 330, display: 'flex', alignItems: 'center' }}>
@@ -78,13 +106,13 @@ const NewTasksTab = props => {
             selectedOption={
               [...INSTALLMENT_STATUS_OPTIONS, { label: 'All', value: 'ALL' }]?.filter(x => x.value === 'ALL') || []
             }
-            labelText="Status"
+            labelText="Conditions"
             onChange={o => {}}
-            name="status"
+            name="conditions"
             options={[...INSTALLMENT_STATUS_OPTIONS, { label: 'All', value: 'ALL' }]}
           />
         </div>
-        <div style={{ display: 'flex', alignItems: 'flex-end', width: '100%', height: '100%', paddingBottom: 3 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', flex: 1, height: '100%', paddingBottom: 3 }}>
           <div
             style={{
               width: '100%',

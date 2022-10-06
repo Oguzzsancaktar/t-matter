@@ -232,6 +232,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
             })
 
             tempUpdatedTaskData.steps[activeStep].responsibleUser = responsible
+            tempUpdatedTaskData.steps[activeStep].addedFrom = loggedUser.user
 
             await updateTask(tempUpdatedTaskData)
             await createActivity({
