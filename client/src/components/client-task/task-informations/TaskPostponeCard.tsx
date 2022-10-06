@@ -16,22 +16,12 @@ interface IProps {
 }
 const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }) => {
   const [postponeDate, setPostponeDate] = useState({ value: [new Date(taskActiveStep.postponedDate)], dateText: '' })
-  const notInitialRender = useRef(false)
-  const { loggedUser } = useAuth()
-
   const canTaskPostpone: boolean = taskActiveStep.stepStatus === ETaskStatus['Progress']
 
   const onDateChange = (value: Date[], dateText: string) => {
     setPostponeDate({ value, dateText })
+    onPostponeChange(value, dateText)
   }
-
-  useEffect(() => {
-    if (notInitialRender.current) {
-      onPostponeChange(postponeDate.value, postponeDate.dateText)
-    } else {
-      notInitialRender.current = true
-    }
-  }, [postponeDate])
 
   return (
     <ItemContainer>

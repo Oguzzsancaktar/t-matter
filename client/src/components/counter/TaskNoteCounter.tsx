@@ -1,6 +1,6 @@
-import { useAnimationFrame } from '@/hooks/useAnimationFrame'
 import { secondsToHourMin } from '@/utils/timeUtils'
-import React from 'react'
+import React, { useMemo, useState } from 'react'
+import { useInterval } from 'usehooks-ts'
 import { ItemContainer } from '../item-container'
 
 interface IProps {
@@ -8,11 +8,12 @@ interface IProps {
   count?: number
 }
 const TaskNoteCounter: React.FC<IProps> = () => {
-  const [count, setCount] = React.useState(0)
+  const delay = useMemo<number>(() => 1000, [])
+  const [count, setCount] = useState(0)
 
-  useAnimationFrame(deltaTime => {
-    setCount(prevCount => (prevCount + deltaTime * 0.001) % 100)
-  })
+  useInterval(() => {
+    setCount(count + 1)
+  }, delay)
 
   return <ItemContainer>{secondsToHourMin(Math.round(count), true)}</ItemContainer>
 }

@@ -131,6 +131,7 @@ const {
   useGetUsersQuery,
   useCreateUserMutation,
   useGetUserByIdQuery,
+  useLazyGetUserByIdQuery,
   useUpdateUserMutation,
   useUpdateUserStatusMutation,
   useAddOrUpdateUserImageMutation
@@ -139,6 +140,7 @@ export {
   userApi,
   useGetUsersQuery,
   useGetUserByIdQuery,
+  useLazyGetUserByIdQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
   useUpdateUserStatusMutation,

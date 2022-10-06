@@ -1,60 +1,68 @@
-import { ProgressBar } from '@/components'
+import { ProgressBar, TaskTimerMultipleProgressBar } from '@/components'
 import { ItemContainer } from '@/components/item-container'
 import { Column, JustifyBetweenRow, Row } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
-import { useAnimationFrame } from '@/hooks/useAnimationFrame'
 import { useAuth } from '@/hooks/useAuth'
-import { ITaskItem } from '@/models'
+import useInterval from '@/hooks/useInterval'
+import { ITaskItem, ITaskUserWorkTime } from '@/models'
 import { secondsToHourMin } from '@/utils/timeUtils'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Calendar } from 'react-feather'
 
 interface IProps {
   taskActiveStep: ITaskItem
   isTaskNotStarted: boolean
-  handleTaskTimerChange: (timerValue: number) => void
+  handleTaskTimerChange: (userWorkTime: ITaskUserWorkTime) => void
 }
 
 const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, handleTaskTimerChange }) => {
   const { loggedUser } = useAuth()
 
-  const findActiveWorker = useCallback(
-    () => taskActiveStep.passedTime.find(work => work.user._id === taskActiveStep.responsibleUser._id),
-    []
-  )
+  const delay = useMemo<number>(() => 1000, [])
 
-  const [workerData, setWorkerData] = useState(findActiveWorker)
+  const [totalPassedTime, setTotalPassedTime] = useState(0)
+  const [counterValue, setCounterValue] = useState(0)
 
-  const [willTimerWork, setWillTimerWork] = useState<boolean>(
-    loggedUser.user?._id === taskActiveStep.responsibleUser._id && !isTaskNotStarted
-  )
-
-  const [passedTime, setPassedTime] = useState(workerData?.time || 0)
-
-  const totalDuration = useMemo(
-    () => taskActiveStep?.checklistItems.reduce((acc, item) => acc + item?.duration, 0),
+  const stepTotalDuration = useMemo(
+    () => taskActiveStep.checklistItems.reduce((prev, current) => prev + current.duration, 0),
     [taskActiveStep]
   )
 
-  useAnimationFrame(deltaTime => {
-    console.log(willTimerWork)
-    setPassedTime(prevCount => {
-      if (willTimerWork) {
-        console.log(1)
-        return prevCount + deltaTime * 0.001
-      } else {
-        console.log(2)
-        return prevCount
-      }
-    })
-  })
+  const isUserWorkingOnTask = useMemo(
+    () => taskActiveStep.responsibleUser._id === loggedUser.user?._id,
+    [taskActiveStep.responsibleUser._id, loggedUser.user?._id]
+  )
 
-  console.log(workerData)
+  const calculateTotalPassedTime = () => {
+    let totalTime = 0
+    for (let index = 0; index < taskActiveStep.workedTimes.length; index++) {
+      const work = taskActiveStep.workedTimes[index]
+      totalTime += work.time
+    }
+    setTotalPassedTime(totalTime)
+  }
+
+  useInterval(
+    () => {
+      setCounterValue(counterValue + 1)
+    },
+    isUserWorkingOnTask ? delay : null
+  )
 
   useEffect(() => {
-    setWillTimerWork(loggedUser.user?._id === taskActiveStep.responsibleUser._id && !isTaskNotStarted)
-  }, [taskActiveStep.responsibleUser._id])
+    if (loggedUser.user) {
+      let userWork: ITaskUserWorkTime = {
+        user: loggedUser.user,
+        time: 1
+      }
+      handleTaskTimerChange(userWork)
+    }
+  }, [counterValue])
+
+  useEffect(() => {
+    calculateTotalPassedTime()
+  }, [])
 
   return (
     <ItemContainer>
@@ -65,23 +73,22 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, han
               <Calendar size={20} color={colors.text.primary} />
               <ItemContainer margin="0 0 0 0.3rem ">
                 <H1 color={colors.text.primary} fontWeight="400" width="auto">
-                  {secondsToHourMin(passedTime, true)}
+                  {secondsToHourMin(counterValue + totalPassedTime, true)}
                 </H1>
               </ItemContainer>
             </Row>
             <ItemContainer width="auto">
               <H1 color={colors.text.primary} fontWeight="400" width="max-content">
-                {secondsToHourMin(totalDuration, true)}
+                {secondsToHourMin(stepTotalDuration, true)}
               </H1>
             </ItemContainer>
           </JustifyBetweenRow>
         </ItemContainer>
         <ItemContainer>
-          <ProgressBar
-            completionColor={passedTime > totalDuration ? colors.orange.primary : colors.blue.primary}
-            completionPercentage={(passedTime / totalDuration) * 100}
-            // startLabel="Timer"
-            // endLabel="Remaining"
+          <TaskTimerMultipleProgressBar
+            isTimeFinished={counterValue + totalPassedTime >= stepTotalDuration}
+            totalDuration={stepTotalDuration}
+            workedTimes={taskActiveStep.workedTimes}
           />
         </ItemContainer>
       </Column>

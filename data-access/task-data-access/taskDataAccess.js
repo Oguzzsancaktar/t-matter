@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 const taskPopulatePipe = [
   {
-    $unwind: '$steps'
+    $unwind: { path: '$steps', preserveNullAndEmptyArrays: true }
   },
   {
     $lookup: {

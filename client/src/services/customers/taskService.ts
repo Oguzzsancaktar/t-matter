@@ -1,4 +1,4 @@
-import { ICustomer, IQueryParams, ITaskFilter, IUsedTaskAnalysisData } from '@models/index'
+import { ICustomer, IQueryParams, ITaskFilter, ITaskUserWorkTime, IUsedTaskAnalysisData } from '@models/index'
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
@@ -123,6 +123,7 @@ const getTaskByTaskId = (builder: IBuilder) => {
 const updateTask = (builder: IBuilder) => {
   return builder.mutation<ICustomerTask, ICustomerTask>({
     query(taskUpdateDto) {
+      console.log('taskUpdateDto', taskUpdateDto)
       return {
         url: `/task/${taskUpdateDto._id}`,
         method: 'PUT',
@@ -132,7 +133,11 @@ const updateTask = (builder: IBuilder) => {
             ...step,
             responsibleUser: step.responsibleUser._id,
             category: step.category._id,
-            location: step.location._id
+            location: step.location._id,
+            workedTimes: step.workedTimes.map((work: ITaskUserWorkTime) => ({
+              ...work,
+              user: work.user?._id || ''
+            }))
           }))
         }
       }

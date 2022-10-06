@@ -7,7 +7,7 @@ import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
 
-import { EActivity, ICustomer, ICustomerTask, ITaskChecklist, IUser } from '@/models'
+import { EActivity, ICustomer, ICustomerTask, ITaskChecklist, ITaskUserWorkTime, IUser } from '@/models'
 import { activityApi, useCreateActivityMutation } from '@/services/activityService'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
@@ -31,7 +31,7 @@ interface IProps {
   handlePostponeChange: (value: Date[], dateText: string) => void
   handleCancelTask: () => void
   handleStartTask: () => void
-  handleTaskTimerChange: (timerValue) => void
+  handleTaskTimerChange: (userWorkTime: ITaskUserWorkTime) => void
 }
 
 const InformationCard = styled(ItemContainer)`

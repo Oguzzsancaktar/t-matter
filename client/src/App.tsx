@@ -74,6 +74,7 @@ function App() {
               </PrivateRoute>
             }
           />
+
           <Route path="/*" element={<Navigate replace to="/" />} />
         </Routes>
       </ItemContainer>

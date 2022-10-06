@@ -13,3 +13,5 @@ export type { default as ITaskChecklistCreateDTO } from './ITaskChecklistCreateD
 export type { default as ITaskChecklistUpdateDTO } from './ITaskChecklistUpdateDTO'
 
 export type { default as IUsedTaskAnalysisData } from './IUsedTaskAnalysisData'
+
+export type { default as ITaskUserWorkTime } from './ITaskUserWorkTime'

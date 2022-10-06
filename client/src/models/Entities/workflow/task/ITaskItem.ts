@@ -1,4 +1,4 @@
-import { ILocation, ITaskChecklist, IUser } from '@models/index'
+import { ILocation, ITaskChecklist, ITaskUserWorkTime, IUser } from '@models/index'
 import ITaskCategory from './ITaskCategory'
 
 export default interface ITaskItem {
@@ -12,8 +12,8 @@ export default interface ITaskItem {
   stepStatus: number
 
   expireDuration: number
-  passedTime: { user: IUser; time: number }[]
-
+  workedTimes: ITaskUserWorkTime[]
+  totalPassedTime: number
   postponeTime: number
   usedPostpone: number
   postponedDate: string

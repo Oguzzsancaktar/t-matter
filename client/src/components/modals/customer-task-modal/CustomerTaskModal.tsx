@@ -5,7 +5,7 @@ import { Row } from '@/components/layout'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
-import { ICustomer, ICustomerTask, ETaskStatus, EActivity, IUser, ITaskChecklist } from '@/models'
+import { ICustomer, ICustomerTask, ETaskStatus, EActivity, IUser, ITaskChecklist, ITaskUserWorkTime } from '@/models'
 import { useCreateActivityMutation, activityApi } from '@/services/activityService'
 import { useUpdateTaskMutation, useGetTaskByTaskIdQuery } from '@/services/customers/taskService'
 import { useCreateExpiredTaskStepMutation } from '@/services/settings/finance-planning/financePlanningService'
@@ -28,6 +28,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const { loggedUser } = useAuth()
 
   const [updateTask] = useUpdateTaskMutation()
+
   const [createActivity] = useCreateActivityMutation()
   const { data: taskData, isLoading: taskIsLoading } = useGetTaskByTaskIdQuery(taskId)
   const [createExpiredTaskStep] = useCreateExpiredTaskStepMutation()
@@ -52,9 +53,24 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     }
   }, [updatedTaskData])
 
-  const handleTaskTimerChange = (timerValue: number) => {
+  const handleTaskTimerChange = (userWorkTime: ITaskUserWorkTime) => {
     const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
-    // tempUpdatedTaskData.steps[activeStep].passedTime = timerValue
+    const activeTaskStep = tempUpdatedTaskData.steps[activeStep]
+    const { user: worker } = userWorkTime
+
+    const workArr = tempUpdatedTaskData.steps[activeStep].workedTimes
+
+    const existingUser = activeTaskStep.workedTimes.find(work => work.user._id === worker._id)
+
+    if (existingUser) {
+      const updatedWork: ITaskUserWorkTime = { time: existingUser.time + userWorkTime.time, user: existingUser.user }
+      const otherWorks = workArr.filter(work => work.user._id !== existingUser.user._id)
+      tempUpdatedTaskData.steps[activeStep].workedTimes = [...otherWorks, updatedWork]
+    } else {
+      tempUpdatedTaskData.steps[activeStep].workedTimes = [...workArr, userWorkTime]
+    }
+
+    console.log(111, tempUpdatedTaskData.steps[activeStep].workedTimes)
     setUpdatedTaskData(tempUpdatedTaskData)
   }
 
@@ -159,8 +175,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
             tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
             tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
 
-            console.log('tempUpdatedTaskData', tempUpdatedTaskData)
-
             await updateTask(tempUpdatedTaskData)
             await createActivity({
               title: 'Task Postponed',
@@ -224,7 +238,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
               title: 'Task Responsible Changed',
               content: result.value.toString() || ' ',
               stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
-
               customer: tempUpdatedTaskData.customer._id,
               task: tempUpdatedTaskData._id,
               owner: loggedUser.user?._id || '',
@@ -272,7 +285,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
       tempChecklist.length === 0
     ) {
       if (
-        tempUpdatedTaskData.steps[activeStep].passedTime >
+        tempUpdatedTaskData.steps[activeStep].workedTimes >
         tempUpdatedTaskData.steps[activeStep].checklistItems?.reduce((acc, cur) => acc + cur.duration, 0)
       ) {
         createExpiredTaskStep({
@@ -283,7 +296,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
           index: 0,
           isInvoiced: false,
           expiredTime:
-            tempUpdatedTaskData.steps[activeStep].passedTime -
+            tempUpdatedTaskData.steps[activeStep].workedTimes -
             tempUpdatedTaskData.steps[activeStep].checklistItems?.reduce((acc, cur) => acc + cur.duration, 0)
         })
       }
@@ -366,19 +379,10 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
         const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
         tempUpdatedTaskData.status = ETaskStatus.Progress
         tempUpdatedTaskData.steps[0].stepStatus = ETaskStatus.Progress
+
         setUpdatedTaskData(tempUpdatedTaskData)
 
         await updateTask(tempUpdatedTaskData)
-        // await createActivity({
-        //   title: 'Task Started',
-        //   content: 'Task Started ',
-        //   customer: tempUpdatedTaskData.customer._id,
-        //   task: tempUpdatedTaskData._id,
-        //   owner: loggedUser.user?._id || '',
-        //   step: 0,
-        //   type: EActivity.TASK_STARTED
-        // })
-        dispatch(activityApi.util.resetApiState())
       } else {
         setUpdatedTaskData(taskData)
       }
@@ -391,7 +395,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
   useEffect(() => {
     if (!taskIsLoading && taskData) {
-      const tempUpdatedTaskData = JSON.parse(JSON.stringify(taskData))
+      const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(taskData))
 
       const taskNotStartedYet =
         taskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length === taskData?.steps.length

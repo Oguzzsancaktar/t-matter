@@ -12,13 +12,22 @@ const createTask = async (req, res) => {
       workflowId: body.workflowId,
       startDate: body.startDate,
       name: body.name,
-      steps: body.steps.map(step => ({
-        ...step,
-        category: mongoose.Types.ObjectId(step.category._id),
-        location: mongoose.Types.ObjectId(step.location._id),
-        responsibleUser: mongoose.Types.ObjectId(step.responsibleUser._id),
-        startDate: step.startDate
-      })),
+      steps: body.steps.map(step => {
+        return {
+          ...step,
+          workedTimes: step.workedTimes.map(work => {
+            return {
+              user: mongoose.Types.ObjectId(step.category._id),
+              time: work.time
+            }
+          }),
+          category: mongoose.Types.ObjectId(step.category._id),
+          location: mongoose.Types.ObjectId(step.location._id),
+          responsibleUser: mongoose.Types.ObjectId(step.responsibleUser._id),
+          startDate: step.startDate,
+          totalPassedTime: step.totalPassedTime
+        }
+      }),
       customer: customerId,
       totalDuration: body.totalDuration,
       totalPrice: body.totalPrice,
@@ -68,8 +77,33 @@ const getTask = async (req, res) => {
   const { taskId } = req.params
   try {
     const [task] = await dataAccess.taskDataAccess.getTaskById(taskId)
-    res.status(200).json(task)
+
+    // TODO aggregate here !
+    // TODO aggregate here !
+    const tempTask = { ...task }
+    for (let index = 0; index < task.steps.length; index++) {
+      let tempworkedTimes = []
+      const step = task.steps[index]
+
+      for (let k = 0; k < step.workedTimes.length; k++) {
+        const work = step.workedTimes[k]
+
+        let populated = {
+          ...work,
+          user: await dataAccess.userDataAccess.findUserById(work.user, 'role')
+        }
+
+        tempworkedTimes.push(populated)
+      }
+
+      tempTask.steps[index].workedTimes = tempworkedTimes
+    }
+    // TODO aggregate here !
+    // TODO aggregate here !
+
+    res.status(200).json(tempTask)
   } catch (error) {
+    console.log(error)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
   }
 }
@@ -103,12 +137,21 @@ const updateTask = async (req, res) => {
   const { taskId } = req.params
   const { body } = req
   try {
-    body.steps = body.steps.map(({ responsibleUser, location, category, ...rest }) => ({
-      ...rest,
-      responsibleUser: mongoose.Types.ObjectId(responsibleUser),
-      location: mongoose.Types.ObjectId(location),
-      category: mongoose.Types.ObjectId(category)
-    }))
+    body.steps = body.steps.map(({ responsibleUser, location, category, workedTimes, ...rest }) => {
+      console.log('workedTimesworkedTimesworkedTimes', workedTimes)
+      return {
+        ...rest,
+        workedTimes: workedTimes.map(work => {
+          return {
+            user: mongoose.Types.ObjectId(work.user),
+            time: work.time
+          }
+        }),
+        responsibleUser: mongoose.Types.ObjectId(responsibleUser),
+        location: mongoose.Types.ObjectId(location),
+        category: mongoose.Types.ObjectId(category)
+      }
+    })
     const task = await dataAccess.taskDataAccess.updateTaskById(taskId, body)
     res.status(200).json(task)
   } catch (error) {
