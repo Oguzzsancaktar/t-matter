@@ -14,7 +14,6 @@ import styled from 'styled-components'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import TaskChecklistCard from './TaskChecklistCard'
-import TaskCustomerCard from './TaskCustomerCard'
 import TaskDeadlineCard from './TaskDeadlineCard'
 import TaskPostponeCard from './TaskPostponeCard'
 import TaskTimerCard from './TaskTimerCard'
@@ -37,7 +36,7 @@ interface IProps {
 const InformationCard = styled(ItemContainer)`
   border-radius: 0.3rem;
   background: ${'transparent'};
-  padding: 1rem;
+  padding: 0rem;
   margin: ${({ margin }) => (margin ? margin : '1rem 0')};
 
   &:not(:first-child) {
@@ -119,12 +118,10 @@ const TaskInformations: React.FC<IProps> = ({
     <ItemContainer height="100%">
       {taskData && taskData.steps[activeStep] ? (
         <JustifyBetweenColumn height="100%">
-          <InformationCard height="100px" margin="0">
-            <TaskCustomerCard customer={customer} taskData={taskData} />
-          </InformationCard>
-
           <InformationCard height="100px">
             <TaskUserCard
+              customer={customer}
+              taskData={taskData}
               taskActiveStep={taskData.steps[activeStep]}
               onResponsibleChange={handleResponsibleChange}
               handleCancelTask={handleCancelTask}
