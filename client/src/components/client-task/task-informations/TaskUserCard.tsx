@@ -60,27 +60,33 @@ const TaskUserCard: React.FC<IProps> = ({
   return (
     <ItemContainer height="100%">
       <JustifyBetweenRow height="100%">
-        <ItemContainer cursorType="pointer" width="60px" height="100%" onClick={handleCustomerClick}>
-          <JustifyBetweenColumn height="100%" width="60px">
+        <ItemContainer
+          cursorType="pointer"
+          width="calc((100% - 200px - 2rem)/2)"
+          height="100%"
+          onClick={handleCustomerClick}
+        >
+          <JustifyBetweenColumn height="100%" width="100%">
             <UserImage
+              height="100%"
               padding="0"
               data-tip={customer.firstname + ' ' + customer.lastname}
               src={customer?.profile_img}
             />
-            <H1 textAlign="center" color={colors.text.primary} fontSize="0.8rem">
+            {/* <H1 textAlign="center" color={colors.text.primary} fontSize="0.8rem">
               Client
-            </H1>
+            </H1> */}
           </JustifyBetweenColumn>
         </ItemContainer>
 
-        <ItemContainer width="calc(100% - 60px - 60px - 1rem)" margin="0 0.5rem">
-          <JustifyCenterColumn>
+        <ItemContainer width="200px" margin="0 1rem" height="100%">
+          <JustifyBetweenColumn height="100%" width="100%">
             <H1
               width="100%"
-              height="25px"
+              height="calc(100% - 20px - 20px)"
               textAlign="center"
-              fontWeight="600"
-              fontSize="0.9rem"
+              fontWeight="900"
+              fontSize="0.8rem"
               color={colors.blue.primary}
             >
               {taskData.name}
@@ -88,24 +94,25 @@ const TaskUserCard: React.FC<IProps> = ({
             <ItemContainer
               width="100%"
               backgroundColor={colors.gray.middle}
-              height="25px"
+              height="20px"
               borderRadius="0.3rem"
               margin="0 0 0.25rem 0"
             >
               <JustifyCenterColumn width="100%" height="100%">
-                <H1 width="100%" textAlign="center" fontWeight="600" fontSize="0.9rem" color={colors.primary.dark}>
+                <H1 width="100%" textAlign="center" fontWeight="600" fontSize="0.8rem" color={colors.primary.dark}>
                   {taskActiveStep?.category.name}
                 </H1>
               </JustifyCenterColumn>
             </ItemContainer>
 
-            <ItemContainer width="100%" height="25px">
-              <JustifyCenterRow width="100%">
+            <ItemContainer width="100%" height="20px">
+              <JustifyCenterRow width="100%" height="20px">
                 <Badge
                   width="100%"
+                  height="20px"
                   children={
                     <H1
-                      fontSize="0.9rem"
+                      fontSize="0.8rem"
                       width="100%"
                       textAlign="center"
                       color={selectColorForTaskStatus(taskActiveStep?.stepStatus)}
@@ -117,19 +124,21 @@ const TaskUserCard: React.FC<IProps> = ({
                 />
               </JustifyCenterRow>
             </ItemContainer>
-          </JustifyCenterColumn>
+          </JustifyBetweenColumn>
         </ItemContainer>
 
-        <ItemContainer width="60px" height="100%">
-          <JustifyBetweenColumn height="100%" width="60px">
-            <UserSelect
-              disabled={!canResponsibleUserChange}
-              selectedUser={taskActiveStep?.responsibleUser}
-              onResponsibleChange={onResponsibleChange}
-            />
-            <H1 textAlign="center" color={colors.text.primary} fontSize="0.8rem">
+        <ItemContainer width="calc((100% - 200px - 2rem)/2)" height="100%">
+          <JustifyBetweenColumn height="100%" width="100%">
+            <ItemContainer height="100%">
+              <UserSelect
+                disabled={!canResponsibleUserChange}
+                selectedUser={taskActiveStep?.responsibleUser}
+                onResponsibleChange={onResponsibleChange}
+              />
+            </ItemContainer>
+            {/* <H1 textAlign="center" color={colors.text.primary} fontSize="0.8rem">
               User
-            </H1>
+            </H1> */}
           </JustifyBetweenColumn>
         </ItemContainer>
 
