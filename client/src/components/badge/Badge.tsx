@@ -8,6 +8,9 @@ interface IProps extends IComponentProps {
 }
 
 const BadgeContainer = styled.div<IProps>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: ${({ width }) => (width ? width : 'auto')};
   height: ${({ height }) => (height ? height : 'auto')};
   margin: ${({ margin }) => (margin ? margin : '0')};

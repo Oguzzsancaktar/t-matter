@@ -28,36 +28,39 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
     onPostponeChange(value, dateText)
   }
 
-  const radialChartOptions: ApexOptions = {
-    ...initialRadialChartOptions,
-    plotOptions: {
-      radialBar: {
-        track: {
-          background: '#ffffff'
-        },
-        startAngle: -135,
-
-        endAngle: 135,
-        dataLabels: {
-          name: {
-            show: false,
-            fontSize: '5px',
-            color: undefined,
-            offsetY: 10
+  const radialChartOptions: ApexOptions = useMemo(
+    () => ({
+      ...initialRadialChartOptions,
+      plotOptions: {
+        radialBar: {
+          track: {
+            background: '#ffffff'
           },
-          value: {
-            show: true,
-            offsetY: 60,
-            fontSize: '3px',
-            color: colors.text.primary,
-            formatter: function (val) {
-              return taskActiveStep?.usedPostpone + '/' + taskActiveStep?.postponeTime
+          startAngle: -135,
+
+          endAngle: 135,
+          dataLabels: {
+            name: {
+              show: false,
+              fontSize: '5px',
+              color: undefined,
+              offsetY: 10
+            },
+            value: {
+              show: true,
+              offsetY: 60,
+              fontSize: '3px',
+              color: colors.text.primary,
+              formatter: function (val) {
+                return taskActiveStep?.usedPostpone + '/' + taskActiveStep?.postponeTime
+              }
             }
           }
         }
       }
-    }
-  }
+    }),
+    [taskActiveStep]
+  )
 
   return (
     <ItemContainer height="100%" position="relative">
@@ -66,7 +69,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
       <ItemContainer position="absolute" left="50%" top="50%" transform="translate(-50%,-50%)">
         <Row>
           <ExternalLink size={20} color={colors.text.primary} />
-          {/* <ItemContainer margin="0 0 0 -0.2rem ">
+          <ItemContainer margin="0 0 0 -0.2rem ">
             <Flatpickr
               disabled={!canTaskPostpone}
               options={{
@@ -77,7 +80,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
               onChange={onDateChange}
               placeholder="Postpone Task"
             />
-          </ItemContainer> */}
+          </ItemContainer>
         </Row>
       </ItemContainer>
 

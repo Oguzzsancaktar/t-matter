@@ -118,7 +118,7 @@ const TaskInformations: React.FC<IProps> = ({
     <ItemContainer height="100%">
       {taskData && taskData.steps[activeStep] ? (
         <JustifyBetweenColumn height="100%">
-          <InformationCard height="100px">
+          <InformationCard height="65px">
             <TaskUserCard
               customer={customer}
               taskData={taskData}
