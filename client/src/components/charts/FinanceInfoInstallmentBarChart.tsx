@@ -36,6 +36,9 @@ const FinanceInfoInstallmentBarChart: React.FC<IProps> = ({ dateRange }) => {
         dataPointSelection: (event, chartContext, config) => {
           // onSelectBar(config.w.config.series[config.seriesIndex].data[config.dataPointIndex])
         }
+      },
+      toolbar: {
+        show: false
       }
     },
     plotOptions: {
@@ -49,9 +52,7 @@ const FinanceInfoInstallmentBarChart: React.FC<IProps> = ({ dateRange }) => {
       enabled: false
     },
     stroke: {
-      show: true,
-      width: 4,
-      colors: ['transparent']
+      show: false
     },
     xaxis: {},
     yaxis: {
@@ -66,6 +67,9 @@ const FinanceInfoInstallmentBarChart: React.FC<IProps> = ({ dateRange }) => {
           return '$ ' + val
         }
       }
+    },
+    legend: {
+      show: false
     }
   })
 

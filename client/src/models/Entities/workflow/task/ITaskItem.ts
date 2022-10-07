@@ -10,7 +10,7 @@ export default interface ITaskItem {
   startDate: number
   endDate: number
   stepStatus: number
-
+  addedFrom?: IUser
   expireDuration: number
   workedTimes: ITaskUserWorkTime[]
   totalPassedTime: number

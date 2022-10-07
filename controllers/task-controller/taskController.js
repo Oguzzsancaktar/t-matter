@@ -24,6 +24,7 @@ const createTask = async (req, res) => {
           category: mongoose.Types.ObjectId(step.category._id),
           location: mongoose.Types.ObjectId(step.location._id),
           responsibleUser: mongoose.Types.ObjectId(step.responsibleUser._id),
+          addedFrom: step.responsibleUser._id ? mongoose.Types.ObjectId(req.user.userId) : null,
           startDate: step.startDate,
           totalPassedTime: step.totalPassedTime
         }

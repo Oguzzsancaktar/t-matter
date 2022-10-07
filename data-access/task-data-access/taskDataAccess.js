@@ -20,6 +20,20 @@ const taskPopulatePipe = [
   },
   {
     $lookup: {
+      from: 'users',
+      localField: 'steps.addedFrom',
+      foreignField: '_id',
+      as: 'steps.addedFrom'
+    }
+  },
+  {
+    $unwind: {
+      path: '$steps.addedFrom',
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $lookup: {
       from: 'colors',
       localField: 'steps.category.color',
       foreignField: '_id',
@@ -302,6 +316,20 @@ const getTaskStepsData = async ({ responsibleUserId, startDate, endDate }) => {
     {
       $unwind: {
         path: '$customer',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'steps.addedFrom',
+        foreignField: '_id',
+        as: 'steps.addedFrom'
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps.addedFrom',
         preserveNullAndEmptyArrays: true
       }
     },
