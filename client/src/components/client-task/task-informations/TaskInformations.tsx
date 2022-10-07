@@ -2,13 +2,15 @@ import { Button } from '@/components/button'
 import { TaskNoteCounter } from '@/components/counter'
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn, Column, JustifyBetweenRow } from '@/components/layout'
+import { NoteEditorModal } from '@/components/modals'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
 
-import { EActivity, ICustomer, ICustomerTask, ITaskChecklist, ITaskUserWorkTime, IUser } from '@/models'
+import { EActivity, ESize, ICustomer, ICustomerTask, ITaskChecklist, ITaskUserWorkTime, IUser } from '@/models'
 import { activityApi, useCreateActivityMutation } from '@/services/activityService'
+import { openModal } from '@/store'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
@@ -56,8 +58,10 @@ const TaskInformations: React.FC<IProps> = ({
   handleTaskTimerChange
 }) => {
   const { loggedUser } = useAuth()
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+
   const [createActivity] = useCreateActivityMutation()
 
   const isResponsibleUserLoggedUser = useMemo(
@@ -65,53 +69,64 @@ const TaskInformations: React.FC<IProps> = ({
     [loggedUser.user, taskData.steps[activeStep].responsibleUser]
   )
 
-  const handleNonResponsibleNewNoteCounter = (value: number) => {
-    console.log('value from new counter', value)
-  }
-
   const handleAddNewNote = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
 
-    SwalReactContent.fire({
-      title: 'Enter your note message',
-      input: 'textarea',
-      inputAttributes: {
-        autocapitalize: 'off'
-      },
-      html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
-      showCancelButton: true,
-      confirmButtonText: 'Add Note',
-      showLoaderOnConfirm: true,
-      preConfirm: login => {
-        return login
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then(async result => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          title: `Note Created`,
-          text: result.value
-        })
+    dispatch(
+      openModal({
+        id: `NoteEditorModal-${taskData._id}`,
+        title: 'Add Note',
+        body: (
+          <NoteEditorModal
+            headerText={`Add Note ( ${customer.firstname + ' ' + customer.lastname} / ${taskData.name} )`}
+          />
+        ),
+        height: ESize.HMedium,
+        width: ESize.WMedium,
+        maxWidth: ESize.WMedium
+      })
+    )
 
-        await createActivity({
-          title: 'Note Added',
-          content: result.value || ' ',
-          customer: taskData.customer._id,
-          stepCategory: taskData.steps[activeStep].category._id,
-          task: taskData._id,
-          owner: loggedUser.user?._id || '',
-          step: activeStep,
-          type: EActivity.NORMAL_NOTE
-        })
-        dispatch(activityApi.util.resetApiState())
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Cancelled'
-        })
-      }
-    })
+    // SwalReactContent.fire({
+    //   title: 'Enter your note message',
+    //   input: 'textarea',
+    //   inputAttributes: {
+    //     autocapitalize: 'off'
+    //   },
+    //   html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
+    //   showCancelButton: true,
+    //   confirmButtonText: 'Add Note',
+    //   showLoaderOnConfirm: true,
+    //   preConfirm: login => {
+    //     return login
+    //   },
+    //   allowOutsideClick: () => !Swal.isLoading()
+    // }).then(async result => {
+    //   if (result.isConfirmed) {
+    //     Swal.fire({
+    //       icon: 'success',
+    //       title: `Note Created`,
+    //       text: result.value
+    //     })
+
+    //     await createActivity({
+    //       title: 'Note Added',
+    //       content: result.value || ' ',
+    //       customer: taskData.customer._id,
+    //       stepCategory: taskData.steps[activeStep].category._id,
+    //       task: taskData._id,
+    //       owner: loggedUser.user?._id || '',
+    //       step: activeStep,
+    //       type: EActivity.NORMAL_NOTE
+    //     })
+    //     dispatch(activityApi.util.resetApiState())
+    //   } else {
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: 'Cancelled'
+    //     })
+    //   }
+    // })
   }
 
   return (
@@ -162,11 +177,31 @@ const TaskInformations: React.FC<IProps> = ({
           </InformationCard>
 
           <ItemContainer margin="0 0 1rem 0">
-            <Button onClick={handleAddNewNote} color={colors.gray.middle}>
-              <H1 cursor="pointer" textAlign="center" color={colors.primary.dark}>
-                Add Note
-              </H1>
-            </Button>
+            <JustifyBetweenRow>
+              <ItemContainer width="100%">
+                <Button
+                  disabled={!isTaskNotStarted || !isResponsibleUserLoggedUser}
+                  color={colors.green.primary}
+                  onClick={handleStartTask}
+                >
+                  Start
+                </Button>
+              </ItemContainer>
+
+              <ItemContainer width="100%" margin="0 1rem">
+                <Button padding="0" width="100%" height="30px" color={colors.red.primary} onClick={handleCancelTask}>
+                  Cancel
+                </Button>
+              </ItemContainer>
+
+              <ItemContainer width="100%">
+                <Button onClick={handleAddNewNote} color={colors.gray.middle}>
+                  <H1 cursor="pointer" textAlign="center" color={colors.primary.dark}>
+                    Add Note
+                  </H1>
+                </Button>
+              </ItemContainer>
+            </JustifyBetweenRow>
           </ItemContainer>
         </JustifyBetweenColumn>
       ) : (

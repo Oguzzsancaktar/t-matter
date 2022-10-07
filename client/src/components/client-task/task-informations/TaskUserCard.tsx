@@ -73,6 +73,7 @@ const TaskUserCard: React.FC<IProps> = ({
               data-tip={customer.firstname + ' ' + customer.lastname}
               src={customer?.profile_img}
             />
+
             {/* <H1 textAlign="center" color={colors.text.primary} fontSize="0.8rem">
               Client
             </H1> */}
@@ -141,29 +142,6 @@ const TaskUserCard: React.FC<IProps> = ({
             </H1> */}
           </JustifyBetweenColumn>
         </ItemContainer>
-
-        {/* <ItemContainer width="calc(30px)">
-          <JustifyBetweenColumn width="auto">
-            <ItemContainer width="auto" margin="0 0 0.25rem 0" cursorType="pointer">
-              <Button
-                disabled={!isTaskNotStarted || !isResponsibleUserCurrentLoggedUser}
-                padding="0"
-                width="30px"
-                height="30px"
-                color={colors.green.primary}
-                onClick={handleStartTask}
-              >
-                <PlayCircle size={20} />
-              </Button>
-            </ItemContainer>
-
-            <ItemContainer width="auto">
-              <Button padding="0" width="30px" height="30px" color={colors.red.primary} onClick={handleCancelTask}>
-                <XCircle size={20} />
-              </Button>
-            </ItemContainer>
-          </JustifyBetweenColumn>
-        </ItemContainer> */}
       </JustifyBetweenRow>
     </ItemContainer>
   )

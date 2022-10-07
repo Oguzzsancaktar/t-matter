@@ -70,7 +70,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
       tempUpdatedTaskData.steps[activeStep].workedTimes = [...workArr, userWorkTime]
     }
 
-    console.log(111, tempUpdatedTaskData.steps[activeStep].workedTimes)
     setUpdatedTaskData(tempUpdatedTaskData)
   }
 
