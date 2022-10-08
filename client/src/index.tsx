@@ -8,6 +8,7 @@ import './styles/index.css'
 import './styles/vendors/react-select.css'
 import './styles/vendors/timekeeper.css'
 import './styles/vendors/react-data-table.css'
+import './styles/vendors/draft.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 

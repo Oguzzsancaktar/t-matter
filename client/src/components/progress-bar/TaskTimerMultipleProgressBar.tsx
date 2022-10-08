@@ -63,6 +63,7 @@ const TaskTimerMultipleProgressBar: React.FC<IProps> = ({
               <ProgressBarRow>
                 {workedTimes.map((work, index) => (
                   <ProgressBarCompletion
+                    key={index}
                     data-tip={
                       work.user.firstname +
                       ' ' +

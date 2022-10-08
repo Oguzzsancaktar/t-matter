@@ -36,7 +36,7 @@ const TaskEventSection: React.FC<IProps> = ({ task, activeStepNumber, taskData }
             <Tab name={'Note'} index={0} isActive={activeTab === 'note'} onClick={() => setActiveTab('note')} />
 
             {taskData.steps[activeStepNumber].tabs.map((tab, index) => (
-              <ItemContainer width="auto" padding="1rem 0">
+              <ItemContainer width="auto" padding="1rem 0" key={index}>
                 <Tab
                   name={tab.charAt(0).toUpperCase() + tab.slice(1)}
                   index={index}

@@ -9,6 +9,7 @@ import { NoteEditor } from '@/components/note-editor'
 interface IProps {
   headerText: string
 }
+
 const NoteEditorModal: React.FC<IProps> = ({ headerText }) => {
   return (
     <JustifyBetweenColumn height="100%">

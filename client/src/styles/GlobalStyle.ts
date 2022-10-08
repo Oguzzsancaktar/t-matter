@@ -29,12 +29,12 @@ const GlobalStyle = createGlobalStyle`
     }
   }
   * {
+    /* font-family: 'Satoshi-Regular';
+    font-size: 16px;
+    text-decoration: none; */
   box-sizing: border-box;
-  font-family: 'Satoshi-Regular';
   margin: 0;
   padding: 0;
-  font-size: 16px;
-  text-decoration: none;
 }
 .tooltip-z-index{
   z-index: 999999999999999!important;
