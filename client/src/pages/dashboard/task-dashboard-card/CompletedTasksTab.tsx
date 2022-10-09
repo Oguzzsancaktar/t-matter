@@ -22,7 +22,7 @@ import DataTable, { TableColumn } from 'react-data-table-component'
 import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 import { TASK_CONDITION_OPTIONS } from '@constants/task'
 import {
-  filterCompletedTasks,
+  filterCompletedTaskSteps,
   filterTaskStepsByCondition,
   isExpireCondition,
   isPostponeCondition,
@@ -44,7 +44,7 @@ const CompletedTasksTab = props => {
 
   useEffect(() => {
     if (data) {
-      setTaskSteps(filterCompletedTasks(filterTaskStepsByCondition(data, selectedCondition)))
+      setTaskSteps(filterCompletedTaskSteps(filterTaskStepsByCondition(data, selectedCondition)))
     }
   }, [data, selectedCondition])
 

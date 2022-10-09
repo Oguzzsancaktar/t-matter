@@ -62,12 +62,6 @@ const Head = () => {
     >
       <SmallBadge
         count={242}
-        text="Transfer"
-        color={'#ccc'}
-        onClick={handleShowTaskDashboardInfoModal.bind(this, 'NewTasksTab')}
-      />
-      <SmallBadge
-        count={242}
         text="New tasks"
         color={'#7adad1'}
         onClick={handleShowTaskDashboardInfoModal.bind(this, 'NewTasksTab')}
@@ -76,13 +70,19 @@ const Head = () => {
         count={242}
         text="Completed"
         color={'#3b4b8d'}
-        onClick={handleShowTaskDashboardInfoModal.bind(this, 'NewTasksTab')}
+        onClick={handleShowTaskDashboardInfoModal.bind(this, 'CompletedTasksTab')}
       />
       <SmallBadge
         count={242}
         text="Cancelled"
         color={'#ca5b5b'}
-        onClick={handleShowTaskDashboardInfoModal.bind(this, 'NewTasksTab')}
+        onClick={handleShowTaskDashboardInfoModal.bind(this, 'CancelledTasksTab')}
+      />
+      <SmallBadge
+        count={242}
+        text="Transfer"
+        color={'#ccc'}
+        onClick={handleShowTaskDashboardInfoModal.bind(this, 'TransferTasksTab')}
       />
     </div>
   )
