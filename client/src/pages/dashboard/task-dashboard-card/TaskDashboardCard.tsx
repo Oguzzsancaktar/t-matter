@@ -5,6 +5,9 @@ import { openModal } from '@/store'
 import { ESize } from '@/models'
 import TaskDashboardInfoModal from '@components/modals/dashboard/TaskDashboardInfoModal'
 import { TaskStepMonthlyAnalysisDashboardChart } from '@/components'
+import { useGetTaskStepsQuery } from '@services/customers/taskService'
+import { filterCancelledTaskSteps, filterCompletedTaskSteps, filterNewTaskSteps } from '@utils/taskUtil'
+import { useEffect, useState } from 'react'
 
 interface Props {}
 
@@ -34,6 +37,22 @@ const SmallBadge = ({ color, onClick, count, text }) => {
 const Head = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+  const { data, isLoading } = useGetTaskStepsQuery({})
+  const [counts, setCounts] = useState<{ new: number; completed: number; cancelled: number }>({
+    new: 0,
+    cancelled: 0,
+    completed: 0
+  })
+
+  useEffect(() => {
+    if (data) {
+      setCounts({
+        new: filterNewTaskSteps(data).length,
+        completed: filterCompletedTaskSteps(data).length,
+        cancelled: filterCancelledTaskSteps(data).length
+      })
+    }
+  }, [])
 
   const handleShowTaskDashboardInfoModal = page => {
     dispatch(
@@ -61,19 +80,19 @@ const Head = () => {
       }}
     >
       <SmallBadge
-        count={242}
+        count={counts.new}
         text="New tasks"
         color={'#7adad1'}
         onClick={handleShowTaskDashboardInfoModal.bind(this, 'NewTasksTab')}
       />
       <SmallBadge
-        count={242}
+        count={counts.completed}
         text="Completed"
         color={'#3b4b8d'}
         onClick={handleShowTaskDashboardInfoModal.bind(this, 'CompletedTasksTab')}
       />
       <SmallBadge
-        count={242}
+        count={counts.cancelled}
         text="Cancelled"
         color={'#ca5b5b'}
         onClick={handleShowTaskDashboardInfoModal.bind(this, 'CancelledTasksTab')}
