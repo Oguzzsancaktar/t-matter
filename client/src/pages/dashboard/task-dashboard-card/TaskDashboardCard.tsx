@@ -1,12 +1,10 @@
 import * as React from 'react'
 import { DashboardCard } from '@/pages'
 import useAccessStore from '@hooks/useAccessStore'
-import { FcBearish, FcBullish, FcTimeline, FcTodoList } from 'react-icons/fc'
 import { openModal } from '@/store'
 import { ESize } from '@/models'
 import TaskDashboardInfoModal from '@components/modals/dashboard/TaskDashboardInfoModal'
 import { TaskStepMonthlyAnalysisDashboardChart } from '@/components'
-import colors from '@constants/colors'
 
 interface Props {}
 
