@@ -1,13 +1,35 @@
 import * as React from 'react'
 import { DashboardCard } from '@/pages'
 import useAccessStore from '@hooks/useAccessStore'
-import { FcBearish, FcBullish, FcTimeline, FcTodoList } from 'react-icons/fc'
 import { openModal } from '@/store'
 import { ESize } from '@/models'
 import TaskDashboardInfoModal from '@components/modals/dashboard/TaskDashboardInfoModal'
 import { TaskStepMonthlyAnalysisDashboardChart } from '@/components'
 
 interface Props {}
+
+const SmallBadge = ({ color, onClick, count, text }) => {
+  return (
+    <div
+      onClick={onClick}
+      style={{ display: 'flex', alignItems: 'center', marginRight: 16, cursor: 'pointer', flexDirection: 'column' }}
+    >
+      <span style={{ fontSize: 10 }}>{count}</span>
+      <span
+        style={{
+          fontSize: 11,
+          padding: '1px 2px',
+          backgroundColor: color,
+          marginTop: 2,
+          color: 'white',
+          borderRadius: 2
+        }}
+      >
+        {text}
+      </span>
+    </div>
+  )
+}
 
 const Head = () => {
   const { useAppDispatch } = useAccessStore()
@@ -38,28 +60,30 @@ const Head = () => {
         height: '100%'
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', left: 0 }}>
-        <span style={{ marginRight: 2, fontSize: 10 }}>Avg:</span>
-        <span style={{ fontSize: 12 }}>$450</span>
-      </div>
-      <div
+      <SmallBadge
+        count={242}
+        text="Transfer"
+        color={'#ccc'}
         onClick={handleShowTaskDashboardInfoModal.bind(this, 'NewTasksTab')}
-        style={{ display: 'flex', alignItems: 'center', marginRight: 16, cursor: 'pointer' }}
-      >
-        <FcTimeline />
-        <span style={{ marginLeft: 4 }}>{222}</span>
-      </div>
-      <div
+      />
+      <SmallBadge
+        count={242}
+        text="New tasks"
+        color={'#7adad1'}
         onClick={handleShowTaskDashboardInfoModal.bind(this, 'NewTasksTab')}
-        style={{ display: 'flex', alignItems: 'center', marginRight: 16, cursor: 'pointer' }}
-      >
-        <FcTodoList />
-        <span style={{ marginLeft: 4 }}>111</span>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: 0 }}>
-        {false ? <FcBearish /> : <FcBullish />}
-        <span style={{ marginLeft: 4 }}>21%</span>
-      </div>
+      />
+      <SmallBadge
+        count={242}
+        text="Completed"
+        color={'#3b4b8d'}
+        onClick={handleShowTaskDashboardInfoModal.bind(this, 'NewTasksTab')}
+      />
+      <SmallBadge
+        count={242}
+        text="Cancelled"
+        color={'#ca5b5b'}
+        onClick={handleShowTaskDashboardInfoModal.bind(this, 'NewTasksTab')}
+      />
     </div>
   )
 }

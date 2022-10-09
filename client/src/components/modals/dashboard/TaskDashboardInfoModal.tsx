@@ -4,11 +4,13 @@ import React, { useState } from 'react'
 import NewTasksTab from '@pages/dashboard/task-dashboard-card/NewTasksTab'
 import CompletedTasksTab from '@pages/dashboard/task-dashboard-card/CompletedTasksTab'
 import CancelledTasksTab from '@pages/dashboard/task-dashboard-card/CancelledTasksTab'
+import TransferTasksTab from '@pages/dashboard/task-dashboard-card/TransferTasksTab'
 
 const Component = {
   NewTasksTab,
   CompletedTasksTab,
-  CancelledTasksTab
+  CancelledTasksTab,
+  TransferTasksTab
 }
 
 const TaskDashboardInfoModal: React.FC<{ page: string; dateRange?: { startDate: Date; endDate: Date } }> = ({
@@ -46,6 +48,13 @@ const TaskDashboardInfoModal: React.FC<{ page: string; dateRange?: { startDate: 
                   name="Cancelled"
                   isActive={activeTab === 'CancelledTasksTab'}
                   onClick={() => setActiveTab('CancelledTasksTab')}
+                />
+                <Tab
+                  margin="0 1rem 0 0rem"
+                  index={3}
+                  name="Transfer"
+                  isActive={activeTab === 'TransferTasksTab'}
+                  onClick={() => setActiveTab('TransferTasksTab')}
                 />
               </JustifyCenterRow>
             </JustifyBetweenColumn>
