@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { EditorState, convertToRaw, convertFromRaw, ContentState } from 'draft-js'
 import { Editor } from 'react-draft-wysiwyg'
@@ -6,18 +6,23 @@ import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs'
 import EditorColorPic from './EditorColorPic'
 
-import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { toastWarning } from '@/utils/toastUtil'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import { ItemContainer } from '../item-container'
+
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import { FaPause, FaRecordVinyl } from 'react-icons/fa'
+import { Pause, Voicemail } from 'react-feather'
+import { FcVoicePresentation } from 'react-icons/fc'
 
 const NoteEditor = () => {
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(searchQueryParams)
 
-  const [contentBlock, setContentBlock] = useState(htmlToDraft('<p>Hey this <strong>editor</strong> rocks 😀</p>'))
+  const [contentBlock, setContentBlock] = useState(htmlToDraft(''))
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
+
+  const editorRef = useRef()
 
   const mentionSuggestUsers = useMemo(
     () =>
@@ -29,13 +34,6 @@ const NoteEditor = () => {
     [usersData]
   )
 
-  const speechCommands = [
-    {
-      command: 'reset',
-      callback: () => resetTranscript()
-    }
-  ]
-
   const listenContinuously = () => {
     SpeechRecognition.startListening({
       continuous: true,
@@ -43,18 +41,16 @@ const NoteEditor = () => {
     })
   }
 
-  const { transcript, interimTranscript, finalTranscript, resetTranscript, listening } = useSpeechRecognition({
-    speechCommands
-  })
+  const { transcript, interimTranscript, finalTranscript, resetTranscript, listening } = useSpeechRecognition({})
+
+  const handleStopSpeech = e => {
+    e.preventDefault()
+    SpeechRecognition.stopListening()
+    resetTranscript()
+  }
 
   const onEditorStateChange = (state: EditorState) => {
     setEditorState(state)
-  }
-
-  const handleFocus = () => {
-    if (listening) {
-      toastWarning('You cant change text when recording on')
-    }
   }
 
   useEffect(() => {
@@ -67,10 +63,19 @@ const NoteEditor = () => {
   }, [contentBlock])
 
   useEffect(() => {
+    let text = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+      .slice(3)
+      .replace('</p>', '')
+      .replace('\n', ' ')
+
     if (transcript !== '') {
-      setContentBlock(htmlToDraft(transcript))
+      setContentBlock(htmlToDraft(text + finalTranscript))
     }
-  }, [transcript])
+
+    if (finalTranscript !== '') {
+      resetTranscript()
+    }
+  }, [finalTranscript])
 
   if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
     return null
@@ -82,26 +87,15 @@ const NoteEditor = () => {
 
   return (
     <ItemContainer height="100%">
-      <div>
-        <span>listening: {listening ? 'on' : 'off'}</span>
-        <div>
-          <button type="button" onClick={resetTranscript}>
-            Reset
-          </button>
-          <button type="button" onClick={listenContinuously}>
-            Listen
-          </button>
-          <button type="button" onClick={SpeechRecognition.stopListening}>
-            Stop
-          </button>
-        </div>
-      </div>
-      <div>
-        <span>{transcript}</span>
-      </div>
+      <ItemContainer>
+        {listening ? (
+          <FaPause size={40} onClick={handleStopSpeech} />
+        ) : (
+          <FcVoicePresentation size={40} onClick={listenContinuously} />
+        )}
+      </ItemContainer>
 
       <Editor
-        onFocus={handleFocus}
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
         wrapperClassName="note-editor-wrapper"
@@ -115,9 +109,11 @@ const NoteEditor = () => {
           suggestions: mentionSuggestUsers
         }}
         hashtag={{}}
+        placeholder="Enter your text..."
+        readOnly={listening}
       />
 
-      {/* <textarea disabled value={draftToHtml(convertToRaw(editorState.getCurrentContent()))} /> */}
+      <textarea disabled value={draftToHtml(convertToRaw(editorState.getCurrentContent()))} />
     </ItemContainer>
   )
 }
