@@ -1,6 +1,6 @@
 import * as React from 'react'
 import useAccessStore from '@hooks/useAccessStore'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import moment from 'moment/moment'
 import { useGetTaskStepsQuery } from '@services/customers/taskService'
 import {
@@ -8,6 +8,7 @@ import {
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterColumn,
+  JustifyCenterRow,
   NoTableData,
   SelectInput,
   TableSkeltonLoader,
@@ -19,6 +20,16 @@ import { INSTALLMENT_STATUS_OPTIONS } from '@constants/finance'
 import colors from '@constants/colors'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
+import { TASK_CONDITION_OPTIONS } from '@constants/task'
+import {
+  filterCompletedTasks,
+  filterTaskStepsByCondition,
+  isExpireCondition,
+  isPostponeCondition,
+  isTimerCondition,
+  taskStepConditionSelector
+} from '@utils/taskUtil'
+import { FcClock, FcExpired, FcLeave } from 'react-icons/fc'
 
 const CompletedTasksTab = props => {
   const { useAppDispatch } = useAccessStore()
@@ -27,7 +38,15 @@ const CompletedTasksTab = props => {
     startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('year').toDate(),
     endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
   })
+  const [selectedCondition, setSelectedCondition] = useState('ALL')
+  const [taskSteps, setTaskSteps] = useState<ITaskStep[]>([])
   const { data, isLoading } = useGetTaskStepsQuery(dateRange)
+
+  useEffect(() => {
+    if (data) {
+      setTaskSteps(filterCompletedTasks(filterTaskStepsByCondition(data, selectedCondition)))
+    }
+  }, [data, selectedCondition])
 
   const columns: TableColumn<ITaskStep>[] = [
     {
@@ -65,7 +84,18 @@ const CompletedTasksTab = props => {
       cell: d => d.name + ' - ' + d.steps.category.name
     },
     {
-      name: 'Conditions'
+      name: 'Conditions',
+      selector: taskStepConditionSelector,
+      sortable: true,
+      cell: d => {
+        return (
+          <JustifyBetweenRow>
+            <JustifyCenterRow>{isTimerCondition(d) && <FcLeave />}</JustifyCenterRow>
+            <JustifyCenterRow>{isPostponeCondition(d) && <FcClock />}</JustifyCenterRow>
+            <JustifyCenterRow>{isExpireCondition(d) && <FcExpired />}</JustifyCenterRow>
+          </JustifyBetweenRow>
+        )
+      }
     }
   ]
 
@@ -103,13 +133,13 @@ const CompletedTasksTab = props => {
         </div>
         <div style={{ minWidth: 200, marginLeft: 8, marginRight: 8 }}>
           <SelectInput
-            selectedOption={
-              [...INSTALLMENT_STATUS_OPTIONS, { label: 'All', value: 'ALL' }]?.filter(x => x.value === 'ALL') || []
-            }
+            selectedOption={[...TASK_CONDITION_OPTIONS]?.filter(x => x.value === selectedCondition) || []}
             labelText="Conditions"
-            onChange={o => {}}
+            onChange={o => {
+              setSelectedCondition(o.value)
+            }}
             name="conditions"
-            options={[...INSTALLMENT_STATUS_OPTIONS, { label: 'All', value: 'ALL' }]}
+            options={[...TASK_CONDITION_OPTIONS]}
           />
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', flex: 1, height: '100%', paddingBottom: 3 }}>
@@ -151,12 +181,12 @@ const CompletedTasksTab = props => {
           <ItemContainer height="100%">
             <TableSkeltonLoader count={13} />
           </ItemContainer>
-        ) : data && data.length > 0 ? (
+        ) : taskSteps && taskSteps.length > 0 ? (
           <DataTable
             className="data-table"
             fixedHeader
             columns={columns}
-            data={data || []}
+            data={taskSteps || []}
             // onRowClicked={handleRowClicked}
           />
         ) : (
