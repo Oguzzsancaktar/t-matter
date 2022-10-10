@@ -1,6 +1,7 @@
 import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 import moment from 'moment'
 import { TASK_CONDITIONS } from '@constants/task'
+import { EStatus, ETaskStatus } from '@/models'
 
 const isTimerCondition = (taskStep: ITaskStep) => {
   const totalUsedTime = taskStep.steps.workedTimes.reduce((acc, user) => {
@@ -37,12 +38,18 @@ const taskStepConditionSelector = (taskStep: ITaskStep) => {
   return count
 }
 
-const filterCompletedTasks = (tasks: ITaskStep[]) => {
+const filterCompletedTaskSteps = (tasks: ITaskStep[]) => {
   return tasks.filter(task => task.steps.checklistItems.every(item => item.isChecked))
 }
 
-const filterNewTasks = (tasks: ITaskStep[]) => {
-  return tasks.filter(task => task.steps.checklistItems.some(item => !item.isChecked))
+const filterNewTaskSteps = (tasks: ITaskStep[]) => {
+  return tasks.filter(
+    task => task.steps.checklistItems.some(item => !item.isChecked) && task.steps.stepStatus !== ETaskStatus.Canceled
+  )
+}
+
+const filterCancelledTaskSteps = (tasks: ITaskStep[]) => {
+  return tasks.filter(task => task.steps.stepStatus === ETaskStatus.Canceled)
 }
 
 const filterTaskStepsByCondition = (tasks: ITaskStep[], conditionType: string): ITaskStep[] => {
@@ -67,6 +74,7 @@ export {
   isExpireCondition,
   taskStepConditionSelector,
   filterTaskStepsByCondition,
-  filterCompletedTasks,
-  filterNewTasks
+  filterCompletedTaskSteps,
+  filterNewTaskSteps,
+  filterCancelledTaskSteps
 }
