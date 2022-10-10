@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { ApexOptions } from 'apexcharts'
 import { secondsToHourMin } from '@utils/timeUtils'
 
-const TaskStepMonthlyAnalysisDashboardChart = () => {
+const TaskStepMonthlyAnalysisDashboardChart = ({ onSelectBar }) => {
   const { data } = useGetTaskStepMonthlyAnalysisDataQuery()
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
@@ -12,6 +12,11 @@ const TaskStepMonthlyAnalysisDashboardChart = () => {
       height: 350,
       toolbar: {
         show: false
+      },
+      events: {
+        dataPointSelection: (event, chartContext, config) => {
+          onSelectBar(config.w.config.series[config.seriesIndex].data[config.dataPointIndex])
+        }
       }
     },
     plotOptions: {

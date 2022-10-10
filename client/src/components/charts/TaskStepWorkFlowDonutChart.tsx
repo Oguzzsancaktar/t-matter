@@ -81,7 +81,7 @@ const TaskStepWorkFlowDonutChart = ({ dateRange }) => {
       })
       setSeries(series)
     }
-  }, [])
+  }, [data])
 
   return (
     <div style={{ height: '100%' }}>

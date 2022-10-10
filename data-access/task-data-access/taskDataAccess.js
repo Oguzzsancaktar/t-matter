@@ -214,7 +214,9 @@ const getTaskStepMonthlyAnalysisData = async ({ responsibleUserId }) => {
     },
     {
       $match: {
-        'steps.responsibleUser': mongoose.Types.ObjectId(responsibleUserId)
+        'steps.responsibleUser': mongoose.Types.ObjectId(responsibleUserId),
+        'steps.stepStatus': { $ne: 0 },
+        'steps.checklistItems': { $elemMatch: { isChecked: { $eq: false } } }
       }
     },
     {

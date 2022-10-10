@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import moment from 'moment/moment'
 import { useGetTaskStepsQuery } from '@services/customers/taskService'
 import {
+  CustomerTaskModal,
   DatePicker,
   ItemContainer,
   JustifyBetweenRow,
@@ -23,12 +24,15 @@ import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 import { TASK_CONDITION_OPTIONS } from '@constants/task'
 import {
   filterTaskStepsByCondition,
+  filterTransferTaskSteps,
   isExpireCondition,
   isPostponeCondition,
   isTimerCondition,
   taskStepConditionSelector
 } from '@utils/taskUtil'
 import { FcClock, FcExpired, FcLeave } from 'react-icons/fc'
+import { openModal } from '@/store'
+import { ESize } from '@/models'
 
 const CompletedTasksTab = props => {
   const { useAppDispatch } = useAccessStore()
@@ -43,7 +47,7 @@ const CompletedTasksTab = props => {
 
   useEffect(() => {
     if (data) {
-      setTaskSteps(filterTaskStepsByCondition(data, selectedCondition))
+      setTaskSteps(filterTransferTaskSteps(filterTaskStepsByCondition(data, selectedCondition), 140))
     }
   }, [data, selectedCondition])
 
@@ -97,6 +101,20 @@ const CompletedTasksTab = props => {
       }
     }
   ]
+
+  const handleRowClicked = (row: ITaskStep) => {
+    dispatch(
+      openModal({
+        id: 'customerTaksModal' + row._id,
+        title: 'Customer Task',
+        body: <CustomerTaskModal customer={row.customer} customerId={row.customer?._id} taskId={row._id as string} />,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
+        maxWidth: ESize.WXLarge,
+        backgroundColor: colors.gray.light
+      })
+    )
+  }
 
   return (
     <ItemContainer padding="1rem" height="100%">
@@ -186,7 +204,7 @@ const CompletedTasksTab = props => {
             fixedHeader
             columns={columns}
             data={taskSteps || []}
-            // onRowClicked={handleRowClicked}
+            onRowClicked={handleRowClicked}
           />
         ) : (
           <NoTableData />

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import moment from 'moment/moment'
 import { useGetTaskStepsQuery } from '@services/customers/taskService'
 import {
+  CustomerTaskModal,
   DatePicker,
   ItemContainer,
   JustifyBetweenRow,
@@ -29,6 +30,8 @@ import {
   taskStepConditionSelector
 } from '@utils/taskUtil'
 import { FcClock, FcExpired, FcLeave } from 'react-icons/fc'
+import { openModal } from '@/store'
+import { ESize } from '@/models'
 
 const NewTasksTab = props => {
   const { useAppDispatch } = useAccessStore()
@@ -97,6 +100,20 @@ const NewTasksTab = props => {
       }
     }
   ]
+
+  const handleRowClicked = (row: ITaskStep) => {
+    dispatch(
+      openModal({
+        id: 'customerTaksModal' + row._id,
+        title: 'Customer Task',
+        body: <CustomerTaskModal customer={row.customer} customerId={row.customer?._id} taskId={row._id as string} />,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
+        maxWidth: ESize.WXLarge,
+        backgroundColor: colors.gray.light
+      })
+    )
+  }
 
   return (
     <ItemContainer padding="1rem" height="100%">
@@ -186,7 +203,7 @@ const NewTasksTab = props => {
             fixedHeader
             columns={columns}
             data={taskSteps || []}
-            // onRowClicked={handleRowClicked}
+            onRowClicked={handleRowClicked}
           />
         ) : (
           <NoTableData />

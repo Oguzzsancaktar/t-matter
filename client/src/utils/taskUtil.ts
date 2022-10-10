@@ -52,6 +52,30 @@ const filterCancelledTaskSteps = (tasks: ITaskStep[]) => {
   return tasks.filter(task => task.steps.stepStatus === ETaskStatus.Canceled)
 }
 
+const filterTransferTaskSteps = (tasks: ITaskStep[], workingHours: number) => {
+  const tempTasks = [...tasks]
+  let totalWorkingHours = filterNewTaskSteps(tempTasks).reduce((acc, task) => {
+    return acc + task.steps.checklistItems.reduce((acc, item) => acc + item.duration, 0)
+  }, 0)
+  totalWorkingHours = totalWorkingHours / 3600
+  console.log(totalWorkingHours)
+  const rest = totalWorkingHours - workingHours
+  if (rest > 0) {
+    const result: ITaskStep[] = []
+    let total = 0
+    for (let i = 0; i < tempTasks.length; i++) {
+      const task = tempTasks[i]
+      const duration = task.steps.checklistItems.reduce((acc, item) => acc + item.duration, 0) / 3600
+      if (duration + total <= rest) {
+        total += duration
+        result.push(task)
+      }
+    }
+    return result
+  }
+  return tempTasks
+}
+
 const filterTaskStepsByCondition = (tasks: ITaskStep[], conditionType: string): ITaskStep[] => {
   if (conditionType === 'ALL') {
     return tasks
@@ -76,5 +100,6 @@ export {
   filterTaskStepsByCondition,
   filterCompletedTaskSteps,
   filterNewTaskSteps,
-  filterCancelledTaskSteps
+  filterCancelledTaskSteps,
+  filterTransferTaskSteps
 }
