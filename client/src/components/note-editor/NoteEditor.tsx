@@ -110,7 +110,6 @@ const NoteEditor = () => {
         }}
         hashtag={{}}
         placeholder="Enter your text..."
-        readOnly={listening}
       />
 
       <textarea disabled value={draftToHtml(convertToRaw(editorState.getCurrentContent()))} />
