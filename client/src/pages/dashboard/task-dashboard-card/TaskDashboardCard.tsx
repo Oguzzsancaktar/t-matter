@@ -52,7 +52,7 @@ const Head = () => {
         cancelled: filterCancelledTaskSteps(data).length
       })
     }
-  }, [])
+  }, [data])
 
   const handleShowTaskDashboardInfoModal = page => {
     dispatch(
