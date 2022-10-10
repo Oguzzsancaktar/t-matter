@@ -62,7 +62,6 @@ const BaloonContent = styled.div`
   height: auto;
   font-size: 1rem;
   font-weight: 300;
-  font-family: 'Satoshi-Light';
   color: ${colors.text.primary};
   flex: 1;
   word-break: break-all;
@@ -142,7 +141,9 @@ const Baloon: React.FC<IProps> = ({ task, customer, title, content, date, links,
         </Column>
       </BaloonHeader>
       <BaloonBody>
-        <BaloonContent>{content}</BaloonContent>
+        <BaloonContent>
+          <div dangerouslySetInnerHTML={{ __html: content }} />
+        </BaloonContent>
       </BaloonBody>
       <BaloonFooter>
         {links &&

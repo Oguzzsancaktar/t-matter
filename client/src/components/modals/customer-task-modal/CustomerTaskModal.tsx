@@ -5,17 +5,27 @@ import { Row } from '@/components/layout'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
-import { ICustomer, ICustomerTask, ETaskStatus, EActivity, IUser, ITaskChecklist, ITaskUserWorkTime } from '@/models'
+import {
+  ICustomer,
+  ICustomerTask,
+  ETaskStatus,
+  EActivity,
+  IUser,
+  ITaskChecklist,
+  ITaskUserWorkTime,
+  ESize
+} from '@/models'
 import { useCreateActivityMutation, activityApi } from '@/services/activityService'
 import { useUpdateTaskMutation, useGetTaskByTaskIdQuery } from '@/services/customers/taskService'
 import { useCreateExpiredTaskStepMutation } from '@/services/settings/finance-planning/financePlanningService'
-import { setModalOnClose } from '@/store'
+import { closeModal, openModal, setModalOnClose } from '@/store'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { ModalBody } from '../types'
 import TaskInformations from '@/components/client-task/task-informations/TaskInformations'
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
+import { NoteEditorModal } from '@/components'
 
 const SwalReactContent = withReactContent(Swal)
 
@@ -73,61 +83,49 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     setUpdatedTaskData(tempUpdatedTaskData)
   }
 
-  const handleCancelTask = async () => {
-    try {
-      if (updatedTaskData) {
-        SwalReactContent.fire({
-          title: 'Enter your cancel message',
-          input: 'textarea',
-          html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
-          inputAttributes: {
-            autocapitalize: 'off'
-          },
-          showCancelButton: true,
-          confirmButtonText: 'Cancel Task',
-          showLoaderOnConfirm: true,
-          preConfirm: login => {
-            return login
-          },
-          allowOutsideClick: () => !Swal.isLoading()
-        }).then(async result => {
-          const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+  const handleConfirmCancelTask = async (timerVal, noteContent) => {
+    dispatch(closeModal(`NoteEditorModal-cancel-${taskData?._id}`))
 
-          if (result.isConfirmed) {
-            Swal.fire({
-              icon: 'success',
-              title: `Task Canceled`,
-              text: result.value
-            })
+    const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
 
-            tempUpdatedTaskData.status = ETaskStatus.Canceled
-            tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Canceled
+    tempUpdatedTaskData.status = ETaskStatus.Canceled
+    tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Canceled
 
-            await updateTask(tempUpdatedTaskData)
-            await createActivity({
-              title: 'Task Canceled',
-              stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
-              content: result.value || ' ',
-              customer: tempUpdatedTaskData.customer._id,
-              task: tempUpdatedTaskData._id,
-              owner: loggedUser.user?._id || '',
-              step: activeStep,
-              type: EActivity.TASK_CANCELED
-            })
-            dispatch(activityApi.util.resetApiState())
+    await updateTask(tempUpdatedTaskData)
 
-            setUpdatedTaskData({ ...tempUpdatedTaskData })
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Cancelled'
-            })
-          }
-        })
-      }
-    } catch (error) {
-      console.log(error)
-    }
+    await createActivity({
+      title: 'Task Canceled',
+
+      content: noteContent,
+      usedTime: timerVal,
+      customer: tempUpdatedTaskData.customer._id,
+      stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
+      task: tempUpdatedTaskData._id,
+      owner: loggedUser.user?._id || '',
+      step: activeStep,
+      type: EActivity.TASK_CANCELED
+    })
+    dispatch(activityApi.util.resetApiState())
+    setUpdatedTaskData({ ...tempUpdatedTaskData })
+  }
+
+  const handleCancelTask = () => {
+    dispatch(
+      openModal({
+        id: `NoteEditorModal-cancel-${updatedTaskData?._id}`,
+        title: 'Cancel Note',
+        body: (
+          <NoteEditorModal
+            id={`NoteEditorModal-cancel-${updatedTaskData?._id}`}
+            headerText={`Cancel Note ( ${customer.firstname + ' ' + customer.lastname} / ${updatedTaskData?.name} )`}
+            cb={handleConfirmCancelTask}
+          />
+        ),
+        height: ESize.HMedium,
+        width: ESize.WMedium,
+        maxWidth: ESize.WMedium
+      })
+    )
   }
 
   const handleStepChange = (step: number) => {
@@ -144,120 +142,106 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     setActiveStep(step)
   }
 
+  const handleConfirmPostponeChange = async (timerVal, noteContent, dateText: string) => {
+    dispatch(closeModal(`NoteEditorModal-postpone-${taskData?._id}`))
+
+    const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+
+    tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
+    tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
+
+    await updateTask(tempUpdatedTaskData)
+    await createActivity({
+      title: 'Task Postponed',
+      content: noteContent,
+      usedTime: timerVal,
+      stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
+      customer: tempUpdatedTaskData.customer._id,
+      task: tempUpdatedTaskData._id,
+      owner: loggedUser.user?._id || '',
+      step: activeStep,
+      type: EActivity.TASK_POSTPONED
+    })
+    dispatch(activityApi.util.resetApiState())
+
+    setUpdatedTaskData({ ...tempUpdatedTaskData })
+  }
+
   const handlePostponeChange = async (value: Date[], dateText: string) => {
-    try {
-      if (updatedTaskData) {
-        SwalReactContent.fire({
-          title: 'Enter your postpone message',
-          input: 'textarea',
-          html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
-          inputAttributes: {
-            autocapitalize: 'off'
-          },
-          showCancelButton: true,
-          confirmButtonText: 'Postponed',
-          showLoaderOnConfirm: true,
-          preConfirm: login => {
-            return login
-          },
-          allowOutsideClick: () => !Swal.isLoading()
-        }).then(async result => {
-          const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
-
-          if (result.isConfirmed) {
-            Swal.fire({
-              icon: 'success',
-              title: `Task Postponed`,
-              text: result.value
-            })
-
-            tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
-            tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
-
-            await updateTask(tempUpdatedTaskData)
-            await createActivity({
-              title: 'Task Postponed',
-              content: result.value || ' ',
-              stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
-
-              customer: tempUpdatedTaskData.customer._id,
-              task: tempUpdatedTaskData._id,
-              owner: loggedUser.user?._id || '',
-              step: activeStep,
-              type: EActivity.TASK_POSTPONED
-            })
-            dispatch(activityApi.util.resetApiState())
-
-            setUpdatedTaskData({ ...tempUpdatedTaskData })
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Cancelled'
-            })
-          }
+    if (
+      (updatedTaskData?.steps[activeStep].usedPostpone || 0) >= (updatedTaskData?.steps[activeStep].postponeTime || 0)
+    ) {
+      dispatch(
+        openModal({
+          id: `NoteEditorModal-postpone-${updatedTaskData?._id}`,
+          title: 'Postpone Note',
+          body: (
+            <NoteEditorModal
+              id={`NoteEditorModal-postpone-${updatedTaskData?._id}`}
+              headerText={`Cancel Note ( ${customer.firstname + ' ' + customer.lastname} / ${updatedTaskData?.name} )`}
+              cb={(timerVal, noteContent) => handleConfirmPostponeChange(timerVal, noteContent, dateText)}
+            />
+          ),
+          height: ESize.HMedium,
+          width: ESize.WMedium,
+          maxWidth: ESize.WMedium
         })
-      }
-    } catch (error) {
-      console.log(error)
+      )
+    } else {
+      const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+
+      tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
+      tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
+
+      await updateTask(tempUpdatedTaskData)
+      setUpdatedTaskData({ ...tempUpdatedTaskData })
     }
   }
 
+  const handleConfirmResponsibleChange = async (timerVal, noteContent, responsible: IUser) => {
+    dispatch(closeModal(`NoteEditorModal-responsible-${taskData?._id}`))
+
+    const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
+
+    tempUpdatedTaskData.steps[activeStep].responsibleUser = responsible
+    tempUpdatedTaskData.steps[activeStep].addedFrom = loggedUser.user
+
+    await updateTask(tempUpdatedTaskData)
+
+    await createActivity({
+      title: 'Task Responsible Changed',
+
+      content: noteContent,
+      usedTime: timerVal,
+      customer: tempUpdatedTaskData.customer._id,
+      stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
+      task: tempUpdatedTaskData._id,
+      owner: loggedUser.user?._id || '',
+      step: activeStep,
+      type: EActivity.TASK_RESPONSIBLE_CHANGED
+    })
+
+    dispatch(activityApi.util.resetApiState())
+    setUpdatedTaskData({ ...tempUpdatedTaskData })
+  }
+
   const handleResponsibleChange = (responsible: IUser) => {
-    try {
-      if (updatedTaskData) {
-        SwalReactContent.fire({
-          title: 'Enter your responsible change message',
-          input: 'textarea',
-          html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
-          inputAttributes: {
-            autocapitalize: 'off'
-          },
-
-          showCancelButton: true,
-          confirmButtonText: 'Change Responsible',
-          showLoaderOnConfirm: true,
-          preConfirm: login => {
-            return login
-          },
-          allowOutsideClick: () => !Swal.isLoading()
-        }).then(async result => {
-          const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
-
-          if (result.isConfirmed) {
-            Swal.fire({
-              icon: 'success',
-              title: `Task Postponed`,
-              text: result.value
-            })
-
-            tempUpdatedTaskData.steps[activeStep].responsibleUser = responsible
-            tempUpdatedTaskData.steps[activeStep].addedFrom = loggedUser.user
-
-            await updateTask(tempUpdatedTaskData)
-            await createActivity({
-              title: 'Task Responsible Changed',
-              content: result.value.toString() || ' ',
-              stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
-              customer: tempUpdatedTaskData.customer._id,
-              task: tempUpdatedTaskData._id,
-              owner: loggedUser.user?._id || '',
-              step: activeStep,
-              type: EActivity.TASK_RESPONSIBLE_CHANGED
-            })
-            dispatch(activityApi.util.resetApiState())
-
-            setUpdatedTaskData({ ...tempUpdatedTaskData })
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Cancelled'
-            })
-          }
-        })
-      }
-    } catch (error) {
-      console.log(error)
-    }
+    dispatch(
+      openModal({
+        id: `NoteEditorModal-responsible-${updatedTaskData?._id}`,
+        title: 'Cancel Note',
+        body: (
+          <NoteEditorModal
+            id={`NoteEditorModal-responsible-${updatedTaskData?._id}`}
+            headerText={`Cancel Note ( ${customer.firstname + ' ' + customer.lastname} / ${updatedTaskData?.name} )`}
+            cb={(timerVal, noteContent) => handleConfirmResponsibleChange(timerVal, noteContent, responsible)}
+          />
+        ),
+        height: ESize.HMedium,
+        width: ESize.WMedium,
+        maxWidth: ESize.WMedium
+      })
+    )
   }
 
   const handleAllChecklistCheck = async (tempUpdatedTaskData, index: number, activityContent: string) => {
