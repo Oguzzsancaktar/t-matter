@@ -257,7 +257,8 @@ const {
   useGetUsedTaskWorkflowCountsQuery,
   useGetTaskCountForMonthsDataQuery,
   useGetTaskStepMonthlyAnalysisDataQuery,
-  useGetTaskStepsQuery
+  useGetTaskStepsQuery,
+  useLazyGetTaskStepsQuery
 } = taskApi
 export {
   taskApi,
@@ -272,5 +273,6 @@ export {
   useGetUsedTaskWorkflowCountsQuery,
   useGetTaskCountForMonthsDataQuery,
   useGetTaskStepMonthlyAnalysisDataQuery,
-  useGetTaskStepsQuery
+  useGetTaskStepsQuery,
+  useLazyGetTaskStepsQuery
 }

@@ -6,7 +6,12 @@ import { ESize } from '@/models'
 import TaskDashboardInfoModal from '@components/modals/dashboard/TaskDashboardInfoModal'
 import { TaskStepMonthlyAnalysisDashboardChart } from '@/components'
 import { useGetTaskStepsQuery } from '@services/customers/taskService'
-import { filterCancelledTaskSteps, filterCompletedTaskSteps, filterNewTaskSteps } from '@utils/taskUtil'
+import {
+  filterCancelledTaskSteps,
+  filterCompletedTaskSteps,
+  filterNewTaskSteps,
+  filterTransferTaskSteps
+} from '@utils/taskUtil'
 import { useEffect, useState } from 'react'
 
 interface Props {}
@@ -38,10 +43,11 @@ const Head = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
   const { data, isLoading } = useGetTaskStepsQuery({})
-  const [counts, setCounts] = useState<{ new: number; completed: number; cancelled: number }>({
+  const [counts, setCounts] = useState<{ new: number; completed: number; cancelled: number; transfer: number }>({
     new: 0,
     cancelled: 0,
-    completed: 0
+    completed: 0,
+    transfer: 0
   })
 
   useEffect(() => {
@@ -49,7 +55,8 @@ const Head = () => {
       setCounts({
         new: filterNewTaskSteps(data).length,
         completed: filterCompletedTaskSteps(data).length,
-        cancelled: filterCancelledTaskSteps(data).length
+        cancelled: filterCancelledTaskSteps(data).length,
+        transfer: filterTransferTaskSteps(data, 140).length
       })
     }
   }, [data])
@@ -98,7 +105,7 @@ const Head = () => {
         onClick={handleShowTaskDashboardInfoModal.bind(this, 'CancelledTasksTab')}
       />
       <SmallBadge
-        count={242}
+        count={counts.transfer}
         text="Transfer"
         color={'#ccc'}
         onClick={handleShowTaskDashboardInfoModal.bind(this, 'TransferTasksTab')}
@@ -108,9 +115,26 @@ const Head = () => {
 }
 
 const TaskDashboardCard = Props => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   return (
     <DashboardCard head={<Head />}>
-      <TaskStepMonthlyAnalysisDashboardChart />
+      <TaskStepMonthlyAnalysisDashboardChart
+        onSelectBar={x => {
+          dispatch(
+            openModal({
+              id: `taskInfoModal`,
+              title: 'Tasks info',
+              body: <TaskDashboardInfoModal page="NewTasksTab" />,
+              width: ESize.WLarge,
+              maxWidth: ESize.WLarge,
+              height: ESize.WXLarge,
+              backgroundColor: 'transparent'
+            })
+          )
+        }}
+      />
     </DashboardCard>
   )
 }
