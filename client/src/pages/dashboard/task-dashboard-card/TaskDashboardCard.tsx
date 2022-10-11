@@ -13,6 +13,8 @@ import {
   filterTransferTaskSteps
 } from '@utils/taskUtil'
 import { useEffect, useState } from 'react'
+import { groupBy } from 'lodash'
+import moment from 'moment'
 
 interface Props {}
 
@@ -52,11 +54,12 @@ const Head = () => {
 
   useEffect(() => {
     if (data) {
+      const tasks = filterNewTaskSteps(groupBy(data, d => moment(d.steps.startDate).month())[moment().month()])
       setCounts({
         new: filterNewTaskSteps(data).length,
         completed: filterCompletedTaskSteps(data).length,
         cancelled: filterCancelledTaskSteps(data).length,
-        transfer: filterTransferTaskSteps(data, 140).length
+        transfer: filterTransferTaskSteps(tasks, 140).length
       })
     }
   }, [data])

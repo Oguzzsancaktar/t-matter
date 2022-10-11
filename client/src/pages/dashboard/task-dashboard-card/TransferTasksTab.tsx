@@ -38,8 +38,8 @@ const CompletedTasksTab = props => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
   const [dateRange, setDateRange] = useState({
-    startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('year').toDate(),
-    endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
+    startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('month').toDate(),
+    endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('month').toDate()
   })
   const [selectedCondition, setSelectedCondition] = useState('ALL')
   const [taskSteps, setTaskSteps] = useState<ITaskStep[]>([])
