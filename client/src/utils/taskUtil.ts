@@ -76,7 +76,6 @@ const filterTransferTaskSteps = (tasks: ITaskStep[], workingHours: number) => {
         result.push(task)
       }
     }
-    console.log(result)
     return result
   }
   return []
