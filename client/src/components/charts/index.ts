@@ -9,3 +9,5 @@ export { default as TaskStepMonthlyAnalysisDashboardChart } from './TaskStepMont
 export { default as TaskStepWorkFlowDonutChart } from './TaskStepWorkFlowDonutChart'
 export { default as TaskStepMostlyAddedUser } from './TaskStepMostlyAddedUser'
 export { default as TaskStepYearlyCountBarChart } from './TaskStepYearlyCountBarChart'
+export { default as TaskStepConditionDonutChart } from './TaskStepConditionDonutChart'
+export { default as TaskStepLostTimeProgressChart } from './TaskStepLostTimeProgressChart'

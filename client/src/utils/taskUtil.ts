@@ -1,19 +1,22 @@
 import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 import moment from 'moment'
 import { TASK_CONDITIONS } from '@constants/task'
-import { EStatus, ETaskStatus } from '@/models'
+import { ETaskStatus } from '@/models'
 
-const isTimerCondition = (taskStep: ITaskStep) => {
-  const totalUsedTime = taskStep.steps.workedTimes.reduce((acc, user) => {
+const getTaskStepTotalWorkingTime = (taskStep: ITaskStep) => {
+  return taskStep.steps.workedTimes.reduce((acc, user) => {
     return acc + user.time
   }, 0)
+}
 
-  return (
-    totalUsedTime >=
-    taskStep.steps.checklistItems.reduce((acc, item) => {
-      return acc + item.duration
-    }, 0)
-  )
+const getTaskStepTotalTime = (taskStep: ITaskStep) => {
+  return taskStep.steps.checklistItems.reduce((acc, item) => {
+    return acc + item.duration
+  }, 0)
+}
+
+const isTimerCondition = (taskStep: ITaskStep) => {
+  return getTaskStepTotalWorkingTime(taskStep) >= getTaskStepTotalTime(taskStep)
 }
 
 const isPostponeCondition = (taskStep: ITaskStep) => {
@@ -54,17 +57,18 @@ const filterCancelledTaskSteps = (tasks: ITaskStep[]) => {
 
 const filterTransferTaskSteps = (tasks: ITaskStep[], workingHours: number) => {
   const tempTasks = [...tasks]
-  let totalWorkingHours = filterNewTaskSteps(tempTasks).reduce((acc, task) => {
+  const newTasks = filterNewTaskSteps(tempTasks)
+  let totalWorkingHours = newTasks.reduce((acc, task) => {
     return acc + task.steps.checklistItems.reduce((acc, item) => acc + item.duration, 0)
   }, 0)
   totalWorkingHours = totalWorkingHours / 3600
-  console.log(totalWorkingHours)
+
   const rest = totalWorkingHours - workingHours
   if (rest > 0) {
     const result: ITaskStep[] = []
     let total = 0
-    for (let i = 0; i < tempTasks.length; i++) {
-      const task = tempTasks[i]
+    for (let i = 0; i < newTasks.length; i++) {
+      const task = newTasks[i]
       const duration = task.steps.checklistItems.reduce((acc, item) => acc + item.duration, 0) / 3600
       if (duration + total <= rest) {
         total += duration
@@ -101,5 +105,7 @@ export {
   filterCompletedTaskSteps,
   filterNewTaskSteps,
   filterCancelledTaskSteps,
-  filterTransferTaskSteps
+  filterTransferTaskSteps,
+  getTaskStepTotalWorkingTime,
+  getTaskStepTotalTime
 }

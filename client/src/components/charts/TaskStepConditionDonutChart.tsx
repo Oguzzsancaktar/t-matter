@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import colors from '@constants/colors'
 import ReactApexChart from 'react-apexcharts'
-import { groupBy } from 'lodash'
+import { isExpireCondition, isPostponeCondition, isTimerCondition } from '@utils/taskUtil'
 
-const TaskStepWorkFlowDonutChart = ({ taskSteps }) => {
+const TaskStepConditionDonutChart = ({ taskSteps }) => {
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
       height: 160,
@@ -27,7 +27,7 @@ const TaskStepWorkFlowDonutChart = ({ taskSteps }) => {
               showAlways: true,
               fontSize: '22px',
               fontWeight: 500,
-              label: 'Workflows',
+              label: 'Conditions',
               color: colors.text.primary,
               formatter: function (w) {
                 return ''
@@ -65,18 +65,30 @@ const TaskStepWorkFlowDonutChart = ({ taskSteps }) => {
       }
     }
   })
-  const [series, setSeries] = useState<ApexCharts.ApexOptions['series']>([])
+  const [series, setSeries] = useState<ApexCharts.ApexOptions['series']>([1, 2])
 
   useEffect(() => {
     if (taskSteps) {
-      const groups = groupBy(taskSteps, 'name')
-      const series = Object.keys(groups).map(key => groups[key].length)
-      const labels = Object.keys(groups)
+      const { timer, expire, postpone } = taskSteps.reduce(
+        (acc, curr) => {
+          if (isTimerCondition(curr)) {
+            acc.timer++
+          }
+          if (isExpireCondition(curr)) {
+            acc.expire++
+          }
+          if (isPostponeCondition(curr)) {
+            acc.postpone++
+          }
+          return acc
+        },
+        { timer: 0, expire: 0, postpone: 0 }
+      )
       setOptions({
         ...options,
-        labels
+        labels: ['timer', 'expire', 'postpone']
       })
-      setSeries(series)
+      setSeries([timer, expire, postpone])
     }
   }, [taskSteps])
 
@@ -86,4 +98,5 @@ const TaskStepWorkFlowDonutChart = ({ taskSteps }) => {
     </div>
   )
 }
-export default TaskStepWorkFlowDonutChart
+
+export default TaskStepConditionDonutChart
