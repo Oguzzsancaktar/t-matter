@@ -59,24 +59,27 @@ const filterTransferTaskSteps = (tasks: ITaskStep[], workingHours: number) => {
   const tempTasks = [...tasks]
   const newTasks = filterNewTaskSteps(tempTasks)
   let totalWorkingHours = newTasks.reduce((acc, task) => {
-    return acc + getTaskStepTotalWorkingTime(task)
+    return acc + getTaskStepTotalTime(task)
   }, 0)
   totalWorkingHours = totalWorkingHours / 3600
   const rest = totalWorkingHours - workingHours
+
   if (rest > 0) {
     const result: ITaskStep[] = []
     let total = 0
     for (let i = 0; i < newTasks.length; i++) {
       const task = newTasks[i]
       const duration = getTaskStepTotalWorkingTime(task) / 3600
+
       if (duration + total <= rest) {
-        total += duration
+        total = total + duration
         result.push(task)
       }
     }
+    console.log(result)
     return result
   }
-  return tempTasks
+  return []
 }
 
 const filterTaskStepsByCondition = (tasks: ITaskStep[], conditionType: string): ITaskStep[] => {
