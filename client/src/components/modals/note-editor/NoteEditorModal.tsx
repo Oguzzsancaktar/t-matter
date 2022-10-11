@@ -5,12 +5,26 @@ import { H1 } from '@/components/texts'
 import { ModalHeader, ModalBody } from '../types'
 import colors from '@/constants/colors'
 import { NoteEditor } from '@/components/note-editor'
+import useAccessStore from '@/hooks/useAccessStore'
+import { closeModal } from '@/store'
 
 interface IProps {
+  id: string
   headerText: string
+  cb: (timerVal: number, noteContent: string) => void
 }
 
-const NoteEditorModal: React.FC<IProps> = ({ headerText }) => {
+const NoteEditorModal: React.FC<IProps> = ({ id, headerText, cb }) => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
+  const handleCancel = () => {
+    dispatch(closeModal(id))
+  }
+  const handleSubmit = (timerVal: number, noteContent: string) => {
+    cb(timerVal, noteContent)
+  }
+
   return (
     <JustifyBetweenColumn height="100%">
       <ModalHeader>
@@ -24,7 +38,7 @@ const NoteEditorModal: React.FC<IProps> = ({ headerText }) => {
       </ModalHeader>
 
       <ModalBody>
-        <NoteEditor />
+        <NoteEditor onSubmit={handleSubmit} onCancel={handleCancel} />
       </ModalBody>
     </JustifyBetweenColumn>
   )

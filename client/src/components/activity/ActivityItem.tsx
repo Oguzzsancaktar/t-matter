@@ -5,6 +5,7 @@ import colors from '@/constants/colors'
 import moment from 'moment'
 import styled from 'styled-components'
 import { RowStyled } from '@/shared'
+import { secondsToHourMin } from '@/utils/timeUtils'
 
 interface IProps {
   activity: IActivity
@@ -24,6 +25,11 @@ const ActivityItem: React.FC<IProps> = ({ activity }) => {
         <H1 textAlign="center" fontSize="0.7rem" color={colors.text.primary} width="100%">
           {moment(activity.createdAt).fromNow()}
         </H1>
+        {activity?.usedTime && (
+          <H1 textAlign="center" fontSize="0.7rem" color={colors.text.primary} width="100%">
+            {secondsToHourMin(activity.usedTime, true)}
+          </H1>
+        )}
       </ItemContainer>
 
       <ItemContainer margin="0rem 0.5rem" width="auto" height="100%" position="relative">

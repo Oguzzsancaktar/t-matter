@@ -11,18 +11,27 @@ import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import { ItemContainer } from '../item-container'
 
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { FaPause, FaRecordVinyl } from 'react-icons/fa'
+import { FaMicrophone, FaMicrophoneSlash, FaPause, FaRecordVinyl } from 'react-icons/fa'
 import { Pause, Voicemail } from 'react-feather'
 import { FcVoicePresentation } from 'react-icons/fc'
+import { JustifyBetweenRow } from '../layout'
+import { H1 } from '../texts'
+import useInterval from '@/hooks/useInterval'
+import { secondsToHourMin } from '@/utils/timeUtils'
+import { ConfirmCancelButtons } from '../button'
 
-const NoteEditor = () => {
+interface IProps {
+  onCancel: () => void
+  onSubmit: (timerVal: number, noteContent: string) => void
+}
+
+const NoteEditor: React.FC<IProps> = ({ onSubmit, onCancel }) => {
+  const [timerValue, setTimerValue] = useState(0)
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(searchQueryParams)
 
   const [contentBlock, setContentBlock] = useState(htmlToDraft(''))
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
-
-  const editorRef = useRef()
 
   const mentionSuggestUsers = useMemo(
     () =>
@@ -53,6 +62,10 @@ const NoteEditor = () => {
     setEditorState(state)
   }
 
+  useInterval(() => {
+    setTimerValue(timerValue + 1)
+  }, 1000)
+
   useEffect(() => {
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
@@ -64,9 +77,9 @@ const NoteEditor = () => {
 
   useEffect(() => {
     let text = draftToHtml(convertToRaw(editorState.getCurrentContent()))
-      .slice(3)
-      .replace('</p>', '')
-      .replace('\n', ' ')
+    // .slice(3)
+    // .replace('</p>', '')
+    // .replace('\n', ' ')
 
     if (transcript !== '') {
       setContentBlock(htmlToDraft(text + finalTranscript))
@@ -87,32 +100,40 @@ const NoteEditor = () => {
 
   return (
     <ItemContainer height="100%">
-      <ItemContainer>
-        {listening ? (
-          <FaPause size={40} onClick={handleStopSpeech} />
-        ) : (
-          <FcVoicePresentation size={40} onClick={listenContinuously} />
-        )}
+      <ItemContainer height="calc(100% - 1rem - 35px)">
+        <Editor
+          editorState={editorState}
+          onEditorStateChange={onEditorStateChange}
+          wrapperClassName="note-editor-wrapper"
+          editorClassName="note-editor"
+          toolbar={{
+            colorPicker: { component: EditorColorPic }
+          }}
+          mention={{
+            separator: ' ',
+            trigger: '@',
+            suggestions: mentionSuggestUsers
+          }}
+          hashtag={{}}
+          placeholder="Enter your text..."
+          readOnly={listening}
+          toolbarCustomButtons={[
+            listening ? (
+              <FaMicrophoneSlash size={40} onClick={handleStopSpeech} />
+            ) : (
+              <FaMicrophone size={40} onClick={listenContinuously} />
+            ),
+            <ItemContainer width="auto">{secondsToHourMin(timerValue, true)}</ItemContainer>
+          ]}
+        />
       </ItemContainer>
 
-      <Editor
-        editorState={editorState}
-        onEditorStateChange={onEditorStateChange}
-        wrapperClassName="note-editor-wrapper"
-        editorClassName="note-editor"
-        toolbar={{
-          colorPicker: { component: EditorColorPic }
-        }}
-        mention={{
-          separator: ' ',
-          trigger: '@',
-          suggestions: mentionSuggestUsers
-        }}
-        hashtag={{}}
-        placeholder="Enter your text..."
-      />
-
-      <textarea disabled value={draftToHtml(convertToRaw(editorState.getCurrentContent()))} />
+      <ItemContainer height="35px" margin="1rem 0 0 0 ">
+        <ConfirmCancelButtons
+          onConfirm={() => onSubmit(timerValue, draftToHtml(convertToRaw(editorState.getCurrentContent())))}
+          onCancel={onCancel}
+        />
+      </ItemContainer>
     </ItemContainer>
   )
 }

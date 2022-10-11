@@ -10,7 +10,7 @@ import { useAuth } from '@/hooks/useAuth'
 
 import { EActivity, ESize, ICustomer, ICustomerTask, ITaskChecklist, ITaskUserWorkTime, IUser } from '@/models'
 import { activityApi, useCreateActivityMutation } from '@/services/activityService'
-import { openModal } from '@/store'
+import { closeModal, openModal } from '@/store'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
@@ -69,16 +69,35 @@ const TaskInformations: React.FC<IProps> = ({
     [loggedUser.user, taskData.steps[activeStep].responsibleUser]
   )
 
+  const handleConfirmAddNewNote = async (timerVal, noteContent) => {
+    dispatch(closeModal(`NoteEditorModal-note-${taskData._id}`))
+
+    await createActivity({
+      title: 'Note Added',
+      content: noteContent,
+      usedTime: timerVal,
+      customer: taskData.customer._id,
+      stepCategory: taskData.steps[activeStep].category._id,
+      task: taskData._id,
+      owner: loggedUser.user?._id || '',
+      step: activeStep,
+      type: EActivity.NORMAL_NOTE
+    })
+    dispatch(activityApi.util.resetApiState())
+  }
+
   const handleAddNewNote = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
 
     dispatch(
       openModal({
-        id: `NoteEditorModal-${taskData._id}`,
+        id: `NoteEditorModal-note-${taskData._id}`,
         title: 'Add Note',
         body: (
           <NoteEditorModal
+            id={`NoteEditorModal-note-${taskData._id}`}
             headerText={`Add Note ( ${customer.firstname + ' ' + customer.lastname} / ${taskData.name} )`}
+            cb={handleConfirmAddNewNote}
           />
         ),
         height: ESize.HMedium,
@@ -86,47 +105,6 @@ const TaskInformations: React.FC<IProps> = ({
         maxWidth: ESize.WMedium
       })
     )
-
-    // SwalReactContent.fire({
-    //   title: 'Enter your note message',
-    //   input: 'textarea',
-    //   inputAttributes: {
-    //     autocapitalize: 'off'
-    //   },
-    //   html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
-    //   showCancelButton: true,
-    //   confirmButtonText: 'Add Note',
-    //   showLoaderOnConfirm: true,
-    //   preConfirm: login => {
-    //     return login
-    //   },
-    //   allowOutsideClick: () => !Swal.isLoading()
-    // }).then(async result => {
-    //   if (result.isConfirmed) {
-    //     Swal.fire({
-    //       icon: 'success',
-    //       title: `Note Created`,
-    //       text: result.value
-    //     })
-
-    //     await createActivity({
-    //       title: 'Note Added',
-    //       content: result.value || ' ',
-    //       customer: taskData.customer._id,
-    //       stepCategory: taskData.steps[activeStep].category._id,
-    //       task: taskData._id,
-    //       owner: loggedUser.user?._id || '',
-    //       step: activeStep,
-    //       type: EActivity.NORMAL_NOTE
-    //     })
-    //     dispatch(activityApi.util.resetApiState())
-    //   } else {
-    //     Swal.fire({
-    //       icon: 'error',
-    //       title: 'Cancelled'
-    //     })
-    //   }
-    // })
   }
 
   return (

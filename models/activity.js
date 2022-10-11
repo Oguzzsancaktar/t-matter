@@ -19,6 +19,9 @@ const activitySchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Categories'
     },
+    usedTime: {
+      type: Number
+    },
 
     task: {
       type: Schema.Types.ObjectId,

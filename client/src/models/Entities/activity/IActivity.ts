@@ -5,6 +5,7 @@ export default interface IActivity {
   title: string
   content: string
   customer?: ICustomer
+  usedTime?: number
   task?: ITask
   owner: IUser
   type: number

@@ -9,6 +9,7 @@ const activityCreateValidation = async (req, res, next) => {
     type: joi.number().required(),
     title: joi.string().required(),
     content: joi.string(),
+    usedTime: joi.number(),
     links: joi.array().items(joi.object({ url: joi.string().required(), text: joi.string().required() })),
     step: joi.number(),
     stepCategory: joi.string().required()
