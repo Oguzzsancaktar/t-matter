@@ -69,7 +69,7 @@ const filterTransferTaskSteps = (tasks: ITaskStep[], workingHours: number) => {
     let total = 0
     for (let i = 0; i < newTasks.length; i++) {
       const task = newTasks[i]
-      const duration = getTaskStepTotalWorkingTime(task) / 3600
+      const duration = getTaskStepTotalTime(task) / 3600
 
       if (duration + total <= rest) {
         total = total + duration
