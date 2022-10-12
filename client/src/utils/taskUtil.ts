@@ -61,7 +61,7 @@ const filterNewTaskSteps = (tasks: ITaskStep[] | undefined) => {
     return (
       task.steps.checklistItems.some(item => !item.isChecked) &&
       task.steps.stepStatus !== ETaskStatus.Canceled &&
-      !tasks.find(t => t.stepIndex > task.stepIndex && t._id === task._id)
+      !tasks.find(t => t.stepIndex < task.stepIndex && t._id === task._id)
     )
   })
 }
