@@ -124,7 +124,6 @@ const getTaskByTaskId = (builder: IBuilder) => {
 const updateTask = (builder: IBuilder) => {
   return builder.mutation<ICustomerTask, ICustomerTask>({
     query(taskUpdateDto) {
-      console.log('taskUpdateDto', taskUpdateDto)
       return {
         url: `/task/${taskUpdateDto._id}`,
         method: 'PUT',
@@ -144,7 +143,8 @@ const updateTask = (builder: IBuilder) => {
       }
     },
     invalidatesTags(result) {
-      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+      if (!result) return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+      return [{ type: TASK_TAG_TYPE, id: result._id }]
     }
   })
 }
@@ -219,6 +219,9 @@ const getTaskSteps = (builder: IBuilder) => {
       }
     },
     providesTags(result) {
+      if (result) {
+        return [...result.map(({ _id }) => ({ type: TASK_TAG_TYPE, id: _id })), { type: TASK_TAG_TYPE, id: 'LIST' }]
+      }
       return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
     }
   })

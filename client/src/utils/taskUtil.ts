@@ -4,26 +4,34 @@ import { TASK_CONDITIONS } from '@constants/task'
 import { ETaskStatus } from '@/models'
 
 const getTaskStepTotalWorkingTime = (taskStep: ITaskStep) => {
+  if (!taskStep) return 0
   return taskStep.steps.workedTimes.reduce((acc, user) => {
     return acc + user.time
   }, 0)
 }
 
-const getTaskStepTotalTime = (taskStep: ITaskStep) => {
+const getTaskStepTotalTime = (taskStep: ITaskStep | undefined) => {
+  if (!taskStep) return 0
   return taskStep.steps.checklistItems.reduce((acc, item) => {
     return acc + item.duration
   }, 0)
 }
 
-const isTimerCondition = (taskStep: ITaskStep) => {
+const isTimerCondition = (taskStep: ITaskStep | undefined) => {
+  if (!taskStep) return false
+
   return getTaskStepTotalWorkingTime(taskStep) >= getTaskStepTotalTime(taskStep)
 }
 
-const isPostponeCondition = (taskStep: ITaskStep) => {
+const isPostponeCondition = (taskStep: ITaskStep | undefined) => {
+  if (!taskStep) return false
+
   return taskStep.steps.usedPostpone >= taskStep.steps.postponeTime
 }
 
-const isExpireCondition = (taskStep: ITaskStep) => {
+const isExpireCondition = (taskStep: ITaskStep | undefined) => {
+  if (!taskStep) return false
+
   return moment().isAfter(moment(taskStep.steps.endDate))
 }
 
@@ -41,21 +49,28 @@ const taskStepConditionSelector = (taskStep: ITaskStep) => {
   return count
 }
 
-const filterCompletedTaskSteps = (tasks: ITaskStep[]) => {
+const filterCompletedTaskSteps = (tasks: ITaskStep[] | undefined) => {
+  if (!tasks) return []
   return tasks.filter(task => task.steps.checklistItems.every(item => item.isChecked))
 }
 
-const filterNewTaskSteps = (tasks: ITaskStep[]) => {
+const filterNewTaskSteps = (tasks: ITaskStep[] | undefined) => {
+  if (!tasks) return []
+
   return tasks.filter(
     task => task.steps.checklistItems.some(item => !item.isChecked) && task.steps.stepStatus !== ETaskStatus.Canceled
   )
 }
 
-const filterCancelledTaskSteps = (tasks: ITaskStep[]) => {
-  return tasks.filter(task => task.steps.stepStatus === ETaskStatus.Canceled)
+const filterCancelledTaskSteps = (tasks: ITaskStep[] | undefined) => {
+  if (!tasks) return []
+
+  return tasks?.filter(task => task.steps.stepStatus === ETaskStatus.Canceled)
 }
 
-const filterTransferTaskSteps = (tasks: ITaskStep[], workingHours: number) => {
+const filterTransferTaskSteps = (tasks: ITaskStep[] | undefined, workingHours: number) => {
+  if (!tasks) return []
+
   const tempTasks = [...tasks]
   const newTasks = filterNewTaskSteps(tempTasks)
   let totalWorkingHours = newTasks.reduce((acc, task) => {
@@ -81,18 +96,20 @@ const filterTransferTaskSteps = (tasks: ITaskStep[], workingHours: number) => {
   return []
 }
 
-const filterTaskStepsByCondition = (tasks: ITaskStep[], conditionType: string): ITaskStep[] => {
+const filterTaskStepsByCondition = (tasks: ITaskStep[] | undefined, conditionType: string): ITaskStep[] => {
+  if (!tasks) return []
+
   if (conditionType === 'ALL') {
     return tasks
   }
   if (conditionType === TASK_CONDITIONS.EXPIRE) {
-    return tasks.filter(task => isExpireCondition(task))
+    return tasks?.filter(task => isExpireCondition(task))
   }
   if (conditionType === TASK_CONDITIONS.POSTPONE) {
-    return tasks.filter(task => isPostponeCondition(task))
+    return tasks?.filter(task => isPostponeCondition(task))
   }
   if (conditionType === TASK_CONDITIONS.TIMER) {
-    return tasks.filter(task => isTimerCondition(task))
+    return tasks?.filter(task => isTimerCondition(task))
   }
   return []
 }
