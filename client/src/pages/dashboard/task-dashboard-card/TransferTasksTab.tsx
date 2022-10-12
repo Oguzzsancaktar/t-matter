@@ -129,16 +129,30 @@ const CompletedTasksTab = props => {
           <TaskStepWorkFlowDonutChart taskSteps={taskSteps} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
-          <TaskStepYearlyCountBarChart
-            onSelectBar={(month: number) => {
-              setDateRange({
-                startDate: moment().month(month).startOf('month').toDate(),
-                endDate: moment().month(month).endOf('month').toDate()
-              })
-            }}
-            dateRange={{ startDate: moment().startOf('year').toDate(), endDate: moment().endOf('year').toDate() }}
-            taskSteps={yearlyTaskSteps}
-          />
+          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <TaskStepYearlyCountBarChart
+              onSelectBar={(month: number) => {
+                setDateRange({
+                  startDate: moment().month(month).startOf('month').toDate(),
+                  endDate: moment().month(month).endOf('month').toDate()
+                })
+              }}
+              dateRange={{ startDate: moment().startOf('year').toDate(), endDate: moment().endOf('year').toDate() }}
+              taskSteps={yearlyTaskSteps}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                color: colors.text.primary,
+                fontSize: 11,
+                top: 0,
+                left: '50%',
+                transform: 'translateX(-50%)'
+              }}
+            >
+              This chart shows yearly not related below date range
+            </div>
+          </div>
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
           <TaskStepMostlyAddedUser taskSteps={taskSteps} />
