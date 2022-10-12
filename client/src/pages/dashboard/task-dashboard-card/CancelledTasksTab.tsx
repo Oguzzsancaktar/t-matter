@@ -13,11 +13,11 @@ import {
   NoTableData,
   SelectInput,
   TableSkeltonLoader,
-  TaskStepMostlyAddedUser,
+  TaskStepLostTimeProgressChart,
   TaskStepWorkFlowDonutChart,
   TaskStepYearlyCountBarChart
 } from '@/components'
-import { INSTALLMENT_STATUS_OPTIONS } from '@constants/finance'
+
 import colors from '@constants/colors'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
@@ -120,13 +120,13 @@ const CompletedTasksTab = props => {
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
         <JustifyCenterColumn width="280px">
-          <TaskStepWorkFlowDonutChart dateRange={dateRange} />
+          <TaskStepWorkFlowDonutChart taskSteps={taskSteps} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
-          <TaskStepYearlyCountBarChart dateRange={dateRange} />
+          <TaskStepYearlyCountBarChart dateRange={dateRange} taskSteps={taskSteps} />
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
-          <TaskStepMostlyAddedUser dateRange={dateRange} />
+          <TaskStepLostTimeProgressChart taskSteps={taskSteps} />
         </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">

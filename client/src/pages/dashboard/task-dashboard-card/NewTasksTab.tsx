@@ -119,13 +119,13 @@ const NewTasksTab = props => {
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
         <JustifyCenterColumn width="280px">
-          <TaskStepWorkFlowDonutChart dateRange={dateRange} />
+          <TaskStepWorkFlowDonutChart taskSteps={taskSteps} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
-          <TaskStepYearlyCountBarChart dateRange={dateRange} />
+          <TaskStepYearlyCountBarChart taskSteps={taskSteps} dateRange={dateRange} />
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
-          <TaskStepMostlyAddedUser dateRange={dateRange} />
+          <TaskStepMostlyAddedUser taskSteps={taskSteps} />
         </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">

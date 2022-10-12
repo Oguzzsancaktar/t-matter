@@ -6,8 +6,7 @@ import moment from 'moment/moment'
 import { groupBy } from 'lodash'
 import { filterCancelledTaskSteps, filterCompletedTaskSteps, filterNewTaskSteps } from '@utils/taskUtil'
 
-const TaskStepYearlyCountBarChart = ({ dateRange }) => {
-  const [fetch, { data }] = useLazyGetTaskStepsQuery()
+const TaskStepYearlyCountBarChart = ({ taskSteps, dateRange }) => {
   const [series, setSeries] = useState<ApexAxisChartSeries>([
     {
       name: 'New Tasks',
@@ -69,10 +68,10 @@ const TaskStepYearlyCountBarChart = ({ dateRange }) => {
   })
 
   useEffect(() => {
-    if (data) {
+    if (taskSteps) {
       if (moment(dateRange.startDate).year() === moment(dateRange.endDate).year()) {
         const months = Array.from({ length: 12 }, (_, i) => i)
-        const groupedByMonth = groupBy(data, item => moment(item.steps.startDate).month())
+        const groupedByMonth = groupBy(taskSteps, item => moment(item.steps.startDate).month())
         const { newTasks, completedTasks, cancelledTasks } = months.reduce<{
           newTasks: number[]
           completedTasks: number[]
@@ -115,7 +114,7 @@ const TaskStepYearlyCountBarChart = ({ dateRange }) => {
       } else {
         const year = moment().year()
         const years = [year - 3, year - 2, year - 1, year, year + 1, year + 2, year + 3]
-        const groupedByYear = groupBy(data, item => moment(item.steps.startDate).year())
+        const groupedByYear = groupBy(taskSteps, item => moment(item.steps.startDate).year())
         const { newTasks, completedTasks, cancelledTasks } = years.reduce<{
           newTasks: number[]
           completedTasks: number[]
@@ -158,10 +157,9 @@ const TaskStepYearlyCountBarChart = ({ dateRange }) => {
         })
       }
     }
-    fetch(dateRange)
-  }, [dateRange, data])
+  }, [taskSteps, dateRange])
 
-  if (!data) return null
+  if (!taskSteps) return null
 
   return (
     <div style={{ height: '100%', width: '100%' }} id="chart">

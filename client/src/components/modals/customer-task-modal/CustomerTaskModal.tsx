@@ -26,6 +26,7 @@ import { ModalBody } from '../types'
 import TaskInformations from '@/components/client-task/task-informations/TaskInformations'
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
 import { NoteEditorModal } from '@/components'
+import useSound from 'use-sound'
 
 const SwalReactContent = withReactContent(Swal)
 
@@ -34,10 +35,12 @@ interface IProps {
   customer: ICustomer
   customerId?: ICustomer['_id']
 }
+
 const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) => {
   const { loggedUser } = useAuth()
-
   const [updateTask] = useUpdateTaskMutation()
+  const [checkPlay] = useSound('sounds/check-play.wav')
+  const [cancelPlay] = useSound('sounds/task-cancel.wav')
 
   const [createActivity] = useCreateActivityMutation()
   const { data: taskData, isLoading: taskIsLoading } = useGetTaskByTaskIdQuery(taskId)
@@ -90,9 +93,9 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
     tempUpdatedTaskData.status = ETaskStatus.Canceled
     tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Canceled
+    cancelPlay()
 
     await updateTask(tempUpdatedTaskData)
-
     await createActivity({
       title: 'Task Canceled',
 
@@ -318,6 +321,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     dispatch(activityApi.util.resetApiState())
   }
 
+<<<<<<< HEAD
   const handleConfirmCheck = async (timerVal, noteContent, checklistItem: ITaskChecklist, index: number) => {
     dispatch(closeModal(`NoteEditorModal-responsible-${taskData?._id}`))
 
@@ -343,6 +347,41 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
         const updatedWork: ITaskUserWorkTime = {
           time: existingUser.time + userWork.time,
           user: existingUser.user
+=======
+  const handleCheckboxClick = (checklistItem: ITaskChecklist, index: number) => {
+    if (!checklistItem.isChecked && updatedTaskData) {
+      SwalReactContent.fire({
+        title: 'Enter your complete message',
+        input: 'textarea',
+        html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Complete',
+        showLoaderOnConfirm: true,
+        preConfirm: login => {
+          return login
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then(async result => {
+        if (result.isConfirmed) {
+          checkPlay()
+          Swal.fire({
+            icon: 'success',
+            title: `Checklist Completed`,
+            text: result.value
+          })
+          const tempUpdatedTaskData = JSON.parse(JSON.stringify(updatedTaskData))
+          tempUpdatedTaskData.steps[activeStep].checklistItems[index].isChecked = true
+          handleAllChecklistCheck(tempUpdatedTaskData, index, result.value)
+          setUpdatedTaskData(tempUpdatedTaskData)
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Cancelled'
+          })
+>>>>>>> refs/remotes/origin/master
         }
         const otherWorks = workArr.filter(work => work.user._id !== existingUser.user._id)
         tempUpdatedTaskData.steps[activeStep].workedTimes = [...otherWorks, updatedWork]

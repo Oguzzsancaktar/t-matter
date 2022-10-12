@@ -348,6 +348,9 @@ const getTaskStepsData = async ({ responsibleUserId, startDate, endDate }) => {
         path: '$steps.category',
         preserveNullAndEmptyArrays: true
       }
+    },
+    {
+      $sort: { 'steps.startDate': -1 }
     }
   ]
 
