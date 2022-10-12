@@ -26,6 +26,8 @@ import { ModalBody } from '../types'
 import TaskInformations from '@/components/client-task/task-informations/TaskInformations'
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
 import { NoteEditorModal } from '@/components'
+import useSound from 'use-sound'
+
 const SwalReactContent = withReactContent(Swal)
 
 interface IProps {
@@ -33,9 +35,12 @@ interface IProps {
   customer: ICustomer
   customerId?: ICustomer['_id']
 }
+
 const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) => {
   const { loggedUser } = useAuth()
   const [updateTask] = useUpdateTaskMutation()
+  const [checkPlay] = useSound('sounds/check-play.wav')
+  const [cancelPlay] = useSound('sounds/task-cancel.wav')
 
   const [createActivity] = useCreateActivityMutation()
   const { data: taskData, isLoading: taskIsLoading } = useGetTaskByTaskIdQuery(taskId)
@@ -88,9 +93,9 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
     tempUpdatedTaskData.status = ETaskStatus.Canceled
     tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Canceled
+    cancelPlay()
 
     await updateTask(tempUpdatedTaskData)
-
     await createActivity({
       title: 'Task Canceled',
 
@@ -328,6 +333,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
         allowOutsideClick: () => !Swal.isLoading()
       }).then(async result => {
         if (result.isConfirmed) {
+          checkPlay()
           Swal.fire({
             icon: 'success',
             title: `Checklist Completed`,
