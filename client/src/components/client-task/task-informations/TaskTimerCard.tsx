@@ -62,7 +62,7 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, han
 
   useEffect(() => {
     calculateTotalPassedTime()
-  }, [])
+  }, [taskActiveStep])
 
   return (
     <ItemContainer>
@@ -73,7 +73,7 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, han
               <Calendar size={20} color={colors.text.primary} />
               <ItemContainer margin="0 0 0 0.3rem ">
                 <H1 color={colors.text.primary} fontWeight="400" width="auto">
-                  {secondsToHourMin(counterValue + totalPassedTime, true)}
+                  {secondsToHourMin(totalPassedTime, true)}
                 </H1>
               </ItemContainer>
             </Row>
@@ -86,7 +86,7 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, han
         </ItemContainer>
         <ItemContainer>
           <TaskTimerMultipleProgressBar
-            isTimeFinished={counterValue + totalPassedTime >= stepTotalDuration}
+            isTimeFinished={totalPassedTime >= stepTotalDuration}
             totalDuration={stepTotalDuration}
             workedTimes={taskActiveStep.workedTimes}
           />

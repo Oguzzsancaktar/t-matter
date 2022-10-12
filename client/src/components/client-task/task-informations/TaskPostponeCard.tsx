@@ -20,6 +20,8 @@ interface IProps {
 const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }) => {
   const series = useMemo(() => [(taskActiveStep?.usedPostpone / taskActiveStep?.postponeTime) * 100], [taskActiveStep])
 
+  const [isPostponeLimitPassed, setIsPostponeLimitPassed] = useState<boolean>(false)
+
   const [postponeDate, setPostponeDate] = useState({ value: [new Date(taskActiveStep.postponedDate)], dateText: '' })
   const canTaskPostpone: boolean = taskActiveStep.stepStatus === ETaskStatus['Progress']
 
@@ -28,42 +30,56 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
     onPostponeChange(value, dateText)
   }
 
-  const radialChartOptions: ApexOptions = useMemo(
-    () => ({
-      ...initialRadialChartOptions,
-      plotOptions: {
-        radialBar: {
-          track: {
-            background: '#ffffff'
-          },
-          startAngle: -135,
+  const [radialChartOptions, setRadialChartOptions] = useState<ApexOptions>({
+    ...initialRadialChartOptions,
+    plotOptions: {
+      radialBar: {
+        track: {
+          background: '#ffffff'
+        },
+        startAngle: -135,
 
-          endAngle: 135,
-          dataLabels: {
-            name: {
-              show: false,
-              fontSize: '5px',
-              color: undefined,
-              offsetY: 10
-            },
-            value: {
-              show: true,
-              offsetY: 60,
-              fontSize: '3px',
-              color: colors.text.primary,
-              formatter: function (val) {
-                return taskActiveStep?.usedPostpone + '/' + taskActiveStep?.postponeTime
+        endAngle: 135,
+        dataLabels: {
+          name: {
+            show: false,
+            fontSize: '3px',
+            color: undefined,
+            offsetY: 10
+          },
+          value: {
+            show: true,
+            offsetY: 60,
+            fontSize: '13x',
+            color: colors.text.primary,
+            formatter: function (val) {
+              if ((taskActiveStep?.postponeTime * val) / 100 > taskActiveStep?.postponeTime) {
+                setIsPostponeLimitPassed(true)
               }
+              return (taskActiveStep?.postponeTime * val) / 100 + '/' + taskActiveStep?.postponeTime
             }
           }
         }
       }
-    }),
-    [taskActiveStep]
-  )
+    },
+    fill: {
+      type: 'gradient',
+      colors: isPostponeLimitPassed ? [colors.red.primary] : [colors.blue.primary],
+      gradient: {
+        shade: 'dark',
+        shadeIntensity: 0.15,
+        inverseColors: false,
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 50, 65, 91]
+      }
+    }
+  })
+
+  console.log(isPostponeLimitPassed)
 
   return (
-    <ItemContainer height="100%" position="relative">
+    <ItemContainer height="100%" position="relative" transform="translateX(18%)">
       <ReactApexChart options={radialChartOptions} series={series} type="radialBar" height={'100%'} />
 
       <ItemContainer position="absolute" left="50%" top="50%" transform="translate(-50%,-50%)">

@@ -210,7 +210,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
     await createActivity({
       title: 'Task Responsible Changed',
-
       content: noteContent,
       usedTime: timerVal,
       customer: tempUpdatedTaskData.customer._id,
@@ -244,7 +243,12 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     )
   }
 
-  const handleAllChecklistCheck = async (tempUpdatedTaskData, index: number, activityContent: string) => {
+  const handleAllChecklistCheck = async (
+    tempUpdatedTaskData,
+    index: number,
+    activityContent: string,
+    timerVal: number
+  ) => {
     const tempChecklist = JSON.parse(JSON.stringify(tempUpdatedTaskData.steps[activeStep].checklistItems))
     tempChecklist.pop()
 
@@ -255,6 +259,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
       await createActivity({
         title: 'Task Checklist Completed',
         content: activityContent || ' ',
+        usedTime: timerVal,
         stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
         customer: tempUpdatedTaskData.customer._id,
         task: tempUpdatedTaskData._id,
@@ -295,6 +300,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
         await createActivity({
           title: 'Task Completed',
           content: activityContent || ' ',
+          usedTime: timerVal,
           stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
           customer: tempUpdatedTaskData.customer._id,
           task: tempUpdatedTaskData._id,
@@ -312,41 +318,75 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     dispatch(activityApi.util.resetApiState())
   }
 
-  const handleCheckboxClick = (checklistItem: ITaskChecklist, index: number) => {
-    if (!checklistItem.isChecked && updatedTaskData) {
-      SwalReactContent.fire({
-        title: 'Enter your complete message',
-        input: 'textarea',
-        html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
-        inputAttributes: {
-          autocapitalize: 'off'
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Complete',
-        showLoaderOnConfirm: true,
-        preConfirm: login => {
-          return login
-        },
-        allowOutsideClick: () => !Swal.isLoading()
-      }).then(async result => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            icon: 'success',
-            title: `Checklist Completed`,
-            text: result.value
-          })
-          const tempUpdatedTaskData = JSON.parse(JSON.stringify(updatedTaskData))
-          tempUpdatedTaskData.steps[activeStep].checklistItems[index].isChecked = true
-          handleAllChecklistCheck(tempUpdatedTaskData, index, result.value)
-          setUpdatedTaskData(tempUpdatedTaskData)
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Cancelled'
-          })
+  const handleConfirmCheck = async (timerVal, noteContent, checklistItem: ITaskChecklist, index: number) => {
+    dispatch(closeModal(`NoteEditorModal-responsible-${taskData?._id}`))
+
+    const tempUpdatedTaskData = JSON.parse(JSON.stringify(updatedTaskData))
+    tempUpdatedTaskData.steps[activeStep].checklistItems[index].isChecked = true
+    handleAllChecklistCheck(tempUpdatedTaskData, index, noteContent, timerVal)
+    setUpdatedTaskData(tempUpdatedTaskData)
+
+    if (loggedUser.user) {
+      let userWork: ITaskUserWorkTime = {
+        user: loggedUser.user,
+        time: timerVal
+      }
+
+      const activeTaskStep = tempUpdatedTaskData.steps[activeStep]
+      const { user: worker } = userWork
+
+      const workArr = tempUpdatedTaskData.steps[activeStep].workedTimes
+
+      const existingUser = activeTaskStep.workedTimes.find(work => work.user._id === worker._id)
+
+      if (existingUser) {
+        const updatedWork: ITaskUserWorkTime = {
+          time: existingUser.time + userWork.time,
+          user: existingUser.user
         }
-      })
+        const otherWorks = workArr.filter(work => work.user._id !== existingUser.user._id)
+        tempUpdatedTaskData.steps[activeStep].workedTimes = [...otherWorks, updatedWork]
+      } else {
+        tempUpdatedTaskData.steps[activeStep].workedTimes = [...workArr, userWork]
+      }
     }
+
+    await updateTask(tempUpdatedTaskData)
+
+    // await createActivity({
+    //   title: 'Task Checklist checked',
+
+    //   content: noteContent,
+    //   usedTime: timerVal,
+    //   customer: tempUpdatedTaskData.customer._id,
+    //   stepCategory: tempUpdatedTaskData.steps[activeStep].category._id,
+    //   task: tempUpdatedTaskData._id,
+    //   owner: loggedUser.user?._id || '',
+    //   step: activeStep,
+    //   type: EActivity.TASK_CHECKLIST_CHECKED
+    // })
+
+    // dispatch(activityApi.util.resetApiState())
+    setUpdatedTaskData({ ...tempUpdatedTaskData })
+  }
+
+  const handleCheckboxClick = (checklistItem: ITaskChecklist, index: number) => {
+    dispatch(
+      openModal({
+        id: `NoteEditorModal-responsible-${updatedTaskData?._id}`,
+        title: 'Cancel Note',
+        body: (
+          <NoteEditorModal
+            id={`NoteEditorModal-responsible-${updatedTaskData?._id}`}
+            headerText={`Cancel Note ( ${customer.firstname + ' ' + customer.lastname} / ${updatedTaskData?.name} )`}
+            cb={(timerVal, noteContent) => handleConfirmCheck(timerVal, noteContent, checklistItem, index)}
+          />
+        ),
+        height: ESize.HMedium,
+        width: ESize.WMedium,
+        maxWidth: ESize.WMedium
+      })
+    )
   }
 
   const handleStartTask = () => {

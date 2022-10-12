@@ -39,7 +39,7 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
           },
           value: {
             offsetY: 60,
-            fontSize: '3px',
+            fontSize: '13px',
             color: colors.text.primary,
             formatter: function (val) {
               return moment(taskActiveStep.startDate).format('MMM/DD/YY  HH:mm')
@@ -51,7 +51,7 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
   }
 
   return (
-    <ItemContainer height="100%">
+    <ItemContainer height="100%" transform="translateX(-18%)">
       <ReactApexChart options={radialChartOptions} series={[percentage]} type="radialBar" height={'100%'} />
 
       {/* <Column>
