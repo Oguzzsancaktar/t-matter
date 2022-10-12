@@ -144,8 +144,7 @@ const updateTask = (builder: IBuilder) => {
       }
     },
     invalidatesTags(result) {
-      if (!result) return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
-      return [{ type: TASK_TAG_TYPE, id: result._id }]
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
     }
   })
 }
