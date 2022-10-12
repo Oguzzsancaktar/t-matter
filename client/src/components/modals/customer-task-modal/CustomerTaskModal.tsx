@@ -39,7 +39,7 @@ interface IProps {
 const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) => {
   const { loggedUser } = useAuth()
   const [updateTask] = useUpdateTaskMutation()
-  const [checkPlay] = useSound('sounds/check-play.wav')
+  const [checkPlay] = useSound('sounds/checkPlay.wav')
   const [cancelPlay] = useSound('sounds/task-cancel.wav')
 
   const [createActivity] = useCreateActivityMutation()
