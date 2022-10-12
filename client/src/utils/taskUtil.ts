@@ -57,9 +57,13 @@ const filterCompletedTaskSteps = (tasks: ITaskStep[] | undefined) => {
 const filterNewTaskSteps = (tasks: ITaskStep[] | undefined) => {
   if (!tasks) return []
 
-  return tasks.filter(
-    task => task.steps.checklistItems.some(item => !item.isChecked) && task.steps.stepStatus !== ETaskStatus.Canceled
-  )
+  return tasks.filter(task => {
+    return (
+      task.steps.checklistItems.some(item => !item.isChecked) &&
+      task.steps.stepStatus !== ETaskStatus.Canceled &&
+      !tasks.find(t => t.stepIndex > task.stepIndex && t._id === task._id)
+    )
+  })
 }
 
 const filterCancelledTaskSteps = (tasks: ITaskStep[] | undefined) => {

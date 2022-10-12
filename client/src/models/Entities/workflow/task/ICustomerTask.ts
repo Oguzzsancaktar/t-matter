@@ -27,4 +27,5 @@ export interface ITaskStep {
   isInvoiced?: boolean
   index?: number
   status?: number
+  stepIndex: number
 }

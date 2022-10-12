@@ -26,7 +26,6 @@ import { ModalBody } from '../types'
 import TaskInformations from '@/components/client-task/task-informations/TaskInformations'
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
 import { NoteEditorModal } from '@/components'
-
 const SwalReactContent = withReactContent(Swal)
 
 interface IProps {
@@ -36,7 +35,6 @@ interface IProps {
 }
 const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) => {
   const { loggedUser } = useAuth()
-
   const [updateTask] = useUpdateTaskMutation()
 
   const [createActivity] = useCreateActivityMutation()
