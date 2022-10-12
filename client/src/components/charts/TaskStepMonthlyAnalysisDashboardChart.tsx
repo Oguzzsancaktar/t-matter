@@ -73,6 +73,15 @@ const TaskStepMonthlyAnalysisDashboardChart = ({ onSelectBar }) => {
 
   useEffect(() => {
     if (data) {
+      let maxHours = Math.max(...data.map(d => d.monthlyDuration / 3600))
+      maxHours = maxHours > 200 ? maxHours : 200
+      setOptions({
+        ...options,
+        xaxis: {
+          ...options.xaxis,
+          max: maxHours + 10
+        }
+      })
       setSeries([{ name: 'Hours', data: data.map(item => item.monthlyDuration / 3600) }])
     }
   }, [data])

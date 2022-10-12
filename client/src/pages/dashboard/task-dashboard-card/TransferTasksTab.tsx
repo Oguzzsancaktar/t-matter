@@ -43,11 +43,17 @@ const CompletedTasksTab = props => {
   })
   const [selectedCondition, setSelectedCondition] = useState('ALL')
   const [taskSteps, setTaskSteps] = useState<ITaskStep[]>([])
+  const [yearlyTaskSteps, setYearlyTaskSteps] = useState<ITaskStep[]>([])
   const { data, isLoading } = useGetTaskStepsQuery(dateRange)
+  const { data: yearlyData } = useGetTaskStepsQuery({
+    startDate: moment().startOf('year').toDate(),
+    endDate: moment().endOf('year').toDate()
+  })
 
   useEffect(() => {
     if (data) {
       setTaskSteps(filterTransferTaskSteps(filterTaskStepsByCondition(data, selectedCondition), 140))
+      setYearlyTaskSteps(filterTransferTaskSteps(filterTaskStepsByCondition(yearlyData, selectedCondition), 140))
     }
   }, [data, selectedCondition])
 
@@ -123,7 +129,16 @@ const CompletedTasksTab = props => {
           <TaskStepWorkFlowDonutChart taskSteps={taskSteps} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
-          <TaskStepYearlyCountBarChart dateRange={dateRange} taskSteps={taskSteps} />
+          <TaskStepYearlyCountBarChart
+            onSelectBar={(month: number) => {
+              setDateRange({
+                startDate: moment().month(month).startOf('month').toDate(),
+                endDate: moment().month(month).endOf('month').toDate()
+              })
+            }}
+            dateRange={{ startDate: moment().startOf('year').toDate(), endDate: moment().endOf('year').toDate() }}
+            taskSteps={yearlyTaskSteps}
+          />
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
           <TaskStepMostlyAddedUser taskSteps={taskSteps} />

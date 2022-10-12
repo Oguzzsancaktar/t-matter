@@ -6,7 +6,7 @@ import moment from 'moment/moment'
 import { groupBy } from 'lodash'
 import { filterCancelledTaskSteps, filterCompletedTaskSteps, filterNewTaskSteps } from '@utils/taskUtil'
 
-const TaskStepYearlyCountBarChart = ({ taskSteps, dateRange }) => {
+const TaskStepYearlyCountBarChart = ({ taskSteps, dateRange, onSelectBar }) => {
   const [series, setSeries] = useState<ApexAxisChartSeries>([
     {
       name: 'New Tasks',
@@ -28,7 +28,7 @@ const TaskStepYearlyCountBarChart = ({ taskSteps, dateRange }) => {
       height: 230,
       events: {
         dataPointSelection: (event, chartContext, config) => {
-          // onSelectBar(config.w.config.series[config.seriesIndex].data[config.dataPointIndex])
+          onSelectBar(config.dataPointIndex)
         }
       },
       toolbar: {

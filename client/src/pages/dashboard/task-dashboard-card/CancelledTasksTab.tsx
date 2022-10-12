@@ -123,7 +123,16 @@ const CompletedTasksTab = props => {
           <TaskStepWorkFlowDonutChart taskSteps={taskSteps} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
-          <TaskStepYearlyCountBarChart dateRange={dateRange} taskSteps={taskSteps} />
+          <TaskStepYearlyCountBarChart
+            onSelectBar={(month: number) => {
+              setDateRange({
+                startDate: moment().month(month).startOf('month').toDate(),
+                endDate: moment().month(month).endOf('month').toDate()
+              })
+            }}
+            dateRange={dateRange}
+            taskSteps={taskSteps}
+          />
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
           <TaskStepLostTimeProgressChart taskSteps={taskSteps} />
