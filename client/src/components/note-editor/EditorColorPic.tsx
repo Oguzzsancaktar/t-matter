@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FaPalette } from 'react-icons/fa'
 import { ItemContainer } from '../item-container'
-import { BlockPicker } from 'react-color'
+import { SketchPicker } from 'react-color'
 
 const EditorColorPic = ({ currentState, onChange }) => {
   const [expanded, setExpanded] = useState<boolean>(false)
@@ -19,7 +19,7 @@ const EditorColorPic = ({ currentState, onChange }) => {
   const renderModal = () => {
     return (
       <div className="draft-color-modal" onClick={stopPropagation}>
-        <BlockPicker color={color} onChangeComplete={handleChange} />
+        <SketchPicker color={color} onChangeComplete={handleChange} />
       </div>
     )
   }

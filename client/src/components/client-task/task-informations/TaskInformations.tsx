@@ -125,8 +125,8 @@ const TaskInformations: React.FC<IProps> = ({
 
           <ItemContainer backgroundColor={'transparent'} borderRadius="0.3rem" margin="0 0 1rem 0">
             <Column height="100%">
-              <InformationCard height="100%">
-                <JustifyBetweenRow width="100%" height="200px">
+              <InformationCard height="100%" margin="0">
+                <JustifyBetweenRow width="100%" height="250px">
                   <TaskDeadlineCard taskActiveStep={taskData.steps[activeStep]} />
 
                   <TaskPostponeCard
@@ -136,7 +136,7 @@ const TaskInformations: React.FC<IProps> = ({
                 </JustifyBetweenRow>
               </InformationCard>
 
-              <InformationCard height="30px">
+              <InformationCard height="30px" margin="-2rem 0 2rem 0">
                 <TaskTimerCard
                   taskActiveStep={taskData.steps[activeStep]}
                   isTaskNotStarted={isTaskNotStarted}

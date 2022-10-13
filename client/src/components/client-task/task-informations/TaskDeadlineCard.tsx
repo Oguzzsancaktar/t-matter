@@ -1,6 +1,6 @@
 import { DatePicker } from '@/components/date-picker'
 import { ItemContainer } from '@/components/item-container'
-import { Column, JustifyBetweenRow, Row } from '@/components/layout'
+import { Column, JustifyBetweenRow, JustifyCenterRow, Row } from '@/components/layout'
 import { ProgressBar } from '@/components/progress-bar'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
@@ -28,6 +28,19 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
         track: {
           background: '#ffffff'
         },
+        hollow: {
+          margin: 5,
+          size: '60%',
+          background: 'transparent',
+          position: 'front',
+          dropShadow: {
+            enabled: false,
+            top: 0,
+            left: 0,
+            blur: 3,
+            opacity: 0.5
+          }
+        },
         startAngle: -135,
         endAngle: 135,
         dataLabels: {
@@ -38,7 +51,7 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
             offsetY: 120
           },
           value: {
-            offsetY: 60,
+            offsetY: 70,
             fontSize: '13px',
             color: colors.text.primary,
             formatter: function (val) {
@@ -51,7 +64,12 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
   }
 
   return (
-    <ItemContainer height="100%" transform="translateX(-18%)">
+    <ItemContainer height="100%" transform="translateX(-6%)">
+      <ItemContainer position="absolute" left="50%" top="40%" transform="translate(-50%,-50%)" width="100px">
+        <JustifyCenterRow width="100%" height="20px">
+          <Calendar size={20} color={colors.text.primary} />
+        </JustifyCenterRow>
+      </ItemContainer>
       <ReactApexChart options={radialChartOptions} series={[percentage]} type="radialBar" height={'100%'} />
 
       {/* <Column>

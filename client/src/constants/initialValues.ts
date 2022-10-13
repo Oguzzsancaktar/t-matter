@@ -187,6 +187,7 @@ export const initialRadialChartOptions: ApexOptions = {
       track: {
         background: 'red'
       },
+
       startAngle: -135,
       endAngle: 135,
       dataLabels: {

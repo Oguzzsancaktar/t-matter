@@ -1,5 +1,4 @@
 import { TaskWizzardNavigation } from '@components/client-task'
-import { TaskNoteCounter } from '@/components/counter'
 import { ItemContainer } from '@/components/item-container'
 import { Row } from '@/components/layout'
 import colors from '@/constants/colors'
@@ -21,14 +20,11 @@ import { useCreateExpiredTaskStepMutation } from '@/services/settings/finance-pl
 import { closeModal, openModal, setModalOnClose } from '@/store'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 import { ModalBody } from '../types'
 import TaskInformations from '@/components/client-task/task-informations/TaskInformations'
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
 import { NoteEditorModal } from '@/components'
 import useSound from 'use-sound'
-
-const SwalReactContent = withReactContent(Swal)
 
 interface IProps {
   taskId: string
@@ -49,11 +45,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const [updatedTaskData, setUpdatedTaskData] = useState<ICustomerTask>()
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-
-  const isResponsibleUserLoggedUser = useMemo(
-    () => loggedUser.user?._id === taskData?.steps[activeStep].responsibleUser._id,
-    [loggedUser.user, taskData?.steps[activeStep].responsibleUser]
-  )
 
   const [isTaskNotStarted, setIsTaskNotStarted] = useState(
     updatedTaskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length ===
@@ -133,16 +124,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   }
 
   const handleStepChange = (step: number) => {
-    // if (isTaskNotStarted && step > activeStep) {
-    //   Swal.fire({
-    //     title: 'You can not go to next step',
-    //     text: 'You can not go to next step because you have not started this task',
-    //     icon: 'error'
-    //   })
-    // } else {
-    //   setActiveStep(step)
-    // }
-
     setActiveStep(step)
   }
 

@@ -13,27 +13,19 @@ import { ItemContainer } from '../item-container'
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { FaMicrophone, FaMicrophoneSlash, FaPause, FaRecordVinyl } from 'react-icons/fa'
 import { Pause, Voicemail } from 'react-feather'
-import { FcCustomerSupport, FcVoicePresentation } from 'react-icons/fc'
+import { FcVoicePresentation } from 'react-icons/fc'
 import { JustifyBetweenRow } from '../layout'
 import { H1 } from '../texts'
 import useInterval from '@/hooks/useInterval'
 import { secondsToHourMin } from '@/utils/timeUtils'
 import { ConfirmCancelButtons } from '../button'
-import styled from 'styled-components'
-import { speechAnimation } from '@/shared'
 
 interface IProps {
   onCancel: () => void
   onSubmit: (timerVal: number, noteContent: string) => void
 }
 
-const AnimatedCircle = styled.div`
-  animation-name: ${speechAnimation};
-  animation-duration: 2s;
-  animation-iteration-count: infinite;
-`
-
-const NoteEditor: React.FC<IProps> = ({ onSubmit, onCancel }) => {
+const NoteSpeech: React.FC<IProps> = ({ onSubmit, onCancel }) => {
   const [timerValue, setTimerValue] = useState(0)
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(searchQueryParams)
@@ -127,11 +119,9 @@ const NoteEditor: React.FC<IProps> = ({ onSubmit, onCancel }) => {
           readOnly={listening}
           toolbarCustomButtons={[
             listening ? (
-              <AnimatedCircle>
-                <FcCustomerSupport size={40} onClick={handleStopSpeech} />
-              </AnimatedCircle>
+              <FaMicrophoneSlash size={40} onClick={handleStopSpeech} />
             ) : (
-              <FcCustomerSupport size={40} onClick={listenContinuously} />
+              <FaMicrophone size={40} onClick={listenContinuously} />
             ),
             <ItemContainer width="auto">{secondsToHourMin(timerValue, true)}</ItemContainer>
           ]}
@@ -148,4 +138,4 @@ const NoteEditor: React.FC<IProps> = ({ onSubmit, onCancel }) => {
   )
 }
 
-export default NoteEditor
+export default NoteSpeech

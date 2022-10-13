@@ -8,7 +8,7 @@ import useInterval from '@/hooks/useInterval'
 import { ITaskItem, ITaskUserWorkTime } from '@/models'
 import { secondsToHourMin } from '@/utils/timeUtils'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Calendar } from 'react-feather'
+import { Calendar, Clock } from 'react-feather'
 
 interface IProps {
   taskActiveStep: ITaskItem
@@ -51,7 +51,7 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, han
   )
 
   useEffect(() => {
-    if (loggedUser.user) {
+    if (loggedUser.user && !isTaskNotStarted) {
       let userWork: ITaskUserWorkTime = {
         user: loggedUser.user,
         time: 1
@@ -70,7 +70,7 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, han
         <ItemContainer>
           <JustifyBetweenRow>
             <Row>
-              <Calendar size={20} color={colors.text.primary} />
+              <Clock size={20} color={colors.text.primary} />
               <ItemContainer margin="0 0 0 0.3rem ">
                 <H1 color={colors.text.primary} fontWeight="400" width="auto">
                   {secondsToHourMin(totalPassedTime, true)}
