@@ -96,6 +96,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     cancelPlay()
 
     await updateTask(tempUpdatedTaskData)
+
     await createActivity({
       title: 'Task Canceled',
 
