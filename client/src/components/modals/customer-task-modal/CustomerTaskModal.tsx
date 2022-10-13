@@ -27,8 +27,6 @@ import TaskInformations from '@/components/client-task/task-informations/TaskInf
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
 import { NoteEditorModal } from '@/components'
 
-const SwalReactContent = withReactContent(Swal)
-
 interface IProps {
   taskId: string
   customer: ICustomer
