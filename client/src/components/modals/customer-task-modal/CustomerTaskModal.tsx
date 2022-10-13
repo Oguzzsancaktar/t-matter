@@ -26,16 +26,21 @@ import { ModalBody } from '../types'
 import TaskInformations from '@/components/client-task/task-informations/TaskInformations'
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
 import { NoteEditorModal } from '@/components'
+import useSound from 'use-sound'
+
+const SwalReactContent = withReactContent(Swal)
 
 interface IProps {
   taskId: string
   customer: ICustomer
   customerId?: ICustomer['_id']
 }
+
 const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) => {
   const { loggedUser } = useAuth()
-
   const [updateTask] = useUpdateTaskMutation()
+  const [checkPlay] = useSound('sounds/check-play.wav')
+  const [cancelPlay] = useSound('sounds/task-cancel.wav')
 
   const [createActivity] = useCreateActivityMutation()
   const { data: taskData, isLoading: taskIsLoading } = useGetTaskByTaskIdQuery(taskId)
@@ -88,6 +93,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
     tempUpdatedTaskData.status = ETaskStatus.Canceled
     tempUpdatedTaskData.steps[activeStep].stepStatus = ETaskStatus.Canceled
+    cancelPlay()
 
     await updateTask(tempUpdatedTaskData)
 
@@ -318,7 +324,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
   const handleConfirmCheck = async (timerVal, noteContent, checklistItem: ITaskChecklist, index: number) => {
     dispatch(closeModal(`NoteEditorModal-responsible-${taskData?._id}`))
-
+    checkPlay()
     const tempUpdatedTaskData = JSON.parse(JSON.stringify(updatedTaskData))
     tempUpdatedTaskData.steps[activeStep].checklistItems[index].isChecked = true
     handleAllChecklistCheck(tempUpdatedTaskData, index, noteContent, timerVal)
@@ -329,8 +335,27 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
         user: loggedUser.user,
         time: timerVal
       }
-      handleTaskTimerChange(userWork)
+
+      const activeTaskStep = tempUpdatedTaskData.steps[activeStep]
+      const { user: worker } = userWork
+
+      const workArr = tempUpdatedTaskData.steps[activeStep].workedTimes
+
+      const existingUser = activeTaskStep.workedTimes.find(work => work.user._id === worker._id)
+
+      if (existingUser) {
+        const updatedWork: ITaskUserWorkTime = {
+          time: existingUser.time + userWork.time,
+          user: existingUser.user
+        }
+        const otherWorks = workArr.filter(work => work.user._id !== existingUser.user._id)
+        tempUpdatedTaskData.steps[activeStep].workedTimes = [...otherWorks, updatedWork]
+      } else {
+        tempUpdatedTaskData.steps[activeStep].workedTimes = [...workArr, userWork]
+      }
     }
+
+    await updateTask(tempUpdatedTaskData)
 
     // await createActivity({
     //   title: 'Task Checklist checked',
