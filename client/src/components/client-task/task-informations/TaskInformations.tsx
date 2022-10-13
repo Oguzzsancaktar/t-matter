@@ -8,7 +8,16 @@ import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
 
-import { EActivity, ESize, ICustomer, ICustomerTask, ITaskChecklist, ITaskUserWorkTime, IUser } from '@/models'
+import {
+  EActivity,
+  ESize,
+  ETaskStatus,
+  ICustomer,
+  ICustomerTask,
+  ITaskChecklist,
+  ITaskUserWorkTime,
+  IUser
+} from '@/models'
 import { activityApi, useCreateActivityMutation } from '@/services/activityService'
 import { closeModal, openModal } from '@/store'
 import React, { useMemo } from 'react'
@@ -67,6 +76,11 @@ const TaskInformations: React.FC<IProps> = ({
   const isResponsibleUserLoggedUser = useMemo(
     () => loggedUser.user?._id === taskData.steps[activeStep].responsibleUser._id,
     [loggedUser.user, taskData.steps[activeStep].responsibleUser]
+  )
+
+  const canStepCancel = useMemo(
+    () => taskData.steps[activeStep].stepStatus !== ETaskStatus.Completed,
+    [taskData, activeStep]
   )
 
   const handleConfirmAddNewNote = async (timerVal, noteContent) => {
@@ -167,7 +181,14 @@ const TaskInformations: React.FC<IProps> = ({
               </ItemContainer>
 
               <ItemContainer width="100%" margin="0 1rem">
-                <Button padding="0" width="100%" height="30px" color={colors.red.primary} onClick={handleCancelTask}>
+                <Button
+                  padding="0"
+                  width="100%"
+                  height="30px"
+                  color={colors.red.primary}
+                  disabled={!canStepCancel}
+                  onClick={handleCancelTask}
+                >
                   Cancel
                 </Button>
               </ItemContainer>
