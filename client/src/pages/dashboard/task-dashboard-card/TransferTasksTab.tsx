@@ -2,7 +2,7 @@ import * as React from 'react'
 import useAccessStore from '@hooks/useAccessStore'
 import { useEffect, useMemo, useState } from 'react'
 import moment from 'moment/moment'
-import { useGetTaskStepsQuery } from '@services/customers/taskService'
+import { useGetTaskStepsQuery, useTransferTasksMutation } from '@services/customers/taskService'
 import {
   Button,
   Checkbox,
@@ -63,6 +63,7 @@ const CompletedTasksTab = props => {
     endDate: moment().endOf('year').toDate()
   })
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
+  const [transfer] = useTransferTasksMutation()
 
   useEffect(() => {
     if (data) {
@@ -165,7 +166,15 @@ const CompletedTasksTab = props => {
     )
   }
 
-  const handleTransfer = () => {}
+  const handleTransfer = async () => {
+    const taskStepsToTransfer = taskSteps
+      .filter(taskStep => taskStep.isChecked)
+      .map(taskStep => {
+        return { taskId: taskStep._id, toUserId: selectedToUser, stepIndex: taskStep.stepIndex }
+      })
+
+    await transfer({ tasks: taskStepsToTransfer }).unwrap()
+  }
 
   const workflowTypes = [
     ...uniqBy(

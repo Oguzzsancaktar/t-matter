@@ -2,7 +2,7 @@ import { ICustomer, IQueryParams, ITaskFilter, ITaskUserWorkTime, IUsedTaskAnaly
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { ICustomerTask, ITask } from '@/models'
+import { ICustomerTask, ITask, IUser } from '@/models'
 import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 
 const TASK_REDUCER_PATH = 'taskApi'
@@ -227,6 +227,31 @@ const getTaskSteps = (builder: IBuilder) => {
   })
 }
 
+const transferTasks = (builder: IBuilder) => {
+  return builder.mutation<
+    ICustomerTask[],
+    {
+      tasks: {
+        toUserId: IUser['_id']
+        taskId: ITaskStep['_id']
+      }[]
+    }
+  >({
+    query({ tasks }) {
+      return {
+        url: '/task/transfer',
+        method: 'POST',
+        data: {
+          tasks
+        }
+      }
+    },
+    invalidatesTags() {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const taskApi = createApi({
   reducerPath: TASK_REDUCER_PATH,
   tagTypes: [TASK_TAG_TYPE],
@@ -243,7 +268,8 @@ const taskApi = createApi({
     getUsedTaskWorkflowCounts: getUsedTaskWorkflowCounts(builder),
     getTaskCountForMonthsData: getTaskCountForMonthsData(builder),
     getTaskStepMonthlyAnalysisData: getTaskStepMonthlyAnalysisData(builder),
-    getTaskSteps: getTaskSteps(builder)
+    getTaskSteps: getTaskSteps(builder),
+    transferTasks: transferTasks(builder)
   })
 })
 
@@ -260,7 +286,8 @@ const {
   useGetTaskCountForMonthsDataQuery,
   useGetTaskStepMonthlyAnalysisDataQuery,
   useGetTaskStepsQuery,
-  useLazyGetTaskStepsQuery
+  useLazyGetTaskStepsQuery,
+  useTransferTasksMutation
 } = taskApi
 export {
   taskApi,
@@ -276,5 +303,6 @@ export {
   useGetTaskCountForMonthsDataQuery,
   useGetTaskStepMonthlyAnalysisDataQuery,
   useGetTaskStepsQuery,
-  useLazyGetTaskStepsQuery
+  useLazyGetTaskStepsQuery,
+  useTransferTasksMutation
 }

@@ -216,6 +216,30 @@ const getTaskSteps = async (req, res) => {
   }
 }
 
+const transferTasks = async (req, res) => {
+  const { body } = req
+  try {
+    for (const task of body.tasks) {
+      if (task.toUserId === 'ALL' || !task.toUserId) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json(utils.errorUtils.errorInstance({ message: 'Please select a user to transfer' }))
+      }
+      if (!task.taskId) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json(utils.errorUtils.errorInstance({ message: 'Please select a task to transfer' }))
+      }
+      const x = await Task.findById(task.taskId).lean()
+      x.steps[task.stepIndex].responsibleUser = mongoose.Types.ObjectId(task.toUserId)
+      await dataAccess.taskDataAccess.updateTaskById(task.taskId, x)
+    }
+    res.senStatus(200)
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
@@ -228,5 +252,6 @@ module.exports = {
   usedTaskWorkflowCounts,
   getTaskCountForMonths,
   getTaskStepMonthlyAnalysis,
-  getTaskSteps
+  getTaskSteps,
+  transferTasks
 }
