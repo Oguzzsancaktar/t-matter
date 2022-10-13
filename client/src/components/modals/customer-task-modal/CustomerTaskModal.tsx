@@ -163,7 +163,9 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
           body: (
             <NoteEditorModal
               id={`NoteEditorModal-postpone-${updatedTaskData?._id}`}
-              headerText={`Cancel Note ( ${customer.firstname + ' ' + customer.lastname} / ${updatedTaskData?.name} )`}
+              headerText={`Responsible Note ( ${customer.firstname + ' ' + customer.lastname} / ${
+                updatedTaskData?.name
+              } )`}
               cb={(timerVal, noteContent) => handleConfirmPostponeChange(timerVal, noteContent, dateText)}
             />
           ),
@@ -213,11 +215,13 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     dispatch(
       openModal({
         id: `NoteEditorModal-responsible-${updatedTaskData?._id}`,
-        title: 'Cancel Note',
+        title: 'Responsible Change Note',
         body: (
           <NoteEditorModal
             id={`NoteEditorModal-responsible-${updatedTaskData?._id}`}
-            headerText={`Cancel Note ( ${customer.firstname + ' ' + customer.lastname} / ${updatedTaskData?.name} )`}
+            headerText={`Responsible Change Note ( ${customer.firstname + ' ' + customer.lastname} / ${
+              updatedTaskData?.name
+            } )`}
             cb={(timerVal, noteContent) => handleConfirmResponsibleChange(timerVal, noteContent, responsible)}
           />
         ),
@@ -359,11 +363,11 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     dispatch(
       openModal({
         id: `NoteEditorModal-responsible-${updatedTaskData?._id}`,
-        title: 'Cancel Note',
+        title: 'Checklist Note',
         body: (
           <NoteEditorModal
             id={`NoteEditorModal-responsible-${updatedTaskData?._id}`}
-            headerText={`Cancel Note ( ${customer.firstname + ' ' + customer.lastname} / ${updatedTaskData?.name} )`}
+            headerText={`Checklist Note ( ${customer.firstname + ' ' + customer.lastname} / ${updatedTaskData?.name} )`}
             cb={(timerVal, noteContent) => handleConfirmCheck(timerVal, noteContent, checklistItem, index)}
           />
         ),
