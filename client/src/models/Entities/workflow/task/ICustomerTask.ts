@@ -18,6 +18,7 @@ export default interface ICustomerTask {
 export interface ITaskStep {
   _id?: string
   workflowId: IWorkflow['_id']
+  workflow: IWorkflow
   customer: ICustomer
   startDate: number
   name: string
@@ -28,4 +29,5 @@ export interface ITaskStep {
   index?: number
   status?: number
   stepIndex: number
+  isChecked?: boolean
 }

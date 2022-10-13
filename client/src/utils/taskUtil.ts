@@ -118,6 +118,18 @@ const filterTaskStepsByCondition = (tasks: ITaskStep[] | undefined, conditionTyp
   return []
 }
 
+const filterTaskStepsByWorkflowType = (tasksSteps: ITaskStep[] | undefined, workflowType: string): ITaskStep[] => {
+  if (!tasksSteps) return []
+
+  return tasksSteps.filter(task => task.workflow._id === workflowType || workflowType === 'ALL')
+}
+
+const filterTaskStepsByTaskCategory = (tasksSteps: ITaskStep[] | undefined, taskCategory: string): ITaskStep[] => {
+  if (!tasksSteps) return []
+
+  return tasksSteps.filter(task => task.steps.category._id === taskCategory || taskCategory === 'ALL')
+}
+
 export {
   isTimerCondition,
   isPostponeCondition,
@@ -129,5 +141,7 @@ export {
   filterCancelledTaskSteps,
   filterTransferTaskSteps,
   getTaskStepTotalWorkingTime,
-  getTaskStepTotalTime
+  getTaskStepTotalTime,
+  filterTaskStepsByWorkflowType,
+  filterTaskStepsByTaskCategory
 }

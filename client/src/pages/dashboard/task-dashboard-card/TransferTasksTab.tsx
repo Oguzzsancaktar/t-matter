@@ -1,9 +1,11 @@
 import * as React from 'react'
 import useAccessStore from '@hooks/useAccessStore'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import moment from 'moment/moment'
 import { useGetTaskStepsQuery } from '@services/customers/taskService'
 import {
+  Button,
+  Checkbox,
   CustomerTaskModal,
   DatePicker,
   ItemContainer,
@@ -24,6 +26,8 @@ import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 import { TASK_CONDITION_OPTIONS } from '@constants/task'
 import {
   filterTaskStepsByCondition,
+  filterTaskStepsByTaskCategory,
+  filterTaskStepsByWorkflowType,
   filterTransferTaskSteps,
   isExpireCondition,
   isPostponeCondition,
@@ -33,6 +37,10 @@ import {
 import { FcClock, FcExpired, FcLeave } from 'react-icons/fc'
 import { openModal } from '@/store'
 import { ESize } from '@/models'
+import { uniqBy } from 'lodash'
+import { pipe } from '@utils/pipe'
+import { useGetUsersQuery } from '@services/settings/user-planning/userService'
+import { emptyQueryParams } from '@constants/queryParams'
 
 const CompletedTasksTab = props => {
   const { useAppDispatch } = useAccessStore()
@@ -41,7 +49,12 @@ const CompletedTasksTab = props => {
     startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('month').toDate(),
     endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('month').toDate()
   })
+
   const [selectedCondition, setSelectedCondition] = useState('ALL')
+  const [selectedWorkflowType, setSelectedWorkflowType] = useState('ALL')
+  const [selectedTaskCategory, setSelectedTaskCategory] = useState('ALL')
+  const [selectedToUser, setSelectedToUser] = useState('ALL')
+
   const [taskSteps, setTaskSteps] = useState<ITaskStep[]>([])
   const [yearlyTaskSteps, setYearlyTaskSteps] = useState<ITaskStep[]>([])
   const { data, isLoading } = useGetTaskStepsQuery(dateRange)
@@ -49,64 +62,94 @@ const CompletedTasksTab = props => {
     startDate: moment().startOf('year').toDate(),
     endDate: moment().endOf('year').toDate()
   })
+  const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
 
   useEffect(() => {
     if (data) {
-      setTaskSteps(filterTransferTaskSteps(filterTaskStepsByCondition(data, selectedCondition), 140))
-      setYearlyTaskSteps(filterTransferTaskSteps(filterTaskStepsByCondition(yearlyData, selectedCondition), 140))
-    }
-  }, [data, selectedCondition])
-
-  const columns: TableColumn<ITaskStep>[] = [
-    {
-      name: 'Added',
-      selector: row => {
-        if (row.steps.addedFrom) {
-          return row.steps.addedFrom?.firstname + ' ' + row.steps.addedFrom?.lastname
-        }
-        return ''
-      },
-      sortable: true,
-      cell: row => {
-        if (row.steps.addedFrom) {
-          return row.steps.addedFrom?.firstname + ' ' + row.steps.addedFrom?.lastname
-        }
-        return ''
-      }
-    },
-    {
-      name: 'Date',
-      selector: row => moment(row.steps.startDate).toString(),
-      sortable: true,
-      cell: d => moment(d.steps.startDate).format('MMM/DD/YYYY')
-    },
-    {
-      name: 'Customer',
-      selector: row => row.customer.firstname + ' ' + row.customer.lastname,
-      sortable: true,
-      cell: d => d.customer.firstname + ' ' + d.customer.lastname
-    },
-    {
-      name: 'Task name',
-      selector: row => row.name + ' ' + row.steps.category.name,
-      sortable: true,
-      cell: d => d.name + ' - ' + d.steps.category.name
-    },
-    {
-      name: 'Conditions',
-      selector: taskStepConditionSelector,
-      sortable: true,
-      cell: d => {
-        return (
-          <JustifyBetweenRow>
-            <JustifyCenterRow>{isTimerCondition(d) && <FcLeave />}</JustifyCenterRow>
-            <JustifyCenterRow>{isPostponeCondition(d) && <FcClock />}</JustifyCenterRow>
-            <JustifyCenterRow>{isExpireCondition(d) && <FcExpired />}</JustifyCenterRow>
-          </JustifyBetweenRow>
+      setTaskSteps(
+        filterTaskStepsByTaskCategory(
+          filterTaskStepsByWorkflowType(
+            filterTransferTaskSteps(filterTaskStepsByCondition(data, selectedCondition), 140),
+            selectedWorkflowType
+          ),
+          selectedTaskCategory
         )
-      }
+      )
+      setYearlyTaskSteps(filterTransferTaskSteps(yearlyData, 140))
     }
-  ]
+  }, [data, selectedCondition, selectedWorkflowType, selectedTaskCategory])
+
+  const columns: TableColumn<ITaskStep>[] = useMemo(() => {
+    return [
+      {
+        name: '',
+        cell: row => {
+          return (
+            <div
+              onClick={e => {
+                e.preventDefault()
+                e.stopPropagation()
+                const taskStepsCopy = JSON.parse(JSON.stringify(taskSteps))
+                const taskStepIndex = taskStepsCopy.findIndex(taskStep => taskStep._id === row._id)
+                taskStepsCopy[taskStepIndex].isChecked = !taskStepsCopy[taskStepIndex].isChecked
+                setTaskSteps(taskStepsCopy)
+              }}
+            >
+              <Checkbox isChecked={row.isChecked || false} onChange={() => {}} />
+            </div>
+          )
+        }
+      },
+      {
+        name: 'Added',
+        selector: row => {
+          if (row.steps.addedFrom) {
+            return row.steps.addedFrom?.firstname + ' ' + row.steps.addedFrom?.lastname
+          }
+          return ''
+        },
+        sortable: true,
+        cell: row => {
+          if (row.steps.addedFrom) {
+            return row.steps.addedFrom?.firstname + ' ' + row.steps.addedFrom?.lastname
+          }
+          return ''
+        }
+      },
+      {
+        name: 'Date',
+        selector: row => moment(row.steps.startDate).toString(),
+        sortable: true,
+        cell: d => moment(d.steps.startDate).format('MMM/DD/YYYY')
+      },
+      {
+        name: 'Customer',
+        selector: row => row.customer.firstname + ' ' + row.customer.lastname,
+        sortable: true,
+        cell: d => d.customer.firstname + ' ' + d.customer.lastname
+      },
+      {
+        name: 'Task name',
+        selector: row => row.name + ' ' + row.steps.category.name,
+        sortable: true,
+        cell: d => d.name + ' - ' + d.steps.category.name
+      },
+      {
+        name: 'Conditions',
+        selector: taskStepConditionSelector,
+        sortable: true,
+        cell: d => {
+          return (
+            <JustifyBetweenRow>
+              <JustifyCenterRow>{isTimerCondition(d) && <FcLeave />}</JustifyCenterRow>
+              <JustifyCenterRow>{isPostponeCondition(d) && <FcClock />}</JustifyCenterRow>
+              <JustifyCenterRow>{isExpireCondition(d) && <FcExpired />}</JustifyCenterRow>
+            </JustifyBetweenRow>
+          )
+        }
+      }
+    ]
+  }, [taskSteps])
 
   const handleRowClicked = (row: ITaskStep) => {
     dispatch(
@@ -122,6 +165,28 @@ const CompletedTasksTab = props => {
     )
   }
 
+  const handleTransfer = () => {}
+
+  const workflowTypes = [
+    ...uniqBy(
+      yearlyData?.map(step => ({ label: step.workflow.name, value: step.workflow._id })),
+      x => x.value
+    ),
+    { label: 'All', value: 'ALL' }
+  ]
+  const selectedWfType = workflowTypes.find(x => x.value === selectedWorkflowType)
+
+  const taskCategories = [
+    ...uniqBy(
+      yearlyData?.map(step => ({ label: step.steps.category.name, value: step.steps.category._id })),
+      x => x.value
+    ),
+    { label: 'All', value: 'ALL' }
+  ]
+  const selectedTC = taskCategories.find(x => x.value === selectedTaskCategory)
+
+  const userOptions = users?.map(({ _id, firstname }) => ({ value: _id, label: firstname })) || []
+  const selectedUser = userOptions.find(x => x.value === selectedToUser)
   return (
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
@@ -177,7 +242,7 @@ const CompletedTasksTab = props => {
             />
           </div>
         </div>
-        <div style={{ minWidth: 200, marginLeft: 8, marginRight: 8 }}>
+        <div style={{ minWidth: 120, marginLeft: 8, marginRight: 8 }}>
           <SelectInput
             selectedOption={[...TASK_CONDITION_OPTIONS]?.filter(x => x.value === selectedCondition) || []}
             labelText="Conditions"
@@ -188,38 +253,37 @@ const CompletedTasksTab = props => {
             options={[...TASK_CONDITION_OPTIONS]}
           />
         </div>
-        <div style={{ display: 'flex', alignItems: 'flex-end', flex: 1, height: '100%', paddingBottom: 3 }}>
-          <div
-            style={{
-              width: '100%',
-              padding: '5px 10px',
-              backgroundColor: 'rgba(248,245,245,0.82)',
-              borderRadius: 3,
-              marginRight: 8,
-              height: 36,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <span style={{ color: colors.green.primary, marginRight: 3 }}>incoming -</span>
-            <span style={{ color: colors.green.primary }}>section</span>
-          </div>
-          <div
-            style={{
-              width: '100%',
-              padding: '5px 10px',
-              backgroundColor: 'rgba(248,245,245,0.82)',
-              borderRadius: 3,
-              height: 36,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <span style={{ color: colors.red.primary, marginRight: 3 }}>incoming -</span>
-            <span style={{ color: colors.red.primary }}>section</span>
-          </div>
+        <div style={{ minWidth: 120, marginLeft: 8, marginRight: 8 }}>
+          <SelectInput
+            onChange={o => setSelectedWorkflowType(o.value)}
+            labelText="Workflows"
+            name="workflowTypes"
+            options={workflowTypes}
+            selectedOption={selectedWfType ? [selectedWfType] : [{ label: 'All', value: 'ALL' }]}
+          />
+        </div>
+        <div style={{ minWidth: 120, marginLeft: 8, marginRight: 8 }}>
+          <SelectInput
+            onChange={o => setSelectedTaskCategory(o.value)}
+            labelText="Task Categories"
+            name="taskCategories"
+            options={taskCategories}
+            selectedOption={selectedTC ? [selectedTC] : [{ label: 'All', value: 'ALL' }]}
+          />
+        </div>
+        <div style={{ minWidth: 120, marginLeft: 8, marginRight: 8 }}>
+          <SelectInput
+            onChange={o => setSelectedToUser(o.value)}
+            labelText="To User"
+            name="toUser"
+            options={userOptions}
+            selectedOption={selectedUser ? [selectedUser] : [{ label: 'All', value: 'ALL' }]}
+          />
+        </div>
+        <div style={{ alignItems: 'flex-end', display: 'flex', height: '100%', position: 'relative', bottom: 4 }}>
+          <Button height="36px" onClick={handleTransfer}>
+            Apply
+          </Button>
         </div>
       </JustifyBetweenRow>
       <ItemContainer height="calc(100% - 300px)">
