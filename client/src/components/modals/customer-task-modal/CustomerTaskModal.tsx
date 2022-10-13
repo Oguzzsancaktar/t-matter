@@ -96,6 +96,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     cancelPlay()
 
     await updateTask(tempUpdatedTaskData)
+
     await createActivity({
       title: 'Task Canceled',
 
@@ -321,10 +322,9 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     dispatch(activityApi.util.resetApiState())
   }
 
-<<<<<<< HEAD
   const handleConfirmCheck = async (timerVal, noteContent, checklistItem: ITaskChecklist, index: number) => {
     dispatch(closeModal(`NoteEditorModal-responsible-${taskData?._id}`))
-
+    checkPlay()
     const tempUpdatedTaskData = JSON.parse(JSON.stringify(updatedTaskData))
     tempUpdatedTaskData.steps[activeStep].checklistItems[index].isChecked = true
     handleAllChecklistCheck(tempUpdatedTaskData, index, noteContent, timerVal)
@@ -347,41 +347,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
         const updatedWork: ITaskUserWorkTime = {
           time: existingUser.time + userWork.time,
           user: existingUser.user
-=======
-  const handleCheckboxClick = (checklistItem: ITaskChecklist, index: number) => {
-    if (!checklistItem.isChecked && updatedTaskData) {
-      SwalReactContent.fire({
-        title: 'Enter your complete message',
-        input: 'textarea',
-        html: isResponsibleUserLoggedUser ? '' : <TaskNoteCounter />,
-        inputAttributes: {
-          autocapitalize: 'off'
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Complete',
-        showLoaderOnConfirm: true,
-        preConfirm: login => {
-          return login
-        },
-        allowOutsideClick: () => !Swal.isLoading()
-      }).then(async result => {
-        if (result.isConfirmed) {
-          checkPlay()
-          Swal.fire({
-            icon: 'success',
-            title: `Checklist Completed`,
-            text: result.value
-          })
-          const tempUpdatedTaskData = JSON.parse(JSON.stringify(updatedTaskData))
-          tempUpdatedTaskData.steps[activeStep].checklistItems[index].isChecked = true
-          handleAllChecklistCheck(tempUpdatedTaskData, index, result.value)
-          setUpdatedTaskData(tempUpdatedTaskData)
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Cancelled'
-          })
->>>>>>> refs/remotes/origin/master
         }
         const otherWorks = workArr.filter(work => work.user._id !== existingUser.user._id)
         tempUpdatedTaskData.steps[activeStep].workedTimes = [...otherWorks, updatedWork]
