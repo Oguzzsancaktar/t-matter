@@ -234,7 +234,7 @@ const transferTasks = async (req, res) => {
       x.steps[task.stepIndex].responsibleUser = mongoose.Types.ObjectId(task.toUserId)
       await dataAccess.taskDataAccess.updateTaskById(task.taskId, x)
     }
-    res.senStatus(200)
+    res.sendStatus(200)
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
   }
