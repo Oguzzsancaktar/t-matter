@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const middlewares = require('../../middlewares')
 const controllers = require('../../controllers')
+
+router.post('/seen', middlewares.authMiddlewares.checkAuth, controllers.taskController.updateTaskStepsSeen)
 router.post('/transfer', middlewares.authMiddlewares.checkAuth, controllers.taskController.transferTasks)
 router.get('/steps', middlewares.authMiddlewares.checkAuth, controllers.taskController.getTaskSteps)
 router.put('/reorder', controllers.taskController.reorderTasks)

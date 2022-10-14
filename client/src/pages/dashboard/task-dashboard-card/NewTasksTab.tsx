@@ -2,7 +2,7 @@ import * as React from 'react'
 import useAccessStore from '@hooks/useAccessStore'
 import { useEffect, useState } from 'react'
 import moment from 'moment/moment'
-import { useGetTaskStepsQuery } from '@services/customers/taskService'
+import { useGetTaskStepsQuery, useUpdateTaskStepsSeenMutation } from '@services/customers/taskService'
 import {
   CustomerTaskModal,
   DatePicker,
@@ -43,9 +43,12 @@ const NewTasksTab = props => {
   const [selectedCondition, setSelectedCondition] = useState('ALL')
   const [taskSteps, setTaskSteps] = useState<ITaskStep[]>([])
   const { data, isLoading } = useGetTaskStepsQuery(dateRange)
+  const [seenUpdate] = useUpdateTaskStepsSeenMutation()
 
   useEffect(() => {
     if (data) {
+      const newTaskSteps = filterNewTaskSteps(data).filter(d => !d.steps.isSeen)
+      seenUpdate({ tasks: newTaskSteps.map(d => ({ taskId: d._id, stepIndex: d.stepIndex })) }).unwrap()
       setTaskSteps(filterNewTaskSteps(filterTaskStepsByCondition(data, selectedCondition)))
     }
   }, [data, selectedCondition])

@@ -266,7 +266,7 @@ const getTaskStepMonthlyAnalysisData = async ({ responsibleUserId }) => {
   return steps
 }
 
-const getTaskStepsData = async ({ responsibleUserId, startDate, endDate }) => {
+const getTaskStepsData = async ({ responsibleUserId, startDate, endDate, disabledSeen }) => {
   const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
 
   const $match = {}
@@ -279,6 +279,12 @@ const getTaskStepsData = async ({ responsibleUserId, startDate, endDate }) => {
     $match['steps.startDate'] = {
       $gte: +new Date(startDate),
       $lte: +new Date(endDate)
+    }
+  }
+
+  if (disabledSeen) {
+    $match['steps.seen'] = {
+      $ne: true
     }
   }
 

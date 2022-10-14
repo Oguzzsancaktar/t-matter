@@ -44,7 +44,10 @@ const SmallBadge = ({ color, onClick, count, text }) => {
 const Head = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
-  const { data, isLoading } = useGetTaskStepsQuery({})
+  const { data, isLoading } = useGetTaskStepsQuery({
+    startDate: moment().startOf('year').toDate(),
+    endDate: moment().endOf('year').toDate()
+  })
   const [counts, setCounts] = useState<{ new: number; completed: number; cancelled: number; transfer: number }>({
     new: 0,
     cancelled: 0,
@@ -55,12 +58,15 @@ const Head = () => {
   useEffect(() => {
     if (data) {
       const tasks = filterNewTaskSteps(groupBy(data, d => moment(d.steps.startDate).month())[moment().month()])
-
+      const filtered = data.filter(d => !d.steps.isSeen)
       setCounts({
-        new: filterNewTaskSteps(data).length,
-        completed: filterCompletedTaskSteps(data).length,
-        cancelled: filterCancelledTaskSteps(data).length,
-        transfer: filterTransferTaskSteps(tasks, 140).length
+        new: filterNewTaskSteps(filtered).length,
+        completed: filterCompletedTaskSteps(filtered).length,
+        cancelled: filterCancelledTaskSteps(filtered).length,
+        transfer: filterTransferTaskSteps(
+          tasks.filter(d => !d.steps.isSeen),
+          140
+        ).length
       })
     }
   }, [data])

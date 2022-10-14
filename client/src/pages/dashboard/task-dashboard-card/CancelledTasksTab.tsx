@@ -2,7 +2,7 @@ import * as React from 'react'
 import useAccessStore from '@hooks/useAccessStore'
 import { useEffect, useState } from 'react'
 import moment from 'moment/moment'
-import { useGetTaskStepsQuery } from '@services/customers/taskService'
+import { useGetTaskStepsQuery, useUpdateTaskStepsSeenMutation } from '@services/customers/taskService'
 import {
   CustomerTaskModal,
   DatePicker,
@@ -24,6 +24,7 @@ import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 import { TASK_CONDITION_OPTIONS } from '@constants/task'
 import {
   filterCancelledTaskSteps,
+  filterCompletedTaskSteps,
   filterTaskStepsByCondition,
   isExpireCondition,
   isPostponeCondition,
@@ -44,9 +45,12 @@ const CompletedTasksTab = props => {
   const [selectedCondition, setSelectedCondition] = useState('ALL')
   const [taskSteps, setTaskSteps] = useState<ITaskStep[]>([])
   const { data, isLoading } = useGetTaskStepsQuery(dateRange)
+  const [seenUpdate] = useUpdateTaskStepsSeenMutation()
 
   useEffect(() => {
     if (data) {
+      const cancelledTasks = filterCompletedTaskSteps(data).filter(d => !d.steps.isSeen)
+      seenUpdate({ tasks: cancelledTasks.map(d => ({ taskId: d._id, stepIndex: d.stepIndex })) }).unwrap()
       setTaskSteps(filterCancelledTaskSteps(filterTaskStepsByCondition(data, selectedCondition)))
     }
   }, [data, selectedCondition])

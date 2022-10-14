@@ -207,14 +207,15 @@ const getTaskStepMonthlyAnalysisData = (builder: IBuilder) => {
 }
 
 const getTaskSteps = (builder: IBuilder) => {
-  return builder.query<ITaskStep[], { startDate?: Date; endDate?: Date }>({
-    query({ startDate, endDate }) {
+  return builder.query<ITaskStep[], { startDate?: Date; endDate?: Date; disabledSeen?: boolean }>({
+    query({ startDate, endDate, disabledSeen }) {
       return {
         url: `/task/steps`,
         method: 'GET',
         params: {
           startDate: startDate?.toDateString(),
-          endDate: endDate?.toDateString()
+          endDate: endDate?.toDateString(),
+          disabledSeen
         }
       }
     },
@@ -234,6 +235,7 @@ const transferTasks = (builder: IBuilder) => {
       tasks: {
         toUserId: IUser['_id']
         taskId: ITaskStep['_id']
+        stepIndex: ITaskStep['stepIndex']
       }[]
     }
   >({
@@ -247,6 +249,34 @@ const transferTasks = (builder: IBuilder) => {
       }
     },
     invalidatesTags() {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
+const updateTaskStepsSeen = (builder: IBuilder) => {
+  return builder.mutation<
+    ICustomerTask[],
+    {
+      tasks: {
+        stepIndex: ITaskStep['stepIndex']
+        taskId: ITaskStep['_id']
+      }[]
+    }
+  >({
+    query({ tasks }) {
+      return {
+        url: `/task/seen`,
+        method: 'POST',
+        data: {
+          tasks
+        }
+      }
+    },
+    invalidatesTags(result) {
+      if (result) {
+        return [...result.map(({ _id }) => ({ type: TASK_TAG_TYPE, id: _id })), { type: TASK_TAG_TYPE, id: 'LIST' }]
+      }
       return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
     }
   })
@@ -269,7 +299,8 @@ const taskApi = createApi({
     getTaskCountForMonthsData: getTaskCountForMonthsData(builder),
     getTaskStepMonthlyAnalysisData: getTaskStepMonthlyAnalysisData(builder),
     getTaskSteps: getTaskSteps(builder),
-    transferTasks: transferTasks(builder)
+    transferTasks: transferTasks(builder),
+    updateTaskStepsSeen: updateTaskStepsSeen(builder)
   })
 })
 
@@ -287,7 +318,8 @@ const {
   useGetTaskStepMonthlyAnalysisDataQuery,
   useGetTaskStepsQuery,
   useLazyGetTaskStepsQuery,
-  useTransferTasksMutation
+  useTransferTasksMutation,
+  useUpdateTaskStepsSeenMutation
 } = taskApi
 export {
   taskApi,
@@ -304,5 +336,6 @@ export {
   useGetTaskStepMonthlyAnalysisDataQuery,
   useGetTaskStepsQuery,
   useLazyGetTaskStepsQuery,
-  useTransferTasksMutation
+  useTransferTasksMutation,
+  useUpdateTaskStepsSeenMutation
 }

@@ -203,11 +203,12 @@ const getTaskStepMonthlyAnalysis = async (req, res) => {
 
 const getTaskSteps = async (req, res) => {
   try {
-    const { startDate, endDate } = req.query
+    const { startDate, endDate, disabledSeen } = req.query
     const steps = await dataAccess.taskDataAccess.getTaskStepsData({
       responsibleUserId: req.user.userId,
       startDate,
-      endDate
+      endDate,
+      disabledSeen: disabledSeen === 'true'
     })
     res.status(StatusCodes.OK).json(steps)
   } catch (e) {
@@ -240,6 +241,22 @@ const transferTasks = async (req, res) => {
   }
 }
 
+const updateTaskStepsSeen = async (req, res) => {
+  const { tasks } = req.body
+  try {
+    const xs = []
+    for (const task of tasks) {
+      const x = await Task.findById(task.taskId).lean()
+      xs.push(x)
+      x.steps[task.stepIndex].isSeen = true
+      await dataAccess.taskDataAccess.updateTaskById(task.taskId, x)
+    }
+    res.status(200).send(xs)
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
@@ -253,5 +270,6 @@ module.exports = {
   getTaskCountForMonths,
   getTaskStepMonthlyAnalysis,
   getTaskSteps,
-  transferTasks
+  transferTasks,
+  updateTaskStepsSeen
 }

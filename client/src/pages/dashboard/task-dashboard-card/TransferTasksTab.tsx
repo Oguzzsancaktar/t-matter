@@ -2,7 +2,11 @@ import * as React from 'react'
 import useAccessStore from '@hooks/useAccessStore'
 import { useEffect, useMemo, useState } from 'react'
 import moment from 'moment/moment'
-import { useGetTaskStepsQuery, useTransferTasksMutation } from '@services/customers/taskService'
+import {
+  useGetTaskStepsQuery,
+  useTransferTasksMutation,
+  useUpdateTaskStepsSeenMutation
+} from '@services/customers/taskService'
 import {
   Button,
   Checkbox,
@@ -25,6 +29,7 @@ import DataTable, { TableColumn } from 'react-data-table-component'
 import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 import { TASK_CONDITION_OPTIONS } from '@constants/task'
 import {
+  filterCompletedTaskSteps,
   filterTaskStepsByCondition,
   filterTaskStepsByTaskCategory,
   filterTaskStepsByWorkflowType,
@@ -64,9 +69,13 @@ const CompletedTasksTab = props => {
   })
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
   const [transfer] = useTransferTasksMutation()
+  const [seenUpdate] = useUpdateTaskStepsSeenMutation()
 
   useEffect(() => {
     if (data) {
+      const transferTasks = filterTransferTaskSteps(data, 140).filter(d => !d.steps.isSeen)
+      seenUpdate({ tasks: transferTasks.map(d => ({ taskId: d._id, stepIndex: d.stepIndex })) }).unwrap()
+
       setTaskSteps(
         filterTaskStepsByTaskCategory(
           filterTaskStepsByWorkflowType(
