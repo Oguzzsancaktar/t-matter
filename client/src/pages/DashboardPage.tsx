@@ -3,6 +3,7 @@ import React from 'react'
 import { ActiveTasksCard, ActivityTimelineCard, DashboardCard } from '.'
 import { FinanceDashboardCard } from '@pages/dashboard/finance-dashboard-card'
 import TaskDashboardCard from '@pages/dashboard/task-dashboard-card/TaskDashboardCard'
+import { HrDashboardCard } from '@pages/dashboard/hr-dashboard-card'
 
 const DashboardPage: React.FC = () => {
   return (
@@ -29,7 +30,7 @@ const DashboardPage: React.FC = () => {
             </ItemContainer>
 
             <ItemContainer width="100%" height="100%" margin="1rem 0">
-              <DashboardCard head={'test'}>incoming chart</DashboardCard>
+              <HrDashboardCard />
             </ItemContainer>
 
             <ItemContainer width="100%" height="100%">
