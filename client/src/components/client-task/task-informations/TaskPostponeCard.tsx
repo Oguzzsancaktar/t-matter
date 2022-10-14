@@ -61,20 +61,49 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
             offsetY: 10
           },
           value: {
-            show: true,
+            show: false,
             offsetY: 70,
-            fontSize: '13x',
+            fontSize: '13px',
             color: colors.text.primary,
             formatter: function (val) {
               if ((taskActiveStep?.postponeTime * val) / 100 > taskActiveStep?.postponeTime) {
                 setIsPostponeLimitPassed(true)
               }
-              return (taskActiveStep?.postponeTime * val) / 100 + '/' + taskActiveStep?.postponeTime
+              return taskActiveStep.postponedDate
             }
           }
         }
       }
     },
+
+    tooltip: {
+      enabled: true,
+      shared: true,
+      followCursor: true,
+      intersect: false,
+      inverseOrder: false,
+      custom: undefined,
+      x: {
+        formatter: function (val) {
+          return '$ ' + val
+        }
+      },
+      style: {
+        fontSize: '12px',
+        fontFamily: undefined
+      },
+      onDatasetHover: {
+        highlightDataSeries: false
+      },
+
+      marker: {
+        show: false
+      },
+      items: {
+        display: 'flex'
+      }
+    },
+
     fill: {
       type: 'gradient',
       colors: isPostponeLimitPassed ? [colors.red.primary] : [colors.blue.primary],
@@ -97,25 +126,26 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
         <JustifyCenterRow width="100%" height="20px" data-toggle>
           <ExternalLink size={20} color={colors.text.primary} />
         </JustifyCenterRow>
-        <ItemContainer margin="0 0 0 -0.2rem">
-          <Flatpickr
-            minDate={'now'}
-            style={{
-              fontSize: 12,
-              height: '20px',
-              textAlign: 'center'
-            }}
-            disabled={!canTaskPostpone}
-            options={{
-              enableTime: true,
-              dateFormat: 'M/d/Y h:m'
-            }}
-            value={taskActiveStep.postponedDate}
-            onChange={onDateChange}
-            placeholder="Postpone Task"
-            wrap={true}
-          />
-        </ItemContainer>
+      </ItemContainer>
+
+      <ItemContainer margin="0 0 0 -0.2rem" position="absolute" left="52%" top="67%" transform="translate(-50%,-50%)">
+        <Flatpickr
+          minDate={'now'}
+          style={{
+            fontSize: 13,
+            height: '20px',
+            textAlign: 'center'
+          }}
+          disabled={!canTaskPostpone}
+          options={{
+            enableTime: true,
+            dateFormat: 'M/d/Y h:m'
+          }}
+          value={taskActiveStep.postponedDate}
+          onChange={onDateChange}
+          placeholder="Postpone Task"
+          wrap={true}
+        />
       </ItemContainer>
     </ItemContainer>
   )
