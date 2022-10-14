@@ -350,6 +350,20 @@ const getTaskStepsData = async ({ responsibleUserId, startDate, endDate }) => {
       }
     },
     {
+      $lookup: {
+        from: 'workflowplans',
+        localField: 'workflowId',
+        foreignField: '_id',
+        as: 'workflow'
+      }
+    },
+    {
+      $unwind: {
+        path: '$workflow',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
       $sort: { 'steps.startDate': -1 }
     }
   ]
