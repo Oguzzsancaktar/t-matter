@@ -30,7 +30,7 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
         },
         hollow: {
           margin: 5,
-          size: '60%',
+          size: '50%',
           background: 'transparent',
           position: 'front',
           dropShadow: {
@@ -46,13 +46,13 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
         dataLabels: {
           name: {
             show: false,
-            fontSize: '16px',
+            fontSize: '15px',
             color: undefined,
-            offsetY: 120
+            offsetY: 60
           },
           value: {
             offsetY: 70,
-            fontSize: '13px',
+            fontSize: '15px',
             color: colors.text.primary,
             formatter: function (val) {
               return moment(taskActiveStep.startDate).format('MMM/DD/YY  HH:mm')
@@ -64,7 +64,7 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
   }
 
   return (
-    <ItemContainer height="100%" transform="translateX(-6%)">
+    <ItemContainer height="100%" transform="translateX(-15%)">
       <ItemContainer position="absolute" left="50%" top="40%" transform="translate(-50%,-50%)" width="100px">
         <JustifyCenterRow width="100%" height="20px">
           <Calendar size={20} color={colors.text.primary} />

@@ -1,47 +1,46 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-import { EditorState, convertToRaw, convertFromRaw, ContentState } from 'draft-js'
-import { Editor } from 'react-draft-wysiwyg'
-import draftToHtml from 'draftjs-to-html'
-import htmlToDraft from 'html-to-draftjs'
-import EditorColorPic from './EditorColorPic'
-
-import { emptyQueryParams } from '@/constants/queryParams'
-import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import { ItemContainer } from '../item-container'
 
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { FaMicrophone, FaMicrophoneSlash, FaPause, FaRecordVinyl } from 'react-icons/fa'
-import { Pause, Voicemail } from 'react-feather'
-import { FcVoicePresentation } from 'react-icons/fc'
+import { FaKeyboard } from 'react-icons/fa'
+import { FcCustomerSupport } from 'react-icons/fc'
 import { JustifyBetweenRow } from '../layout'
 import { H1 } from '../texts'
 import useInterval from '@/hooks/useInterval'
 import { secondsToHourMin } from '@/utils/timeUtils'
 import { ConfirmCancelButtons } from '../button'
+import styled from 'styled-components'
+import { speechAnimation } from '@/shared'
+
+import SunEditorCore from 'suneditor/src/lib/core'
+import 'suneditor/dist/css/suneditor.min.css' // Import Sun Editor's CSS File
+import RichTextEditor from './RichTextEditor'
+import colors from '@/constants/colors'
 
 interface IProps {
   onCancel: () => void
   onSubmit: (timerVal: number, noteContent: string) => void
 }
 
+const AnimatedCircle = styled.div`
+  animation-name: ${speechAnimation};
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+`
+
+const styles = {
+  'font-size': '',
+  'font-family': ''
+}
+
 const NoteSpeech: React.FC<IProps> = ({ onSubmit, onCancel }) => {
+  const [textContent, setTextContent] = useState('')
+  const editor = useRef<SunEditorCore>()
+
+  const [content, setContent] = useState(``)
+
   const [timerValue, setTimerValue] = useState(0)
-  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
-  const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(searchQueryParams)
-
-  const [contentBlock, setContentBlock] = useState(htmlToDraft(''))
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
-
-  const mentionSuggestUsers = useMemo(
-    () =>
-      usersData?.map(user => ({
-        text: user.firstname + '_' + user.lastname,
-        value: user.firstname + '_' + user.lastname,
-        url: user._id
-      })),
-    [usersData]
-  )
 
   const listenContinuously = () => {
     SpeechRecognition.startListening({
@@ -58,8 +57,9 @@ const NoteSpeech: React.FC<IProps> = ({ onSubmit, onCancel }) => {
     resetTranscript()
   }
 
-  const onEditorStateChange = (state: EditorState) => {
-    setEditorState(state)
+  // The sunEditor parameter will be set to the core suneditor instance when this function is called
+  const getSunEditorInstance = (sunEditor: SunEditorCore) => {
+    editor.current = sunEditor
   }
 
   useInterval(() => {
@@ -67,25 +67,8 @@ const NoteSpeech: React.FC<IProps> = ({ onSubmit, onCancel }) => {
   }, 1000)
 
   useEffect(() => {
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
-      const tempEditorState = EditorState.createWithContent(contentState)
-
-      setEditorState(tempEditorState)
-    }
-  }, [contentBlock])
-
-  useEffect(() => {
-    let text = draftToHtml(convertToRaw(editorState.getCurrentContent()))
-    // .slice(3)
-    // .replace('</p>', '')
-    // .replace('\n', ' ')
-
     if (transcript !== '') {
-      setContentBlock(htmlToDraft(text + finalTranscript))
-    }
-
-    if (finalTranscript !== '') {
+      setTextContent(transcript)
       resetTranscript()
     }
   }, [finalTranscript])
@@ -101,38 +84,50 @@ const NoteSpeech: React.FC<IProps> = ({ onSubmit, onCancel }) => {
   return (
     <ItemContainer height="100%">
       <ItemContainer height="calc(100% - 1rem - 35px)">
-        <Editor
-          editorState={editorState}
-          onEditorStateChange={onEditorStateChange}
-          wrapperClassName="note-editor-wrapper"
-          editorClassName="note-editor"
-          toolbar={{
-            colorPicker: { component: EditorColorPic }
-          }}
-          mention={{
-            separator: ' ',
-            trigger: '@',
-            suggestions: mentionSuggestUsers
-          }}
-          hashtag={{}}
-          placeholder="Enter your text..."
-          readOnly={listening}
-          toolbarCustomButtons={[
-            listening ? (
-              <FaMicrophoneSlash size={40} onClick={handleStopSpeech} />
+        <ItemContainer
+          padding="0 1rem"
+          height="80px"
+          borderTop={'1px solid ' + colors.gray.disabled}
+          borderLeft={'1px solid ' + colors.gray.disabled}
+          borderRight={'1px solid ' + colors.gray.disabled}
+          borderRadius="0.3rem 0.3rem 0 0"
+        >
+          <JustifyBetweenRow height="50px">
+            {listening ? (
+              <AnimatedCircle>
+                <FcCustomerSupport size={40} onClick={handleStopSpeech} style={{ cursor: 'pointer' }} />
+              </AnimatedCircle>
             ) : (
-              <FaMicrophone size={40} onClick={listenContinuously} />
-            ),
-            <ItemContainer width="auto">{secondsToHourMin(timerValue, true)}</ItemContainer>
-          ]}
-        />
+              <FcCustomerSupport size={40} onClick={listenContinuously} style={{ cursor: 'pointer' }} />
+            )}
+
+            <ItemContainer borderRadius="0.3rem" padding="0.2rem 0.3rem" width="120px">
+              <H1 color={colors.text.primary} fontSize="1.5rem">
+                {secondsToHourMin(timerValue, true)}{' '}
+              </H1>
+            </ItemContainer>
+            <ItemContainer width="30px"></ItemContainer>
+          </JustifyBetweenRow>
+          <ItemContainer height="30px" borderTop={'1px solid ' + colors.gray.disabled}>
+            <H1 color={colors.gray.dark} fontSize="1rem">
+              {transcript}
+            </H1>
+          </ItemContainer>
+        </ItemContainer>
+
+        <ItemContainer height="calc(100% - 80px)">
+          {/* @ts-ignore */}
+          <RichTextEditor
+            value={content}
+            onChange={content => setContent(content)}
+            showToolbar={false}
+            appendContent={textContent}
+          />
+        </ItemContainer>
       </ItemContainer>
 
       <ItemContainer height="35px" margin="1rem 0 0 0 ">
-        <ConfirmCancelButtons
-          onConfirm={() => onSubmit(timerValue, draftToHtml(convertToRaw(editorState.getCurrentContent())))}
-          onCancel={onCancel}
-        />
+        <ConfirmCancelButtons onConfirm={() => onSubmit(timerValue, content)} onCancel={onCancel} />
       </ItemContainer>
     </ItemContainer>
   )

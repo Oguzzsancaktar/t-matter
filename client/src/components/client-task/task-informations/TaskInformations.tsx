@@ -49,10 +49,6 @@ const InformationCard = styled(ItemContainer)`
   background: ${'transparent'};
   padding: 0rem;
   margin: ${({ margin }) => (margin ? margin : '1rem 0')};
-
-  &:not(:first-child) {
-    margin-top: 0;
-  }
 `
 const TaskInformations: React.FC<IProps> = ({
   taskData,
@@ -137,10 +133,10 @@ const TaskInformations: React.FC<IProps> = ({
             />
           </InformationCard>
 
-          <ItemContainer backgroundColor={'transparent'} borderRadius="0.3rem" margin="0 0 1rem 0">
+          <ItemContainer backgroundColor={'transparent'} borderRadius="0.3rem" margin="5rem 0 -2rem 0">
             <Column height="100%">
               <InformationCard height="100%" margin="0">
-                <JustifyBetweenRow width="100%" height="250px">
+                <JustifyBetweenRow width="100%" height="220px">
                   <TaskDeadlineCard taskActiveStep={taskData.steps[activeStep]} />
 
                   <TaskPostponeCard
@@ -150,7 +146,7 @@ const TaskInformations: React.FC<IProps> = ({
                 </JustifyBetweenRow>
               </InformationCard>
 
-              <InformationCard height="30px" margin="-2rem 0 2rem 0">
+              <InformationCard height="30px" margin="3rem 0 2rem 0">
                 <TaskTimerCard
                   taskActiveStep={taskData.steps[activeStep]}
                   isTaskNotStarted={isTaskNotStarted}

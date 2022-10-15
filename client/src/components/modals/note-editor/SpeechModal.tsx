@@ -4,7 +4,7 @@ import { JustifyBetweenColumn, JustifyCenterRow } from '@/components/layout'
 import { H1 } from '@/components/texts'
 import { ModalHeader, ModalBody } from '../types'
 import colors from '@/constants/colors'
-import { NoteEditor, NoteSpeech } from '@/components/note-editor'
+import { NoteSpeech } from '@/components/note-editor'
 import useAccessStore from '@/hooks/useAccessStore'
 import { closeModal } from '@/store'
 
@@ -39,7 +39,7 @@ const NoteEditorModal: React.FC<IProps> = ({ id, headerText, size = 'large', cb 
       </ModalHeader>
 
       <ModalBody>
-        <NoteEditor onSubmit={handleSubmit} onCancel={handleCancel} />
+        <NoteSpeech onSubmit={handleSubmit} onCancel={handleCancel} />
       </ModalBody>
     </JustifyBetweenColumn>
   )

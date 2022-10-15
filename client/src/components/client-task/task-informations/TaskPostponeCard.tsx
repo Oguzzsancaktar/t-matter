@@ -39,7 +39,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
         },
         hollow: {
           margin: 5,
-          size: '60%',
+          size: '50%',
           background: 'transparent',
           position: 'front',
           dropShadow: {
@@ -62,8 +62,8 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
           },
           value: {
             show: false,
-            offsetY: 70,
-            fontSize: '13px',
+            offsetY: 60,
+            fontSize: '15px',
             color: colors.text.primary,
             formatter: function (val) {
               if ((taskActiveStep?.postponeTime * val) / 100 > taskActiveStep?.postponeTime) {
@@ -119,7 +119,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
   })
 
   return (
-    <ItemContainer height="100%" position="relative" transform="translateX(6%)">
+    <ItemContainer height="100%" position="relative" transform="translateX(15%)">
       <ReactApexChart options={radialChartOptions} series={series} type="radialBar" height={'100%'} />
 
       <ItemContainer position="absolute" left="50%" top="40%" transform="translate(-50%,-50%)" width="140px">
@@ -132,7 +132,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
         <Flatpickr
           minDate={'now'}
           style={{
-            fontSize: 13,
+            fontSize: 16,
             height: '20px',
             textAlign: 'center'
           }}
