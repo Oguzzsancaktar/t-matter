@@ -10,11 +10,11 @@ const SmallBadge = ({ color, onClick, count, text }) => {
       <span style={{ fontSize: 10 }}>{count}</span>
       <span
         style={{
-          width: '80px',
-          fontSize: 13,
+          width: '70px',
+          fontSize: 12,
           textAlign: 'center',
-          fontFamily: 'Satoshi-Medium',
-          padding: '0.2rem 0.3rem',
+          fontFamily: 'Satoshi-Light',
+          padding: '0.1rem 0.2rem',
           backgroundColor: color,
           marginTop: 2,
           color: 'white',
