@@ -111,7 +111,7 @@ const TaskProgress: React.FC<IProps> = ({ taskStatus, taskSteps, workflowName, t
               <UserImage
                 width="40px"
                 height="40px"
-                src={taskSteps[activeStep]?.responsibleUser.profile_img}
+                src={taskSteps[activeStep]?.responsibleUser?.profile_img}
               ></UserImage>
             </ItemContainer>
             <H1 textAlign="center" color={colors.white.secondary} width="calc(100% - 1rem - 40px)">

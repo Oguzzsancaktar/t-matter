@@ -23,7 +23,7 @@ import Swal from 'sweetalert2'
 import { ModalBody } from '../types'
 import TaskInformations from '@/components/client-task/task-informations/TaskInformations'
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
-import { NoteEditorModal } from '@/components'
+import { NoteEditorModal, SpeechModal } from '@/components'
 import useSound from 'use-sound'
 
 interface IProps {
@@ -78,7 +78,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   }
 
   const handleConfirmCancelTask = async (timerVal, noteContent) => {
-    dispatch(closeModal(`NoteEditorModal-cancel-${taskData?._id}`))
+    dispatch(closeModal(`SpeechModal-cancel-${taskData?._id}`))
 
     const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
 
@@ -107,18 +107,18 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const handleCancelTask = () => {
     dispatch(
       openModal({
-        id: `NoteEditorModal-cancel-${updatedTaskData?._id}`,
+        id: `SpeechModal-cancel-${updatedTaskData?._id}`,
         title: 'Cancel Note',
         body: (
-          <NoteEditorModal
-            id={`NoteEditorModal-cancel-${updatedTaskData?._id}`}
+          <SpeechModal
+            id={`SpeechModal-cancel-${updatedTaskData?._id}`}
             headerText={`Cancel Note ( ${customer.firstname + ' ' + customer.lastname} / ${updatedTaskData?.name} )`}
             cb={handleConfirmCancelTask}
           />
         ),
-        height: ESize.HMedium,
-        width: ESize.WMedium,
-        maxWidth: ESize.WMedium
+        height: ESize.HSmall,
+        width: ESize.WSmall,
+        maxWidth: ESize.WSmall
       })
     )
   }
@@ -128,7 +128,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   }
 
   const handleConfirmPostponeChange = async (timerVal, noteContent, dateText: string) => {
-    dispatch(closeModal(`NoteEditorModal-postpone-${taskData?._id}`))
+    dispatch(closeModal(`SpeechModal-postpone-${taskData?._id}`))
 
     const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
 
@@ -158,20 +158,20 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     ) {
       dispatch(
         openModal({
-          id: `NoteEditorModal-postpone-${updatedTaskData?._id}`,
+          id: `SpeechModal-postpone-${updatedTaskData?._id}`,
           title: 'Postpone Note',
           body: (
-            <NoteEditorModal
-              id={`NoteEditorModal-postpone-${updatedTaskData?._id}`}
+            <SpeechModal
+              id={`SpeechModal-postpone-${updatedTaskData?._id}`}
               headerText={`Responsible Note ( ${customer.firstname + ' ' + customer.lastname} / ${
                 updatedTaskData?.name
               } )`}
               cb={(timerVal, noteContent) => handleConfirmPostponeChange(timerVal, noteContent, dateText)}
             />
           ),
-          height: ESize.HMedium,
-          width: ESize.WMedium,
-          maxWidth: ESize.WMedium
+          height: ESize.HSmall,
+          width: ESize.WSmall,
+          maxWidth: ESize.WSmall
         })
       )
     } else {
@@ -186,7 +186,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   }
 
   const handleConfirmResponsibleChange = async (timerVal, noteContent, responsible: IUser) => {
-    dispatch(closeModal(`NoteEditorModal-responsible-${taskData?._id}`))
+    dispatch(closeModal(`SpeechModal-responsible-${taskData?._id}`))
 
     const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
 
@@ -214,20 +214,20 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const handleResponsibleChange = (responsible: IUser) => {
     dispatch(
       openModal({
-        id: `NoteEditorModal-responsible-${updatedTaskData?._id}`,
+        id: `SpeechModal-responsible-${updatedTaskData?._id}`,
         title: 'Responsible Change Note',
         body: (
-          <NoteEditorModal
-            id={`NoteEditorModal-responsible-${updatedTaskData?._id}`}
+          <SpeechModal
+            id={`SpeechModal-responsible-${updatedTaskData?._id}`}
             headerText={`Responsible Change Note ( ${customer.firstname + ' ' + customer.lastname} / ${
               updatedTaskData?.name
             } )`}
             cb={(timerVal, noteContent) => handleConfirmResponsibleChange(timerVal, noteContent, responsible)}
           />
         ),
-        height: ESize.HMedium,
-        width: ESize.WMedium,
-        maxWidth: ESize.WMedium
+        height: ESize.HSmall,
+        width: ESize.WSmall,
+        maxWidth: ESize.WSmall
       })
     )
   }
