@@ -27,12 +27,16 @@ const SmallBadge = ({ color, onClick, count, text }) => {
       <span style={{ fontSize: 10 }}>{count}</span>
       <span
         style={{
-          fontSize: 11,
-          padding: '1px 2px',
+          width: '80px',
+          fontSize: 13,
+          textAlign: 'center',
+          fontFamily: 'Satoshi-Medium',
+          padding: '0.2rem 0.3rem',
           backgroundColor: color,
           marginTop: 2,
           color: 'white',
-          borderRadius: 2
+          borderRadius: '0.3rem',
+          fontWeight: '600'
         }}
       >
         {text}
@@ -96,6 +100,12 @@ const Head = () => {
         height: '100%'
       }}
     >
+      <SmallBadge
+        count={counts.transfer}
+        text="Transfer"
+        color={'#ff7b00'}
+        onClick={handleShowTaskDashboardInfoModal.bind(this, 'ConditionsTab')}
+      />
       <SmallBadge
         count={counts.new}
         text="New tasks"
