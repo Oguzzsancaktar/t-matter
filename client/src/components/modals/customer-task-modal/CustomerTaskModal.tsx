@@ -46,6 +46,12 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
+  const [taskNoteFilterUserId, setTaskNoteFilterUserId] = useState('')
+
+  const handleResetActivityUserFilter = () => {
+    setTaskNoteFilterUserId('')
+  }
+
   const [isTaskNotStarted, setIsTaskNotStarted] = useState(
     updatedTaskData?.steps.filter(step => step.stepStatus === ETaskStatus.Not_Started).length ===
       updatedTaskData?.steps.length
@@ -56,6 +62,10 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
       updateTask(updatedTaskData)
     }
   }, [updatedTaskData])
+
+  const handleUserWorkClick = (userId: string) => {
+    setTaskNoteFilterUserId(userId)
+  }
 
   const handleTaskTimerChange = (userWorkTime: ITaskUserWorkTime) => {
     const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
@@ -179,6 +189,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
       tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
       tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
+
+      console.log(111, tempUpdatedTaskData.steps[activeStep].postponedDate)
 
       await updateTask(tempUpdatedTaskData)
       setUpdatedTaskData({ ...tempUpdatedTaskData })
@@ -466,6 +478,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
                       handleCancelTask={handleCancelTask}
                       handleStartTask={handleStartTask}
                       handleTaskTimerChange={handleTaskTimerChange}
+                      handleUserWorkClick={handleUserWorkClick}
+                      handleResetActivityUserFilter={handleResetActivityUserFilter}
                     />
                   </ItemContainer>
 
@@ -474,7 +488,12 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
                     height="100%"
                     backgroundColor={colors.white.primary}
                   >
-                    <TaskEventSection taskData={updatedTaskData} task={taskId} activeStepNumber={activeStep} />
+                    <TaskEventSection
+                      taskData={updatedTaskData}
+                      task={taskId}
+                      activeStepNumber={activeStep}
+                      taskNoteFilterUserId={taskNoteFilterUserId}
+                    />
                   </ItemContainer>
                 </Row>
               )}

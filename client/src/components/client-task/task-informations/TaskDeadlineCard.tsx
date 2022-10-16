@@ -55,9 +55,29 @@ const TaskDeadlineCard: React.FC<IProps> = ({ taskActiveStep }) => {
             fontSize: '15px',
             color: colors.text.primary,
             formatter: function (val) {
-              return moment(taskActiveStep.startDate).format('MMM/DD/YY  HH:mm')
+              return moment(taskActiveStep.endDate).format('MMM/DD/YY  HH:mm')
             }
           }
+        }
+      }
+    },
+    tooltip: {
+      shared: true,
+      followCursor: true,
+      x: {
+        show: true,
+        formatter(timestamp) {
+          return 'timestamp.toString()'
+        }
+      },
+      y: {
+        formatter(timestamp) {
+          return 'timestamp.toString()'
+        }
+      },
+      z: {
+        formatter(timestamp) {
+          return 'timestamp.toString()'
         }
       }
     }

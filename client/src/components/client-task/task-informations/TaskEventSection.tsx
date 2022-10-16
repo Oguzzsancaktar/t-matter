@@ -11,8 +11,9 @@ interface IProps {
   task: ITask['_id']
   activeStepNumber: number
   taskData: ICustomerTask
+  taskNoteFilterUserId: string
 }
-const TaskEventSection: React.FC<IProps> = ({ task, activeStepNumber, taskData }) => {
+const TaskEventSection: React.FC<IProps> = ({ task, activeStepNumber, taskData, taskNoteFilterUserId }) => {
   const [activeTab, setActiveTab] = useState('note')
 
   console.log()
@@ -57,11 +58,15 @@ const TaskEventSection: React.FC<IProps> = ({ task, activeStepNumber, taskData }
             padding="1rem"
           >
             {activeTab === 'note' ? (
-              <CustomerTaskModalNoteTab task={task} step={activeStepNumber} />
+              <CustomerTaskModalNoteTab
+                task={task}
+                step={activeStepNumber}
+                taskNoteFilterUserId={taskNoteFilterUserId}
+              />
             ) : activeTab === 'workflow-checklist' ? (
               <>tab1</>
             ) : (
-              <>tab2</>
+              <>TAB 2</>
             )}
           </ItemContainer>
         </ModalBody>

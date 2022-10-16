@@ -9,13 +9,14 @@ import { secondsToHourMin } from '@/utils/timeUtils'
 
 interface IProps {
   activity: IActivity
+  updatable?: boolean
 }
 
 const RowBaseline = styled(RowStyled)`
   align-items: flex-start;
   overflow: hidden;
 `
-const ActivityItem: React.FC<IProps> = ({ activity }) => {
+const ActivityItem: React.FC<IProps> = ({ activity, updatable = false }) => {
   return (
     <RowBaseline width="100%" padding="1rem 0" height="auto">
       <ItemContainer width="100px" height="100%">
@@ -57,6 +58,8 @@ const ActivityItem: React.FC<IProps> = ({ activity }) => {
 
       <ItemContainer width="calc(100% - 35px - 100px - 1rem)">
         <Baloon
+          activity={activity}
+          owner={activity.owner}
           customer={activity.customer}
           task={activity.task}
           type={activity.type}
@@ -64,6 +67,7 @@ const ActivityItem: React.FC<IProps> = ({ activity }) => {
           content={activity.content}
           date={activity.createdAt}
           links={activity.links}
+          updatable={updatable}
         />
       </ItemContainer>
     </RowBaseline>

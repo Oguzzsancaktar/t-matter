@@ -14,9 +14,15 @@ interface IProps {
   taskActiveStep: ITaskItem
   isTaskNotStarted: boolean
   handleTaskTimerChange: (userWorkTime: ITaskUserWorkTime) => void
+  handleUserWorkClick: (userId: string) => void
 }
 
-const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, handleTaskTimerChange }) => {
+const TaskTimerCard: React.FC<IProps> = ({
+  taskActiveStep,
+  isTaskNotStarted,
+  handleTaskTimerChange,
+  handleUserWorkClick
+}) => {
   const { loggedUser } = useAuth()
 
   const delay = useMemo<number>(() => 1000, [])
@@ -89,6 +95,7 @@ const TaskTimerCard: React.FC<IProps> = ({ taskActiveStep, isTaskNotStarted, han
             isTimeFinished={totalPassedTime >= stepTotalDuration}
             totalDuration={stepTotalDuration}
             workedTimes={taskActiveStep.workedTimes}
+            handleUserWorkClick={handleUserWorkClick}
           />
         </ItemContainer>
       </Column>

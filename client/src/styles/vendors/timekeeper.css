@@ -1,4 +1,4 @@
-.react-timekeeper{
-  position: absolute!important;
-  z-index: 1;
+.react-timekeeper {
+  position: absolute !important;
+  z-index: 9999999999999 !important;
 }

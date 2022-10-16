@@ -14,6 +14,7 @@ import {
   TaskProgress
 } from '@/components'
 import colors from '@/constants/colors'
+import { dateTimeFormatMoment } from '@/constants/formats'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { taskStatusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
@@ -45,7 +46,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
     {
       name: 'Start Date',
       width: '200px',
-      selector: row => moment(row.startDate).format('MMM - DD - YYYY'),
+      selector: row => moment(row.startDate).format(dateTimeFormatMoment),
       sortable: true
     },
 

@@ -12,10 +12,25 @@ const createActivity = async (req, res) => {
   }
 }
 
-const getTaskActivity = async (req, res) => {
-  const { task, step } = req.query
+const updateActivity = async (req, res) => {
+  const { body } = req
+  const { activityId } = req.params
+
+  console.log('activityId', activityId)
   try {
-    const activities = await dataAccess.activityDataAccess.getTaskActivity({ task, step })
+    const updatedActivity = await dataAccess.activityDataAccess.updateActivity(body)
+    res.send(updatedActivity)
+  } catch (e) {
+    console.log(e)
+    res.status(500).json(utils.errorUtils.errorInstance({ message: 'Error while creating activity' }))
+  }
+}
+
+const getTaskActivity = async (req, res) => {
+  const { task, step, userId } = req.query
+  try {
+    const activities = await dataAccess.activityDataAccess.getTaskActivity({ task, step, userId })
+
     res.send(activities)
   } catch (e) {
     console.log(e)
@@ -65,6 +80,7 @@ const getCustomerActivityCategoryCounts = async (req, res) => {
 
 module.exports = {
   createActivity,
+  updateActivity,
   getTaskActivity,
   getAllActivity,
   getCustomerActivity,

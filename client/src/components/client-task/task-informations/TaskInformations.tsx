@@ -1,7 +1,6 @@
 import { Button } from '@/components/button'
-import { TaskNoteCounter } from '@/components/counter'
 import { ItemContainer } from '@/components/item-container'
-import { JustifyBetweenColumn, Column, JustifyBetweenRow } from '@/components/layout'
+import { JustifyBetweenColumn, Column, JustifyBetweenRow, Row } from '@/components/layout'
 import { NoteEditorModal } from '@/components/modals'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
@@ -21,6 +20,7 @@ import {
 import { activityApi, useCreateActivityMutation } from '@/services/activityService'
 import { closeModal, openModal } from '@/store'
 import React, { useMemo } from 'react'
+import { Delete } from 'react-feather'
 import styled from 'styled-components'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -30,7 +30,6 @@ import TaskPostponeCard from './TaskPostponeCard'
 import TaskTimerCard from './TaskTimerCard'
 import TaskUserCard from './TaskUserCard'
 
-const SwalReactContent = withReactContent(Swal)
 interface IProps {
   taskData: ICustomerTask
   isTaskNotStarted: boolean
@@ -42,6 +41,8 @@ interface IProps {
   handleCancelTask: () => void
   handleStartTask: () => void
   handleTaskTimerChange: (userWorkTime: ITaskUserWorkTime) => void
+  handleUserWorkClick: (userId: string) => void
+  handleResetActivityUserFilter: () => void
 }
 
 const InformationCard = styled(ItemContainer)`
@@ -60,7 +61,9 @@ const TaskInformations: React.FC<IProps> = ({
   handlePostponeChange,
   handleCancelTask,
   handleStartTask,
-  handleTaskTimerChange
+  handleTaskTimerChange,
+  handleUserWorkClick,
+  handleResetActivityUserFilter
 }) => {
   const { loggedUser } = useAuth()
 
@@ -135,7 +138,7 @@ const TaskInformations: React.FC<IProps> = ({
 
           <ItemContainer backgroundColor={'transparent'} borderRadius="0.3rem" margin="5rem 0 -2rem 0">
             <Column height="100%">
-              <InformationCard height="100%" margin="0">
+              <InformationCard height="100%" margin="0" zIndex="99">
                 <JustifyBetweenRow width="100%" height="220px">
                   <TaskDeadlineCard taskActiveStep={taskData.steps[activeStep]} />
 
@@ -147,11 +150,24 @@ const TaskInformations: React.FC<IProps> = ({
               </InformationCard>
 
               <InformationCard height="30px" margin="3rem 0 2rem 0">
-                <TaskTimerCard
-                  taskActiveStep={taskData.steps[activeStep]}
-                  isTaskNotStarted={isTaskNotStarted}
-                  handleTaskTimerChange={handleTaskTimerChange}
-                />
+                <Row>
+                  <TaskTimerCard
+                    taskActiveStep={taskData.steps[activeStep]}
+                    isTaskNotStarted={isTaskNotStarted}
+                    handleTaskTimerChange={handleTaskTimerChange}
+                    handleUserWorkClick={handleUserWorkClick}
+                  />
+                  <ItemContainer
+                    onClick={() => handleResetActivityUserFilter()}
+                    margin="0 0 0 0.5rem"
+                    width="30px"
+                    cursorType="pointer"
+                  >
+                    <JustifyBetweenColumn height="100%">
+                      <Delete size={20} />
+                    </JustifyBetweenColumn>
+                  </ItemContainer>
+                </Row>
               </InformationCard>
             </Column>
           </ItemContainer>

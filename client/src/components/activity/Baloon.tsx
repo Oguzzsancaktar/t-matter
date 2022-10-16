@@ -1,23 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
 import colors from '@constants/colors'
-import { Link } from 'react-feather'
+import { Edit, Link } from 'react-feather'
 import { selectColorForActivityType } from '@/utils/statusColorUtil'
 import { H1 } from '../texts'
-import { ESize, ICustomer, ITask } from '@/models'
+import { ESize, IActivity, ICustomer, ITask, IUser } from '@/models'
 import useAccessStore from '@/hooks/useAccessStore'
 import { openModal } from '@/store'
 import { CustomerTaskModal, ReadCustomerModal } from '../modals'
 import { Column } from '../layout'
 import { ItemContainer } from '../item-container'
+import { useAuth } from '@/hooks/useAuth'
 
 interface IProps {
+  activity: IActivity
   title: string
   content: string
   date: Date
+  owner: IUser
   customer?: ICustomer
   type?: number
   task?: ITask
+  updatable?: boolean
   links?: [
     {
       url: string
@@ -83,9 +87,26 @@ const BaloonFooter = styled.div`
   display: flex;
 `
 
-const Baloon: React.FC<IProps> = ({ task, customer, title, content, date, links, type }) => {
+const Baloon: React.FC<IProps> = ({
+  activity,
+  task,
+  customer,
+  title,
+  content,
+  date,
+  links,
+  type,
+  owner,
+  updatable = false
+}) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const { loggedUser } = useAuth()
+
+  const handleNoteUpdate = (activity: IActivity) => {
+    console.log(activity)
+  }
 
   const handleOpenTaskModal = (taskId?: ITask['_id']) => {
     if (customer?._id && taskId) {
@@ -139,6 +160,9 @@ const Baloon: React.FC<IProps> = ({ task, customer, title, content, date, links,
             </BaloonTitle>
           </ItemContainer>
         </Column>
+        {updatable && loggedUser.user?._id === owner._id && (
+          <Edit cursor={'pointer'} onClick={() => handleNoteUpdate(activity)} />
+        )}
       </BaloonHeader>
       <BaloonBody>
         <BaloonContent>

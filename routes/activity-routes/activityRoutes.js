@@ -16,6 +16,12 @@ router.get('/category-counts', (req, res) => {
   return controller.activityController.getCustomerActivityCategoryCounts(req, res)
 })
 
+router.put(
+  '/:activityId',
+  middlewares.validations.activityValidations.activityUpdateValidation,
+  controller.activityController.updateActivity
+)
+
 router.post(
   '/',
   middlewares.validations.activityValidations.activityCreateValidation,

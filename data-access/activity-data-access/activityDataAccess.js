@@ -50,17 +50,29 @@ const populateActivity = [
   }
 ]
 
-const getTaskActivity = ({ task, step }) => {
+const getTaskActivity = ({ task, step, userId }) => {
+  const tempPipeline = []
+
   const obj = {
     task: mongoose.Types.ObjectId(task)
   }
   if (step) {
     obj.step = { $eq: +step }
   }
+
+  if (userId && userId?.trim().length > 0) {
+    tempPipeline.push({
+      $match: {
+        owner: { $eq: mongoose.Types.ObjectId(userId) }
+      }
+    })
+  }
+
   return Activity.aggregate([
     {
       $match: obj
     },
+    ...tempPipeline,
     ...populateActivity
   ]).exec()
 }
@@ -107,6 +119,10 @@ const getAllActivity = (userId, customerId, categoryId) => {
 }
 
 const createActivity = data => {
+  return Activity.create(data)
+}
+
+const updateActivity = data => {
   return Activity.create(data)
 }
 
@@ -207,5 +223,6 @@ module.exports = {
   getCustomerActivity,
   getAllActivity,
   createActivity,
+  updateActivity,
   getActivityCategoryCounts
 }

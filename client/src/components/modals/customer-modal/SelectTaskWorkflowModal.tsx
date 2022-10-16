@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
 import { useGetPlanByIdQuery, useGetPlansQuery } from '@/services/settings/workflow-planning/workflowService'
 import { SelectInput } from '@/components/input'
@@ -19,6 +19,9 @@ import { DatePicker } from '@/components/date-picker'
 import { useGetUsersQuery } from '@/services/settings/user-planning/userService'
 import { useGetCustomersQuery } from '@/services/customers/customerService'
 import { initialCreateCustomer } from '@/constants/initialValues'
+import TimeKeeper, { TimeOutput } from 'react-timekeeper'
+import { ChangeTimeFn } from 'react-timekeeper/lib/helpers/types'
+import { dateTimeFormat } from '@/constants/formats'
 
 interface IProps {
   customer?: ICustomer
@@ -31,14 +34,23 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
 
   const [createTask] = useCreateTaskMutation()
 
-  const [taskCustomer, setTaskCustomer] = useState(customer)
-
   const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery(emptyQueryParams)
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(emptyQueryParams)
   const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(emptyQueryParams)
 
   const [selectedWorkflowPlanId, setSelectedWorkflowPlanId] = useState('')
   const { data: workflowData, isLoading: workflowIsLoading } = useGetPlanByIdQuery(selectedWorkflowPlanId)
+
+  const [taskCustomer, setTaskCustomer] = useState(customer)
+  const [showTime, setShowTime] = useState(false)
+  const timePickerRef = useRef(null)
+
+  const [postponeDate, setPostponeDate] = useState({
+    value: [new Date()],
+    dateText: ''
+  })
+
+  const [postponeClock, setPostponeClock] = useState('00:00')
 
   const [selectedWorkflow, setSelectedWorkflow] = useState<IWorkflowUpdateDTO>({
     _id: workflowData?._id || '',
@@ -57,7 +69,16 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
   })
 
   const handleStartDateChange = (value: Date[], dateText: string) => {
-    setStartDate(moment(dateText).valueOf())
+    setShowTime(true)
+    setPostponeDate({ value, dateText })
+  }
+
+  const onClockChange: ChangeTimeFn = (t: TimeOutput) => {
+    const date = postponeDate.dateText.split(' ')[0]
+    const dateWithClock = date + ' ' + t.formatted24
+
+    setPostponeClock(t.formatted24)
+    setStartDate(moment(dateWithClock).valueOf())
   }
 
   const handleResponsibleChange = (selectedUserId: IUser['_id']) => {
@@ -227,6 +248,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
     }
   }
 
+  console.log(startDate)
   useEffect(() => {
     if (workflowData?.steps) {
       setSelectedWorkflow({
@@ -323,19 +345,34 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
             />
           </ItemContainer>
 
-          <ItemContainer margin="0.5rem 0" onClick={handleDisbledInputs}>
+          <ItemContainer margin="0.5rem 0" onClick={handleDisbledInputs} position="relative">
             <DatePicker
               disabled={!(selectedWorkflowPlanId.trim().length > 0)}
               name="startDate"
               labelText="Start Date"
               onChange={handleStartDateChange}
               minDate={moment.now().valueOf()}
-              enableTime={true}
-              dateFormat="m-d-Y H:i"
+              enableTime={false}
+              dateFormat={dateTimeFormat}
               placeholder="Select start date..."
               value={startDate}
               validationError={creationErrors.startDateError}
             />
+
+            <ItemContainer position="absolute" zIndex="999" bottom="calc(390px  + 40px)">
+              {showTime && (
+                <div ref={timePickerRef}>
+                  <TimeKeeper
+                    closeOnMinuteSelect={true}
+                    onChange={onClockChange}
+                    hour24Mode={true}
+                    time={postponeClock.trim()}
+                    onDoneClick={() => setShowTime(false)}
+                    switchToMinuteOnHourSelect
+                  />
+                </div>
+              )}
+            </ItemContainer>
           </ItemContainer>
 
           <ItemContainer>
