@@ -10,7 +10,9 @@ import {
   filterCancelledTaskSteps,
   filterCompletedTaskSteps,
   filterNewTaskSteps,
-  filterTransferTaskSteps
+  filterTaskStepsByConditions,
+  filterTransferTaskSteps,
+  taskStepConditionSelector
 } from '@utils/taskUtil'
 import { useEffect, useState } from 'react'
 import { groupBy } from 'lodash'
@@ -69,9 +71,9 @@ const Head = () => {
   useEffect(() => {
     if (data) {
       const tasks = filterNewTaskSteps(groupBy(data, d => moment(d.steps.startDate).month())[moment().month()])
-      console.log(filterNewTaskSteps(data))
+
       setCounts({
-        condition: data.filter(d => !d.steps.seen?.condition).length,
+        condition: filterTaskStepsByConditions(data).filter(d => !d.steps.seen?.condition).length,
         new: filterNewTaskSteps(data).filter(d => !d.steps.seen?.new).length,
         completed: filterCompletedTaskSteps(data.filter(d => !d.steps.seen?.completed)).length,
         cancelled: filterCancelledTaskSteps(data.filter(d => !d.steps.seen?.cancelled)).length,
@@ -109,7 +111,7 @@ const Head = () => {
       }}
     >
       <SmallBadge
-        count={counts.transfer}
+        count={counts.condition}
         text="Conditions"
         color={'#ff7b00'}
         onClick={handleShowTaskDashboardInfoModal.bind(this, 'ConditionTasksTab')}

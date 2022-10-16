@@ -4,10 +4,19 @@ import colors from '@constants/colors'
 import ReactApexChart from 'react-apexcharts'
 import moment from 'moment/moment'
 import { groupBy } from 'lodash'
-import { filterCancelledTaskSteps, filterCompletedTaskSteps, filterNewTaskSteps } from '@utils/taskUtil'
+import {
+  filterCancelledTaskSteps,
+  filterCompletedTaskSteps,
+  filterNewTaskSteps,
+  filterTaskStepsByConditions
+} from '@utils/taskUtil'
 
 const TaskStepYearlyCountBarChart = ({ taskSteps, dateRange, onSelectBar }) => {
   const [series, setSeries] = useState<ApexAxisChartSeries>([
+    {
+      name: 'Condition Tasks',
+      data: []
+    },
     {
       name: 'New Tasks',
       data: []
@@ -22,7 +31,7 @@ const TaskStepYearlyCountBarChart = ({ taskSteps, dateRange, onSelectBar }) => {
     }
   ])
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
-    colors: [colors.blue.primary, colors.green.primary, colors.red.primary],
+    colors: [colors.orange.primary, colors.blue.primary, colors.green.primary, colors.red.primary],
     chart: {
       type: 'bar',
       height: 230,
@@ -72,22 +81,25 @@ const TaskStepYearlyCountBarChart = ({ taskSteps, dateRange, onSelectBar }) => {
       if (moment(dateRange.startDate).year() === moment(dateRange.endDate).year()) {
         const months = Array.from({ length: 12 }, (_, i) => i)
         const groupedByMonth = groupBy(taskSteps, item => moment(item.steps.startDate).month())
-        const { newTasks, completedTasks, cancelledTasks } = months.reduce<{
+        const { newTasks, completedTasks, cancelledTasks, conditionTasks } = months.reduce<{
           newTasks: number[]
           completedTasks: number[]
           cancelledTasks: number[]
+          conditionTasks: number[]
         }>(
           (acc, month) => {
             const tasks = groupedByMonth[month] || []
             acc.newTasks.push(filterNewTaskSteps(tasks).length)
             acc.completedTasks.push(filterCompletedTaskSteps(tasks).length)
             acc.cancelledTasks.push(filterCancelledTaskSteps(tasks).length)
+            acc.conditionTasks.push(filterTaskStepsByConditions(tasks).length)
             return acc
           },
           {
             newTasks: [],
             completedTasks: [],
-            cancelledTasks: []
+            cancelledTasks: [],
+            conditionTasks: []
           }
         )
         setOptions({
@@ -98,6 +110,10 @@ const TaskStepYearlyCountBarChart = ({ taskSteps, dateRange, onSelectBar }) => {
           labels: months.map(m => moment().month(m).format('MMM'))
         })
         setSeries([
+          {
+            name: 'Condition Tasks',
+            data: conditionTasks
+          },
           {
             name: 'New Tasks',
             data: newTasks
@@ -115,25 +131,32 @@ const TaskStepYearlyCountBarChart = ({ taskSteps, dateRange, onSelectBar }) => {
         const year = moment().year()
         const years = [year - 3, year - 2, year - 1, year, year + 1, year + 2, year + 3]
         const groupedByYear = groupBy(taskSteps, item => moment(item.steps.startDate).year())
-        const { newTasks, completedTasks, cancelledTasks } = years.reduce<{
+        const { newTasks, completedTasks, cancelledTasks, conditionTasks } = years.reduce<{
           newTasks: number[]
           completedTasks: number[]
           cancelledTasks: number[]
+          conditionTasks: number[]
         }>(
           (acc, curr) => {
             const tasks = groupedByYear[curr] || []
             acc.newTasks.push(filterNewTaskSteps(tasks).length)
             acc.completedTasks.push(filterCompletedTaskSteps(tasks).length)
             acc.cancelledTasks.push(filterCancelledTaskSteps(tasks).length)
+            acc.conditionTasks.push(filterTaskStepsByConditions(tasks).length)
             return acc
           },
           {
             newTasks: [],
             completedTasks: [],
-            cancelledTasks: []
+            cancelledTasks: [],
+            conditionTasks: []
           }
         )
         setSeries([
+          {
+            name: 'Condition Tasks',
+            data: conditionTasks
+          },
           {
             name: 'New Tasks',
             data: newTasks
