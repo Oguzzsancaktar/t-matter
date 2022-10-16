@@ -42,10 +42,10 @@ const HrDashboardCard = () => {
             height: '100%'
           }}
         >
-          <SmallBadge count={10} text="Absent" color={'#ff7b00'} onClick={() => {}} />
           <SmallBadge count={10} text="Login" color={'#7adad1'} onClick={() => {}} />
           <SmallBadge count={11} text="Mental" color={'#3b4b8d'} onClick={() => {}} />
-          <SmallBadge count={12} text="Sick" color={'#ca5b5b'} onClick={() => {}} />
+          <SmallBadge count={12} text="Absent" color={'#ca5b5b'} onClick={() => {}} />
+          <SmallBadge count={12} text="Absent" color={'#416fc7'} onClick={() => {}} />
           <SmallBadge count={13} text="Vacation" color={'#ccc'} onClick={() => {}} />
         </div>
       }
