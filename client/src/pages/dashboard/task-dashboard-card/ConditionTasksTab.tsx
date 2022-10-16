@@ -16,7 +16,8 @@ import {
   TaskStepWorkFlowDonutChart,
   TaskStepYearlyCountBarChart,
   TaskStepConditionDonutChart,
-  TaskStepMostlyAddedUser
+  TaskStepMostlyAddedUser,
+  TaskStepUsers
 } from '@/components'
 import colors from '@constants/colors'
 import DataTable, { TableColumn } from 'react-data-table-component'
@@ -142,7 +143,7 @@ const ConditionTasksTab = props => {
           />
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
-          <TaskStepMostlyAddedUser taskSteps={taskSteps} />
+          <TaskStepUsers taskSteps={taskSteps} />
         </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">

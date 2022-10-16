@@ -324,6 +324,20 @@ const getTaskStepsData = async ({ responsibleUserId, startDate, endDate }) => {
     {
       $lookup: {
         from: 'users',
+        localField: 'steps.responsibleUser',
+        foreignField: '_id',
+        as: 'steps.responsibleUser'
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps.responsibleUser',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
         localField: 'steps.addedFrom',
         foreignField: '_id',
         as: 'steps.addedFrom'
