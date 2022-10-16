@@ -98,12 +98,13 @@ const ConditionTasksTab = props => {
       name: 'Conditions',
       selector: taskStepConditionSelector,
       sortable: true,
+      width: '140px',
       cell: d => {
         return (
           <JustifyBetweenRow>
-            <JustifyCenterRow>{isTimerCondition(d) && <FcLeave />}</JustifyCenterRow>
-            <JustifyCenterRow>{isPostponeCondition(d) && <FcClock />}</JustifyCenterRow>
-            <JustifyCenterRow>{isExpireCondition(d) && <FcExpired />}</JustifyCenterRow>
+            <JustifyCenterRow>{isTimerCondition(d) && <FcLeave size="20px" />}</JustifyCenterRow>
+            <JustifyCenterRow>{isPostponeCondition(d) && <FcClock size="20px" />}</JustifyCenterRow>
+            <JustifyCenterRow>{isExpireCondition(d) && <FcExpired size="20px" />}</JustifyCenterRow>
           </JustifyBetweenRow>
         )
       }

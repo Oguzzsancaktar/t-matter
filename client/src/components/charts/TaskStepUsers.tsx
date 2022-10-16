@@ -70,7 +70,6 @@ const TaskStepUsers = ({ taskSteps }) => {
 
   useEffect(() => {
     if (taskSteps) {
-      console.log('taskSteps', taskSteps)
       const groups = groupBy(taskSteps, 'steps.responsibleUser._id')
       const series = Object.keys(groups).map(key => groups[key].length)
       const labels = Object.keys(groups).map(id => {

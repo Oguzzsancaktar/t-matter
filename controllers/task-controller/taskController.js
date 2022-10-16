@@ -150,7 +150,8 @@ const updateTask = async (req, res) => {
         }),
         responsibleUser: mongoose.Types.ObjectId(responsibleUser),
         location: mongoose.Types.ObjectId(location),
-        category: mongoose.Types.ObjectId(category)
+        category: mongoose.Types.ObjectId(category),
+        addedFrom: mongoose.Types.ObjectId(rest.addedFrom)
       }
     })
     const task = await dataAccess.taskDataAccess.updateTaskById(taskId, body)
