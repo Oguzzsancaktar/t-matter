@@ -207,15 +207,14 @@ const getTaskStepMonthlyAnalysisData = (builder: IBuilder) => {
 }
 
 const getTaskSteps = (builder: IBuilder) => {
-  return builder.query<ITaskStep[], { startDate?: Date; endDate?: Date; disabledSeen?: boolean }>({
-    query({ startDate, endDate, disabledSeen }) {
+  return builder.query<ITaskStep[], { startDate?: Date; endDate?: Date }>({
+    query({ startDate, endDate }) {
       return {
         url: `/task/steps`,
         method: 'GET',
         params: {
           startDate: startDate?.toDateString(),
-          endDate: endDate?.toDateString(),
-          disabledSeen
+          endDate: endDate?.toDateString()
         }
       }
     },

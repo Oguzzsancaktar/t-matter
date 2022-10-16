@@ -203,12 +203,11 @@ const getTaskStepMonthlyAnalysis = async (req, res) => {
 
 const getTaskSteps = async (req, res) => {
   try {
-    const { startDate, endDate, disabledSeen } = req.query
+    const { startDate, endDate } = req.query
     const steps = await dataAccess.taskDataAccess.getTaskStepsData({
       responsibleUserId: req.user.userId,
       startDate,
-      endDate,
-      disabledSeen: disabledSeen === 'true'
+      endDate
     })
     res.status(StatusCodes.OK).json(steps)
   } catch (e) {

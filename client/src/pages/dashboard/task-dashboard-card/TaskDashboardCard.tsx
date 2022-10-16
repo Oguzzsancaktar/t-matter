@@ -69,9 +69,10 @@ const Head = () => {
   useEffect(() => {
     if (data) {
       const tasks = filterNewTaskSteps(groupBy(data, d => moment(d.steps.startDate).month())[moment().month()])
+      console.log(filterNewTaskSteps(data))
       setCounts({
         condition: data.filter(d => !d.steps.seen?.condition).length,
-        new: filterNewTaskSteps(data.filter(d => !d.steps.seen?.new)).length,
+        new: filterNewTaskSteps(data).filter(d => !d.steps.seen?.new).length,
         completed: filterCompletedTaskSteps(data.filter(d => !d.steps.seen?.completed)).length,
         cancelled: filterCancelledTaskSteps(data.filter(d => !d.steps.seen?.cancelled)).length,
         transfer: filterTransferTaskSteps(
