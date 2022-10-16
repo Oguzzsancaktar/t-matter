@@ -17,6 +17,12 @@ export default interface ITaskItem {
   postponeTime: number
   usedPostpone: number
   postponedDate: string
-  isSeen?: boolean
+  seen?: {
+    completed: boolean
+    cancelled: boolean
+    new: boolean
+    transfer: boolean
+    condition: boolean
+  }
   checklistItems: ITaskChecklist[]
 }

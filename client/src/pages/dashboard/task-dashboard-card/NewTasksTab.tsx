@@ -47,8 +47,8 @@ const NewTasksTab = props => {
 
   useEffect(() => {
     if (data) {
-      const newTaskSteps = filterNewTaskSteps(data).filter(d => !d.steps.isSeen)
-      seenUpdate({ tasks: newTaskSteps.map(d => ({ taskId: d._id, stepIndex: d.stepIndex })) }).unwrap()
+      const newTaskSteps = filterNewTaskSteps(data).filter(d => !d.steps.seen?.new)
+      seenUpdate({ tasks: newTaskSteps.map(d => ({ taskId: d._id, stepIndex: d.stepIndex, name: 'new' })) }).unwrap()
       setTaskSteps(filterNewTaskSteps(filterTaskStepsByCondition(data, selectedCondition)))
     }
   }, [data, selectedCondition])

@@ -40,10 +40,6 @@ const taskSchema = new Schema(
     },
     status: {
       type: Number
-    },
-    isSeen: {
-      type: Boolean,
-      default: false
     }
   },
   {

@@ -52,7 +52,14 @@ const Head = () => {
     startDate: moment().startOf('year').toDate(),
     endDate: moment().endOf('year').toDate()
   })
-  const [counts, setCounts] = useState<{ new: number; completed: number; cancelled: number; transfer: number }>({
+  const [counts, setCounts] = useState<{
+    new: number
+    completed: number
+    cancelled: number
+    transfer: number
+    condition: number
+  }>({
+    condition: 0,
     new: 0,
     cancelled: 0,
     completed: 0,
@@ -62,13 +69,14 @@ const Head = () => {
   useEffect(() => {
     if (data) {
       const tasks = filterNewTaskSteps(groupBy(data, d => moment(d.steps.startDate).month())[moment().month()])
-      const filtered = data.filter(d => !d.steps.isSeen)
+      console.log(filterNewTaskSteps(data))
       setCounts({
-        new: filterNewTaskSteps(filtered).length,
-        completed: filterCompletedTaskSteps(filtered).length,
-        cancelled: filterCancelledTaskSteps(filtered).length,
+        condition: data.filter(d => !d.steps.seen?.condition).length,
+        new: filterNewTaskSteps(data).filter(d => !d.steps.seen?.new).length,
+        completed: filterCompletedTaskSteps(data.filter(d => !d.steps.seen?.completed)).length,
+        cancelled: filterCancelledTaskSteps(data.filter(d => !d.steps.seen?.cancelled)).length,
         transfer: filterTransferTaskSteps(
-          tasks.filter(d => !d.steps.isSeen),
+          tasks.filter(d => !d.steps.seen?.transfer),
           140
         ).length
       })
@@ -104,7 +112,7 @@ const Head = () => {
         count={counts.transfer}
         text="Conditions"
         color={'#ff7b00'}
-        onClick={handleShowTaskDashboardInfoModal.bind(this, 'ConditionsTab')}
+        onClick={handleShowTaskDashboardInfoModal.bind(this, 'ConditionTasksTab')}
       />
       <SmallBadge
         count={counts.new}
