@@ -34,7 +34,7 @@ import { FcClock, FcExpired, FcLeave } from 'react-icons/fc'
 import { openModal } from '@/store'
 import { ESize } from '@/models'
 
-const CompletedTasksTab = props => {
+const ConditionTasksTab = props => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
   const [dateRange, setDateRange] = useState({
@@ -48,9 +48,9 @@ const CompletedTasksTab = props => {
 
   useEffect(() => {
     if (data) {
-      const completedTasks = filterCompletedTaskSteps(data).filter(d => !d.steps.seen?.completed)
+      const conditionTasks = filterCompletedTaskSteps(data).filter(d => !d.steps.seen?.condition)
       seenUpdate({
-        tasks: completedTasks.map(d => ({ taskId: d._id, stepIndex: d.stepIndex, name: 'completed' }))
+        tasks: conditionTasks.map(d => ({ taskId: d._id, stepIndex: d.stepIndex, name: 'condition' }))
       }).unwrap()
       setTaskSteps(filterCompletedTaskSteps(filterTaskStepsByCondition(data, selectedCondition)))
     }
@@ -228,4 +228,4 @@ const CompletedTasksTab = props => {
   )
 }
 
-export default CompletedTasksTab
+export default ConditionTasksTab

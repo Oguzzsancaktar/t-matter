@@ -49,8 +49,10 @@ const CompletedTasksTab = props => {
 
   useEffect(() => {
     if (data) {
-      const cancelledTasks = filterCompletedTaskSteps(data).filter(d => !d.steps.isSeen)
-      seenUpdate({ tasks: cancelledTasks.map(d => ({ taskId: d._id, stepIndex: d.stepIndex })) }).unwrap()
+      const cancelledTasks = filterCompletedTaskSteps(data).filter(d => !d.steps.seen?.cancelled)
+      seenUpdate({
+        tasks: cancelledTasks.map(d => ({ taskId: d._id, stepIndex: d.stepIndex, name: 'cancelled' }))
+      }).unwrap()
       setTaskSteps(filterCancelledTaskSteps(filterTaskStepsByCondition(data, selectedCondition)))
     }
   }, [data, selectedCondition])

@@ -5,8 +5,10 @@ import NewTasksTab from '@pages/dashboard/task-dashboard-card/NewTasksTab'
 import CompletedTasksTab from '@pages/dashboard/task-dashboard-card/CompletedTasksTab'
 import CancelledTasksTab from '@pages/dashboard/task-dashboard-card/CancelledTasksTab'
 import TransferTasksTab from '@pages/dashboard/task-dashboard-card/TransferTasksTab'
+import ConditionTasksTab from '@pages/dashboard/task-dashboard-card/ConditionTasksTab'
 
 const Component = {
+  ConditionTasksTab,
   NewTasksTab,
   CompletedTasksTab,
   CancelledTasksTab,
@@ -29,6 +31,14 @@ const TaskDashboardInfoModal: React.FC<{ page: string; dateRange?: { startDate: 
                 <Tab
                   margin="0 1rem 0 0rem"
                   index={0}
+                  name="Condition"
+                  isActive={activeTab === 'ConditionTasksTab'}
+                  onClick={() => setActiveTab('ConditionTasksTab')}
+                />
+
+                <Tab
+                  margin="0 1rem 0 0rem"
+                  index={1}
                   name="New"
                   isActive={activeTab === 'NewTasksTab'}
                   onClick={() => setActiveTab('NewTasksTab')}
@@ -36,7 +46,7 @@ const TaskDashboardInfoModal: React.FC<{ page: string; dateRange?: { startDate: 
 
                 <Tab
                   margin="0 1rem 0 0rem"
-                  index={1}
+                  index={2}
                   name="Completed"
                   isActive={activeTab === 'CompletedTasksTab'}
                   onClick={() => setActiveTab('CompletedTasksTab')}
@@ -44,14 +54,14 @@ const TaskDashboardInfoModal: React.FC<{ page: string; dateRange?: { startDate: 
 
                 <Tab
                   margin="0 1rem 0 0rem"
-                  index={2}
+                  index={3}
                   name="Cancelled"
                   isActive={activeTab === 'CancelledTasksTab'}
                   onClick={() => setActiveTab('CancelledTasksTab')}
                 />
                 <Tab
                   margin="0 1rem 0 0rem"
-                  index={3}
+                  index={4}
                   name="Transfer"
                   isActive={activeTab === 'TransferTasksTab'}
                   onClick={() => setActiveTab('TransferTasksTab')}

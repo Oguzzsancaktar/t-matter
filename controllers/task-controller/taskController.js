@@ -248,7 +248,13 @@ const updateTaskStepsSeen = async (req, res) => {
     for (const task of tasks) {
       const x = await Task.findById(task.taskId).lean()
       xs.push(x)
-      x.steps[task.stepIndex].isSeen = true
+      if (!x.steps[task.stepIndex].seen) {
+        x.steps[task.stepIndex].seen = {
+          [task.name]: true
+        }
+      } else {
+        x.steps[task.stepIndex].seen[task.name] = true
+      }
       await dataAccess.taskDataAccess.updateTaskById(task.taskId, x)
     }
     res.status(200).send(xs)

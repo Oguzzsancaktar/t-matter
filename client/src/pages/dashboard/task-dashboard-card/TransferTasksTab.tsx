@@ -73,8 +73,10 @@ const CompletedTasksTab = props => {
 
   useEffect(() => {
     if (data) {
-      const transferTasks = filterTransferTaskSteps(data, 140).filter(d => !d.steps.isSeen)
-      seenUpdate({ tasks: transferTasks.map(d => ({ taskId: d._id, stepIndex: d.stepIndex })) }).unwrap()
+      const transferTasks = filterTransferTaskSteps(data, 140).filter(d => !d.steps.seen?.transfer)
+      seenUpdate({
+        tasks: transferTasks.map(d => ({ taskId: d._id, stepIndex: d.stepIndex, name: 'transfer' }))
+      }).unwrap()
 
       setTaskSteps(
         filterTaskStepsByTaskCategory(
