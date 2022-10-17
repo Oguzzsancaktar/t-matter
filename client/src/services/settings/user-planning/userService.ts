@@ -2,15 +2,17 @@ import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { IQueryParams, IUser, IUserCreateDTO, IUserUpdateDTO } from '@/models'
+import IUserHrSetting from '@models/Entities/user/IUserHrSetting'
 
 const USER_REDUCER_PATH = 'userApi'
 const USER_TAG_TYPE = 'userTag' as const
 
 const COMPANY_PRICING_TAG = 'companyPricingTag'
+const USER_HR_TAG = 'userHrTag'
 
 type IBuilder = EndpointBuilder<
   IAxiosBaseQueryFn,
-  typeof USER_TAG_TYPE | typeof COMPANY_PRICING_TAG,
+  typeof USER_TAG_TYPE | typeof COMPANY_PRICING_TAG | typeof USER_HR_TAG,
   typeof USER_REDUCER_PATH
 >
 
@@ -113,9 +115,38 @@ const addOrUpdateUserImage = (builder: IBuilder) => {
   })
 }
 
+const getUserHrSetting = (builder: IBuilder) => {
+  return builder.query<IUserHrSetting, IUser['_id']>({
+    query(userId) {
+      return {
+        url: `/hr-setting/${userId}`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: USER_HR_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const updateUserHrSetting = (builder: IBuilder) => {
+  return builder.mutation<void, IUserHrSetting>({
+    query(dto) {
+      return {
+        url: `/hr-setting/${dto.owner}`,
+        method: 'POST',
+        data: dto
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: USER_HR_TAG, id: 'LIST' }]
+    }
+  })
+}
+
 const userApi = createApi({
   reducerPath: USER_REDUCER_PATH,
-  tagTypes: [USER_TAG_TYPE, COMPANY_PRICING_TAG],
+  tagTypes: [USER_TAG_TYPE, COMPANY_PRICING_TAG, USER_HR_TAG],
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
     getUsers: getUsers(builder),
@@ -123,7 +154,9 @@ const userApi = createApi({
     getUserById: getUserById(builder),
     updateUser: updateUser(builder),
     updateUserStatus: updateUserStatus(builder),
-    addOrUpdateUserImage: addOrUpdateUserImage(builder)
+    addOrUpdateUserImage: addOrUpdateUserImage(builder),
+    getUserHrSetting: getUserHrSetting(builder),
+    updateUserHrSetting: updateUserHrSetting(builder)
   })
 })
 
@@ -134,7 +167,8 @@ const {
   useLazyGetUserByIdQuery,
   useUpdateUserMutation,
   useUpdateUserStatusMutation,
-  useAddOrUpdateUserImageMutation
+  useAddOrUpdateUserImageMutation,
+  useGetUserHrSettingQuery
 } = userApi
 export {
   userApi,
@@ -144,5 +178,6 @@ export {
   useCreateUserMutation,
   useUpdateUserMutation,
   useUpdateUserStatusMutation,
-  useAddOrUpdateUserImageMutation
+  useAddOrUpdateUserImageMutation,
+  useGetUserHrSettingQuery
 }

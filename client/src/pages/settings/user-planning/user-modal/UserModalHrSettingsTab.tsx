@@ -3,7 +3,7 @@ import { IUser } from '@/models'
 import { Checkbox, JustifyBetweenColumn, JustifyBetweenRow, SelectInput } from '@/components'
 import { useGetUserCompanyPricingQuery } from '@services/settings/company-planning/companyPricingService'
 import { getUserMonthlyWorkingHours } from '@utils/workingHourUtil'
-import { useGetUsersQuery } from '@services/settings/user-planning/userService'
+import { useGetUserHrSettingQuery, useGetUsersQuery } from '@services/settings/user-planning/userService'
 import { emptyQueryParams } from '@constants/queryParams'
 
 const days = [
@@ -25,6 +25,8 @@ const widths = {
 const UserModalHrSettingsTab: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
   const { data } = useGetUserCompanyPricingQuery(userId)
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
+  const { data: hrSetting } = useGetUserHrSettingQuery(userId)
+
   const [specialDays, setSpecialDays] = useState([])
   if (!data) return null
 
