@@ -72,6 +72,10 @@ const hrSettingSchema = new Schema(
     ],
     specialDays: [
       {
+        name: {
+          type: String,
+          default: ''
+        },
         isChecked: {
           type: Boolean,
           default: false
