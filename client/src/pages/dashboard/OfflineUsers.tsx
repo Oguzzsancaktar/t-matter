@@ -37,13 +37,14 @@ const OfflineUsers = () => {
             {userArr?.map((user, index) => (
               <Tooltip key={index} animated placement="rightEnd" content={user.firstname + ' ' + user.lastname}>
                 <Avatar
-                  size="lg"
+                  size="md"
                   pointer
                   src={user.profile_img}
                   text={user.firstname[0] + '' + user.lastname[0]}
                   bordered
                   stacked
                   zoomed
+                  squared
                   color={isOnline ? 'success' : 'default'}
                 />
               </Tooltip>
