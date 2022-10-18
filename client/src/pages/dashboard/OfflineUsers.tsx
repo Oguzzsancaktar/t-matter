@@ -9,32 +9,32 @@ import useAccessStore from '@hooks/useAccessStore'
 const OfflineUsers = () => {
   const { data: users } = useGetUsersQuery(emptyQueryParams)
   const { useAppSelector } = useAccessStore()
-  const [toggle, setToggle] = useState(false)
+  const [isOnline, setIsOnline] = useState(false)
 
   const onlineUsers = useAppSelector(state => state.onlineUsers.onlineUsers)
 
   const offlineUserArr = users?.filter(u => !onlineUsers.includes(u._id)) || []
   const onlineUserArr = users?.filter(u => onlineUsers.includes(u._id)) || []
-
+  const userArr = isOnline ? onlineUserArr : offlineUserArr
   return (
     <div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', overflowX: 'auto' }}>
       <Row height="100%">
         <div
           style={{ cursor: 'pointer', height: '100%', marginRight: '1rem', width: 'auto' }}
-          onClick={() => setToggle(!toggle)}
+          onClick={() => setIsOnline(!isOnline)}
         >
           <JustifyCenterColumn height="100%">
             <H1 textAlign="center" fontSize="0.8rem" color={colors.primary.middle}>
-              {(toggle ? offlineUserArr : onlineUserArr).length}
+              {userArr.length}
             </H1>
             <H1 textAlign="center" fontSize="0.8rem" color={colors.blue.primary}>
-              {toggle ? 'Offline' : 'Online'}
+              {isOnline ? 'Online' : 'Offline'}
             </H1>
           </JustifyCenterColumn>
         </div>
         <Row>
           <Avatar.Group animated>
-            {(toggle ? offlineUserArr : onlineUserArr)?.map((user, index) => (
+            {userArr?.map((user, index) => (
               <Tooltip key={index} animated placement="rightEnd" content={user.firstname + ' ' + user.lastname}>
                 <Avatar
                   size="lg"
@@ -44,6 +44,7 @@ const OfflineUsers = () => {
                   bordered
                   stacked
                   zoomed
+                  color={isOnline ? 'success' : 'default'}
                 />
               </Tooltip>
             ))}
