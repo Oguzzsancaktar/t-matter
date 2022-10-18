@@ -7,12 +7,11 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const helmet = require('helmet')
 const morgan = require('morgan')
-
+const { createServer } = require('http')
+const { Server } = require('socket.io')
 const routes = require('./routes')
 const cronJobs = require('./cron/cronJobs')
-
-const app = express()
-
+const UserHandler = require('./socket/userHandler')
 const URI = process.env.MONGO_URI
 const PORT = process.env.PORT || 5000
 
@@ -26,6 +25,13 @@ const main = async () => {
   } catch (err) {
     console.log('Error connecting to MongoDB:', err.message)
   }
+  const app = express()
+  const httpServer = createServer(app)
+  const io = new Server(httpServer, {
+    cors: {
+      origin: '*'
+    }
+  })
 
   app.use(express.json())
   app.use(cookieParser())
@@ -45,6 +51,16 @@ const main = async () => {
   app.use(bodyParser.json())
 
   app.use('/api', routes)
+
+  const userHandler = new UserHandler(io)
+
+  io.on('connection', socket => {
+    const userId = socket.handshake.query.userId
+    userHandler.addUser(userId)
+    socket.on('disconnect', () => {
+      userHandler.removeUser(userId)
+    })
+  })
 
   // error handler
   app.use(function (err, req, res, next) {
@@ -71,7 +87,7 @@ const main = async () => {
 
   cronJobs()
 
-  app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+  httpServer.listen(PORT, () => console.log(`Server started on port ${PORT}`))
 }
 
 main().then(() => console.log('SUCCESS STARTING SERVER'))

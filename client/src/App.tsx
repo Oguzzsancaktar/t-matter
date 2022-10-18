@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
@@ -9,10 +9,11 @@ import useAccessStore from '@/hooks/useAccessStore'
 import { selectMinimizedModals, selectOpenModals } from '@/store'
 import { useAuth } from '@hooks/useAuth'
 import ReactTooltip from 'react-tooltip'
-
+import { io, Socket } from 'socket.io-client'
 import './styles/vendors/fullcalendar.css'
 import './styles/vendors/react-drag-drop-file.css'
 import './styles/vendors/apex.css'
+import { setOnlineUsers } from '@store/online-users'
 
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
@@ -25,6 +26,35 @@ function App() {
   const { loggedUser } = useAuth()
   const openModals = useAppSelector(selectOpenModals)
   const minimizedModals = useAppSelector(selectMinimizedModals)
+  let socket: Socket | null = null
+
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (!(loggedUser && loggedUser.user)) {
+      if (socket) {
+        socket.disconnect()
+        socket = null
+      }
+      return
+    }
+    if (socket) {
+      return
+    }
+    socket = io(process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:5000', {
+      query: {
+        userId: loggedUser.user._id
+      }
+    })
+
+    socket.on('online', data => {
+      dispatch(setOnlineUsers(data.onlineUsers))
+    })
+    return () => {
+      socket?.disconnect()
+    }
+  }, [loggedUser])
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
