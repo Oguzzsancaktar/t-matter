@@ -29,7 +29,9 @@ class ActiveTaskStepHandler {
   }
 
   removeActiveTaskStep = ({ taskId, userId }) => {
-    this.activeTaskSteps = this.activeTaskSteps.filter(({ task, user }) => task._id === taskId && user._id === userId)
+    this.activeTaskSteps = this.activeTaskSteps.filter(
+      ({ task, user }) => !(task._id === taskId && user._id === userId)
+    )
     this.io.in(this.room).emit('activeTaskSteps', this.activeTaskSteps)
   }
 
