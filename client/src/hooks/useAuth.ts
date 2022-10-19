@@ -20,7 +20,8 @@ export const useAuth = () => {
     data: userData,
     isLoading: isLoadingLoggedUser,
     error,
-    isError
+    isError,
+    refetch: refetchLoggedUser
   } = useGetUserByIdQuery(userId ?? '', {
     skip: !userId
   })

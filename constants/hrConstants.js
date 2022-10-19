@@ -1,0 +1,8 @@
+const TASK_TYPES = {
+  MENTAL: 'MENTAL',
+  ABSENT: 'ABSENT',
+  OTHERS: 'OTHERS',
+  VACATION: 'VOCATION'
+}
+
+module.exports = { TASK_TYPES }

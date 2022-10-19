@@ -25,6 +25,7 @@ import TaskInformations from '@/components/client-task/task-informations/TaskInf
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
 import { NoteEditorModal, SpeechModal } from '@/components'
 import useSound from 'use-sound'
+import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 
 interface IProps {
   taskId: string
@@ -47,6 +48,8 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const dispatch = useAppDispatch()
 
   const [taskNoteFilterUserId, setTaskNoteFilterUserId] = useState('')
+  const { useAppSelector } = useAccessStore()
+  const socket = useAppSelector(state => state.socketGlobal.socket)
 
   const handleResetActivityUserFilter = () => {
     setTaskNoteFilterUserId('')
@@ -134,6 +137,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   }
 
   const handleStepChange = (step: number) => {
+    socket?.emit('taskStepChange', { taskId, activeTaskStep: step, userId: loggedUser.user?._id })
     setActiveStep(step)
   }
 
@@ -296,7 +300,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
       if (tempUpdatedTaskData.steps[activeStep + 1]) {
         tempUpdatedTaskData.status = ETaskStatus.Progress
         tempUpdatedTaskData.steps[activeStep + 1].stepStatus = ETaskStatus.Progress
-        setActiveStep(activeStep + 1)
+        handleStepChange(activeStep + 1)
       } else {
         await createActivity({
           title: 'Task Completed',
@@ -415,7 +419,15 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   }
 
   useEffect(() => {
-    dispatch(setModalOnClose({ modalId: 'customerTaksModal' + taskId, onClose: updateTaskData }))
+    dispatch(
+      setModalOnClose({
+        modalId: 'customerTaksModal' + taskId,
+        onClose: () => {
+          socket?.emit('removeActiveTaskStep', { taskId, userId: loggedUser.user?._id })
+          updateTaskData()
+        }
+      })
+    )
   }, [updateTaskData])
 
   useEffect(() => {
@@ -430,6 +442,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
         handleStartTask()
       } else {
         if (taskData) {
+          socket?.emit('addActiveTaskStep', { task: taskData, activeTaskStep: activeStep, user: loggedUser.user })
           const lastStep = tempUpdatedTaskData.steps
             .filter(
               step =>
@@ -443,12 +456,31 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
           setUpdatedTaskData(tempUpdatedTaskData)
           if (lastStepIndex && lastStepIndex !== -1) {
-            setActiveStep(lastStepIndex)
+            handleStepChange(lastStepIndex)
           }
         }
       }
     }
   }, [taskData, taskIsLoading])
+
+  useEffect(() => {
+    if (!updatedTaskData) {
+      return
+    }
+    const interval = setInterval(() => {
+      if (updatedTaskData?.steps && updatedTaskData?.steps[activeStep]?.workedTimes) {
+        const workedTime = updatedTaskData?.steps[activeStep]?.workedTimes.reduce((acc, user) => {
+          return acc + user.time
+        }, 0)
+        socket?.emit('updateTaskWorkedTime', { taskId, workedTime })
+      }
+    }, 1100)
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [updatedTaskData])
 
   return (
     <ItemContainer height="100%" overflow="hidden" borderRadius="0.3rem">

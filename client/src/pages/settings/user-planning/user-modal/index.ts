@@ -4,3 +4,4 @@ export { default as UserModalWorkingScheduleSettingsSummaryBody } from './UserMo
 export { default as UserModalWorkingScheduleSettingsSummaryFooter } from './UserModalWorkingScheduleSettingsSummaryFooter'
 export { default as UserModalSalarySettingsSummaryFooter } from './UserModalSalarySettingsSummaryFooter'
 export { default as UserModalSalarySettingsSummaryBody } from './UserModalSalarySettingsSummaryBody'
+export { default as UserModalHrSettingsTab } from './UserModalHrSettingsTab'

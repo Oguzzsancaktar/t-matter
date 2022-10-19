@@ -1,4 +1,4 @@
-import { ICustomer, IWorkflow } from '@/models'
+import { ICustomer, IUser, IWorkflow } from '@/models'
 import ITaskItem from './ITaskItem'
 
 export default interface ICustomerTask {
@@ -30,4 +30,11 @@ export interface ITaskStep {
   status?: number
   stepIndex: number
   isChecked?: boolean
+}
+
+export interface IActiveTaskStep {
+  task: ICustomerTask
+  user: IUser
+  activeTaskStep: number
+  workedTime?: number
 }

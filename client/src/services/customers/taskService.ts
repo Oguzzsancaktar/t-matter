@@ -132,6 +132,7 @@ const updateTask = (builder: IBuilder) => {
           steps: taskUpdateDto.steps.map(step => ({
             ...step,
             responsibleUser: step.responsibleUser._id,
+            addedFrom: step.addedFrom?._id,
             category: step.category._id,
             location: step.location._id,
             workedTimes: step.workedTimes.map((work: ITaskUserWorkTime) => ({

@@ -3,6 +3,7 @@ import { ModalHeader, ModalBody } from '@/components/modals/types'
 import { IUser } from '@/models'
 import React, { useState } from 'react'
 import { UserModalSalarySettingsTab, UserModalWorkingScheduleSettingsTab } from '../settings'
+import { UserModalHrSettingsTab } from '@/pages'
 
 interface IProps {
   userId: IUser['_id']
@@ -31,6 +32,14 @@ const UserModalSettingsTab: React.FC<IProps> = ({ userId }) => {
                 isActive={activeTab === 'working-schedule-settings'}
                 onClick={() => setActiveTab('working-schedule-settings')}
               />
+
+              <Tab
+                margin="0 1rem 0 0rem"
+                index={2}
+                name="User Hr Settings"
+                isActive={activeTab === 'user-hr-settings'}
+                onClick={() => setActiveTab('user-hr-settings')}
+              />
             </JustifyCenterRow>
           </JustifyBetweenColumn>
         </ItemContainer>
@@ -41,6 +50,8 @@ const UserModalSettingsTab: React.FC<IProps> = ({ userId }) => {
             <UserModalSalarySettingsTab userId={userId} />
           ) : activeTab === 'working-schedule-settings' ? (
             <UserModalWorkingScheduleSettingsTab userId={userId} />
+          ) : activeTab === 'user-hr-settings' ? (
+            <UserModalHrSettingsTab userId={userId} />
           ) : (
             'hata'
           )}

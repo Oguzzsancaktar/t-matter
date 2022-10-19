@@ -7,12 +7,12 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const helmet = require('helmet')
 const morgan = require('morgan')
-
+const { createServer } = require('http')
+const { Server } = require('socket.io')
 const routes = require('./routes')
 const cronJobs = require('./cron/cronJobs')
-
-const app = express()
-
+const UserHandler = require('./socket/userHandler')
+const ActiveTaskStepHandler = require('./socket/activeTaskStepHandler')
 const URI = process.env.MONGO_URI
 const PORT = process.env.PORT || 5000
 
@@ -26,6 +26,13 @@ const main = async () => {
   } catch (err) {
     console.log('Error connecting to MongoDB:', err.message)
   }
+  const app = express()
+  const httpServer = createServer(app)
+  const io = new Server(httpServer, {
+    cors: {
+      origin: '*'
+    }
+  })
 
   app.use(express.json())
   app.use(cookieParser())
@@ -45,6 +52,35 @@ const main = async () => {
   app.use(bodyParser.json())
 
   app.use('/api', routes)
+
+  const userHandler = new UserHandler(io)
+  const activeTaskStepHandler = new ActiveTaskStepHandler(io)
+
+  io.on('connection', socket => {
+    userHandler.setSocket(socket)
+    userHandler.addUser()
+    activeTaskStepHandler.setSocket(socket)
+
+    socket.on('addActiveTaskStep', data => {
+      activeTaskStepHandler.addActiveTaskStep(data)
+    })
+
+    socket.on('removeActiveTaskStep', data => {
+      activeTaskStepHandler.removeActiveTaskStep(data)
+    })
+
+    socket.on('taskStepChange', data => {
+      activeTaskStepHandler.taskStepChange(data)
+    })
+
+    socket.on('updateTaskWorkedTime', data => {
+      activeTaskStepHandler.updateTaskWorkedTime(data)
+    })
+
+    socket.on('disconnect', () => {
+      userHandler.removeUser()
+    })
+  })
 
   // error handler
   app.use(function (err, req, res, next) {
@@ -71,7 +107,7 @@ const main = async () => {
 
   cronJobs()
 
-  app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+  httpServer.listen(PORT, () => console.log(`Server started on port ${PORT}`))
 }
 
 main().then(() => console.log('SUCCESS STARTING SERVER'))

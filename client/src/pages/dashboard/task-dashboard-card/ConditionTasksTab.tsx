@@ -15,7 +15,9 @@ import {
   TableSkeltonLoader,
   TaskStepWorkFlowDonutChart,
   TaskStepYearlyCountBarChart,
-  TaskStepConditionDonutChart
+  TaskStepConditionDonutChart,
+  TaskStepMostlyAddedUser,
+  TaskStepUsers
 } from '@/components'
 import colors from '@constants/colors'
 import DataTable, { TableColumn } from 'react-data-table-component'
@@ -25,6 +27,7 @@ import {
   filterCompletedTaskSteps,
   filterNewTaskSteps,
   filterTaskStepsByCondition,
+  filterTaskStepsByConditions,
   isExpireCondition,
   isPostponeCondition,
   isTimerCondition,
@@ -48,11 +51,11 @@ const ConditionTasksTab = props => {
 
   useEffect(() => {
     if (data) {
-      const conditionTasks = filterCompletedTaskSteps(data).filter(d => !d.steps.seen?.condition)
+      const conditionTasks = filterTaskStepsByConditions(data).filter(d => !d.steps.seen?.condition)
       seenUpdate({
         tasks: conditionTasks.map(d => ({ taskId: d._id, stepIndex: d.stepIndex, name: 'condition' }))
       }).unwrap()
-      setTaskSteps(filterCompletedTaskSteps(filterTaskStepsByCondition(data, selectedCondition)))
+      setTaskSteps(filterTaskStepsByConditions(filterTaskStepsByCondition(data, selectedCondition)))
     }
   }, [data, selectedCondition])
 
@@ -95,12 +98,13 @@ const ConditionTasksTab = props => {
       name: 'Conditions',
       selector: taskStepConditionSelector,
       sortable: true,
+      width: '140px',
       cell: d => {
         return (
           <JustifyBetweenRow>
-            <JustifyCenterRow>{isTimerCondition(d) && <FcLeave />}</JustifyCenterRow>
-            <JustifyCenterRow>{isPostponeCondition(d) && <FcClock />}</JustifyCenterRow>
-            <JustifyCenterRow>{isExpireCondition(d) && <FcExpired />}</JustifyCenterRow>
+            <JustifyCenterRow>{isTimerCondition(d) && <FcLeave size="20px" />}</JustifyCenterRow>
+            <JustifyCenterRow>{isPostponeCondition(d) && <FcClock size="20px" />}</JustifyCenterRow>
+            <JustifyCenterRow>{isExpireCondition(d) && <FcExpired size="20px" />}</JustifyCenterRow>
           </JustifyBetweenRow>
         )
       }
@@ -125,7 +129,7 @@ const ConditionTasksTab = props => {
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
         <JustifyCenterColumn width="280px">
-          <TaskStepWorkFlowDonutChart taskSteps={taskSteps} />
+          <TaskStepConditionDonutChart taskSteps={taskSteps} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
           <TaskStepYearlyCountBarChart
@@ -140,7 +144,7 @@ const ConditionTasksTab = props => {
           />
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
-          <TaskStepConditionDonutChart taskSteps={taskSteps} />
+          <TaskStepUsers taskSteps={taskSteps} />
         </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">
