@@ -463,6 +463,15 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     }
   }, [taskData, taskIsLoading])
 
+  useEffect(() => {
+    if (updatedTaskData?.steps && updatedTaskData?.steps[activeStep]?.workedTimes.length > 0) {
+      const workedTime = updatedTaskData?.steps[activeStep]?.workedTimes.reduce((acc, user) => {
+        return acc + user.time
+      }, 0)
+      socket?.emit('updateTaskWorkedTime', { taskId, workedTime })
+    }
+  }, [updatedTaskData?.steps[activeStep]?.workedTimes])
+
   return (
     <ItemContainer height="100%" overflow="hidden" borderRadius="0.3rem">
       {taskData && !taskIsLoading && updatedTaskData ? (

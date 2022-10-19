@@ -40,6 +40,11 @@ class ActiveTaskStepHandler {
       this.io.in(this.room).emit('activeTaskSteps', this.activeTaskSteps)
     }
   }
+  updateTaskWorkedTime = ({ taskId, workedTime }) => {
+    console.log('updateTaskWorkedTime', taskId, workedTime)
+    this.activeTaskSteps = this.activeTaskSteps.map(data => (data.task._id === taskId ? { ...data, workedTime } : data))
+    this.io.in(this.room).emit('activeTaskSteps', this.activeTaskSteps)
+  }
 }
 
 module.exports = ActiveTaskStepHandler

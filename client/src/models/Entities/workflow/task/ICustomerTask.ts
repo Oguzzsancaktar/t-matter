@@ -36,4 +36,5 @@ export interface IActiveTaskStep {
   task: ICustomerTask
   user: IUser
   activeTaskStep: number
+  workedTime?: number
 }

@@ -70,8 +70,11 @@ const main = async () => {
     })
 
     socket.on('taskStepChange', data => {
-      console.log('taskStepChange', data)
       activeTaskStepHandler.taskStepChange(data)
+    })
+
+    socket.on('updateTaskWorkedTime', data => {
+      activeTaskStepHandler.updateTaskWorkedTime(data)
     })
 
     socket.on('disconnect', () => {

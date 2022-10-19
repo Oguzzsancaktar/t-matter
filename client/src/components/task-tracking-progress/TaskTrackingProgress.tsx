@@ -44,6 +44,12 @@ const TaskTrackingProgress: React.FC<ITaskTrackingProgressProps> = ({ activeTask
     )
   }
 
+  const totalWorkTime = activeTaskStep.task.steps[activeTaskStep.activeTaskStep].checklistItems?.reduce((acc, item) => {
+    return acc + item.duration
+  }, 0)
+  const workedTime = activeTaskStep?.workedTime ? activeTaskStep?.workedTime : 0
+  const progress = (workedTime / totalWorkTime) * 100
+
   return (
     <ItemContainer onClick={handleClick} borderRadius="0.3rem">
       <JustifyBetweenRow>
@@ -73,7 +79,7 @@ const TaskTrackingProgress: React.FC<ITaskTrackingProgressProps> = ({ activeTask
             </JustifyBetweenRow>
           </ItemContainer>
           <ItemContainer>
-            <ProgressBar completionPercentage={0} completionColor={colors.blue.primary} />
+            <ProgressBar completionPercentage={progress} completionColor={colors.blue.primary} />
           </ItemContainer>
         </Column>
       </JustifyBetweenRow>
