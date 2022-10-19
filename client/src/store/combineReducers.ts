@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { ModalReducer } from '@store/modal/index'
 import { AuthReducer } from '@store/auth/index'
-import { OnlineUsersReducer } from '@store/online-users'
+import { SocketGlobalReducer } from '@store/online-users'
 
 import { authApi } from '@services/authService'
 import { userApi } from '@/services/settings/user-planning/userService'
@@ -22,7 +22,7 @@ import { historyApi } from '@services/historyService'
 const rootReducer = combineReducers({
   auth: AuthReducer,
   modal: ModalReducer,
-  onlineUsers: OnlineUsersReducer,
+  socketGlobal: SocketGlobalReducer,
   [salarySettingsApi.reducerPath]: salarySettingsApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,

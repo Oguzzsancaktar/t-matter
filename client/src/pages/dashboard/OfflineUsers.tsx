@@ -11,7 +11,7 @@ const OfflineUsers = () => {
   const { useAppSelector } = useAccessStore()
   const [isOnline, setIsOnline] = useState(false)
 
-  const onlineUsers = useAppSelector(state => state.onlineUsers.onlineUsers)
+  const onlineUsers = useAppSelector(state => state.socketGlobal.onlineUsers)
 
   const offlineUserArr = users?.filter(u => !onlineUsers.includes(u._id)) || []
   const onlineUserArr = users?.filter(u => onlineUsers.includes(u._id)) || []

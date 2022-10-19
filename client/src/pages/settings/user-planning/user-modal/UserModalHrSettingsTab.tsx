@@ -26,7 +26,7 @@ const UserModalHrSettingsTab: React.FC<{ userId: IUser['_id'] }> = ({ userId }) 
   const { data } = useGetUserCompanyPricingQuery(userId)
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
   const { data: hrSetting } = useGetUserHrSettingQuery(userId)
-
+  console.log(data)
   const [specialDays, setSpecialDays] = useState([])
   if (!data) return null
 

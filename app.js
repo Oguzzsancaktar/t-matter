@@ -12,6 +12,7 @@ const { Server } = require('socket.io')
 const routes = require('./routes')
 const cronJobs = require('./cron/cronJobs')
 const UserHandler = require('./socket/userHandler')
+const ActiveTaskStepHandler = require('./socket/activeTaskStepHandler')
 const URI = process.env.MONGO_URI
 const PORT = process.env.PORT || 5000
 
@@ -53,12 +54,28 @@ const main = async () => {
   app.use('/api', routes)
 
   const userHandler = new UserHandler(io)
+  const activeTaskStepHandler = new ActiveTaskStepHandler(io)
 
   io.on('connection', socket => {
-    const userId = socket.handshake.query.userId
-    userHandler.addUser(userId)
+    userHandler.setSocket(socket)
+    userHandler.addUser()
+    activeTaskStepHandler.setSocket(socket)
+
+    socket.on('addActiveTaskStep', data => {
+      activeTaskStepHandler.addActiveTaskStep(data)
+    })
+
+    socket.on('removeActiveTaskStep', data => {
+      activeTaskStepHandler.removeActiveTaskStep(data)
+    })
+
+    socket.on('taskStepChange', data => {
+      console.log('taskStepChange', data)
+      activeTaskStepHandler.taskStepChange(data)
+    })
+
     socket.on('disconnect', () => {
-      userHandler.removeUser(userId)
+      userHandler.removeUser()
     })
   })
 

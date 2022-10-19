@@ -14,6 +14,7 @@ import './styles/vendors/fullcalendar.css'
 import './styles/vendors/react-drag-drop-file.css'
 import './styles/vendors/apex.css'
 import { setOnlineUsers } from '@store/online-users'
+import { setSocket } from '@store/online-users/socketGlobal'
 
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
@@ -44,10 +45,11 @@ function App() {
     }
     socket = io(process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:5000', {
       query: {
-        userId: loggedUser.user._id
+        userId: loggedUser.user._id,
+        organization: 'futurePurpose'
       }
     })
-
+    dispatch(setSocket(socket))
     socket.on('online', data => {
       dispatch(setOnlineUsers(data.onlineUsers))
     })

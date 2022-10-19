@@ -1,1 +1,1 @@
-export { default as OnlineUsersReducer, setOnlineUsers } from './onlineUsersSlice'
+export { default as SocketGlobalReducer, setOnlineUsers } from './socketGlobal'
