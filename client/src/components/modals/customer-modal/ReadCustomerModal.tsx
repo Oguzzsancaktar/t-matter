@@ -1,4 +1,4 @@
-import { AddOrChangeCustomerImageModal } from '@/components'
+import { AddOrChangeCustomerImageModal, NoTableData } from '@/components'
 import { Badge } from '@/components/badge'
 import { Button } from '@/components/button'
 import { ActionButtons } from '@/components/data-tables'
@@ -11,7 +11,12 @@ import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ICustomer, ESize, EStatus, ECustomerType } from '@/models'
-import { CustomerModalActivityTab, CustomerModalWorkflowTab, CustomerModalFinanceTab } from '@/pages'
+import {
+  CustomerModalActivityTab,
+  CustomerModalWorkflowTab,
+  CustomerModalFinanceTab,
+  CustomerModalPreviewTab
+} from '@/pages'
 import {
   useGetCustomerByIdQuery,
   useUpdateCustomerStatusMutation,
@@ -38,9 +43,10 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
   const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customer._id)
   const [updateCustomerStatus] = useUpdateCustomerStatusMutation()
 
+  console.log(customerData?.reliableCustomers)
   const [updateCustomer] = useUpdateCustomerMutation()
 
-  const [activeTab, setActiveTab] = useState(defaultActiveTab ? defaultActiveTab : 'activity')
+  const [activeTab, setActiveTab] = useState(defaultActiveTab ? defaultActiveTab : 'preview')
   const [activeSliderIndex, setActiveSliderIndex] = useState(0)
 
   const handleEdit = (customer: ICustomer) => {
@@ -159,6 +165,8 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
     try {
       // @ts-ignore
       await updateCustomer(tempContactData)
+      toastSuccess('Contact ' + customer.firstname + ' ' + customer.lastname + ' updated to client successfully')
+      dispatch(closeModal(`makeContactToClient-${customer._id}`))
     } catch (error) {
       console.log('updatecustomer ===>', error)
     }
@@ -166,6 +174,8 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
 
   const renderSwitch = () => {
     switch (activeTab) {
+      case 'preview':
+        return <CustomerModalPreviewTab customerId={customer._id} />
       case 'activity':
         return <CustomerModalActivityTab customerId={customer._id} />
       case 'calendar':
@@ -317,14 +327,16 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
 
               <ItemContainer margin="1rem 0">
                 {customerData.reliableCustomers.length > 0 &&
-                  !customerData.reliableCustomers[0].relativeType.fromOrTo && (
-                    <ReliableSlider
-                      reliableCustomers={customerData.reliableCustomers}
-                      activeIndex={activeSliderIndex}
-                      customerId={customerData?._id}
-                      onActiveStepChange={handleActiveStep}
-                    />
-                  )}
+                customerData.reliableCustomers[0].relativeType.fromOrTo === 0 ? (
+                  <ReliableSlider
+                    reliableCustomers={customerData.reliableCustomers}
+                    activeIndex={activeSliderIndex}
+                    customerId={customerData?._id}
+                    onActiveStepChange={handleActiveStep}
+                  />
+                ) : (
+                  <NoTableData text="No Reliable" />
+                )}
               </ItemContainer>
 
               <ItemContainer height="40px" borderBottom={'1px solid ' + colors.white.primary} padding="0 0 0.5rem 0">
@@ -349,6 +361,17 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
 
         <ItemContainer height="100%" width="120px" padding="1rem" backgroundColor={colors.gray.disabled}>
           <JustifyBetweenColumn height="100%">
+            <ItemContainer height="100%" margin="0 0 0.25rem 0">
+              <Button
+                onClick={() => setActiveTab('preview')}
+                color={activeTab === 'preview' ? colors.blue.primary : colors.primary.dark}
+              >
+                <H1 color={activeTab === 'preview' ? colors.gray.primary : colors.white.primary} textAlign="center">
+                  Preview
+                </H1>
+              </Button>
+            </ItemContainer>
+
             <ItemContainer height="100%" margin="0 0 0.25rem 0">
               <Button
                 onClick={() => setActiveTab('activity')}

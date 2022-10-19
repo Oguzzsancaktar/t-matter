@@ -11,7 +11,7 @@ router.post(
   controllers.customerController.createCustomer
 )
 
-router.patch(
+router.put(
   '/',
   middlewares.validations.customerValidations.updateCustomerValidation,
   controllers.customerController.updateCustomer

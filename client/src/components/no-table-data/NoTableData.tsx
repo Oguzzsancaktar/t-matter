@@ -5,13 +5,16 @@ import { ItemContainer } from '../item-container'
 import { JustifyCenterColumn, JustifyCenterRow } from '../layout'
 import { H1 } from '../texts'
 
-const NoTableData = () => {
+interface IProps {
+  text?: string
+}
+const NoTableData: React.FC<IProps> = ({ text = 'No Data' }) => {
   return (
     <ItemContainer width="100%" height="100%">
       <JustifyCenterColumn height="100%">
         <Airplay size={100} color={colors.gray.disabled} />
         <H1 width="auto" fontSize="2rem" color={colors.gray.disabled}>
-          No Data
+          {text}
         </H1>
       </JustifyCenterColumn>
     </ItemContainer>

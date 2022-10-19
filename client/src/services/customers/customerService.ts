@@ -66,8 +66,8 @@ const updateCustomer = (builder: IBuilder) => {
     query(customerUpdateDto) {
       return {
         url: `/customer`,
-        method: 'PATCH',
-        data: { ...customerUpdateDto }
+        method: 'PUT',
+        data: { ...customerUpdateDto, jobTitle: customerUpdateDto.jobTitle._id }
       }
     },
     invalidatesTags(result) {

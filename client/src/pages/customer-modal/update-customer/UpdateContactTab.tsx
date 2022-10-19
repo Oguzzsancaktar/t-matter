@@ -190,7 +190,6 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
     const validationResult = validateFormFields()
     try {
       if (validationResult) {
-        console.log('updateContactDTO', updateContactDTO)
         await updateCustomer({ ...updateContactDTO })
         dispatch(closeModal(`updateCustomerModal-${customer._id}`))
         toastSuccess(

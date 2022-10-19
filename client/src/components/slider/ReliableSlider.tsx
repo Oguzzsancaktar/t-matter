@@ -59,6 +59,7 @@ const ReliableSlider: React.FC<IProps> = ({ customerId, activeIndex, onActiveSte
     )
   }
 
+  console.log(reliableCustomers)
   return (
     <ItemContainer>
       {customer && (

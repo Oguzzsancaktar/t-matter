@@ -41,6 +41,8 @@ const UpdateCustomerReliables: React.FC<IProps> = ({
     )
   }
 
+  console.log('zzz', customerReliablesData?.length)
+
   return (
     <ItemContainer height="70px">
       <Row>
@@ -48,7 +50,7 @@ const UpdateCustomerReliables: React.FC<IProps> = ({
           <Row>
             {!customerReliablesIsLoading &&
               customerReliablesData &&
-              customerReliablesData.length > 0 &&
+              customerReliablesData?.length > 0 &&
               updateContactDTO.reliableCustomers.length > 0 && (
                 <Row>
                   {customerReliablesData.map((reliable, index) => {

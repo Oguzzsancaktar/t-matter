@@ -43,6 +43,7 @@ const UpdateClientReliables: React.FC<IProps> = ({
     )
   }
 
+  console.log('zzz', customerReliablesData?.length)
   return (
     <ItemContainer>
       <Row>
@@ -50,12 +51,12 @@ const UpdateClientReliables: React.FC<IProps> = ({
           <Row>
             {!customerReliablesIsLoading &&
               customerReliablesData &&
-              customerReliablesData.length > 0 &&
+              customerReliablesData?.length > 0 &&
               updateClientDTO.reliableCustomers.length > 0 && (
                 <Row>
                   {customerReliablesData.map((reliable, index) =>
                     updatedReliableList.map(updatedReliable => {
-                      if (updatedReliable.reliableId === reliable._id) {
+                      if (updatedReliable?.reliableId === reliable?._id) {
                         return (
                           <ItemContainer
                             key={index}
@@ -69,9 +70,9 @@ const UpdateClientReliables: React.FC<IProps> = ({
                             <JustifyBetweenRow>
                               <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
                                 <UserBadge
-                                  userEmail={reliable.relativeType?.relateTo || ''}
-                                  userImage={'reliable.photo'}
-                                  userName={reliable.firstname + ' ' + reliable.lastname}
+                                  userEmail={reliable?.relativeType?.relateTo || ''}
+                                  userImage={'reliable?.photo'}
+                                  userName={reliable?.firstname + ' ' + reliable?.lastname}
                                 />
                               </ItemContainer>
                               <Button
@@ -107,9 +108,9 @@ const UpdateClientReliables: React.FC<IProps> = ({
                     <JustifyBetweenRow>
                       <ItemContainer margin="0 0.5rem 0 0" width="calc(100% - 0.5rem - 30px)">
                         <UserBadge
-                          userEmail={reliable.relativeType?.relateTo || ''}
-                          userImage={'reliable.photo'}
-                          userName={reliable.firstname + ' ' + reliable.lastname}
+                          userEmail={reliable?.relativeType?.relateTo || ''}
+                          userImage={'reliable?.photo'}
+                          userName={reliable?.firstname + ' ' + reliable?.lastname}
                         />
                       </ItemContainer>
                       <Button

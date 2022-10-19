@@ -258,7 +258,7 @@ const CreateContactTab = () => {
       if (validationResult) {
         // @ts-ignore
         delete tempCreateContactDTO._id
-        tempCreateContactDTO.customerType = ECustomerType.Client
+        tempCreateContactDTO.customerType = ECustomerType.Contact
         const result = await createCustomer({ ...tempCreateContactDTO })
         console.log(result)
         dispatch(closeModal('createCustomerModal'))

@@ -11,6 +11,8 @@ const customerValidationSchema = {
   birthday: joi.date().allow(''),
   birthplace: joi.string().allow(''),
 
+  cloudinary_id: joi.any(),
+  profile_img: joi.any(),
   customerType: joi.number(),
   firstname: joi.string().required(),
   lastname: joi.string().required(),

@@ -15,48 +15,29 @@ const findByIdAndUpdateCustomer = async (id, data) => {
   const reliableInCompanyArr = data['reliableInCompany']
 
   let reliableCustomers = []
-  debugger
-  for (let customerId of deletedReliableIdArr) {
-    const customer = await Customer.findById(customerId)
-    customer.reliableCustomers = customer.reliableCustomers.filter(reliable => reliable.reliableId.toString() !== id)
-    Customer.findByIdAndUpdate(customerId, customer)
-  }
 
-  for (let reliable of reliableInCompanyArr) {
-    const reliableId = reliable._id
-    const relativeType = {
-      relativeTypeId: mongoose.Types.ObjectId(reliable.relativeType._id),
+  for (let i = 0; i < reliableInCompanyArr?.length; i++) {
+    const reliable = reliableInCompanyArr[i]
+    const { _id: reliableId, relativeType } = reliable
+
+    const type = {
+      relativeTypeId: mongoose.Types.ObjectId(relativeType._id),
       fromOrTo: 0
     }
 
-    reliableCustomers.push({ reliableId: mongoose.Types.ObjectId(reliableId), relativeType })
+    const reliableAndType = {
+      reliableId: mongoose.Types.ObjectId(reliableId),
+      relativeType: type
+    }
+
+    console.log(reliableAndType)
+    reliableCustomers.push(reliableAndType)
   }
 
-  if (reliableCustomers.length) {
-    data.reliableCustomers = [...data.reliableCustomers, ...reliableCustomers]
-  }
+  data.reliableCustomers = reliableCustomers
+  delete data.reliableInCompany
 
-  for (let reliableCustomer of reliableCustomers) {
-    const customerId = reliableCustomer.reliableId
-    const relativeTypeId = reliableCustomer.relativeType.relativeTypeId
-    await Customer.findByIdAndUpdate(customerId, {
-      $push: {
-        reliableCustomers: {
-          reliableId: mongoose.Types.ObjectId(id),
-          relativeType: {
-            relativeTypeId: mongoose.Types.ObjectId(relativeTypeId),
-            fromOrTo: 1
-          }
-        }
-      }
-    })
-  }
-
-  //TODO
-  let bugIndex = data.reliableCustomers.findIndex({
-    relativeType: {}
-  })
-  data.reliableCustomers.splice(bugIndex)
+  console.log(id, data)
 
   return await Customer.findByIdAndUpdate(id, data)
 }
@@ -84,6 +65,20 @@ const findCustomerById = async (id, populate = '') => {
         localField: 'refferedBy.color',
         foreignField: '_id',
         as: 'refferedBy.color'
+      }
+    },
+    {
+      $lookup: {
+        from: 'jobtitles',
+        localField: 'jobTitle',
+        foreignField: '_id',
+        as: 'jobTitle'
+      }
+    },
+    {
+      $unwind: {
+        path: '$jobTitle',
+        preserveNullAndEmptyArrays: true
       }
     },
     {
@@ -192,6 +187,20 @@ const findCustomerWithFiltersAndPopulate = ({ search, size, status }) => {
     {
       $unwind: {
         path: '$refferedBy',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'jobtitles',
+        localField: 'jobTitle',
+        foreignField: '_id',
+        as: 'jobTitle'
+      }
+    },
+    {
+      $unwind: {
+        path: '$jobTitle',
         preserveNullAndEmptyArrays: true
       }
     },
