@@ -17,7 +17,7 @@ class ActiveTaskStepHandler {
 
   setSocket(socket) {
     this.socket = socket
-    this.room = socket.handshake.query.room
+    this.room = socket.handshake.query.organization
   }
 
   addActiveTaskStep = data => {

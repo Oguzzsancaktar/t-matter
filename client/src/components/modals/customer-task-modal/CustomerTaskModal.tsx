@@ -463,14 +463,25 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     }
   }, [taskData, taskIsLoading])
 
+  let interval: null | NodeJS.Timer = null
   useEffect(() => {
-    if (updatedTaskData?.steps && updatedTaskData?.steps[activeStep]?.workedTimes.length > 0) {
-      const workedTime = updatedTaskData?.steps[activeStep]?.workedTimes.reduce((acc, user) => {
-        return acc + user.time
-      }, 0)
-      socket?.emit('updateTaskWorkedTime', { taskId, workedTime })
+    if (!updatedTaskData || interval) {
+      return
     }
-  }, [updatedTaskData?.steps[activeStep]?.workedTimes])
+    interval = setInterval(() => {
+      if (updatedTaskData?.steps && updatedTaskData?.steps[activeStep]?.workedTimes) {
+        const workedTime = updatedTaskData?.steps[activeStep]?.workedTimes.reduce((acc, user) => {
+          return acc + user.time
+        }, 0)
+        socket?.emit('updateTaskWorkedTime', { taskId, workedTime })
+      }
+    }, 10000)
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [updatedTaskData])
 
   return (
     <ItemContainer height="100%" overflow="hidden" borderRadius="0.3rem">

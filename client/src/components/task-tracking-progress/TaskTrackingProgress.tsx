@@ -10,11 +10,12 @@ import {
   UserImage
 } from '@/components'
 import colors from '@/constants/colors'
-import { IActiveTaskStep, ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
+import { IActiveTaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 import useAccessStore from '@hooks/useAccessStore'
 import { openModal } from '@/store'
 import { ESize } from '@/models'
 import { Avatar } from '@nextui-org/react'
+import { secondsToHourMin } from '@utils/timeUtils'
 
 interface ITaskTrackingProgressProps {
   activeTaskStep: IActiveTaskStep
@@ -74,6 +75,11 @@ const TaskTrackingProgress: React.FC<ITaskTrackingProgressProps> = ({ activeTask
                 </H1>
                 <H1 margin="0 0 0 0.25rem" color={colors.blue.primary} width="auto">
                   {activeTaskStep.task.steps[activeTaskStep.activeTaskStep].category.name}
+                </H1>
+              </Row>
+              <Row>
+                <H1 width="auto" color={colors.text.primary}>
+                  {secondsToHourMin(workedTime)} / {secondsToHourMin(totalWorkTime)}
                 </H1>
               </Row>
             </JustifyBetweenRow>
