@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { IUser } from '@/models'
 import { Checkbox, JustifyBetweenColumn, JustifyBetweenRow, SelectInput } from '@/components'
+import { useGetUsersQuery } from '@services/settings/user-planning/userService'
+import { emptyQueryParams } from '@constants/queryParams'
 import { useGetUserCompanyPricingQuery } from '@services/settings/company-planning/companyPricingService'
 import { getUserMonthlyWorkingHours } from '@utils/workingHourUtil'
-import { useGetUserHrSettingQuery, useGetUsersQuery } from '@services/settings/user-planning/userService'
-import { emptyQueryParams } from '@constants/queryParams'
-
 const days = [
   { value: 1, label: '1 Days' },
   { value: 2, label: '2 Days' },
@@ -21,15 +19,10 @@ const widths = {
   2: 270,
   3: 200
 }
-
-const UserModalHrSettingsTab: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
-  const { data } = useGetUserCompanyPricingQuery(userId)
+const UserHrSettings = () => {
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
-  // const { data: hrSetting } = useGetUserHrSettingQuery(userId)
-  console.log(data)
 
   const [specialDays, setSpecialDays] = useState([])
-  if (!data) return null
 
   const userOptions = users?.map(({ _id, firstname }) => ({ value: _id, label: firstname })) || []
 
@@ -38,9 +31,7 @@ const UserModalHrSettingsTab: React.FC<{ userId: IUser['_id'] }> = ({ userId }) 
       <JustifyBetweenColumn width="70%">
         <JustifyBetweenRow>
           <Checkbox isChecked={false} onChange={() => {}} />
-          <span style={{ width: widths[1], marginRight: 16 }}>
-            After {getUserMonthlyWorkingHours(data.workingSchedule)} Hours
-          </span>
+          <span style={{ width: widths[1], marginRight: 16 }}>After $$DYNAMIC Hours</span>
           <span style={{ width: widths[2], marginRight: 16 }}>Healthy mental days</span>
           <div style={{ width: widths[3], marginRight: 16 }}>
             <SelectInput placeHolder="Days" onChange={() => {}} name="mental" options={days} />
@@ -102,4 +93,4 @@ const UserModalHrSettingsTab: React.FC<{ userId: IUser['_id'] }> = ({ userId }) 
   )
 }
 
-export default UserModalHrSettingsTab
+export default UserHrSettings

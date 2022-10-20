@@ -13,7 +13,7 @@ const findWorkingScheduleByUserId = owner => {
 }
 
 const findCompanyWorkingSchedule = () => {
-  return WorkingSchedule.findOne({ owner: { $exists: false } })
+  return WorkingSchedule.findOne({ owner: { $eq: null } })
     .lean()
     .exec()
 }

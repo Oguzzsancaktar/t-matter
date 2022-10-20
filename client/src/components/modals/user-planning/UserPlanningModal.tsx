@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { UserPageSettingsTab, UserRoleSettings, UserTaskSettingsTab } from '@/pages'
+import { UserPageSettingsTab, UserRoleSettings, UserTaskSettingsTab, UserHrSettings } from '@/pages'
 import { Column, JustifyBetweenColumn, JustifyCenterRow } from '@components/layout'
 import { Tab } from '@components/tab'
 import { ModalBody, ModalHeader } from '../types'
@@ -27,6 +27,14 @@ const UserPlanningModal = () => {
               isActive={activeTab === 'user-page-settings'}
               onClick={() => setActiveTab('user-page-settings')}
             />
+
+            <Tab
+              margin="0 1rem 0 0rem"
+              index={2}
+              name="User HR Settings"
+              isActive={activeTab === 'user-hr-settings'}
+              onClick={() => setActiveTab('user-hr-settings')}
+            />
           </JustifyCenterRow>
         </JustifyBetweenColumn>
       </ModalHeader>
@@ -36,6 +44,8 @@ const UserPlanningModal = () => {
           <UserRoleSettings />
         ) : activeTab === 'user-task-settings' ? (
           <UserTaskSettingsTab />
+        ) : activeTab === 'user-hr-settings' ? (
+          <UserHrSettings />
         ) : (
           <UserPageSettingsTab />
         )}
