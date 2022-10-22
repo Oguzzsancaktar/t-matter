@@ -385,6 +385,78 @@ const getTaskStepsData = async ({ responsibleUserId, startDate, endDate }) => {
   return Task.aggregate(pipeline).exec()
 }
 
+const getCustomerMostUsedUserInTasks = async () => {
+  const pipeline = [
+    {
+      $match: {
+        customer: {
+          $eq: mongoose.Types.ObjectId('631e6e6d24005a667f78b542')
+        }
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $group: {
+        _id: '$steps.responsibleUser',
+        count: {
+          $sum: 1
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'responsibleUser'
+      }
+    },
+    {
+      $unwind: {
+        path: '$responsibleUser',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]
+
+  return Task.aggregate(pipeline).exec()
+}
+
+const getCustomerTimerAnalysis = async () => {
+  const pipeline = [
+    {
+      $match: {
+        customer: {
+          $eq: mongoose.Types.ObjectId('631e6e6d24005a667f78b542')
+        }
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $group: {
+        _id: '$steps.responsibleUser',
+        totalDuration: {
+          $sum: '$totalDuration'
+        },
+        totalPassedTime: {
+          $sum: '$steps.totalPassedTime'
+        }
+      }
+    }
+  ]
+
+  return Task.aggregate(pipeline).exec()
+}
 module.exports = {
   createTask,
   getCustomerTasks,
@@ -394,5 +466,7 @@ module.exports = {
   getUsedTaskWorkflowCounts,
   getTaskCountForMonthsData,
   getTaskStepMonthlyAnalysisData,
-  getTaskStepsData
+  getTaskStepsData,
+  getCustomerMostUsedUserInTasks,
+  getCustomerTimerAnalysis
 }

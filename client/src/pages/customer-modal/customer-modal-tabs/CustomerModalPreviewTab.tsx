@@ -3,6 +3,10 @@ import { EActivity, ICustomer, ITaskCategory, IUser } from '@/models'
 import {
   ActivityFilter,
   Column,
+  CustomerActivityMonthlyBarChart,
+  CustomerMostUsedUserDonutChart,
+  CustomerPerformanceRadialChart,
+  CustomerTaskTimingAnalysisRadialChart,
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterColumn,
@@ -13,60 +17,67 @@ import ActivityItem from '@components/activity/ActivityItem'
 import ReactTooltip from 'react-tooltip'
 import { emptyActivtyFilter } from '@/constants/queryParams'
 import { AdditionalTimeDonut, DiscountedInvoicesDonut, InvoicesDonut, NonBillableCircleProgress } from './finance-tabs'
+import colors from '@/constants/colors'
+import {
+  useGetCustomerMostUsedUserInTasksQuery,
+  useGetCustomerTasksTimerAnalyisesQuery
+} from '@/services/customers/taskService'
 
 interface IProps {
   customerId: ICustomer['_id']
 }
 
 const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
-  const [activityFilter, setActivityFilter] = useState({ ...emptyActivtyFilter, customerId })
-  const { data, isLoading } = useGetActivitiesQuery(activityFilter)
-
-  const [userFilter, setUserFilter] = useState<IUser>()
-
-  const handleFilterUserChange = (user: IUser) => {
-    setActivityFilter({ ...activityFilter, userId: user._id })
-    setUserFilter(user)
-  }
-
-  const handleTypeFilter = (categoryId: ITaskCategory['_id']) => {
-    setActivityFilter({ ...activityFilter, categoryId })
-  }
-
-  const handleRemoveFilters = () => {
-    setActivityFilter({ ...emptyActivtyFilter, customerId })
-  }
-
-  useEffect(() => {
-    ReactTooltip.rebuild()
-  }, [data])
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  const { data: customerMostUsedUserChartData } = useGetCustomerMostUsedUserInTasksQuery({ customerId })
+  const { data: customerTaskTimerChartData } = useGetCustomerTasksTimerAnalyisesQuery({ customerId })
 
   return (
     <ItemContainer padding="1rem" height="100%" overflow="hidden">
       <Column height="100%">
-        <ItemContainer height="250px" margin="0 0 1rem 0">
-          <JustifyBetweenRow>
-            <ItemContainer>chart 1</ItemContainer>
+        <ItemContainer
+          height="200px"
+          margin="0 0 1rem 0"
+          backgroundColor={colors.white.secondary}
+          boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
+          borderRadius="0.3rem"
+        >
+          <JustifyBetweenRow height="100%">
+            <ItemContainer height="100%">
+              <CustomerMostUsedUserDonutChart chartData={customerMostUsedUserChartData} />
+            </ItemContainer>
 
-            <ItemContainer>chart 1</ItemContainer>
+            <ItemContainer height="100%">
+              <CustomerTaskTimingAnalysisRadialChart chartData={customerTaskTimerChartData} />
+            </ItemContainer>
 
-            <ItemContainer>chart 1</ItemContainer>
+            <ItemContainer>
+              <CustomerPerformanceRadialChart chartData={undefined} />
+            </ItemContainer>
 
             <ItemContainer>chart 1</ItemContainer>
           </JustifyBetweenRow>
         </ItemContainer>
 
-        <ItemContainer height="calc(100% - 250px - 1rem)">
-          <JustifyBetweenRow>
-            <ItemContainer height="100%">
-              <JustifyCenterColumn>
-                <ItemContainer height="calc(100% - 250px - 1rem)">bar chart</ItemContainer>
+        <ItemContainer height="calc(100% - 200px - 1rem)">
+          <JustifyBetweenRow height="100%">
+            <ItemContainer height="100%" margin="0  1rem 0 0" width="calc(100% - 400px - 1rem)">
+              <JustifyCenterColumn height="100%">
+                <ItemContainer
+                  height="calc(100% - 200px - 1rem)"
+                  backgroundColor={colors.white.secondary}
+                  boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
+                  borderRadius="0.3rem"
+                  margin="0 0 1rem 0"
+                >
+                  <CustomerActivityMonthlyBarChart />
+                </ItemContainer>
 
-                <ItemContainer height="250px">
+                <ItemContainer
+                  height="200px"
+                  backgroundColor={colors.white.secondary}
+                  boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
+                  borderRadius="0.3rem"
+                >
                   <JustifyBetweenRow height="100%">
                     <InvoicesDonut selectedInvoice={undefined} onSelect={() => {}} customerId={customerId} />
                     <DiscountedInvoicesDonut selectedInvoice={undefined} onSelect={() => {}} customerId={customerId} />
@@ -77,7 +88,15 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
               </JustifyCenterColumn>
             </ItemContainer>
 
-            <ItemContainer height="100%">Task activity</ItemContainer>
+            <ItemContainer
+              width="400px"
+              height="100%"
+              backgroundColor={colors.white.secondary}
+              boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
+              borderRadius="0.3rem"
+            >
+              Task activity
+            </ItemContainer>
           </JustifyBetweenRow>
         </ItemContainer>
       </Column>
@@ -86,3 +105,6 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
 }
 
 export default CustomerModalPreviewTab
+function getCustomerMostUsedUserInTasks(customerId: string) {
+  throw new Error('Function not implemented.')
+}

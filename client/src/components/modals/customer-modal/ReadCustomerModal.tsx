@@ -431,10 +431,8 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
           minHeight="700px"
           height="inherit"
           width="calc(100% - 120px - 350px )"
-          backgroundColor={colors.white.secondary}
+          backgroundColor={activeTab === 'preview' ? colors.gray.thirth : colors.white.secondary}
           borderRadius="0 0.3rem 0.3rem 0"
-          // padding="1rem"
-          padding={activeTab === 'finance' ? undefined : '1rem 0'}
         >
           {renderSwitch()}
         </ItemContainer>

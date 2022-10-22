@@ -12,3 +12,4 @@ export { default as TaskStepYearlyCountBarChart } from './TaskStepYearlyCountBar
 export { default as TaskStepConditionDonutChart } from './TaskStepConditionDonutChart'
 export { default as TaskStepLostTimeProgressChart } from './TaskStepLostTimeProgressChart'
 export { default as TaskStepUsers } from './TaskStepUsers'
+export * from './customer'

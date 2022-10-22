@@ -282,6 +282,42 @@ const updateTaskStepsSeen = (builder: IBuilder) => {
   })
 }
 
+// charts
+
+const getCustomerMostUsedUserInTasks = (builder: IBuilder) => {
+  return builder.query<
+    { _id: IUser['_id']; count: number; responsibleUser: IUser }[],
+    { customerId: ICustomer['_id'] }
+  >({
+    query({ customerId }) {
+      return {
+        url: `/task/chart/customer-most-used-user/${customerId}`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
+const getCustomerTasksTimerAnalyises = (builder: IBuilder) => {
+  return builder.query<
+    { _id: ICustomer['_id']; totalDuration: number; totalPassedTime: number }[],
+    { customerId: ICustomer['_id'] }
+  >({
+    query({ customerId }) {
+      return {
+        url: `/task/chart/customer-timer-analyis/${customerId}`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const taskApi = createApi({
   reducerPath: TASK_REDUCER_PATH,
   tagTypes: [TASK_TAG_TYPE],
@@ -300,7 +336,9 @@ const taskApi = createApi({
     getTaskStepMonthlyAnalysisData: getTaskStepMonthlyAnalysisData(builder),
     getTaskSteps: getTaskSteps(builder),
     transferTasks: transferTasks(builder),
-    updateTaskStepsSeen: updateTaskStepsSeen(builder)
+    updateTaskStepsSeen: updateTaskStepsSeen(builder),
+    getCustomerMostUsedUserInTasks: getCustomerMostUsedUserInTasks(builder),
+    getCustomerTasksTimerAnalyises: getCustomerTasksTimerAnalyises(builder)
   })
 })
 
@@ -319,7 +357,9 @@ const {
   useGetTaskStepsQuery,
   useLazyGetTaskStepsQuery,
   useTransferTasksMutation,
-  useUpdateTaskStepsSeenMutation
+  useUpdateTaskStepsSeenMutation,
+  useGetCustomerMostUsedUserInTasksQuery,
+  useGetCustomerTasksTimerAnalyisesQuery
 } = taskApi
 export {
   taskApi,
@@ -337,5 +377,7 @@ export {
   useGetTaskStepsQuery,
   useLazyGetTaskStepsQuery,
   useTransferTasksMutation,
-  useUpdateTaskStepsSeenMutation
+  useUpdateTaskStepsSeenMutation,
+  useGetCustomerMostUsedUserInTasksQuery,
+  useGetCustomerTasksTimerAnalyisesQuery
 }
