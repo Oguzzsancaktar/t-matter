@@ -25,6 +25,7 @@ const CardTitle = styled.h1`
   font-weight: bold;
   text-align: center;
   padding: 1rem;
+  font-family: Satoshi-Medium;
   color: ${colors.gray.light};
 `
 

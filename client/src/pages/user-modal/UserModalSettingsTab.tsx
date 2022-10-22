@@ -36,7 +36,7 @@ const UserModalSettingsTab: React.FC<IProps> = ({ userId }) => {
               <Tab
                 margin="0 1rem 0 0rem"
                 index={2}
-                name="User Hr Settings"
+                name="User HR Settings"
                 isActive={activeTab === 'user-hr-settings'}
                 onClick={() => setActiveTab('user-hr-settings')}
               />

@@ -13,6 +13,10 @@ const GlobalStyle = createGlobalStyle`
     overflow-y: auto;
   }
   
+  * {
+    font-family: Satoshi-Light, sans-serif;
+  }
+  
   #side-drawer-root {
     height: 100%;
     background: white;

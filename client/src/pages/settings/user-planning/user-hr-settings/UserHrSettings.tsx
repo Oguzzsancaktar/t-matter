@@ -21,7 +21,6 @@ import moment from 'moment'
 import { Input } from '@nextui-org/react'
 import colors from '@constants/colors'
 import { Edit, Plus, Trash } from 'react-feather'
-import { IUser } from '@/models'
 const days = [
   { value: 1, label: '1 Days' },
   { value: 2, label: '2 Days' },
@@ -50,15 +49,12 @@ const InfoRow = ({ title, count }) => {
   )
 }
 
-const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
+const UserHrSettings = () => {
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
-  const { data } = useGetUserCompanyPricingQuery(userId)
 
   const [specialDays, setSpecialDays] = useState<IUserHrSetting['specialDays'][]>([])
 
   const userOptions = users?.map(({ _id, firstname }) => ({ value: _id, label: firstname })) || []
-
-  if (!data) return null
 
   const handleAddSpecialDay = () => {
     setSpecialDays([
@@ -89,9 +85,7 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
           <div style={{ minWidth: 32 }}>
             <Checkbox isChecked={false} onChange={() => {}} />
           </div>
-          <span style={{ minWidth: widths[1], marginRight: 16 }}>
-            After {getUserMonthlyWorkingHours(data.workingSchedule)} Hours
-          </span>
+          <span style={{ minWidth: widths[1], marginRight: 16 }}>After $$DYNAMIC Hours</span>
           <span style={{ minWidth: widths[2], marginRight: 16 }}>Healthy mental days</span>
           <div style={{ minWidth: widths[3], marginRight: 16 }}>
             <SelectInput placeHolder="Days" onChange={() => {}} name="mental" options={days} />
