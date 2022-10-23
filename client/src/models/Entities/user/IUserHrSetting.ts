@@ -1,7 +1,7 @@
 import { IUser } from '@/models'
 
 interface IUserHrSetting {
-  owner: IUser['_id']
+  owner?: IUser['_id'] | null
   monthlyWorking: {
     isChecked: boolean
     days: number
@@ -19,7 +19,7 @@ interface IUserHrSetting {
     notificationReceivers: IUser['_id'][]
     afterHours: number
     days: number
-  }
+  }[]
   specialDays: {
     isChecked: boolean
     taskType: string
@@ -27,7 +27,7 @@ interface IUserHrSetting {
     name: string
     startDate: string
     endDate: string
-  }
+  }[]
 }
 
 export default IUserHrSetting
