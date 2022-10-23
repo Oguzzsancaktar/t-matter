@@ -138,8 +138,8 @@ const updateTask = async (req, res) => {
   const { taskId } = req.params
   const { body } = req
   try {
+    let passedTimeTotal = 0
     body.steps = body.steps.map(({ responsibleUser, location, category, workedTimes, ...rest }) => {
-      console.log('workedTimesworkedTimesworkedTimes', workedTimes)
       return {
         ...rest,
         workedTimes: workedTimes.map(work => {
@@ -148,6 +148,10 @@ const updateTask = async (req, res) => {
             time: work.time
           }
         }),
+        totalPassedTime: workedTimes.reduce((acc, curr) => {
+          passedTimeTotal += curr.time
+          return acc + curr.time
+        }, 0),
         responsibleUser: mongoose.Types.ObjectId(responsibleUser),
         location: mongoose.Types.ObjectId(location),
         category: mongoose.Types.ObjectId(category),
@@ -266,8 +270,6 @@ const updateTaskStepsSeen = async (req, res) => {
 const getCustomerMostUsedUserInTasks = async (req, res) => {
   const { customerId } = req.params
 
-  console.log('===========', customerId)
-
   if (customerId) {
     try {
       const data = await dataAccess.taskDataAccess.getCustomerMostUsedUserInTasks(customerId)
@@ -283,7 +285,6 @@ const getCustomerMostUsedUserInTasks = async (req, res) => {
 const getCustomerTimerAnalysis = async (req, res) => {
   const { customerId } = req.params
 
-  console.log(11123123412341234123)
   if (customerId) {
     try {
       const data = await dataAccess.taskDataAccess.getCustomerTimerAnalysis(customerId)

@@ -15,7 +15,7 @@ import {
   ESize
 } from '@/models'
 import { useCreateActivityMutation, activityApi } from '@/services/activityService'
-import { useUpdateTaskMutation, useGetTaskByTaskIdQuery } from '@/services/customers/taskService'
+import { useUpdateTaskMutation, useGetTaskByTaskIdQuery, taskApi } from '@/services/customers/taskService'
 import { useCreateExpiredTaskStepMutation } from '@/services/settings/finance-planning/financePlanningService'
 import { closeModal, openModal, setModalOnClose } from '@/store'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -63,6 +63,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const updateTaskData = useCallback(async () => {
     if (updatedTaskData) {
       updateTask(updatedTaskData)
+      taskApi.util.resetApiState()
     }
   }, [updatedTaskData])
 

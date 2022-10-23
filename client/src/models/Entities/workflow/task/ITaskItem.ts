@@ -17,6 +17,9 @@ export default interface ITaskItem {
   postponeTime: number
   usedPostpone: number
   postponedDate: string
+  isPostponePassed: boolean
+  isDeadllinePassed: boolean
+  isExpireDatePassed: boolean
   seen?: {
     completed: boolean
     cancelled: boolean

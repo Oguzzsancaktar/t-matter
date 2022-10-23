@@ -11,18 +11,19 @@ interface IProps {
   chartData: { _id: IUser['_id']; count: number; responsibleUser: IUser }[] | undefined
 }
 const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
+  console.log('xxx', chartData)
   const mostUsedUser = useMemo(() => {
-    if (!chartData) {
+    if (!chartData || chartData.length === 0) {
       return undefined
     }
-    return chartData.reduce((prev, current) => (prev.count > current.count ? prev : current))
+    return chartData?.reduce((prev, current) => (prev.count > current.count ? prev : current))
   }, [chartData])
 
   const total = useMemo(() => {
-    if (!chartData) {
+    if (!chartData || chartData.length === 0) {
       return 0
     }
-    return chartData.reduce((prev, current) => prev + current.count, 0)
+    return chartData?.reduce((prev, current) => prev + current.count, 0)
   }, [chartData])
 
   const chartOptions = useMemo<ApexOptions>(
@@ -71,7 +72,12 @@ const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
   return (
     <ItemContainer height="100%" transform="translate(0%, 7%)" position="relative" width="100%">
       {chartSeries && chartOptions && (
-        <ReactApexChart options={chartOptions} series={chartSeries} type="donut" height={'100%'} />
+        <ReactApexChart
+          options={chartOptions}
+          series={chartSeries.length !== 0 ? chartSeries : [0]}
+          type="donut"
+          height={'100%'}
+        />
       )}
       {mostUsedUser && (
         <ItemContainer position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" width="auto">

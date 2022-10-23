@@ -385,12 +385,12 @@ const getTaskStepsData = async ({ responsibleUserId, startDate, endDate }) => {
   return Task.aggregate(pipeline).exec()
 }
 
-const getCustomerMostUsedUserInTasks = async () => {
+const getCustomerMostUsedUserInTasks = async customerId => {
   const pipeline = [
     {
       $match: {
         customer: {
-          $eq: mongoose.Types.ObjectId('631e6e6d24005a667f78b542')
+          $eq: mongoose.Types.ObjectId(customerId)
         }
       }
     },
@@ -427,12 +427,12 @@ const getCustomerMostUsedUserInTasks = async () => {
   return Task.aggregate(pipeline).exec()
 }
 
-const getCustomerTimerAnalysis = async () => {
+const getCustomerTimerAnalysis = async customerId => {
   const pipeline = [
     {
       $match: {
         customer: {
-          $eq: mongoose.Types.ObjectId('631e6e6d24005a667f78b542')
+          $eq: mongoose.Types.ObjectId(customerId)
         }
       }
     },
@@ -444,7 +444,7 @@ const getCustomerTimerAnalysis = async () => {
     },
     {
       $group: {
-        _id: '$steps.responsibleUser',
+        _id: '$_id',
         totalDuration: {
           $sum: '$totalDuration'
         },

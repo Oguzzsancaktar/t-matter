@@ -9,6 +9,7 @@ interface IProps {
 }
 
 const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) => {
+  console.log('chartData', chartData)
   const chartPercentage = useMemo(() => {
     if (!chartData) {
       return 0

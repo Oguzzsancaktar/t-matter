@@ -19,6 +19,7 @@ import { emptyActivtyFilter } from '@/constants/queryParams'
 import { AdditionalTimeDonut, DiscountedInvoicesDonut, InvoicesDonut, NonBillableCircleProgress } from './finance-tabs'
 import colors from '@/constants/colors'
 import {
+  taskApi,
   useGetCustomerMostUsedUserInTasksQuery,
   useGetCustomerTasksTimerAnalyisesQuery
 } from '@/services/customers/taskService'
@@ -28,8 +29,11 @@ interface IProps {
 }
 
 const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
+  taskApi.util.resetApiState()
   const { data: customerMostUsedUserChartData } = useGetCustomerMostUsedUserInTasksQuery({ customerId })
   const { data: customerTaskTimerChartData } = useGetCustomerTasksTimerAnalyisesQuery({ customerId })
+
+  console.log('customerTaskTimerChartData', customerTaskTimerChartData)
 
   return (
     <ItemContainer padding="1rem" height="100%" overflow="hidden">

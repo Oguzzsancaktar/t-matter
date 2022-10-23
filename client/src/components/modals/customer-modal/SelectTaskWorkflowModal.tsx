@@ -204,6 +204,9 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
               expireDuration: step.expireDuration,
               workedTimes: [],
               totalPassedTime: 0,
+              isPostponePassed: false,
+              isDeadllinePassed: false,
+              isExpireDatePassed: false,
               postponeTime: step.postponeTime,
               usedPostpone: 0,
               postponedDate: '',
@@ -224,6 +227,9 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
               expireDuration: step.expireDuration,
               workedTimes: [],
               totalPassedTime: 0,
+              isPostponePassed: false,
+              isDeadllinePassed: false,
+              isExpireDatePassed: false,
               postponeTime: step.postponeTime,
               usedPostpone: 0,
               postponedDate: '',
@@ -248,7 +254,6 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
     }
   }
 
-  console.log(startDate)
   useEffect(() => {
     if (workflowData?.steps) {
       setSelectedWorkflow({
