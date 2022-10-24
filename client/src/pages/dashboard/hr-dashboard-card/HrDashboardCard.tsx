@@ -1,5 +1,9 @@
 import React from 'react'
 import { DashboardCard } from '@/pages'
+import useAccessStore from '@hooks/useAccessStore'
+import { openModal } from '@/store'
+import { ESize } from '@/models'
+import HrDashboardInfoModal from '../../../components/modals/dashboard/HrDashboardInfoModal'
 
 const SmallBadge = ({ color, onClick, count, text }) => {
   return (
@@ -29,6 +33,23 @@ const SmallBadge = ({ color, onClick, count, text }) => {
 }
 
 const HrDashboardCard = () => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
+  const showHrDashboardInfo = (tab: string) => {
+    dispatch(
+      openModal({
+        id: `hrInfoModal`,
+        title: 'HR info',
+        body: <HrDashboardInfoModal page={tab} />,
+        width: ESize.WLarge,
+        maxWidth: ESize.WLarge,
+        height: ESize.WXLarge,
+        backgroundColor: 'transparent'
+      })
+    )
+  }
+
   return (
     <DashboardCard
       head={
@@ -42,11 +63,31 @@ const HrDashboardCard = () => {
             height: '100%'
           }}
         >
-          <SmallBadge count={10} text="Login" color={'#7adad1'} onClick={() => {}} />
-          <SmallBadge count={11} text="Mental" color={'#3b4b8d'} onClick={() => {}} />
-          <SmallBadge count={12} text="Absent" color={'#ca5b5b'} onClick={() => {}} />
-          <SmallBadge count={12} text="Vacation" color={'#416fc7'} onClick={() => {}} />
-          <SmallBadge count={13} text="Others" color={'#ccc'} onClick={() => {}} />
+          <SmallBadge
+            count={10}
+            text="Login"
+            color={'#7adad1'}
+            onClick={showHrDashboardInfo.bind(this, 'LoginHrTab')}
+          />
+          <SmallBadge
+            count={11}
+            text="Mental"
+            color={'#3b4b8d'}
+            onClick={showHrDashboardInfo.bind(this, 'MentalHrTab')}
+          />
+          <SmallBadge
+            count={12}
+            text="Absent"
+            color={'#ca5b5b'}
+            onClick={showHrDashboardInfo.bind(this, 'AbsentHrTab')}
+          />
+          <SmallBadge
+            count={12}
+            text="Vacation"
+            color={'#416fc7'}
+            onClick={showHrDashboardInfo.bind(this, 'VocationHrTab')}
+          />
+          <SmallBadge count={13} text="Others" color={'#ccc'} onClick={showHrDashboardInfo.bind(this, 'OthersHrTab')} />
         </div>
       }
     >

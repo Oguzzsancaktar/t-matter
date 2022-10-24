@@ -1,1 +1,6 @@
 export { default as HrDashboardCard } from './HrDashboardCard'
+export { default as LoginTasksTab } from './LoginHrTab'
+export { default as MentalHrTab } from './MentalHrTab'
+export { default as VocationHrTab } from './VocationHrTab'
+export { default as AbsentHrTab } from './AbsentHrTab'
+export { default as OthersHrTab } from './OthersHrTab'
