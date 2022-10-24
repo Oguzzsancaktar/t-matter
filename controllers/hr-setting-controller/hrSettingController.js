@@ -2,11 +2,19 @@ const dataAccess = require('../../data-access')
 const { TASK_TYPES } = require('../../constants/hrConstants')
 
 const getUserHrSetting = async (req, res) => {
+  let { userId } = req.query
+  userId = userId || null
   try {
-    const userHrSetting = await dataAccess.hrSettingDataAccess.getHrSettingByUserId({ userId: req.params.userId })
+    let userHrSetting = await dataAccess.hrSettingDataAccess.getHrSettingByUserId({
+      userId
+    })
     if (!userHrSetting) {
+      if (userId) {
+        userHrSetting = await dataAccess.hrSettingDataAccess.getHrSettingByUserId({ userId: undefined })
+        return res.send(userHrSetting)
+      }
       res.send({
-        owner: req.params.userId,
+        owner: userId,
         monthlyWorking: {
           isChecked: false,
           days: 1,
@@ -35,9 +43,12 @@ const getUserHrSetting = async (req, res) => {
 }
 
 const updateUserHrSetting = async (req, res) => {
+  const { owner } = req.body
+  const userId = owner || null
+
   try {
     const updatedHrSetting = await dataAccess.hrSettingDataAccess.updateHrSetting({
-      userId: req.params.userId,
+      userId,
       hrSetting: req.body
     })
     res.status(200).json(updatedHrSetting)

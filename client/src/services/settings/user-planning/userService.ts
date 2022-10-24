@@ -116,11 +116,12 @@ const addOrUpdateUserImage = (builder: IBuilder) => {
 }
 
 const getUserHrSetting = (builder: IBuilder) => {
-  return builder.query<IUserHrSetting, IUser['_id']>({
+  return builder.query<IUserHrSetting, IUser['_id'] | void>({
     query(userId) {
       return {
-        url: `/hr-setting/${userId}`,
-        method: 'GET'
+        url: `/hr-setting`,
+        method: 'GET',
+        params: { userId: userId }
       }
     },
     providesTags(result) {
@@ -130,10 +131,10 @@ const getUserHrSetting = (builder: IBuilder) => {
 }
 
 const updateUserHrSetting = (builder: IBuilder) => {
-  return builder.mutation<void, IUserHrSetting>({
+  return builder.mutation<void, IUserHrSetting | void>({
     query(dto) {
       return {
-        url: `/hr-setting/${dto.owner}`,
+        url: `/hr-setting`,
         method: 'POST',
         data: dto
       }
@@ -168,7 +169,8 @@ const {
   useUpdateUserMutation,
   useUpdateUserStatusMutation,
   useAddOrUpdateUserImageMutation,
-  useGetUserHrSettingQuery
+  useGetUserHrSettingQuery,
+  useUpdateUserHrSettingMutation
 } = userApi
 export {
   userApi,
@@ -179,5 +181,6 @@ export {
   useUpdateUserMutation,
   useUpdateUserStatusMutation,
   useAddOrUpdateUserImageMutation,
-  useGetUserHrSettingQuery
+  useGetUserHrSettingQuery,
+  useUpdateUserHrSettingMutation
 }

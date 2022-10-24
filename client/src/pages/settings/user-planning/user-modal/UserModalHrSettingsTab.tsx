@@ -1,36 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Button, Checkbox, DatePicker, IconButton, InputWithText, JustifyBetweenRow, SelectInput } from '@/components'
 import {
-  Button,
-  Checkbox,
-  Column,
-  DatePicker,
-  IconButton,
-  InputWithText,
-  JustifyBetweenColumn,
-  JustifyBetweenRow,
-  SelectInput
-} from '@/components'
-import { useGetUsersQuery } from '@services/settings/user-planning/userService'
+  useGetUserHrSettingQuery,
+  useGetUsersQuery,
+  useUpdateUserHrSettingMutation
+} from '@services/settings/user-planning/userService'
 import { emptyQueryParams } from '@constants/queryParams'
-import { useGetUserCompanyPricingQuery } from '@services/settings/company-planning/companyPricingService'
-import { getUserMonthlyWorkingHours } from '@utils/workingHourUtil'
-import styled from 'styled-components'
 import IUserHrSetting from '@models/Entities/user/IUserHrSetting'
 import { HR_TASK_TYPES } from '@constants/hrTask'
 import moment from 'moment'
-import { Input } from '@nextui-org/react'
 import colors from '@constants/colors'
-import { Edit, Plus, Trash } from 'react-feather'
+import { Plus, Trash } from 'react-feather'
+import { days } from '@constants/dates'
+import { useGetUserCompanyPricingQuery } from '@services/settings/company-planning/companyPricingService'
 import { IUser } from '@/models'
-const days = [
-  { value: 1, label: '1 Days' },
-  { value: 2, label: '2 Days' },
-  { value: 3, label: '3 Days' },
-  { value: 4, label: '4 Days' },
-  { value: 5, label: '5 Days' },
-  { value: 6, label: '6 Days' },
-  { value: 7, label: '7 Days' }
-]
+import { getUserMonthlyWorkingHours } from '@utils/workingHourUtil'
 
 const widths = {
   1: 200,
@@ -54,9 +38,24 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
   const { data } = useGetUserCompanyPricingQuery(userId)
 
-  const [specialDays, setSpecialDays] = useState<IUserHrSetting['specialDays'][]>([])
+  const { data: hrSetting } = useGetUserHrSettingQuery(userId)
+  const [update] = useUpdateUserHrSettingMutation()
+
+  const [loginLogout, setLoginLogout] = useState<IUserHrSetting['loginLogout']>()
+  const [monthlyWorking, setMonthlyWorking] = useState<IUserHrSetting['monthlyWorking']>()
+  const [vocations, setVocations] = useState<IUserHrSetting['vocations']>([])
+  const [specialDays, setSpecialDays] = useState<IUserHrSetting['specialDays']>([])
 
   const userOptions = users?.map(({ _id, firstname }) => ({ value: _id, label: firstname })) || []
+
+  useEffect(() => {
+    if (hrSetting) {
+      setLoginLogout(hrSetting.loginLogout)
+      setMonthlyWorking(hrSetting.monthlyWorking)
+      setVocations(hrSetting.vocations)
+      setSpecialDays(hrSetting.specialDays)
+    }
+  }, [hrSetting])
 
   if (!data) return null
 
@@ -74,6 +73,12 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
     ])
   }
 
+  const handleSave = () => {
+    if (specialDays && loginLogout && monthlyWorking && vocations) {
+      update({ specialDays, loginLogout, monthlyWorking, vocations, owner: userId }).unwrap()
+    }
+  }
+
   return (
     <JustifyBetweenRow height="100%">
       <div style={{ height: '100%', marginRight: '1rem', minWidth: '70%' }}>
@@ -86,57 +91,146 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
         </JustifyBetweenRow>
         <hr style={{ marginBottom: 16 }} />
         <JustifyBetweenRow>
-          <div style={{ minWidth: 32 }}>
-            <Checkbox isChecked={false} onChange={() => {}} />
+          <div
+            onClick={() => {
+              if (monthlyWorking) {
+                setMonthlyWorking({
+                  ...monthlyWorking,
+                  isChecked: !monthlyWorking.isChecked
+                })
+              }
+            }}
+            style={{ minWidth: 32 }}
+          >
+            <Checkbox isChecked={!!monthlyWorking?.isChecked} onChange={() => {}} />
           </div>
           <span style={{ minWidth: widths[1], marginRight: 16 }}>
             After {getUserMonthlyWorkingHours(data.workingSchedule)} Hours
           </span>
           <span style={{ minWidth: widths[2], marginRight: 16 }}>Healthy mental days</span>
           <div style={{ minWidth: widths[3], marginRight: 16 }}>
-            <SelectInput placeHolder="Days" onChange={() => {}} name="mental" options={days} />
+            <SelectInput
+              placeHolder="Days"
+              selectedOption={days.filter(day => day.value === '' + monthlyWorking?.days) || days[0]}
+              onChange={(e, o) => {
+                if (monthlyWorking) {
+                  setMonthlyWorking({
+                    ...monthlyWorking,
+                    days: +e.value
+                  })
+                }
+              }}
+              name="mental"
+              options={days}
+            />
           </div>
           <SelectInput
             isMulti
-            // selectedOption={userOptions}
+            selectedOption={userOptions.filter(({ value }) => monthlyWorking?.notificationReceivers?.includes(value))}
             placeHolder="Users"
-            onChange={() => {}}
+            onChange={(e, o) => {
+              if (monthlyWorking) {
+                setMonthlyWorking({
+                  ...monthlyWorking,
+                  notificationReceivers: e.map(({ value }) => value)
+                })
+              }
+            }}
             name="monthlyNotifyUsers"
             options={userOptions}
           />
         </JustifyBetweenRow>
         <JustifyBetweenRow margin="1rem 0 0 0">
-          <div style={{ minWidth: 32 }}>
-            <Checkbox isChecked={false} onChange={() => {}} />
+          <div
+            onClick={() => {
+              if (loginLogout) {
+                setLoginLogout({
+                  ...loginLogout,
+                  isChecked: !loginLogout.isChecked
+                })
+              }
+            }}
+            style={{ minWidth: 32 }}
+          >
+            <Checkbox isChecked={!!loginLogout?.isChecked} onChange={() => {}} />
           </div>
           <span style={{ minWidth: widths[1], marginRight: 16 }}>After 24 hours</span>
           <span style={{ minWidth: widths[2], marginRight: 16 }}>Absent days</span>
           <span style={{ minWidth: widths[3], marginRight: 16 }} />
           <SelectInput
             isMulti
-            // selectedOption={userOptions}
+            selectedOption={userOptions.filter(({ value }) => loginLogout?.notificationReceivers?.includes(value))}
             placeHolder="Users"
-            onChange={() => {}}
+            onChange={e => {
+              if (loginLogout) {
+                setLoginLogout({
+                  ...loginLogout,
+                  notificationReceivers: e.map(({ value }) => value)
+                })
+              }
+            }}
             name="monthlyNotifyUsers"
             options={userOptions}
           />
         </JustifyBetweenRow>
-        {[1920, 3840, 5760, 7680, 9600].map(hours => {
+        {vocations?.map((vocation, index) => {
           return (
             <JustifyBetweenRow margin="1rem 0 0 0">
-              <div style={{ minWidth: 32 }}>
-                <Checkbox isChecked={false} onChange={() => {}} />
+              <div
+                onClick={() => {
+                  if (vocation) {
+                    setVocations([
+                      ...vocations.slice(0, index),
+                      {
+                        ...vocation,
+                        isChecked: !vocation.isChecked
+                      },
+                      ...vocations.slice(index + 1)
+                    ])
+                  }
+                }}
+                style={{ minWidth: 32 }}
+              >
+                <Checkbox isChecked={vocation.isChecked} onChange={() => {}} />
               </div>
-              <span style={{ minWidth: widths[1], marginRight: 16 }}>After {hours} hours</span>
+              <span style={{ minWidth: widths[1], marginRight: 16 }}>After {vocation.afterHours} hours</span>
               <span style={{ minWidth: widths[2], marginRight: 16 }}>Vocation days</span>
               <div style={{ minWidth: widths[3], marginRight: 16 }}>
-                <SelectInput placeHolder="Days" onChange={() => {}} name="mental" options={days} />
+                <SelectInput
+                  placeHolder="Days"
+                  selectedOption={days.filter(day => day.value === '' + vocation.days) || days[0]}
+                  onChange={e => {
+                    if (vocations) {
+                      setVocations([
+                        ...vocations.slice(0, index),
+                        {
+                          ...vocation,
+                          days: +e.value
+                        },
+                        ...vocations.slice(index + 1)
+                      ])
+                    }
+                  }}
+                  name="mental"
+                  options={days}
+                />
               </div>
               <SelectInput
                 isMulti
-                // selectedOption={userOptions}
+                selectedOption={userOptions.filter(({ value }) => vocation.notificationReceivers?.includes(value))}
                 placeHolder="Users"
-                onChange={() => {}}
+                onChange={e => {
+                  if (vocations) {
+                    setVocations([
+                      ...vocations.slice(0, index),
+                      {
+                        ...vocation,
+                        notificationReceivers: e.map(({ value }) => value)
+                      },
+                      ...vocations.slice(index + 1)
+                    ])
+                  }
+                }}
                 name="monthlyNotifyUsers"
                 options={userOptions}
               />
@@ -152,81 +246,112 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
           <div style={{ flex: 1 }}>Users</div>
         </JustifyBetweenRow>
         <hr style={{ marginBottom: 16 }} />
-        {specialDays.map((s, i) => {
-          return (
-            <JustifyBetweenRow margin="1rem 0 0 0">
-              <div
-                style={{
-                  minWidth: 32
-                }}
-                onClick={() => {
-                  const newSpecialDays = [...specialDays]
-                  newSpecialDays[i].isChecked = !newSpecialDays[i].isChecked
-                  setSpecialDays(newSpecialDays)
-                }}
-              >
-                <Checkbox isChecked={s.isChecked} onChange={() => {}} />
-              </div>
-              <div style={{ minWidth: 220, marginRight: 16 }}>
-                <InputWithText
-                  name="name"
-                  value={s.name}
-                  onChange={e => {
-                    const newSpecialDays = [...specialDays]
-                    newSpecialDays[i].name = e.target.value
-                    setSpecialDays(newSpecialDays)
+        <div style={{ maxHeight: 250, overflowY: 'auto' }}>
+          {specialDays.map((s, i) => {
+            return (
+              <JustifyBetweenRow margin="1rem 0 0 0">
+                <div
+                  style={{
+                    minWidth: 32
                   }}
-                />
-              </div>
-              <div style={{ minWidth: 150, marginRight: 16 }}>
-                <DatePicker
-                  placeholder="Select start"
-                  name={'startDate'}
-                  onChange={(value, dateText) => {
-                    const newSpecialDays = [...specialDays]
-                    newSpecialDays[i].startDate = dateText
-                    setSpecialDays(newSpecialDays)
-                  }}
-                  value={moment(s.startDate).toDate()}
-                />
-              </div>
-              <div style={{ minWidth: 150, marginRight: 16 }}>
-                <DatePicker
-                  placeholder="Select end"
-                  name={'endDate'}
-                  onChange={(value, dateText) => {
-                    const newSpecialDays = [...specialDays]
-                    newSpecialDays[i].endDate = dateText
-                    setSpecialDays(newSpecialDays)
-                  }}
-                  value={moment(s.endDate).toDate()}
-                />
-              </div>
-              <SelectInput
-                isMulti
-                // selectedOption={userOptions}
-                placeHolder="Users"
-                onChange={() => {}}
-                name="monthlyNotifyUsers"
-                options={userOptions}
-              />
-              <div style={{ marginLeft: 16 }}>
-                <IconButton
                   onClick={() => {
-                    const newSpecialDays = [...specialDays]
-                    newSpecialDays.splice(i, 1)
-                    setSpecialDays(newSpecialDays)
+                    setSpecialDays([
+                      ...specialDays.slice(0, i),
+                      {
+                        ...s,
+                        isChecked: !s.isChecked
+                      },
+                      ...specialDays.slice(i + 1)
+                    ])
                   }}
-                  bgColor={colors.red.primary}
-                  width="30px"
-                  height="30px"
-                  margin="0 .2rem 0 0"
-                  children={<Trash size={'16px'} color="#fff" />}
+                >
+                  <Checkbox isChecked={s.isChecked} onChange={() => {}} />
+                </div>
+                <div style={{ minWidth: 220, marginRight: 16 }}>
+                  <InputWithText
+                    name="name"
+                    value={s.name}
+                    onChange={e => {
+                      setSpecialDays([
+                        ...specialDays.slice(0, i),
+                        {
+                          ...s,
+                          name: e.target.value
+                        },
+                        ...specialDays.slice(i + 1)
+                      ])
+                    }}
+                  />
+                </div>
+                <div style={{ minWidth: 150, marginRight: 16 }}>
+                  <DatePicker
+                    placeholder="Select start"
+                    name={'startDate'}
+                    onChange={(value, dateText) => {
+                      setSpecialDays([
+                        ...specialDays.slice(0, i),
+                        {
+                          ...s,
+                          startDate: dateText
+                        },
+                        ...specialDays.slice(i + 1)
+                      ])
+                    }}
+                    value={moment(s.startDate).toDate()}
+                  />
+                </div>
+                <div style={{ minWidth: 150, marginRight: 16 }}>
+                  <DatePicker
+                    placeholder="Select end"
+                    name={'endDate'}
+                    onChange={(value, dateText) => {
+                      setSpecialDays([
+                        ...specialDays.slice(0, i),
+                        {
+                          ...s,
+                          endDate: dateText
+                        },
+                        ...specialDays.slice(i + 1)
+                      ])
+                    }}
+                    value={moment(s.endDate).toDate()}
+                  />
+                </div>
+                <SelectInput
+                  isMulti
+                  selectedOption={userOptions.filter(({ value }) => s.notificationReceivers?.includes(value))}
+                  placeHolder="Users"
+                  onChange={e => {
+                    if (specialDays) {
+                      setSpecialDays([
+                        ...specialDays.slice(0, i),
+                        {
+                          ...s,
+                          notificationReceivers: e.map(({ value }) => value)
+                        },
+                        ...specialDays.slice(i + 1)
+                      ])
+                    }
+                  }}
+                  name="monthlyNotifyUsers"
+                  options={userOptions}
                 />
-              </div>
-            </JustifyBetweenRow>
-          )
-        })}
+                <div style={{ marginLeft: 16 }}>
+                  <IconButton
+                    onClick={() => {
+                      setSpecialDays([...specialDays.slice(0, i), ...specialDays.slice(i + 1)])
+                    }}
+                    bgColor={colors.red.primary}
+                    width="30px"
+                    height="30px"
+                    margin="0 .2rem 0 0"
+                    children={<Trash size={'16px'} color="#fff" />}
+                  />
+                </div>
+              </JustifyBetweenRow>
+            )
+          })}
+        </div>
         <JustifyBetweenRow>
           <JustifyBetweenRow margin="1rem 0 0 0">
             <div />
@@ -254,11 +379,21 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
             borderRadius: 4
           }}
         >
-          <InfoRow title="Totally vocation days in 5 years" count={49} />
-          <InfoRow title="Totally yearly healthy mental days" count={12} />
+          <InfoRow
+            title="Totally vocation days in 5 years"
+            count={vocations.reduce((acc, curr) => {
+              return acc + curr.days
+            }, 0)}
+          />
+          <InfoRow
+            title="Totally yearly healthy mental days"
+            count={(monthlyWorking?.days ? monthlyWorking?.days : 1) * 12}
+          />
           <InfoRow title="Totally yearly absent days" count={12} />
         </div>
-        <Button height="40px">Save</Button>
+        <Button onClick={handleSave} height="40px">
+          Save
+        </Button>
       </div>
     </JustifyBetweenRow>
   )
