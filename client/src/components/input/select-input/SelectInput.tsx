@@ -1,6 +1,6 @@
 import React from 'react'
 import { CircleColor, Column, H1, ItemContainer, JustifyBetweenRow, Label } from '@components/index'
-import Select from 'react-select'
+import Select, { StylesConfig } from 'react-select'
 import { IOption } from '@/models'
 import colors from '@/constants/colors'
 
@@ -18,6 +18,7 @@ interface IProps {
   options: any[]
   menuPlacement?: 'auto' | 'top' | 'bottom'
   placeHolder?: string
+  customStyles?: StylesConfig
 }
 
 const SelectInput: React.FC<IProps> = ({
@@ -33,7 +34,8 @@ const SelectInput: React.FC<IProps> = ({
   onChange,
   options,
   menuPlacement,
-  placeHolder
+  placeHolder,
+  customStyles = {}
 }) => {
   const selectedValues = selectedOption?.map(
     op =>
@@ -62,6 +64,7 @@ const SelectInput: React.FC<IProps> = ({
         isMulti={isMulti}
         onChange={onChange}
         defaultValue={selectedValues}
+        styles={customStyles}
         value={selectedValues?.length === 1 ? selectedValues[0] : selectedValues}
         menuPlacement={menuPlacement ? menuPlacement : 'auto'}
         formatOptionLabel={data => (

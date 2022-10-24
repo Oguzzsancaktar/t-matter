@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Checkbox, DatePicker, IconButton, InputWithText, JustifyBetweenRow, SelectInput } from '@/components'
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  IconButton,
+  InputRegular,
+  InputWithIcon,
+  InputWithText,
+  JustifyBetweenRow,
+  SelectInput
+} from '@/components'
 import {
   useGetUserHrSettingQuery,
   useGetUsersQuery,
@@ -11,24 +21,36 @@ import { HR_TASK_TYPES } from '@constants/hrTask'
 import moment from 'moment'
 import colors from '@constants/colors'
 import { Plus, Trash } from 'react-feather'
-import { days } from '@constants/dates'
 import { useGetUserCompanyPricingQuery } from '@services/settings/company-planning/companyPricingService'
 import { IUser } from '@/models'
 import { getUserMonthlyWorkingHours } from '@utils/workingHourUtil'
 import { toastSuccess } from '@utils/toastUtil'
 
 const widths = {
-  1: 200,
-  2: 200,
-  3: 200
+  1: 80,
+  2: 60,
+  3: 80,
+  4: 80
+}
+
+const customStyles = {
+  valueContainer: (provided, state) => ({
+    ...provided,
+    textOverflow: 'ellipsis',
+    maxWidth: '90%',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    height: 35,
+    display: 'flex'
+  })
 }
 
 const InfoRow = ({ title, count }) => {
   return (
-    <JustifyBetweenRow height="50px">
-      <span style={{ fontSize: 16, height: 50, fontFamily: 'Satoshi-Medium', marginRight: 4 }}>{title}</span>
+    <JustifyBetweenRow height="75px">
+      <span style={{ fontSize: 16, height: 75, fontFamily: 'Satoshi-Medium', marginRight: 4 }}>{title}</span>
       <div style={{ minWidth: 70, maxWidth: 70, display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ width: 1, height: 50, backgroundColor: '#ccc' }} />
+        <div style={{ width: 1, height: 75, backgroundColor: '#ccc' }} />
         <span style={{ fontSize: 16, fontFamily: 'Satoshi-Medium' }}>{count} days</span>
       </div>
     </JustifyBetweenRow>
@@ -69,7 +91,8 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
         name: '',
         startDate: moment().format('YYYY-MM-DD'),
         endDate: moment().format('YYYY-MM-DD'),
-        notificationReceivers: []
+        notificationReceivers: [],
+        beforeNotificationDays: 0
       }
     ])
   }
@@ -83,12 +106,13 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
 
   return (
     <JustifyBetweenRow height="100%">
-      <div style={{ height: '100%', marginRight: '1rem', minWidth: '70%' }}>
+      <div style={{ height: '100%', marginRight: '1rem', minWidth: '75%' }}>
         <JustifyBetweenRow margin="0 0 0.25rem 0">
           <div style={{ width: 32 }} />
-          <div style={{ minWidth: widths[1], marginRight: 16 }}>After</div>
-          <div style={{ minWidth: widths[2], marginRight: 16 }}>Task</div>
-          <div style={{ minWidth: widths[3], marginRight: 16 }}>Days</div>
+          <div style={{ minWidth: widths[1], maxWidth: widths[1], marginRight: 16 }}>After hours</div>
+          <div style={{ minWidth: widths[2], maxWidth: widths[2], marginRight: 16 }}>Task</div>
+          <div style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>Before h</div>
+          <div style={{ minWidth: widths[4], maxWidth: widths[4], marginRight: 16 }}>Days</div>
           <div style={{ flex: 1 }}>Users</div>
         </JustifyBetweenRow>
         <hr style={{ marginBottom: 16 }} />
@@ -106,28 +130,43 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
           >
             <Checkbox isChecked={!!monthlyWorking?.isChecked} onChange={() => {}} />
           </div>
-          <span style={{ minWidth: widths[1], marginRight: 16 }}>
-            After {getUserMonthlyWorkingHours(data.workingSchedule)} Hours
+          <span style={{ minWidth: widths[1], maxWidth: widths[1], marginRight: 16 }}>
+            {getUserMonthlyWorkingHours(data.workingSchedule)}
           </span>
-          <span style={{ minWidth: widths[2], marginRight: 16 }}>Healthy mental days</span>
-          <div style={{ minWidth: widths[3], marginRight: 16 }}>
-            <SelectInput
-              placeHolder="Days"
-              selectedOption={days.filter(day => day.value === '' + monthlyWorking?.days) || days[0]}
-              onChange={(e, o) => {
-                if (monthlyWorking) {
+          <span style={{ minWidth: widths[2], maxWidth: widths[2], marginRight: 16 }}>Healthy mental</span>
+          <span style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>
+            <InputWithIcon
+              name="monthlyWorking"
+              onChange={e => {
+                if (monthlyWorking && +e.target.value > 0) {
                   setMonthlyWorking({
                     ...monthlyWorking,
-                    days: +e.value
+                    beforeNotificationDays: +e.target.value
                   })
                 }
               }}
-              name="mental"
-              options={days}
+              value={monthlyWorking?.beforeNotificationDays ? monthlyWorking.beforeNotificationDays : 0}
+              type="number"
+            />
+          </span>
+          <div style={{ minWidth: widths[4], maxWidth: widths[4], marginRight: 16 }}>
+            <InputWithIcon
+              name="monthlyWorking"
+              onChange={e => {
+                if (monthlyWorking && +e.target.value > 0) {
+                  setMonthlyWorking({
+                    ...monthlyWorking,
+                    days: +e.target.value
+                  })
+                }
+              }}
+              value={monthlyWorking?.days ? monthlyWorking.days : 0}
+              type="number"
             />
           </div>
           <SelectInput
             isMulti
+            customStyles={customStyles}
             selectedOption={userOptions.filter(({ value }) => monthlyWorking?.notificationReceivers?.includes(value))}
             placeHolder="Users"
             onChange={(e, o) => {
@@ -156,11 +195,13 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
           >
             <Checkbox isChecked={!!loginLogout?.isChecked} onChange={() => {}} />
           </div>
-          <span style={{ minWidth: widths[1], marginRight: 16 }}>After 24 hours</span>
-          <span style={{ minWidth: widths[2], marginRight: 16 }}>Absent days</span>
-          <span style={{ minWidth: widths[3], marginRight: 16 }} />
+          <span style={{ minWidth: widths[1], maxWidth: widths[1], marginRight: 16 }}>24</span>
+          <span style={{ minWidth: widths[2], maxWidth: widths[2], marginRight: 16 }}>Absent</span>
+          <span style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}></span>
+          <span style={{ minWidth: widths[4], maxWidth: widths[4], marginRight: 16 }} />
           <SelectInput
             isMulti
+            customStyles={customStyles}
             selectedOption={userOptions.filter(({ value }) => loginLogout?.notificationReceivers?.includes(value))}
             placeHolder="Users"
             onChange={e => {
@@ -195,30 +236,49 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
               >
                 <Checkbox isChecked={vocation.isChecked} onChange={() => {}} />
               </div>
-              <span style={{ minWidth: widths[1], marginRight: 16 }}>After {vocation.afterHours} hours</span>
-              <span style={{ minWidth: widths[2], marginRight: 16 }}>Vocation days</span>
-              <div style={{ minWidth: widths[3], marginRight: 16 }}>
-                <SelectInput
-                  placeHolder="Days"
-                  selectedOption={days.filter(day => day.value === '' + vocation.days) || days[0]}
+              <span style={{ minWidth: widths[1], maxWidth: widths[1], marginRight: 16 }}>{vocation.afterHours}</span>
+              <span style={{ minWidth: widths[2], maxWidth: widths[2], marginRight: 16 }}>Vocation</span>
+              <span style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>
+                <InputWithIcon
+                  name={'vocation' + index}
                   onChange={e => {
-                    if (vocations) {
+                    if (vocations && +e.target.value > 0) {
                       setVocations([
                         ...vocations.slice(0, index),
                         {
                           ...vocation,
-                          days: +e.value
+                          beforeNotificationDays: +e.target.value
                         },
                         ...vocations.slice(index + 1)
                       ])
                     }
                   }}
-                  name="mental"
-                  options={days}
+                  value={vocation?.beforeNotificationDays ? vocation.beforeNotificationDays : 0}
+                  type="number"
+                />
+              </span>
+              <div style={{ minWidth: widths[4], maxWidth: widths[4], marginRight: 16 }}>
+                <InputWithIcon
+                  name={'vocation' + index}
+                  onChange={e => {
+                    if (vocations && +e.target.value > 0) {
+                      setVocations([
+                        ...vocations.slice(0, index),
+                        {
+                          ...vocation,
+                          days: +e.target.value
+                        },
+                        ...vocations.slice(index + 1)
+                      ])
+                    }
+                  }}
+                  value={vocation?.days ? vocation.days : 0}
+                  type="number"
                 />
               </div>
               <SelectInput
                 isMulti
+                customStyles={customStyles}
                 selectedOption={userOptions.filter(({ value }) => vocation.notificationReceivers?.includes(value))}
                 placeHolder="Users"
                 onChange={e => {
@@ -242,13 +302,14 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
 
         <JustifyBetweenRow margin="1rem 0 0.25rem 0">
           <div style={{ width: 32 }} />
-          <div style={{ minWidth: 220, marginRight: 16 }}>Name</div>
+          <div style={{ minWidth: 150, marginRight: 16 }}>Name</div>
+          <div style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>Before h</div>
           <div style={{ minWidth: 150, marginRight: 16 }}>Start Date</div>
           <div style={{ minWidth: 150, marginRight: 16 }}>End Date</div>
           <div style={{ flex: 1 }}>Users</div>
         </JustifyBetweenRow>
         <hr style={{ marginBottom: 16 }} />
-        <div style={{ maxHeight: 250, overflowY: 'auto' }}>
+        <div style={{ maxHeight: 220, overflowY: 'auto', overflowX: 'hidden' }}>
           {specialDays.map((s, i) => {
             return (
               <JustifyBetweenRow margin="1rem 0 0 0">
@@ -269,7 +330,7 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
                 >
                   <Checkbox isChecked={s.isChecked} onChange={() => {}} />
                 </div>
-                <div style={{ minWidth: 220, marginRight: 16 }}>
+                <div style={{ minWidth: 150, marginRight: 16 }}>
                   <InputWithText
                     name="name"
                     value={s.name}
@@ -285,6 +346,25 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
                     }}
                   />
                 </div>
+                <span style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>
+                  <InputWithIcon
+                    name={'s' + i}
+                    onChange={e => {
+                      if (specialDays && +e.target.value > 0) {
+                        setSpecialDays([
+                          ...specialDays.slice(0, i),
+                          {
+                            ...s,
+                            beforeNotificationDays: +e.target.value
+                          },
+                          ...specialDays.slice(i + 1)
+                        ])
+                      }
+                    }}
+                    value={s?.beforeNotificationDays ? s.beforeNotificationDays : 0}
+                    type="number"
+                  />
+                </span>
                 <div style={{ minWidth: 150, marginRight: 16 }}>
                   <DatePicker
                     placeholder="Select start"
@@ -321,6 +401,7 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
                 </div>
                 <SelectInput
                   isMulti
+                  customStyles={customStyles}
                   selectedOption={userOptions.filter(({ value }) => s.notificationReceivers?.includes(value))}
                   placeHolder="Users"
                   onChange={e => {

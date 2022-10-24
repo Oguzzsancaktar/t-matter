@@ -6,6 +6,7 @@ interface IUserHrSetting {
     isChecked: boolean
     days: number
     taskType: string
+    beforeNotificationDays: number
     notificationReceivers: IUser['_id'][]
   }
   loginLogout: {
@@ -16,6 +17,7 @@ interface IUserHrSetting {
   vocations: {
     isChecked: boolean
     taskType: string
+    beforeNotificationDays: number
     notificationReceivers: IUser['_id'][]
     afterHours: number
     days: number
@@ -23,6 +25,7 @@ interface IUserHrSetting {
   specialDays: {
     isChecked: boolean
     taskType: string
+    beforeNotificationDays: number
     notificationReceivers: IUser['_id'][]
     name: string
     startDate: string

@@ -13,6 +13,10 @@ const hrSettingSchema = new Schema(
         type: Boolean,
         default: false
       },
+      beforeNotificationDays: {
+        type: Number,
+        default: 0
+      },
       days: {
         type: Number,
         default: 0
@@ -54,6 +58,10 @@ const hrSettingSchema = new Schema(
           type: String,
           default: TASK_TYPES.VACATION
         },
+        beforeNotificationDays: {
+          type: Number,
+          default: 0
+        },
         afterHours: {
           type: Number,
           default: 0
@@ -79,6 +87,10 @@ const hrSettingSchema = new Schema(
         isChecked: {
           type: Boolean,
           default: false
+        },
+        beforeNotificationDays: {
+          type: Number,
+          default: 0
         },
         taskType: {
           type: String,
