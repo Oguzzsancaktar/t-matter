@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { JustifyCenterRow, H1, JustifyBetweenRow } from '@/components'
+import { JustifyCenterRow, H1, JustifyBetweenRow, ItemContainer } from '@/components'
 import styled from 'styled-components'
 import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd'
 import colors from '@constants/colors'
@@ -24,12 +24,13 @@ import {
 import { emptyQueryParams } from '@constants/queryParams'
 import { invoiceDefault } from '@constants/finance'
 
-const Bordered = styled.div<{ margin?: string; width?: string }>`
-  border: 1px solid #ccc;
-  height: 100%;
+const Bordered = styled.div<{ margin?: string; width?: string; height?: string }>`
+  /* border: 1px solid #ccc; */
+  height: ${({ height }) => (height ? height : '100%')};
   box-sizing: border-box;
   border-radius: 5px;
   padding: 1rem 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   margin: ${({ margin }) => (margin ? margin : '0')};
   width: ${({ width }) => (width ? width : '100%')};
 `
@@ -219,40 +220,42 @@ const EstimateTab: React.FC<IProps> = ({ customerId, selectedInvoice, handleSele
           </JustifyBetweenRow>
         </Bordered>
       </JustifyCenterRow>
-      <JustifyCenterRow height={'calc(70% - 40px)'}>
-        <DragDropContext key="context" onDragEnd={onDragEnd}>
-          <Bordered margin="0 12px 0 0" width="33%">
-            <H1 color={colors.text.primary}>Invoiced</H1>
-            <InvoicedList openInvoice={selectedInvoice} invoices={invoices} />
-          </Bordered>
-          <div style={{ margin: '0 12px 0 0', width: '33%' }}>
-            <Bordered style={{ marginBottom: 8 }}>
-              <H1 color={colors.text.primary}>Additional time</H1>
-              <ExpiredTaskStepList expiredTaskSteps={expiredTaskStepsState.nonBillable} />
+      <ItemContainer height={'calc(100% - 235px - 2rem)'}>
+        <JustifyCenterRow height="100%">
+          <DragDropContext key="context" onDragEnd={onDragEnd}>
+            <Bordered margin="0 1rem 0 0" width="33%">
+              <H1 color={colors.text.primary}>Invoiced</H1>
+              <InvoicedList openInvoice={selectedInvoice} invoices={invoices} />
             </Bordered>
-            <Bordered>
-              <H1 color={colors.text.primary}>Non billable</H1>
-              <NonBillableList nonBillableTasks={state.nonBillableTasks} />
+            <div style={{ margin: '0 1rem 0 0', width: '33%', height: '100%' }}>
+              <Bordered style={{ marginBottom: '1rem' }} height="calc((100% - 1rem)/2)">
+                <H1 color={colors.text.primary}>Additional time</H1>
+                <ExpiredTaskStepList expiredTaskSteps={expiredTaskStepsState.nonBillable} />
+              </Bordered>
+              <Bordered height="calc((100% - 1rem)/2)">
+                <H1 color={colors.text.primary}>Non billable</H1>
+                <NonBillableList nonBillableTasks={state.nonBillableTasks} />
+              </Bordered>
+            </div>
+            <Bordered width="33%">
+              <H1 color={colors.text.primary}>New invoice</H1>
+              <CreateInvoiceList
+                expiredTaskSteps={expiredTaskStepsState.createInvoice}
+                createInvoiceTasks={state.createInvoiceTasks}
+              />
+              <CreateInvoice
+                customerId={customerId}
+                expiredTaskSteps={expiredTaskStepsState.createInvoice}
+                createInvoiceTasks={state.createInvoiceTasks}
+                setInvoice={setInvoice}
+                invoiceCategories={invoiceCategories}
+                invoice={invoice}
+                refetch={refetch}
+              />
             </Bordered>
-          </div>
-          <Bordered width="33%">
-            <H1 color={colors.text.primary}>New invoice</H1>
-            <CreateInvoiceList
-              expiredTaskSteps={expiredTaskStepsState.createInvoice}
-              createInvoiceTasks={state.createInvoiceTasks}
-            />
-            <CreateInvoice
-              customerId={customerId}
-              expiredTaskSteps={expiredTaskStepsState.createInvoice}
-              createInvoiceTasks={state.createInvoiceTasks}
-              setInvoice={setInvoice}
-              invoiceCategories={invoiceCategories}
-              invoice={invoice}
-              refetch={refetch}
-            />
-          </Bordered>
-        </DragDropContext>
-      </JustifyCenterRow>
+          </DragDropContext>
+        </JustifyCenterRow>
+      </ItemContainer>
     </div>
   )
 }

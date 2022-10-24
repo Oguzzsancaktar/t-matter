@@ -43,7 +43,11 @@ const UserPageSettingsTab = () => {
       sortable: true,
       cell: data => (
         <ItemContainer width="auto" onClick={() => handleRead(data)} cursorType="pointer">
-          <UserBadge userEmail={data.email} userImage={data.photo} userName={data.firstname + ' ' + data.lastname} />
+          <UserBadge
+            userEmail={data.email}
+            userImage={data.profile_img}
+            userName={data.firstname + ' ' + data.lastname}
+          />
         </ItemContainer>
       )
     },
