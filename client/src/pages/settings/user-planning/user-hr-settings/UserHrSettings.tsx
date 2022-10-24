@@ -103,7 +103,7 @@ const UserHrSettings = () => {
           <div style={{ width: 32 }} />
           <div style={{ minWidth: widths[1], maxWidth: widths[1], marginRight: 16 }}>After hours</div>
           <div style={{ minWidth: widths[2], maxWidth: widths[2], marginRight: 16 }}>Task</div>
-          <div style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>Before h</div>
+          <div style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>Before d</div>
           <div style={{ minWidth: widths[4], maxWidth: widths[4], marginRight: 16 }}>Days</div>
           <div style={{ flex: 1 }}>Users</div>
         </JustifyBetweenRow>
@@ -293,7 +293,7 @@ const UserHrSettings = () => {
         <JustifyBetweenRow margin="1rem 0 0.25rem 0">
           <div style={{ width: 32 }} />
           <div style={{ minWidth: 150, marginRight: 16 }}>Name</div>
-          <div style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>Before h</div>
+          <div style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>Before d</div>
           <div style={{ minWidth: 150, marginRight: 16 }}>Start Date</div>
           <div style={{ minWidth: 150, marginRight: 16 }}>End Date</div>
           <div style={{ flex: 1 }}>Users</div>
