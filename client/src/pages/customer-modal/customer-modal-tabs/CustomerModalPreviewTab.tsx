@@ -29,12 +29,12 @@ interface IProps {
 }
 
 const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
-  taskApi.util.resetApiState()
   const { data: customerMostUsedUserChartData } = useGetCustomerMostUsedUserInTasksQuery({ customerId })
   const { data: customerTaskTimerChartData } = useGetCustomerTasksTimerAnalyisesQuery({ customerId })
 
-  console.log('customerTaskTimerChartData', customerTaskTimerChartData)
-
+  useEffect(() => {
+    taskApi.util.resetApiState()
+  }, [])
   return (
     <ItemContainer padding="1rem" height="100%" overflow="hidden">
       <Column height="100%">
