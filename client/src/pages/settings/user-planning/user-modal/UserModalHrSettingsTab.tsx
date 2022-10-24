@@ -304,8 +304,8 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
           <div style={{ width: 32 }} />
           <div style={{ minWidth: 150, marginRight: 16 }}>Name</div>
           <div style={{ minWidth: widths[3], maxWidth: widths[3], marginRight: 16 }}>Before d</div>
-          <div style={{ minWidth: 150, marginRight: 16 }}>Start Date</div>
-          <div style={{ minWidth: 150, marginRight: 16 }}>End Date</div>
+          <div style={{ minWidth: 100, marginRight: 16 }}>Start Date</div>
+          <div style={{ minWidth: 100, marginRight: 16 }}>End Date</div>
           <div style={{ flex: 1 }}>Users</div>
         </JustifyBetweenRow>
         <hr style={{ marginBottom: 16 }} />
@@ -365,7 +365,7 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
                     type="number"
                   />
                 </span>
-                <div style={{ minWidth: 150, marginRight: 16 }}>
+                <div style={{ minWidth: 100, marginRight: 16 }}>
                   <DatePicker
                     placeholder="Select start"
                     name={'startDate'}
@@ -382,7 +382,7 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
                     value={moment(s.startDate).toDate()}
                   />
                 </div>
-                <div style={{ minWidth: 150, marginRight: 16 }}>
+                <div style={{ minWidth: 100, marginRight: 16 }}>
                   <DatePicker
                     placeholder="Select end"
                     name={'endDate'}
