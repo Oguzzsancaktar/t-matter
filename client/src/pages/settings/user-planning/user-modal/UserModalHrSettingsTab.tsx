@@ -74,7 +74,7 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
     ])
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (specialDays && loginLogout && monthlyWorking && vocations) {
       await update({ specialDays, loginLogout, monthlyWorking, vocations, owner: undefined }).unwrap()
       toastSuccess('User HR settings saved successfully')
