@@ -15,6 +15,7 @@ import { days } from '@constants/dates'
 import { useGetUserCompanyPricingQuery } from '@services/settings/company-planning/companyPricingService'
 import { IUser } from '@/models'
 import { getUserMonthlyWorkingHours } from '@utils/workingHourUtil'
+import { toastSuccess } from '@utils/toastUtil'
 
 const widths = {
   1: 200,
@@ -75,7 +76,8 @@ const UserHrSettings: React.FC<{ userId: IUser['_id'] }> = ({ userId }) => {
 
   const handleSave = () => {
     if (specialDays && loginLogout && monthlyWorking && vocations) {
-      update({ specialDays, loginLogout, monthlyWorking, vocations, owner: userId }).unwrap()
+      await update({ specialDays, loginLogout, monthlyWorking, vocations, owner: undefined }).unwrap()
+      toastSuccess('User HR settings saved successfully')
     }
   }
 

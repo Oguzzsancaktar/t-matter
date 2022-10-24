@@ -12,6 +12,7 @@ import moment from 'moment'
 import colors from '@constants/colors'
 import { Plus, Trash } from 'react-feather'
 import { days } from '@constants/dates'
+import { toastSuccess } from '@utils/toastUtil'
 
 const widths = {
   1: 200,
@@ -66,9 +67,10 @@ const UserHrSettings = () => {
     ])
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (specialDays && loginLogout && monthlyWorking && vocations) {
-      update({ specialDays, loginLogout, monthlyWorking, vocations, owner: undefined }).unwrap()
+      await update({ specialDays, loginLogout, monthlyWorking, vocations, owner: undefined }).unwrap()
+      toastSuccess('User HR settings saved successfully')
     }
   }
 
