@@ -2,7 +2,8 @@ const dataAccess = require('../data-access')
 const Installment = require('../models/installment')
 const { INSTALLMENT_STATUS } = require('../constants/finance')
 const moment = require('moment/moment')
-const installmentFee = async () => {
+const installmentFee = async date => {
+  console.log('INSTALLMENT FEE CRON JOB', date)
   const financePlanning = await dataAccess.financeDataAccess.getFinancePlanning()
   const unPaidInstallments = Installment.find({
     status: { $ne: INSTALLMENT_STATUS.PAID },
