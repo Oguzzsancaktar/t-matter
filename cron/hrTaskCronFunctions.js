@@ -56,7 +56,7 @@ const hrTaskSender = async date => {
                 days: Math.abs(moment(specialDay.endDate).diff(moment(specialDay.startDate), 'days')),
                 startDate: specialDay.startDate,
                 endDate: specialDay.endDate,
-                owner: user._id
+                owner: user._id.toString()
               })
             }
           }
