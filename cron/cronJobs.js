@@ -4,7 +4,7 @@ const { hrTaskSender } = require('./hrTaskCronFunctions')
 
 const cronJobs = () => {
   cron.schedule('* * * * *', installmentFee)
-  cron.schedule('* * * * *', hrTaskSender)
+  cron.schedule('0 0 12 * *', hrTaskSender)
 }
 
 module.exports = cronJobs
