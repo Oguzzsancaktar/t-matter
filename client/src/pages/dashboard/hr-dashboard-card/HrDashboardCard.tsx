@@ -4,6 +4,7 @@ import useAccessStore from '@hooks/useAccessStore'
 import { openModal } from '@/store'
 import { ESize } from '@/models'
 import HrDashboardInfoModal from '../../../components/modals/dashboard/HrDashboardInfoModal'
+import { HrDashboardLoginRadialChart } from '@components/charts/hr'
 
 const SmallBadge = ({ color, onClick, count, text }) => {
   return (
@@ -90,7 +91,9 @@ const HrDashboardCard = () => {
           <SmallBadge count={13} text="Others" color={'#ccc'} onClick={showHrDashboardInfo.bind(this, 'OthersHrTab')} />
         </div>
       }
-    ></DashboardCard>
+    >
+      <HrDashboardLoginRadialChart />
+    </DashboardCard>
   )
 }
 
