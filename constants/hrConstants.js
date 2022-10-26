@@ -1,8 +1,8 @@
-const TASK_TYPES = {
+const HR_TASK_TYPES = {
   MENTAL: 'MENTAL',
   ABSENT: 'ABSENT',
   OTHERS: 'OTHERS',
   VACATION: 'VOCATION'
 }
 
-module.exports = { TASK_TYPES }
+module.exports = { HR_TASK_TYPES }

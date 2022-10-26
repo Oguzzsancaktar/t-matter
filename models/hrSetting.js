@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { TASK_TYPES } = require('../constants/hrConstants')
+const { HR_TASK_TYPES } = require('../constants/hrConstants')
 const { Schema } = mongoose
 
 const hrSettingSchema = new Schema(
@@ -14,6 +14,7 @@ const hrSettingSchema = new Schema(
         default: false
       },
       beforeNotificationDays: {
+        // useless
         type: Number,
         default: 0
       },
@@ -23,7 +24,7 @@ const hrSettingSchema = new Schema(
       },
       taskType: {
         type: String,
-        default: TASK_TYPES.MENTAL
+        default: HR_TASK_TYPES.MENTAL
       },
       notificationReceivers: [
         {
@@ -39,7 +40,7 @@ const hrSettingSchema = new Schema(
       },
       taskType: {
         type: String,
-        default: TASK_TYPES.ABSENT
+        default: HR_TASK_TYPES.ABSENT
       },
       notificationReceivers: [
         {
@@ -56,9 +57,10 @@ const hrSettingSchema = new Schema(
         },
         taskType: {
           type: String,
-          default: TASK_TYPES.VACATION
+          default: HR_TASK_TYPES.VACATION
         },
         beforeNotificationDays: {
+          //useless
           type: Number,
           default: 0
         },
@@ -94,7 +96,7 @@ const hrSettingSchema = new Schema(
         },
         taskType: {
           type: String,
-          default: TASK_TYPES.OTHERS
+          default: HR_TASK_TYPES.OTHERS
         },
         startDate: {
           type: Date
