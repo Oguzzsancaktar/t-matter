@@ -1,3 +1,22 @@
 .apexcharts-inner.apexcharts-graphical {
   height: 100% !important;
 }
+
+.customer__task__performance__chart__tooltip {
+  width: 150px;
+  background: #f6f6f6 !important;
+  padding: 0.5rem;
+}
+
+.customer__task__performance__chart__tooltip .tooltip__layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.customer__task__performance__chart__tooltip .tooltip__layout .tooltip__layout__item {
+  display: flex;
+}
+
+.customer__task__performance__chart__tooltip .tooltip__layout .tooltip__layout__item h1 {
+  font-size: 1rem;
+}

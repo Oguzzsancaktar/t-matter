@@ -74,6 +74,8 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
     return Math.round((totalPassedCount / (totalStepCount * 3)) * 100)
   }, [totalStepCount, postponePassedStepCount, deadlinePassedStepCount, durationPassedStepCount])
 
+  console.log(postponePassedStepCount, deadlinePassedStepCount, durationPassedStepCount)
+
   const chartOptions = useMemo<ApexOptions>(
     () => ({
       chart: {
@@ -84,7 +86,6 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
       plotOptions: {
         radialBar: {
           track: {
-            background: '#fff',
             strokeWidth: '66%',
             margin: 0, // margin is in pixels
             dropShadow: {
@@ -134,7 +135,7 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
       },
       labels: []
     }),
-    [customerId, performancePercentage]
+    [postponePassedStepCount, deadlinePassedStepCount, durationPassedStepCount]
   )
 
   return (
