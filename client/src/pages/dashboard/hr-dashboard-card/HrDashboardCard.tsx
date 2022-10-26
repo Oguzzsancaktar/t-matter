@@ -4,7 +4,12 @@ import useAccessStore from '@hooks/useAccessStore'
 import { openModal } from '@/store'
 import { ESize } from '@/models'
 import HrDashboardInfoModal from '../../../components/modals/dashboard/HrDashboardInfoModal'
-import { HrDashboardLoginRadialChart } from '@components/charts/hr'
+import {
+  HrDashboardLoginRadialChart,
+  HrDashboardMentalRadialChart,
+  HrDashboardVocationRadialChart
+} from '@components/charts/hr'
+import { Row } from '@nextui-org/react'
 
 const SmallBadge = ({ color, onClick, count, text }) => {
   return (
@@ -92,7 +97,11 @@ const HrDashboardCard = () => {
         </div>
       }
     >
-      <HrDashboardLoginRadialChart />
+      <Row>
+        <HrDashboardLoginRadialChart />
+        <HrDashboardMentalRadialChart />
+        <HrDashboardVocationRadialChart />
+      </Row>
     </DashboardCard>
   )
 }

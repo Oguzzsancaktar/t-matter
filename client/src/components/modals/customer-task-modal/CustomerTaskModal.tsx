@@ -280,8 +280,9 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
       tempChecklist.length === 0
     ) {
       if (
-        tempUpdatedTaskData.steps[activeStep].workedTimes >
-        tempUpdatedTaskData.steps[activeStep].checklistItems?.reduce((acc, cur) => acc + cur.duration, 0)
+        tempUpdatedTaskData.steps[activeStep].workedTimes.reduce((acc, w) => {
+          return acc + w.time
+        }, 0) > tempUpdatedTaskData.steps[activeStep].checklistItems?.reduce((acc, cur) => acc + cur.duration, 0)
       ) {
         createExpiredTaskStep({
           task: tempUpdatedTaskData._id as string,
@@ -291,8 +292,9 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
           index: 0,
           isInvoiced: false,
           expiredTime:
-            tempUpdatedTaskData.steps[activeStep].workedTimes -
-            tempUpdatedTaskData.steps[activeStep].checklistItems?.reduce((acc, cur) => acc + cur.duration, 0)
+            tempUpdatedTaskData.steps[activeStep].workedTimes.reduce((acc, w) => {
+              return acc + w.time
+            }, 0) - tempUpdatedTaskData.steps[activeStep].checklistItems?.reduce((acc, cur) => acc + cur.duration, 0)
         })
       }
 

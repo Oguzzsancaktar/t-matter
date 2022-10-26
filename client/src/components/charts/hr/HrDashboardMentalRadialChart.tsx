@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 
-const HrDashboardLoginRadialChart = () => {
-  const [series, setSeries] = useState([60, 80])
+const HrDashboardMentalRadialChart = () => {
+  const [series, setSeries] = useState([40, 94])
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
       width: 194,
@@ -29,10 +29,10 @@ const HrDashboardLoginRadialChart = () => {
         }
       }
     },
-    colors: ['#7adad1', '#416fc7'],
+    colors: ['#3b4b8d', '#ca5b5b'],
     labels: ['Login', 'Tracking'],
     legend: {
-      show: true,
+      show: false,
       floating: true,
       fontSize: '16px',
       position: 'left',
@@ -66,4 +66,4 @@ const HrDashboardLoginRadialChart = () => {
   )
 }
 
-export default HrDashboardLoginRadialChart
+export default HrDashboardMentalRadialChart
