@@ -26,6 +26,7 @@ import { invoiceDefault } from '@constants/finance'
 
 const Bordered = styled.div<{ margin?: string; width?: string; height?: string }>`
   /* border: 1px solid #ccc; */
+  background: ${colors.white.secondary};
   height: ${({ height }) => (height ? height : '100%')};
   box-sizing: border-box;
   border-radius: 5px;
@@ -201,7 +202,15 @@ const EstimateTab: React.FC<IProps> = ({ customerId, selectedInvoice, handleSele
   }
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1rem' }}>
+    <div
+      style={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '1rem',
+        background: colors.gray.thirth
+      }}
+    >
       <JustifyCenterRow margin="0 0 1rem 0" height="235px">
         <Bordered width="100%">
           <JustifyBetweenRow height="100%">

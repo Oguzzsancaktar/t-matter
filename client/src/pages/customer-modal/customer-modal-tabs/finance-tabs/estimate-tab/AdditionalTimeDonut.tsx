@@ -75,7 +75,7 @@ const AdditionalTimeDonut: React.FC<IProps> = ({ customerId }) => {
         )
         return acc
       }, [])
-      console.log(labels, series)
+
       setSeries(series)
       setOptions({
         ...options,

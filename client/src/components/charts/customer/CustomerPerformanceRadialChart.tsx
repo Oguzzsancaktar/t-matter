@@ -2,28 +2,77 @@ import CircleImage from '@/components/image/CircleImage'
 import { ItemContainer } from '@/components/item-container'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
-import { IUser } from '@/models'
+import { emptyQueryParams } from '@/constants/queryParams'
+import { ICustomer, IUser } from '@/models'
+import { useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
 import { ApexOptions } from 'apexcharts'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 
 interface IProps {
-  chartData: { _id: IUser['_id']; count: number; responsibleUser: IUser }[] | undefined
+  customerId: ICustomer['_id']
 }
-const CustomerPerformanceRadialChart: React.FC<IProps> = ({ chartData }) => {
-  const mostUsedUser = useMemo(() => {
-    if (!chartData) {
-      return undefined
-    }
-    return chartData.reduce((prev, current) => (prev.count > current.count ? prev : current))
-  }, [chartData])
 
-  const total = useMemo(() => {
-    if (!chartData) {
+const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
+  const [searchQueryParams, setSearchQueryParams] = useState({ ...emptyQueryParams, status: -9 })
+
+  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
+    ...searchQueryParams,
+    customerId
+  })
+
+  const totalStepCount = useMemo(() => {
+    if (customerTasksData) {
+      return customerTasksData.reduce((acc, task) => acc + task.steps.length, 0)
+    }
+    return 0
+  }, [customerTasksData])
+
+  const postponePassedStepCount = useMemo(() => {
+    if (customerTasksData) {
+      return customerTasksData.reduce((acc, task) => {
+        const passedStepCount = task.steps.filter(step => step.usedPostpone > step.postponeTime).length
+        return acc + passedStepCount
+      }, 0)
+    }
+    return 0
+  }, [customerTasksData])
+
+  const deadlinePassedStepCount = useMemo(() => {
+    if (customerTasksData) {
+      return customerTasksData.reduce((acc, task) => {
+        const passedStepCount = task.steps.filter(step => {
+          return Date.now() > step.endDate
+        }).length
+
+        return acc + passedStepCount
+      }, 0)
+    }
+    return 0
+  }, [customerTasksData])
+
+  const durationPassedStepCount = useMemo(() => {
+    if (customerTasksData) {
+      return customerTasksData.reduce((acc, task) => {
+        const passedStepCount = task.steps.filter(step => {
+          const totalDuration = step.checklistItems.reduce((acc, item) => acc + item.duration, 0)
+          return step.totalPassedTime > totalDuration
+        }).length
+
+        return acc + passedStepCount
+      }, 0)
+    }
+    return 0
+  }, [customerTasksData])
+
+  const performancePercentage = useMemo(() => {
+    if (totalStepCount === 0) {
       return 0
     }
-    return chartData.reduce((prev, current) => prev + current.count, 0)
-  }, [chartData])
+
+    const totalPassedCount = postponePassedStepCount + deadlinePassedStepCount + durationPassedStepCount
+    return Math.round((totalPassedCount / (totalStepCount * 3)) * 100)
+  }, [totalStepCount, postponePassedStepCount, deadlinePassedStepCount, durationPassedStepCount])
 
   const chartOptions = useMemo<ApexOptions>(
     () => ({
@@ -85,12 +134,12 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ chartData }) => {
       },
       labels: []
     }),
-    [chartData]
+    [customerId, performancePercentage]
   )
 
   return (
     <ItemContainer height="100%" transform="translate(0%, 7%)" position="relative" width="100%">
-      <ReactApexChart options={chartOptions} series={[67]} type="radialBar" height={260} />
+      <ReactApexChart options={chartOptions} series={[performancePercentage]} type="radialBar" height={260} />
     </ItemContainer>
   )
 }

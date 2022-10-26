@@ -43,7 +43,6 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
   const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customer._id)
   const [updateCustomerStatus] = useUpdateCustomerStatusMutation()
 
-  console.log(customerData?.reliableCustomers)
   const [updateCustomer] = useUpdateCustomerMutation()
 
   const [activeTab, setActiveTab] = useState(defaultActiveTab ? defaultActiveTab : 'preview')
@@ -192,8 +191,6 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
   const handleActiveStep = (index: number) => {
     setActiveSliderIndex(index)
   }
-
-  console.log('customerData', customerData?.birthday)
 
   return (
     <ItemContainer borderRadius="0.3rem" overflow="visible" height="100%">

@@ -55,7 +55,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
             </ItemContainer>
 
             <ItemContainer>
-              <CustomerPerformanceRadialChart chartData={undefined} />
+              <CustomerPerformanceRadialChart customerId={customerId} />
             </ItemContainer>
 
             <ItemContainer>chart 1</ItemContainer>
@@ -73,7 +73,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
                   borderRadius="0.3rem"
                   margin="0 0 1rem 0"
                 >
-                  <CustomerActivityMonthlyBarChart />
+                  <CustomerActivityMonthlyBarChart customerId={customerId} />
                 </ItemContainer>
 
                 <ItemContainer

@@ -10,7 +10,6 @@ interface IProps {
   userEmail: string
 }
 const UserBadge: React.FC<IProps> = ({ userImage, userName, userEmail }) => {
-  console.log(userImage)
   return (
     <Row>
       <Column width="35px" margin="0 0.5rem 0 0">

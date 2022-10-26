@@ -11,7 +11,6 @@ interface IProps {
   chartData: { _id: IUser['_id']; count: number; responsibleUser: IUser }[] | undefined
 }
 const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
-  console.log('xxx', chartData)
   const mostUsedUser = useMemo(() => {
     if (!chartData || chartData.length === 0) {
       return undefined

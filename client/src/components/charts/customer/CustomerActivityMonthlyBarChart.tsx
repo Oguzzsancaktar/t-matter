@@ -1,36 +1,67 @@
 import { ItemContainer } from '@/components/item-container'
+import colors from '@/constants/colors'
+import { emptyQueryParams } from '@/constants/queryParams'
+import { ICustomer } from '@/models'
+import { useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
 import { ApexOptions } from 'apexcharts'
-import React, { useMemo } from 'react'
+import moment from 'moment'
+import React, { useMemo, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 
-const CustomerActivityMonthlyBarChart = () => {
-  const series = useMemo(
-    () => [
-      {
-        name: 'PRODUCT A',
-        data: [44, 55, 41, 67, 22, 43]
-      },
-      {
-        name: 'PRODUCT B',
-        data: [13, 23, 20, 8, 13, 27]
-      },
-      {
-        name: 'PRODUCT C',
-        data: [11, 17, 15, 15, 21, 14]
-      },
-      {
-        name: 'PRODUCT D',
-        data: [21, 7, 25, 13, 22, 8]
-      }
-    ],
-    []
-  )
+interface IProps {
+  customerId: ICustomer['_id']
+}
 
+const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customerId }) => {
+  const [searchQueryParams, setSearchQueryParams] = useState({ ...emptyQueryParams, status: -9 })
+
+  const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
+    ...searchQueryParams,
+    customerId
+  })
+
+  const monthlyCompletedUncompletedTasks = useMemo(() => {
+    const monthlyCompletedUncompletedTasks: any = {
+      completed: {
+        data: [],
+        name: 'Completed'
+      },
+      uncompleted: {
+        data: [],
+        name: 'Uncompleted'
+      }
+    }
+    const completedTasks = customerTasksData?.filter(task => task.status === 1)
+    const uncompletedTasks = customerTasksData?.filter(task => task.status !== 1)
+
+    for (let i = 0; i < 12; i++) {
+      const month = moment().month(i).format('MMM')
+      const completedTasksCount = completedTasks?.filter(task => {
+        return moment(task.startDate).format('MMM') === month
+      }).length
+      const uncompletedTasksCount = uncompletedTasks?.filter(
+        task => moment(task.startDate).format('MMM') === month
+      ).length
+
+      monthlyCompletedUncompletedTasks.completed.data[i] = completedTasksCount || 0
+      monthlyCompletedUncompletedTasks.uncompleted.data[i] = uncompletedTasksCount || 0
+    }
+
+    return monthlyCompletedUncompletedTasks
+  }, [customerTasksData])
+
+  const monthlyTaskCompletedUncompletedBarChartSeries = useMemo(() => {
+    return [monthlyCompletedUncompletedTasks.completed, monthlyCompletedUncompletedTasks.uncompleted]
+  }, [monthlyCompletedUncompletedTasks])
+
+  console.log(monthlyTaskCompletedUncompletedBarChartSeries)
   const chartOptions = useMemo<ApexOptions>(
     () => ({
+      colors: [colors.primary.light, colors.secondary.middle],
       chart: {
         type: 'bar',
-        height: 350,
+        height: '100%',
+        width: '100%',
         stacked: true,
         toolbar: {
           show: true
@@ -55,21 +86,17 @@ const CustomerActivityMonthlyBarChart = () => {
         bar: {
           horizontal: false,
           borderRadius: 10,
+          columnWidth: '25%',
+
           dataLabels: {}
         }
       },
       xaxis: {
-        type: 'datetime',
-        categories: [
-          '01/01/2011 GMT',
-          '01/02/2011 GMT',
-          '01/03/2011 GMT',
-          '01/04/2011 GMT',
-          '01/05/2011 GMT',
-          '01/06/2011 GMT'
-        ]
+        type: 'category',
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       },
       legend: {
+        show: false,
         position: 'right',
         offsetY: 40
       },
@@ -80,9 +107,15 @@ const CustomerActivityMonthlyBarChart = () => {
     []
   )
 
+  console.log('monthlyTaskCompletedUncompletedBarChartSeries', monthlyTaskCompletedUncompletedBarChartSeries)
   return (
     <ItemContainer height="100%" transform="translate(0%, 7%)" position="relative" width="100%">
-      <ReactApexChart options={chartOptions} series={[67]} type="bar" height={260} />
+      <ReactApexChart
+        options={chartOptions}
+        series={monthlyTaskCompletedUncompletedBarChartSeries}
+        type="bar"
+        height={'100%'}
+      />
     </ItemContainer>
   )
 }
