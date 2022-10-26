@@ -14,17 +14,18 @@ interface IProps {
   customerId: ICustomer['_id']
   onSelect: (invoice: Invoice) => void
   selectedInvoice?: Invoice
+  isPreview?: boolean
 }
 
-const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice }) => {
+const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice, isPreview = false }) => {
   const { data: invoices, isLoading: isInvoicesLoading } = useGetInvoicesQuery(customerId)
 
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
-      height: 160,
-      width: 160,
+      height: 165,
+      width: 165,
       type: 'donut',
       offsetY: 0,
       events: {
@@ -101,10 +102,14 @@ const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice
 
   return (
     <div style={{ position: 'relative', height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}>
-        Invoices
-      </H1>
-      <ReactApexChart options={options} series={series} type="donut" height={160} width={160} />
+      {!isPreview ? (
+        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}>
+          Invoices
+        </H1>
+      ) : (
+        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}></H1>
+      )}
+      <ReactApexChart options={options} series={series} type="donut" height={165} width={165} />
       <div style={{ position: 'absolute', top: '50%', right: '40%' }}>
         <IconButton
           onClick={showInvoicesMailModal}

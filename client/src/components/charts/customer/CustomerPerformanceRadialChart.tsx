@@ -107,8 +107,8 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
               offsetY: 120
             },
             value: {
-              offsetY: 76,
-              fontSize: '22px',
+              offsetY: 50,
+              fontSize: '12px',
               color: undefined,
               formatter: function (val) {
                 return 'Performance'

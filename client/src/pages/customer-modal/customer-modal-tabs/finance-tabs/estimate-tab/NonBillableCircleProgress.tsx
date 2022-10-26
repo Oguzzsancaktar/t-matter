@@ -10,9 +10,10 @@ import { useGetTasksByCustomerIdQuery } from '@services/customers/taskService'
 
 interface IProps {
   customerId: ICustomer['_id']
+  isPreview?: boolean
 }
 
-const NonBillableCircleProgress: React.FC<IProps> = ({ customerId }) => {
+const NonBillableCircleProgress: React.FC<IProps> = ({ customerId, isPreview = false }) => {
   const { data: financePlanning, isLoading: isFinancePlanningLoading } = useGetFinancePlanningQuery()
   const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
     customerId,
@@ -33,7 +34,7 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId }) => {
       text: 'Non Billable',
       align: 'center',
       style: {
-        fontSize: '12px',
+        fontSize: !isPreview ? '12px' : '0px',
         color: colors.text.primary
       }
     },
@@ -48,8 +49,8 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId }) => {
             offsetY: 90
           },
           value: {
-            offsetY: 50,
-            fontSize: '22px',
+            offsetY: 40,
+            fontSize: '15px',
             color: colors.text.primary,
             formatter: function (val) {
               return val + '%'
