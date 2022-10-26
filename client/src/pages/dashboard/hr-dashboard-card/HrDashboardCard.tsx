@@ -90,9 +90,7 @@ const HrDashboardCard = () => {
           <SmallBadge count={13} text="Others" color={'#ccc'} onClick={showHrDashboardInfo.bind(this, 'OthersHrTab')} />
         </div>
       }
-    >
-      incoming chart
-    </DashboardCard>
+    ></DashboardCard>
   )
 }
 
