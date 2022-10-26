@@ -97,6 +97,9 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
             }
           },
 
+          hollow: {
+            size: '60%'
+          },
           startAngle: -135,
           endAngle: 135,
           dataLabels: {
@@ -111,7 +114,7 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
               fontSize: '12px',
               color: undefined,
               formatter: function (val) {
-                return 'Performance'
+                return 'Conditions'
               }
             }
           }
@@ -138,9 +141,53 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
     [postponePassedStepCount, deadlinePassedStepCount, durationPassedStepCount]
   )
 
+  const chartPerformance = useMemo(() => {
+    if (100 - performancePercentage > 75) {
+      return 1
+    } else {
+      if (100 - performancePercentage > 50) {
+        return 2
+      } else {
+        if (100 - performancePercentage > 25) {
+          return 3
+        } else {
+          return 4
+        }
+      }
+    }
+  }, [performancePercentage])
+
   return (
     <ItemContainer height="100%" transform="translate(0%, 7%)" position="relative" width="100%">
-      <ReactApexChart options={chartOptions} series={[performancePercentage]} type="radialBar" height={220} />
+      <ItemContainer position="absolute" top="26%" left="42%" width="80px">
+        <H1 fontSize="1.8rem" color={colors.text.primary} width="80px" margin="auto" textAlign="center">
+          {100 - performancePercentage}%
+        </H1>
+        <H1
+          fontSize="0.8rem"
+          color={
+            chartPerformance === 1
+              ? colors.green.primary
+              : chartPerformance === 2
+              ? colors.blue.primary
+              : chartPerformance === 3
+              ? colors.orange.primary
+              : colors.red.primary
+          }
+          width="80px"
+          margin="auto"
+          textAlign="center"
+        >
+          {chartPerformance === 1
+            ? 'Excelent'
+            : chartPerformance === 2
+            ? 'Good'
+            : chartPerformance === 3
+            ? 'Normal'
+            : 'Bad'}
+        </H1>
+      </ItemContainer>
+      <ReactApexChart options={chartOptions} series={[100 - performancePercentage]} type="radialBar" height={220} />
     </ItemContainer>
   )
 }

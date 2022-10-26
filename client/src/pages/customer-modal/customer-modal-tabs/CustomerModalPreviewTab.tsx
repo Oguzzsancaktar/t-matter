@@ -47,10 +47,10 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
               transform="rotate(90deg)"
               width="100px"
               left="-30px"
-              top="45%"
+              top="40%"
               zIndex="999"
             >
-              <H1 fontSize="1rem" fontWeight="bold" color={colors.text.primary}>
+              <H1 fontSize="1.2rem" fontWeight="bold" color={colors.gray.disabled}>
                 Performance
               </H1>
             </ItemContainer>
@@ -81,10 +81,10 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
             transform="rotate(90deg)"
             width="100px"
             left="-30px"
-            top="35%"
+            top="30%"
             zIndex="999"
           >
-            <H1 fontSize="1rem" fontWeight="bold" color={colors.text.primary}>
+            <H1 fontSize="1.2rem" fontWeight="bold" color={colors.gray.disabled}>
               Workflow
             </H1>
           </ItemContainer>
@@ -117,7 +117,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
                       top="50%"
                       zIndex="999"
                     >
-                      <H1 fontSize="1rem" fontWeight="bold" color={colors.text.primary}>
+                      <H1 fontSize="1.2rem" fontWeight="bold" color={colors.gray.disabled}>
                         Finance
                       </H1>
                     </ItemContainer>
