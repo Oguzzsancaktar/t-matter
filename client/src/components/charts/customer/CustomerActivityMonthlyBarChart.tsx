@@ -61,7 +61,7 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customerId }) => {
       chart: {
         type: 'bar',
         height: '80%',
-        width: '100%',
+        width: '95%',
         stacked: true,
         toolbar: {
           show: true
@@ -108,7 +108,7 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customerId }) => {
   )
 
   return (
-    <ItemContainer height="85%" transform="translate(0%, 7%)" position="relative" width="100%">
+    <ItemContainer height="85%" transform="translate(0%, 7%)" position="relative" margin="0 0 0 auto" width="95%">
       <ReactApexChart
         options={chartOptions}
         series={monthlyTaskCompletedUncompletedBarChartSeries}

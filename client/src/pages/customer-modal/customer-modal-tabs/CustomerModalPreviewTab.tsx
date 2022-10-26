@@ -7,6 +7,7 @@ import {
   CustomerPerformanceRadialChart,
   CustomerTaskTargetRadialChart,
   CustomerTaskTimingAnalysisRadialChart,
+  H1,
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterColumn
@@ -40,28 +41,56 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
           boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
           borderRadius="0.3rem"
         >
-          <JustifyBetweenRow height="100%">
-            <ItemContainer height="100%">
-              <CustomerMostUsedUserDonutChart chartData={customerMostUsedUserChartData} />
+          <ItemContainer width="100%" height="100%" position="relative">
+            <ItemContainer
+              position="absolute"
+              transform="rotate(90deg)"
+              width="100px"
+              left="-30px"
+              top="45%"
+              zIndex="999"
+            >
+              <H1 fontSize="1rem" fontWeight="bold" color={colors.text.primary}>
+                Performance
+              </H1>
             </ItemContainer>
 
-            <ItemContainer height="100%">
-              <CustomerTaskTimingAnalysisRadialChart chartData={customerTaskTimerChartData} />
-            </ItemContainer>
+            <JustifyBetweenRow height="100%">
+              <ItemContainer height="100%">
+                <CustomerMostUsedUserDonutChart chartData={customerMostUsedUserChartData} />
+              </ItemContainer>
 
-            <ItemContainer>
-              <CustomerPerformanceRadialChart customerId={customerId} />
-            </ItemContainer>
+              <ItemContainer height="100%">
+                <CustomerTaskTimingAnalysisRadialChart chartData={customerTaskTimerChartData} />
+              </ItemContainer>
 
-            <ItemContainer>
-              <CustomerTaskTargetRadialChart />
-            </ItemContainer>
-          </JustifyBetweenRow>
+              <ItemContainer>
+                <CustomerPerformanceRadialChart customerId={customerId} />
+              </ItemContainer>
+
+              <ItemContainer>
+                <CustomerTaskTargetRadialChart />
+              </ItemContainer>
+            </JustifyBetweenRow>
+          </ItemContainer>
         </ItemContainer>
 
-        <ItemContainer height="calc(100% - 200px - 1rem)">
+        <ItemContainer height="calc(100% - 200px - 1rem)" position="relative">
+          <ItemContainer
+            position="absolute"
+            transform="rotate(90deg)"
+            width="100px"
+            left="-30px"
+            top="35%"
+            zIndex="999"
+          >
+            <H1 fontSize="1rem" fontWeight="bold" color={colors.text.primary}>
+              Workflow
+            </H1>
+          </ItemContainer>
+
           <JustifyBetweenRow height="100%">
-            <ItemContainer height="100%" margin="0  1rem 0 0" width="calc(100% - 400px - 1rem)">
+            <ItemContainer height="100%" margin="0 1rem 0 0" width="calc(100% - 400px - 1rem)">
               <JustifyCenterColumn height="100%">
                 <ItemContainer
                   height="calc(100% - 200px - 1rem)"
@@ -79,8 +108,21 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
                   boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
                   borderRadius="0.3rem"
                 >
-                  <ItemContainer height="100%" transform="translateY(5%)">
-                    <JustifyBetweenRow height="100%">
+                  <ItemContainer height="100%" transform="translateY(5%)" position="relative">
+                    <ItemContainer
+                      position="absolute"
+                      transform="rotate(90deg)"
+                      width="100px"
+                      left="-30px"
+                      top="50%"
+                      zIndex="999"
+                    >
+                      <H1 fontSize="1rem" fontWeight="bold" color={colors.text.primary}>
+                        Finance
+                      </H1>
+                    </ItemContainer>
+
+                    <JustifyBetweenRow height="100%" width="calc(100% - 5rem)" margin="0 0 0 auto">
                       <InvoicesDonut
                         isPreview={true}
                         selectedInvoice={undefined}
@@ -88,12 +130,12 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
                         customerId={customerId}
                       />
 
-                      <DiscountedInvoicesDonut
+                      {/* <DiscountedInvoicesDonut
                         isPreview={true}
                         selectedInvoice={undefined}
                         onSelect={() => {}}
                         customerId={customerId}
-                      />
+                      /> */}
                       <NonBillableCircleProgress isPreview={true} customerId={customerId} />
                       <AdditionalTimeDonut isPreview={true} customerId={customerId} />
                     </JustifyBetweenRow>
