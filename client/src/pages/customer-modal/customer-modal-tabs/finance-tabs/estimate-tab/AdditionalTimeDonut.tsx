@@ -7,9 +7,10 @@ import { H1 } from '@/components'
 
 interface IProps {
   customerId: ICustomer['_id']
+  isPreview?: boolean
 }
 
-const AdditionalTimeDonut: React.FC<IProps> = ({ customerId }) => {
+const AdditionalTimeDonut: React.FC<IProps> = ({ customerId, isPreview = false }) => {
   const { data: expiredTaskSteps, isLoading: isExpiredTaskStepsLoading } = useGetExpiredTaskStepsQuery({
     customerId: customerId
   })
@@ -86,9 +87,14 @@ const AdditionalTimeDonut: React.FC<IProps> = ({ customerId }) => {
 
   return (
     <div style={{ height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}>
-        Additional time
-      </H1>
+      {!isPreview ? (
+        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}>
+          Additional time
+        </H1>
+      ) : (
+        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}></H1>
+      )}
+
       <ReactApexChart options={options} series={series} type="donut" height={160} width={160} />
     </div>
   )

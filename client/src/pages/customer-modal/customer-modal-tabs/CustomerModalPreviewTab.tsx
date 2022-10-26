@@ -79,12 +79,25 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
                   boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
                   borderRadius="0.3rem"
                 >
-                  <JustifyBetweenRow height="100%">
-                    <InvoicesDonut selectedInvoice={undefined} onSelect={() => {}} customerId={customerId} />
-                    <DiscountedInvoicesDonut selectedInvoice={undefined} onSelect={() => {}} customerId={customerId} />
-                    <NonBillableCircleProgress customerId={customerId} />
-                    <AdditionalTimeDonut customerId={customerId} />
-                  </JustifyBetweenRow>
+                  <ItemContainer height="100%" transform="translateY(5%)">
+                    <JustifyBetweenRow height="100%">
+                      <InvoicesDonut
+                        isPreview={true}
+                        selectedInvoice={undefined}
+                        onSelect={() => {}}
+                        customerId={customerId}
+                      />
+
+                      <DiscountedInvoicesDonut
+                        isPreview={true}
+                        selectedInvoice={undefined}
+                        onSelect={() => {}}
+                        customerId={customerId}
+                      />
+                      <NonBillableCircleProgress isPreview={true} customerId={customerId} />
+                      <AdditionalTimeDonut isPreview={true} customerId={customerId} />
+                    </JustifyBetweenRow>
+                  </ItemContainer>
                 </ItemContainer>
               </JustifyCenterColumn>
             </ItemContainer>

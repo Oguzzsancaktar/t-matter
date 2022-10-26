@@ -43,8 +43,8 @@ const CustomerTaskTargetRadialChart: React.FC<IProps> = () => {
               offsetY: 120
             },
             value: {
-              offsetY: 76,
-              fontSize: '22px',
+              offsetY: 54,
+              fontSize: '12px',
               color: undefined,
               formatter: function (val) {
                 return 'Target'
