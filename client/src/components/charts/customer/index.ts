@@ -2,3 +2,4 @@ export { default as CustomerMostUsedUserDonutChart } from './CustomerMostUsedUse
 export { default as CustomerTaskTimingAnalysisRadialChart } from './CustomerTaskTimingAnalysisRadialChart'
 export { default as CustomerPerformanceRadialChart } from './CustomerPerformanceRadialChart'
 export { default as CustomerActivityMonthlyBarChart } from './CustomerActivityMonthlyBarChart'
+export { default as CustomerTaskTargetRadialChart } from './CustomerTaskTargetRadialChart'

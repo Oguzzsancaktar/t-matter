@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { EActivity, ICustomer, ITaskCategory, IUser } from '@/models'
+import React, { useEffect } from 'react'
+import { ICustomer } from '@/models'
 import {
-  ActivityFilter,
   Column,
   CustomerActivityMonthlyBarChart,
   CustomerMostUsedUserDonutChart,
   CustomerPerformanceRadialChart,
+  CustomerTaskTargetRadialChart,
   CustomerTaskTimingAnalysisRadialChart,
   ItemContainer,
   JustifyBetweenRow,
-  JustifyCenterColumn,
-  NoTableData
+  JustifyCenterColumn
 } from '@/components'
-import { useGetActivitiesQuery } from '@services/activityService'
-import ActivityItem from '@components/activity/ActivityItem'
-import ReactTooltip from 'react-tooltip'
-import { emptyActivtyFilter } from '@/constants/queryParams'
 import { AdditionalTimeDonut, DiscountedInvoicesDonut, InvoicesDonut, NonBillableCircleProgress } from './finance-tabs'
 import colors from '@/constants/colors'
 import {
@@ -58,7 +53,9 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
               <CustomerPerformanceRadialChart customerId={customerId} />
             </ItemContainer>
 
-            <ItemContainer>chart 1</ItemContainer>
+            <ItemContainer>
+              <CustomerTaskTargetRadialChart />
+            </ItemContainer>
           </JustifyBetweenRow>
         </ItemContainer>
 
@@ -109,6 +106,3 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
 }
 
 export default CustomerModalPreviewTab
-function getCustomerMostUsedUserInTasks(customerId: string) {
-  throw new Error('Function not implemented.')
-}

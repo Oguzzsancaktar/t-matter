@@ -21,7 +21,7 @@ const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) 
   const chartOptions = useMemo<ApexOptions>(
     () => ({
       chart: {
-        height: 260,
+        height: 220,
         type: 'radialBar'
       },
       plotOptions: {
@@ -39,8 +39,8 @@ const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) 
   )
 
   return (
-    <ItemContainer height="100%" transform="translate(0%, -10%)">
-      <ReactApexChart options={chartOptions} series={[chartPercentage]} type="radialBar" height={260} />
+    <ItemContainer height="100%" transform="translate(0%, -0%)">
+      <ReactApexChart options={chartOptions} series={[chartPercentage]} type="radialBar" height={220} />
     </ItemContainer>
   )
 }

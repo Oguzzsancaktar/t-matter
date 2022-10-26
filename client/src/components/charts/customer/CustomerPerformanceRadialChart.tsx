@@ -79,7 +79,7 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
   const chartOptions = useMemo<ApexOptions>(
     () => ({
       chart: {
-        height: 260,
+        height: 220,
         type: 'radialBar',
         offsetY: -10
       },
@@ -111,7 +111,7 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
               fontSize: '22px',
               color: undefined,
               formatter: function (val) {
-                return val + '%'
+                return 'Performance'
               }
             }
           }
@@ -140,7 +140,7 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
 
   return (
     <ItemContainer height="100%" transform="translate(0%, 7%)" position="relative" width="100%">
-      <ReactApexChart options={chartOptions} series={[performancePercentage]} type="radialBar" height={260} />
+      <ReactApexChart options={chartOptions} series={[performancePercentage]} type="radialBar" height={220} />
     </ItemContainer>
   )
 }

@@ -29,7 +29,7 @@ const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
     () => ({
       chart: {
         type: 'donut',
-        height: '100%',
+        height: 170,
         toolbar: {
           show: false
         }
@@ -44,7 +44,7 @@ const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
       plotOptions: {
         pie: {
           donut: {
-            size: '90%'
+            size: '85%'
           }
         }
       },
@@ -69,17 +69,17 @@ const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
   const chartSeries = useMemo(() => chartData?.map(item => item.count), [chartData])
 
   return (
-    <ItemContainer height="100%" transform="translate(0%, 7%)" position="relative" width="100%">
+    <ItemContainer height="100%" transform="translate(0%, 15%)" position="relative" width="100%">
       {chartSeries && chartOptions && (
         <ReactApexChart
           options={chartOptions}
           series={chartSeries.length !== 0 ? chartSeries : [0]}
           type="donut"
-          height={'100%'}
+          height={170}
         />
       )}
       {mostUsedUser && (
-        <ItemContainer position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" width="auto">
+        <ItemContainer position="absolute" top="50%" left="50%" transform="translate(-50%, -80%)" width="auto">
           <CircleImage
             imageUrl={mostUsedUser?.responsibleUser.profile_img || ''}
             width="40px"
