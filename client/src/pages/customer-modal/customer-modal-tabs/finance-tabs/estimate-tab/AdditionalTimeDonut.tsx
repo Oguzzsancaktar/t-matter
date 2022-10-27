@@ -3,7 +3,7 @@ import ReactApexChart from 'react-apexcharts'
 import { ICustomer } from '@/models'
 import { useGetExpiredTaskStepsQuery } from '@services/settings/finance-planning/financePlanningService'
 import colors from '@constants/colors'
-import { H1 } from '@/components'
+import { H1, ItemContainer, NoTableData } from '@/components'
 
 interface IProps {
   customerId: ICustomer['_id']
@@ -88,14 +88,22 @@ const AdditionalTimeDonut: React.FC<IProps> = ({ customerId, isPreview = false }
   return (
     <div style={{ height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {!isPreview ? (
-        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}>
+        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
           Additional time
         </H1>
       ) : (
         <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}></H1>
       )}
 
-      <ReactApexChart options={options} series={series} type="donut" height={160} width={160} />
+      {series?.length !== 0 && (
+        <ReactApexChart options={options} series={series} type="donut" height={160} width={160} />
+      )}
+
+      {series?.length === 0 && (
+        <ItemContainer width="150px" height="100%" transform="translateY(-15%)">
+          <NoTableData />
+        </ItemContainer>
+      )}
     </div>
   )
 }

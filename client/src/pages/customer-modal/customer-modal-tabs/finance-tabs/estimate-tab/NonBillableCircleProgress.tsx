@@ -7,6 +7,7 @@ import {
 } from '@services/settings/finance-planning/financePlanningService'
 import { ICustomer } from '@/models'
 import { useGetTasksByCustomerIdQuery } from '@services/customers/taskService'
+import { H1, ItemContainer, NoTableData } from '@/components'
 
 interface IProps {
   customerId: ICustomer['_id']
@@ -27,14 +28,14 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId, isPreview = f
     chart: {
       height: 200,
       type: 'radialBar',
-      offsetY: 0,
+      offsetY: -20,
       width: 200
     },
     title: {
-      text: 'Non Billable',
+      text: '',
       align: 'center',
       style: {
-        fontSize: !isPreview ? '12px' : '0px',
+        fontSize: '0px',
         color: colors.text.primary
       }
     },
@@ -92,7 +93,28 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId, isPreview = f
     }
   }, [expiredTaskSteps, financePlanning, customerTasksData])
 
-  return <ReactApexChart width={200} options={options} series={series} type="radialBar" height={200} />
+  console.log(series)
+  return (
+    <div style={{ height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {!isPreview ? (
+        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
+          Non billable
+        </H1>
+      ) : (
+        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}></H1>
+      )}
+
+      {customerTasksData?.length !== 0 && (
+        <ReactApexChart width={200} options={options} series={series} type="radialBar" height={200} />
+      )}
+
+      {customerTasksData?.length === 0 && (
+        <ItemContainer width="150px" height="100%" transform="translateY(-15%)">
+          <NoTableData />
+        </ItemContainer>
+      )}
+    </div>
+  )
 }
 
 export default NonBillableCircleProgress
