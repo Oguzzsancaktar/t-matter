@@ -12,14 +12,14 @@ const CustomerTaskTargetRadialChart: React.FC<IProps> = () => {
     () => ({
       colors: [colors.orange.primary],
       chart: {
-        height: 190,
+        height: 200,
         type: 'radialBar',
         offsetY: -10
       },
       plotOptions: {
         radialBar: {
           track: {
-            strokeWidth: '30%',
+            strokeWidth: '20%',
             margin: 0, // margin is in pixels
             dropShadow: {
               enabled: false,
@@ -30,7 +30,7 @@ const CustomerTaskTargetRadialChart: React.FC<IProps> = () => {
             }
           },
           hollow: {
-            size: '70%'
+            size: '80%'
           },
 
           startAngle: -135,
@@ -44,7 +44,7 @@ const CustomerTaskTargetRadialChart: React.FC<IProps> = () => {
             },
             value: {
               offsetY: 54,
-              fontSize: '12px',
+              fontSize: '16px',
               color: undefined,
               formatter: function (val) {
                 return 'Target'
@@ -56,15 +56,17 @@ const CustomerTaskTargetRadialChart: React.FC<IProps> = () => {
       fill: {
         type: ''
       },
-      stroke: {},
-      labels: []
+      labels: ['Target'],
+      stroke: {
+        lineCap: 'round'
+      }
     }),
     []
   )
 
   return (
-    <ItemContainer height="100%" transform="translate(0%, 7%)">
-      <ReactApexChart options={chartOptions} series={[79]} type="radialBar" height={190} />
+    <ItemContainer height="100%" transform="translate(0%, 15%)">
+      <ReactApexChart options={chartOptions} series={[79]} type="radialBar" height={200} />
     </ItemContainer>
   )
 }
