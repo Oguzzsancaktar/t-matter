@@ -3,6 +3,7 @@
 }
 
 .customer__task__performance__chart__tooltip {
+  z-index: 99999999 !important;
   width: 150px;
   background: #f6f6f6 !important;
   padding: 0.5rem;
@@ -19,4 +20,10 @@
 
 .customer__task__performance__chart__tooltip .tooltip__layout .tooltip__layout__item h1 {
   font-size: 1rem;
+}
+
+/* // task timer chart  */
+
+.timer__chart__tooltip {
+  padding: 0.2rem 0.3rem;
 }

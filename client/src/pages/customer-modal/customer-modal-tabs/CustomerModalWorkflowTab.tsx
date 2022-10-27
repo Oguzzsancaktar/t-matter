@@ -154,7 +154,6 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
     }
   }
 
-  console.log(customerTasksData)
   const handleStatusFilter = (status: EStatus) => {
     setSearchQueryParams({ ...searchQueryParams, status })
   }
@@ -166,12 +165,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
   return (
     <ItemContainer height="100%" padding="0 1rem">
       <JustifyBetweenColumn height="100%">
-        <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-          <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-          <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-          <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        </JustifyBetweenRow>
-        <Column height="calc(100% - 200px - 1rem)">
+        <Column height="calc(100%)">
           <DataTableHeader
             filterStatusOptions={taskStatusOptions}
             handleAddNew={() => openSelectTaskWorkflowModal()}
