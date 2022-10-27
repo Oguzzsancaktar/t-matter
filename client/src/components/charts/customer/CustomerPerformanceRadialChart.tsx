@@ -269,33 +269,36 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
 
   return (
     <ItemContainer height="100%" transform="translate(0%, 5%)" position="relative" width="100%">
-      <ItemContainer position="absolute" top="50%" left="50%" transform="translate(-50%, 5px)" width="80px">
-        {/* <H1 fontSize="1.8rem" color={colors.text.primary} width="80px" margin="auto" textAlign="center">
+      {customerTasksData && customerTasksData?.length !== 0 && (
+        <ItemContainer position="absolute" top="50%" left="50%" transform="translate(-50%, 5px)" width="80px">
+          {/* <H1 fontSize="1.8rem" color={colors.text.primary} width="80px" margin="auto" textAlign="center">
           {100 - performancePercentage}%
         </H1> */}
-        <H1
-          width="100%"
-          textAlign="center"
-          fontSize="0.8rem"
-          color={
-            chartPerformance === 1
-              ? colors.green.primary
+          <H1
+            width="100%"
+            textAlign="center"
+            fontSize="0.8rem"
+            color={
+              chartPerformance === 1
+                ? colors.green.primary
+                : chartPerformance === 2
+                ? colors.blue.primary
+                : chartPerformance === 3
+                ? colors.orange.primary
+                : colors.red.primary
+            }
+          >
+            {chartPerformance === 1
+              ? 'Excelent'
               : chartPerformance === 2
-              ? colors.blue.primary
+              ? 'Good'
               : chartPerformance === 3
-              ? colors.orange.primary
-              : colors.red.primary
-          }
-        >
-          {chartPerformance === 1
-            ? 'Excelent'
-            : chartPerformance === 2
-            ? 'Good'
-            : chartPerformance === 3
-            ? 'Normal'
-            : 'Bad'}
-        </H1>
-      </ItemContainer>
+              ? 'Normal'
+              : 'Bad'}
+          </H1>
+        </ItemContainer>
+      )}
+
       {customerTasksData && customerTasksData?.length !== 0 && (
         <ReactApexChart options={chartOptions} series={[100 - performancePercentage]} type="radialBar" height={220} />
       )}

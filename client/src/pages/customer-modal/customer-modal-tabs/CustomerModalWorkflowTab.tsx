@@ -163,7 +163,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
   }
 
   return (
-    <ItemContainer height="100%" padding="0 1rem">
+    <ItemContainer height="100%" padding="1rem">
       <JustifyBetweenColumn height="100%">
         <Column height="calc(100%)">
           <DataTableHeader
