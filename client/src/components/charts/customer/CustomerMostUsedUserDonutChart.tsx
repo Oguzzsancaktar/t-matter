@@ -82,7 +82,7 @@ const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
       )}
 
       {chartSeries?.length === 0 && (
-        <ItemContainer height="100%" transform="translateY(-15%)">
+        <ItemContainer height="50%" transform="translateY(15%)">
           <NoTableData />
         </ItemContainer>
       )}

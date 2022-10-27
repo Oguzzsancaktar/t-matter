@@ -172,7 +172,7 @@ const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) 
       )}
 
       {chartData?.length === 0 && (
-        <ItemContainer height="100%" transform="translateY(-5%)">
+        <ItemContainer height="50%" transform="translateY(35%)">
           <NoTableData />
         </ItemContainer>
       )}

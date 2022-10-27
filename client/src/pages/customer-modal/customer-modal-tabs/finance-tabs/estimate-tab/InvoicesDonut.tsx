@@ -101,20 +101,33 @@ const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice
   }
 
   return (
-    <div style={{ position: 'relative', height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div
+      style={{
+        position: 'relative',
+        height: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
       {!isPreview ? (
         <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
           Invoices
         </H1>
       ) : (
-        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}></H1>
+        <ItemContainer position="absolute" left="0%" top="45%">
+          <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
+            Invoices
+          </H1>
+        </ItemContainer>
       )}
 
       {series?.length !== 0 && (
         <ReactApexChart options={options} series={series} type="donut" height={165} width={165} />
       )}
 
-      {series?.length !== 0 && (
+      {series?.length !== 0 && !isPreview && (
         <div style={{ position: 'absolute', top: '50%', right: '40%' }}>
           <IconButton
             onClick={showInvoicesMailModal}
@@ -128,7 +141,7 @@ const InvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, selectedInvoice
       )}
 
       {series?.length === 0 && (
-        <ItemContainer width="150px" height="100%" transform="translateY(-15%)">
+        <ItemContainer height="50%" transform="translateY(25%)">
           <NoTableData />
         </ItemContainer>
       )}

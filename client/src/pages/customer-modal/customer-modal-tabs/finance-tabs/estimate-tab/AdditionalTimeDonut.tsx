@@ -86,13 +86,22 @@ const AdditionalTimeDonut: React.FC<IProps> = ({ customerId, isPreview = false }
   }, [expiredTaskSteps])
 
   return (
-    <div style={{ height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div
+      style={{
+        position: 'relative',
+        height: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
       {!isPreview ? (
-        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
+        <H1 textAlign="center" fontSize="1rem" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
           Additional time
         </H1>
       ) : (
-        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}></H1>
+        <H1 textAlign="center" fontSize="1rem" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}></H1>
       )}
 
       {series?.length !== 0 && (
@@ -100,7 +109,7 @@ const AdditionalTimeDonut: React.FC<IProps> = ({ customerId, isPreview = false }
       )}
 
       {series?.length === 0 && (
-        <ItemContainer width="150px" height="100%" transform="translateY(-15%)">
+        <ItemContainer height="50%" transform="translateY(25%)" width="150px">
           <NoTableData />
         </ItemContainer>
       )}

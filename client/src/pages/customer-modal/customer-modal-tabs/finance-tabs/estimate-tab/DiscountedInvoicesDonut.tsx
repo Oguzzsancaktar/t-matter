@@ -72,7 +72,8 @@ const DiscountedInvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, isPre
       style: {
         color: colors.text.primary
       }
-    }
+    },
+    labels: isPreview ? ['invoices'] : []
   })
   const [series, setSeries] = useState<ApexCharts.ApexOptions['series']>([])
 
@@ -102,11 +103,15 @@ const DiscountedInvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, isPre
   return (
     <div style={{ height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
       {!isPreview ? (
-        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
+        <H1 textAlign="center" fontSize="1rem" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
           Discounted invoices
         </H1>
       ) : (
-        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}></H1>
+        <ItemContainer position="absolute" left="50%" top="50%">
+          <H1 textAlign="center" fontSize="1rem" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}>
+            Discounted invoices
+          </H1>
+        </ItemContainer>
       )}
 
       {series?.length !== 0 && (
@@ -127,7 +132,7 @@ const DiscountedInvoicesDonut: React.FC<IProps> = ({ customerId, onSelect, isPre
       )}
 
       {series?.length === 0 && (
-        <ItemContainer width="150px" height="100%" transform="translateY(-15%)">
+        <ItemContainer height="50%" transform="translateY(25%)" width="150px">
           <NoTableData />
         </ItemContainer>
       )}
