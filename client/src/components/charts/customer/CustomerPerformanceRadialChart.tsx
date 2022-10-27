@@ -1,5 +1,6 @@
 import CircleImage from '@/components/image/CircleImage'
 import { ItemContainer } from '@/components/item-container'
+import { NoTableData } from '@/components/no-table-data'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import { emptyQueryParams } from '@/constants/queryParams'
@@ -295,8 +296,14 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
             : 'Bad'}
         </H1>
       </ItemContainer>
-      {customerTasksData && (
+      {customerTasksData && customerTasksData?.length !== 0 && (
         <ReactApexChart options={chartOptions} series={[100 - performancePercentage]} type="radialBar" height={220} />
+      )}
+
+      {customerTasksData?.length === 0 && (
+        <ItemContainer height="100%" transform="translateY(-5%)">
+          <NoTableData />
+        </ItemContainer>
       )}
     </ItemContainer>
   )

@@ -1,4 +1,5 @@
 import { ItemContainer } from '@/components/item-container'
+import { NoTableData } from '@/components/no-table-data'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import { ICustomer } from '@/models'
@@ -158,13 +159,22 @@ const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) 
 
   return (
     <ItemContainer height="100%" transform="translate(0%, 3%)" position="relative">
-      <ItemContainer position="absolute" top="50%" left="50%" transform="translate(-30px, 5px)">
-        <H1 fontSize="0.8rem" color={colors.text.primary}>
-          {secondsToHourMin(taskTotaşDuration, true)}
-        </H1>
-      </ItemContainer>
-      {chartData && (
+      {chartData && chartData?.length !== 0 && (
+        <ItemContainer position="absolute" top="50%" left="50%" transform="translate(-30px, 5px)">
+          <H1 fontSize="0.8rem" color={colors.text.primary}>
+            {secondsToHourMin(taskTotaşDuration, true)}
+          </H1>
+        </ItemContainer>
+      )}
+
+      {chartData && chartData?.length !== 0 && (
         <ReactApexChart options={chartOptions} series={[100 - chartPercentage]} type="radialBar" height={220} />
+      )}
+
+      {chartData?.length === 0 && (
+        <ItemContainer height="100%" transform="translateY(-5%)">
+          <NoTableData />
+        </ItemContainer>
       )}
     </ItemContainer>
   )
