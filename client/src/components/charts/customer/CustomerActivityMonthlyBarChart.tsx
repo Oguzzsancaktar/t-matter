@@ -54,7 +54,6 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customerId }) => {
     return [monthlyCompletedUncompletedTasks.completed, monthlyCompletedUncompletedTasks.uncompleted]
   }, [monthlyCompletedUncompletedTasks])
 
-  console.log(monthlyTaskCompletedUncompletedBarChartSeries)
   const chartOptions = useMemo<ApexOptions>(
     () => ({
       colors: [colors.primary.light, colors.secondary.middle],
@@ -109,6 +108,9 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customerId }) => {
 
   return (
     <ItemContainer height="85%" transform="translate(0%, 7%)" position="relative" margin="0 0 0 auto" width="95%">
+      <ItemContainer position="absolute" right="3rem" top="0" width="auto">
+        select
+      </ItemContainer>
       <ReactApexChart
         options={chartOptions}
         series={monthlyTaskCompletedUncompletedBarChartSeries}

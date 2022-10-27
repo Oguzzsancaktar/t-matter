@@ -12,7 +12,7 @@ import {
   JustifyBetweenRow,
   JustifyCenterColumn
 } from '@/components'
-import { AdditionalTimeDonut, DiscountedInvoicesDonut, InvoicesDonut, NonBillableCircleProgress } from './finance-tabs'
+import { AdditionalTimeDonut, InvoicesDonut, NonBillableCircleProgress } from './finance-tabs'
 import colors from '@/constants/colors'
 import {
   taskApi,

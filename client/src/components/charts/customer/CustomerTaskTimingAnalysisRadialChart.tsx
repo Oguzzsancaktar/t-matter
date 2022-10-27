@@ -72,10 +72,10 @@ const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) 
           },
           value: {
             show: true,
-            fontSize: '1.5rem',
+            fontSize: '1.3rem',
             fontFamily: undefined,
             fontWeight: 400,
-            color: colors.text.primary,
+            color: colors.gray.disabled,
             offsetY: -15,
             formatter: function (val) {
               return val.toFixed(1) + '%'
