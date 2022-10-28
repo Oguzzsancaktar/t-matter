@@ -21,12 +21,12 @@ import {
 } from '@/services/customers/taskService'
 
 interface IProps {
-  customerId: ICustomer['_id']
+  customer: ICustomer
 }
 
-const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
-  const { data: customerMostUsedUserChartData } = useGetCustomerMostUsedUserInTasksQuery({ customerId })
-  const { data: customerTaskTimerChartData } = useGetCustomerTasksTimerAnalyisesQuery({ customerId })
+const CustomerModalPreviewTab: React.FC<IProps> = ({ customer }) => {
+  const { data: customerMostUsedUserChartData } = useGetCustomerMostUsedUserInTasksQuery({ customerId: customer._id })
+  const { data: customerTaskTimerChartData } = useGetCustomerTasksTimerAnalyisesQuery({ customerId: customer._id })
 
   useEffect(() => {
     taskApi.util.resetApiState()
@@ -65,7 +65,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
               </ItemContainer>
 
               <ItemContainer height="100%">
-                <CustomerPerformanceRadialChart customerId={customerId} />
+                <CustomerPerformanceRadialChart customerId={customer._id} />
               </ItemContainer>
 
               <ItemContainer>
@@ -99,7 +99,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
                   borderRadius="0.3rem"
                   margin="0 0 1rem 0"
                 >
-                  <CustomerActivityMonthlyBarChart customerId={customerId} />
+                  <CustomerActivityMonthlyBarChart customer={customer} />
                 </ItemContainer>
 
                 <ItemContainer
@@ -127,7 +127,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
                         isPreview={true}
                         selectedInvoice={undefined}
                         onSelect={() => {}}
-                        customerId={customerId}
+                        customerId={customer._id}
                       />
 
                       {/* <DiscountedInvoicesDonut
@@ -136,8 +136,8 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
                         onSelect={() => {}}
                         customerId={customerId}
                       /> */}
-                      <NonBillableCircleProgress isPreview={true} customerId={customerId} />
-                      <AdditionalTimeDonut isPreview={true} customerId={customerId} />
+                      <NonBillableCircleProgress isPreview={true} customerId={customer._id} />
+                      <AdditionalTimeDonut isPreview={true} customerId={customer._id} />
                     </JustifyBetweenRow>
                   </ItemContainer>
                 </ItemContainer>

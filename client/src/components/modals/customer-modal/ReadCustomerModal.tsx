@@ -174,7 +174,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
   const renderSwitch = () => {
     switch (activeTab) {
       case 'preview':
-        return <CustomerModalPreviewTab customerId={customer._id} />
+        return <CustomerModalPreviewTab customer={customer} />
       case 'activity':
         return <CustomerModalActivityTab customerId={customer._id} />
       case 'calendar':
