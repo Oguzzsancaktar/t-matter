@@ -3,6 +3,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const express = require('express')
 const mongoose = require('mongoose')
+const redis = require('redis')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const helmet = require('helmet')
@@ -18,6 +19,7 @@ const PORT = process.env.PORT || 5000
 
 const main = async () => {
   try {
+    //MONGODB
     await mongoose.connect(URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
@@ -28,12 +30,28 @@ const main = async () => {
   }
   const app = express()
   const httpServer = createServer(app)
+
+  //SOCKET IO
   const io = new Server(httpServer, {
     cors: {
       origin: '*'
     }
   })
 
+  try {
+    //REDIS
+    var client = redis.createClient({
+      url: 'redis://:a264fb46f1b44793b7328ab02fa5ea08@global-divine-grubworm-31728.upstash.io:31728'
+    })
+
+    client.on('error', function (err) {
+      console.log('Error from Redis:', err.message)
+    })
+    await client.connect()
+    console.log('Connected to Redis')
+  } catch (err) {
+    console.log('Error connecting to Redis:', err.message)
+  }
   app.use(express.json())
   app.use(cookieParser())
   app.use(helmet({ crossOriginEmbedderPolicy: false, originAgentCluster: true }))
@@ -53,7 +71,7 @@ const main = async () => {
 
   app.use('/api', routes)
 
-  const userHandler = new UserHandler(io)
+  const userHandler = new UserHandler(io, client)
   const activeTaskStepHandler = new ActiveTaskStepHandler(io)
 
   io.on('connection', socket => {
