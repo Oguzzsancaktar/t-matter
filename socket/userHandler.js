@@ -14,7 +14,7 @@ class UserHandler {
     this.room = socket.handshake.query.organization
   }
 
-  getOnlineUsers(usersObj) {
+  static getOnlineUsers(usersObj) {
     return Object.keys(usersObj).filter(k => usersObj[k] === 'online')
   }
 
@@ -22,14 +22,14 @@ class UserHandler {
     this.socket.join(this.room)
     await this.redisClient.hSet('user', this.socket.handshake.query.userId, 'online')
     const usersObj = await this.redisClient.hGetAll('user')
-    this.io.in(this.room).emit('online', { onlineUsers: this.getOnlineUsers(usersObj) })
+    this.io.in(this.room).emit('online', { onlineUsers: UserHandler.getOnlineUsers(usersObj) })
   }
 
   removeUser = async () => {
     this.socket.leave(this.room)
     await this.redisClient.hSet('user', this.socket.handshake.query.userId, 'offline')
     const usersObj = await this.redisClient.hGetAll('user')
-    this.io.in(this.room).emit('online', { onlineUsers: this.getOnlineUsers(usersObj) })
+    this.io.in(this.room).emit('online', { onlineUsers: UserHandler.getOnlineUsers(usersObj) })
   }
 }
 
