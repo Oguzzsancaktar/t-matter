@@ -9,6 +9,8 @@ router.get('/steps', middlewares.authMiddlewares.checkAuth, controllers.taskCont
 router.put('/reorder', controllers.taskController.reorderTasks)
 router.post('/postpone', controllers.taskController.postponeTask)
 
+router.get('/customer-task-years/:customerId', controllers.taskController.getTaskYearsWithCustomerId)
+
 router.get('/chart/customer-most-used-user/:customerId', controllers.taskController.getCustomerMostUsedUserInTasks)
 router.get('/chart/customer-timer-analyis/:customerId', controllers.taskController.getCustomerTimerAnalysis)
 

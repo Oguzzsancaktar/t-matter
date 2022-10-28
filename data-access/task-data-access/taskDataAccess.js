@@ -106,9 +106,13 @@ const createTask = data => {
   return Task.create(data)
 }
 
-const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId, categoryId }) => {
-  console.log(categoryId, customerId, isInvoiced, search, size, status, userId)
+const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId, categoryId, year }) => {
   const $match = {}
+  const $match2 = {}
+
+  if (year && year.trim().length > 0) {
+    $match2.year = { $eq: +year }
+  }
 
   if (customerId && customerId.trim().length > 0) {
     $match.customer = mongoose.Types.ObjectId(customerId)
@@ -137,7 +141,25 @@ const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId
     {
       $match
     },
-    ...taskPopulatePipe
+
+    ...taskPopulatePipe,
+    {
+      $addFields: {
+        convertedStartDate: {
+          $toDate: '$startDate'
+        }
+      }
+    },
+    {
+      $addFields: {
+        year: {
+          $year: '$convertedStartDate'
+        }
+      }
+    },
+    {
+      $match: $match2
+    }
   ]).exec()
 }
 
@@ -457,6 +479,43 @@ const getCustomerTimerAnalysis = async customerId => {
 
   return Task.aggregate(pipeline).exec()
 }
+
+const getTaskYearsWithCustomerId = async customerId => {
+  const pipeline = [
+    {
+      $match: {
+        customer: {
+          $eq: mongoose.Types.ObjectId(customerId)
+        }
+      }
+    },
+    {
+      $addFields: {
+        convertedStartDate: {
+          $toDate: '$startDate'
+        }
+      }
+    },
+    {
+      $project: {
+        year: {
+          $year: '$convertedStartDate'
+        }
+      }
+    },
+    {
+      $group: {
+        _id: '$year',
+        count: {
+          $sum: 1
+        }
+      }
+    }
+  ]
+
+  return Task.aggregate(pipeline).exec()
+}
+
 module.exports = {
   createTask,
   getCustomerTasks,
@@ -468,5 +527,6 @@ module.exports = {
   getTaskStepMonthlyAnalysisData,
   getTaskStepsData,
   getCustomerMostUsedUserInTasks,
-  getCustomerTimerAnalysis
+  getCustomerTimerAnalysis,
+  getTaskYearsWithCustomerId
 }
