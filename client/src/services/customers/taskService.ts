@@ -83,8 +83,11 @@ const getAllTaskList = (builder: IBuilder) => {
 }
 
 const getTasksByCustomerId = (builder: IBuilder) => {
-  return builder.query<ICustomerTask[], { customerId: ICustomer['_id']; isInvoiced?: boolean } & IQueryParams>({
-    query({ customerId, isInvoiced, search, size, status }) {
+  return builder.query<
+    ICustomerTask[],
+    { customerId: ICustomer['_id']; isInvoiced?: boolean; year?: string } & IQueryParams
+  >({
+    query({ customerId, isInvoiced, search, size, status, year }) {
       return {
         url: `/task/customer/${customerId}`,
         method: 'GET',
@@ -92,7 +95,8 @@ const getTasksByCustomerId = (builder: IBuilder) => {
           isInvoiced,
           search,
           size,
-          status
+          status,
+          year
         }
       }
     },
@@ -318,6 +322,20 @@ const getCustomerTasksTimerAnalyises = (builder: IBuilder) => {
   })
 }
 
+const getTaskYearsWithCustomerId = (builder: IBuilder) => {
+  return builder.query<{ _id: number; count: number }[], { customerId: ICustomer['_id'] }>({
+    query({ customerId }) {
+      return {
+        method: 'GET',
+        url: `/task/customer-task-years/${customerId}`
+      }
+    },
+    providesTags(result) {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
 const taskApi = createApi({
   reducerPath: TASK_REDUCER_PATH,
   tagTypes: [TASK_TAG_TYPE],
@@ -338,7 +356,8 @@ const taskApi = createApi({
     transferTasks: transferTasks(builder),
     updateTaskStepsSeen: updateTaskStepsSeen(builder),
     getCustomerMostUsedUserInTasks: getCustomerMostUsedUserInTasks(builder),
-    getCustomerTasksTimerAnalyises: getCustomerTasksTimerAnalyises(builder)
+    getCustomerTasksTimerAnalyises: getCustomerTasksTimerAnalyises(builder),
+    getTaskYearsWithCustomerId: getTaskYearsWithCustomerId(builder)
   })
 })
 
@@ -359,7 +378,8 @@ const {
   useTransferTasksMutation,
   useUpdateTaskStepsSeenMutation,
   useGetCustomerMostUsedUserInTasksQuery,
-  useGetCustomerTasksTimerAnalyisesQuery
+  useGetCustomerTasksTimerAnalyisesQuery,
+  useGetTaskYearsWithCustomerIdQuery
 } = taskApi
 export {
   taskApi,
@@ -379,5 +399,6 @@ export {
   useTransferTasksMutation,
   useUpdateTaskStepsSeenMutation,
   useGetCustomerMostUsedUserInTasksQuery,
-  useGetCustomerTasksTimerAnalyisesQuery
+  useGetCustomerTasksTimerAnalyisesQuery,
+  useGetTaskYearsWithCustomerIdQuery
 }

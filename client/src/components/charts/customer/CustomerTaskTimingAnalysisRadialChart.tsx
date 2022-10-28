@@ -38,8 +38,6 @@ const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) 
     return (totalPassedTime / totalDuration) * 100
   }, [chartData])
 
-  console.log('ccc', chartPercentage)
-
   const chartOptions: any = {
     colors: [colors.green.thirth],
     chart: {
@@ -172,7 +170,7 @@ const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) 
       )}
 
       {chartData?.length === 0 && (
-        <ItemContainer height="100%" transform="translateY(-5%)">
+        <ItemContainer height="50%" transform="translateY(35%)">
           <NoTableData />
         </ItemContainer>
       )}

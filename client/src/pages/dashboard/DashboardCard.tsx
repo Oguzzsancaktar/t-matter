@@ -27,11 +27,11 @@ const DashboardCard: React.FC<IProps> = ({ head, children }) => {
           padding="1rem"
           overflow="auto"
           backgroundColor={colors.white.secondary}
-          borderBottom={'1px solid ' + colors.gray.middle}
-          borderTop={'1px solid ' + colors.gray.middle}
-          borderLeft={'1px solid ' + colors.gray.middle}
-          borderRight={'1px solid ' + colors.gray.middle}
-          borderRadius="0.2rem"
+          // borderBottom={'1px solid ' + colors.gray.middle}
+          // borderTop={'1px solid ' + colors.gray.middle}
+          // borderLeft={'1px solid ' + colors.gray.middle}
+          // borderRight={'1px solid ' + colors.gray.middle}
+          borderRadius="0.3rem"
         >
           {children}
         </ItemContainer>

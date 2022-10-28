@@ -64,7 +64,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customerId }) => {
                 <CustomerTaskTimingAnalysisRadialChart chartData={customerTaskTimerChartData} />
               </ItemContainer>
 
-              <ItemContainer>
+              <ItemContainer height="100%">
                 <CustomerPerformanceRadialChart customerId={customerId} />
               </ItemContainer>
 

@@ -69,7 +69,6 @@ const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
 
   const chartSeries = useMemo(() => chartData?.map(item => item.count), [chartData])
 
-  console.log(chartSeries)
   return (
     <ItemContainer height="100%" transform="translate(0%, 15%)" position="relative" width="100%">
       {chartSeries && chartOptions && chartSeries?.length !== 0 && (
@@ -82,7 +81,7 @@ const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
       )}
 
       {chartSeries?.length === 0 && (
-        <ItemContainer height="100%" transform="translateY(-15%)">
+        <ItemContainer height="50%" transform="translateY(15%)">
           <NoTableData />
         </ItemContainer>
       )}

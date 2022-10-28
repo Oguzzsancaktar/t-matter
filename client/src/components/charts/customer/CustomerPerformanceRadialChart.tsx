@@ -304,7 +304,7 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
       )}
 
       {customerTasksData?.length === 0 && (
-        <ItemContainer height="100%" transform="translateY(-5%)">
+        <ItemContainer height="50%" transform="translateY(35%)">
           <NoTableData />
         </ItemContainer>
       )}

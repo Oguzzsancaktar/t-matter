@@ -28,7 +28,7 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId, isPreview = f
     chart: {
       height: 200,
       type: 'radialBar',
-      offsetY: -20,
+      offsetY: 0,
       width: 200
     },
     title: {
@@ -93,15 +93,27 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId, isPreview = f
     }
   }, [expiredTaskSteps, financePlanning, customerTasksData])
 
-  console.log(series)
   return (
-    <div style={{ height: 200, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div
+      style={{
+        position: 'relative',
+        height: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
       {!isPreview ? (
-        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
+        <H1 textAlign="center" fontSize="1rem" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
           Non billable
         </H1>
       ) : (
-        <H1 textAlign="center" fontSize="18px" fontWeight="700" margin="0 0 22px 0" color={colors.text.primary}></H1>
+        <ItemContainer position="absolute" left="0%" top="45%">
+          <H1 textAlign="center" fontSize="1rem" fontWeight="700" margin="0 0 22px 0" color={colors.gray.disabled}>
+            Non billable
+          </H1>
+        </ItemContainer>
       )}
 
       {customerTasksData?.length !== 0 && (
@@ -109,7 +121,7 @@ const NonBillableCircleProgress: React.FC<IProps> = ({ customerId, isPreview = f
       )}
 
       {customerTasksData?.length === 0 && (
-        <ItemContainer width="150px" height="100%" transform="translateY(-15%)">
+        <ItemContainer height="50%" transform="translateY(25%)">
           <NoTableData />
         </ItemContainer>
       )}

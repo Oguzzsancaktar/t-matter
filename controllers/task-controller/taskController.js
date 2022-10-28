@@ -65,9 +65,17 @@ const removeTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
   const { customerId } = req.params
-  const { isInvoiced, search, size, status } = req.query
+  const { isInvoiced, search, size, status, year } = req.query
+
   try {
-    const tasks = await dataAccess.taskDataAccess.getCustomerTasks({ customerId, isInvoiced, search, size, status })
+    const tasks = await dataAccess.taskDataAccess.getCustomerTasks({
+      customerId,
+      isInvoiced,
+      search,
+      size,
+      status,
+      year
+    })
     res.status(200).json(tasks)
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
@@ -297,6 +305,21 @@ const getCustomerTimerAnalysis = async (req, res) => {
   }
 }
 
+const getTaskYearsWithCustomerId = async (req, res) => {
+  const { customerId } = req.params
+
+  if (customerId) {
+    try {
+      const data = await dataAccess.taskDataAccess.getTaskYearsWithCustomerId(customerId)
+      res.status(200).json(data)
+    } catch (error) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+    }
+  } else {
+    res.status(StatusCodes.BAD_REQUEST).json(utils.errorUtils.errorInstance({ message: 'customerId is required' }))
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
@@ -313,5 +336,6 @@ module.exports = {
   transferTasks,
   updateTaskStepsSeen,
   getCustomerMostUsedUserInTasks,
-  getCustomerTimerAnalysis
+  getCustomerTimerAnalysis,
+  getTaskYearsWithCustomerId
 }
