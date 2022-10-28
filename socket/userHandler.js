@@ -2,9 +2,11 @@ class UserHandler {
   io = null
   socket = null
   room = null
+  redisClient = null
 
-  constructor(io) {
+  constructor(io, client) {
     this.io = io
+    this.redisClient = client
   }
 
   setSocket(socket) {
@@ -12,16 +14,22 @@ class UserHandler {
     this.room = socket.handshake.query.organization
   }
 
+  getOnlineUsers(usersObj) {
+    return Object.keys(usersObj).filter(k => usersObj[k] === 'online')
+  }
+
   addUser = async () => {
     this.socket.join(this.room)
-    const clients = await this.io.in(this.room).fetchSockets()
-    this.io.in(this.room).emit('online', { onlineUsers: clients.map(({ handshake }) => handshake.query.userId) })
+    await this.redisClient.hSet('user', this.socket.handshake.query.userId, 'online')
+    const usersObj = await this.redisClient.hGetAll('user')
+    this.io.in(this.room).emit('online', { onlineUsers: this.getOnlineUsers(usersObj) })
   }
 
   removeUser = async () => {
     this.socket.leave(this.room)
-    const clients = await this.io.in(this.room).fetchSockets()
-    this.io.in(this.room).emit('online', { onlineUsers: clients.map(({ handshake }) => handshake.query.userId) })
+    await this.redisClient.hSet('user', this.socket.handshake.query.userId, 'offline')
+    const usersObj = await this.redisClient.hGetAll('user')
+    this.io.in(this.room).emit('online', { onlineUsers: this.getOnlineUsers(usersObj) })
   }
 }
 
