@@ -1,69 +1,73 @@
 import { SelectInput } from '@/components/input'
 import { ItemContainer } from '@/components/item-container'
+import { CustomerTaskModal } from '@/components/modals'
 import { NoTableData } from '@/components/no-table-data'
-import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import { emptyQueryParams } from '@/constants/queryParams'
-import { ICustomer, IOption } from '@/models'
+import useAccessStore from '@/hooks/useAccessStore'
+import { ESize, ICustomer, IOption } from '@/models'
 import { useGetTasksByCustomerIdQuery, useGetTaskYearsWithCustomerIdQuery } from '@/services/customers/taskService'
+import { openModal } from '@/store'
 import { ApexOptions } from 'apexcharts'
 import moment from 'moment'
 import React, { useMemo, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 
 interface IProps {
-  customerId: ICustomer['_id']
+  customer: ICustomer
 }
 
-const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customerId }) => {
+const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customer }) => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   const [selectedYear, setSelectedYear] = useState<number>(moment().year())
 
   const [searchQueryParams, setSearchQueryParams] = useState({ ...emptyQueryParams, status: -9 })
   const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
     ...searchQueryParams,
-    customerId,
+    customerId: customer._id,
     year: selectedYear.toString()
   })
 
   const { data: customerTaskYears, isLoading: isTaskYearsLoading } = useGetTaskYearsWithCustomerIdQuery({
-    customerId
+    customerId: customer._id
   })
 
-  const monthlyCompletedUncompletedTasks = useMemo(() => {
-    const monthlyCompletedUncompletedTasks: any = {
-      completed: {
-        data: [],
-        name: 'Completed',
-        color: '#00E396'
-      },
-      uncompleted: {
-        data: [],
-        name: 'Uncompleted',
-        color: '#3c6255'
+  const monthlyTaskSeries = useMemo(() => {
+    const series: any = []
+
+    if (customerTasksData?.length) {
+      for (let index = 0; index < customerTasksData.length; index++) {
+        const seriesItem = {
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          color: '#FFA41B',
+          name: 'Task Name',
+          taskId: ''
+        }
+
+        const element = customerTasksData[index]
+        const month = moment(element.startDate).month()
+
+        seriesItem.data[month] = 1
+        seriesItem.name = element.name
+        seriesItem.color = element.status === 1 ? '#21506f' : '#3fa2dc'
+        seriesItem.taskId = element._id || ''
+
+        console.log(seriesItem.color)
+
+        console.log(element.status)
+
+        if (element.status === 1) {
+          series.unshift(seriesItem)
+        } else {
+          series.push(seriesItem)
+        }
       }
     }
-    const completedTasks = customerTasksData?.filter(task => task.status === 1)
-    const uncompletedTasks = customerTasksData?.filter(task => task.status !== 1)
 
-    for (let i = 0; i < 12; i++) {
-      const month = moment().month(i).format('MMM')
-      const completedTasksCount = completedTasks?.filter(task => {
-        return moment(task.startDate).format('MMM') === month
-      }).length
-      const uncompletedTasksCount = uncompletedTasks?.filter(
-        task => moment(task.startDate).format('MMM') === month
-      ).length
-
-      monthlyCompletedUncompletedTasks.completed.data[i] = completedTasksCount || 0
-      monthlyCompletedUncompletedTasks.uncompleted.data[i] = uncompletedTasksCount || 0
-    }
-
-    return monthlyCompletedUncompletedTasks
+    return series
   }, [customerTasksData])
-
-  const monthlyTaskCompletedUncompletedBarChartSeries = useMemo(() => {
-    return [monthlyCompletedUncompletedTasks.completed, monthlyCompletedUncompletedTasks.uncompleted]
-  }, [monthlyCompletedUncompletedTasks])
 
   const chartOptions = useMemo<ApexOptions>(
     () => ({
@@ -80,6 +84,11 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customerId }) => {
         },
         zoom: {
           enabled: true
+        },
+        events: {
+          click: function (event, chartContext, config) {
+            openCustomerTaskModal(monthlyTaskSeries[config.seriesIndex].taskId)
+          }
         }
       },
       responsive: [
@@ -116,11 +125,25 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customerId }) => {
         opacity: 1
       }
     }),
-    []
+    [monthlyTaskSeries, customerTasksData, selectedYear]
   )
 
   const handleYearChange = (option: IOption) => {
     setSelectedYear(+option.value)
+  }
+
+  const openCustomerTaskModal = taskId => {
+    dispatch(
+      openModal({
+        id: 'customerTaksModal' + taskId,
+        title: 'Customer Task',
+        body: <CustomerTaskModal customer={customer} customerId={customer._id} taskId={taskId} />,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
+        maxWidth: ESize.WXLarge,
+        backgroundColor: colors.gray.light
+      })
+    )
   }
 
   return (
@@ -146,13 +169,8 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customerId }) => {
         </ItemContainer>
       )}
 
-      {customerTasksData?.length !== 0 && monthlyTaskCompletedUncompletedBarChartSeries && (
-        <ReactApexChart
-          options={chartOptions}
-          series={monthlyTaskCompletedUncompletedBarChartSeries}
-          type="bar"
-          height={'100%'}
-        />
+      {customerTasksData?.length !== 0 && monthlyTaskSeries && (
+        <ReactApexChart options={chartOptions} series={monthlyTaskSeries} type="bar" height={'100%'} />
       )}
       {customerTasksData?.length === 0 && (
         <ItemContainer height="50%" transform="translateY(35%)">
