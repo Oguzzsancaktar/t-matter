@@ -72,7 +72,7 @@ const main = async () => {
   app.use('/api', routes)
 
   const userHandler = new UserHandler(io, redisClient)
-  const activeTaskStepHandler = new ActiveTaskStepHandler(io)
+  const activeTaskStepHandler = new ActiveTaskStepHandler(io, redisClient)
 
   io.on('connection', socket => {
     userHandler.setSocket(socket)

@@ -138,7 +138,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   }
 
   const handleStepChange = (step: number) => {
-    socket?.emit('taskStepChange', { taskId, activeTaskStep: step, userId: loggedUser.user?._id })
+    socket?.emit('taskStepChange', { taskId, activeTaskStep: step })
     setActiveStep(step)
   }
 
