@@ -125,7 +125,7 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customer }) => {
         opacity: 1
       }
     }),
-    []
+    [monthlyTaskSeries, customerTasksData, selectedYear]
   )
 
   const handleYearChange = (option: IOption) => {
