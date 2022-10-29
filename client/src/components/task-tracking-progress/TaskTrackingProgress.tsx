@@ -46,9 +46,12 @@ const TaskTrackingProgress: React.FC<ITaskTrackingProgressProps> = ({ activeTask
     )
   }
 
-  const totalWorkTime = activeTaskStep.task.steps[activeTaskStep.activeTaskStep].checklistItems?.reduce((acc, item) => {
-    return acc + item.duration
-  }, 0)
+  const totalWorkTime = activeTaskStep?.task.steps[activeTaskStep.activeTaskStep].checklistItems?.reduce(
+    (acc, item) => {
+      return acc + item.duration
+    },
+    0
+  )
   const workedTime = activeTaskStep?.workedTime ? activeTaskStep?.workedTime : 0
   const progress = (workedTime / totalWorkTime) * 100
 

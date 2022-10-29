@@ -28,8 +28,7 @@ class ActiveTaskStepHandler {
   }
 
   getActiveTaskStep = async ({ taskId }) => {
-    const x = await this.redisClient.get(`task_${this.socket.handshake.query.userId}_${taskId}`)
-    return JSON.parse(x)
+    return await this.redisClient.get(`task_${this.socket.handshake.query.userId}_${taskId}`)
   }
 
   emitActiveTaskSteps = async () => {
