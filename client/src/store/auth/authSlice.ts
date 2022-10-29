@@ -13,8 +13,8 @@ type IAuthState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    userId: localStorage.getItem('userId') || '',
-    accessToken: localStorage.getItem('accessToken') || '',
+    userId: sessionStorage.getItem('userId') || '',
+    accessToken: sessionStorage.getItem('accessToken') || '',
     user: undefined
   } as IAuthState,
   reducers: {
