@@ -24,6 +24,7 @@ class UserHandler {
 
   addUser = async () => {
     this.socket.join(this.room)
+    console.log('addUser', this.socket.handshake.query.userId)
     await this.redisClient.set(`user_${this.socket.handshake.query.userId}`, 1)
     const onlineUsers = await UserHandler.getUsers(this.redisClient)
     this.io.in(this.room).emit('online', { onlineUsers })
@@ -31,6 +32,7 @@ class UserHandler {
 
   removeUser = async () => {
     this.socket.leave(this.room)
+    console.log('removeUser', this.socket.handshake.query.userId)
     await this.redisClient.del(`user_${this.socket.handshake.query.userId}`)
     const onlineUsers = await UserHandler.getUsers(this.redisClient)
     this.io.in(this.room).emit('online', { onlineUsers })
