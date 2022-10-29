@@ -53,13 +53,13 @@ const LoginHrTab = props => {
       name: 'Login',
       selector: row => '',
       sortable: true,
-      cell: row => moment(row.login).format('DD/MM/YYYY hh:mm A')
+      cell: row => moment(row.login).format('DD/MM/YYYY hh:mm')
     },
     {
       name: 'Logout',
       selector: row => '',
       sortable: true,
-      cell: row => moment(row.logout).format('DD/MM/YYYY HH:mm A')
+      cell: row => moment(row.logout).format('DD/MM/YYYY HH:mm')
     },
     {
       name: 'Working time',
