@@ -79,24 +79,25 @@ const main = async () => {
     userHandler.addUser()
     activeTaskStepHandler.setSocket(socket)
 
-    socket.on('addActiveTaskStep', data => {
-      activeTaskStepHandler.addActiveTaskStep(data)
+    socket.on('addActiveTaskStep', async data => {
+      await activeTaskStepHandler.addActiveTaskStep(data)
     })
 
-    socket.on('removeActiveTaskStep', data => {
-      activeTaskStepHandler.removeActiveTaskStep(data)
+    socket.on('removeActiveTaskStep', async data => {
+      await activeTaskStepHandler.removeActiveTaskStep(data)
     })
 
-    socket.on('taskStepChange', data => {
-      activeTaskStepHandler.taskStepChange(data)
+    socket.on('taskStepChange', async data => {
+      await activeTaskStepHandler.taskStepChange(data)
     })
 
-    socket.on('updateTaskWorkedTime', data => {
-      activeTaskStepHandler.updateTaskWorkedTime(data)
+    socket.on('updateTaskWorkedTime', async data => {
+      await activeTaskStepHandler.updateTaskWorkedTime(data)
     })
 
-    socket.on('disconnect', () => {
-      userHandler.removeUser()
+    socket.on('disconnect', async () => {
+      await userHandler.removeUser()
+      await activeTaskStepHandler.removeAllUserActiveTaskSteps()
     })
   })
 

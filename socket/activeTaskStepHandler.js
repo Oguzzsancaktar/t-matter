@@ -6,7 +6,6 @@ class ActiveTaskStepHandler {
       activeTaskStep: number
     }[]
   * */
-  activeTaskSteps = []
   io = null
   socket = null
   room = null
@@ -42,39 +41,39 @@ class ActiveTaskStepHandler {
     return activeTaskSteps
   }
 
-  addActiveTaskStep = async data => {
-    if (this.activeTaskSteps.find(x => x.task._id === data.task._id && x.user._id === data.user._id)) {
-      return
-    }
-    await this.setTaskStep({ taskId: data.task._id, data })
+  emitActiveTaskSteps = async () => {
     const userIdArr = await this.redisClient.keys(`task_*`)
     const activeTaskSteps = await this.getActiveTaskSteps(userIdArr)
     this.io.in(this.room).emit('activeTaskSteps', activeTaskSteps)
   }
 
+  addActiveTaskStep = async data => {
+    await this.setTaskStep({ taskId: data.task._id, data })
+    await this.emitActiveTaskSteps()
+  }
+
   removeActiveTaskStep = async ({ taskId, userId }) => {
     await this.redisClient.hDel(`task_${userId}`, taskId)
-    const userIdArr = await this.redisClient.keys(`task_*`)
-    const activeTaskSteps = await this.getActiveTaskSteps(userIdArr)
-    this.io.in(this.room).emit('activeTaskSteps', activeTaskSteps)
+    await this.emitActiveTaskSteps()
   }
 
   taskStepChange = async ({ taskId, activeTaskStep }) => {
     let data = await this.getActiveTaskStep({ taskId })
     data.activeTaskStep = activeTaskStep
     await this.setTaskStep({ taskId, data })
-    const userIdArr = await this.redisClient.keys(`task_*`)
-    const activeTaskSteps = await this.getActiveTaskSteps(userIdArr)
-    this.io.in(this.room).emit('activeTaskSteps', activeTaskSteps)
+    await this.emitActiveTaskSteps()
   }
 
   updateTaskWorkedTime = async ({ taskId, workedTime }) => {
     let data = await this.getActiveTaskStep({ taskId })
     data.workedTime = workedTime
     await this.setTaskStep({ taskId, data })
-    const userIdArr = await this.redisClient.keys(`task_*`)
-    const activeTaskSteps = await this.getActiveTaskSteps(userIdArr)
-    this.io.in(this.room).emit('activeTaskSteps', activeTaskSteps)
+    await this.emitActiveTaskSteps()
+  }
+
+  removeAllUserActiveTaskSteps = async () => {
+    await this.redisClient.del(`task_${this.socket.handshake.query.userId}`)
+    await this.emitActiveTaskSteps()
   }
 }
 
