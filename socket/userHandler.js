@@ -24,7 +24,7 @@ class UserHandler {
 
   addUser = async () => {
     this.socket.join(this.room)
-    await this.redisClient.set(`user_${this.socket.handshake.query.userId}`, '')
+    await this.redisClient.set(`user_${this.socket.handshake.query.userId}`, 1)
     const onlineUsers = await UserHandler.getUsers(this.redisClient)
     this.io.in(this.room).emit('online', { onlineUsers })
   }
