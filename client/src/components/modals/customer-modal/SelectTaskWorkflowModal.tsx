@@ -22,6 +22,9 @@ import { initialCreateCustomer } from '@/constants/initialValues'
 import TimeKeeper, { TimeOutput } from 'react-timekeeper'
 import { ChangeTimeFn } from 'react-timekeeper/lib/helpers/types'
 import { dateTimeFormat } from '@/constants/formats'
+import { useCreateCustomerActivityMutation } from '@/services/customers/customerActivityService'
+import { CUSTOMER_ACTIVITY_TYPES } from '@/constants/customerActivityTypes'
+import { useAuth } from '@/hooks/useAuth'
 
 interface IProps {
   customer?: ICustomer
@@ -32,7 +35,9 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
+  const { loggedUser } = useAuth()
   const [createTask] = useCreateTaskMutation()
+  const [createCustomerActivity] = useCreateCustomerActivityMutation()
 
   const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery(emptyQueryParams)
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(emptyQueryParams)
@@ -243,6 +248,11 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
 
         await createTask(task)
         toastSuccess(`User task ${selectedWorkflow.name} created successfully`)
+        await createCustomerActivity({
+          customer: taskCustomer._id,
+          creator: loggedUser.user?._id || '',
+          type: CUSTOMER_ACTIVITY_TYPES.TASK_ADDED
+        })
         if (customer) {
           dispatch(closeModal(`selectTaskWorkflowModal-${customer?._id}`))
         } else {

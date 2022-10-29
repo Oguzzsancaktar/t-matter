@@ -15,7 +15,12 @@ import {
   ESize
 } from '@/models'
 import { useCreateActivityMutation, activityApi } from '@/services/activityService'
-import { useUpdateTaskMutation, useGetTaskByTaskIdQuery, taskApi } from '@/services/customers/taskService'
+import {
+  useUpdateTaskMutation,
+  useGetTaskByTaskIdQuery,
+  taskApi,
+  useDeleteTaskMutation
+} from '@/services/customers/taskService'
 import { useCreateExpiredTaskStepMutation } from '@/services/settings/finance-planning/financePlanningService'
 import { closeModal, openModal, setModalOnClose } from '@/store'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -26,6 +31,8 @@ import TaskEventSection from '@/components/client-task/task-informations/TaskEve
 import { NoteEditorModal, SpeechModal } from '@/components'
 import useSound from 'use-sound'
 import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
+import { CUSTOMER_ACTIVITY_TYPES } from '@/constants/customerActivityTypes'
+import { useCreateCustomerActivityMutation } from '@/services/customers/customerActivityService'
 
 interface IProps {
   taskId: string
@@ -38,6 +45,9 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const [updateTask] = useUpdateTaskMutation()
   const [checkPlay] = useSound('sounds/check-play.wav')
   const [cancelPlay] = useSound('sounds/task-cancel.wav')
+
+  const [deleteTask] = useDeleteTaskMutation()
+  const [createCustomerActivity] = useCreateCustomerActivityMutation()
 
   const [createActivity] = useCreateActivityMutation()
   const { data: taskData, isLoading: taskIsLoading } = useGetTaskByTaskIdQuery(taskId)
@@ -315,6 +325,12 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
           owner: loggedUser.user?._id || '',
           step: activeStep,
           type: EActivity.TASK_FINISHED
+        })
+
+        await createCustomerActivity({
+          customer: customer._id,
+          creator: loggedUser.user?._id || '',
+          type: CUSTOMER_ACTIVITY_TYPES.TASK_COMPLETED
         })
 
         tempUpdatedTaskData.status = ETaskStatus.Completed

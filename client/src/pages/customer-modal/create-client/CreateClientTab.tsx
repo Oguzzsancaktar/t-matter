@@ -24,8 +24,15 @@ import {
 } from '@/services/settings/company-planning/dynamicVariableService'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { initialCreateCustomer } from '@/constants/initialValues'
+import { useAuth } from '@/hooks/useAuth'
+import { useCreateCustomerHistoryMutation } from '@/services/customers/customerHistoryService'
+import { useCreateTaskMutation } from '@/services/customers/taskService'
+import { CUSTOMER_HISTORY_TYPES } from '@/constants/customerHistoryTypes'
 
 const CreateClientTab = () => {
+  const { loggedUser } = useAuth()
+  const [createCustomerHistory] = useCreateCustomerHistoryMutation()
+
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
   const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
 
@@ -337,7 +344,17 @@ const CreateClientTab = () => {
     const validationResult = validateFormFields()
     try {
       if (validationResult) {
-        await createCustomer({ ...createClientDTO, birthday })
+        const result = await createCustomer({ ...createClientDTO, birthday })
+
+        // @ts-ignore
+        if (result?.data) {
+          await createCustomerHistory({
+            // @ts-ignore
+            customer: result.data._id,
+            responsible: loggedUser.user?._id || '',
+            type: CUSTOMER_HISTORY_TYPES.CUSTOMER_CREATED
+          })
+        }
 
         dispatch(closeModal('createCustomerModal'))
       }

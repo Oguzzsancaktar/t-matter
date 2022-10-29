@@ -3,3 +3,8 @@ export type { default as ICustomerCreateDTO } from './ICustomerCreateDTO'
 export type { default as ICustomerUpdateDTO } from './ICustomerUpdateDTO'
 export type { default as ICustomerAddNew } from './ICustomerAddNew'
 export type { default as IReliableCustomer } from './IReliableCustomer'
+export type { default as ICustomerActivity } from './activity/ICustomerActivity'
+export type { default as ICustomerActivityCreateDTO } from './activity/ICustomerActivityCreateDTO'
+
+export type { default as ICustomerHistory } from './history/ICustomerHistory'
+export type { default as ICustomerHistoryCreateDTO } from './history/ICustomerHistoryCreateDTO'

@@ -24,6 +24,9 @@ const historyDataAccess = require('./history-data-access/historyDataAccess')
 const hrSettingDataAccess = require('./hr-setting-data-access/hrSettingDataAccess')
 const hrTaskDataAccess = require('./hr-task-data-access/hrTaskDataAccess')
 
+const customerWorkActivityDataAccess = require('./customer-work-activity-data-access/customerWorkActivityDataAccess')
+const customerHistoryDataAccess = require('./history-data-access/customerHistoryDataAccess')
+
 module.exports = {
   authDataAccess,
   salarySettingDataAccess,
@@ -47,5 +50,7 @@ module.exports = {
   customerTypeDataAccess,
   historyDataAccess,
   hrSettingDataAccess,
-  hrTaskDataAccess
+  hrTaskDataAccess,
+  customerWorkActivityDataAccess,
+  customerHistoryDataAccess
 }

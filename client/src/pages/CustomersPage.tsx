@@ -25,8 +25,14 @@ import { useGetCustomersQuery, useUpdateCustomerStatusMutation } from '@/service
 import { toastSuccess, toastError } from '@/utils/toastUtil'
 import { statusOptions } from '@/constants/statuses'
 import { emptyQueryParams } from '@/constants/queryParams'
+import { CUSTOMER_HISTORY_TYPES } from '@/constants/customerHistoryTypes'
+import { useAuth } from '@/hooks/useAuth'
+import { useCreateCustomerHistoryMutation } from '@/services/customers/customerHistoryService'
 
 const CustomersPage = () => {
+  const { loggedUser } = useAuth()
+  const [createCustomerHistory] = useCreateCustomerHistoryMutation()
+
   const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
   const { data: customersData, isLoading: customersIsLoading } = useGetCustomersQuery(searchQueryParams)
 
@@ -180,6 +186,12 @@ const CustomersPage = () => {
     try {
       await updateCustomerStatus({ _id: customer._id, status: EStatus.Inactive })
       toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' inactivated successfully')
+      await createCustomerHistory({
+        customer: customer._id,
+        responsible: loggedUser.user?._id || '',
+        type: CUSTOMER_HISTORY_TYPES.CUSTOMER_STATUS_CHANGED
+      })
+
       dispatch(closeModal(`deleteCustomerModal-${customer._id}`))
     } catch (error) {
       toastError('Error inactivating customer')
@@ -189,6 +201,13 @@ const CustomersPage = () => {
   const handleOnConfirmReactive = async (customer: ICustomer) => {
     try {
       await updateCustomerStatus({ _id: customer._id, status: EStatus.Active })
+
+      await createCustomerHistory({
+        customer: customer._id,
+        responsible: loggedUser.user?._id || '',
+        type: CUSTOMER_HISTORY_TYPES.CUSTOMER_STATUS_CHANGED
+      })
+
       toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' reactivated successfully')
       dispatch(closeModal(`reactiveCustomerModal-${customer._id}`))
     } catch (error) {

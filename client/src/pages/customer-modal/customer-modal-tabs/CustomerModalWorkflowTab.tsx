@@ -12,11 +12,14 @@ import {
   TaskProgress
 } from '@/components'
 import colors from '@/constants/colors'
+import { CUSTOMER_ACTIVITY_TYPES } from '@/constants/customerActivityTypes'
 import { dateTimeFormatMoment } from '@/constants/formats'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { taskStatusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
+import { useAuth } from '@/hooks/useAuth'
 import { ESize, EStatus, ETaskStatus, ICustomer, ITask } from '@/models'
+import { useCreateCustomerActivityMutation } from '@/services/customers/customerActivityService'
 import { useDeleteTaskMutation, useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
 import { closeModal, openModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
@@ -32,7 +35,10 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
+  const { loggedUser } = useAuth()
+
   const [deleteTask] = useDeleteTaskMutation()
+  const [createCustomerActivity] = useCreateCustomerActivityMutation()
 
   const [searchQueryParams, setSearchQueryParams] = useState({ ...emptyQueryParams, status: -9 })
   const { data: customerTasksData, isLoading: customerTasksIsLoading } = useGetTasksByCustomerIdQuery({
@@ -142,9 +148,15 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
   }
 
   const handleOnConfirmDelete = async (task: ITask) => {
-    console.log('task', task)
     try {
       await deleteTask(task._id)
+
+      await createCustomerActivity({
+        customer: customer._id,
+        creator: loggedUser.user?._id || '',
+        type: CUSTOMER_ACTIVITY_TYPES.TASK_CANCELLED
+      })
+
       toastSuccess('Plan ' + task.name + ' inactivated successfully')
       dispatch(closeModal(`deleteCustomerTaskModal-${task._id}`))
     } catch (error) {

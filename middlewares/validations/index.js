@@ -11,6 +11,8 @@ const timeLogValidations = require('./time-log-validations/timeLogValidations')
 const workingScheduleValidations = require('./working-schedule-validations')
 const taskValidations = require('./task-validations/taskValidations')
 const activityValidations = require('./activity-validations/activityValidations')
+const customerWorkActivityValidations = require('./customer-work-activity-validations/customerWorkActivityValidations')
+const customerHistoryValidations = require('./history-validations/customerHistoryValidations')
 
 module.exports = {
   authValidations,
@@ -25,5 +27,7 @@ module.exports = {
   workingScheduleValidations,
   customerValidations,
   activityValidations,
-  taskValidations
+  taskValidations,
+  customerWorkActivityValidations,
+  customerHistoryValidations
 }

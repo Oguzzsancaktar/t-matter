@@ -51,7 +51,7 @@ const createCustomer = async (req, res) => {
         }
       })
     }
-    res.sendStatus(StatusCodes.CREATED)
+    res.status(StatusCodes.CREATED).json(createdCustomer)
   } catch (e) {
     console.log(e)
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -61,8 +61,8 @@ const createCustomer = async (req, res) => {
 const updateCustomer = async (req, res) => {
   const { _id, ...data } = req.body
   try {
-    await dataAccess.customerDataAccess.findByIdAndUpdateCustomer(_id ? _id : req.params.id, data)
-    res.sendStatus(StatusCodes.OK)
+    const updatedUser = await dataAccess.customerDataAccess.findByIdAndUpdateCustomer(_id ? _id : req.params.id, data)
+    res.sendStatus(StatusCodes.OK).json(updatedUser)
   } catch (e) {
     console.log(e)
     res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)

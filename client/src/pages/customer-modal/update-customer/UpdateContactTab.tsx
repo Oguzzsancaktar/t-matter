@@ -13,11 +13,17 @@ import { isEmailValid, isValueNull } from '@/utils/validationUtils'
 import { emptyQueryParams } from '@/constants/queryParams'
 import colors from '@/constants/colors'
 import { customerApi, useUpdateCustomerMutation } from '@/services/customers/customerService'
+import { CUSTOMER_HISTORY_TYPES } from '@/constants/customerHistoryTypes'
+import { useAuth } from '@/hooks/useAuth'
+import { useCreateCustomerHistoryMutation } from '@/services/customers/customerHistoryService'
 
 interface IProps {
   customer: ICustomer
 }
 const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
+  const { loggedUser } = useAuth()
+  const [createCustomerHistory] = useCreateCustomerHistoryMutation()
+
   const [updateCustomer] = useUpdateCustomerMutation()
   const { data: refferedByData } = useGetRefferedBysQuery(emptyQueryParams)
   const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
@@ -192,6 +198,13 @@ const UpdateContactTab: React.FC<IProps> = ({ customer }) => {
       if (validationResult) {
         await updateCustomer({ ...updateContactDTO })
         dispatch(closeModal(`updateCustomerModal-${customer._id}`))
+
+        await createCustomerHistory({
+          customer: customer._id,
+          responsible: loggedUser.user?._id || '',
+          type: CUSTOMER_HISTORY_TYPES.CUSTOMER_UPDATED
+        })
+
         toastSuccess(
           'Contact ' + updateContactDTO.firstname + ' ' + updateContactDTO.lastname + ' updated successfully'
         )

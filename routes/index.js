@@ -19,6 +19,10 @@ const invoiceCategoryRoutes = require('./invoice-category-routes/invoiceCategory
 const companyRoutes = require('./company-routes/companyRoutes')
 const historyRoutes = require('./history-routes/historyRoutes')
 const hrSettingRoutes = require('./hr-setting-routes/hrSettingRoutes')
+
+const customerWorkActivityRoutes = require('./customer-work-activity-routes/customerWorkActivityRoutes')
+const customerHistoryRoutes = require('./history-routes/customerHistoryRoutes')
+
 router.get('/hello', (req, res) => {
   res.send('hello')
 })
@@ -38,6 +42,9 @@ router.use('/task', taskRoutes)
 router.use('/activity', activityRoutes)
 router.use('/finance', middlewares.authMiddlewares.checkAuth, financeRoutes)
 router.use('/invoice-category', invoiceCategoryRoutes)
+router.use('/history/customer', customerHistoryRoutes)
 router.use('/history', middlewares.authMiddlewares.checkAuth, historyRoutes)
 router.use('/hr-setting', middlewares.authMiddlewares.checkAuth, hrSettingRoutes)
+router.use('/customer-work-activity', customerWorkActivityRoutes)
+
 module.exports = router

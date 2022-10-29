@@ -15,6 +15,8 @@ const invoiceCategoryController = require('./invoice-category-controller/invoice
 const companyController = require('./company-controller/companyController')
 const historyController = require('./history-controller/historyController')
 const hrSettingController = require('./hr-setting-controller/hrSettingController')
+const customerWorkActivityController = require('./customer-work-activity-controller/customerWorkActivityController')
+const customerHistoryController = require('./customer-history-controller/customerHistoryController')
 
 module.exports = {
   salarySettingController,
@@ -33,5 +35,7 @@ module.exports = {
   invoiceCategoryController,
   companyController,
   historyController,
-  hrSettingController
+  hrSettingController,
+  customerWorkActivityController,
+  customerHistoryController
 }

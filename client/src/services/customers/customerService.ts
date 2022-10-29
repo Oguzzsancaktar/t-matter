@@ -29,7 +29,7 @@ const getCustomers = (builder: IBuilder) => {
 }
 
 const createCustomer = (builder: IBuilder) => {
-  return builder.mutation<unknown, Omit<ICustomerCreateDTO, '_id'>>({
+  return builder.mutation<ICustomer, Omit<ICustomerCreateDTO, '_id'>>({
     query(customerCreateDto) {
       return {
         url: '/customer',

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ICustomer } from '@/models'
 import {
   Column,
@@ -10,7 +10,8 @@ import {
   H1,
   ItemContainer,
   JustifyBetweenRow,
-  JustifyCenterColumn
+  JustifyCenterColumn,
+  JustifyCenterRow
 } from '@/components'
 import { AdditionalTimeDonut, InvoicesDonut, NonBillableCircleProgress } from './finance-tabs'
 import colors from '@/constants/colors'
@@ -19,6 +20,9 @@ import {
   useGetCustomerMostUsedUserInTasksQuery,
   useGetCustomerTasksTimerAnalyisesQuery
 } from '@/services/customers/taskService'
+import CustomerActivity from './CustomerActivity'
+import CustomerHistory from './finance-tabs/CustomerHistory'
+import { Row } from '@nextui-org/react'
 
 interface IProps {
   customer: ICustomer
@@ -27,6 +31,8 @@ interface IProps {
 const CustomerModalPreviewTab: React.FC<IProps> = ({ customer }) => {
   const { data: customerMostUsedUserChartData } = useGetCustomerMostUsedUserInTasksQuery({ customerId: customer._id })
   const { data: customerTaskTimerChartData } = useGetCustomerTasksTimerAnalyisesQuery({ customerId: customer._id })
+
+  const [previewType, setPreviewType] = useState('activity')
 
   useEffect(() => {
     taskApi.util.resetApiState()
@@ -151,7 +157,40 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customer }) => {
               boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
               borderRadius="0.3rem"
             >
-              Task activity
+              <ItemContainer height="40px" margin="0 0 1rem 0">
+                <JustifyCenterRow width="100%">
+                  <ItemContainer onClick={() => setPreviewType('activity')} cursorType="pointer" width="auto">
+                    <H1
+                      width="auto"
+                      color={previewType === 'activity' ? colors.blue.primary : colors.gray.disabled}
+                      cursor="pointer"
+                    >
+                      Activity
+                    </H1>
+                  </ItemContainer>
+                  <H1 width="auto" color={colors.gray.disabled}>
+                    /
+                  </H1>
+
+                  <ItemContainer onClick={() => setPreviewType('history')} cursorType="pointer" width="auto">
+                    <H1
+                      width="auto"
+                      color={previewType === 'history' ? colors.blue.primary : colors.gray.disabled}
+                      cursor="pointer"
+                    >
+                      History
+                    </H1>
+                  </ItemContainer>
+                </JustifyCenterRow>
+              </ItemContainer>
+
+              <ItemContainer height="calc(100% - 40px - 1rem)">
+                {previewType === 'activity' ? (
+                  <CustomerActivity customerId={customer._id} />
+                ) : (
+                  <CustomerHistory customerId={customer._id} />
+                )}
+              </ItemContainer>
             </ItemContainer>
           </JustifyBetweenRow>
         </ItemContainer>

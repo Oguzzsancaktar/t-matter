@@ -54,10 +54,6 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customer }) => {
         seriesItem.color = element.status === 1 ? '#21506f' : '#3fa2dc'
         seriesItem.taskId = element._id || ''
 
-        console.log(seriesItem.color)
-
-        console.log(element.status)
-
         if (element.status === 1) {
           series.unshift(seriesItem)
         } else {
@@ -109,8 +105,17 @@ const CustomerActivityMonthlyBarChart: React.FC<IProps> = ({ customer }) => {
           borderRadius: 10,
           columnWidth: '25%',
 
-          dataLabels: {}
+          dataLabels: {
+            // @ts-ignore
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
         }
+      },
+      dataLabels: {
+        enabled: false
       },
       xaxis: {
         type: 'category',

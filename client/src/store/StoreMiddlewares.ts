@@ -13,6 +13,8 @@ import { activityApi } from '@/services/activityService'
 import { financePlanningApi } from '@services/settings/finance-planning/financePlanningService'
 import { companyInfoApi } from '@services/settings/company-info/companyInfoService'
 import { historyApi } from '@services/historyService'
+import { customerActivityApi } from '@/services/customers/customerActivityService'
+import { customerHistoryApi } from '@/services/customers/customerHistoryService'
 
 const StoreMiddlewares = [
   authApi.middleware,
@@ -25,6 +27,8 @@ const StoreMiddlewares = [
   dynamicVariablesApi.middleware,
   logsApi.middleware,
   customerApi.middleware,
+  customerActivityApi.middleware,
+  customerHistoryApi.middleware,
   taskApi.middleware,
   activityApi.middleware,
   historyApi.middleware,

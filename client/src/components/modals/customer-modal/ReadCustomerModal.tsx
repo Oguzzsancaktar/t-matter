@@ -9,7 +9,9 @@ import { UserSkeletonLoader } from '@/components/skelton-loader'
 import ReliableSlider from '@/components/slider/ReliableSlider'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
+import { CUSTOMER_HISTORY_TYPES } from '@/constants/customerHistoryTypes'
 import useAccessStore from '@/hooks/useAccessStore'
+import { useAuth } from '@/hooks/useAuth'
 import { ICustomer, ESize, EStatus, ECustomerType } from '@/models'
 import {
   CustomerModalActivityTab,
@@ -17,6 +19,7 @@ import {
   CustomerModalFinanceTab,
   CustomerModalPreviewTab
 } from '@/pages'
+import { useCreateCustomerHistoryMutation } from '@/services/customers/customerHistoryService'
 import {
   useGetCustomerByIdQuery,
   useUpdateCustomerStatusMutation,
@@ -38,6 +41,9 @@ interface IProps {
 }
 
 const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => {
+  const { loggedUser } = useAuth()
+  const [createCustomerHistory] = useCreateCustomerHistoryMutation()
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
   const { data: customerData, isLoading: customerIsLoading } = useGetCustomerByIdQuery(customer._id)
@@ -164,6 +170,11 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
     try {
       // @ts-ignore
       await updateCustomer(tempContactData)
+      await createCustomerHistory({
+        customer: customer._id,
+        responsible: loggedUser.user?._id || '',
+        type: CUSTOMER_HISTORY_TYPES.CUSTOMER_STATUS_CHANGED
+      })
       toastSuccess('Contact ' + customer.firstname + ' ' + customer.lastname + ' updated to client successfully')
       dispatch(closeModal(`makeContactToClient-${customer._id}`))
     } catch (error) {
