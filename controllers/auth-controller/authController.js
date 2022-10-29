@@ -3,7 +3,7 @@ const utils = require('../../utils')
 const constants = require('../../constants')
 const { AUTH_COOKIE_OPTIONS } = require('../../constants/constants')
 const { LOG_TYPES } = require('../../constants/log')
-const redis = require('redis')
+const { Redis } = require('@upstash/redis/with-fetch')
 const UserHandler = require('../../socket/userHandler')
 
 const loginController = async (req, res) => {
@@ -22,10 +22,10 @@ const loginController = async (req, res) => {
     return res.status(400).json(utils.errorUtils.errorInstance({ message: 'Invalid password' }))
   }
 
-  const redisClient = redis.createClient({
-    url: process.env.UPSTASH_URI
+  const redisClient = new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN
   })
-  await redisClient.connect()
   const userArr = await UserHandler.getUsers(redisClient)
   if (userArr.some(_id => _id === user._id.toString())) {
     return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User already logged in' }))

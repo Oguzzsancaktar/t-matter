@@ -3,7 +3,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const express = require('express')
 const mongoose = require('mongoose')
-const redis = require('redis')
+const { Redis } = require('@upstash/redis/with-fetch')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const helmet = require('helmet')
@@ -39,14 +39,11 @@ const main = async () => {
   })
   //REDIS
   try {
-    var redisClient = redis.createClient({
-      url: process.env.UPSTASH_URI
+    var redisClient = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN
     })
 
-    redisClient.on('error', function (err) {
-      console.log('Error from Redis:', err.message)
-    })
-    await redisClient.connect()
     console.log('Connected to Redis')
   } catch (err) {
     console.log('Error connecting to Redis:', err.message)
