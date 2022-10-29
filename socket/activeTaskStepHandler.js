@@ -6,13 +6,14 @@ class ActiveTaskStepHandler {
       activeTaskStep: number
     }[]
   * */
-  activeTaskSteps = []
   io = null
   socket = null
   room = null
+  redisClient = null
 
-  constructor(io) {
+  constructor(io, redisClient) {
     this.io = io
+    this.redisClient = redisClient
   }
 
   setSocket(socket) {
@@ -20,32 +21,58 @@ class ActiveTaskStepHandler {
     this.room = socket.handshake.query.organization
   }
 
-  addActiveTaskStep = data => {
-    if (this.activeTaskSteps.find(x => x.task._id === data.task._id && x.user._id === data.user._id)) {
+  setTaskStep = ({ taskId, data }) => {
+    return this.redisClient.setEx(`task_${this.socket.handshake.query.userId}_${taskId}`, 60 * 3, JSON.stringify(data))
+  }
+
+  getActiveTaskStep = async ({ taskId }) => {
+    const x = await this.redisClient.get(`task_${this.socket.handshake.query.userId}_${taskId}`)
+    return JSON.parse(x)
+  }
+
+  emitActiveTaskSteps = async () => {
+    let activeTaskStepKeys = await this.redisClient.keys(`task_*`)
+    let activeTaskStepValues = []
+    if (activeTaskStepKeys.length > 0) {
+      activeTaskStepValues = await this.redisClient.mGet(activeTaskStepKeys)
+      activeTaskStepValues = activeTaskStepValues.map(x => JSON.parse(x))
+    }
+    this.io.in(this.room).emit('activeTaskSteps', activeTaskStepValues)
+  }
+
+  addActiveTaskStep = async data => {
+    await this.setTaskStep({ taskId: data.task._id, data })
+    await this.emitActiveTaskSteps()
+  }
+
+  removeActiveTaskStep = async ({ taskId }) => {
+    await this.redisClient.del(`task_${this.socket.handshake.query.userId}_${taskId}`)
+    await this.emitActiveTaskSteps()
+  }
+
+  taskStepChange = async ({ taskId, activeTaskStep }) => {
+    let data = await this.getActiveTaskStep({ taskId })
+    if (!data) {
       return
     }
-    this.activeTaskSteps.push(data)
-    this.io.in(this.room).emit('activeTaskSteps', this.activeTaskSteps)
+    data.activeTaskStep = activeTaskStep
+    await this.setTaskStep({ taskId, data })
+    await this.emitActiveTaskSteps()
   }
 
-  removeActiveTaskStep = ({ taskId, userId }) => {
-    this.activeTaskSteps = this.activeTaskSteps.filter(
-      ({ task, user }) => !(task._id === taskId && user._id === userId)
-    )
-    this.io.in(this.room).emit('activeTaskSteps', this.activeTaskSteps)
-  }
-
-  taskStepChange = ({ taskId, userId, activeTaskStep }) => {
-    const index = this.activeTaskSteps.findIndex(({ task, user }) => task._id === taskId && user._id === userId)
-    if (index > -1) {
-      this.activeTaskSteps[index].activeTaskStep = activeTaskStep
-      this.io.in(this.room).emit('activeTaskSteps', this.activeTaskSteps)
+  updateTaskWorkedTime = async ({ taskId, workedTime }) => {
+    let data = await this.getActiveTaskStep({ taskId })
+    if (!data) {
+      return
     }
+    data.workedTime = workedTime
+    await this.setTaskStep({ taskId, data })
+    await this.emitActiveTaskSteps()
   }
-  updateTaskWorkedTime = ({ taskId, workedTime }) => {
-    console.log('updateTaskWorkedTime', taskId, workedTime)
-    this.activeTaskSteps = this.activeTaskSteps.map(data => (data.task._id === taskId ? { ...data, workedTime } : data))
-    this.io.in(this.room).emit('activeTaskSteps', this.activeTaskSteps)
+
+  removeAllUserActiveTaskSteps = async () => {
+    await this.redisClient.del(`task_${this.socket.handshake.query.userId}_*`)
+    await this.emitActiveTaskSteps()
   }
 }
 

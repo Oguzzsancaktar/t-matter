@@ -3,6 +3,8 @@ const utils = require('../../utils')
 const constants = require('../../constants')
 const { AUTH_COOKIE_OPTIONS } = require('../../constants/constants')
 const { LOG_TYPES } = require('../../constants/log')
+const redis = require('redis')
+const UserHandler = require('../../socket/userHandler')
 
 const loginController = async (req, res) => {
   const { body } = req
@@ -11,6 +13,7 @@ const loginController = async (req, res) => {
   if (!user) {
     return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User not found' }))
   }
+
   const isPasswordValid = await utils.authUtils.comparePassword({
     plainTextPassword: password,
     hashedPassword: user.password
@@ -18,6 +21,16 @@ const loginController = async (req, res) => {
   if (!isPasswordValid) {
     return res.status(400).json(utils.errorUtils.errorInstance({ message: 'Invalid password' }))
   }
+
+  const redisClient = redis.createClient({
+    url: process.env.UPSTASH_URI
+  })
+  await redisClient.connect()
+  const userArr = await UserHandler.getUsers(redisClient)
+  if (userArr.some(_id => _id === user._id.toString())) {
+    return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User already logged in' }))
+  }
+
   const { accessToken, refreshToken } = await utils.authUtils.generateTokens({
     userId: user._id.toString(),
     role: user.role

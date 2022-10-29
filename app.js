@@ -37,21 +37,21 @@ const main = async () => {
       origin: '*'
     }
   })
-
+  //REDIS
   try {
-    //REDIS
-    var client = redis.createClient({
-      url: 'redis://:a264fb46f1b44793b7328ab02fa5ea08@global-divine-grubworm-31728.upstash.io:31728'
+    var redisClient = redis.createClient({
+      url: process.env.UPSTASH_URI
     })
 
-    client.on('error', function (err) {
+    redisClient.on('error', function (err) {
       console.log('Error from Redis:', err.message)
     })
-    await client.connect()
+    await redisClient.connect()
     console.log('Connected to Redis')
   } catch (err) {
     console.log('Error connecting to Redis:', err.message)
   }
+
   app.use(express.json())
   app.use(cookieParser())
   app.use(helmet({ crossOriginEmbedderPolicy: false, originAgentCluster: true }))
@@ -71,32 +71,33 @@ const main = async () => {
 
   app.use('/api', routes)
 
-  const userHandler = new UserHandler(io, client)
-  const activeTaskStepHandler = new ActiveTaskStepHandler(io)
+  const userHandler = new UserHandler(io, redisClient)
+  const activeTaskStepHandler = new ActiveTaskStepHandler(io, redisClient)
 
   io.on('connection', socket => {
     userHandler.setSocket(socket)
     userHandler.addUser()
     activeTaskStepHandler.setSocket(socket)
 
-    socket.on('addActiveTaskStep', data => {
-      activeTaskStepHandler.addActiveTaskStep(data)
+    socket.on('addActiveTaskStep', async data => {
+      await activeTaskStepHandler.addActiveTaskStep(data)
     })
 
-    socket.on('removeActiveTaskStep', data => {
-      activeTaskStepHandler.removeActiveTaskStep(data)
+    socket.on('removeActiveTaskStep', async data => {
+      await activeTaskStepHandler.removeActiveTaskStep(data)
     })
 
-    socket.on('taskStepChange', data => {
-      activeTaskStepHandler.taskStepChange(data)
+    socket.on('taskStepChange', async data => {
+      await activeTaskStepHandler.taskStepChange(data)
     })
 
-    socket.on('updateTaskWorkedTime', data => {
-      activeTaskStepHandler.updateTaskWorkedTime(data)
+    socket.on('updateTaskWorkedTime', async data => {
+      await activeTaskStepHandler.updateTaskWorkedTime(data)
     })
 
-    socket.on('disconnect', () => {
-      userHandler.removeUser()
+    socket.on('disconnect', async () => {
+      await userHandler.removeUser()
+      await activeTaskStepHandler.removeAllUserActiveTaskSteps()
     })
   })
 

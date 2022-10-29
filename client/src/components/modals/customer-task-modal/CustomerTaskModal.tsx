@@ -148,7 +148,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   }
 
   const handleStepChange = (step: number) => {
-    socket?.emit('taskStepChange', { taskId, activeTaskStep: step, userId: loggedUser.user?._id })
+    socket?.emit('taskStepChange', { taskId, activeTaskStep: step })
     setActiveStep(step)
   }
 
@@ -442,7 +442,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
       setModalOnClose({
         modalId: 'customerTaksModal' + taskId,
         onClose: () => {
-          socket?.emit('removeActiveTaskStep', { taskId, userId: loggedUser.user?._id })
+          socket?.emit('removeActiveTaskStep', { taskId })
           updateTaskData()
         }
       })
