@@ -22,7 +22,7 @@ class ActiveTaskStepHandler {
   }
 
   setTaskStep = ({ taskId, data }) => {
-    return this.redisClient.setEx(`task_${this.socket.handshake.query.userId}_${taskId}`, 60 * 3, JSON.stringify(data))
+    return this.redisClient.set(`task_${this.socket.handshake.query.userId}_${taskId}`, 60 * 3, JSON.stringify(data))
   }
 
   getActiveTaskStep = async ({ taskId }) => {
