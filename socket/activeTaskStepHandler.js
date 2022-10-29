@@ -22,7 +22,7 @@ class ActiveTaskStepHandler {
   }
 
   setTaskStep = ({ taskId, data }) => {
-    return this.redisClient.set(`task_${this.socket.handshake.query.userId}_${taskId}`, JSON.stringify(data))
+    return this.redisClient.setEx(`task_${this.socket.handshake.query.userId}_${taskId}`, 60 * 3, JSON.stringify(data))
   }
 
   getActiveTaskStep = async ({ taskId }) => {
@@ -32,8 +32,11 @@ class ActiveTaskStepHandler {
 
   emitActiveTaskSteps = async () => {
     let activeTaskStepKeys = await this.redisClient.keys(`task_*`)
-    let activeTaskStepValues = await this.redisClient.mGet(activeTaskStepKeys)
-    activeTaskStepValues = activeTaskStepValues.map(x => JSON.parse(x))
+    let activeTaskStepValues = []
+    if (activeTaskStepKeys.length > 0) {
+      activeTaskStepValues = await this.redisClient.mGet(activeTaskStepKeys)
+      activeTaskStepValues = activeTaskStepValues.map(x => JSON.parse(x))
+    }
     this.io.in(this.room).emit('activeTaskSteps', activeTaskStepValues)
   }
 

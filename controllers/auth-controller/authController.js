@@ -26,8 +26,8 @@ const loginController = async (req, res) => {
     url: process.env.UPSTASH_URI
   })
   await redisClient.connect()
-  const usersOjb = await redisClient.hGetAll('user')
-  if (UserHandler.getOnlineUsers(usersOjb).some(_id => _id === user._id.toString())) {
+  const userArr = await UserHandler.getUsers(redisClient)
+  if (userArr.some(_id => _id === user._id.toString())) {
     return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User already logged in' }))
   }
 
