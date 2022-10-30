@@ -34,6 +34,6 @@ const logsApi = createApi({
   })
 })
 
-const { useGetUserLogsByIdQuery } = logsApi
+const { useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery } = logsApi
 
-export { logsApi, useGetUserLogsByIdQuery }
+export { logsApi, useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery }

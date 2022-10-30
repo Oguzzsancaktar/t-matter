@@ -6,7 +6,7 @@ import { PrivateRoute } from '@routes/PrivateRoute'
 import GlobalStyle from './styles/GlobalStyle'
 import { GlobalModal, ItemContainer, MinimizedModal, MinimizedModalsBar, SideBar } from '@components/index'
 import useAccessStore from '@/hooks/useAccessStore'
-import { selectMinimizedModals, selectOpenModals } from '@/store'
+import { selectMinimizedModals, selectOpenModals, selectUser } from '@/store'
 import { useAuth } from '@hooks/useAuth'
 import ReactTooltip from 'react-tooltip'
 import { io, Socket } from 'socket.io-client'
@@ -23,17 +23,17 @@ const CustomersPage = lazy(() => import('./pages/CustomersPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 
 function App() {
-  const { useAppSelector } = useAccessStore()
+  const { useAppSelector, useAppDispatch } = useAccessStore()
   const { loggedUser } = useAuth()
   const openModals = useAppSelector(selectOpenModals)
   const minimizedModals = useAppSelector(selectMinimizedModals)
-  let socket: Socket | null = null
+  const user = useAppSelector(selectUser)
 
-  const { useAppDispatch } = useAccessStore()
+  let socket: Socket | null = null
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (!(loggedUser && loggedUser.user)) {
+    if (!user) {
       if (socket) {
         socket.disconnect()
         socket = null
@@ -45,7 +45,7 @@ function App() {
     }
     socket = io(process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:5000', {
       query: {
-        userId: loggedUser.user._id,
+        userId: user._id,
         organization: 'futurePurpose'
       }
     })

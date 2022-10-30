@@ -38,7 +38,7 @@ const CustomerModalFinanceTab: React.FC<IProps> = ({ customerId }) => {
 
   const { data, refetch } = useGetFinanceHistoryQuery({
     customerId,
-    userId: localStorage.getItem('userId') as string,
+    userId: sessionStorage.getItem('userId') as string,
     historyType,
     invoiceId: selectedInvoice?._id,
     installmentId: selectedInstallment?._id

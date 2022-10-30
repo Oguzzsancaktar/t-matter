@@ -1,5 +1,5 @@
 import useAccessStore from '@hooks/useAccessStore'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import moment from 'moment'
 import DataTable, { TableColumn } from 'react-data-table-component'
 import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
@@ -16,51 +16,62 @@ import {
 import { FcClock, FcExpired, FcLeave } from 'react-icons/fc'
 import * as React from 'react'
 import colors from '@constants/colors'
+import { useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery } from '@services/userLogService'
+import { selectUser } from '@/store'
+import { IUserLog } from '@/models'
 
 const LoginHrTab = props => {
-  const { useAppDispatch } = useAccessStore()
+  const { useAppDispatch, useAppSelector } = useAccessStore()
+  const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
   const [dateRange, setDateRange] = useState({
     startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('year').toDate(),
     endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
   })
+  const [fetchUserTimeLogs, { data: timeLogs, isLoading: timeLogsLoading }] = useLazyGetUserLogsByIdQuery()
 
-  const columns: TableColumn<ITaskStep>[] = [
+  useEffect(() => {
+    if (user) {
+      fetchUserTimeLogs(user._id)
+    }
+  }, [])
+
+  const columns: TableColumn<IUserLog>[] = [
     {
       name: 'User',
       selector: row => '',
       sortable: true,
-      cell: row => ''
+      cell: row => user?.firstname + ' ' + user?.lastname
     },
     {
       name: 'Date',
       selector: row => '',
       sortable: true,
-      cell: row => ''
+      cell: row => moment(row.date).format('DD/MM/YYYY')
     },
     {
       name: 'Login',
       selector: row => '',
       sortable: true,
-      cell: row => ''
+      cell: row => moment(row.login).format('DD/MM/YYYY hh:mm')
     },
     {
       name: 'Logout',
       selector: row => '',
       sortable: true,
-      cell: row => ''
+      cell: row => moment(row.logout).format('DD/MM/YYYY HH:mm')
     },
     {
       name: 'Working time',
       selector: row => '',
       sortable: true,
-      cell: row => ''
+      cell: row => 'coming'
     },
     {
       name: 'Tracking',
       selector: row => '',
       sortable: true,
-      cell: d => ''
+      cell: d => 'coming'
     },
     {
       name: 'Conditions',
@@ -68,7 +79,7 @@ const LoginHrTab = props => {
       sortable: true,
       width: '140px',
       cell: d => {
-        return <JustifyBetweenRow></JustifyBetweenRow>
+        return <JustifyBetweenRow>coming</JustifyBetweenRow>
       }
     }
   ]
@@ -134,12 +145,12 @@ const LoginHrTab = props => {
         </div>
       </JustifyBetweenRow>
       <ItemContainer height="calc(100% - 300px)">
-        {false ? (
+        {timeLogsLoading ? (
           <ItemContainer height="100%">
             <TableSkeltonLoader count={13} />
           </ItemContainer>
-        ) : [] && [].length > 0 ? (
-          <DataTable className="data-table" fixedHeader columns={columns} data={[]} onRowClicked={() => {}} />
+        ) : timeLogs && timeLogs?.length > 0 ? (
+          <DataTable className="data-table" fixedHeader columns={columns} data={timeLogs} onRowClicked={() => {}} />
         ) : (
           <NoTableData />
         )}

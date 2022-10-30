@@ -12,8 +12,8 @@ export const useAuth = () => {
   const userId = useAppSelector(selectUserId)
 
   useEffect(() => {
-    localStorage.setItem('accessToken', accessToken)
-    localStorage.setItem('userId', userId)
+    sessionStorage.setItem('accessToken', accessToken)
+    sessionStorage.setItem('userId', userId)
   }, [accessToken, userId])
 
   const {
@@ -37,7 +37,7 @@ export const useAuth = () => {
   }, [isLoginSuccessfull])
 
   const logout = () => {
-    localStorage.clear()
+    sessionStorage.clear()
     dispatch(handleLogout())
     logoutMutation().unwrap()
     window.location.href = '/'
