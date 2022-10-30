@@ -26,7 +26,7 @@ const getLogsByUserId = async userId => {
     const logins = logs.filter(log => log.logType === LOG_TYPES.LOGIN).sort((a, b) => a.createdAt - b.createdAt)
 
     const totalTime = logins.reduce((acc, curr, i) => {
-      if(logouts[i]) {
+      if (logouts[i]) {
         return acc + moment(moment(logouts[i].createdAt)).diff(curr.createdAt, 'seconds')
       }
       return acc
@@ -35,7 +35,7 @@ const getLogsByUserId = async userId => {
     acc.push({
       date: _id,
       totalTime: totalTime / 60 / 60,
-      login: logins[0].createdAt,
+      login: logins[0]?.createdAt || logins[logins.length - 1]?.createdAt || moment(),
       logout: logouts[logouts.length - 1] ? logouts[logouts.length - 1].createdAt : logins[logins.length - 1].createdAt
     })
     return acc
