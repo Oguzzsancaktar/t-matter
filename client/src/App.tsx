@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
@@ -7,7 +7,6 @@ import GlobalStyle from './styles/GlobalStyle'
 import { GlobalModal, ItemContainer, MinimizedModal, MinimizedModalsBar, SideBar } from '@components/index'
 import useAccessStore from '@/hooks/useAccessStore'
 import { selectMinimizedModals, selectOpenModals, selectUser } from '@/store'
-import { useAuth } from '@hooks/useAuth'
 import ReactTooltip from 'react-tooltip'
 import { io, Socket } from 'socket.io-client'
 import './styles/vendors/fullcalendar.css'
@@ -24,7 +23,6 @@ const LoginPage = lazy(() => import('./pages/LoginPage'))
 
 function App() {
   const { useAppSelector, useAppDispatch } = useAccessStore()
-  const { loggedUser } = useAuth()
   const openModals = useAppSelector(selectOpenModals)
   const minimizedModals = useAppSelector(selectMinimizedModals)
   const user = useAppSelector(selectUser)
@@ -56,7 +54,7 @@ function App() {
     return () => {
       socket?.disconnect()
     }
-  }, [loggedUser])
+  }, [user])
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -74,7 +72,7 @@ function App() {
         </MinimizedModalsBar>
       )}
 
-      {loggedUser.accessToken && <SideBar />}
+      {user && <SideBar />}
 
       <ItemContainer height="100vh" width="calc(100vw - 48px - 2rem)" margin="0 0 0 auto">
         <Routes>

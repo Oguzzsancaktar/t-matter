@@ -1,4 +1,3 @@
-import { userApi } from '@/services/settings/user-planning/userService'
 import { authApi } from '@services/authService'
 import { IUser } from '@models/index'
 import { createSlice } from '@reduxjs/toolkit'
@@ -28,10 +27,7 @@ const authSlice = createSlice({
     builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state, action) => {
       state.accessToken = action.payload.accessToken
       state.userId = action.payload.userId
-    })
-
-    builder.addMatcher(userApi.endpoints.getUserById.matchFulfilled, (state, action) => {
-      state.user = action.payload
+      state.user = action.payload.user
     })
   }
 })

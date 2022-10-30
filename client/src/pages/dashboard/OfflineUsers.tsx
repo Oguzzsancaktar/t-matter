@@ -13,8 +13,20 @@ const OfflineUsers = () => {
 
   const onlineUsers = useAppSelector(state => state.socketGlobal.onlineUsers)
 
-  const offlineUserArr = users?.filter(u => !onlineUsers.includes(u._id)) || []
-  const onlineUserArr = users?.filter(u => onlineUsers.includes(u._id)) || []
+  const offlineUserArr =
+    users?.filter(u => {
+      if (Array.isArray(onlineUsers)) {
+        return !onlineUsers.includes(u._id)
+      }
+      return false
+    }) || []
+  const onlineUserArr =
+    users?.filter(u => {
+      if (Array.isArray(onlineUsers)) {
+        return onlineUsers.includes(u._id)
+      }
+      return false
+    }) || []
   const userArr = isOnline ? onlineUserArr : offlineUserArr
   return (
     <div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', overflowX: 'auto' }}>

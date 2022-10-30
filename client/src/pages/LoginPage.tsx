@@ -45,16 +45,16 @@ const Container = styled.div`
 
 const LoginPage: React.FC = () => {
   const {
-    loggedUser: { accessToken, user, isLoading }
+    loggedUser: { accessToken, user }
   } = useAuth()
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (accessToken && user && !isLoading) {
+    if (accessToken && user) {
       navigate('/')
     }
-  }, [accessToken, user, isLoading, navigate])
+  }, [accessToken, user, navigate])
 
   return (
     <PageWrapper>
