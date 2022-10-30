@@ -14,7 +14,7 @@ const authSlice = createSlice({
   initialState: {
     userId: sessionStorage.getItem('userId') || '',
     accessToken: sessionStorage.getItem('accessToken') || '',
-    user: undefined
+    user: JSON.parse(sessionStorage.getItem('user') || '{}')
   } as IAuthState,
   reducers: {
     logout(state: IAuthState) {

@@ -72,7 +72,7 @@ function App() {
         </MinimizedModalsBar>
       )}
 
-      {user && <SideBar />}
+      {user && user._id && <SideBar />}
 
       <ItemContainer height="100vh" width="calc(100vw - 48px - 2rem)" margin="0 0 0 auto">
         <Routes>

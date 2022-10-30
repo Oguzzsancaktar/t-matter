@@ -15,7 +15,8 @@ export const useAuth = () => {
   useEffect(() => {
     sessionStorage.setItem('accessToken', accessToken)
     sessionStorage.setItem('userId', userId)
-  }, [accessToken, userId])
+    sessionStorage.setItem('user', JSON.stringify(user))
+  }, [accessToken, userId, user])
 
   const [logoutMutation, { isLoading: isLoadingLogout }] = useLogoutMutation()
 
