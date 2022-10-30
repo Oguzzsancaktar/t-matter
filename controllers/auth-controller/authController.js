@@ -27,9 +27,9 @@ const loginController = async (req, res) => {
   })
   await redisClient.connect()
   const userArr = await UserHandler.getUsers(redisClient)
-  if (userArr.some(_id => _id === user._id.toString())) {
-    return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User already logged in' }))
-  }
+  // if (userArr.some(_id => _id === user._id.toString())) {
+  //   return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User already logged in' }))
+  // }
 
   const { accessToken, refreshToken } = await utils.authUtils.generateTokens({
     userId: user._id.toString(),
