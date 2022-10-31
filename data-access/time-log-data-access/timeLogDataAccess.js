@@ -34,7 +34,7 @@ const getLogsByUserId = async userId => {
 
     acc.push({
       date: _id,
-      totalTime: totalTime / 60 / 60,
+      totalTime,
       login: logins[0]?.createdAt || logins[logins.length - 1]?.createdAt || moment(),
       logout: logouts[logouts.length - 1] ? logouts[logouts.length - 1].createdAt : logins[logins.length - 1].createdAt
     })

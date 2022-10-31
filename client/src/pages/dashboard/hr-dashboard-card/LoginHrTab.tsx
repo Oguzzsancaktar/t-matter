@@ -19,6 +19,7 @@ import colors from '@constants/colors'
 import { useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery } from '@services/userLogService'
 import { selectUser } from '@/store'
 import { IUserLog } from '@/models'
+import { secondsToHourMin } from '@utils/timeUtils'
 
 const LoginHrTab = props => {
   const { useAppDispatch, useAppSelector } = useAccessStore()
@@ -53,19 +54,19 @@ const LoginHrTab = props => {
       name: 'Login',
       selector: row => '',
       sortable: true,
-      cell: row => moment(row.login).format('DD/MM/YYYY hh:mm')
+      cell: row => moment(row.login).format('hh:mm')
     },
     {
       name: 'Logout',
       selector: row => '',
       sortable: true,
-      cell: row => moment(row.logout).format('DD/MM/YYYY HH:mm')
+      cell: row => moment(row.logout).format('HH:mm')
     },
     {
       name: 'Working time',
       selector: row => '',
       sortable: true,
-      cell: row => 'coming'
+      cell: row => secondsToHourMin(row.totalTime)
     },
     {
       name: 'Tracking',
