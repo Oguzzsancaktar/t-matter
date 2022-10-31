@@ -3,7 +3,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const express = require('express')
 const mongoose = require('mongoose')
-const { Redis } = require('@upstash/redis/with-fetch')
+// const { Redis } = require('@upstash/redis/with-fetch')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const helmet = require('helmet')
@@ -12,8 +12,8 @@ const { createServer } = require('http')
 const { Server } = require('socket.io')
 const routes = require('./routes')
 const cronJobs = require('./cron/cronJobs')
-const UserHandler = require('./socket/userHandler')
-const ActiveTaskStepHandler = require('./socket/activeTaskStepHandler')
+// const UserHandler = require('./socket/userHandler')
+// const ActiveTaskStepHandler = require('./socket/activeTaskStepHandler')
 const URI = process.env.MONGO_URI
 const PORT = process.env.PORT || 5000
 
@@ -39,10 +39,10 @@ const main = async () => {
   })
   //REDIS
   try {
-    var redisClient = new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN
-    })
+    // var redisClient = new Redis({
+    //   url: process.env.UPSTASH_REDIS_REST_URL,
+    //   token: process.env.UPSTASH_REDIS_REST_TOKEN
+    // })
 
     console.log('Connected to Redis')
   } catch (err) {
@@ -68,35 +68,35 @@ const main = async () => {
 
   app.use('/api', routes)
 
-  const userHandler = new UserHandler(io, redisClient)
-  const activeTaskStepHandler = new ActiveTaskStepHandler(io, redisClient)
-
-  io.on('connection', socket => {
-    userHandler.setSocket(socket)
-    userHandler.addUser()
-    activeTaskStepHandler.setSocket(socket)
-
-    socket.on('addActiveTaskStep', async data => {
-      await activeTaskStepHandler.addActiveTaskStep(data)
-    })
-
-    socket.on('removeActiveTaskStep', async data => {
-      await activeTaskStepHandler.removeActiveTaskStep(data)
-    })
-
-    socket.on('taskStepChange', async data => {
-      await activeTaskStepHandler.taskStepChange(data)
-    })
-
-    socket.on('updateTaskWorkedTime', async data => {
-      await activeTaskStepHandler.updateTaskWorkedTime(data)
-    })
-
-    socket.on('disconnect', async () => {
-      await userHandler.removeUser()
-      await activeTaskStepHandler.removeAllUserActiveTaskSteps()
-    })
-  })
+  // const userHandler = new UserHandler(io, redisClient)
+  // const activeTaskStepHandler = new ActiveTaskStepHandler(io, redisClient)
+  //
+  // io.on('connection', socket => {
+  //   userHandler.setSocket(socket)
+  //   userHandler.addUser()
+  //   activeTaskStepHandler.setSocket(socket)
+  //
+  //   socket.on('addActiveTaskStep', async data => {
+  //     await activeTaskStepHandler.addActiveTaskStep(data)
+  //   })
+  //
+  //   socket.on('removeActiveTaskStep', async data => {
+  //     await activeTaskStepHandler.removeActiveTaskStep(data)
+  //   })
+  //
+  //   socket.on('taskStepChange', async data => {
+  //     await activeTaskStepHandler.taskStepChange(data)
+  //   })
+  //
+  //   socket.on('updateTaskWorkedTime', async data => {
+  //     await activeTaskStepHandler.updateTaskWorkedTime(data)
+  //   })
+  //
+  //   socket.on('disconnect', async () => {
+  //     await userHandler.removeUser()
+  //     await activeTaskStepHandler.removeAllUserActiveTaskSteps()
+  //   })
+  // })
 
   // error handler
   app.use(function (err, req, res, next) {

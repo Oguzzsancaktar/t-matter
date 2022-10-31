@@ -22,11 +22,11 @@ const loginController = async (req, res) => {
     return res.status(400).json(utils.errorUtils.errorInstance({ message: 'Invalid password' }))
   }
 
-  const redisClient = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN
-  })
-  const userArr = await UserHandler.getUsers(redisClient)
+  // const redisClient = new Redis({
+  //   url: process.env.UPSTASH_REDIS_REST_URL,
+  //   token: process.env.UPSTASH_REDIS_REST_TOKEN
+  // })
+  // const userArr = await UserHandler.getUsers(redisClient)
   // if (userArr.some(_id => _id === user._id.toString())) {
   //   return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User already logged in' }))
   // }
