@@ -7,6 +7,7 @@ import { isEmailValid, isPasswordValid } from '@utils/validationUtils'
 import { useAuth } from '@hooks/useAuth'
 import { useToggle } from '@hooks/useToggle'
 import styled, { keyframes } from 'styled-components'
+import colors from '@constants/colors'
 
 const animate = keyframes`
   0% {
@@ -21,8 +22,14 @@ const animate = keyframes`
   `
 
 const Wrapper = styled.div`
+  flex-direction: column;
   border-radius: 4px;
-  padding: 30px;
+  width: 25vw;
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 16px;
   background-color: #fff;
   transition: all 0.3s ease-in-out;
   animation: ${animate} 2s ease-in-out infinite;
@@ -81,6 +88,11 @@ const SigninComponent: React.FC<Props> = () => {
 
   return (
     <Wrapper>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+        <span style={{ rotate: '180deg', fontFamily: 'Satoshi-Bold', fontSize: 34, color: '#6ad3ca' }}>E</span>
+        <span style={{ fontFamily: 'Satoshi-Bold', fontSize: 34, color: '#6ad3ca' }}>-</span>
+        <span style={{ fontFamily: 'Satoshi-Bold', fontSize: 34, color: '#6ad3ca' }}>Matter</span>
+      </div>
       <Form onSubmit={handleSignIn}>
         <Column>
           <div style={{ marginBottom: 16 }}>
@@ -114,7 +126,6 @@ const SigninComponent: React.FC<Props> = () => {
           </Row>
         </Column>
         <JustifyBetweenRow>
-          {/* <InputCheckbox /> */}
           <Button disabled={isLoginLoading}>Sign In</Button>
         </JustifyBetweenRow>
       </Form>
