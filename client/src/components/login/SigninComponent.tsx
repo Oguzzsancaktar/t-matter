@@ -24,8 +24,8 @@ const animate = keyframes`
 const Wrapper = styled.div`
   flex-direction: column;
   border-radius: 4px;
-  width: 25vw;
-  height: 20vh;
+  min-width: 30vw;
+  min-height: 27vh;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -89,9 +89,9 @@ const SigninComponent: React.FC<Props> = () => {
   return (
     <Wrapper>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-        <span style={{ rotate: '180deg', fontFamily: 'Satoshi-Bold', fontSize: 34, color: '#6ad3ca' }}>E</span>
-        <span style={{ fontFamily: 'Satoshi-Bold', fontSize: 34, color: '#6ad3ca' }}>-</span>
-        <span style={{ fontFamily: 'Satoshi-Bold', fontSize: 34, color: '#6ad3ca' }}>Matter</span>
+        <span style={{ rotate: '180deg', fontFamily: 'Satoshi-Bold', fontSize: 28, color: '#6ad3ca' }}>E</span>
+        <span style={{ fontFamily: 'Satoshi-Bold', fontSize: 28, color: '#6ad3ca' }}>-</span>
+        <span style={{ fontFamily: 'Satoshi-Bold', fontSize: 28, color: '#6ad3ca' }}>Matter</span>
       </div>
       <Form onSubmit={handleSignIn}>
         <Column>
