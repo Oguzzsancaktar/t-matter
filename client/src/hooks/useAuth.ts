@@ -20,7 +20,8 @@ export const useAuth = () => {
 
   const [logoutMutation, { isLoading: isLoadingLogout }] = useLogoutMutation()
 
-  const [login, { isError: isLoginRejected, isSuccess: isLoginSuccessfull }] = useLoginMutation()
+  const [login, { isError: isLoginRejected, isSuccess: isLoginSuccessfull, isLoading: isLoginLoading }] =
+    useLoginMutation()
 
   useEffect(() => {
     if (isLoginSuccessfull) {
@@ -43,7 +44,7 @@ export const useAuth = () => {
       }),
       [accessToken, user]
     ),
-    tryLogin: { login, isLoginRejected, isLoginSuccessfull },
+    tryLogin: { login, isLoginRejected, isLoginSuccessfull, isLoginLoading },
     logout
   }
 }

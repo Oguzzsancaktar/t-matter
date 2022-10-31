@@ -8,23 +8,67 @@ import styled from 'styled-components'
 
 const rotate = keyframes`
 	0% {
-		background-position: 0% 50%;
+    background: linear-gradient(90deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
 	}
+  5% {
+    background: linear-gradient(70deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  10% {
+    background: linear-gradient(50deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  15% {
+    background: linear-gradient(30deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  20% {
+    background: linear-gradient(10deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  25% {
+    background: linear-gradient(-10deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  30% {
+    background: linear-gradient(-30deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
 	50% {
-		background-position: 100% 50%;
+    background: linear-gradient(-50deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
 	}
+  55% {
+    background: linear-gradient(-70deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  60% {
+    background: linear-gradient(-90deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  65% {
+    background: linear-gradient(-110deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  70% {
+    background: linear-gradient(-130deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  75% {
+    background: linear-gradient(-150deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  80% {
+    background: linear-gradient(-170deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  85% {
+    background: linear-gradient(-190deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  90% {
+    background: linear-gradient(-210deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
+  95% {
+    background: linear-gradient(-230deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  }
 	100% {
-		background-position: 0% 50%;
+    background: linear-gradient(-250deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
 	}
 `
 
 const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
-  // background: ${colors.green.primary};
-  // background: linear-gradient(-45deg, ${colors.black.light} 0%, ${colors.black.primary} 100%);
-  background-size: 150% 150%;
-  animation: ${rotate} 10s ease-in-out infinite;
+  background: linear-gradient(-45deg, ${colors.purple.primary} 0%, ${colors.blue.primary} 100%);
+  transition: 2s ease-in-out;
+  animation: ${rotate} 2s ease-in-out infinite;
 `
 const Container = styled.div`
   height: 100%;
@@ -57,18 +101,15 @@ const LoginPage: React.FC = () => {
   }, [accessToken, user, navigate])
 
   return (
-    <PageWrapper>
-      <Wrapper>
-        <Link to={'/'}>Home</Link>
-        <Container>
-          <ItemContainer>
-            <JustifyCenterColumn>
-              <SigninComponent />
-            </JustifyCenterColumn>
-          </ItemContainer>
-        </Container>
-      </Wrapper>
-    </PageWrapper>
+    <Wrapper>
+      <Container>
+        <ItemContainer>
+          <JustifyCenterColumn>
+            <SigninComponent />
+          </JustifyCenterColumn>
+        </ItemContainer>
+      </Container>
+    </Wrapper>
   )
 }
 

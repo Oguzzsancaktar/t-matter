@@ -6,15 +6,34 @@ import { Key, User } from 'react-feather'
 import { isEmailValid, isPasswordValid } from '@utils/validationUtils'
 import { useAuth } from '@hooks/useAuth'
 import { useToggle } from '@hooks/useToggle'
-import axios from '@api/axios.instance'
-import { AxiosRequestConfig } from 'axios'
+import styled, { keyframes } from 'styled-components'
+
+const animate = keyframes`
+  0% {
+    box-shadow: rgb(0 0 0 / 10%) 0px 0px 20px 20px;
+  }
+  50% {
+    box-shadow: rgb(0 0 0 / 10%) 0px 0px 0px 0px;
+  }
+  100% {
+    box-shadow: rgb(0 0 0 / 10%) 0px 0px 20px 20px;
+  }
+  `
+
+const Wrapper = styled.div`
+  border-radius: 4px;
+  padding: 30px;
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+  animation: ${animate} 2s ease-in-out infinite;
+`
 
 interface Props {}
 const SigninComponent: React.FC<Props> = () => {
   const [isPasswordVisible, togglePasswordVisibility] = useToggle(false)
 
   const {
-    tryLogin: { login }
+    tryLogin: { login, isLoginLoading }
   } = useAuth()
 
   const [emailError, setEmailError] = useState(false)
@@ -61,41 +80,45 @@ const SigninComponent: React.FC<Props> = () => {
   }
 
   return (
-    <Form onSubmit={handleSignIn}>
-      <Column>
-        <InputWithIcon
-          validationError={emailError}
-          onChange={handleInputChange}
-          onBlur={validateFormFields}
-          name="email"
-          placeholder="email"
-          type="text"
-          value={credentials.email}
-        >
-          <User size="16px" />
-        </InputWithIcon>
-        <InputWithIcon
-          validationError={passwordError}
-          onBlur={validateFormFields}
-          onChange={handleInputChange}
-          name="password"
-          placeholder="Password"
-          value={credentials.password}
-          handleVisibility={togglePasswordVisibility}
-          isPasswordVisible={isPasswordVisible}
-          type={isPasswordVisible ? 'text' : 'password'}
-        >
-          <Key size="16px" />
-        </InputWithIcon>
-        <Row>
-          <FormErrorMessage message={errorMessage} />
-        </Row>
-      </Column>
-      <JustifyBetweenRow>
-        {/* <InputCheckbox /> */}
-        <Button>Sign In</Button>
-      </JustifyBetweenRow>
-    </Form>
+    <Wrapper>
+      <Form onSubmit={handleSignIn}>
+        <Column>
+          <div style={{ marginBottom: 16 }}>
+            <InputWithIcon
+              validationError={emailError}
+              onChange={handleInputChange}
+              onBlur={validateFormFields}
+              name="email"
+              placeholder="email"
+              type="text"
+              value={credentials.email}
+            >
+              <User size="16px" />
+            </InputWithIcon>
+          </div>
+          <InputWithIcon
+            validationError={passwordError}
+            onBlur={validateFormFields}
+            onChange={handleInputChange}
+            name="password"
+            placeholder="Password"
+            value={credentials.password}
+            handleVisibility={togglePasswordVisibility}
+            isPasswordVisible={isPasswordVisible}
+            type={isPasswordVisible ? 'text' : 'password'}
+          >
+            <Key size="16px" />
+          </InputWithIcon>
+          <Row>
+            <FormErrorMessage message={errorMessage} />
+          </Row>
+        </Column>
+        <JustifyBetweenRow>
+          {/* <InputCheckbox /> */}
+          <Button disabled={isLoginLoading}>Sign In</Button>
+        </JustifyBetweenRow>
+      </Form>
+    </Wrapper>
   )
 }
 
