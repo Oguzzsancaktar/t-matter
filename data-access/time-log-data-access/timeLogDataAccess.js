@@ -42,7 +42,17 @@ const getLogsByUserId = async userId => {
   }, [])
 }
 
+const findLastLog = async userId => {
+  return TimeLog.findOne({ owner: userId }).sort({ createdAt: -1 }).exec()
+}
+
+const removeTimeLog = async id => {
+  return TimeLog.findByIdAndDelete(id).exec()
+}
+
 module.exports = {
   createTimeLog,
-  getLogsByUserId
+  getLogsByUserId,
+  findLastLog,
+  removeTimeLog
 }

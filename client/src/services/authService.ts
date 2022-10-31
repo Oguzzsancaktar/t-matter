@@ -21,11 +21,14 @@ const login = (builder: IBuilder) => {
 }
 
 const logout = (builder: IBuilder) => {
-  return builder.mutation<void, void>({
-    query() {
+  return builder.mutation<void, { isCookieNotRemoved?: boolean }>({
+    query({ isCookieNotRemoved }) {
       return {
         url: '/auth/logout',
-        method: 'DELETE'
+        method: 'DELETE',
+        params: {
+          isCookieNotRemoved
+        }
       }
     }
   })
