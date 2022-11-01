@@ -18,28 +18,32 @@ const CustomerMonthlyCustomerTypeBarChart = () => {
     let arr: any = []
 
     if (customerTypeData && customersData && customersData?.length) {
+      for (let i = 0; i < customerTypeData.length; i++) {
+        arr.push({
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          name: customerTypeData[i].name,
+          color: customerTypeData[i].color.color
+        })
+      }
+
       for (let index = 0; index < customersData.length; index++) {
         const customer = customersData[index]
-        let item = {
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          name: customer.customerType.name,
-          color: customer.customerType.color.color
-        }
+        const month = new Date(customer?.createdAt || '').getMonth()
 
         for (let i = 0; i < customerTypeData.length; i++) {
-          if (customer.customerType._id === customerTypeData[i]._id) {
-            const month = new Date(customer?.createdAt || '').getMonth()
-            item.data[month] = item.data[month] + 1
-            arr.push(item)
+          if (arr[i].name === customer.customerType.name) {
+            arr[i].data[month] = arr[i].data[month] + 1
           }
         }
       }
+
+      console.log(arr)
       return arr
     }
     return []
   }, [customersData, customerTypeData])
 
-  console.log(monthlyCreatedCustomerTypeSeries)
+  console.log('monthlyCreatedCustomerTypeSeries', monthlyCreatedCustomerTypeSeries)
 
   const chartOptions = useMemo<ApexOptions>(
     () => ({
