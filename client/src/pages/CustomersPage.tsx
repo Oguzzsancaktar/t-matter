@@ -12,7 +12,10 @@ import {
   ItemContainer,
   TableSkeltonLoader,
   NoTableData,
-  ChangeCustomerTypeModal
+  ChangeCustomerTypeModal,
+  CustomerTypesDonutChart,
+  CustomerRefferedByDonutChart,
+  CustomerMonthlyCustomerTypeBarChart
 } from '@/components'
 import DataTable from 'react-data-table-component'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
@@ -50,8 +53,6 @@ const CustomersPage = () => {
     return [{ value: '-9', label: 'All' }]
   }, [customerTypeData])
 
-  console.log('customerTypeOptions', customerTypeOptions, emptyQueryParams)
-
   const [updateCustomerStatus] = useUpdateCustomerStatusMutation()
 
   const { useAppDispatch } = useAccessStore()
@@ -72,14 +73,8 @@ const CustomersPage = () => {
       )
     },
     {
-      name: 'Phone',
-      width: '200px',
-      selector: row => row.phone,
-      sortable: true
-    },
-    {
       name: 'Type',
-      width: '160px',
+      width: '250px',
       selector: row => row.customerType,
       sortable: true,
       cell: data => (
@@ -91,6 +86,13 @@ const CustomersPage = () => {
           />
         </ItemContainer>
       )
+    },
+
+    {
+      name: 'Phone',
+      width: '200px',
+      selector: row => row.phone,
+      sortable: true
     },
 
     {
@@ -125,9 +127,6 @@ const CustomersPage = () => {
         <ActionButtons
           status={data.status}
           onEdit={() => handleEdit(data)}
-          onHistory={function (): void {
-            throw new Error('Function not implemented.')
-          }}
           onCustomType={() => handleCustomerTypeChange(data)}
         />
       )
@@ -217,9 +216,15 @@ const CustomersPage = () => {
   return (
     <JustifyBetweenColumn height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
-        <JustifyCenterColumn>Up Coming Chart</JustifyCenterColumn>
+        <JustifyCenterColumn width="250px">
+          <CustomerRefferedByDonutChart />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn>
+          <CustomerMonthlyCustomerTypeBarChart />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn width="250px">
+          <CustomerTypesDonutChart />
+        </JustifyCenterColumn>
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px - 1rem)">
         <DataTableHeader

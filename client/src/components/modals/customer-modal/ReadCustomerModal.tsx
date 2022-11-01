@@ -1,4 +1,4 @@
-import { AddOrChangeCustomerImageModal, NoTableData } from '@/components'
+import { AddOrChangeCustomerImageModal, ChangeCustomerTypeModal, NoTableData } from '@/components'
 import { Badge } from '@/components/badge'
 import { Button } from '@/components/button'
 import { ActionButtons } from '@/components/data-tables'
@@ -139,6 +139,41 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
         return 'File'
       case 'finance':
         return <CustomerModalFinanceTab customerId={customer._id} />
+    }
+  }
+
+  const handleCustomerTypeChange = (customer: ICustomer) => {
+    dispatch(
+      openModal({
+        id: `changeCustomerType-${customer._id}`,
+        title: `Are you sure to change ${customer.firstname + ' ' + customer.lastname} type?`,
+        body: (
+          <ChangeCustomerTypeModal
+            modalId={`changeCustomerType-${customer._id}`}
+            title={`Are you sure to inactivate ${customer.firstname + ' ' + customer.lastname}?`}
+            onConfirm={customerType => handleOnConfirmTypeChange(customer, customerType)}
+          />
+        ),
+        width: ESize.WLarge,
+        height: ESize.HAuto,
+        maxWidth: ESize.WSmall
+      })
+    )
+  }
+
+  const handleOnConfirmTypeChange = async (customer: ICustomer, customerType: string) => {
+    try {
+      await updateCustomerStatus({ _id: customer._id, customerType: customerType })
+      toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' type changed successfully')
+      await createCustomerHistory({
+        customer: customer._id,
+        responsible: loggedUser.user?._id || '',
+        type: CUSTOMER_HISTORY_TYPES.CUSTOMER_STATUS_CHANGED
+      })
+
+      dispatch(closeModal(`changeCustomerType-${customer._id}`))
+    } catch (error) {
+      toastError('Error customer type change')
     }
   }
 
@@ -296,11 +331,9 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
                     rowWidth="100%"
                     iconSize="30px"
                     buttonWidth="100%"
-                    status={customerData.status}
+                    // status={customerData.status}
                     onEdit={() => handleEdit(customerData)}
-                    onHistory={function (): void {
-                      throw new Error('Function not implemented.')
-                    }}
+                    onCustomType={() => handleCustomerTypeChange(customerData)}
                   />
                 </JustifyCenterColumn>
               </ItemContainer>

@@ -52,14 +52,17 @@ const ActionButtons: React.FC<IProps> = ({
           children={<Edit size={'16px'} color={colors.text.primary} />}
         />
       )}
-      <IconButton
-        onClick={onHistory}
-        bgColor={colors.background.gray.light}
-        width={buttonWidth || iconSize}
-        height={iconSize}
-        margin="0 .2rem 0 0"
-        children={<FileText size={'16px'} color={colors.text.primary} />}
-      />
+
+      {onHistory && (
+        <IconButton
+          onClick={onHistory}
+          bgColor={colors.background.gray.light}
+          width={buttonWidth || iconSize}
+          height={iconSize}
+          margin="0 .2rem 0 0"
+          children={<FileText size={'16px'} color={colors.text.primary} />}
+        />
+      )}
       {status === EStatus.Active && onDelete ? (
         <IconButton
           onClick={onDelete}

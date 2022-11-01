@@ -73,7 +73,11 @@ const updateCustomer = (builder: IBuilder) => {
       return {
         url: `/customer`,
         method: 'PUT',
-        data: { ...customerUpdateDto, jobTitle: customerUpdateDto.jobTitle._id }
+        data: {
+          ...customerUpdateDto,
+          jobTitle: customerUpdateDto.jobTitle._id,
+          customerType: customerUpdateDto.customerType._id
+        }
       }
     },
     invalidatesTags(result) {
