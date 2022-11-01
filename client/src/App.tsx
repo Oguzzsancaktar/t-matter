@@ -14,7 +14,7 @@ import './styles/vendors/react-drag-drop-file.css'
 import './styles/vendors/apex.css'
 import { setOnlineUsers } from '@store/online-users'
 import { setSocket } from '@store/online-users/socketGlobal'
-
+import { useLogoutMutation } from '@services/authService'
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
@@ -26,9 +26,35 @@ function App() {
   const openModals = useAppSelector(selectOpenModals)
   const minimizedModals = useAppSelector(selectMinimizedModals)
   const user = useAppSelector(selectUser)
-
+  const [logout] = useLogoutMutation()
   let socket: Socket | null = null
   const dispatch = useAppDispatch()
+
+  const alertUser = async e => {
+    e = e || window.event
+    var localStorageTime = localStorage.getItem('storagetime')
+    if (localStorageTime != null && localStorageTime != undefined) {
+      var currentTime = new Date().getTime(),
+        timeDifference = currentTime - +localStorageTime
+      await logout({ isCookieNotRemoved: true }).unwrap()
+      if (timeDifference < 25) {
+        //Browser Closed
+        localStorage.removeItem('storagetime')
+      } else {
+        //Browser Tab Closed
+        localStorage.setItem('storagetime', new Date().getTime().toString())
+      }
+    } else {
+      localStorage.setItem('storagetime', new Date().getTime().toString())
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', alertUser)
+    return () => {
+      window.removeEventListener('beforeunload', alertUser)
+    }
+  }, [])
 
   useEffect(() => {
     if (!user) {

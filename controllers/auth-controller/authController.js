@@ -22,11 +22,11 @@ const loginController = async (req, res) => {
     return res.status(400).json(utils.errorUtils.errorInstance({ message: 'Invalid password' }))
   }
 
-  const redisClient = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN
-  })
-  const userArr = await UserHandler.getUsers(redisClient)
+  // const redisClient = new Redis({
+  //   url: process.env.UPSTASH_REDIS_REST_URL,
+  //   token: process.env.UPSTASH_REDIS_REST_TOKEN
+  // })
+  // const userArr = await UserHandler.getUsers(redisClient)
   // if (userArr.some(_id => _id === user._id.toString())) {
   //   return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User already logged in' }))
   // }
@@ -67,8 +67,10 @@ const registerController = async (req, res) => {
 
 const logoutController = async (req, res) => {
   try {
-    res.clearCookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_ACCESS_KEY)
-    res.clearCookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_REFRESH_KEY)
+    if (req.query.isCookieNotRemoved !== 'true') {
+      res.clearCookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_ACCESS_KEY)
+      res.clearCookie(constants.tokenConstants.TOKEN_ACCESS_KEYS.USER_REFRESH_KEY)
+    }
     await dataAccess.timeLogDataAccess.createTimeLog({ logType: LOG_TYPES.LOGOUT, owner: req.user.userId })
     res.send({ message: 'Logout successful' })
   } catch (e) {

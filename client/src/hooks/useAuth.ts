@@ -30,7 +30,7 @@ export const useAuth = () => {
   }, [isLoginSuccessfull])
 
   const logout = async () => {
-    await logoutMutation().unwrap()
+    await logoutMutation({}).unwrap()
     sessionStorage.clear()
     dispatch(handleLogout())
     navigate('/login')

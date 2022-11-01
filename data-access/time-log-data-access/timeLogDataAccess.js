@@ -34,7 +34,7 @@ const getLogsByUserId = async userId => {
 
     acc.push({
       date: _id,
-      totalTime: totalTime / 60 / 60,
+      totalTime,
       login: logins[0]?.createdAt || logins[logins.length - 1]?.createdAt || moment(),
       logout: logouts[logouts.length - 1] ? logouts[logouts.length - 1].createdAt : logins[logins.length - 1].createdAt
     })
@@ -42,7 +42,17 @@ const getLogsByUserId = async userId => {
   }, [])
 }
 
+const findLastLog = async userId => {
+  return TimeLog.findOne({ owner: userId }).sort({ createdAt: -1 }).exec()
+}
+
+const removeTimeLog = async id => {
+  return TimeLog.findByIdAndDelete(id).exec()
+}
+
 module.exports = {
   createTimeLog,
-  getLogsByUserId
+  getLogsByUserId,
+  findLastLog,
+  removeTimeLog
 }
