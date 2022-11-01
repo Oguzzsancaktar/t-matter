@@ -4,7 +4,6 @@ import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import { ICustomer } from '@/models'
 import { secondsToHourMin } from '@/utils/timeUtils'
-import { ApexOptions } from 'apexcharts'
 import React, { useMemo } from 'react'
 import ReactApexChart from 'react-apexcharts'
 

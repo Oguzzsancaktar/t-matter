@@ -24,6 +24,13 @@ const CustomerTypesDonutChart = () => {
     return []
   }, [customerTypeData])
 
+  const typeLabels = useMemo(() => {
+    if (customerTypeData) {
+      return customerTypeData.map(customerType => customerType.name)
+    }
+    return []
+  }, [customerTypeData])
+
   const customerTypesSeries = useMemo(() => {
     if (customerTypeData && customersData) {
       return customerTypeData.map(customerType => {
@@ -49,10 +56,50 @@ const CustomerTypesDonutChart = () => {
         startAngle: -90,
         endAngle: 270,
         donut: {
-          size: '80%'
+          size: '80%',
+          labels: {
+            show: true,
+            total: {
+              label: 'Account Types',
+              show: true,
+              showAlways: true,
+              fontSize: '16px',
+              fontWeight: 200,
+              color: colors.text.primary
+            }
+          }
         }
       }
     },
+    // tooltip: {
+    //   enabled: true,
+    //   enabledOnSeries: undefined,
+    //   shared: true,
+    //   followCursor: false,
+    //   intersect: false,
+    //   inverseOrder: false,
+    //   custom: a => {
+    //     return `
+    //       <div class="customer__task__performance__chart__tooltip">
+    //         <div class="tooltip__layout">
+    //           <div class="tooltip__layout__item">
+    //             <h1>Postpone Passed : </h1>
+    //             <h1>postponePassedStepCount}</h1>
+    //           </div>
+
+    //           <div class="tooltip__layout__item">
+    //             <h1>Deadline Passed : </h1>
+    //             <h1>deadlinePassedStepCount}</h1>
+    //           </div>
+
+    //           <div class="tooltip__layout__item">
+    //             <h1>Duration Passed : </h1>
+    //             <h1>durationPassedStepCount}</h1>
+    //           </div>
+    //         </div>
+    //       </div > `
+    //   }
+    // },
     dataLabels: {
       enabled: false
     },
@@ -80,7 +127,8 @@ const CustomerTypesDonutChart = () => {
       style: {
         color: colors.text.primary
       }
-    }
+    },
+    labels: [...typeLabels]
   }
 
   return (

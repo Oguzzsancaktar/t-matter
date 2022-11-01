@@ -290,7 +290,7 @@ const CalendarModal = () => {
                               color={colors.secondary.middle}
                               width="calc(100% - 40px - 0.5rem)"
                             >
-                              {task.customer.firstname + ' ' + task.customer.lastname}
+                              {task.customer?.firstname + ' ' + task.customer?.lastname}
                             </H1>
                           </Row>
 

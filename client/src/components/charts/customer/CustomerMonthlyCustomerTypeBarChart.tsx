@@ -22,8 +22,8 @@ const CustomerMonthlyCustomerTypeBarChart = () => {
         const customer = customersData[index]
         let item = {
           data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          name: customerTypeData[index].name,
-          color: customerTypeData[index].color.color
+          name: customer.customerType.name,
+          color: customer.customerType.color.color
         }
 
         for (let i = 0; i < customerTypeData.length; i++) {
@@ -34,7 +34,6 @@ const CustomerMonthlyCustomerTypeBarChart = () => {
           }
         }
       }
-      console.log('aee', arr)
       return arr
     }
     return []
@@ -76,7 +75,8 @@ const CustomerMonthlyCustomerTypeBarChart = () => {
         bar: {
           horizontal: false,
           borderRadius: 10,
-          columnWidth: '25%',
+          columnWidth: '100%',
+          margin: '10px',
 
           dataLabels: {
             // @ts-ignore

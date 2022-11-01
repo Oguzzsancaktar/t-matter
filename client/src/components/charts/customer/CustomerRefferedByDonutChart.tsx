@@ -24,6 +24,13 @@ const CustomerRefferedByDonutChart = () => {
     return []
   }, [refferedByData])
 
+  const typeLabels = useMemo(() => {
+    if (refferedByData) {
+      return refferedByData.map(refferedBy => refferedBy.name)
+    }
+    return []
+  }, [refferedByData])
+
   const customerRefferedBySeries = useMemo(() => {
     if (refferedByData && customersData) {
       return refferedByData.map(refferedBy => {
@@ -47,7 +54,18 @@ const CustomerRefferedByDonutChart = () => {
         startAngle: -90,
         endAngle: 270,
         donut: {
-          size: '80%'
+          size: '80%',
+          labels: {
+            show: true,
+            total: {
+              label: 'Reffered By',
+              show: true,
+              showAlways: true,
+              fontSize: '16px',
+              fontWeight: 200,
+              color: colors.text.primary
+            }
+          }
         }
       }
     },
@@ -78,7 +96,8 @@ const CustomerRefferedByDonutChart = () => {
       style: {
         color: colors.text.primary
       }
-    }
+    },
+    labels: [...typeLabels]
   }
 
   return (

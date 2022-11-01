@@ -22,7 +22,6 @@ import {
 } from '@/services/customers/taskService'
 import CustomerActivity from './CustomerActivity'
 import CustomerHistory from './finance-tabs/CustomerHistory'
-import { Row } from '@nextui-org/react'
 
 interface IProps {
   customer: ICustomer
