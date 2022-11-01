@@ -12,7 +12,7 @@ interface IProps {
   updateClientDTO: ICustomerUpdateDTO
   onAdd: (id: ICustomer) => void
   onRemovePastReliable: (id: ICustomer) => void
-  onRemoveNewReliable: (id: ICustomerAddNew) => void
+  onRemoveNewReliable: (id: ICustomer) => void
 }
 
 const UpdateClientReliables: React.FC<IProps> = ({

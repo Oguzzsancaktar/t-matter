@@ -66,64 +66,6 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
     )
   }
 
-  const handleDelete = (customer: ICustomer) => {
-    dispatch(
-      openModal({
-        id: `deleteCustomerModal-${customer._id}`,
-        title: `Are you sure to inactivate ${customer.firstname + ' ' + customer.lastname}?`,
-        body: (
-          <ConfirmModal
-            modalId={`deleteCustomerModal-${customer._id}`}
-            title={`Are you sure to inactivate ${customer.firstname + ' ' + customer.lastname}?`}
-            onConfirm={() => handleOnConfirmDelete(customer)}
-          />
-        ),
-        width: ESize.WLarge,
-        height: ESize.HAuto,
-        maxWidth: ESize.WSmall
-      })
-    )
-  }
-
-  const handleReactive = (customer: ICustomer) => {
-    dispatch(
-      openModal({
-        id: `reactiveCustomerModal-${customer._id}`,
-        title: `Are you sure to reactivate ${customer.firstname + ' ' + customer.lastname}?`,
-        body: (
-          <ConfirmModal
-            modalId={`reactiveCustomerModal-${customer._id}`}
-            title={`Are you sure to reactivate ${customer.firstname + ' ' + customer.lastname}?`}
-            onConfirm={() => handleOnConfirmReactive(customer)}
-          />
-        ),
-        width: ESize.WLarge,
-        height: ESize.HAuto,
-        maxWidth: ESize.WSmall
-      })
-    )
-  }
-
-  const handleOnConfirmDelete = async (customer: ICustomer) => {
-    try {
-      await updateCustomerStatus({ _id: customer._id, status: EStatus.Inactive })
-      toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' inactivated successfully')
-      dispatch(closeModal(`deleteCustomerModal-${customer._id}`))
-    } catch (error) {
-      toastError('Error inactivating customer')
-    }
-  }
-
-  const handleOnConfirmReactive = async (customer: ICustomer) => {
-    try {
-      await updateCustomerStatus({ _id: customer._id, status: EStatus.Active })
-      toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' reactivated successfully')
-      dispatch(closeModal(`reactiveCustomerModal-${customer._id}`))
-    } catch (error) {
-      toastError('Error reactivating customer')
-    }
-  }
-
   const openMakeContactToClientModal = () => {
     dispatch(
       openModal({
@@ -151,21 +93,22 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
   }
 
   const handleMakeContactToClient = async extraInformations => {
-    const tempContactData = { ...customerData }
+    if (customerData) {
+      const tempContactData = { ...customerData }
 
-    delete tempContactData.status
-    delete tempContactData.createdAt
-    delete tempContactData.updatedAt
+      delete tempContactData.createdAt
+      delete tempContactData.updatedAt
 
-    tempContactData.birthday = extraInformations.birthday
-    tempContactData.birthplace = extraInformations.birthplace
-    tempContactData.country = extraInformations.country
-    tempContactData.city = extraInformations.city
-    tempContactData.state = extraInformations.state
-    tempContactData.zipcode = extraInformations.zipcode
-    tempContactData.address = extraInformations.address
-    tempContactData.aSharpNumber = extraInformations.aSharpNumber
-    tempContactData.customerType = 0
+      tempContactData.birthday = extraInformations.birthday
+      tempContactData.birthplace = extraInformations.birthplace
+      tempContactData.country = extraInformations.country
+      tempContactData.city = extraInformations.city
+      tempContactData.state = extraInformations.state
+      tempContactData.zipcode = extraInformations.zipcode
+      tempContactData.address = extraInformations.address
+      tempContactData.aSharpNumber = extraInformations.aSharpNumber
+      tempContactData.customerType._id = '636108d115070e01a633c57d'
+    }
 
     try {
       // @ts-ignore
@@ -223,7 +166,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
                     padding="0 0 1rem 0"
                     position="relative"
                   >
-                    {customerData.customerType === 1 && (
+                    {customerData.customerType._id === '636108db15070e01a633c583' && (
                       <ItemContainer position="absolute">
                         <Button
                           color={colors.primary.light}
@@ -267,7 +210,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
                   <ItemContainer>
                     <JustifyCenterRow>
                       <ItemContainer width="auto" margin="0 0.5rem 0 0">
-                        <Badge children={ECustomerType[customerData?.customerType]} color={colors.gray.dark} />
+                        <Badge children={customerData.customerType.name} color={colors.gray.dark} />
                       </ItemContainer>
 
                       <ItemContainer width="auto">
@@ -358,8 +301,6 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
                     onHistory={function (): void {
                       throw new Error('Function not implemented.')
                     }}
-                    onDelete={() => handleDelete(customerData!)}
-                    onReactive={() => handleReactive(customerData!)}
                   />
                 </JustifyCenterColumn>
               </ItemContainer>

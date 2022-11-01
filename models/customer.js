@@ -41,8 +41,9 @@ const CustomerSchema = new Schema(
     },
     // ortak
     customerType: {
-      default: 0,
-      type: Number
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'CustomerType',
+      required: false
     },
     firstname: {
       required: true,

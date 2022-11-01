@@ -197,10 +197,9 @@ const UserPageSettingsTab = () => {
     )
   }
 
-  const handleStatusFilter = (status: EStatus) => {
-    setSearchQueryParams({ ...searchQueryParams, status })
+  const handleStatusFilter = (status: number | string) => {
+    setSearchQueryParams({ ...searchQueryParams, status: +status })
   }
-
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
   }

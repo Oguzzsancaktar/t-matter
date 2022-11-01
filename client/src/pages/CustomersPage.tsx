@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import {
   JustifyBetweenColumn,
   JustifyBetweenRow,
@@ -8,33 +8,49 @@ import {
   ActionButtons,
   CreateCustomerModal,
   ReadCustomerModal,
-  ConfirmModal,
   UpdateCustomerModal,
   ItemContainer,
   TableSkeltonLoader,
-  NoTableData
+  NoTableData,
+  ChangeCustomerTypeModal
 } from '@/components'
 import DataTable from 'react-data-table-component'
 import { Badge, RoleBadge, UserBadge } from '@/components/badge'
 import useAccessStore from '@/hooks/useAccessStore'
-import { EStatus, ESize, ECustomerType, ICustomer } from '@/models'
+import { EStatus, ESize, ICustomer } from '@/models'
 import { closeModal, openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import { UserCheck } from 'react-feather'
 import { useGetCustomersQuery, useUpdateCustomerStatusMutation } from '@/services/customers/customerService'
 import { toastSuccess, toastError } from '@/utils/toastUtil'
-import { statusOptions } from '@/constants/statuses'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { CUSTOMER_HISTORY_TYPES } from '@/constants/customerHistoryTypes'
 import { useAuth } from '@/hooks/useAuth'
 import { useCreateCustomerHistoryMutation } from '@/services/customers/customerHistoryService'
+import { useGetCustomerTypesQuery } from '@/services/settings/company-planning/dynamicVariableService'
 
 const CustomersPage = () => {
   const { loggedUser } = useAuth()
   const [createCustomerHistory] = useCreateCustomerHistoryMutation()
 
-  const [searchQueryParams, setSearchQueryParams] = useState(emptyQueryParams)
+  const [searchQueryParams, setSearchQueryParams] = useState({ ...emptyQueryParams, status: '-9' })
   const { data: customersData, isLoading: customersIsLoading } = useGetCustomersQuery(searchQueryParams)
+
+  const { data: customerTypeData, isLoading: customerTypeIsLoading } = useGetCustomerTypesQuery(emptyQueryParams)
+
+  const customerTypeOptions = useMemo(() => {
+    if (customerTypeData) {
+      return [{ value: '-9', label: 'All' }].concat(
+        customerTypeData.map(customerType => ({
+          label: customerType.name,
+          value: customerType._id
+        }))
+      )
+    }
+    return [{ value: '-9', label: 'All' }]
+  }, [customerTypeData])
+
+  console.log('customerTypeOptions', customerTypeOptions, emptyQueryParams)
 
   const [updateCustomerStatus] = useUpdateCustomerStatusMutation()
 
@@ -69,9 +85,9 @@ const CustomersPage = () => {
       cell: data => (
         <ItemContainer onClick={() => handleRead(data)} cursorType="pointer">
           <RoleBadge
-            roleColor="#ff0000"
+            roleColor={data.customerType.color.color}
             roleIcon={<UserCheck size={16} />}
-            roleName={ECustomerType[data.customerType]}
+            roleName={data.customerType.name}
           />
         </ItemContainer>
       )
@@ -112,8 +128,7 @@ const CustomersPage = () => {
           onHistory={function (): void {
             throw new Error('Function not implemented.')
           }}
-          onDelete={() => handleDelete(data)}
-          onReactive={() => handleReactive(data)}
+          onCustomType={() => handleCustomerTypeChange(data)}
         />
       )
     }
@@ -144,16 +159,16 @@ const CustomersPage = () => {
     )
   }
 
-  const handleDelete = (customer: ICustomer) => {
+  const handleCustomerTypeChange = (customer: ICustomer) => {
     dispatch(
       openModal({
-        id: `deleteCustomerModal-${customer._id}`,
-        title: `Are you sure to inactivate ${customer.firstname + ' ' + customer.lastname}?`,
+        id: `changeCustomerType-${customer._id}`,
+        title: `Are you sure to change ${customer.firstname + ' ' + customer.lastname} type?`,
         body: (
-          <ConfirmModal
-            modalId={`deleteCustomerModal-${customer._id}`}
+          <ChangeCustomerTypeModal
+            modalId={`changeCustomerType-${customer._id}`}
             title={`Are you sure to inactivate ${customer.firstname + ' ' + customer.lastname}?`}
-            onConfirm={() => handleOnConfirmDelete(customer)}
+            onConfirm={customerType => handleOnConfirmTypeChange(customer, customerType)}
           />
         ),
         width: ESize.WLarge,
@@ -163,55 +178,19 @@ const CustomersPage = () => {
     )
   }
 
-  const handleReactive = (customer: ICustomer) => {
-    dispatch(
-      openModal({
-        id: `reactiveCustomerModal-${customer._id}`,
-        title: `Are you sure to reactivate ${customer.firstname + ' ' + customer.lastname}?`,
-        body: (
-          <ConfirmModal
-            modalId={`reactiveCustomerModal-${customer._id}`}
-            title={`Are you sure to reactivate ${customer.firstname + ' ' + customer.lastname}?`}
-            onConfirm={() => handleOnConfirmReactive(customer)}
-          />
-        ),
-        width: ESize.WLarge,
-        height: ESize.HAuto,
-        maxWidth: ESize.WSmall
-      })
-    )
-  }
-
-  const handleOnConfirmDelete = async (customer: ICustomer) => {
+  const handleOnConfirmTypeChange = async (customer: ICustomer, customerType: string) => {
     try {
-      await updateCustomerStatus({ _id: customer._id, status: EStatus.Inactive })
-      toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' inactivated successfully')
+      await updateCustomerStatus({ _id: customer._id, customerType: customerType })
+      toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' type changed successfully')
       await createCustomerHistory({
         customer: customer._id,
         responsible: loggedUser.user?._id || '',
         type: CUSTOMER_HISTORY_TYPES.CUSTOMER_STATUS_CHANGED
       })
 
-      dispatch(closeModal(`deleteCustomerModal-${customer._id}`))
+      dispatch(closeModal(`changeCustomerType-${customer._id}`))
     } catch (error) {
-      toastError('Error inactivating customer')
-    }
-  }
-
-  const handleOnConfirmReactive = async (customer: ICustomer) => {
-    try {
-      await updateCustomerStatus({ _id: customer._id, status: EStatus.Active })
-
-      await createCustomerHistory({
-        customer: customer._id,
-        responsible: loggedUser.user?._id || '',
-        type: CUSTOMER_HISTORY_TYPES.CUSTOMER_STATUS_CHANGED
-      })
-
-      toastSuccess('Customer ' + customer.firstname + ' ' + customer.lastname + ' reactivated successfully')
-      dispatch(closeModal(`reactiveCustomerModal-${customer._id}`))
-    } catch (error) {
-      toastError('Error reactivating customer')
+      toastError('Error customer type change')
     }
   }
 
@@ -228,8 +207,8 @@ const CustomersPage = () => {
       })
     )
   }
-  const handleStatusFilter = (status: EStatus) => {
-    setSearchQueryParams({ ...searchQueryParams, status })
+  const handleStatusFilter = (status: number | string) => {
+    setSearchQueryParams({ ...searchQueryParams, status: status.toString() })
   }
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,8 +223,9 @@ const CustomersPage = () => {
       </JustifyBetweenRow>
       <Column height="calc(100% - 200px - 1rem)">
         <DataTableHeader
+          filterStatusOptions={customerTypeOptions}
           handleAddNew={openCreateCustomerModal}
-          status={statusOptions.find(status => +status.value === searchQueryParams.status)}
+          status={customerTypeOptions.find(status => status.value.toString() === searchQueryParams.status?.toString())}
           handleSearch={handleSearch}
           handleStatusFilter={handleStatusFilter}
         />

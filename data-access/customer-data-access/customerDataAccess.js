@@ -37,8 +37,6 @@ const findByIdAndUpdateCustomer = async (id, data) => {
   data.reliableCustomers = reliableCustomers
   delete data.reliableInCompany
 
-  console.log(id, data)
-
   return await Customer.findByIdAndUpdate(id, data)
 }
 
@@ -78,6 +76,34 @@ const findCustomerById = async (id, populate = '') => {
     {
       $unwind: {
         path: '$jobTitle',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'customertypes',
+        localField: 'customerType',
+        foreignField: '_id',
+        as: 'customerType'
+      }
+    },
+    {
+      $unwind: {
+        path: '$customerType',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'colors',
+        localField: 'customerType.color',
+        foreignField: '_id',
+        as: 'customerType.color'
+      }
+    },
+    {
+      $unwind: {
+        path: '$customerType.color',
         preserveNullAndEmptyArrays: true
       }
     },
@@ -172,8 +198,9 @@ const findCustomerWithFiltersAndPopulate = ({ search, size, status }) => {
   }
 
   if (status && status !== '-9') {
-    match.$match.status = { $eq: +status }
+    match.$match.customerType = { $eq: mongoose.Types.ObjectId(status) }
   }
+
   pipeline.push(match)
   pipeline.push(
     {
@@ -201,6 +228,41 @@ const findCustomerWithFiltersAndPopulate = ({ search, size, status }) => {
     {
       $unwind: {
         path: '$jobTitle',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'customertypes',
+        localField: 'customerType',
+        foreignField: '_id',
+        as: 'customerType'
+      }
+    },
+    {
+      $unwind: {
+        path: '$customerType',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+
+    {
+      $unwind: {
+        path: '$customerType',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'colors',
+        localField: 'customerType.color',
+        foreignField: '_id',
+        as: 'customerType.color'
+      }
+    },
+    {
+      $unwind: {
+        path: '$customerType.color',
         preserveNullAndEmptyArrays: true
       }
     },

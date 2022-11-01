@@ -1,7 +1,7 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { ICustomer, ICustomerCreateDTO, ICustomerUpdateDTO, IQueryParams } from '@/models'
+import { ICustomer, ICustomerCreateDTO, ICustomerType, ICustomerUpdateDTO, IQueryParams } from '@/models'
 
 const CUSTOMER_REDUCER_PATH = 'customerApi'
 const CUSTOMER_TAG_TYPE = 'customerTag' as const
@@ -31,10 +31,16 @@ const getCustomers = (builder: IBuilder) => {
 const createCustomer = (builder: IBuilder) => {
   return builder.mutation<ICustomer, Omit<ICustomerCreateDTO, '_id'>>({
     query(customerCreateDto) {
+      // @ts-ignore
+      delete customerCreateDto._id
       return {
         url: '/customer',
         method: 'POST',
-        data: { ...customerCreateDto, jobTitle: customerCreateDto.jobTitle._id }
+        data: {
+          ...customerCreateDto,
+          jobTitle: customerCreateDto.jobTitle._id,
+          customerType: customerCreateDto.customerType._id
+        }
       }
     },
     invalidatesTags() {
@@ -78,12 +84,12 @@ const updateCustomer = (builder: IBuilder) => {
 }
 
 const updateCustomerStatus = (builder: IBuilder) => {
-  return builder.mutation<any, Pick<ICustomerUpdateDTO, '_id' | 'status'>>({
+  return builder.mutation<any, Pick<ICustomerUpdateDTO, '_id'> & { customerType: ICustomerType['_id'] }>({
     query(dto) {
       return {
         url: `/customer/${dto._id}/status`,
         method: 'PATCH',
-        data: { status: dto.status }
+        data: { customerType: dto.customerType }
       }
     },
     invalidatesTags(result) {

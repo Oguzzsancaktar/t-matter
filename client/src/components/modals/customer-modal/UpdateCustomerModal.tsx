@@ -20,17 +20,15 @@ const UpdateCustomerModal: React.FC<IProps> = ({ customerId }) => {
         <JustifyBetweenColumn height="100%">
           <ModalHeader>
             <H1 width="100%" textAlign="center" color={colors.white.primary}>
-              {customerDetailData.customerType === 1 ? 'Update Contact' : 'Update Client'} -{' '}
+              {customerDetailData.aSharpNumber?.trim().length === 0 ? 'Update Contact' : 'Update Client'} -{' '}
               {customerDetailData.firstname + ' ' + customerDetailData.lastname}
             </H1>
           </ModalHeader>
           <ModalBody height="calc(100% - 63px)">
-            {customerDetailData?.customerType === 1 ? (
+            {customerDetailData.aSharpNumber?.trim().length === 0 ? (
               <UpdateContactTab customer={customerDetailData} />
-            ) : customerDetailData?.customerType === 0 ? (
-              <UpdateClientTab customer={customerDetailData} />
             ) : (
-              'Something went wrong'
+              <UpdateClientTab customer={customerDetailData} />
             )}
           </ModalBody>
         </JustifyBetweenColumn>

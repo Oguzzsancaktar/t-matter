@@ -1,4 +1,4 @@
-import { IJobTitle, IRefferedBy, IRelativeType, IReliableCustomer } from '@/models'
+import { ICustomerType, IJobTitle, IRefferedBy, IRelativeType, IReliableCustomer } from '@/models'
 export default interface ICustomer {
   _id: string
   aSharpNumber?: string
@@ -10,7 +10,7 @@ export default interface ICustomer {
   birthday?: string
   birthplace?: string
 
-  customerType: number
+  customerType: ICustomerType
   firstname: string
   lastname: string
   email: string

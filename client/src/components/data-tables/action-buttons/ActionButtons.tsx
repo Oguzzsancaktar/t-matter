@@ -1,8 +1,9 @@
 import React from 'react'
 import { IconButton, Row } from '@/components'
 import colors from '@/constants/colors'
-import { Check, Edit, Eye, FileText, Trash2 } from 'react-feather'
+import { Check, Edit, Eye, FileText, Trash2, Type } from 'react-feather'
 import { EStatus } from '@/models'
+import { CgArrowsExchangeV } from 'react-icons/cg'
 
 interface IProps {
   iconSize?: string
@@ -14,6 +15,7 @@ interface IProps {
   onHistory?: () => void
   onDelete?: () => void
   onReactive?: () => void
+  onCustomType?: () => void
 }
 
 const ActionButtons: React.FC<IProps> = ({
@@ -24,7 +26,8 @@ const ActionButtons: React.FC<IProps> = ({
   onEdit,
   onHistory,
   onDelete,
-  onReactive
+  onReactive,
+  onCustomType
 }) => {
   return (
     <Row width={rowWidth ? rowWidth : 'auto'}>
@@ -57,7 +60,7 @@ const ActionButtons: React.FC<IProps> = ({
         margin="0 .2rem 0 0"
         children={<FileText size={'16px'} color={colors.text.primary} />}
       />
-      {status === EStatus.Active ? (
+      {status === EStatus.Active && onDelete ? (
         <IconButton
           onClick={onDelete}
           bgColor={colors.background.gray.light}
@@ -66,15 +69,26 @@ const ActionButtons: React.FC<IProps> = ({
           margin="0 0 0 0"
           children={<Trash2 size={'16px'} color={colors.text.primary} />}
         />
-      ) : (
+      ) : onCustomType ? (
         <IconButton
-          onClick={onReactive}
+          onClick={onCustomType}
           bgColor={colors.background.gray.light}
           width={buttonWidth || iconSize}
           height={iconSize}
           margin="0 0 0 0"
-          children={<Check size={'16px'} color={colors.text.primary} />}
+          children={<CgArrowsExchangeV size={'16px'} color={colors.text.primary} />}
         />
+      ) : (
+        onReactive && (
+          <IconButton
+            onClick={onReactive}
+            bgColor={colors.background.gray.light}
+            width={buttonWidth || iconSize}
+            height={iconSize}
+            margin="0 0 0 0"
+            children={<Check size={'16px'} color={colors.text.primary} />}
+          />
+        )
       )}
     </Row>
   )

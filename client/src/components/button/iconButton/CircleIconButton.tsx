@@ -1,4 +1,3 @@
-import colors from '@/constants/colors'
 import { IComponentProps } from '@/models'
 import React from 'react'
 import styled from 'styled-components'

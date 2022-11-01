@@ -1,18 +1,18 @@
+import React from 'react'
 import { Button, ItemContainer, JustifyBetweenRow, Row, UserBadge } from '@/components'
 import UpdateContactCustomerSearchModal from '@/components/modals/customer-modal/UpdateContactCustomerSearchModal'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ESize, ICustomer, ICustomerAddNew, ICustomerUpdateDTO } from '@/models'
+import { ESize, ICustomer, ICustomerUpdateDTO } from '@/models'
 import { useGetCustomerReliablesQuery } from '@/services/customers/customerService'
 import { openModal } from '@/store'
-import React, { useState } from 'react'
 import { X } from 'react-feather'
 
 interface IProps {
   updateContactDTO: ICustomerUpdateDTO
   onAdd: (id: ICustomer) => void
   onRemovePastReliable: (id: ICustomer) => void
-  onRemoveNewReliable: (id: ICustomerAddNew) => void
+  onRemoveNewReliable: (id: ICustomer) => void
 }
 
 const UpdateCustomerReliables: React.FC<IProps> = ({

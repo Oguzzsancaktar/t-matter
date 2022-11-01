@@ -2,7 +2,7 @@ import { IJobTitle, IRefferedBy, IRelativeType } from '@/models'
 
 export default interface ICustomerAddNew {
   _id: string
-  customerType: number
+  customerType: string
   firstname: string
   lastname: string
   email: string

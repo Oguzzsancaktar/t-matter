@@ -1,5 +1,5 @@
 export default interface IQueryParams {
   search?: string
-  status?: number
+  status?: number | string
   size?: number
 }

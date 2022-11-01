@@ -1,6 +1,6 @@
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
-import { ECustomerType, ESize, EStatus, ICustomer, IRelativeType, IReliableCustomer } from '@/models'
+import { ESize, EStatus, ICustomer, IRelativeType, IReliableCustomer } from '@/models'
 import { openModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
 import React from 'react'
@@ -83,7 +83,7 @@ const ReliableSlider: React.FC<IProps> = ({ customerId, activeIndex, onActiveSte
 
                     <JustifyCenterRow>
                       <ItemContainer width="auto" margin=" 0 0.5rem 0 0">
-                        <Badge children={ECustomerType[customer?.customerType]} color={colors.gray.dark} />
+                        <Badge children={customer?.customerType.name} color={colors.gray.dark} />
                       </ItemContainer>
                       <ItemContainer width="auto">
                         <Badge color={selectColorForStatus(customer?.status)}>{EStatus[customer?.status]}</Badge>

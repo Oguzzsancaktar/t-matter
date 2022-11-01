@@ -18,7 +18,7 @@ import { emptyQueryParams } from '@/constants/queryParams'
 import { taskStatusOptions } from '@/constants/statuses'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
-import { ESize, EStatus, ETaskStatus, ICustomer, ITask } from '@/models'
+import { ESize, EStatus, ETaskStatus, ICustomer, IOption, ITask } from '@/models'
 import { useCreateCustomerActivityMutation } from '@/services/customers/customerActivityService'
 import { useDeleteTaskMutation, useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
 import { closeModal, openModal } from '@/store'
@@ -164,8 +164,8 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
     }
   }
 
-  const handleStatusFilter = (status: EStatus) => {
-    setSearchQueryParams({ ...searchQueryParams, status })
+  const handleStatusFilter = (status: number | string) => {
+    setSearchQueryParams({ ...searchQueryParams, status: +status })
   }
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

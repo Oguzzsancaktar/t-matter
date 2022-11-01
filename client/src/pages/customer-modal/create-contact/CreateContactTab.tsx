@@ -10,7 +10,7 @@ import {
 } from '@/components'
 import ContactInformationsStep from './ContactInformationsStep'
 import ContactSearchInCompanyStep from './ContactSearchInCompanyStep'
-import { ECustomerType, ESize, ICustomer, ICustomerAddNew, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
+import { ECustomerType, ESize, ICustomer, ICustomerCreateDTO, IOption, IRelativeType } from '@/models'
 import { toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isEmailValid } from '@/utils/validationUtils'
 import { useCreateCustomerMutation } from '@/services/customers/customerService'
@@ -21,10 +21,9 @@ import {
   useGetRefferedBysQuery
 } from '@/services/settings/company-planning/dynamicVariableService'
 import { emptyQueryParams } from '@/constants/queryParams'
-import { initialCreateCustomer } from '@/constants/initialValues'
+import { initialContactType, initialCreateCustomer } from '@/constants/initialValues'
 import { useAuth } from '@/hooks/useAuth'
 import { useCreateCustomerHistoryMutation } from '@/services/customers/customerHistoryService'
-import { useCreateTaskMutation } from '@/services/customers/taskService'
 import { CUSTOMER_HISTORY_TYPES } from '@/constants/customerHistoryTypes'
 
 const CreateContactTab = () => {
@@ -265,7 +264,7 @@ const CreateContactTab = () => {
       if (validationResult) {
         // @ts-ignore
         delete tempCreateContactDTO._id
-        tempCreateContactDTO.customerType = ECustomerType.Contact
+        tempCreateContactDTO.customerType = initialContactType
         const result = await createCustomer({ ...tempCreateContactDTO })
 
         // @ts-ignore

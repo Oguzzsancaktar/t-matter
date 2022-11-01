@@ -1,4 +1,11 @@
-import { IActivityCategoryCountsFilter, ICustomerCreateDTO, IRole, IUser, IWorkflow } from '@models/index'
+import {
+  IActivityCategoryCountsFilter,
+  ICustomerCreateDTO,
+  ICustomerType,
+  IRole,
+  IUser,
+  IWorkflow
+} from '@models/index'
 import { IColor, EStatus } from '@/models'
 import { ApexOptions } from 'apexcharts'
 
@@ -14,9 +21,23 @@ export const initialCategoryCountsFilter: IActivityCategoryCountsFilter = {
   customerId: ''
 }
 
+export const initialClientType: ICustomerType = {
+  _id: '636108d115070e01a633c57d',
+  name: '',
+  color: initialColor,
+  status: EStatus.Active
+}
+
+export const initialContactType: ICustomerType = {
+  _id: '636108db15070e01a633c583',
+  name: '',
+  color: initialColor,
+  status: EStatus.Active
+}
+
 export const initialCreateCustomer: ICustomerCreateDTO = {
   _id: '',
-  customerType: 0,
+  customerType: initialClientType,
   firstname: '',
   lastname: '',
   jobTitle: {

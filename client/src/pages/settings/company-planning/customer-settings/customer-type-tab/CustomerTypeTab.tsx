@@ -71,8 +71,16 @@ const CustomerTypeTab = () => {
           onHistory={function (): void {
             throw new Error('Function not implemented.')
           }}
-          onDelete={() => handleDelete(data)}
-          onReactive={() => handleReactive(data)}
+          onDelete={
+            data._id !== '636108d115070e01a633c57d' && data._id !== '636108db15070e01a633c583'
+              ? () => handleDelete(data)
+              : undefined
+          }
+          onReactive={
+            data._id !== '636108d115070e01a633c57d' && data._id !== '636108db15070e01a633c583'
+              ? () => handleReactive(data)
+              : undefined
+          }
         />
       )
     }
@@ -176,10 +184,9 @@ const CustomerTypeTab = () => {
     )
   }
 
-  const handleStatusFilter = (status: EStatus) => {
-    setSearchQueryParams({ ...searchQueryParams, status })
+  const handleStatusFilter = (status: number | string) => {
+    setSearchQueryParams({ ...searchQueryParams, status: +status })
   }
-
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
   }

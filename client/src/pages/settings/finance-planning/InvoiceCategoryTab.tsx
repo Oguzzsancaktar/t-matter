@@ -200,10 +200,9 @@ const InvoiceCategoryTab = () => {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQueryParams({ ...searchQueryParams, search: event.target.value })
   }
-  const handleStatusFilter = (status: EStatus) => {
-    setSearchQueryParams({ ...searchQueryParams, status })
+  const handleStatusFilter = (status: number | string) => {
+    setSearchQueryParams({ ...searchQueryParams, status: +status })
   }
-
   return (
     <JustifyBetweenColumn height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">

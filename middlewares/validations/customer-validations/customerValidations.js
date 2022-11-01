@@ -13,7 +13,7 @@ const customerValidationSchema = {
 
   cloudinary_id: joi.any(),
   profile_img: joi.any(),
-  customerType: joi.number(),
+  customerType: joi.string(),
   firstname: joi.string().required(),
   lastname: joi.string().required(),
   email: joi.string().required(),
@@ -86,11 +86,11 @@ const getCustomerValidation = async (req, res, next) => {
 
 const statusUpdateCustomerValidation = async (req, res, next) => {
   const { id } = req.params
-  const { status } = req.body
-  const schema = joi.object({ id: joi.string().required(), status: joi.number().required() })
+  const { customerType } = req.body
+  const schema = joi.object({ id: joi.string().required(), customerType: joi.string().required() })
 
   try {
-    await schema.validateAsync({ id, status })
+    await schema.validateAsync({ id, customerType })
     next()
   } catch (error) {
     res.status(400).json(

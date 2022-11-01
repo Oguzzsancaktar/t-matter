@@ -1,3 +1,4 @@
+import { ICustomerType } from '@/models'
 import ICustomer from './ICustomer'
 import ICustomerAddNew from './ICustomerAddNew'
 

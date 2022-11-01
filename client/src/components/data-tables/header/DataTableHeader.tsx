@@ -3,7 +3,7 @@ import { JustifyBetweenRow, Row } from '@/components/layout'
 import { InputRegular, SelectInput } from '@/components/input'
 import { Button } from '@/components/button'
 import { Upload } from 'react-feather'
-import { EStatus, IOption } from '@/models'
+import { IOption } from '@/models'
 import { statusOptions } from '@/constants/statuses'
 import colors from '@/constants/colors'
 
@@ -11,7 +11,7 @@ interface IProps {
   status?: IOption
   handleAddNew?: (a?: any, b?: any) => void
   handleSearch?: (event: React.ChangeEvent<HTMLInputElement>) => void
-  handleStatusFilter?: (status: EStatus) => void
+  handleStatusFilter?: (status: number | string) => void
   filterStatusOptions?: IOption[]
   showStatus?: boolean
   showSearch?: boolean
@@ -31,7 +31,7 @@ const DataTableHeader: React.FC<IProps> = ({
 }) => {
   const handleStatusChange = (option: IOption) => {
     if (handleStatusFilter) {
-      handleStatusFilter(+option.value)
+      handleStatusFilter(option.value)
     }
   }
 
