@@ -23,7 +23,7 @@ const SearchCustomersModal = () => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
-  const [searchQuery, setSearchQuery] = useState(emptyQueryParams)
+  const [searchQuery, setSearchQuery] = useState({ ...emptyQueryParams, status: '-9' })
   const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(searchQuery)
 
   const columns = [

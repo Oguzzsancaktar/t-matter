@@ -41,7 +41,11 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
 
   const { data: workflowPlans, isLoading: workflowPlanIsLoading } = useGetPlansQuery(emptyQueryParams)
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(emptyQueryParams)
-  const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(emptyQueryParams)
+
+  const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery({
+    ...emptyQueryParams,
+    status: '-9'
+  })
 
   const [selectedWorkflowPlanId, setSelectedWorkflowPlanId] = useState('')
   const { data: workflowData, isLoading: workflowIsLoading } = useGetPlanByIdQuery(selectedWorkflowPlanId)

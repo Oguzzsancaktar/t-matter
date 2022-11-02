@@ -12,7 +12,7 @@ import colors from '@/constants/colors'
 import { CUSTOMER_HISTORY_TYPES } from '@/constants/customerHistoryTypes'
 import useAccessStore from '@/hooks/useAccessStore'
 import { useAuth } from '@/hooks/useAuth'
-import { ICustomer, ESize, EStatus, ECustomerType } from '@/models'
+import { ICustomer, ESize, EStatus } from '@/models'
 import {
   CustomerModalActivityTab,
   CustomerModalWorkflowTab,
@@ -31,7 +31,6 @@ import { toastSuccess, toastError } from '@/utils/toastUtil'
 import moment from 'moment'
 import { useState } from 'react'
 import { Camera } from 'react-feather'
-import { ConfirmModal } from '../general'
 import MakeContactToClientModal from './MakeContactToClientModal'
 import UpdateCustomerModal from './UpdateCustomerModal'
 

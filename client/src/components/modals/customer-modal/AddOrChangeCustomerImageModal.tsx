@@ -14,12 +14,16 @@ import { UserImage } from '@/components/image'
 import { getBase64 } from '@/utils/imageConvert'
 import { closeModal } from '@/store'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
+import useAccessStore from '@/hooks/useAccessStore'
 
 interface IProps {
   customer: ICustomer
 }
 
 const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   const [addOrUpdateCustomerImage, { isLoading: customerImageUpdateIsLoading }] = useAddOrUpdateCustomerImageMutation()
   const [formData, setFormData] = useState<FormData>(new FormData())
   const [image, setImage] = useState(customer?.profile_img || 'https://via.placeholder.com/150')
@@ -39,7 +43,6 @@ const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
       try {
         const base64Image = await getBase64(file)
         setImage(base64Image as string)
-        console.log(base64Image)
         tempFormData.append('file', file)
       } catch (error) {
         console.log(error)
@@ -56,7 +59,7 @@ const AddOrChangeCustomerImageModal: React.FC<IProps> = ({ customer }) => {
       await addOrUpdateCustomerImage({ _id: customer._id, file: formData })
       customerApi.util.resetApiState()
       toastSuccess(customer.firstname + ' ' + customer.lastname + 'profile image saved successfully')
-      closeModal(`openAddOrChangeImageModal-${customer?._id}`)
+      dispatch(closeModal(`openAddOrChangeImageModal-${customer?._id}`))
     } catch (error) {
       toastError(customer.firstname + ' ' + customer.lastname + 'profile image didnot saved')
       console.log(error)

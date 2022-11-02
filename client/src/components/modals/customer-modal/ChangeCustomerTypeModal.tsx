@@ -67,7 +67,7 @@ const ChangeCustomerTypeModal: React.FC<IProps> = ({ title, onConfirm, modalId }
       <ModalBody>
         <ItemContainer>
           <JustifyCenterColumn height="100%" padding="2rem 0">
-            <ItemContainer>
+            <ItemContainer margin="0 0 1rem 0">
               <SelectInput
                 name="customerType"
                 onChange={handleCustomerTypeChange}

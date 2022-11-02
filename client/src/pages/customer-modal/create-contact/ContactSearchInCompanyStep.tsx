@@ -24,7 +24,7 @@ interface IProps {
   onRemove: (id: ICustomer) => void
 }
 const ContactSearchInCompanyStep: React.FC<IProps> = ({ reliableInCompanyList, onAdd, onRemove }) => {
-  const [searchQuery, setSearchQuery] = useState(emptyQueryParams)
+  const [searchQuery, setSearchQuery] = useState({ ...emptyQueryParams, status: '-9' })
   const { data: filteredCustomers, isLoading: filteredCustomersIsLoading } = useGetCustomersQuery(searchQuery)
 
   const columns = [

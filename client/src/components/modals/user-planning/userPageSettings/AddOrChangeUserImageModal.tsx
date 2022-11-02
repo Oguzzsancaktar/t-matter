@@ -14,12 +14,16 @@ import { ModalHeader, ModalBody } from '../../types'
 import { useAddOrUpdateUserImageMutation, userApi } from '@/services/settings/user-planning/userService'
 import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { closeModal } from '@/store'
+import useAccessStore from '@/hooks/useAccessStore'
 
 interface IProps {
   user: IUser
 }
 
 const AddOrChangeUserImageModal: React.FC<IProps> = ({ user }) => {
+  const { useAppDispatch } = useAccessStore()
+  const dispatch = useAppDispatch()
+
   const [addOrUpdateUserImage] = useAddOrUpdateUserImageMutation()
   const [formData, setFormData] = useState<FormData>(new FormData())
   const [image, setImage] = useState(user?.profile_img || 'https://via.placeholder.com/150')
@@ -39,7 +43,6 @@ const AddOrChangeUserImageModal: React.FC<IProps> = ({ user }) => {
       try {
         const base64Image = await getBase64(file)
         setImage(base64Image as string)
-        console.log(base64Image)
         tempFormData.append('file', file)
       } catch (error) {
         console.log(error)
@@ -53,9 +56,9 @@ const AddOrChangeUserImageModal: React.FC<IProps> = ({ user }) => {
   const handleSubmit = async () => {
     try {
       await addOrUpdateUserImage({ _id: user._id, file: formData })
+      dispatch(closeModal(`openAddOrChangeImageModal-${user._id}`))
       userApi.util.resetApiState()
       toastSuccess(user.firstname + ' ' + user.lastname + 'profile image saved successfully')
-      closeModal(`openAddOrChangeImageModal-${user?._id}`)
     } catch (error) {
       toastError(user.firstname + ' ' + user.lastname + 'profile image didnot saved')
       console.log(error)
