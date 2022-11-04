@@ -22,20 +22,20 @@ class ActiveTaskStepHandler {
   }
 
   setTaskStep = ({ taskId, data }) => {
-    return dataAccess.userDataAccess.setActiveTaskStep({
-      _id: this.socket.handshake.query.userId,
-      taskId,
+    return dataAccess.activeTaskDataAccess.addActiveTask({
+      user: this.socket.handshake.query.userId,
+      task: taskId,
       activeTaskStep: data.activeTaskStep
     })
   }
 
-  getActiveTaskStep = async ({ taskId }) => {
-    return await this.redisClient.get(`task_${this.socket.handshake.query.userId}_${taskId}`)
+  getActiveTaskStep = ({ taskId }) => {
+    return dataAccess.activeTaskDataAccess.getActiveTasks({ task: taskId, user: this.socket.handshake.query.userId })
   }
 
   emitActiveTaskSteps = async () => {
-    // emit all active task steps
-    // this.io.in(this.room).emit('activeTaskSteps', activeTaskStepValues)
+    const activeTasks = await dataAccess.activeTaskDataAccess.getActiveTasks()
+    this.io.in(this.room).emit('activeTaskSteps', activeTasks)
   }
 
   addActiveTaskStep = async data => {
@@ -44,7 +44,7 @@ class ActiveTaskStepHandler {
   }
 
   removeActiveTaskStep = async ({ taskId }) => {
-    await dataAccess.userDataAccess.removeActiveTaskStep({ _id: this.socket.handshake.query.userId, taskId })
+    await dataAccess.activeTaskDataAccess.removeActiveTask({ task: taskId, user: this.socket.handshake.query.userId })
     await this.emitActiveTaskSteps()
   }
 
@@ -59,7 +59,7 @@ class ActiveTaskStepHandler {
   }
 
   updateTaskWorkedTime = async ({ taskId, workedTime }) => {
-    let data = await this.getActiveTaskStep({ taskId })
+    let [data] = await this.getActiveTaskStep({ taskId })
     if (!data) {
       return
     }
@@ -69,7 +69,7 @@ class ActiveTaskStepHandler {
   }
 
   removeAllUserActiveTaskSteps = async () => {
-    await this.redisClient.del(`task_${this.socket.handshake.query.userId}_*`)
+    await dataAccess.activeTaskDataAccess.removeUserActiveTasks({ user: this.socket.handshake.query.userId })
     await this.emitActiveTaskSteps()
   }
 }

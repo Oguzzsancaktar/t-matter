@@ -3,12 +3,12 @@ const { Schema } = mongoose
 
 const activeTaskSchema = new Schema(
   {
-    owner: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: 'Users',
       required: true
     },
-    step: {
+    activeTaskStep: {
       type: Number
     },
     task: {

@@ -89,7 +89,7 @@ const main = async () => {
     })
 
     socket.on('updateTaskWorkedTime', async data => {
-      await activeTaskStepHandler.updateTaskWorkedTime(data)
+      // await activeTaskStepHandler.updateTaskWorkedTime(data)
     })
 
     socket.on('disconnect', async () => {
