@@ -1,3 +1,5 @@
+const dataAccess = require('../data-access')
+
 class ActiveTaskStepHandler {
   /*
   * activeTaskSteps = {
@@ -9,11 +11,9 @@ class ActiveTaskStepHandler {
   io = null
   socket = null
   room = null
-  redisClient = null
 
-  constructor(io, redisClient) {
+  constructor(io) {
     this.io = io
-    this.redisClient = redisClient
   }
 
   setSocket(socket) {
@@ -22,8 +22,10 @@ class ActiveTaskStepHandler {
   }
 
   setTaskStep = ({ taskId, data }) => {
-    return this.redisClient.set(`task_${this.socket.handshake.query.userId}_${taskId}`, JSON.stringify(data), {
-      ex: 180
+    return dataAccess.userDataAccess.setActiveTaskStep({
+      _id: this.socket.handshake.query.userId,
+      taskId,
+      activeTaskStep: data.activeTaskStep
     })
   }
 
@@ -32,12 +34,8 @@ class ActiveTaskStepHandler {
   }
 
   emitActiveTaskSteps = async () => {
-    let activeTaskStepKeys = await this.redisClient.keys(`task_*`)
-    let activeTaskStepValues = []
-    if (activeTaskStepKeys.length > 0) {
-      activeTaskStepValues = await this.redisClient.mget(...activeTaskStepKeys)
-    }
-    this.io.in(this.room).emit('activeTaskSteps', activeTaskStepValues)
+    // emit all active task steps
+    // this.io.in(this.room).emit('activeTaskSteps', activeTaskStepValues)
   }
 
   addActiveTaskStep = async data => {
@@ -46,7 +44,7 @@ class ActiveTaskStepHandler {
   }
 
   removeActiveTaskStep = async ({ taskId }) => {
-    await this.redisClient.del(`task_${this.socket.handshake.query.userId}_${taskId}`)
+    await dataAccess.userDataAccess.removeActiveTaskStep({ _id: this.socket.handshake.query.userId, taskId })
     await this.emitActiveTaskSteps()
   }
 

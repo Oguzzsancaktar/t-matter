@@ -68,7 +68,11 @@ const UserSchema = new Schema(
       required: true,
       type: mongoose.Types.ObjectId,
       ref: 'Role'
-    }
+    },
+    isOnline: {
+      default: false
+    },
+    activeTaskSteps: [Object]
   },
   { timestamps: true }
 )

@@ -56,11 +56,16 @@ const findActiveUsersAndPopulateSalarySetting = () => {
   ]).exec()
 }
 
+const findOnlineUsers = () => {
+  return User.find({ isOnline: true }).select('_id').lean().exec()
+}
+
 module.exports = {
   createUser,
   findByIdAndUpdateUser,
   findUserById,
   findUser,
   findUserWithFiltersAndPopulate,
-  findActiveUsersAndPopulateSalarySetting
+  findActiveUsersAndPopulateSalarySetting,
+  findOnlineUsers
 }
