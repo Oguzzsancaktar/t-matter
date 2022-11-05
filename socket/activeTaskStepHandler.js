@@ -1,3 +1,5 @@
+const dataAccess = require('../data-access')
+
 class ActiveTaskStepHandler {
   /*
   * activeTaskSteps = {
@@ -9,11 +11,9 @@ class ActiveTaskStepHandler {
   io = null
   socket = null
   room = null
-  redisClient = null
 
-  constructor(io, redisClient) {
+  constructor(io) {
     this.io = io
-    this.redisClient = redisClient
   }
 
   setSocket(socket) {
@@ -22,22 +22,21 @@ class ActiveTaskStepHandler {
   }
 
   setTaskStep = ({ taskId, data }) => {
-    return this.redisClient.set(`task_${this.socket.handshake.query.userId}_${taskId}`, JSON.stringify(data), {
-      ex: 180
+    console.log(this.socket.handshake.query.userId)
+    return dataAccess.activeTaskDataAccess.addActiveTask({
+      user: this.socket.handshake.query.userId,
+      task: taskId,
+      activeTaskStep: data.activeTaskStep
     })
   }
 
-  getActiveTaskStep = async ({ taskId }) => {
-    return await this.redisClient.get(`task_${this.socket.handshake.query.userId}_${taskId}`)
+  getActiveTaskStep = ({ taskId }) => {
+    return dataAccess.activeTaskDataAccess.getActiveTasks({ task: taskId, user: this.socket.handshake.query.userId })
   }
 
   emitActiveTaskSteps = async () => {
-    let activeTaskStepKeys = await this.redisClient.keys(`task_*`)
-    let activeTaskStepValues = []
-    if (activeTaskStepKeys.length > 0) {
-      activeTaskStepValues = await this.redisClient.mget(...activeTaskStepKeys)
-    }
-    this.io.in(this.room).emit('activeTaskSteps', activeTaskStepValues)
+    const activeTasks = await dataAccess.activeTaskDataAccess.getActiveTasks()
+    this.io.in(this.room).emit('activeTaskSteps', activeTasks)
   }
 
   addActiveTaskStep = async data => {
@@ -46,7 +45,7 @@ class ActiveTaskStepHandler {
   }
 
   removeActiveTaskStep = async ({ taskId }) => {
-    await this.redisClient.del(`task_${this.socket.handshake.query.userId}_${taskId}`)
+    await dataAccess.activeTaskDataAccess.removeActiveTask({ task: taskId, user: this.socket.handshake.query.userId })
     await this.emitActiveTaskSteps()
   }
 
@@ -61,7 +60,7 @@ class ActiveTaskStepHandler {
   }
 
   updateTaskWorkedTime = async ({ taskId, workedTime }) => {
-    let data = await this.getActiveTaskStep({ taskId })
+    let [data] = await this.getActiveTaskStep({ taskId })
     if (!data) {
       return
     }
@@ -71,7 +70,7 @@ class ActiveTaskStepHandler {
   }
 
   removeAllUserActiveTaskSteps = async () => {
-    await this.redisClient.del(`task_${this.socket.handshake.query.userId}_*`)
+    await dataAccess.activeTaskDataAccess.removeUserActiveTasks({ user: this.socket.handshake.query.userId })
     await this.emitActiveTaskSteps()
   }
 }
