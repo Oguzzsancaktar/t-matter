@@ -1,15 +1,18 @@
 const dataAccess = require('../../data-access')
 const utils = require('../../utils')
 const constants = require('../../constants')
-const { AUTH_COOKIE_OPTIONS } = require('../../constants/constants')
+const { AUTH_COOKIE_OPTIONS, STATUS_TYPES } = require('../../constants/constants')
 const { LOG_TYPES } = require('../../constants/log')
-const { Redis } = require('@upstash/redis/with-fetch')
-const UserHandler = require('../../socket/userHandler')
 
 const loginController = async (req, res) => {
   const { body } = req
   const { email, password } = body
-  const user = await dataAccess.authDataAccess.findUserByEmail({ email })
+  const user = await dataAccess.authDataAccess.findUserByEmail({ email }).exec()
+
+  if (user.status === STATUS_TYPES.INACTIVE) {
+    return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User is inactive' }))
+  }
+
   if (!user) {
     return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User not found' }))
   }
