@@ -15,6 +15,7 @@ import './styles/vendors/apex.css'
 import { setOnlineUsers } from '@store/online-users'
 import { setSocket } from '@store/online-users/socketGlobal'
 import { useLogoutMutation } from '@services/authService'
+import { isEqual } from 'lodash'
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
@@ -57,7 +58,9 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (!user) {
+    console.log(user)
+    // @ts-ignore
+    if (!user || isEqual(user, {})) {
       if (socket) {
         socket.disconnect()
         socket = null

@@ -22,6 +22,7 @@ class ActiveTaskStepHandler {
   }
 
   setTaskStep = ({ taskId, data }) => {
+    console.log(this.socket.handshake.query.userId)
     return dataAccess.activeTaskDataAccess.addActiveTask({
       user: this.socket.handshake.query.userId,
       task: taskId,

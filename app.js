@@ -105,7 +105,7 @@ const main = async () => {
   })
 
   process.on('unhandledRejection', error => {
-    console.log('unhandledRejection', error.message)
+    console.log('unhandledRejection', error)
   })
 
   app.use(express.json())

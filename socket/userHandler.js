@@ -21,6 +21,9 @@ class UserHandler {
   }
 
   addUser = async () => {
+    if (this.socket.handshake.query.userId === 'undefined') {
+      return
+    }
     this.socket.join(this.room)
     await dataAccess.userDataAccess.findByIdAndUpdateUser(this.socket.handshake.query.userId, { isOnline: true })
     let onlineUsers = await UserHandler.getUsers()
@@ -28,6 +31,9 @@ class UserHandler {
   }
 
   removeUser = async () => {
+    if (this.socket.handshake.query.userId === 'undefined') {
+      return
+    }
     this.socket.leave(this.room)
     await dataAccess.userDataAccess.findByIdAndUpdateUser(this.socket.handshake.query.userId, { isOnline: false })
     const onlineUsers = await UserHandler.getUsers()
