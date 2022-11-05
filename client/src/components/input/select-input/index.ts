@@ -1,2 +1,2 @@
 export { default as SelectInput } from './SelectInput'
-export { default as SelectDopdown } from './SelectDopdown'
+export { default as MultiSelectOthers } from './MultiSelectOthers'

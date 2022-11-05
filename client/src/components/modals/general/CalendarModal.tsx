@@ -1,13 +1,13 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useMemo, useReducer, useState } from 'react'
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, Row } from '@/components/layout'
 import FullCalendar, { EventSourceInput } from '@fullcalendar/react'
 import colors from '@/constants/colors'
-import { SelectDopdown, SelectInput } from '@/components/input'
+import { MultiSelectOthers, SelectInput } from '@/components/input'
 import { emptyQueryParams, emptyTaskFilter } from '@/constants/queryParams'
 import { ESize, ETaskStatus, IOption, ITaskCategory, IUser } from '@/models'
 import { useGetCategoriesQuery } from '@/services/settings/workflow-planning/workflowService'
-import { useGetAllTaskListQuery } from '@/services/customers/taskService'
+import { useGetAllTaskListMutation } from '@/services/customers/taskService'
 import DefaultCalendarOptions from '@/constants/calendarOptions'
 import { Button, CustomerTaskModal, H1, UserImage } from '@/components'
 import { openModal } from '@/store'
@@ -28,11 +28,11 @@ const EventInner = styled(Button)`
 function calendarFiltersReducer(state, action) {
   switch (action.type) {
     case 'CHANGE_CATEGORY':
-      return { ...state, category: action.payload }
+      return { ...state, categoryArr: action.payload }
     case 'CHANGE_USER':
-      return { ...state, user: action.payload }
+      return { ...state, userArr: action.payload }
     case 'CHANGE_STATUS':
-      return { ...state, status: action.payload }
+      return { ...state, statusArr: action.payload }
   }
 }
 
@@ -63,7 +63,8 @@ const CalendarModal = () => {
     ...emptyTaskFilter
   })
 
-  const { data: taskData, isLoading: taskDataIsLoading } = useGetAllTaskListQuery(calendarFilters)
+  const [postGetAllTaskList, { data: taskData, isLoading: taskDataIsLoading }] =
+    useGetAllTaskListMutation(calendarFilters)
 
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false)
   const [calendarEvents, setCalendarEvents] = useState<any>(null)
@@ -71,6 +72,40 @@ const CalendarModal = () => {
   const [isSlotFull, setIsSlotFull] = useState<boolean>(false)
 
   const calendarOptions = { ...defaultOptions }
+
+  const categoryOptions: IOption[] = useMemo(() => {
+    if (categoriesData) {
+      return categoriesData?.map((category: ITaskCategory) => ({
+        value: category._id,
+        label: category.name,
+        color: category.color
+      }))
+    } else {
+      return []
+    }
+  }, [categoriesData])
+
+  const userOptions: IOption[] = useMemo(() => {
+    if (usersData) {
+      return usersData?.map((user: IUser) => ({
+        value: user._id,
+        label: user.firstname + ' ' + user.lastname
+      }))
+    } else {
+      return []
+    }
+  }, [usersData])
+
+  const taskStatusOptionsFiltered = useMemo(() => {
+    return taskStatusOptions.filter(option => option.value !== '-9')
+  }, [taskStatusOptions])
+
+  const statusOptions: IOption[] = useMemo(() => {
+    return taskStatusOptionsFiltered.map(status => ({
+      value: status.value,
+      label: status.label
+    }))
+  }, [])
 
   const handleOpenTaskModal = ({ event }) => {
     const taskId = event.id
@@ -91,37 +126,24 @@ const CalendarModal = () => {
     }
   }
 
-  const handleCategoryChange = (option: IOption) => {
-    if (option) {
-      const selectedCategory = {
-        _id: option.value,
-        name: option.label,
-        color: option.color
-      }
+  const handleCategoryChange = (selectedCategory: IOption[]) => {
+    if (selectedCategory) {
       calendarFiltersDispatch({ type: 'CHANGE_CATEGORY', payload: selectedCategory })
     } else {
       calendarFiltersDispatch({ type: 'CHANGE_CATEGORY', payload: undefined })
     }
   }
 
-  const handleUserChange = (option: IOption) => {
-    if (option) {
-      const selectedUser = {
-        _id: option.value,
-        name: option.label
-      }
+  const handleUserChange = (selectedUser: IOption[]) => {
+    if (selectedUser) {
       calendarFiltersDispatch({ type: 'CHANGE_USER', payload: selectedUser })
     } else {
       calendarFiltersDispatch({ type: 'CHANGE_USER', payload: undefined })
     }
   }
 
-  const handleStatusChange = (option: IOption) => {
-    if (option) {
-      const selectedStatus = {
-        value: option.value,
-        label: option.label
-      }
+  const handleStatusChange = (selectedStatus: IOption[]) => {
+    if (selectedStatus) {
       calendarFiltersDispatch({ type: 'CHANGE_STATUS', payload: selectedStatus })
     } else {
       calendarFiltersDispatch({ type: 'CHANGE_STATUS', payload: undefined })
@@ -145,74 +167,21 @@ const CalendarModal = () => {
   }
 
   calendarOptions.customButtons.categoryFilter.text = (
-    <SelectDopdown
-      options={(categoriesData || []).map((category: ITaskCategory) => ({
-        label: category.name,
-        value: category._id,
-        color: category.color
-      }))}
-    />
+    <ItemContainer width="230px">
+      <MultiSelectOthers optionList={categoryOptions} handleChange={handleCategoryChange} placeholder="Category" />
+    </ItemContainer>
   )
 
-  //  <SelectInput
-  //   isMulti={true}
-  //   isClearable={true}
-  //   name={'stepCategory'}
-  //   placeHolder="Workflow Category"
-  //   // selectedOption={[
-  //   //   {
-  //   //     value: calendarFilters.category?._id,
-  //   //     label: calendarFilters.category?.name,
-  //   //     color: calendarFilters.category?.color
-  //   //   }
-  //   // ]}
-  //   options={(categoriesData || []).map((category: ITaskCategory) => ({
-  //     label: category.name,
-  //     value: category._id,
-  //     color: category.color
-  //   }))}
-  //   onChange={handleCategoryChange}
-  //   isLoading={isCategoriesLoading}
-  // />
-
   calendarOptions.customButtons.userFilter.text = (
-    <SelectInput
-      isClearable={true}
-      name={'responsibleUser'}
-      placeHolder="Responsible User"
-      selectedOption={[
-        {
-          value: calendarFilters.user?._id,
-          label: calendarFilters.user?.firstname + ' ' + calendarFilters.user?.lastname
-        }
-      ]}
-      options={(usersData || []).map((user: IUser) => ({
-        label: user.firstname + ' ' + user.lastname,
-        value: user._id
-      }))}
-      onChange={handleUserChange}
-      isLoading={isUsersDataLoading}
-    />
+    <ItemContainer width="230px">
+      <MultiSelectOthers optionList={userOptions} handleChange={handleUserChange} placeholder="User" />
+    </ItemContainer>
   )
 
   calendarOptions.customButtons.statusFilter.text = (
-    <SelectInput
-      isClearable={true}
-      name={'stepStatus'}
-      placeHolder="Step Status"
-      selectedOption={[
-        {
-          value: calendarFilters.status?.value,
-          label: calendarFilters.status?.label
-        }
-      ]}
-      options={taskStatusOptions.map((status: IOption) => ({
-        label: status.label,
-        value: status.value
-      }))}
-      onChange={handleStatusChange}
-      isLoading={isCategoriesLoading}
-    />
+    <ItemContainer width="230px">
+      <MultiSelectOthers optionList={statusOptions} handleChange={handleStatusChange} placeholder="Status" />
+    </ItemContainer>
   )
 
   useEffect(() => {
@@ -240,6 +209,12 @@ const CalendarModal = () => {
     }
     setCalendarEvents(allTaskSteps)
   }, [taskData, taskDataIsLoading])
+
+  useEffect(() => {
+    postGetAllTaskList(calendarFilters)
+  }, [calendarFilters])
+
+  console.log('calendarFilters', calendarFilters)
 
   return (
     <ItemContainer borderRadius="0.3rem" overflow="hidden" height="100%">

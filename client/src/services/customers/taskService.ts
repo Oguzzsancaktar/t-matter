@@ -63,21 +63,20 @@ const deleteTask = (builder: IBuilder) => {
 }
 
 const getAllTaskList = (builder: IBuilder) => {
-  return builder.query<ICustomerTask[], ITaskFilter>({
-    query({ category, user, status }) {
+  return builder.mutation<ICustomerTask[], ITaskFilter>({
+    query({ categoryArr, userArr, statusArr }) {
       return {
         url: `/task`,
-        method: 'GET',
-        params: {
-          categoryId: category?._id,
-          userId: user?._id,
-          status: status?.value
+        method: 'POST',
+        data: {
+          categoryArr,
+          userArr,
+          statusArr
         }
       }
     },
-    providesTags(result) {
-      if (!result) return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
-      return [...result.map(task => ({ type: TASK_TAG_TYPE, id: task._id })), { type: TASK_TAG_TYPE, id: 'LIST' }]
+    invalidatesTags() {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
     }
   })
 }
@@ -367,7 +366,6 @@ const {
   useGetTaskByTaskIdQuery,
   useUpdateTaskMutation,
   useReorderTasksMutation,
-  useGetAllTaskListQuery,
   usePostponeTaskMutation,
   useDeleteTaskMutation,
   useGetUsedTaskWorkflowCountsQuery,
@@ -379,7 +377,8 @@ const {
   useUpdateTaskStepsSeenMutation,
   useGetCustomerMostUsedUserInTasksQuery,
   useGetCustomerTasksTimerAnalyisesQuery,
-  useGetTaskYearsWithCustomerIdQuery
+  useGetTaskYearsWithCustomerIdQuery,
+  useGetAllTaskListMutation
 } = taskApi
 export {
   taskApi,
@@ -388,7 +387,6 @@ export {
   useGetTaskByTaskIdQuery,
   useUpdateTaskMutation,
   useReorderTasksMutation,
-  useGetAllTaskListQuery,
   usePostponeTaskMutation,
   useDeleteTaskMutation,
   useGetUsedTaskWorkflowCountsQuery,
@@ -400,5 +398,6 @@ export {
   useUpdateTaskStepsSeenMutation,
   useGetCustomerMostUsedUserInTasksQuery,
   useGetCustomerTasksTimerAnalyisesQuery,
-  useGetTaskYearsWithCustomerIdQuery
+  useGetTaskYearsWithCustomerIdQuery,
+  useGetAllTaskListMutation
 }

@@ -52,6 +52,18 @@ const getAllTaskList = async (req, res) => {
   }
 }
 
+const getTasksWithArrQueries = async (req, res) => {
+  const { categoryArr, userArr, statusArr } = req.body
+
+  try {
+    const tasks = await dataAccess.taskDataAccess.getTasksWithArrFilter({ categoryArr, userArr, statusArr })
+    res.status(200).json(tasks)
+  } catch (error) {
+    console.log(error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
 const removeTask = async (req, res) => {
   const { taskId } = req.params
   try {
@@ -337,5 +349,6 @@ module.exports = {
   updateTaskStepsSeen,
   getCustomerMostUsedUserInTasks,
   getCustomerTimerAnalysis,
-  getTaskYearsWithCustomerId
+  getTaskYearsWithCustomerId,
+  getTasksWithArrQueries
 }

@@ -23,6 +23,8 @@ router.post(
 
 router.get('/', controllers.taskController.getAllTaskList)
 
+router.post('/', controllers.taskController.getTasksWithArrQueries)
+
 router.get(
   '/customer/:customerId',
   middlewares.validations.taskValidations.getTasksValidation,

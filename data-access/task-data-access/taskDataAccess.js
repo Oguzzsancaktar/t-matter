@@ -174,6 +174,36 @@ const getTaskById = taskId => {
   ]).exec()
 }
 
+const getTasksWithArrFilter = async ({ categoryArr, userArr, statusArr }) => {
+  const categoryArrIdList = categoryArr.map(categoryId => mongoose.Types.ObjectId(categoryId.value))
+  const userArrIdList = userArr.map(userId => mongoose.Types.ObjectId(userId.value))
+  const statusArrIdList = statusArr.map(statusId => +statusId.value)
+
+  const $match = {}
+
+  if (categoryArr.length > 0) {
+    $match['steps.category'] = { $in: categoryArrIdList }
+  }
+
+  if (userArr.length > 0) {
+    $match['steps.responsibleUser'] = { $in: userArrIdList }
+  }
+
+  if (statusArr.length > 0) {
+    $match['steps.stepStatus'] = { $in: statusArrIdList }
+  }
+
+  return Task.aggregate([
+    {
+      $unwind: { path: '$steps', preserveNullAndEmptyArrays: true }
+    },
+    {
+      $match
+    },
+    ...taskPopulatePipe
+  ]).exec()
+}
+
 const deleteTaskById = taskId => {
   return Task.findByIdAndDelete(taskId)
 }
@@ -528,5 +558,6 @@ module.exports = {
   getTaskStepsData,
   getCustomerMostUsedUserInTasks,
   getCustomerTimerAnalysis,
-  getTaskYearsWithCustomerId
+  getTaskYearsWithCustomerId,
+  getTasksWithArrFilter
 }
