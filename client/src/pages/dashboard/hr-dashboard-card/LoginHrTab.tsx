@@ -32,39 +32,50 @@ const LoginHrTab = props => {
     if (user) {
       fetchUserTimeLogs({
         userId: user._id,
-        timeOffSet: new Date().getTimezoneOffset()
+        timeOffSet: new Date().getTimezoneOffset(),
+        startDate: moment(dateRange.startDate).toISOString(true),
+        endDate: moment(dateRange.endDate).toISOString(true)
       })
     }
-  }, [])
+  }, [dateRange])
 
   const columns: TableColumn<IUserLog>[] = [
     {
       name: 'User',
-      selector: row => '',
+      selector: row => user?.firstname + ' ' + user?.lastname,
       sortable: true,
       cell: row => user?.firstname + ' ' + user?.lastname
     },
     {
       name: 'Date',
-      selector: row => '',
+      selector: row =>
+        moment(row.date || '')
+          .unix()
+          .valueOf(),
       sortable: true,
       cell: row => moment(row.date).format('MM/DD/YYYY')
     },
     {
       name: 'Login',
-      selector: row => '',
+      selector: row =>
+        moment(row.login || '')
+          .unix()
+          .valueOf(),
       sortable: true,
       cell: row => moment(row.login).format('LT')
     },
     {
       name: 'Logout',
-      selector: row => '',
+      selector: row =>
+        moment(row.logout || '')
+          .unix()
+          .valueOf(),
       sortable: true,
       cell: row => moment(row.logout).format('LT')
     },
     {
       name: 'Working time',
-      selector: row => '',
+      selector: row => row.totalTime,
       sortable: true,
       cell: row => secondsToHourMin(row.totalTime)
     },

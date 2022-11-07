@@ -7,9 +7,8 @@ const createTimeLog = data => {
   return TimeLog.create(data)
 }
 
-const getLogsByUserId = async (userId, timeOffSet) => {
-  console.log('timeOffSet', timeOffSet)
-  const timeLogs = await TimeLog.aggregate([
+const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate }) => {
+  const pipeline = [
     { $match: { owner: mongoose.Types.ObjectId(userId) } },
     {
       $addFields: {
@@ -35,12 +34,25 @@ const getLogsByUserId = async (userId, timeOffSet) => {
         _id: -1
       }
     }
-  ]).exec()
+  ]
+
+  if (startDate && endDate) {
+    pipeline.unshift({
+      $match: {
+        createdAt: {
+          $gte: moment(startDate).toDate(),
+          $lte: moment(endDate).toDate()
+        }
+      }
+    })
+  }
+
+  const timeLogs = await TimeLog.aggregate(pipeline).exec()
 
   return timeLogs.reduce((acc, curr) => {
     const { _id, logs } = curr
-    const logouts = logs.filter(log => log.logType === LOG_TYPES.LOGOUT).sort((a, b) => a.date - b.date)
-    const logins = logs.filter(log => log.logType === LOG_TYPES.LOGIN).sort((a, b) => a.date - b.date)
+    const logouts = logs.filter(log => log.logType === LOG_TYPES.LOGOUT).sort((a, b) => a.createdAt - b.createdAt)
+    const logins = logs.filter(log => log.logType === LOG_TYPES.LOGIN).sort((a, b) => a.createdAt - b.createdAt)
 
     const totalTime = logins.reduce((acc, curr, i) => {
       if (logouts[i]) {
