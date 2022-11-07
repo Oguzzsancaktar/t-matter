@@ -9,6 +9,7 @@ import {
   JustifyBetweenRow,
   JustifyCenterColumn,
   NoTableData,
+  SelectInput,
   TableSkeltonLoader
 } from '@/components'
 import * as React from 'react'
@@ -17,6 +18,10 @@ import { useLazyGetUserLogsByIdQuery } from '@services/userLogService'
 import { selectUser } from '@/store'
 import { IUserLog } from '@/models'
 import { secondsToHourMin } from '@utils/timeUtils'
+import { useGetUsersQuery } from '@services/settings/user-planning/userService'
+import { emptyQueryParams } from '@constants/queryParams'
+import { TASK_CONDITION_OPTIONS } from '@constants/task'
+import { HR_LOGIN_CONDITIONS_OPTIONS } from '@constants/hrLogin'
 
 const LoginHrTab = props => {
   const { useAppDispatch, useAppSelector } = useAccessStore()
@@ -27,6 +32,9 @@ const LoginHrTab = props => {
     endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
   })
   const [fetchUserTimeLogs, { data: timeLogs, isLoading: timeLogsLoading }] = useLazyGetUserLogsByIdQuery()
+  const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
+  const [selectedUserId, setSelectedUserId] = useState('ALL')
+  const [selectedCondition, setSelectedCondition] = useState('ALL')
 
   useEffect(() => {
     if (user) {
@@ -96,6 +104,9 @@ const LoginHrTab = props => {
     }
   ]
 
+  const userOptions = users?.map(({ _id, firstname }) => ({ value: _id, label: firstname })) || []
+  const selectedUser = userOptions.find(x => x.value === selectedUserId)
+
   return (
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
@@ -121,6 +132,26 @@ const LoginHrTab = props => {
               value={dateRange.endDate}
             />
           </div>
+        </div>
+        <div style={{ minWidth: 120, marginLeft: 8, marginRight: 8 }}>
+          <SelectInput
+            labelText="Conditions"
+            name="conditions"
+            onChange={o => {
+              setSelectedCondition(o.value)
+            }}
+            selectedOption={[...HR_LOGIN_CONDITIONS_OPTIONS]?.filter(x => x.value === selectedCondition) || []}
+            options={[...HR_LOGIN_CONDITIONS_OPTIONS]}
+          />
+        </div>
+        <div style={{ minWidth: 120, marginLeft: 8, marginRight: 8 }}>
+          <SelectInput
+            onChange={o => setSelectedUserId(o.value)}
+            labelText="User"
+            name="user"
+            options={[{ label: 'All', value: 'ALL' }, ...userOptions]}
+            selectedOption={selectedUser ? [selectedUser] : [{ label: 'All', value: 'ALL' }]}
+          />
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', flex: 1, height: '100%', paddingBottom: 3 }}>
           <div
