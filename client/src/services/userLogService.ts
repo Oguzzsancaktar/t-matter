@@ -9,11 +9,14 @@ const LOGS_TAG = 'logsTag'
 type IBuilder = EndpointBuilder<IAxiosBaseQueryFn, typeof LOGS_TAG, typeof LOGS_API_REDUCER_PATH>
 
 const getUserLogsById = (builder: IBuilder) => {
-  return builder.query<IUserLog[], IUser['_id']>({
-    query(userId) {
+  return builder.query<IUserLog[], { userId: IUser['_id']; timeOffSet: number }>({
+    query({ userId, timeOffSet }) {
       return {
         url: `/time-log/${userId}`,
-        method: 'GET'
+        method: 'GET',
+        params: {
+          timeOffSet
+        }
       }
     },
     providesTags(results) {

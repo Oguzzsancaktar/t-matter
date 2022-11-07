@@ -2,21 +2,18 @@ import useAccessStore from '@hooks/useAccessStore'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
-import { isExpireCondition, isPostponeCondition, isTimerCondition, taskStepConditionSelector } from '@utils/taskUtil'
+
 import {
   DatePicker,
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterColumn,
-  JustifyCenterRow,
   NoTableData,
   TableSkeltonLoader
 } from '@/components'
-import { FcClock, FcExpired, FcLeave } from 'react-icons/fc'
 import * as React from 'react'
 import colors from '@constants/colors'
-import { useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery } from '@services/userLogService'
+import { useLazyGetUserLogsByIdQuery } from '@services/userLogService'
 import { selectUser } from '@/store'
 import { IUserLog } from '@/models'
 import { secondsToHourMin } from '@utils/timeUtils'
@@ -33,7 +30,10 @@ const LoginHrTab = props => {
 
   useEffect(() => {
     if (user) {
-      fetchUserTimeLogs(user._id)
+      fetchUserTimeLogs({
+        userId: user._id,
+        timeOffSet: new Date().getTimezoneOffset()
+      })
     }
   }, [])
 
@@ -48,19 +48,19 @@ const LoginHrTab = props => {
       name: 'Date',
       selector: row => '',
       sortable: true,
-      cell: row => moment(row.date).format('DD/MM/YYYY')
+      cell: row => moment(row.date).format('MM/DD/YYYY')
     },
     {
       name: 'Login',
       selector: row => '',
       sortable: true,
-      cell: row => moment(row.login).format('hh:mm')
+      cell: row => moment(row.login).format('LT')
     },
     {
       name: 'Logout',
       selector: row => '',
       sortable: true,
-      cell: row => moment(row.logout).format('HH:mm')
+      cell: row => moment(row.logout).format('LT')
     },
     {
       name: 'Working time',
