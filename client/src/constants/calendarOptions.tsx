@@ -35,7 +35,7 @@ const DefaultCalendarOptions = (): any => {
     headerToolbar: {
       start: 'sidebarToggle,showFullDay, prev,next, title',
       center: 'categoryFilter,userFilter,statusFilter',
-      end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+      end: 'year,dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
     // businessHours: true, // display business hours
     // slotDuration: { hours: 1 },

@@ -31,7 +31,7 @@ const MultiSelectOthers: React.FC<IProps> = ({ placeholder = 'Select Option', op
       openMenuOnClick={true}
       placeholder={placeholder}
       // blurInputOnSelect={blurInputOnSelect}
-      // closeMenuOnSelect={closeMenuOnSelect}
+      closeMenuOnSelect={false}
       onOptionChange={handleChange}
       hideSelectedOptions={false}
       renderMultiOptions={renderMultiOptions}
