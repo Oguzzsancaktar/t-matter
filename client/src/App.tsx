@@ -36,6 +36,7 @@ function App() {
     console.log('mouse moved')
     clearTimeout(timeout)
     timeout = setTimeout(function () {
+      console.log('move your mouse')
       alert('move your mouse')
     }, 60 * 1000)
   }
