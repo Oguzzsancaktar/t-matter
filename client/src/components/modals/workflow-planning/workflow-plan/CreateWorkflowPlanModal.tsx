@@ -33,7 +33,7 @@ const CreateWorkflowPlanModal = () => {
     durationError: false,
     priceError: false,
     expireDurationError: false,
-    postponeTimeError: false,
+    postponeLimitError: false,
     categoryError: false,
     locationError: false,
     responsibleUserError: false,
@@ -95,9 +95,9 @@ const CreateWorkflowPlanModal = () => {
         return (result = false)
       }
 
-      if (!isValueBiggerThanZero(+(task.postponeTime ?? 0))) {
+      if (!isValueBiggerThanZero(+(task.postponeLimit ?? 0))) {
         setActiveStep(index)
-        setValidationErrors({ ...initialErrors, postponeTimeError: true })
+        setValidationErrors({ ...initialErrors, postponeLimitError: true })
         toastError('Please enter valid task postpone duration')
         return (result = false)
       }

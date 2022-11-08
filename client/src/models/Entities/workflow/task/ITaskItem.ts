@@ -14,9 +14,9 @@ export default interface ITaskItem {
   expireDuration: number
   workedTimes: ITaskUserWorkTime[]
   totalPassedTime: number
-  postponeTime: number
+  postponeLimit: number
   usedPostpone: number
-  postponedDate: string
+  postponedDate: number
   isPostponePassed: boolean
   isDeadllinePassed: boolean
   isExpireDatePassed: boolean

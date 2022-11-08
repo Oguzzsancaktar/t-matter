@@ -8,6 +8,7 @@ import { Label } from '../texts'
 import { Container, IconContainer } from '../input/input-with-icon/styled'
 import { ItemContainer } from '../item-container'
 import colors from '@/constants/colors'
+import moment from 'moment'
 
 interface IProps {
   name: string

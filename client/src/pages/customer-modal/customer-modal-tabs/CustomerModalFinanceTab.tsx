@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ICustomer, IInstallment, Invoice } from '@/models'
-import {
-  Column,
-  IconButton,
-  ItemContainer,
-  JustifyBetweenColumn,
-  JustifyBetweenRow,
-  JustifyCenterRow,
-  SideDrawer,
-  Tab
-} from '@/components'
+import { Column, ItemContainer, JustifyBetweenColumn, JustifyCenterRow, SideDrawer, Tab } from '@/components'
 import { ModalHeader } from '@components/modals/types'
 import InvoiceTab from '@pages/customer-modal/customer-modal-tabs/finance-tabs/InvoiceTab'
 import EstimateTab from '@pages/customer-modal/customer-modal-tabs/finance-tabs/estimate-tab/EstimateTab'
@@ -17,7 +8,6 @@ import InstallmentTab from '@pages/customer-modal/customer-modal-tabs/finance-ta
 import ShowHistory from '@components/show-history/ShowHistory'
 import { useGetFinanceHistoryQuery } from '@services/historyService'
 import { History } from '@components/history'
-import history from '@components/history/History'
 
 interface IProps {
   customerId: ICustomer['_id']

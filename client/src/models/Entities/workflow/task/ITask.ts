@@ -6,7 +6,7 @@ export default interface ITask {
   _id: string
   stepIndex: number
   expireDuration: number
-  postponeTime: number
+  postponeLimit: number
   category: Pick<ITaskCategory, '_id' | 'name' | 'color'>
   location: Pick<ILocation, '_id' | 'name'>
   responsibleUser: Pick<IUser, '_id' | 'firstname' | 'lastname'> | IUser

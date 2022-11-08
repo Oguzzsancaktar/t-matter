@@ -8,10 +8,10 @@ import { ModalBody, ModalHeader } from '../types'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ETaskStatus, ICustomer, ICustomerTask, IOption, ITaskCreateDTO, IUser, IWorkflowUpdateDTO } from '@/models'
 import { closeModal } from '@/store'
-import { toastError, toastSuccess } from '@/utils/toastUtil'
+import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
 import { isValueNull, isValueBiggerThanZero } from '@/utils/validationUtils'
 import colors from '@/constants/colors'
-import { useCreateTaskMutation } from '@/services/customers/taskService'
+import { taskApi, useCreateTaskMutation } from '@/services/customers/taskService'
 import moment from 'moment'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { H1 } from '@/components/texts'
@@ -28,10 +28,11 @@ import { useAuth } from '@/hooks/useAuth'
 
 interface IProps {
   customer?: ICustomer
-  date?: number
+  date: number
+  cb?: () => void
 }
 
-const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
+const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date, cb }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
@@ -68,7 +69,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
   })
 
   const [firstStepResponsibleUser, setFirstStepResponsibleUser] = useState(selectedWorkflow?.steps[0]?.responsibleUser)
-  const [startDate, setStartDate] = useState<number>(date || Date.now())
+  const [startDate, setStartDate] = useState<number>(date)
 
   const [creationErrors, setCreationErrors] = useState({
     workflowError: false,
@@ -173,10 +174,11 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
       return false
     }
 
-    if (!isValueBiggerThanZero(startDate)) {
+    if (!isValueBiggerThanZero(startDate) && startDate > Date.now()) {
       tempErrors.startDateError = true
       setCreationErrors(tempErrors)
-      toastError('Please select start date')
+      toastError('Start date can not be less than now')
+
       return false
     }
 
@@ -216,9 +218,9 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
               isPostponePassed: false,
               isDeadllinePassed: false,
               isExpireDatePassed: false,
-              postponeTime: step.postponeTime,
+              postponeLimit: step.postponeLimit,
               usedPostpone: 0,
-              postponedDate: '',
+              postponedDate: 0,
               checklistItems: step.checklistItems.map(item => ({
                 ...item,
                 isChecked: false
@@ -239,9 +241,9 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
               isPostponePassed: false,
               isDeadllinePassed: false,
               isExpireDatePassed: false,
-              postponeTime: step.postponeTime,
+              postponeLimit: step.postponeLimit,
               usedPostpone: 0,
-              postponedDate: '',
+              postponedDate: 0,
               checklistItems: step.checklistItems.map(item => ({
                 ...item,
                 isChecked: false
@@ -257,6 +259,10 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
           creator: loggedUser.user?._id || '',
           type: CUSTOMER_ACTIVITY_TYPES.TASK_ADDED
         })
+        if (cb) {
+          cb()
+        }
+
         if (customer) {
           dispatch(closeModal(`selectTaskWorkflowModal-${customer?._id}`))
         } else {
@@ -276,7 +282,6 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
       })
 
       setFirstStepResponsibleUser(workflowData.steps[0].responsibleUser)
-      setStartDate(moment.now().valueOf())
     }
   }, [workflowData, workflowIsLoading])
 
@@ -370,7 +375,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date }) => {
               name="startDate"
               labelText="Start Date"
               onChange={handleStartDateChange}
-              minDate={moment.now().valueOf()}
+              minDate={Date.now()}
               enableTime={false}
               dateFormat={dateTimeFormat}
               placeholder="Select start date..."

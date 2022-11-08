@@ -67,7 +67,7 @@ const PostponeInstallmentModal: React.FC<IProps> = ({ installment, selectedInvoi
               }}
               minDate={moment(installment.payDate).valueOf()}
               maxDate={moment(installment.payDate)
-                .add(financePlanning?.installmentPostponeTimeLimit.value, 'days')
+                .add(financePlanning?.installmentpostponeLimitLimit.value, 'days')
                 .valueOf()}
               value={state}
             />

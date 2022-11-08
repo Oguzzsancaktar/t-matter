@@ -18,7 +18,7 @@ interface IFinancePlanning {
   minDepositAmount: IFinancePlanningItem
   minInstallmentAmount: IFinancePlanningItem
   installmentPostponeLimit: IFinancePlanningItem
-  installmentPostponeTimeLimit: IFinancePlanningItem
+  installmentpostponeLimitLimit: IFinancePlanningItem
   activeTimeSlipAmount: IFinancePlanningItem
   inactiveTimeSlipAmount: IFinancePlanningItem
   pastDueLateFee: IFinancePlanningExtendItem

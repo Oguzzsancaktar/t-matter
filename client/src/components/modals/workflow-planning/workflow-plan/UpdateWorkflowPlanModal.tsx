@@ -39,7 +39,7 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
   const initialErrors = {
     nameError: false,
     expireDurationError: false,
-    postponeTimeError: false,
+    postponeLimitError: false,
     categoryError: false,
     locationError: false,
     responsibleUserError: false,
@@ -101,9 +101,9 @@ const UpdateWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
         return (result = false)
       }
 
-      if (!isValueBiggerThanZero(+(task.postponeTime ?? 0))) {
+      if (!isValueBiggerThanZero(+(task.postponeLimit ?? 0))) {
         setActiveStep(index)
-        setValidationErrors({ ...initialErrors, postponeTimeError: true })
+        setValidationErrors({ ...initialErrors, postponeLimitError: true })
         toastError('Please enter valid task postpone duration')
         return (result = false)
       }

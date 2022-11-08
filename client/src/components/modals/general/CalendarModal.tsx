@@ -5,12 +5,17 @@ import FullCalendar, { EventSourceInput } from '@fullcalendar/react'
 import colors from '@/constants/colors'
 import { MultiSelectOthers, SelectInput } from '@/components/input'
 import { emptyQueryParams, emptyTaskFilter } from '@/constants/queryParams'
-import { ESize, ETaskStatus, IOption, ITaskCategory, IUser } from '@/models'
+import { EActivity, ESize, ETaskStatus, ICustomerTask, IOption, ITask, ITaskCategory, IUser } from '@/models'
 import { useGetCategoriesQuery } from '@/services/settings/workflow-planning/workflowService'
-import { useGetAllTaskListMutation } from '@/services/customers/taskService'
+import {
+  taskApi,
+  useGetAllTaskListMutation,
+  usePostponeTaskStepMutation,
+  useUpdateTaskMutation
+} from '@/services/customers/taskService'
 import DefaultCalendarOptions from '@/constants/calendarOptions'
-import { Button, CustomerTaskModal, H1, UserImage } from '@/components'
-import { openModal } from '@/store'
+import { Button, CustomerTaskModal, H1, SelectTaskWorkflowModal, SpeechModal, UserImage } from '@/components'
+import { closeModal, openModal } from '@/store'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ModalBody } from '../types'
 import { taskStatusOptions } from '@/constants/statuses'
@@ -19,6 +24,11 @@ import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import moment from 'moment'
 import { selectColorForTaskStatus } from '@/utils/statusColorUtil'
+import { toastWarning } from '@/utils/toastUtil'
+import { activityApi, useCreateActivityMutation } from '@/services/activityService'
+import { useAuth } from '@/hooks/useAuth'
+import Swal from 'sweetalert2'
+import { dateToEpoch, epochToDateString } from '@/utils/timeUtils'
 
 const EventInner = styled(Button)`
   display: flex;
@@ -51,13 +61,139 @@ const StyledReactTooltip = styled(ReactTooltip)`
   }
 `
 const CalendarModal = () => {
+  const { loggedUser } = useAuth()
+
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const [postponeTaskStep] = usePostponeTaskStepMutation()
+  const [createActivity] = useCreateActivityMutation()
 
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(emptyQueryParams)
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery(emptyQueryParams)
 
   const defaultOptions = DefaultCalendarOptions()
+
+  defaultOptions.dateClick = info => {
+    if (moment(info.dateStr).valueOf() < Date.now()) {
+      return toastWarning('You can not create a task for the past')
+    }
+
+    dispatch(
+      openModal({
+        id: 'selectTaskWorkflowModalForCalendar',
+        title: 'Customer Task',
+        body: (
+          <SelectTaskWorkflowModal
+            cb={() => postGetAllTaskList(calendarFilters)}
+            date={moment(info.dateStr).valueOf()}
+          />
+        ),
+        width: ESize.WSmall,
+        height: ESize.HMedium,
+        maxWidth: ESize.WSmall,
+        backgroundColor: colors.gray.light
+      })
+    )
+  }
+
+  const handleConfirmPostponeChange = async (
+    timerVal,
+    noteContent,
+    date: number,
+    task: ICustomerTask,
+    stepIndex: number
+  ) => {
+    dispatch(closeModal(`SpeechModal-postpone-${task?._id}`))
+
+    console.log(epochToDateString(date))
+
+    await postponeTaskStep({
+      taskId: task._id,
+      stepIndex,
+      postponedDate: date
+    })
+
+    console.log(task)
+
+    await createActivity({
+      title: 'Task Postponed',
+      content: noteContent,
+      usedTime: timerVal,
+      stepCategory: task.steps[stepIndex].category._id,
+      customer: task.customer._id,
+      task: task._id,
+      owner: loggedUser.user?._id || '',
+      step: stepIndex,
+      type: EActivity.TASK_POSTPONED
+    })
+
+    await postGetAllTaskList(calendarFilters)
+    dispatch(activityApi.util.resetApiState())
+  }
+
+  defaultOptions.eventDrop = async ({ event: droppedEvent }) => {
+    const task = droppedEvent._def.extendedProps.task
+    const stepIndex = droppedEvent._def.extendedProps.stepIndex
+    const date = dateToEpoch(droppedEvent.startStr)
+
+    try {
+      Swal.fire({
+        title: 'Enter your postpone message',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Postponed',
+        showLoaderOnConfirm: true,
+        preConfirm: login => {
+          return login
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then(async result => {
+        if (result.isConfirmed) {
+          if ((task?.steps[stepIndex].usedPostpone || 0) >= (task?.steps[stepIndex].postponeLimit || 0)) {
+            dispatch(
+              openModal({
+                id: `SpeechModal-postpone-${task?._id}`,
+                title: 'Postpone Note',
+                body: (
+                  <SpeechModal
+                    id={`SpeechModal-postpone-${task?._id}`}
+                    headerText={`Responsible Note ( ${task.customer.firstname + ' ' + task.customer.lastname} / ${
+                      task?.name
+                    } )`}
+                    cb={(timerVal, noteContent) =>
+                      handleConfirmPostponeChange(timerVal, noteContent, date, task, stepIndex)
+                    }
+                    cbCancel={async () => await postGetAllTaskList(calendarFilters)}
+                  />
+                ),
+                height: ESize.HSmall,
+                width: ESize.WSmall,
+                maxWidth: ESize.WSmall
+              })
+            )
+          } else {
+            await postponeTaskStep({
+              taskId: task._id,
+              stepIndex,
+              postponedDate: date
+            })
+            await postGetAllTaskList(calendarFilters)
+          }
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Cancelled'
+          })
+          await postGetAllTaskList(calendarFilters)
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const [calendarFilters, calendarFiltersDispatch] = useReducer(calendarFiltersReducer, {
     ...emptyTaskFilter
@@ -196,11 +332,11 @@ const CalendarModal = () => {
               id: task._id,
               // allDay: false,
               backgroundColor: step.category.color.color,
-              start: step?.postponedDate?.toString().trim().length > 0 ? step?.postponedDate : step.startDate,
-              end: step?.postponedDate?.toString().trim().length > 0 ? step?.postponedDate : step.startDate,
+              start: step?.postponedDate > 0 ? step?.postponedDate : step.startDate,
+              end: step?.postponedDate > 0 ? step?.postponedDate : step.startDate,
               color: step.category.color.color,
               title: task.name,
-              extendedProps: { task, step }
+              extendedProps: { task, step, stepIndex: index }
             }
             allTaskSteps.push(event)
           }
@@ -213,8 +349,6 @@ const CalendarModal = () => {
   useEffect(() => {
     postGetAllTaskList(calendarFilters)
   }, [calendarFilters])
-
-  console.log('calendarFilters', calendarFilters)
 
   return (
     <ItemContainer borderRadius="0.3rem" overflow="hidden" height="100%">

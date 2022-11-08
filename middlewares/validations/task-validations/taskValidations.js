@@ -45,7 +45,7 @@ const createTaskValidation = async (req, res, next) => {
           responsibleUser: responsibleUserSchema,
           checklistItems: joi.array().items(checklistItemSchema),
           expireDuration: joi.number().required(),
-          postponeTime: joi.number().required(),
+          postponeLimit: joi.number().required(),
           tabs: joi.array().items(joi.string()),
           _id: joi.string()
         })

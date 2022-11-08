@@ -5,7 +5,7 @@ export default interface ITaskControlStep {
   startDate: string
   expireDuration: number
   postponeCount: number
-  postponeTime: number
+  postponeLimit: number
   totalDuration: number
   usedTime: number
 

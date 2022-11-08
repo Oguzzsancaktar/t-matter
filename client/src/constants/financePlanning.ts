@@ -25,7 +25,7 @@ const defaultPaymentSettings: IFinancePlanning = {
     isChecked: false,
     value: 2
   },
-  installmentPostponeTimeLimit: {
+  installmentpostponeLimitLimit: {
     isChecked: false,
     value: 30
   },

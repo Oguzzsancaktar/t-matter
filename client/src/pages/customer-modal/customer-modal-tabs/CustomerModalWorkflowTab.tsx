@@ -119,7 +119,7 @@ const CustomerModalWorkflowTab: React.FC<IProps> = ({ customer }) => {
       openModal({
         id: 'selectTaskWorkflowModal-' + customer._id,
         title: 'Customer Task',
-        body: <SelectTaskWorkflowModal customer={customer} />,
+        body: <SelectTaskWorkflowModal date={Date.now()} customer={customer} />,
         width: ESize.WSmall,
         height: ESize.HMedium,
         maxWidth: ESize.WSmall,

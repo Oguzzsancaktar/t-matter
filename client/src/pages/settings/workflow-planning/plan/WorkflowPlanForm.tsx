@@ -148,14 +148,14 @@ const WorkflowPlanForm: React.FC<IProps> = ({ data, errors, onDataChange }) => {
 
             <ItemContainer width="calc((100% - 1rem)/2)">
               <InputWithText
-                name={'postponeTime'}
+                name={'postponeLimit'}
                 labelText="Task Postpone Time"
                 placeholder="Task Postpone Time"
                 children="Times"
                 onChange={handleInputChange}
                 type="number"
-                value={data.postponeTime || ''}
-                validationError={errors.postponeTimeError}
+                value={data.postponeLimit || ''}
+                validationError={errors.postponeLimitError}
               />
             </ItemContainer>
           </JustifyBetweenRow>
