@@ -37,7 +37,7 @@ function App() {
     clearTimeout(timeout)
     timeout = setTimeout(function () {
       alert('move your mouse')
-    }, 300 * 1000)
+    }, 60 * 1000)
   }
 
   const alertUser = async e => {
