@@ -32,22 +32,9 @@ function App() {
   const dispatch = useAppDispatch()
 
   const alertUser = async e => {
-    e = e || window.event
-    var localStorageTime = localStorage.getItem('storagetime')
-    if (localStorageTime != null && localStorageTime != undefined) {
-      var currentTime = new Date().getTime(),
-        timeDifference = currentTime - +localStorageTime
-      await logout({ isCookieNotRemoved: true }).unwrap()
-      if (timeDifference < 25) {
-        //Browser Closed
-        localStorage.removeItem('storagetime')
-      } else {
-        //Browser Tab Closed
-        localStorage.setItem('storagetime', new Date().getTime().toString())
-      }
-    } else {
-      localStorage.setItem('storagetime', new Date().getTime().toString())
-    }
+    await logout({ isCookieNotRemoved: true }).unwrap()
+    ;(e || window.event).returnValue = ''
+    return ''
   }
 
   useEffect(() => {
