@@ -3,7 +3,7 @@ import { EStatus, ITaskCreateDTO } from '@/models'
 const initialTask: ITaskCreateDTO = {
   stepIndex: 0,
   expireDuration: 0,
-  postponeTime: 0,
+  postponeLimit: 0,
   category: {
     _id: '-1',
     name: 'Select Value',

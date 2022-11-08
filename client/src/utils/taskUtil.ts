@@ -26,7 +26,7 @@ const isTimerCondition = (taskStep: ITaskStep | undefined) => {
 const isPostponeCondition = (taskStep: ITaskStep | undefined) => {
   if (!taskStep) return false
 
-  return taskStep.steps.usedPostpone >= taskStep.steps.postponeTime
+  return taskStep.steps.usedPostpone >= taskStep.steps.postponeLimit
 }
 
 const isExpireCondition = (taskStep: ITaskStep | undefined) => {

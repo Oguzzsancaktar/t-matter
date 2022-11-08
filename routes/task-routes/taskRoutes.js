@@ -37,6 +37,8 @@ router.get('/:taskId', middlewares.validations.taskValidations.getTaskValidation
 
 router.put('/:taskId', controllers.taskController.updateTask)
 
+router.patch('/postpone/:taskId', controllers.taskController.postponeTaskStep)
+
 router.get('/chart/most-used-workflow', controllers.taskController.usedTaskWorkflowCounts)
 router.get('/chart/task-workflow-added-monthly-analysis', controllers.taskController.getTaskCountForMonths)
 router.get(

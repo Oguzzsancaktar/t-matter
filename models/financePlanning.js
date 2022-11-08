@@ -27,7 +27,7 @@ const FinancePlanningSchema = new Schema({
   minDepositAmount: financePlanningItem,
   minInstallmentAmount: financePlanningItem,
   installmentPostponeLimit: financePlanningItem,
-  installmentPostponeTimeLimit: financePlanningItem,
+  installmentpostponeLimitLimit: financePlanningItem,
   activeTimeSlipAmount: financePlanningItem,
   inactiveTimeSlipAmount: financePlanningItem,
   pastDueLateFee: financePlanningExtendItem,

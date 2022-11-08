@@ -332,6 +332,22 @@ const getTaskYearsWithCustomerId = async (req, res) => {
   }
 }
 
+const postponeTaskStep = async (req, res) => {
+  const { taskId } = req.params
+  const { stepIndex, postponedDate } = req.body
+  console.log('abcd', taskId, stepIndex, postponedDate)
+
+  try {
+    const task = await Task.findById(taskId).lean()
+    task.steps[stepIndex].postponedDate = postponedDate
+    task.steps[stepIndex].usedPostpone = task.steps[stepIndex].usedPostpone + 1
+    await dataAccess.taskDataAccess.updateTaskById(taskId, task)
+    res.sendStatus(200)
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
@@ -350,5 +366,6 @@ module.exports = {
   getCustomerMostUsedUserInTasks,
   getCustomerTimerAnalysis,
   getTaskYearsWithCustomerId,
-  getTasksWithArrQueries
+  getTasksWithArrQueries,
+  postponeTaskStep
 }

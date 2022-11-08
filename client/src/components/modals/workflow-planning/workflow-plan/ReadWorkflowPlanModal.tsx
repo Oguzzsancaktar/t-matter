@@ -58,7 +58,7 @@ const ReadWorkflowPlanModal: React.FC<IProps> = ({ workflow }) => {
                         <JustifyBetweenRow>
                           <ItemContainer margin="0 0 1rem 0">
                             <H1 width="auto" color={colors.text.primary}>
-                              Task Postpone Time: {step.postponeTime}
+                              Task Postpone Time: {step.postponeLimit}
                             </H1>
                           </ItemContainer>
                           <Row margin="0 0 1rem 0">

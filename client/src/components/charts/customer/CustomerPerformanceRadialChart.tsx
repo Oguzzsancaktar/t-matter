@@ -32,7 +32,7 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
   const postponePassedStepCount = useMemo(() => {
     if (customerTasksData) {
       return customerTasksData.reduce((acc, task) => {
-        const passedStepCount = task.steps.filter(step => step.usedPostpone > step.postponeTime).length
+        const passedStepCount = task.steps.filter(step => step.usedPostpone > step.postponeLimit).length
         return acc + passedStepCount
       }, 0)
     }

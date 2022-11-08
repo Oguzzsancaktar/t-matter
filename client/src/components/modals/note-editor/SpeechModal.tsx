@@ -12,14 +12,18 @@ interface IProps {
   id: string
   headerText: string
   cb: (timerVal: number, noteContent: string) => void
+  cbCancel?: () => void
   size?: string
 }
 
-const NoteEditorModal: React.FC<IProps> = ({ id, headerText, size = 'large', cb }) => {
+const NoteEditorModal: React.FC<IProps> = ({ id, headerText, size = 'large', cb, cbCancel }) => {
   const { useAppDispatch } = useAccessStore()
   const dispatch = useAppDispatch()
 
   const handleCancel = () => {
+    if (cbCancel) {
+      cbCancel()
+    }
     dispatch(closeModal(id))
   }
   const handleSubmit = (timerVal: number, noteContent: string) => {

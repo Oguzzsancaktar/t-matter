@@ -15,24 +15,19 @@ import {
   ESize
 } from '@/models'
 import { useCreateActivityMutation, activityApi } from '@/services/activityService'
-import {
-  useUpdateTaskMutation,
-  useGetTaskByTaskIdQuery,
-  taskApi,
-  useDeleteTaskMutation
-} from '@/services/customers/taskService'
+import { useUpdateTaskMutation, useGetTaskByTaskIdQuery, taskApi } from '@/services/customers/taskService'
 import { useCreateExpiredTaskStepMutation } from '@/services/settings/finance-planning/financePlanningService'
 import { closeModal, openModal, setModalOnClose } from '@/store'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import { ModalBody } from '../types'
 import TaskInformations from '@/components/client-task/task-informations/TaskInformations'
 import TaskEventSection from '@/components/client-task/task-informations/TaskEventSection'
 import { NoteEditorModal, SpeechModal } from '@/components'
 import useSound from 'use-sound'
-import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
 import { CUSTOMER_ACTIVITY_TYPES } from '@/constants/customerActivityTypes'
 import { useCreateCustomerActivityMutation } from '@/services/customers/customerActivityService'
+import moment from 'moment'
 
 interface IProps {
   taskId: string
@@ -46,7 +41,6 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
   const [checkPlay] = useSound('sounds/check-play.wav')
   const [cancelPlay] = useSound('sounds/task-cancel.wav')
 
-  const [deleteTask] = useDeleteTaskMutation()
   const [createCustomerActivity] = useCreateCustomerActivityMutation()
 
   const [createActivity] = useCreateActivityMutation()
@@ -158,7 +152,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
     const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
 
     tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
-    tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
+    tempUpdatedTaskData.steps[activeStep].postponedDate = moment(dateText).valueOf()
 
     await updateTask(tempUpdatedTaskData)
     await createActivity({
@@ -179,7 +173,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
 
   const handlePostponeChange = async (value: Date[], dateText: string) => {
     if (
-      (updatedTaskData?.steps[activeStep].usedPostpone || 0) >= (updatedTaskData?.steps[activeStep].postponeTime || 0)
+      (updatedTaskData?.steps[activeStep].usedPostpone || 0) >= (updatedTaskData?.steps[activeStep].postponeLimit || 0)
     ) {
       dispatch(
         openModal({
@@ -203,9 +197,7 @@ const CustomerTaskModal: React.FC<IProps> = ({ taskId, customerId, customer }) =
       const tempUpdatedTaskData: ICustomerTask = JSON.parse(JSON.stringify(updatedTaskData))
 
       tempUpdatedTaskData.steps[activeStep].usedPostpone = +tempUpdatedTaskData.steps[activeStep].usedPostpone + 1
-      tempUpdatedTaskData.steps[activeStep].postponedDate = dateText
-
-      console.log(111, tempUpdatedTaskData.steps[activeStep].postponedDate)
+      tempUpdatedTaskData.steps[activeStep].postponedDate = moment(dateText).valueOf()
 
       await updateTask(tempUpdatedTaskData)
       setUpdatedTaskData({ ...tempUpdatedTaskData })

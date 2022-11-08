@@ -150,16 +150,16 @@ const PaymentSettingsTab = () => {
         </JustifyBetweenRow>
         <JustifyBetweenRow margin="0 0 1rem 0">
           <Column margin="1.3rem 0 0 0" width="50px" height="100%">
-            <ItemContainer onClick={handleChangeCheckbox.bind(this, 'installmentPostponeTimeLimit')}>
-              <Checkbox isChecked={state.installmentPostponeTimeLimit.isChecked} onChange={() => {}} />
+            <ItemContainer onClick={handleChangeCheckbox.bind(this, 'installmentpostponeLimitLimit')}>
+              <Checkbox isChecked={state.installmentpostponeLimitLimit.isChecked} onChange={() => {}} />
             </ItemContainer>
           </Column>
           <Column>
             <InputWithIcon
               labelText="Installment postpone time limit (Days)"
               placeholder="Installment postpone time limit (Days)"
-              name="installmentPostponeTimeLimit"
-              value={state.installmentPostponeTimeLimit.value}
+              name="installmentpostponeLimitLimit"
+              value={state.installmentpostponeLimitLimit.value}
               onChange={handleInputChange}
               type="number"
             >

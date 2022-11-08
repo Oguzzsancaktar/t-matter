@@ -15,6 +15,7 @@ import { initialRadialChartOptions } from '@/constants/initialValues'
 import { useAuth } from '@/hooks/useAuth'
 import { useOutsideTrigger } from '@/hooks/useOutsideTrigger'
 import { ETaskStatus, ITaskItem } from '@/models'
+import { epochToDateString } from '@/utils/timeUtils'
 import { ApexOptions } from 'apexcharts'
 import moment from 'moment'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -30,11 +31,11 @@ interface IProps {
 }
 const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }) => {
   const series = useMemo(
-    () => [(taskActiveStep?.usedPostpone / taskActiveStep?.postponeTime) * 100],
+    () => [(taskActiveStep?.usedPostpone / taskActiveStep?.postponeLimit) * 100],
     [taskActiveStep?.usedPostpone]
   )
   const [isPostponeLimitPassed, setIsPostponeLimitPassed] = useState<boolean>(
-    taskActiveStep.usedPostpone > taskActiveStep.postponeTime
+    taskActiveStep.usedPostpone > taskActiveStep.postponeLimit
   )
 
   const [showTime, setShowTime] = useState(false)
@@ -43,9 +44,11 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
 
   const [postponeDate, setPostponeDate] = useState({
     value: [new Date(taskActiveStep.postponedDate)],
-    dateText: taskActiveStep.postponedDate || ''
+    dateText: epochToDateString(taskActiveStep.postponedDate) || ''
   })
-  const [postponeClock, setPostponeClock] = useState(taskActiveStep.postponedDate.split(' ')[1] || '00:00')
+  const [postponeClock, setPostponeClock] = useState(
+    epochToDateString(taskActiveStep.postponedDate).split(' ')[1] || '00:00'
+  )
   const canTaskPostpone: boolean = taskActiveStep.stepStatus === ETaskStatus['Progress']
 
   const onDateChange = (value: Date[], dateText: string) => {
@@ -98,10 +101,10 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
               fontSize: '15px',
               color: colors.text.primary,
               formatter: function (val) {
-                if ((taskActiveStep?.postponeTime * val) / 100 > taskActiveStep?.postponeTime) {
+                if ((taskActiveStep?.postponeLimit * val) / 100 > taskActiveStep?.postponeLimit) {
                   setIsPostponeLimitPassed(true)
                 }
-                return taskActiveStep.postponedDate
+                return epochToDateString(taskActiveStep.postponedDate)
               }
             }
           }
@@ -129,7 +132,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
           },
 
           formatter(timestamp) {
-            return taskActiveStep.usedPostpone + '/' + taskActiveStep.postponeTime
+            return taskActiveStep.usedPostpone + '/' + taskActiveStep.postponeLimit
           }
         },
         z: {
@@ -206,10 +209,10 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
             fontSize: '15px',
             color: colors.text.primary,
             formatter: function (val) {
-              if ((taskActiveStep?.postponeTime * val) / 100 > taskActiveStep?.postponeTime) {
+              if ((taskActiveStep?.postponeLimit * val) / 100 > taskActiveStep?.postponeLimit) {
                 setIsPostponeLimitPassed(true)
               }
-              return taskActiveStep.postponedDate
+              return epochToDateString(taskActiveStep.postponedDate)
             }
           }
         }
@@ -237,7 +240,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
         },
 
         formatter(timestamp) {
-          return taskActiveStep.usedPostpone + '/' + taskActiveStep.postponeTime
+          return taskActiveStep.usedPostpone + '/' + taskActiveStep.postponeLimit
         }
       },
       z: {
@@ -288,7 +291,7 @@ const TaskPostponeCard: React.FC<IProps> = ({ taskActiveStep, onPostponeChange }
         <JustifyCenterColumn width="100%" height="40px">
           <ExternalLink size={20} color={colors.text.primary} />
           <H1 color={colors.text.primary} fontSize="0.8rem" textAlign="center">
-            {taskActiveStep?.usedPostpone + '/' + taskActiveStep?.postponeTime}
+            {taskActiveStep?.usedPostpone + '/' + taskActiveStep?.postponeLimit}
           </H1>
         </JustifyCenterColumn>
       </ItemContainer>

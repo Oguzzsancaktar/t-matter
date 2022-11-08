@@ -14,6 +14,7 @@ import moment from 'moment'
 import { Button, SelectTaskWorkflowModal } from '@/components'
 import { openModal } from '@/store'
 import colors from './colors'
+import { toastWarning } from '@/utils/toastUtil'
 
 const DefaultCalendarOptions = (): any => {
   const { loggedUser } = useAuth()
@@ -39,7 +40,6 @@ const DefaultCalendarOptions = (): any => {
     },
     // businessHours: true, // display business hours
     // slotDuration: { hours: 1 },
-    timezone: 'local',
     slotDuration: '01:00',
     snapDuration: '00:01',
     allDaySlot: false,
@@ -98,6 +98,10 @@ const DefaultCalendarOptions = (): any => {
     },
 
     dateClick(info) {
+      if (moment(info.dateStr).valueOf() < Date.now()) {
+        return toastWarning('You can not create a task for the past')
+      }
+
       dispatch(
         openModal({
           id: 'selectTaskWorkflowModalForCalendar',

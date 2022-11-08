@@ -1,3 +1,6 @@
+import { dateTimeFormatMoment } from '@/constants/formats'
+import moment from 'moment'
+
 export const secondsToTimeWithDisplay = second => {
   let d = Number(second)
   var h = Math.floor(d / 3600)
@@ -102,4 +105,12 @@ export const clockToSeconds = (time: string) => {
     total = seconds
   }
   return total
+}
+
+export const epochToDateString = (epoch: number) => {
+  return moment(epoch).format(dateTimeFormatMoment)
+}
+
+export const dateToEpoch = (date: string) => {
+  return moment(date).valueOf()
 }

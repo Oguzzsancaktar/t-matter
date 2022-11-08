@@ -132,6 +132,7 @@ const updateTask = (builder: IBuilder) => {
         method: 'PUT',
         data: {
           ...taskUpdateDto,
+          customer: taskUpdateDto.customer?._id || taskUpdateDto.customer,
           steps: taskUpdateDto.steps.map(step => ({
             ...step,
             responsibleUser: step.responsibleUser._id,
@@ -285,6 +286,30 @@ const updateTaskStepsSeen = (builder: IBuilder) => {
   })
 }
 
+const postponeTaskStep = (builder: IBuilder) => {
+  return builder.mutation<
+    ICustomerTask,
+    {
+      taskId: ITaskStep['_id']
+      stepIndex: ITaskStep['stepIndex']
+      postponedDate: number
+    }
+  >({
+    query({ taskId, stepIndex, postponedDate }) {
+      return {
+        url: `/task/postpone/${taskId}`,
+        method: 'PATCH',
+        data: {
+          stepIndex,
+          postponedDate
+        }
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: TASK_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
 // charts
 
 const getCustomerMostUsedUserInTasks = (builder: IBuilder) => {
@@ -356,7 +381,8 @@ const taskApi = createApi({
     updateTaskStepsSeen: updateTaskStepsSeen(builder),
     getCustomerMostUsedUserInTasks: getCustomerMostUsedUserInTasks(builder),
     getCustomerTasksTimerAnalyises: getCustomerTasksTimerAnalyises(builder),
-    getTaskYearsWithCustomerId: getTaskYearsWithCustomerId(builder)
+    getTaskYearsWithCustomerId: getTaskYearsWithCustomerId(builder),
+    postponeTaskStep: postponeTaskStep(builder)
   })
 })
 
@@ -378,7 +404,8 @@ const {
   useGetCustomerMostUsedUserInTasksQuery,
   useGetCustomerTasksTimerAnalyisesQuery,
   useGetTaskYearsWithCustomerIdQuery,
-  useGetAllTaskListMutation
+  useGetAllTaskListMutation,
+  usePostponeTaskStepMutation
 } = taskApi
 export {
   taskApi,
@@ -399,5 +426,6 @@ export {
   useGetCustomerMostUsedUserInTasksQuery,
   useGetCustomerTasksTimerAnalyisesQuery,
   useGetTaskYearsWithCustomerIdQuery,
-  useGetAllTaskListMutation
+  useGetAllTaskListMutation,
+  usePostponeTaskStepMutation
 }

@@ -24,7 +24,7 @@ const workflowPlanStep = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Locations'
   },
-  postponeTime: {
+  postponeLimit: {
     type: Number
   },
   tabs: [],
