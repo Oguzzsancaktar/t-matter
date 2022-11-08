@@ -2,24 +2,27 @@ import useAccessStore from '@hooks/useAccessStore'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { ITaskStep } from '@models/Entities/workflow/task/ICustomerTask'
-import { isExpireCondition, isPostponeCondition, isTimerCondition, taskStepConditionSelector } from '@utils/taskUtil'
+
 import {
   DatePicker,
   ItemContainer,
   JustifyBetweenRow,
   JustifyCenterColumn,
-  JustifyCenterRow,
   NoTableData,
+  SelectInput,
   TableSkeltonLoader
 } from '@/components'
-import { FcClock, FcExpired, FcLeave } from 'react-icons/fc'
 import * as React from 'react'
 import colors from '@constants/colors'
-import { useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery } from '@services/userLogService'
+import { useLazyGetUserLogsByIdQuery } from '@services/userLogService'
 import { selectUser } from '@/store'
 import { IUserLog } from '@/models'
 import { secondsToHourMin } from '@utils/timeUtils'
+import { useGetUsersQuery } from '@services/settings/user-planning/userService'
+import { emptyQueryParams } from '@constants/queryParams'
+import { TASK_CONDITION_OPTIONS } from '@constants/task'
+import { HR_LOGIN_CONDITIONS_OPTIONS } from '@constants/hrLogin'
+import { HrLoginBarChart, HrLoginConditionDonutChart, HrLoginRadialChart } from '@components/charts/hr'
 
 const LoginHrTab = props => {
   const { useAppDispatch, useAppSelector } = useAccessStore()
@@ -30,41 +33,58 @@ const LoginHrTab = props => {
     endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
   })
   const [fetchUserTimeLogs, { data: timeLogs, isLoading: timeLogsLoading }] = useLazyGetUserLogsByIdQuery()
+  const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
+  const [selectedUserId, setSelectedUserId] = useState('ALL')
+  const [selectedCondition, setSelectedCondition] = useState('ALL')
 
   useEffect(() => {
     if (user) {
-      fetchUserTimeLogs(user._id)
+      fetchUserTimeLogs({
+        userId: user._id,
+        timeOffSet: new Date().getTimezoneOffset(),
+        startDate: moment(dateRange.startDate).toISOString(true),
+        endDate: moment(dateRange.endDate).toISOString(true)
+      })
     }
-  }, [])
+  }, [dateRange])
 
   const columns: TableColumn<IUserLog>[] = [
     {
       name: 'User',
-      selector: row => '',
+      selector: row => user?.firstname + ' ' + user?.lastname,
       sortable: true,
       cell: row => user?.firstname + ' ' + user?.lastname
     },
     {
       name: 'Date',
-      selector: row => '',
+      selector: row =>
+        moment(row.date || '')
+          .unix()
+          .valueOf(),
       sortable: true,
-      cell: row => moment(row.date).format('DD/MM/YYYY')
+      cell: row => moment(row.date).format('MM/DD/YYYY')
     },
     {
       name: 'Login',
-      selector: row => '',
+      selector: row =>
+        moment(row.login || '')
+          .unix()
+          .valueOf(),
       sortable: true,
-      cell: row => moment(row.login).format('hh:mm')
+      cell: row => moment(row.login).format('LT')
     },
     {
       name: 'Logout',
-      selector: row => '',
+      selector: row =>
+        moment(row.logout || '')
+          .unix()
+          .valueOf(),
       sortable: true,
-      cell: row => moment(row.logout).format('HH:mm')
+      cell: row => moment(row.logout).format('LT')
     },
     {
       name: 'Working time',
-      selector: row => '',
+      selector: row => row.totalTime,
       sortable: true,
       cell: row => secondsToHourMin(row.totalTime)
     },
@@ -85,12 +105,21 @@ const LoginHrTab = props => {
     }
   ]
 
+  const userOptions = users?.map(({ _id, firstname }) => ({ value: _id, label: firstname })) || []
+  const selectedUser = userOptions.find(x => x.value === selectedUserId)
+
   return (
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-        <JustifyCenterColumn width="280px">Chart left</JustifyCenterColumn>
-        <JustifyCenterColumn>chart middle</JustifyCenterColumn>
-        <JustifyCenterColumn width="280px">chart right</JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
+          <HrLoginRadialChart />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn>
+          <HrLoginBarChart dateRange={dateRange} />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
+          <HrLoginConditionDonutChart />
+        </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">
         <div style={{ minWidth: 330, display: 'flex', alignItems: 'center' }}>
@@ -110,6 +139,26 @@ const LoginHrTab = props => {
               value={dateRange.endDate}
             />
           </div>
+        </div>
+        <div style={{ minWidth: 120, marginLeft: 8, marginRight: 8 }}>
+          <SelectInput
+            labelText="Conditions"
+            name="conditions"
+            onChange={o => {
+              setSelectedCondition(o.value)
+            }}
+            selectedOption={[...HR_LOGIN_CONDITIONS_OPTIONS]?.filter(x => x.value === selectedCondition) || []}
+            options={[...HR_LOGIN_CONDITIONS_OPTIONS]}
+          />
+        </div>
+        <div style={{ minWidth: 120, marginLeft: 8, marginRight: 8 }}>
+          <SelectInput
+            onChange={o => setSelectedUserId(o.value)}
+            labelText="User"
+            name="user"
+            options={[{ label: 'All', value: 'ALL' }, ...userOptions]}
+            selectedOption={selectedUser ? [selectedUser] : [{ label: 'All', value: 'ALL' }]}
+          />
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', flex: 1, height: '100%', paddingBottom: 3 }}>
           <div

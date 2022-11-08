@@ -7,18 +7,47 @@ const createTimeLog = data => {
   return TimeLog.create(data)
 }
 
-const getLogsByUserId = async userId => {
-  const timeLogs = await TimeLog.aggregate([
+const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate }) => {
+  const pipeline = [
     { $match: { owner: mongoose.Types.ObjectId(userId) } },
     {
+      $addFields: {
+        date: {
+          $dateAdd: {
+            startDate: '$createdAt',
+            unit: 'minute',
+            amount: -timeOffSet
+          }
+        }
+      }
+    },
+    {
       $group: {
-        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$date' } },
         logs: {
           $push: '$$ROOT'
         }
       }
+    },
+    {
+      $sort: {
+        _id: -1
+      }
     }
-  ]).exec()
+  ]
+
+  if (startDate && endDate) {
+    pipeline.unshift({
+      $match: {
+        createdAt: {
+          $gte: moment(startDate).toDate(),
+          $lte: moment(endDate).toDate()
+        }
+      }
+    })
+  }
+
+  const timeLogs = await TimeLog.aggregate(pipeline).exec()
 
   return timeLogs.reduce((acc, curr) => {
     const { _id, logs } = curr
@@ -27,7 +56,7 @@ const getLogsByUserId = async userId => {
 
     const totalTime = logins.reduce((acc, curr, i) => {
       if (logouts[i]) {
-        return acc + moment(moment(logouts[i].createdAt)).diff(curr.createdAt, 'seconds')
+        return acc + moment(moment(logouts[i].date)).diff(curr.date, 'seconds')
       }
       return acc
     }, 0)

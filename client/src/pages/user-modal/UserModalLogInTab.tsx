@@ -21,7 +21,10 @@ interface IProps {
 const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
   const { useAppDispatch } = useAccessStore()
 
-  const { data: userTimeLogData, isLoading: userTimeLogIsLoading } = useGetUserLogsByIdQuery(userId)
+  const { data: userTimeLogData, isLoading: userTimeLogIsLoading } = useGetUserLogsByIdQuery({
+    userId,
+    timeOffSet: new Date().getTimezoneOffset()
+  })
 
   const columns = [
     {

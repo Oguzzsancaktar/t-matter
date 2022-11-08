@@ -546,6 +546,35 @@ const getTaskYearsWithCustomerId = async customerId => {
   return Task.aggregate(pipeline).exec()
 }
 
+const getUserTrackingTime = async userId => {
+  const pipeline = [
+    {
+      $unwind: {
+        path: '$steps',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $unwind: {
+        path: '$steps.workedTimes',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $match: {
+        'steps.workedTimes.user': mongoose.Types.ObjectId(userId)
+      }
+    },
+    {
+      $group: {
+        _id: '$steps.workedTimes.user',
+        trackingTime: { $sum: '$steps.workedTimes.time' }
+      }
+    }
+  ]
+  return Task.aggregate(pipeline).exec()
+}
+
 module.exports = {
   createTask,
   getCustomerTasks,
@@ -559,5 +588,6 @@ module.exports = {
   getCustomerMostUsedUserInTasks,
   getCustomerTimerAnalysis,
   getTaskYearsWithCustomerId,
-  getTasksWithArrFilter
+  getTasksWithArrFilter,
+  getUserTrackingTime
 }
