@@ -31,6 +31,15 @@ function App() {
   let socket: Socket | null = null
   const dispatch = useAppDispatch()
 
+  let timeout
+  document.onmousemove = function () {
+    console.log('mouse moved')
+    clearTimeout(timeout)
+    timeout = setTimeout(function () {
+      alert('move your mouse')
+    }, 300 * 1000)
+  }
+
   const alertUser = async e => {
     await logout({ isCookieNotRemoved: true }).unwrap()
     ;(e || window.event).returnValue = ''
