@@ -22,6 +22,7 @@ import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 import { emptyQueryParams } from '@constants/queryParams'
 import { TASK_CONDITION_OPTIONS } from '@constants/task'
 import { HR_LOGIN_CONDITIONS_OPTIONS } from '@constants/hrLogin'
+import { HrLoginBarChart, HrLoginConditionDonutChart, HrLoginRadialChart } from '@components/charts/hr'
 
 const LoginHrTab = props => {
   const { useAppDispatch, useAppSelector } = useAccessStore()
@@ -110,9 +111,15 @@ const LoginHrTab = props => {
   return (
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
-        <JustifyCenterColumn width="280px">Chart left</JustifyCenterColumn>
-        <JustifyCenterColumn>chart middle</JustifyCenterColumn>
-        <JustifyCenterColumn width="280px">chart right</JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
+          <HrLoginRadialChart />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn>
+          <HrLoginBarChart dateRange={dateRange} />
+        </JustifyCenterColumn>
+        <JustifyCenterColumn width="280px">
+          <HrLoginConditionDonutChart />
+        </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">
         <div style={{ minWidth: 330, display: 'flex', alignItems: 'center' }}>
