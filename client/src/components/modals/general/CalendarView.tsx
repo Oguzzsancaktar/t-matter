@@ -23,14 +23,16 @@ import { activityApi, useCreateActivityMutation } from '@/services/activityServi
 import { useAuth } from '@/hooks/useAuth'
 import Swal from 'sweetalert2'
 import { dateToEpoch } from '@/utils/timeUtils'
-import { Tooltip } from '@nextui-org/react'
+import { Avatar, Tooltip } from '@nextui-org/react'
 import { TaskStepTooltip } from '@/shared'
+import { Menu } from 'react-feather'
 
 const EventInner = styled(Button)`
   display: flex;
   align-items: center;
   height: ${({ height }) => height};
 `
+
 function calendarFiltersReducer(state, action) {
   switch (action.type) {
     case 'CHANGE_CATEGORY':
@@ -57,6 +59,8 @@ const CalendarView: React.FC<IProps> = ({ customer }) => {
 
   const { data: usersData, isLoading: isUsersDataLoading } = useGetUsersQuery(emptyQueryParams)
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery(emptyQueryParams)
+
+  const [customerId, setCustomerId] = useState<string | undefined>(customer?._id)
 
   const defaultOptions = DefaultCalendarOptions()
 
@@ -181,7 +185,7 @@ const CalendarView: React.FC<IProps> = ({ customer }) => {
   }
 
   const [calendarFilters, calendarFiltersDispatch] = useReducer(calendarFiltersReducer, {
-    customerId: customer?._id,
+    customerId: customerId,
     ...emptyTaskFilter
   })
 
@@ -272,6 +276,77 @@ const CalendarView: React.FC<IProps> = ({ customer }) => {
     }
   }
 
+  if (customer) {
+    calendarOptions.headerToolbar = {
+      start: 'sidebarToggle,customerToggle, prev, title, next',
+      center: 'categoryFilter,userFilter,statusFilter',
+      end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth,showFullDay'
+    }
+
+    calendarOptions.customButtons = {
+      customerToggle: {
+        text: '',
+        click: () => {}
+      },
+      sidebarToggle: {
+        text: <Menu />,
+        click: () => {}
+      },
+      showFullDay: {
+        text: <Button>Show All Hours</Button>,
+        click: () => {}
+      },
+      categoryFilter: {
+        text: '',
+        click: () => {}
+      },
+      userFilter: {
+        text: '',
+        click: () => {}
+      },
+      statusFilter: {
+        text: '',
+        click: () => {}
+      }
+    }
+
+    calendarOptions.customButtons.customerToggle.text = customerId ? (
+      <Tooltip animated placement="bottom" content={customer.firstname + ' ' + customer.lastname}>
+        <Avatar
+          size="md"
+          pointer
+          src={customer.profile_img}
+          text={customer.firstname + '' + customer.lastname}
+          bordered
+          stacked
+          zoomed
+          squared
+          color={'success'}
+        />
+      </Tooltip>
+    ) : (
+      <Tooltip animated placement="bottom" content={customer.firstname + ' ' + customer.lastname}>
+        <Avatar
+          size="md"
+          pointer
+          src={customer.profile_img}
+          text={customer.firstname + '' + customer.lastname}
+          bordered
+          stacked
+          zoomed
+          squared
+          color={'default'}
+        />
+      </Tooltip>
+    )
+
+    calendarOptions.customButtons.customerToggle.click = () => {
+      setCustomerId(customerId ? undefined : customer?._id)
+    }
+  }
+
+  console.log(customerId)
+
   calendarOptions.eventClick = handleOpenTaskModal
   calendarOptions.customButtons.showFullDay.text = isSlotFull ? 'All Hours' : 'Working Hours'
   calendarOptions.slotMinTime = isSlotFull ? '00:00:00' : '08:00:00'
@@ -333,8 +408,8 @@ const CalendarView: React.FC<IProps> = ({ customer }) => {
   }, [taskData, taskDataIsLoading])
 
   useEffect(() => {
-    postGetAllTaskList(calendarFilters)
-  }, [calendarFilters])
+    postGetAllTaskList({ ...calendarFilters, customerId })
+  }, [calendarFilters, customerId])
 
   return (
     <ItemContainer borderRadius="0.3rem" overflow="hidden" height="100%">
