@@ -55,7 +55,14 @@ function App() {
 
   useEffect(() => {
     let timeout
-    document.onmousemove = () => {
+    document.onmousemove = e => {
+      if (e.pageX === 0) {
+        const sidebar = document.querySelector('.main-side-bar')
+        sidebar?.classList.add('hover')
+        setTimeout(() => {
+          sidebar?.classList.remove('hover')
+        }, 200)
+      }
       clearTimeout(timeout)
       if (isFreeze) {
         setIsFreeze(false)

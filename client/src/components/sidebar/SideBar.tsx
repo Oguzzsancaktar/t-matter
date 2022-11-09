@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Column, H1, ItemContainer, JustifyBetweenColumn, Row, SearchCustomersModal } from '@components/index'
 import { useAuth } from '@/hooks/useAuth'
@@ -38,9 +38,11 @@ const Sidebar = styled.div`
   height: 100vh;
   background-color: ${colors.primary.dark};
   z-index: 10;
-  transition: 0.4s ease-in-out width;
-  &:hover {
+  transition: 0.4s ease-in-out all;
+  &:hover,
+  &.hover {
     width: 200px;
+    z-index: 99999999999;
   }
 
   &:hover .sidebar__hover_hide_show {
@@ -126,7 +128,7 @@ const SideBar = () => {
   }
 
   return (
-    <Sidebar>
+    <Sidebar className="main-side-bar">
       <ItemContainer height="100vh">
         <JustifyBetweenColumn height="100%" padding="1rem">
           <ItemContainer>
