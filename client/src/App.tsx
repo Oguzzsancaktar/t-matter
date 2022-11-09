@@ -59,7 +59,7 @@ function App() {
         if (!isFreeze) {
           setIsFreeze(true)
         }
-      }, 10 * 1000)
+      }, 60 * 1000)
     }
   }, [user, isFreeze])
 
@@ -69,10 +69,11 @@ function App() {
     }
     let x = true
     while (x) {
-      createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
-      await logout({ isCookieNotRemoved: true }).unwrap()
+      await createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
       x = false
     }
+    console.log('logout worked')
+    window.close()
     ;(e || window.event).returnValue = ''
     return ''
   }

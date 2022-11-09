@@ -6,7 +6,8 @@
     "heroku-postbuild": "cd client && npm i && npm run build",
     "script:task-steps-objectid-fix": "env-cmd -f .env.production node scripts/task-steps-objectid-fix.js",
     "script:remove-all-task-and-invoice-data": "env-cmd -f .env.production node scripts/remove-all-task-and-invoice-data.js",
-    "script:make-customer-types-to-string": "env-cmd -f .env.production node scripts/make-customer-types-to-string.js"
+    "script:make-customer-types-to-string": "env-cmd -f .env.production node scripts/make-customer-types-to-string.js",
+    "script:remove-user-timelogs": "env-cmd -f .env.production node scripts/remove-user-timelogs.js"
   },
   "engines": {
     "node": "18.4.0"
