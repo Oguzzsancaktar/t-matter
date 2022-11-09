@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react'
+import React, { Suspense, lazy, useEffect, useState, useCallback } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
@@ -16,6 +16,9 @@ import { setOnlineUsers } from '@store/online-users'
 import { setSocket } from '@store/online-users/socketGlobal'
 import { useLogoutMutation } from '@services/authService'
 import { isEqual } from 'lodash'
+import { Freeze } from '@/components'
+import { useCreateLogMutation } from '@services/userLogService'
+import { LOG_TYPES } from '@constants/logTypes'
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
@@ -28,21 +31,48 @@ function App() {
   const minimizedModals = useAppSelector(selectMinimizedModals)
   const user = useAppSelector(selectUser)
   const [logout] = useLogoutMutation()
+  const [createLog] = useCreateLogMutation()
   let socket: Socket | null = null
   const dispatch = useAppDispatch()
+  const [isFreeze, setIsFreeze] = useState<Boolean | undefined>(undefined)
 
-  let timeout
-  document.onmousemove = function () {
-    console.log('mouse moved')
-    clearTimeout(timeout)
-    timeout = setTimeout(function () {
-      console.log('move your mouse')
-      alert('move your mouse')
-    }, 10 * 1000)
-  }
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+    if (typeof isFreeze === 'boolean' && isFreeze) {
+      createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
+    }
+    if (typeof isFreeze === 'boolean' && !isFreeze) {
+      createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
+    }
+  }, [user, isFreeze])
+
+  useEffect(() => {
+    let timeout
+    document.onmousemove = () => {
+      clearTimeout(timeout)
+      if (isFreeze) {
+        setIsFreeze(false)
+      }
+      timeout = setTimeout(function () {
+        if (!isFreeze) {
+          setIsFreeze(true)
+        }
+      }, 10 * 1000)
+    }
+  }, [user, isFreeze])
 
   const alertUser = async e => {
-    await logout({ isCookieNotRemoved: true }).unwrap()
+    if (!user) {
+      return ''
+    }
+    let x = true
+    while (x) {
+      createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
+      await logout({ isCookieNotRemoved: true }).unwrap()
+      x = false
+    }
     ;(e || window.event).returnValue = ''
     return ''
   }
@@ -84,6 +114,7 @@ function App() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      {isFreeze && <Freeze />}
       <GlobalStyle />
       <ReactTooltip className="tooltip-z-index" />
 

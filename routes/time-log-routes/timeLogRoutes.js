@@ -9,4 +9,6 @@ router.get(
   controllers.timeLogController.getUserTimeLogs
 )
 
+router.post('/', controllers.timeLogController.createTimeLog)
+
 module.exports = router
