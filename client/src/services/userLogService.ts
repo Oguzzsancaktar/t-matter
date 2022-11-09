@@ -30,15 +30,32 @@ const getUserLogsById = (builder: IBuilder) => {
   })
 }
 
+const createLog = (builder: IBuilder) => {
+  return builder.mutation<void, { logType: number; owner: IUser['_id'] }>({
+    query({ logType, owner }) {
+      return {
+        url: `/time-log`,
+        method: 'POST',
+        data: {
+          logType,
+          owner
+        }
+      }
+    },
+    invalidatesTags: [{ type: LOGS_TAG, id: 'LIST' }]
+  })
+}
+
 const logsApi = createApi({
   reducerPath: LOGS_API_REDUCER_PATH,
   tagTypes: [LOGS_TAG],
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
-    getUserLogsById: getUserLogsById(builder)
+    getUserLogsById: getUserLogsById(builder),
+    createLog: createLog(builder)
   })
 })
 
-const { useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery } = logsApi
+const { useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery, useCreateLogMutation } = logsApi
 
-export { logsApi, useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery }
+export { logsApi, useGetUserLogsByIdQuery, useLazyGetUserLogsByIdQuery, useCreateLogMutation }

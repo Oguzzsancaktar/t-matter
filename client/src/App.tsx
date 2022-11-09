@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react'
+import React, { Suspense, lazy, useEffect, useState, useCallback } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
@@ -16,11 +16,19 @@ import { setOnlineUsers } from '@store/online-users'
 import { setSocket } from '@store/online-users/socketGlobal'
 import { useLogoutMutation } from '@services/authService'
 import { isEqual } from 'lodash'
+import { Freeze } from '@/components'
+import { useCreateLogMutation } from '@services/userLogService'
+import { LOG_TYPES } from '@constants/logTypes'
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const CustomersPage = lazy(() => import('./pages/CustomersPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
+
+function delay(ms) {
+  var start = +new Date()
+  while (+new Date() - start < ms);
+}
 
 function App() {
   const { useAppSelector, useAppDispatch } = useAccessStore()
@@ -28,26 +36,46 @@ function App() {
   const minimizedModals = useAppSelector(selectMinimizedModals)
   const user = useAppSelector(selectUser)
   const [logout] = useLogoutMutation()
+  const [createLog] = useCreateLogMutation()
   let socket: Socket | null = null
   const dispatch = useAppDispatch()
+  const [isFreeze, setIsFreeze] = useState<Boolean | undefined>(undefined)
 
-  const alertUser = async e => {
-    e = e || window.event
-    var localStorageTime = localStorage.getItem('storagetime')
-    if (localStorageTime != null && localStorageTime != undefined) {
-      var currentTime = new Date().getTime(),
-        timeDifference = currentTime - +localStorageTime
-      await logout({ isCookieNotRemoved: true }).unwrap()
-      if (timeDifference < 25) {
-        //Browser Closed
-        localStorage.removeItem('storagetime')
-      } else {
-        //Browser Tab Closed
-        localStorage.setItem('storagetime', new Date().getTime().toString())
-      }
-    } else {
-      localStorage.setItem('storagetime', new Date().getTime().toString())
+  useEffect(() => {
+    if (!user) {
+      return
     }
+    if (typeof isFreeze === 'boolean' && isFreeze) {
+      createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
+    }
+    if (typeof isFreeze === 'boolean' && !isFreeze) {
+      createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
+    }
+  }, [user, isFreeze])
+
+  useEffect(() => {
+    let timeout
+    document.onmousemove = () => {
+      clearTimeout(timeout)
+      if (isFreeze) {
+        setIsFreeze(false)
+      }
+      timeout = setTimeout(function () {
+        if (!isFreeze) {
+          setIsFreeze(true)
+        }
+      }, 60 * 1000)
+    }
+  }, [user, isFreeze])
+
+  const alertUser = e => {
+    if (!user) {
+      return ''
+    }
+    createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
+    delay(1000)
+    // this is needed to avoid to show a confirmation prompt
+    delete e['returnValue']
   }
 
   useEffect(() => {
@@ -55,7 +83,7 @@ function App() {
     return () => {
       window.removeEventListener('beforeunload', alertUser)
     }
-  }, [])
+  }, [user])
 
   useEffect(() => {
     console.log(user)
@@ -87,6 +115,7 @@ function App() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      {isFreeze && <Freeze />}
       <GlobalStyle />
       <ReactTooltip className="tooltip-z-index" />
 
