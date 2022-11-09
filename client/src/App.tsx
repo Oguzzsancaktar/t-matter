@@ -50,7 +50,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (!user) {
+    if (!user || isEqual(user, {})) {
       return
     }
     if (typeof isFreeze === 'boolean' && isFreeze) {
@@ -85,7 +85,7 @@ function App() {
   }, [user, isFreeze])
 
   const alertUser = e => {
-    if (!user) {
+    if (!user || isEqual(user, {})) {
       return ''
     }
     createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
