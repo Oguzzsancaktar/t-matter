@@ -367,3 +367,8 @@
     margin-top: 1rem;
   }
 }
+
+.fc-daygrid-day-events,
+.fc-daygrid-day-top {
+  z-index: 1 !important;
+}

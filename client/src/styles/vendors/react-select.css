@@ -84,6 +84,22 @@
   box-shadow: 0px 4px 10px #00000041;
 }
 
-.rfs-option.rfs-option-focused {
-  background-color: #e8e8e8 !important;
+.rfs-option-focused {
+  background: white !important;
+  color: #435971 !important;
+}
+
+.rfs-option-focused:hover {
+  background: rgba(0, 123, 255, 0.15) !important;
+  color: #435971 !important;
+}
+
+.rfs-option-selected {
+  background: #274e57 !important;
+  color: #fff !important;
+}
+
+.rfs-option-selected:hover {
+  background: #274e57 !important;
+  color: #fff !important;
 }

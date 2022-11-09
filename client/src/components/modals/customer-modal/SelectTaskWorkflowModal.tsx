@@ -8,10 +8,10 @@ import { ModalBody, ModalHeader } from '../types'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ETaskStatus, ICustomer, ICustomerTask, IOption, ITaskCreateDTO, IUser, IWorkflowUpdateDTO } from '@/models'
 import { closeModal } from '@/store'
-import { toastError, toastSuccess, toastWarning } from '@/utils/toastUtil'
+import { toastError, toastSuccess } from '@/utils/toastUtil'
 import { isValueNull, isValueBiggerThanZero } from '@/utils/validationUtils'
 import colors from '@/constants/colors'
-import { taskApi, useCreateTaskMutation } from '@/services/customers/taskService'
+import { useCreateTaskMutation } from '@/services/customers/taskService'
 import moment from 'moment'
 import { emptyQueryParams } from '@/constants/queryParams'
 import { H1 } from '@/components/texts'
@@ -265,6 +265,7 @@ const SelectTaskWorkflowModal: React.FC<IProps> = ({ customer, date, cb }) => {
 
         if (customer) {
           dispatch(closeModal(`selectTaskWorkflowModal-${customer?._id}`))
+          dispatch(closeModal(`selectTaskWorkflowModalForCalendar`))
         } else {
           dispatch(closeModal(`selectTaskWorkflowModalForCalendar`))
         }
