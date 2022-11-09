@@ -63,7 +63,8 @@ function App() {
       createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
       const n = new Notification('Click if you here', {
         vibrate: [200, 100, 200],
-        body: 'Now you are offline please move your mouse to login again'
+        body: 'Now you are offline please move your mouse to login again',
+        icon: 'https://res.cloudinary.com/de0xihdep/image/upload/v1668026524/Screen_Shot_2022-11-09_at_15.38.57_bjlqvy.png'
       })
       n.onclick = () => {
         if (isFreeze) {
