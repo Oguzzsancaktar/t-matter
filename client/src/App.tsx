@@ -42,11 +42,20 @@ function App() {
   const [isFreeze, setIsFreeze] = useState<Boolean | undefined>(undefined)
 
   useEffect(() => {
+    if (!('Notification' in window)) {
+      console.log('Browser does not support desktop notification')
+    } else {
+      Notification.requestPermission()
+    }
+  }, [])
+
+  useEffect(() => {
     if (!user) {
       return
     }
     if (typeof isFreeze === 'boolean' && isFreeze) {
       createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
+      new Notification('Now you are offline please move your mouse to login again')
     }
     if (typeof isFreeze === 'boolean' && !isFreeze) {
       createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
