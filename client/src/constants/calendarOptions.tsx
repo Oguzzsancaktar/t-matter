@@ -34,9 +34,9 @@ const DefaultCalendarOptions = (): any => {
     now: Date.now(),
     displayEventTime: false,
     headerToolbar: {
-      start: 'sidebarToggle,showFullDay, prev,next, title',
+      start: 'sidebarToggle, prev, title, next',
       center: 'categoryFilter,userFilter,statusFilter',
-      end: 'year,dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+      end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth,showFullDay'
     },
     // businessHours: true, // display business hours
     // slotDuration: { hours: 1 },

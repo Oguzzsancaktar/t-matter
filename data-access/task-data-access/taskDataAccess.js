@@ -174,12 +174,16 @@ const getTaskById = taskId => {
   ]).exec()
 }
 
-const getTasksWithArrFilter = async ({ categoryArr, userArr, statusArr }) => {
+const getTasksWithArrFilter = async ({ categoryArr, userArr, statusArr, customerId }) => {
   const categoryArrIdList = categoryArr.map(categoryId => mongoose.Types.ObjectId(categoryId.value))
   const userArrIdList = userArr.map(userId => mongoose.Types.ObjectId(userId.value))
   const statusArrIdList = statusArr.map(statusId => +statusId.value)
 
   const $match = {}
+
+  if (customerId && customerId.trim().length > 0) {
+    $match.customer = mongoose.Types.ObjectId(customerId)
+  }
 
   if (categoryArr.length > 0) {
     $match['steps.category'] = { $in: categoryArrIdList }

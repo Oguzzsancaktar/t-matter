@@ -64,11 +64,12 @@ const deleteTask = (builder: IBuilder) => {
 
 const getAllTaskList = (builder: IBuilder) => {
   return builder.mutation<ICustomerTask[], ITaskFilter>({
-    query({ categoryArr, userArr, statusArr }) {
+    query({ categoryArr, userArr, statusArr, customerId }) {
       return {
         url: `/task`,
         method: 'POST',
         data: {
+          customerId,
           categoryArr,
           userArr,
           statusArr

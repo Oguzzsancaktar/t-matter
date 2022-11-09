@@ -53,10 +53,10 @@ const getAllTaskList = async (req, res) => {
 }
 
 const getTasksWithArrQueries = async (req, res) => {
-  const { categoryArr, userArr, statusArr } = req.body
+  const { categoryArr, userArr, statusArr, customerId } = req.body
 
   try {
-    const tasks = await dataAccess.taskDataAccess.getTasksWithArrFilter({ categoryArr, userArr, statusArr })
+    const tasks = await dataAccess.taskDataAccess.getTasksWithArrFilter({ categoryArr, userArr, statusArr, customerId })
     res.status(200).json(tasks)
   } catch (error) {
     console.log(error)
@@ -335,7 +335,6 @@ const getTaskYearsWithCustomerId = async (req, res) => {
 const postponeTaskStep = async (req, res) => {
   const { taskId } = req.params
   const { stepIndex, postponedDate } = req.body
-  console.log('abcd', taskId, stepIndex, postponedDate)
 
   try {
     const task = await Task.findById(taskId).lean()

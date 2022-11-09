@@ -17,7 +17,8 @@ import {
   CustomerModalActivityTab,
   CustomerModalWorkflowTab,
   CustomerModalFinanceTab,
-  CustomerModalPreviewTab
+  CustomerModalPreviewTab,
+  CustomerModalCalendarTab
 } from '@/pages'
 import { useCreateCustomerHistoryMutation } from '@/services/customers/customerHistoryService'
 import {
@@ -131,7 +132,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
       case 'activity':
         return <CustomerModalActivityTab customerId={customer._id} />
       case 'calendar':
-        return 'Calendar'
+        return <CustomerModalCalendarTab customer={customer} />
       case 'workflow':
         return <CustomerModalWorkflowTab customer={customer} />
       case 'file':
