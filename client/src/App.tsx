@@ -25,6 +25,11 @@ const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const CustomersPage = lazy(() => import('./pages/CustomersPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 
+function delay(ms) {
+  var start = +new Date()
+  while (+new Date() - start < ms);
+}
+
 function App() {
   const { useAppSelector, useAppDispatch } = useAccessStore()
   const openModals = useAppSelector(selectOpenModals)
@@ -63,19 +68,14 @@ function App() {
     }
   }, [user, isFreeze])
 
-  const alertUser = async e => {
+  const alertUser = e => {
     if (!user) {
       return ''
     }
-    let x = true
-    while (x) {
-      await createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
-      x = false
-    }
-    console.log('logout worked')
-    window.close()
-    ;(e || window.event).returnValue = ''
-    return ''
+    createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
+    delay(1000)
+    // this is needed to avoid to show a confirmation prompt
+    delete e['returnValue']
   }
 
   useEffect(() => {
@@ -83,7 +83,7 @@ function App() {
     return () => {
       window.removeEventListener('beforeunload', alertUser)
     }
-  }, [])
+  }, [user])
 
   useEffect(() => {
     console.log(user)
