@@ -66,9 +66,11 @@ function App() {
         body: 'Now you are offline please move your mouse to login again'
       })
       n.onclick = () => {
-        setIsFreeze(false)
-        createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
-        n.close()
+        if (isFreeze) {
+          setIsFreeze(false)
+          createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
+          n.close()
+        }
       }
     }
     if (typeof isFreeze === 'boolean' && !isFreeze) {
