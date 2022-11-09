@@ -47,13 +47,9 @@ function App() {
     } else {
       Notification.requestPermission().then(permission => {
         if (permission === 'granted') {
-          new Notification('Click if you here', {
-            vibrate: [200, 100, 200],
-            body: 'Now you are offline please move your mouse to login again'
-          })
           console.log('Notification permission granted.')
         } else {
-          console.log('Unable to get permission to notify.')
+          alert('Please allow notification to use this app')
         }
       })
     }
@@ -65,7 +61,15 @@ function App() {
     }
     if (typeof isFreeze === 'boolean' && isFreeze) {
       createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
-      new Notification('Now you are offline please move your mouse to login again')
+      const n = new Notification('Click if you here', {
+        vibrate: [200, 100, 200],
+        body: 'Now you are offline please move your mouse to login again'
+      })
+      n.onclick = () => {
+        setIsFreeze(false)
+        createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
+        n.close()
+      }
     }
     if (typeof isFreeze === 'boolean' && !isFreeze) {
       createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
