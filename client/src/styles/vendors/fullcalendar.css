@@ -73,14 +73,14 @@
 }
 .fc .fc-toolbar .fc-button-group .fc-button-primary:not(.fc-prev-button):not(.fc-next-button) {
   background-color: transparent;
-  border-color: #223446;
+  border: 1px solid #dddddd !important;
   color: #223446;
 }
 .fc .fc-toolbar .fc-button-group .fc-button-primary:not(.fc-prev-button):not(.fc-next-button).fc-button-active,
 .fc .fc-toolbar .fc-button-group .fc-button-primary:not(.fc-prev-button):not(.fc-next-button):hover {
-  background-color: rgba(39, 78, 87, 0.2) !important;
-  border-color: #223446 !important;
-  color: #223446;
+  background-color: transparent !important;
+  border-color: #274e57 !important;
+  color: #274e57;
 }
 .fc .fc-toolbar .fc-button-group .fc-button-primary.fc-sidebarToggle-button {
   border: 0;
@@ -371,4 +371,34 @@
 .fc-daygrid-day-events,
 .fc-daygrid-day-top {
   z-index: 1 !important;
+}
+
+.fc-customerToggle-button {
+  padding: 0 !important;
+  border: none !important;
+  margin-left: 1rem !important;
+}
+
+.fc-customerToggle-button:hover {
+  background-color: transparent !important;
+}
+
+.fc-sidebarToggle-button.fc-button.fc-button-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border: 1px solid transparent !important;
+}
+
+.fc-categoryFilter-button.fc-button.fc-button-primary:hover {
+  border: 0px solid transparent !important;
+}
+
+.fc-userFilter-button.fc-button.fc-button-primary:hover {
+  border: 0px solid transparent !important;
+}
+
+.fc-statusFilter-button.fc-button.fc-button-primary:hover {
+  border: 10px solid transparent !important;
 }
