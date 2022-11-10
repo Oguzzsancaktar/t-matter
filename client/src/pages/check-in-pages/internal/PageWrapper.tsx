@@ -5,7 +5,16 @@ import { useNavigate } from 'react-router-dom'
 const PageWrapper = ({ children, title }) => {
   const navigate = useNavigate()
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', padding: 24 }}>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 24,
+        background: '#f1f2f3'
+      }}
+    >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div />
         <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#925D07' }} size={38}>
