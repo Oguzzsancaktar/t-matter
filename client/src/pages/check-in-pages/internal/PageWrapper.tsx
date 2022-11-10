@@ -20,7 +20,7 @@ const PageWrapper = ({ children, title }) => {
         <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#925D07' }} size={38}>
           {title}
         </Text>
-        <Button onClick={() => navigate('/checkin')} auto flat color="error" icon={<CgClose size="24px" />} />
+        <Button onClick={() => navigate('/checkin')} auto flat color="primary" icon={<CgClose size="24px" />} />
       </div>
       {children}
     </div>
