@@ -174,7 +174,7 @@ function App() {
       >
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/check-in" element={<CheckInHome />} />
+          <Route path="/checkin" element={<CheckInHome />} />
           <Route
             path="/settings"
             element={
