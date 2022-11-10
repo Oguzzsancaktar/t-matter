@@ -47,7 +47,7 @@ const NewConsultation = () => {
 
   return (
     <PageWrapper title="New consultation">
-      <div style={{ width: '1100px', margin: '64px auto' }}>
+      <div style={{ width: '900px', margin: '64px auto' }}>
         <Row fluid>
           <Input
             {...firstNameBindings}
@@ -112,21 +112,35 @@ const NewConsultation = () => {
             placeholder="Please enter your email"
           />
         </Row>
+        <Spacer y={3} />
         <Row>
-          {/*<Dropdown.Menu*/}
-          {/*  aria-label="Single selection actions"*/}
-          {/*  color="secondary"*/}
-          {/*  disallowEmptySelection*/}
-          {/*  selectionMode="single"*/}
-          {/*  selectedKeys={'text'}*/}
-          {/*  onSelectionChange={() => {}}*/}
-          {/*>*/}
-          {/*  <Dropdown.Item key="text">Text</Dropdown.Item>*/}
-          {/*  <Dropdown.Item key="number">Number</Dropdown.Item>*/}
-          {/*  <Dropdown.Item key="date">Date</Dropdown.Item>*/}
-          {/*  <Dropdown.Item key="single_date">Single Date</Dropdown.Item>*/}
-          {/*  <Dropdown.Item key="iteration">Iteration</Dropdown.Item>*/}
-          {/*</Dropdown.Menu>*/}
+          <Dropdown>
+            <Dropdown.Button size="xl" flat>
+              Gender
+            </Dropdown.Button>
+            <Dropdown.Menu aria-label="gender">
+              <Dropdown.Item key="female">Female</Dropdown.Item>
+              <Dropdown.Item key="male">male</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <Dropdown>
+            <Dropdown.Button size="xl" flat>
+              Gender
+            </Dropdown.Button>
+            <Dropdown.Menu aria-label="gender">
+              <Dropdown.Item key="female">Female</Dropdown.Item>
+              <Dropdown.Item key="male">male</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <Dropdown>
+            <Dropdown.Button size="xl" flat>
+              Gender
+            </Dropdown.Button>
+            <Dropdown.Menu aria-label="gender">
+              <Dropdown.Item key="female">Female</Dropdown.Item>
+              <Dropdown.Item key="male">male</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Row>
         <Spacer y={3} />
         <Row align="center" justify="center">
