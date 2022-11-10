@@ -52,8 +52,8 @@ const CheckInHome = ({}) => {
       }}
     >
       <Col>
-        <Row style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 125 }}>
-          <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#925D07' }} size={48}>
+        <Row style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 175 }}>
+          <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#0E8AAA' }} size={48}>
             BK Law Firm ( Melinda Basaran )
           </Text>
         </Row>
