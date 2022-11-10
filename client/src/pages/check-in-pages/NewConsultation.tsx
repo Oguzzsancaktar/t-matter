@@ -1,6 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { PageWrapper } from './internal'
 import { Input, Row, Spacer, useInput, Dropdown, Button } from '@nextui-org/react'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@services/settings/company-planning/dynamicVariableService'
+import { emptyQueryParams } from '@constants/queryParams'
+import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 
 type IHelperValidation = (
   value: string,
@@ -13,6 +19,14 @@ const NewConsultation = () => {
   const { value: phoneValue, reset: phoneReset, bindings: phoneBindings } = useInput('')
   const { value: firstNameValue, reset: firstNameReset, bindings: firstNameBindings } = useInput('')
   const { value: lastNameValue, reset: lastNameReset, bindings: lastNameBindings } = useInput('')
+  const [genderSelectedKey, setGenderSelectedKey] = useState('')
+  const [jobTitleSelectedKey, setJobTitleSelectedKey] = useState('')
+  const [userSelectedKey, setUserSelectedKey] = useState('')
+  const [referredBySelectedKey, setReferredBySelectedKey] = useState('')
+
+  const { data: referredByData, isLoading: referredByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
+  const { data: users } = useGetUsersQuery(emptyQueryParams)
 
   const validateEmail = emailValue => {
     return emailValue.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i)
@@ -115,36 +129,69 @@ const NewConsultation = () => {
         <Spacer y={3} />
         <Row>
           <Dropdown>
-            <Dropdown.Button size="xl" flat>
-              Gender
+            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+              {genderSelectedKey ? genderSelectedKey : 'Select gender'}
             </Dropdown.Button>
-            <Dropdown.Menu aria-label="gender">
+            <Dropdown.Menu
+              disallowEmptySelection
+              selectionMode="single"
+              selectedKeys={genderSelectedKey}
+              aria-label="gender"
+              // @ts-ignore
+              onSelectionChange={setGenderSelectedKey}
+            >
               <Dropdown.Item key="female">Female</Dropdown.Item>
-              <Dropdown.Item key="male">male</Dropdown.Item>
+              <Dropdown.Item key="male">Male</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
+
+          <Spacer x={2} />
+
           <Dropdown>
-            <Dropdown.Button size="xl" flat>
-              Gender
+            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+              {jobTitleSelectedKey ? jobTitleSelectedKey : 'Select job title'}
             </Dropdown.Button>
-            <Dropdown.Menu aria-label="gender">
-              <Dropdown.Item key="female">Female</Dropdown.Item>
-              <Dropdown.Item key="male">male</Dropdown.Item>
-            </Dropdown.Menu>
+            {jobTitleData && (
+              <Dropdown.Menu aria-label="job">
+                {jobTitleData.map(jobTitle => {
+                  return <Dropdown.Item key={jobTitle.name}>{jobTitle.name}</Dropdown.Item>
+                })}
+              </Dropdown.Menu>
+            )}
           </Dropdown>
+
+          <Spacer x={2} />
+
           <Dropdown>
-            <Dropdown.Button size="xl" flat>
-              Gender
+            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+              {userSelectedKey ? userSelectedKey : 'Select user'}
             </Dropdown.Button>
-            <Dropdown.Menu aria-label="gender">
-              <Dropdown.Item key="female">Female</Dropdown.Item>
-              <Dropdown.Item key="male">male</Dropdown.Item>
-            </Dropdown.Menu>
+            {users && (
+              <Dropdown.Menu aria-label="user">
+                {users.map(user => {
+                  return <Dropdown.Item key={user._id}>{user.firstname + ' ' + user.lastname}</Dropdown.Item>
+                })}
+              </Dropdown.Menu>
+            )}
+          </Dropdown>
+
+          <Spacer x={2} />
+          <Dropdown>
+            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+              {userSelectedKey ? userSelectedKey : 'Select referred by'}
+            </Dropdown.Button>
+            {referredByData && (
+              <Dropdown.Menu aria-label="referredBy">
+                {referredByData.map(referredBy => {
+                  return <Dropdown.Item key={referredBy._id}>{referredBy.name}</Dropdown.Item>
+                })}
+              </Dropdown.Menu>
+            )}
           </Dropdown>
         </Row>
-        <Spacer y={3} />
+        <Spacer y={2} />
         <Row align="center" justify="center">
-          <Button size="xl" bordered color="success" auto>
+          <Button size="xl" color="warning">
             Success
           </Button>
         </Row>

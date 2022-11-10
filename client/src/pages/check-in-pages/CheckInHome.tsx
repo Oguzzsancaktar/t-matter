@@ -1,10 +1,19 @@
 import React from 'react'
 import { Card, Text, useTheme, Row, Col, Spacer } from '@nextui-org/react'
 import { useNavigate } from 'react-router-dom'
+import {
+  useGetJobTitlesQuery,
+  useGetRefferedBysQuery
+} from '@services/settings/company-planning/dynamicVariableService'
+import { emptyQueryParams } from '@constants/queryParams'
+import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 
 const CheckInHome = ({}) => {
   const { theme } = useTheme()
   const navigate = useNavigate()
+  const { data: refferedByData, isLoading: refferedByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
+  const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
+  const { data: users } = useGetUsersQuery(emptyQueryParams)
 
   const MockItem = ({ text, to }) => {
     return (
