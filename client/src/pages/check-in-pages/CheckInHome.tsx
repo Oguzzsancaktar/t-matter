@@ -47,21 +47,30 @@ const CheckInHome = ({}) => {
         backgroundSize: 'cover',
         backdropFilter: 'blur(8px)',
         backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat'
+        backgroundRepeat: 'no-repeat',
+        position: 'relative'
       }}
     >
-      <Col style={{ padding: 40 }}>
-        <Row justify="center">
-          <MockItem to="/checkin/new-consultation" text="New consultation" />
-          <Spacer x={2} />
-          <MockItem to="/checkin/appointment" text="Appointment" />
+      <Col>
+        <Row style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 125 }}>
+          <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#925D07' }} size={48}>
+            BK Law Firm ( Melinda Basaran )
+          </Text>
         </Row>
-        <Spacer y={2} />
-        <Row justify="center">
-          <MockItem to="/checkin/drop-of-documents" text="Drop of documents" />
-          <Spacer x={2} />
-          <MockItem to="/checkin/pick-up-documents" text="Pick up documents" />
-        </Row>
+        <Col style={{ padding: 40 }}>
+          <Spacer y={2} />
+          <Row justify="center">
+            <MockItem to="/checkin/new-consultation" text="New consultation" />
+            <Spacer x={2} />
+            <MockItem to="/checkin/appointment" text="Appointment" />
+          </Row>
+          <Spacer y={2} />
+          <Row justify="center">
+            <MockItem to="/checkin/drop-of-documents" text="Drop of documents" />
+            <Spacer x={2} />
+            <MockItem to="/checkin/pick-up-documents" text="Pick up documents" />
+          </Row>
+        </Col>
       </Col>
     </div>
   )
