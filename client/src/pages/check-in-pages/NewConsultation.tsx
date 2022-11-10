@@ -61,7 +61,7 @@ const NewConsultation = () => {
 
   return (
     <PageWrapper title="New consultation">
-      <div style={{ width: '900px', margin: '64px auto' }}>
+      <div style={{ width: '900px', margin: '250px auto' }}>
         <Row fluid>
           <Input
             {...firstNameBindings}
