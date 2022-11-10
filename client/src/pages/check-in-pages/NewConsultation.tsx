@@ -1,6 +1,6 @@
 import React from 'react'
 import { PageWrapper } from './internal'
-import { Input, Row, Spacer, useInput, NormalColors } from '@nextui-org/react'
+import { Input, Row, Spacer, useInput, Dropdown, Button } from '@nextui-org/react'
 
 type IHelperValidation = (
   value: string,
@@ -47,7 +47,7 @@ const NewConsultation = () => {
 
   return (
     <PageWrapper title="New consultation">
-      <div style={{ width: '1100px', margin: 'auto' }}>
+      <div style={{ width: '1100px', margin: '64px auto' }}>
         <Row fluid>
           <Input
             {...firstNameBindings}
@@ -111,6 +111,28 @@ const NewConsultation = () => {
             label="Email"
             placeholder="Please enter your email"
           />
+        </Row>
+        <Row>
+          {/*<Dropdown.Menu*/}
+          {/*  aria-label="Single selection actions"*/}
+          {/*  color="secondary"*/}
+          {/*  disallowEmptySelection*/}
+          {/*  selectionMode="single"*/}
+          {/*  selectedKeys={'text'}*/}
+          {/*  onSelectionChange={() => {}}*/}
+          {/*>*/}
+          {/*  <Dropdown.Item key="text">Text</Dropdown.Item>*/}
+          {/*  <Dropdown.Item key="number">Number</Dropdown.Item>*/}
+          {/*  <Dropdown.Item key="date">Date</Dropdown.Item>*/}
+          {/*  <Dropdown.Item key="single_date">Single Date</Dropdown.Item>*/}
+          {/*  <Dropdown.Item key="iteration">Iteration</Dropdown.Item>*/}
+          {/*</Dropdown.Menu>*/}
+        </Row>
+        <Spacer y={3} />
+        <Row align="center" justify="center">
+          <Button size="xl" bordered color="success" auto>
+            Success
+          </Button>
         </Row>
       </div>
     </PageWrapper>
