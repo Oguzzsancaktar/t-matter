@@ -19,7 +19,7 @@ import { isEqual } from 'lodash'
 import { Freeze } from '@/components'
 import { useCreateLogMutation } from '@services/userLogService'
 import { LOG_TYPES } from '@constants/logTypes'
-import { CheckInHome } from '@pages/check-in-pages'
+import { Appointment, CheckInHome, DropOfDocuments, PickUpDocuments, NewConsultation } from '@pages/check-in-pages'
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
@@ -175,6 +175,10 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/checkin" element={<CheckInHome />} />
+          <Route path="/checkin/new-consultation" element={<NewConsultation />} />
+          <Route path="/checkin/appointment" element={<Appointment />} />
+          <Route path="/checkin/drop-of-documents" element={<DropOfDocuments />} />
+          <Route path="/checkin/pick-up-documents" element={<PickUpDocuments />} />
           <Route
             path="/settings"
             element={
