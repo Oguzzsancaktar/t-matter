@@ -33,6 +33,16 @@ const NewConsultation = () => {
   const firstNameHelper = validationHelper(firstNameValue, validateName, 'first name')
   const lastNameHelper = validationHelper(lastNameValue, validateName, 'last name')
 
+  const isButtonDisabled =
+    emailHelper.color !== 'success' ||
+    phoneHelper.color !== 'success' ||
+    firstNameHelper.color !== 'success' ||
+    lastNameHelper.color !== 'success' ||
+    genderSelectedKey === '' ||
+    jobTitleSelectedKey === '' ||
+    userSelectedKey === '' ||
+    referredBySelectedKey === ''
+
   return (
     <PageWrapper title="New consultation">
       <div style={{ width: '900px', margin: '250px auto' }}>
@@ -165,7 +175,7 @@ const NewConsultation = () => {
         </Row>
         <Spacer y={2} />
         <Row align="center" justify="center">
-          <Button size="xl" color="warning">
+          <Button disabled={isButtonDisabled} size="xl" color="warning">
             Success
           </Button>
         </Row>

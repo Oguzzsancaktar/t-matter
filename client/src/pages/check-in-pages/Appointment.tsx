@@ -12,6 +12,8 @@ const Appointment = () => {
 
   const phoneHelper = validationHelper(phoneValue, validatePhone, 'phone')
 
+  const isButtonDisabled = phoneHelper.color !== 'success' || userSelectedKey === ''
+
   return (
     <PageWrapper title="Appointment">
       <div style={{ width: '900px', margin: '250px auto' }}>
@@ -57,7 +59,7 @@ const Appointment = () => {
         </Row>
         <Spacer y={2} />
         <Row fluid align="center" justify="center">
-          <Button size="xl" color="warning">
+          <Button disabled={isButtonDisabled} size="xl" color="warning">
             Success
           </Button>
         </Row>

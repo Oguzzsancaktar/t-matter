@@ -64,7 +64,11 @@ const DropOfDocuments = () => {
         </Row>
         <Spacer y={2} />
         <Row fluid align="center" justify="center">
-          <Button size="xl" color="warning">
+          <Button
+            disabled={phoneHelper.color !== 'success' || documentTypesHelper.color !== 'success'}
+            size="xl"
+            color="warning"
+          >
             Submit
           </Button>
         </Row>

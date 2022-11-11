@@ -1,9 +1,9 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { PageWrapper } from './internal'
-import {Button, Dropdown, Input, Row, Spacer, Textarea, useInput} from '@nextui-org/react'
-import {useGetUsersQuery} from "@services/settings/user-planning/userService";
-import {emptyQueryParams} from "@constants/queryParams";
-import {validatePhone, validationHelper} from "@pages/check-in-pages/internal/validationHelper";
+import { Button, Dropdown, Input, Row, Spacer, Textarea, useInput } from '@nextui-org/react'
+import { useGetUsersQuery } from '@services/settings/user-planning/userService'
+import { emptyQueryParams } from '@constants/queryParams'
+import { validatePhone, validationHelper } from '@pages/check-in-pages/internal/validationHelper'
 
 const PickUpDocuments = () => {
   const { value: phoneValue, reset: phoneReset, bindings: phoneBindings } = useInput('')
@@ -63,7 +63,11 @@ const PickUpDocuments = () => {
         </Row>
         <Spacer y={2} />
         <Row fluid align="center" justify="center">
-          <Button size="xl" color="warning">
+          <Button
+            disabled={phoneHelper.color !== 'success' || documentTypesHelper.color !== 'success'}
+            size="xl"
+            color="warning"
+          >
             Submit
           </Button>
         </Row>
