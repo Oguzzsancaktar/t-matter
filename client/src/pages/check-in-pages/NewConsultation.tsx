@@ -7,12 +7,12 @@ import {
 } from '@services/settings/company-planning/dynamicVariableService'
 import { emptyQueryParams } from '@constants/queryParams'
 import { useGetUsersQuery } from '@services/settings/user-planning/userService'
-
-type IHelperValidation = (
-  value: string,
-  validation: (value: string) => any,
-  field: string
-) => { text: string; color: 'default' | 'error' | 'success' }
+import {
+  validatePhone,
+  validateName,
+  validateEmail,
+  validationHelper
+} from '@pages/check-in-pages/internal/validationHelper'
 
 const NewConsultation = () => {
   const { value: emailValue, reset: emailReset, bindings: emailBindings } = useInput('')
@@ -28,36 +28,10 @@ const NewConsultation = () => {
   const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
   const { data: users } = useGetUsersQuery(emptyQueryParams)
 
-  const validateEmail = emailValue => {
-    return emailValue.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i)
-  }
-
-  const validatePhone = phoneValue => {
-    return phoneValue.match(/\(?\d{3}\)?-? *\d{3}-? *-?\d{4}/)
-  }
-
-  const validateName = nameValue => {
-    return nameValue.match(/^[a-z ,.'-]+$/i)
-  }
-
-  const helper: IHelperValidation = (value, validation, field) => {
-    if (!value) {
-      return {
-        text: `please enter your ${field}`,
-        color: 'default'
-      }
-    }
-    const isValid = validation(value)
-    return {
-      text: isValid ? `Correct ${field}` : `Enter a valid ${field}`,
-      color: isValid ? 'success' : 'error'
-    }
-  }
-
-  const emailHelper = helper(emailValue, validateEmail, 'email')
-  const phoneHelper = helper(phoneValue, validatePhone, 'phone')
-  const firstNameHelper = helper(firstNameValue, validateName, 'first name')
-  const lastNameHelper = helper(lastNameValue, validateName, 'last name')
+  const emailHelper = validationHelper(emailValue, validateEmail, 'email')
+  const phoneHelper = validationHelper(phoneValue, validatePhone, 'phone')
+  const firstNameHelper = validationHelper(firstNameValue, validateName, 'first name')
+  const lastNameHelper = validationHelper(lastNameValue, validateName, 'last name')
 
   return (
     <PageWrapper title="New consultation">
@@ -178,7 +152,7 @@ const NewConsultation = () => {
           <Spacer x={2} />
           <Dropdown>
             <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
-              {userSelectedKey ? userSelectedKey : 'Select referred by'}
+              {referredBySelectedKey ? referredBySelectedKey : 'Select referred by'}
             </Dropdown.Button>
             {referredByData && (
               <Dropdown.Menu aria-label="referredBy">
