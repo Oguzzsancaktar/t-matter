@@ -13,6 +13,10 @@ import {
   validateEmail,
   validationHelper
 } from '@pages/check-in-pages/internal/validationHelper'
+import { useCheckInCreateCustomerMutation, useCreateCustomerMutation } from '@services/customers/customerService'
+import ICustomer from '../../models/Entities/customer/ICustomer'
+import { IUser } from '@/models'
+import { GENDER_TYPES } from '@constants/statuses'
 
 const NewConsultation = () => {
   const { value: emailValue, reset: emailReset, bindings: emailBindings } = useInput('')
@@ -27,6 +31,7 @@ const NewConsultation = () => {
   const { data: referredByData, isLoading: referredByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
   const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
   const { data: users } = useGetUsersQuery(emptyQueryParams)
+  const [create] = useCheckInCreateCustomerMutation()
 
   const emailHelper = validationHelper(emailValue, validateEmail, 'email')
   const phoneHelper = validationHelper(phoneValue, validatePhone, 'phone')
@@ -42,6 +47,48 @@ const NewConsultation = () => {
     jobTitleSelectedKey === '' ||
     userSelectedKey === '' ||
     referredBySelectedKey === ''
+
+  const getDropdownData = x => {
+    return Array.from(x)[0]
+  }
+
+  const handleSubmit = async () => {
+    await create({
+      email: emailValue,
+      phone: phoneValue,
+      firstname: firstNameValue,
+      lastname: lastNameValue,
+      gender: (genderSelectedKey === 'female' ? GENDER_TYPES.FEMALE : GENDER_TYPES.MALE) as ICustomer['gender'],
+      jobTitle: getDropdownData(jobTitleSelectedKey) as ICustomer['jobTitle'],
+      refferedBy: getDropdownData(referredBySelectedKey) as ICustomer['refferedBy']['_id'],
+      customerType: '636108db15070e01a633c583',
+      userId: getDropdownData(userSelectedKey) as IUser['_id']
+    })
+  }
+
+  const getJobTitleContent = () => {
+    if (!jobTitleData) {
+      return 'Select Job Title'
+    }
+    const id = getDropdownData(jobTitleSelectedKey)
+    return id ? jobTitleData.find(x => x._id === id)?.name : 'Select Job Title'
+  }
+
+  const getReferredByContent = () => {
+    if (!referredByData) {
+      return 'Select Referred By'
+    }
+    const id = getDropdownData(referredBySelectedKey)
+    return id ? referredByData.find(x => x._id === id)?.name : 'Select Referred By'
+  }
+
+  const getUserContent = () => {
+    if (!users) {
+      return 'Select User'
+    }
+    const id = getDropdownData(userSelectedKey)
+    return id ? users.find(x => x._id === id)?.firstname + ' ' + users.find(x => x._id === id)?.lastname : 'Select User'
+  }
 
   return (
     <PageWrapper title="New consultation">
@@ -133,27 +180,18 @@ const NewConsultation = () => {
 
           <Dropdown>
             <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
-              {jobTitleSelectedKey ? jobTitleSelectedKey : 'Select job title'}
+              {getJobTitleContent()}
             </Dropdown.Button>
             {jobTitleData && (
-              <Dropdown.Menu aria-label="job">
+              <Dropdown.Menu
+                disallowEmptySelection
+                selectionMode="single"
+                aria-label="job"
+                // @ts-ignore
+                onSelectionChange={setJobTitleSelectedKey}
+              >
                 {jobTitleData.map(jobTitle => {
-                  return <Dropdown.Item key={jobTitle.name}>{jobTitle.name}</Dropdown.Item>
-                })}
-              </Dropdown.Menu>
-            )}
-          </Dropdown>
-
-          <Spacer x={2} />
-
-          <Dropdown>
-            <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
-              {userSelectedKey ? userSelectedKey : 'Select user'}
-            </Dropdown.Button>
-            {users && (
-              <Dropdown.Menu aria-label="user">
-                {users.map(user => {
-                  return <Dropdown.Item key={user._id}>{user.firstname + ' ' + user.lastname}</Dropdown.Item>
+                  return <Dropdown.Item key={jobTitle._id}>{jobTitle.name}</Dropdown.Item>
                 })}
               </Dropdown.Menu>
             )}
@@ -162,12 +200,39 @@ const NewConsultation = () => {
           <Spacer x={2} />
           <Dropdown>
             <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
-              {referredBySelectedKey ? referredBySelectedKey : 'Select referred by'}
+              {getReferredByContent()}
             </Dropdown.Button>
             {referredByData && (
-              <Dropdown.Menu aria-label="referredBy">
+              <Dropdown.Menu
+                disallowEmptySelection
+                selectionMode="single"
+                aria-label="referredBy"
+                // @ts-ignore
+                onSelectionChange={setReferredBySelectedKey}
+              >
                 {referredByData.map(referredBy => {
                   return <Dropdown.Item key={referredBy._id}>{referredBy.name}</Dropdown.Item>
+                })}
+              </Dropdown.Menu>
+            )}
+          </Dropdown>
+
+          <Spacer x={2} />
+
+          <Dropdown>
+            <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
+              {getUserContent()}
+            </Dropdown.Button>
+            {users && (
+              <Dropdown.Menu
+                aria-label="user"
+                disallowEmptySelection
+                selectionMode="single"
+                // @ts-ignore
+                onSelectionChange={setUserSelectedKey}
+              >
+                {users.map(user => {
+                  return <Dropdown.Item key={user._id}>{user.firstname + ' ' + user.lastname}</Dropdown.Item>
                 })}
               </Dropdown.Menu>
             )}
@@ -175,7 +240,7 @@ const NewConsultation = () => {
         </Row>
         <Spacer y={2} />
         <Row align="center" justify="center">
-          <Button disabled={isButtonDisabled} size="xl" color="warning">
+          <Button onClick={handleSubmit} disabled={isButtonDisabled} size="xl" color="warning">
             Success
           </Button>
         </Row>

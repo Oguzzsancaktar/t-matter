@@ -14,6 +14,8 @@ const Appointment = () => {
 
   const isButtonDisabled = phoneHelper.color !== 'success' || userSelectedKey === ''
 
+  const handleSubmit = () => {}
+
   return (
     <PageWrapper title="Appointment">
       <div style={{ width: '900px', margin: '250px auto' }}>
@@ -59,7 +61,7 @@ const Appointment = () => {
         </Row>
         <Spacer y={2} />
         <Row fluid align="center" justify="center">
-          <Button disabled={isButtonDisabled} size="xl" color="warning">
+          <Button onClick={handleSubmit} disabled={isButtonDisabled} size="xl" color="warning">
             Success
           </Button>
         </Row>

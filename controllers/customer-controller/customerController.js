@@ -152,6 +152,17 @@ const addOrChangeCustomerProfileImage = async (req, res) => {
   }
 }
 
+const checkInCreateContactAndRelateNewConsultationTask = async (req, res) => {
+  const { body } = req
+  try {
+    await dataAccess.customerDataAccess.createCustomer(body)
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createCustomer,
   getCustomers,
@@ -159,5 +170,6 @@ module.exports = {
   getCustomer,
   updateCustomer,
   getCustomerReliablesWithId,
-  addOrChangeCustomerProfileImage
+  addOrChangeCustomerProfileImage,
+  checkInCreateContactAndRelateNewConsultationTask
 }

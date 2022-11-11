@@ -11,6 +11,8 @@ router.post(
   controllers.customerController.createCustomer
 )
 
+router.post('/checkin', controllers.customerController.checkInCreateContactAndRelateNewConsultationTask)
+
 router.put(
   '/',
   middlewares.validations.customerValidations.updateCustomerValidation,
