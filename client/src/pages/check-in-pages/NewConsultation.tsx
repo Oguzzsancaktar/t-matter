@@ -103,7 +103,7 @@ const NewConsultation = () => {
         <Spacer y={3} />
         <Row>
           <Dropdown>
-            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+            <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
               {genderSelectedKey ? genderSelectedKey : 'Select gender'}
             </Dropdown.Button>
             <Dropdown.Menu
@@ -122,7 +122,7 @@ const NewConsultation = () => {
           <Spacer x={2} />
 
           <Dropdown>
-            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+            <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
               {jobTitleSelectedKey ? jobTitleSelectedKey : 'Select job title'}
             </Dropdown.Button>
             {jobTitleData && (
@@ -137,7 +137,7 @@ const NewConsultation = () => {
           <Spacer x={2} />
 
           <Dropdown>
-            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+            <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
               {userSelectedKey ? userSelectedKey : 'Select user'}
             </Dropdown.Button>
             {users && (
@@ -151,7 +151,7 @@ const NewConsultation = () => {
 
           <Spacer x={2} />
           <Dropdown>
-            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+            <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
               {referredBySelectedKey ? referredBySelectedKey : 'Select referred by'}
             </Dropdown.Button>
             {referredByData && (

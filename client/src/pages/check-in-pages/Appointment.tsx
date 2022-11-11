@@ -34,7 +34,7 @@ const Appointment = () => {
         <Spacer y={3} />
         <Row fluid>
           <Dropdown>
-            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+            <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
               Select appointment
             </Dropdown.Button>
             <Dropdown.Menu aria-label="appointment">
@@ -43,7 +43,7 @@ const Appointment = () => {
           </Dropdown>
           <Spacer x={2} />
           <Dropdown>
-            <Dropdown.Button css={{ tt: 'capitalize' }} size="xl" flat>
+            <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
               {userSelectedKey ? userSelectedKey : 'Select user'}
             </Dropdown.Button>
             {users && (
