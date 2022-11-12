@@ -17,7 +17,7 @@ const PageWrapper = ({ children, title }) => {
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div />
-        <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#925D07' }} size={38}>
+        <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#96C1F2', position: 'relative', top: 80 }} size={46}>
           {title}
         </Text>
         <Button onClick={() => navigate('/checkin')} auto flat color="primary" icon={<CgClose size="24px" />} />
