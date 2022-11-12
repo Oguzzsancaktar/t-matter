@@ -173,11 +173,11 @@ const checkInCreateContactAndRelateNewConsultationTask = async (req, res) => {
           location: mongoose.Types.ObjectId(step.location._id),
           tabs: step.tabs,
           responsibleUser: mongoose.Types.ObjectId(body.userId),
-          startDate: i === 0 ? now : newConsultationWF.steps[index - 1].endDate,
+          startDate: i === 0 ? +now : +newConsultationWF.steps[index - 1].endDate,
           endDate:
             i === 0
-              ? now + step.expireDuration * 60 * 60 * 24 * 1000
-              : newConsultationWF.steps[index - 1].endDate + step.expireDuration * 60 * 60 * 24 * 1000,
+              ? +now + step.expireDuration * 60 * 60 * 24 * 1000
+              : =newConsultationWF.steps[index - 1].endDate + step.expireDuration * 60 * 60 * 24 * 1000,
           stepStatus: 2,
           expireDuration: step.expireDuration,
           workedTimes: [],
