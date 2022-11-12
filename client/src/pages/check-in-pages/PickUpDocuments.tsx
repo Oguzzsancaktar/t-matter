@@ -40,7 +40,7 @@ const PickUpDocuments = () => {
       return
     }
     await createActivity({
-      title: 'Pick up documents',
+      title: 'Pick up of documents',
       content: noteValue,
       customer: selectedCustomer?._id,
       stepCategory: activeStep.category._id,
@@ -49,7 +49,7 @@ const PickUpDocuments = () => {
       type: EActivity.NORMAL_NOTE,
       step: getTaskActiveStepIndex(selectedTask)
     }).unwrap()
-    toastSuccess('Pick up documents successfully')
+    toastSuccess('Pick up of documents successfully')
     navigate('/checkin')
   }
 
@@ -59,7 +59,7 @@ const PickUpDocuments = () => {
     const tasks = await getTaskByCustomerId({
       customerId: data._id,
       startDate: new Date(),
-      search: 'pick up documents'
+      search: 'pick up of documents'
     }).unwrap()
     setTasks(tasks)
   }
@@ -71,7 +71,7 @@ const PickUpDocuments = () => {
   }
 
   return (
-    <PageWrapper title="Pick up documents">
+    <PageWrapper title="Pick up of documents">
       <div style={{ width: '900px', margin: '250px auto' }}>
         <Row fluid align="flex-end">
           <Input
@@ -128,7 +128,7 @@ const PickUpDocuments = () => {
             <Row fluid>
               <Dropdown>
                 <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
-                  {selectedTask ? getDropdownContent(selectedTask) : 'Select pick up documents'}
+                  {selectedTask ? getDropdownContent(selectedTask) : 'Select pick up of documents'}
                 </Dropdown.Button>
                 <Dropdown.Menu
                   css={{ $$dropdownMenuWidth: '500px' }}
