@@ -177,7 +177,7 @@ const checkInCreateContactAndRelateNewConsultationTask = async (req, res) => {
           endDate:
             i === 0
               ? +now + step.expireDuration * 60 * 60 * 24 * 1000
-              : =newConsultationWF.steps[index - 1].endDate + step.expireDuration * 60 * 60 * 24 * 1000,
+              : +newConsultationWF.steps[index - 1].endDate + step.expireDuration * 60 * 60 * 24 * 1000,
           stepStatus: 2,
           expireDuration: step.expireDuration,
           workedTimes: [],
