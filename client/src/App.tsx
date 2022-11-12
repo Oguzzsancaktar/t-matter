@@ -175,7 +175,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/checkin" element={<CheckInHome />} />
-          <Route path="/checkin/new-consultation" element={<NewConsultation />} />
+          <Route path="/checkin/walk-in" element={<NewConsultation />} />
           <Route path="/checkin/appointment" element={<Appointment />} />
           <Route path="/checkin/drop-of-documents" element={<DropOfDocuments />} />
           <Route path="/checkin/pick-up-documents" element={<PickUpDocuments />} />

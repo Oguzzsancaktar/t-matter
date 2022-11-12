@@ -92,7 +92,7 @@ const NewConsultation = () => {
   }
 
   return (
-    <PageWrapper title="New consultation">
+    <PageWrapper title="Walk in">
       <div style={{ width: '900px', margin: '250px auto' }}>
         <Row fluid>
           <Input

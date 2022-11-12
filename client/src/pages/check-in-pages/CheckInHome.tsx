@@ -62,7 +62,7 @@ const CheckInHome = ({}) => {
         <Col style={{ padding: 40 }}>
           <Spacer y={2} />
           <Row justify="center">
-            <MockItem to="/checkin/new-consultation" text="New consultation" />
+            <MockItem to="/checkin/walk-in" text="Walk in" />
             <Spacer x={2} />
             <MockItem to="/checkin/appointment" text="Appointment" />
           </Row>
