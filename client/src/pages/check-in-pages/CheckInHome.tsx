@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Text, useTheme, Row, Col, Spacer } from '@nextui-org/react'
+import { Card, Text, useTheme, Row, Col, Spacer, Image } from '@nextui-org/react'
 import { useNavigate } from 'react-router-dom'
 import {
   useGetJobTitlesQuery,
@@ -52,11 +52,19 @@ const CheckInHome = ({}) => {
     >
       <Col>
         <Row
-          style={{ position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: 175 }}
+          style={{
+            position: 'absolute',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            top: 100,
+            left: -25
+          }}
         >
-          <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#C3F4FD', opacity: 0.8 }} size={48}>
-            BK Law Firm ( Melinda Basaran )
-          </Text>
+          <Image src="https://res.cloudinary.com/de0xihdep/image/upload/v1668293081/logo-removebg-preview_o1gwkz.png" />
+          {/*<Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#C3F4FD', opacity: 0.8 }} size={48}>*/}
+          {/*  BK Law Firm ( Melinda Basaran )*/}
+          {/*</Text>*/}
         </Row>
         <Col style={{ padding: 40 }}>
           <Spacer y={2} />
