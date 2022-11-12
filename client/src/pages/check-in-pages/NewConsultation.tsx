@@ -17,6 +17,8 @@ import { useCheckInCreateCustomerMutation, useCreateCustomerMutation } from '@se
 import ICustomer from '../../models/Entities/customer/ICustomer'
 import { IUser } from '@/models'
 import { GENDER_TYPES } from '@constants/statuses'
+import { toastSuccess } from '@utils/toastUtil'
+import { useNavigate } from 'react-router-dom'
 
 const NewConsultation = () => {
   const { value: emailValue, reset: emailReset, bindings: emailBindings } = useInput('')
@@ -27,6 +29,8 @@ const NewConsultation = () => {
   const [jobTitleSelectedKey, setJobTitleSelectedKey] = useState('')
   const [userSelectedKey, setUserSelectedKey] = useState('')
   const [referredBySelectedKey, setReferredBySelectedKey] = useState('')
+
+  const navigate = useNavigate()
 
   const { data: referredByData, isLoading: referredByDataIsLoading } = useGetRefferedBysQuery(emptyQueryParams)
   const { data: jobTitleData, isLoading: jobTitleDataIsLoading } = useGetJobTitlesQuery(emptyQueryParams)
@@ -65,6 +69,8 @@ const NewConsultation = () => {
       userId: getDropdownData(userSelectedKey) as IUser['_id'],
       wfName: 'New Consultation'
     })
+    toastSuccess('Walk in successfully')
+    navigate('/checkin')
   }
 
   const getJobTitleContent = () => {
