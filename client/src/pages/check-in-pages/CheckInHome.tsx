@@ -23,11 +23,11 @@ const CheckInHome = ({}) => {
         }}
         isHoverable
         isPressable
-        css={{ $$cardColor: theme?.colors.yellow200 }}
-        style={{ height: 250 }}
+        css={{ $$cardColor: theme?.colors.gray700 }}
+        style={{ height: 250, opacity: 0.8 }}
       >
         <Card.Body style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#925D07' }} size={34}>
+          <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#fff', opacity: 1 }} size={34}>
             {text}
           </Text>
         </Card.Body>
@@ -42,8 +42,7 @@ const CheckInHome = ({}) => {
         justifyContent: 'center',
         width: '100%',
         height: '100%',
-        backgroundImage:
-          'url("https://res.cloudinary.com/de0xihdep/image/upload/v1668101735/wallpaperflare.com_wallpaper_nhysul.jpg")',
+        backgroundImage: 'url("https://res.cloudinary.com/de0xihdep/image/upload/v1668291695/bg_hjkbhv.jpg")',
         backgroundSize: 'cover',
         backdropFilter: 'blur(8px)',
         backgroundPosition: 'center center',
@@ -55,7 +54,7 @@ const CheckInHome = ({}) => {
         <Row
           style={{ position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: 175 }}
         >
-          <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#0E8AAA' }} size={48}>
+          <Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#C3F4FD', opacity: 0.8 }} size={48}>
             BK Law Firm ( Melinda Basaran )
           </Text>
         </Row>
@@ -63,13 +62,13 @@ const CheckInHome = ({}) => {
           <Spacer y={2} />
           <Row justify="center">
             <MockItem to="/checkin/walk-in" text="Walk in" />
-            <Spacer x={2} />
+            <Spacer x={6} />
             <MockItem to="/checkin/appointment" text="Appointment" />
           </Row>
-          <Spacer y={2} />
+          <Spacer y={4} />
           <Row justify="center">
             <MockItem to="/checkin/drop-of-documents" text="Drop of documents" />
-            <Spacer x={2} />
+            <Spacer x={6} />
             <MockItem to="/checkin/pick-up-documents" text="Pick up documents" />
           </Row>
         </Col>
