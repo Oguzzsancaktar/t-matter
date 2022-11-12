@@ -85,7 +85,7 @@ const getAllTaskList = (builder: IBuilder) => {
 const getTasksByCustomerId = (builder: IBuilder) => {
   return builder.query<
     ICustomerTask[],
-    { customerId: ICustomer['_id']; isInvoiced?: boolean; year?: string } & IQueryParams
+    { customerId: ICustomer['_id']; isInvoiced?: boolean; year?: string; startDate?: Date } & IQueryParams
   >({
     query({ customerId, isInvoiced, search, size, status, year }) {
       return {
@@ -389,6 +389,7 @@ const taskApi = createApi({
 
 const {
   useGetTasksByCustomerIdQuery,
+  useLazyGetTasksByCustomerIdQuery,
   useCreateTaskMutation,
   useGetTaskByTaskIdQuery,
   useUpdateTaskMutation,
@@ -428,5 +429,6 @@ export {
   useGetCustomerTasksTimerAnalyisesQuery,
   useGetTaskYearsWithCustomerIdQuery,
   useGetAllTaskListMutation,
-  usePostponeTaskStepMutation
+  usePostponeTaskStepMutation,
+  useLazyGetTasksByCustomerIdQuery
 }

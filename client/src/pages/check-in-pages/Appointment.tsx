@@ -4,27 +4,47 @@ import { Button, Dropdown, Input, Row, Spacer, useInput } from '@nextui-org/reac
 import { validatePhone, validationHelper } from '@pages/check-in-pages/internal/validationHelper'
 import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 import { emptyQueryParams } from '@constants/queryParams'
-import { ICustomer } from '@/models'
+import { ICustomer, ICustomerTask, IUser } from '@/models'
 import { useLazyGetCustomerByPhoneQuery } from '@services/customers/customerService'
 import { BsSearch } from 'react-icons/bs'
 import { UserBadge } from '@/components'
+import { useLazyGetTasksByCustomerIdQuery } from '@services/customers/taskService'
+import moment from 'moment'
+import { getTaskActiveStep } from '@utils/taskUtil'
+import { getFullName } from '@utils/userUtil'
 
 const Appointment = () => {
   const { value: phoneValue, reset: phoneReset, bindings: phoneBindings } = useInput('')
-  const [userSelectedKey, setUserSelectedKey] = useState('')
+
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer>()
+  const [tasks, setTasks] = useState<ICustomerTask[]>([])
+  const [selectedTask, setSelectedTask] = useState<ICustomerTask>()
+
   const { data: users } = useGetUsersQuery(emptyQueryParams)
   const [getCustomerByPhone] = useLazyGetCustomerByPhoneQuery()
+  const [getTaskByCustomerId] = useLazyGetTasksByCustomerIdQuery()
 
   const phoneHelper = validationHelper(phoneValue, validatePhone, 'phone')
 
-  const isButtonDisabled = phoneHelper.color !== 'success' || userSelectedKey === ''
+  const isButtonDisabled = phoneHelper.color !== 'success' || selectedTask === undefined
 
   const handleSubmit = () => {}
 
   const handleSearch = async () => {
     const data = await getCustomerByPhone(phoneValue).unwrap()
     setSelectedCustomer(data)
+    const tasks = await getTaskByCustomerId({
+      customerId: data._id,
+      startDate: new Date(),
+      search: 'Appointment'
+    }).unwrap()
+    setTasks(tasks)
+  }
+
+  const getDropdownContent = (task: ICustomerTask) => {
+    const activeStep = getTaskActiveStep(task)
+    const fullNameResponsible = getFullName(activeStep.responsibleUser as IUser)
+    return `${task.name} with ${fullNameResponsible} at ${moment(activeStep.startDate).format('LTS')}`
   }
 
   return (
@@ -55,37 +75,52 @@ const Appointment = () => {
             icon={<BsSearch fill="currentColor" size={'32px'} />}
           />
         </Row>
-        {selectedCustomer && (
+
+        {selectedCustomer && tasks && (
           <>
             <Spacer y={2} />
-            <UserBadge
-              userImage={selectedCustomer.profile_img as string}
-              userName={selectedCustomer.firstname + ' ' + selectedCustomer.lastname}
-              userEmail={selectedCustomer.email}
-            />
+            <Row justify="space-between" fluid>
+              <div>
+                <UserBadge
+                  userImage={selectedCustomer.profile_img as string}
+                  userName={selectedCustomer.firstname + ' ' + selectedCustomer.lastname}
+                  userEmail={selectedCustomer.email}
+                />
+              </div>
+              {selectedTask && (
+                <>
+                  <span style={{ fontSize: 26 }}>to</span>
+                  <div>
+                    <UserBadge
+                      userImage={getTaskActiveStep(selectedTask).responsibleUser.profile_img as string}
+                      userName={getFullName(getTaskActiveStep(selectedTask).responsibleUser as IUser)}
+                      userEmail={(getTaskActiveStep(selectedTask).responsibleUser as IUser).email}
+                    />
+                  </div>
+                </>
+              )}
+            </Row>
             <Spacer y={2} />
 
             <Row fluid>
               <Dropdown>
                 <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
-                  Select appointment
+                  {selectedTask ? getDropdownContent(selectedTask) : 'Select appointment'}
                 </Dropdown.Button>
-                <Dropdown.Menu aria-label="appointment">
-                  <Dropdown.Item key="mock">mock appoo</Dropdown.Item>
+                <Dropdown.Menu
+                  css={{ $$dropdownMenuWidth: '500px' }}
+                  disallowEmptySelection
+                  selectionMode="single"
+                  selectedKeys={selectedTask?._id as string}
+                  aria-label="appointment"
+                  onSelectionChange={keys => setSelectedTask(tasks.find(task => task._id === Array.from(keys)[0]))}
+                >
+                  {tasks.map((task, i) => (
+                    <Dropdown.Item withDivider={i !== 0} key={task._id}>
+                      {getDropdownContent(task)}
+                    </Dropdown.Item>
+                  ))}
                 </Dropdown.Menu>
-              </Dropdown>
-              <Spacer x={2} />
-              <Dropdown>
-                <Dropdown.Button css={{ tt: 'capitalize', width: '100%' }} size="xl" flat>
-                  {userSelectedKey ? userSelectedKey : 'Select user'}
-                </Dropdown.Button>
-                {users && (
-                  <Dropdown.Menu aria-label="user">
-                    {users.map(user => {
-                      return <Dropdown.Item key={user._id}>{user.firstname + ' ' + user.lastname}</Dropdown.Item>
-                    })}
-                  </Dropdown.Menu>
-                )}
               </Dropdown>
             </Row>
             <Spacer y={2} />

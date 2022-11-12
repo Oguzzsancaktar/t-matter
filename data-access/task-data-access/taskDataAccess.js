@@ -106,7 +106,7 @@ const createTask = data => {
   return Task.create(data)
 }
 
-const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId, categoryId, year }) => {
+const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId, categoryId, year, startDate }) => {
   const $match = {}
   const $match2 = {}
 
@@ -131,6 +131,12 @@ const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId
   }
   if (status && status !== '-9') {
     $match.status = { $eq: +status }
+  }
+  if (startDate && startDate.trim().length > 0) {
+    $match.startDate = {
+      $gte: +moment(startDate).startOf('day').toDate(),
+      $lte: +moment(startDate).endOf('day').toDate()
+    }
   }
 
   if (isInvoiced) {
