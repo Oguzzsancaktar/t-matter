@@ -152,6 +152,19 @@ const getTaskActiveStep = (task: ICustomerTask) => {
   return task.steps[index]
 }
 
+const getTaskActiveStepIndex = (task: ICustomerTask) => {
+  let index = task.steps.reduce((acc, step, index) => {
+    if (step.checklistItems.every(item => item.isChecked)) {
+      return acc + index
+    }
+    return acc
+  }, 0)
+  if (index > task.steps.length - 1 || index < 0) {
+    index = 0
+  }
+  return index
+}
+
 export {
   isTimerCondition,
   isPostponeCondition,
@@ -167,5 +180,6 @@ export {
   filterTaskStepsByWorkflowType,
   filterTaskStepsByTaskCategory,
   filterTaskStepsByConditions,
-  getTaskActiveStep
+  getTaskActiveStep,
+  getTaskActiveStepIndex
 }

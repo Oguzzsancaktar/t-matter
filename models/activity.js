@@ -22,7 +22,6 @@ const activitySchema = new Schema(
     usedTime: {
       type: Number
     },
-
     task: {
       type: Schema.Types.ObjectId,
       ref: 'Tasks'

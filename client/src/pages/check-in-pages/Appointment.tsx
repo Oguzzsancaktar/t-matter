@@ -1,24 +1,30 @@
 import React, { useState } from 'react'
 import { PageWrapper } from './internal'
-import { Button, Dropdown, Input, Row, Spacer, useInput } from '@nextui-org/react'
+import { Button, Dropdown, Input, Row, Spacer, Textarea, useInput } from '@nextui-org/react'
 import { validatePhone, validationHelper } from '@pages/check-in-pages/internal/validationHelper'
 import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 import { emptyQueryParams } from '@constants/queryParams'
-import { ICustomer, ICustomerTask, IUser } from '@/models'
+import { EActivity, ICustomer, ICustomerTask, IUser } from '@/models'
 import { useLazyGetCustomerByPhoneQuery } from '@services/customers/customerService'
 import { BsSearch } from 'react-icons/bs'
 import { UserBadge } from '@/components'
 import { useLazyGetTasksByCustomerIdQuery } from '@services/customers/taskService'
 import moment from 'moment'
-import { getTaskActiveStep } from '@utils/taskUtil'
+import { getTaskActiveStep, getTaskActiveStepIndex } from '@utils/taskUtil'
 import { getFullName } from '@utils/userUtil'
+import { useCreateActivityMutation } from '@services/activityService'
+import { useNavigate } from 'react-router-dom'
+import { toastSuccess } from '@utils/toastUtil'
 
 const Appointment = () => {
   const { value: phoneValue, reset: phoneReset, bindings: phoneBindings } = useInput('')
+  const { value: noteValue, bindings: noteBindings } = useInput('')
 
+  const navigate = useNavigate()
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer>()
   const [tasks, setTasks] = useState<ICustomerTask[]>([])
   const [selectedTask, setSelectedTask] = useState<ICustomerTask>()
+  const [createActivity] = useCreateActivityMutation()
 
   const { data: users } = useGetUsersQuery(emptyQueryParams)
   const [getCustomerByPhone] = useLazyGetCustomerByPhoneQuery()
@@ -28,7 +34,27 @@ const Appointment = () => {
 
   const isButtonDisabled = phoneHelper.color !== 'success' || selectedTask === undefined
 
-  const handleSubmit = () => {}
+  const handleSubmit = async () => {
+    if (!selectedTask) {
+      return
+    }
+    const activeStep = getTaskActiveStep(selectedTask)
+    if (!activeStep) {
+      return
+    }
+    await createActivity({
+      title: 'Check in',
+      content: noteValue,
+      customer: selectedCustomer?._id,
+      stepCategory: activeStep.category._id,
+      task: selectedTask?._id,
+      owner: activeStep.responsibleUser._id as string,
+      type: EActivity.NORMAL_NOTE,
+      step: getTaskActiveStepIndex(selectedTask)
+    }).unwrap()
+    toastSuccess('Check in successfully')
+    navigate('/checkin')
+  }
 
   const handleSearch = async () => {
     const data = await getCustomerByPhone(phoneValue).unwrap()
@@ -122,6 +148,17 @@ const Appointment = () => {
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
+            </Row>
+            <Spacer y={2} />
+            <Row fluid>
+              <Textarea
+                {...noteBindings}
+                helperText="Note for the employee(optional)"
+                width="100%"
+                bordered
+                label="Note"
+                placeholder="You can enter note here"
+              />
             </Row>
             <Spacer y={2} />
             <Row fluid align="center" justify="center">
