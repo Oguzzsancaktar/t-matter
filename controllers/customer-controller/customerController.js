@@ -204,6 +204,17 @@ const checkInCreateContactAndRelateNewConsultationTask = async (req, res) => {
   }
 }
 
+const getCustomerByPhone = async (req, res) => {
+  const { phone } = req.params
+  try {
+    const [customer] = await dataAccess.customerDataAccess.findCustomer({ phone: { $regex: phone, $options: 'i' } })
+    res.status(StatusCodes.OK).json(customer)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createCustomer,
   getCustomers,
@@ -212,5 +223,6 @@ module.exports = {
   updateCustomer,
   getCustomerReliablesWithId,
   addOrChangeCustomerProfileImage,
-  checkInCreateContactAndRelateNewConsultationTask
+  checkInCreateContactAndRelateNewConsultationTask,
+  getCustomerByPhone
 }

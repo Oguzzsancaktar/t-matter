@@ -38,6 +38,7 @@ router.get(
 )
 
 router.get('/', controllers.customerController.getCustomers)
+router.get('/phone/:phone', controllers.customerController.getCustomerByPhone)
 
 router.post('/image/:id', upload.single('file'), controllers.customerController.addOrChangeCustomerProfileImage)
 
