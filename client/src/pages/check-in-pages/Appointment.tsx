@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { PageWrapper } from './internal'
 import { Button, Dropdown, Input, Row, Spacer, Textarea, useInput } from '@nextui-org/react'
 import { validatePhone, validationHelper } from '@pages/check-in-pages/internal/validationHelper'
-import { useGetUsersQuery } from '@services/settings/user-planning/userService'
-import { emptyQueryParams } from '@constants/queryParams'
 import { EActivity, ICustomer, ICustomerTask, IUser } from '@/models'
 import { useLazyGetCustomerByPhoneQuery } from '@services/customers/customerService'
 import { BsSearch } from 'react-icons/bs'
@@ -26,7 +24,6 @@ const Appointment = () => {
   const [selectedTask, setSelectedTask] = useState<ICustomerTask>()
   const [createActivity] = useCreateActivityMutation()
 
-  const { data: users } = useGetUsersQuery(emptyQueryParams)
   const [getCustomerByPhone] = useLazyGetCustomerByPhoneQuery()
   const [getTaskByCustomerId] = useLazyGetTasksByCustomerIdQuery()
 
