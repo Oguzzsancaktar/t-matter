@@ -62,7 +62,8 @@ const NewConsultation = () => {
       jobTitle: getDropdownData(jobTitleSelectedKey) as ICustomer['jobTitle'],
       refferedBy: getDropdownData(referredBySelectedKey) as ICustomer['refferedBy']['_id'],
       customerType: '636108db15070e01a633c583',
-      userId: getDropdownData(userSelectedKey) as IUser['_id']
+      userId: getDropdownData(userSelectedKey) as IUser['_id'],
+      wfName: 'New Consultation'
     })
   }
 

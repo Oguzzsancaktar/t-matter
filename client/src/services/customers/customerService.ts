@@ -148,6 +148,7 @@ const checkInCreateCustomer = (builder: IBuilder) => {
       customerType: ICustomer['customerType']['_id']
       refferedBy: ICustomer['refferedBy']['_id']
       userId: IUser['_id']
+      wfName: string
     }
   >({
     query(dto) {

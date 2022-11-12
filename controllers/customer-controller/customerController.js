@@ -155,7 +155,48 @@ const addOrChangeCustomerProfileImage = async (req, res) => {
 const checkInCreateContactAndRelateNewConsultationTask = async (req, res) => {
   const { body } = req
   try {
-    await dataAccess.customerDataAccess.createCustomer(body)
+    const customer = await dataAccess.customerDataAccess.createCustomer(body)
+    const newConsultationWF = await dataAccess.workflowDataAccess.findByNameWorkflowPlan(body.wfName)
+    const now = new Date()
+    await dataAccess.taskDataAccess.createTask({
+      workflowId: newConsultationWF._id,
+      startDate: now,
+      name: newConsultationWF.name,
+      customer: customer._id,
+      totalDuration: newConsultationWF.totalDuration,
+      totalPrice: newConsultationWF.totalPrice,
+      status: 2,
+      steps: newConsultationWF.steps.map((step, i) => {
+        return {
+          ...step,
+          category: mongoose.Types.ObjectId(step.category._id),
+          location: mongoose.Types.ObjectId(step.location._id),
+          tabs: step.tabs,
+          responsibleUser: mongoose.Types.ObjectId(body.userId),
+          startDate: i === 0 ? now : newConsultationWF.steps[index - 1].endDate,
+          endDate:
+            i === 0
+              ? now + step.expireDuration * 60 * 60 * 24 * 1000
+              : newConsultationWF.steps[index - 1].endDate + step.expireDuration * 60 * 60 * 24 * 1000,
+          stepStatus: 2,
+          expireDuration: step.expireDuration,
+          workedTimes: [],
+          totalPassedTime: 0,
+          isPostponePassed: false,
+          isDeadllinePassed: false,
+          isExpireDatePassed: false,
+          postponeLimit: step.postponeLimit,
+          usedPostpone: 0,
+          postponedDate: 0,
+          checklistItems: step.checklistItems.map(item => ({
+            ...item,
+            isChecked: false
+          })),
+          addedFrom: 'CUSTOMER'
+        }
+      })
+    })
+
     res.sendStatus(StatusCodes.OK)
   } catch (e) {
     console.log(e)
