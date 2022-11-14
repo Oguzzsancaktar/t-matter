@@ -128,7 +128,7 @@ const getInvoicesByCustomerId = customerId => {
 }
 
 const createExpiredTaskStep = data => {
-  return ExpiredTaskStep.create(data, { new: true }).exec()
+  return ExpiredTaskStep.create(data, { new: true })
 }
 
 const getExpiredTaskStepsByCustomerId = ({ customerId, isInvoiced }) => {
