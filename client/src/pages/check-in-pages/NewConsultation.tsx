@@ -60,7 +60,8 @@ const NewConsultation = () => {
     genderSelectedKey === '' ||
     jobTitleSelectedKey === '' ||
     userSelectedKey === '' ||
-    referredBySelectedKey === ''
+    referredBySelectedKey === '' ||
+    image === 'https://via.placeholder.com/150'
 
   const getDropdownData = x => {
     return Array.from(x)[0]

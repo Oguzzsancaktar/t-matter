@@ -91,7 +91,8 @@ const taskPopulatePipe = [
       totalPrice: { $first: '$totalPrice' },
       index: { $first: '$index' },
       isInvoiced: { $first: '$isInvoiced' },
-      status: { $first: '$status' }
+      status: { $first: '$status' },
+      workHistory: { $first: '$workHistory' }
     }
   },
   // TODO created At gelmiyor
