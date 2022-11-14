@@ -62,9 +62,6 @@ const CheckInHome = ({}) => {
           }}
         >
           <Image src="https://res.cloudinary.com/de0xihdep/image/upload/v1668293081/logo-removebg-preview_o1gwkz.png" />
-          {/*<Text h2 style={{ fontFamily: 'Satoshi-Bold', color: '#C3F4FD', opacity: 0.8 }} size={48}>*/}
-          {/*  BK Law Firm ( Melinda Basaran )*/}
-          {/*</Text>*/}
         </Row>
         <Col style={{ padding: 40 }}>
           <Spacer y={2} />

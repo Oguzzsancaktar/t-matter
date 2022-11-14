@@ -40,7 +40,7 @@ const DropOfDocuments = () => {
       return
     }
     await createActivity({
-      title: 'Drop of documents',
+      title: 'Check in',
       content: noteValue,
       customer: selectedCustomer?._id,
       stepCategory: activeStep.category._id,

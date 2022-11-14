@@ -40,7 +40,7 @@ const PickUpDocuments = () => {
       return
     }
     await createActivity({
-      title: 'Pick up of documents',
+      title: 'Check in',
       content: noteValue,
       customer: selectedCustomer?._id,
       stepCategory: activeStep.category._id,
