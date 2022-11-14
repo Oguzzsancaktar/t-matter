@@ -136,28 +136,12 @@ const addOrUpdateCustomerImage = (builder: IBuilder) => {
 }
 
 const checkInCreateCustomer = (builder: IBuilder) => {
-  return builder.mutation<
-    ICustomer,
-    {
-      firstname: ICustomer['firstname']
-      lastname: ICustomer['lastname']
-      phone: ICustomer['phone']
-      email: ICustomer['email']
-      gender: ICustomer['gender']
-      jobTitle: ICustomer['jobTitle']
-      customerType: ICustomer['customerType']['_id']
-      refferedBy: ICustomer['refferedBy']['_id']
-      userId: IUser['_id']
-      wfName: string
-    }
-  >({
+  return builder.mutation<ICustomer, FormData>({
     query(dto) {
       return {
         url: `/customer/checkin`,
         method: 'POST',
-        data: {
-          ...dto
-        }
+        data: dto
       }
     },
     invalidatesTags(result) {

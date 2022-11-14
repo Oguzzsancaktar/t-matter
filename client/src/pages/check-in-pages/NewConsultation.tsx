@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { PageWrapper } from './internal'
-import { Input, Row, Spacer, useInput, Dropdown, Button } from '@nextui-org/react'
+import { Input, Row, Spacer, useInput, Dropdown, Button, Col } from '@nextui-org/react'
 import {
   useGetJobTitlesQuery,
   useGetRefferedBysQuery
@@ -13,12 +13,19 @@ import {
   validateEmail,
   validationHelper
 } from '@pages/check-in-pages/internal/validationHelper'
-import { useCheckInCreateCustomerMutation, useCreateCustomerMutation } from '@services/customers/customerService'
+import {
+  useAddOrUpdateCustomerImageMutation,
+  useCheckInCreateCustomerMutation,
+  useCreateCustomerMutation
+} from '@services/customers/customerService'
 import ICustomer from '../../models/Entities/customer/ICustomer'
 import { IUser } from '@/models'
 import { GENDER_TYPES } from '@constants/statuses'
 import { toastSuccess } from '@utils/toastUtil'
 import { useNavigate } from 'react-router-dom'
+import { ItemContainer, UserImage, WebcamCapture } from '@/components'
+import colors from '@constants/colors'
+import { getBase64 } from '@utils/imageConvert'
 
 const NewConsultation = () => {
   const { value: emailValue, reset: emailReset, bindings: emailBindings } = useInput('')
@@ -29,6 +36,9 @@ const NewConsultation = () => {
   const [jobTitleSelectedKey, setJobTitleSelectedKey] = useState('')
   const [userSelectedKey, setUserSelectedKey] = useState('')
   const [referredBySelectedKey, setReferredBySelectedKey] = useState('')
+
+  const [image, setImage] = useState('https://via.placeholder.com/150')
+  const [showCamera, setShowCamera] = useState<boolean>(false)
 
   const navigate = useNavigate()
 
@@ -57,18 +67,19 @@ const NewConsultation = () => {
   }
 
   const handleSubmit = async () => {
-    await create({
-      email: emailValue,
-      phone: phoneValue,
-      firstname: firstNameValue,
-      lastname: lastNameValue,
-      gender: (genderSelectedKey === 'female' ? GENDER_TYPES.FEMALE : GENDER_TYPES.MALE) as ICustomer['gender'],
-      jobTitle: getDropdownData(jobTitleSelectedKey) as ICustomer['jobTitle'],
-      refferedBy: getDropdownData(referredBySelectedKey) as ICustomer['refferedBy']['_id'],
-      customerType: '636108db15070e01a633c583',
-      userId: getDropdownData(userSelectedKey) as IUser['_id'],
-      wfName: 'New Consultation'
-    })
+    const f = new FormData()
+    f.append('email', emailValue)
+    f.append('phone', phoneValue)
+    f.append('firstname', firstNameValue)
+    f.append('lastname', lastNameValue)
+    f.append('gender', (genderSelectedKey === 'female' ? GENDER_TYPES.FEMALE : GENDER_TYPES.MALE) + '')
+    f.append('jobTitle', getDropdownData(jobTitleSelectedKey) as ICustomer['jobTitle']['_id'])
+    f.append('refferedBy', getDropdownData(referredBySelectedKey) as ICustomer['refferedBy']['_id'])
+    f.append('customerType', '636108db15070e01a633c583')
+    f.append('userId', getDropdownData(userSelectedKey) as IUser['_id'])
+    f.append('wfName', 'New Consultation')
+    f.append('file', image)
+    await create(f).unwrap()
     toastSuccess('Walk in successfully')
     navigate('/checkin')
   }
@@ -97,9 +108,56 @@ const NewConsultation = () => {
     return id ? users.find(x => x._id === id)?.firstname + ' ' + users.find(x => x._id === id)?.lastname : 'Select User'
   }
 
+  const handleUploadChange = async file => {
+    if (typeof file === 'string') {
+      try {
+        setImage(file)
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      try {
+        const base64Image = await getBase64(file)
+        setImage(base64Image as string)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    setShowCamera(false)
+  }
+
   return (
     <PageWrapper title="Walk in">
       <div style={{ width: '900px', margin: '250px auto' }}>
+        <Row fluid>
+          <Col style={{ alignItems: 'center' }}>
+            {!showCamera && (
+              <div style={{ width: 150, margin: 'auto' }}>
+                <UserImage src={image} />
+              </div>
+            )}
+            <div
+              style={{
+                display: 'flex',
+                margin: 'auto',
+                justifyContent: 'center',
+                alignItems: 'center',
+                maxWidth: 300,
+                maxHeight: 300
+              }}
+            >
+              {showCamera ? (
+                <WebcamCapture handleShowCamera={show => setShowCamera(show)} onCapture={handleUploadChange} />
+              ) : (
+                <Button color="default" onClick={setShowCamera.bind(this, true)}>
+                  Take Photo
+                </Button>
+              )}
+            </div>
+          </Col>
+        </Row>
+        <Spacer y={3} />
         <Row fluid>
           <Input
             {...firstNameBindings}

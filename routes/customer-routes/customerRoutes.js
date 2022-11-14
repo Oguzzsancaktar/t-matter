@@ -11,7 +11,7 @@ router.post(
   controllers.customerController.createCustomer
 )
 
-router.post('/checkin', controllers.customerController.checkInCreateContactAndRelateNewConsultationTask)
+router.post('/checkin', upload.none(), controllers.customerController.checkInCreateContactAndRelateNewConsultationTask)
 
 router.put(
   '/',

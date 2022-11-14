@@ -156,6 +156,20 @@ const checkInCreateContactAndRelateNewConsultationTask = async (req, res) => {
   const { body } = req
   try {
     const customer = await dataAccess.customerDataAccess.createCustomer(body)
+    let result
+    if (body.file) {
+      result = await cloudinary.uploader.upload(req.body.file)
+    } else {
+      result = await cloudinary.uploader.upload(req.file.path)
+    }
+
+    customer.cloudinary_id = result.public_id
+    customer.profile_img = result.secure_url
+    const updatedCustomer = await dataAccess.customerDataAccess.findByIdAndUpdateCustomerForCreate(
+      customer._id,
+      customer
+    )
+
     const newConsultationWF = await dataAccess.workflowDataAccess.findByNameWorkflowPlan(body.wfName)
     const now = new Date()
     await dataAccess.taskDataAccess.createTask({
