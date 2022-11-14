@@ -130,7 +130,7 @@ const NewConsultation = () => {
   return (
     <PageWrapper title="Walk in">
       <div style={{ width: '900px', margin: '250px auto' }}>
-        <Row fluid>
+        <Row style={{ position: 'relative', bottom: 40 }} fluid>
           <Col style={{ alignItems: 'center' }}>
             {!showCamera && (
               <div style={{ width: 150, margin: 'auto' }}>
