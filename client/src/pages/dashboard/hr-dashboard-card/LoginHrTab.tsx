@@ -20,8 +20,11 @@ import { IUserLog } from '@/models'
 import { secondsToHourMin } from '@utils/timeUtils'
 import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 import { emptyQueryParams } from '@constants/queryParams'
-import { HR_LOGIN_CONDITIONS_OPTIONS } from '@constants/hrLogin'
+import { HR_LOGIN_CONDITIONS_COLOR, HR_LOGIN_CONDITIONS_OPTIONS } from '@constants/hrLogin'
 import { HrLoginBarChart, HrLoginConditionDonutChart, HrLoginRadialChart } from '@components/charts/hr'
+import { Badge } from '@nextui-org/react'
+import { snakeCase } from 'lodash'
+import constantToLabel from '@utils/constantToLabel'
 
 const LoginHrTab = props => {
   const { useAppDispatch, useAppSelector } = useAccessStore()
@@ -100,7 +103,15 @@ const LoginHrTab = props => {
       sortable: true,
       width: '140px',
       cell: d => {
-        return <JustifyBetweenRow>{d.condition}</JustifyBetweenRow>
+        return (
+          <Badge
+            disableOutline
+            enableShadow //@ts-ignore
+            color={HR_LOGIN_CONDITIONS_COLOR[d.condition]}
+          >
+            {constantToLabel(d.condition)}
+          </Badge>
+        )
       }
     }
   ]
