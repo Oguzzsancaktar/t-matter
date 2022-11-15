@@ -1,7 +1,4 @@
-const transform = require('lodash.transform')
-const isEqual = require('lodash.isequal')
-const isArray = require('lodash.isarray')
-const isObject = require('lodash.isobject')
+const { isArray, isObject, transform, isEqual } = require('lodash')
 
 /**
  * Find difference between two objects
