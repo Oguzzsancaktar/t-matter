@@ -99,7 +99,7 @@ function App() {
         if (!isFreeze) {
           setIsFreeze(true)
         }
-      }, 180 * 1000)
+      }, 600 * 1000)
     }
   }, [user, isFreeze])
 
