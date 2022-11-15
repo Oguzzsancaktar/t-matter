@@ -42,10 +42,11 @@ const LoginHrTab = props => {
         userId: user._id,
         timeOffSet: new Date().getTimezoneOffset(),
         startDate: moment(dateRange.startDate).toISOString(true),
-        endDate: moment(dateRange.endDate).toISOString(true)
+        endDate: moment(dateRange.endDate).toISOString(true),
+        condition: selectedCondition
       })
     }
-  }, [dateRange])
+  }, [dateRange, selectedCondition])
 
   const columns: TableColumn<IUserLog>[] = [
     {
@@ -99,7 +100,7 @@ const LoginHrTab = props => {
       sortable: true,
       width: '140px',
       cell: d => {
-        return <JustifyBetweenRow>coming</JustifyBetweenRow>
+        return <JustifyBetweenRow>{d.condition}</JustifyBetweenRow>
       }
     }
   ]

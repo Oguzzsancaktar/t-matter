@@ -3,12 +3,14 @@ const mongoose = require('mongoose')
 const { LOG_TYPES } = require('../../constants/log')
 const moment = require('moment')
 const taskDataAccess = require('../task-data-access/taskDataAccess')
+const { HR_LOGIN_CONDITIONS } = require('../../constants/hrConstants')
+const { calculateUserWeeklyWorkingSeconds } = require('../../helpers/calculateUserWeeklyWorkingHours')
 
 const createTimeLog = data => {
   return TimeLog.create(data)
 }
 
-const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate }) => {
+const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate, condition }) => {
   const pipeline = [
     { $match: { owner: mongoose.Types.ObjectId(userId) } },
     {
@@ -71,12 +73,27 @@ const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate }) => {
       return acc
     }, 0)
     const trackingTime = await taskDataAccess.getUserTrackingTime({ userId, date: _id })
+    // calculate tracking condition
+    const day = moment(_id).day()
+    const seconds = (await calculateUserWeeklyWorkingSeconds(userId))[day - 1]
+    const p = trackingTime / seconds
+    let c = HR_LOGIN_CONDITIONS.POOR_TRACKING
+    if (p > 0.6) {
+      c = HR_LOGIN_CONDITIONS.NORMAL_TRACKING
+    }
+    if (p > 0.8) {
+      c = HR_LOGIN_CONDITIONS.GOOD_TRACKING
+    }
+    if (p > 0.9) {
+      c = HR_LOGIN_CONDITIONS.EXCELLENT_TRACKING
+    }
     acc.push({
       date: _id,
       totalTime,
       login: logins[0]?.createdAt || logins[logins.length - 1]?.createdAt || moment(),
       logout: logouts[logouts.length - 1] ? logouts[logouts.length - 1].createdAt : logins[logins.length - 1].createdAt,
-      trackingTime
+      trackingTime,
+      condition: c
     })
     return acc
   }, [])

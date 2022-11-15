@@ -5,4 +5,5 @@ export default interface IUserLog {
   login: string
   logout?: string
   trackingTime: number
+  condition: string
 }

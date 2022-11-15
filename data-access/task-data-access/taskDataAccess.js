@@ -570,14 +570,14 @@ const getUserTrackingTime = async ({ userId, date }) => {
       $match: {
         'workHistory.user': mongoose.Types.ObjectId(userId),
         'workHistory.date': {
-          $gte: new Date(new Date(date).setHours(0, 0, 0, 0)),
-          $lte: new Date(new Date(date).setHours(23, 59, 59, 999))
+          $gte: new Date(moment(date).add(-1, 'days').startOf('day').toISOString(true).slice(0, 10)),
+          $lte: new Date(moment(date).add(1, 'days').startOf('day').toISOString(true).slice(0, 10))
         }
       }
     },
     {
       $group: {
-        _id: '_id',
+        _id: '$_id',
         totalDuration: {
           $sum: '$workHistory.time'
         }

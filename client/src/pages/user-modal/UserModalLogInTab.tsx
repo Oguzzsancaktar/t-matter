@@ -23,7 +23,8 @@ const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
 
   const { data: userTimeLogData, isLoading: userTimeLogIsLoading } = useGetUserLogsByIdQuery({
     userId,
-    timeOffSet: new Date().getTimezoneOffset()
+    timeOffSet: new Date().getTimezoneOffset(),
+    condition: 'ALL'
   })
 
   const columns = [
