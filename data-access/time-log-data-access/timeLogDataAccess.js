@@ -52,51 +52,60 @@ const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate, conditi
 
   const timeLogs = await TimeLog.aggregate(pipeline).exec()
 
-  return timeLogs.reduce(async (acc, curr) => {
-    const { _id, logs } = curr
-    const logouts = logs.filter(log => log.logType === LOG_TYPES.LOGOUT).sort((a, b) => a.createdAt - b.createdAt)
-    const logins = logs
-      .filter(log => log.logType === LOG_TYPES.LOGIN)
-      .filter((l, i, array) => {
-        if (i === 0) return true
-        if (moment(l.createdAt).diff(array[i - 1].createdAt, 'minutes') === 0) {
-          return false
-        }
-        return true
-      })
-      .sort((a, b) => a.createdAt - b.createdAt)
+  return timeLogs
+    .reduce(async (acc, curr) => {
+      const { _id, logs } = curr
+      const logouts = logs.filter(log => log.logType === LOG_TYPES.LOGOUT).sort((a, b) => a.createdAt - b.createdAt)
+      const logins = logs
+        .filter(log => log.logType === LOG_TYPES.LOGIN)
+        .filter((l, i, array) => {
+          if (i === 0) return true
+          if (moment(l.createdAt).diff(array[i - 1].createdAt, 'minutes') === 0) {
+            return false
+          }
+          return true
+        })
+        .sort((a, b) => a.createdAt - b.createdAt)
 
-    const totalTime = logins.reduce((acc, curr, i) => {
-      if (logouts[i]) {
-        return acc + Math.abs(moment(moment(logouts[i].date)).diff(curr.date, 'seconds'))
+      const totalTime = logins.reduce((acc, curr, i) => {
+        if (logouts[i]) {
+          return acc + Math.abs(moment(moment(logouts[i].date)).diff(curr.date, 'seconds'))
+        }
+        return acc
+      }, 0)
+      const trackingTime = await taskDataAccess.getUserTrackingTime({ userId, date: _id })
+      // calculate tracking condition
+      const day = moment(_id).day()
+      const seconds = (await calculateUserWeeklyWorkingSeconds(userId))[day - 1]
+      const p = trackingTime / seconds
+      let c = HR_LOGIN_CONDITIONS.POOR_TRACKING
+      if (p > 0.6) {
+        c = HR_LOGIN_CONDITIONS.NORMAL_TRACKING
       }
+      if (p > 0.8) {
+        c = HR_LOGIN_CONDITIONS.GOOD_TRACKING
+      }
+      if (p > 0.9) {
+        c = HR_LOGIN_CONDITIONS.EXCELLENT_TRACKING
+      }
+      acc.push({
+        date: _id,
+        totalTime,
+        login: logins[0]?.createdAt || logins[logins.length - 1]?.createdAt || moment(),
+        logout: logouts[logouts.length - 1]
+          ? logouts[logouts.length - 1].createdAt
+          : logins[logins.length - 1].createdAt,
+        trackingTime,
+        condition: c
+      })
       return acc
-    }, 0)
-    const trackingTime = await taskDataAccess.getUserTrackingTime({ userId, date: _id })
-    // calculate tracking condition
-    const day = moment(_id).day()
-    const seconds = (await calculateUserWeeklyWorkingSeconds(userId))[day - 1]
-    const p = trackingTime / seconds
-    let c = HR_LOGIN_CONDITIONS.POOR_TRACKING
-    if (p > 0.6) {
-      c = HR_LOGIN_CONDITIONS.NORMAL_TRACKING
-    }
-    if (p > 0.8) {
-      c = HR_LOGIN_CONDITIONS.GOOD_TRACKING
-    }
-    if (p > 0.9) {
-      c = HR_LOGIN_CONDITIONS.EXCELLENT_TRACKING
-    }
-    acc.push({
-      date: _id,
-      totalTime,
-      login: logins[0]?.createdAt || logins[logins.length - 1]?.createdAt || moment(),
-      logout: logouts[logouts.length - 1] ? logouts[logouts.length - 1].createdAt : logins[logins.length - 1].createdAt,
-      trackingTime,
-      condition: c
+    }, [])
+    .filter(l => {
+      if (condition === HR_LOGIN_CONDITIONS.ALL) {
+        return true
+      }
+      return l.condition === condition
     })
-    return acc
-  }, [])
 }
 
 const findLastLog = async userId => {
