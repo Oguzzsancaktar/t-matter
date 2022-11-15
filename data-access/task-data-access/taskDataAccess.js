@@ -2,6 +2,7 @@ const Task = require('../../models/task')
 const mongoose = require('mongoose')
 const calculateHourlyCompanyFee = require('../../helpers/calculateHourlyCompanyFee')
 const moment = require('moment')
+const { mongo } = require('mongoose')
 
 const taskPopulatePipe = [
   {
@@ -557,33 +558,34 @@ const getTaskYearsWithCustomerId = async customerId => {
   return Task.aggregate(pipeline).exec()
 }
 
-const getUserTrackingTime = async userId => {
+const getUserTrackingTime = async ({ userId, date }) => {
   const pipeline = [
     {
       $unwind: {
-        path: '$steps',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $unwind: {
-        path: '$steps.workedTimes',
+        path: '$workHistory',
         preserveNullAndEmptyArrays: true
       }
     },
     {
       $match: {
-        'steps.workedTimes.user': mongoose.Types.ObjectId(userId)
+        'workHistory.user': mongoose.Types.ObjectId(userId),
+        'workHistory.date': {
+          $gte: new Date(new Date(date).setHours(0, 0, 0, 0)),
+          $lte: new Date(new Date(date).setHours(23, 59, 59, 999))
+        }
       }
     },
     {
       $group: {
-        _id: '$steps.workedTimes.user',
-        trackingTime: { $sum: '$steps.workedTimes.time' }
+        _id: '_id',
+        totalDuration: {
+          $sum: '$workHistory.time'
+        }
       }
     }
   ]
-  return Task.aggregate(pipeline).exec()
+  const task = await Task.aggregate(pipeline).exec()
+  return task.reduce((acc, curr) => acc + curr.totalDuration, 0)
 }
 
 module.exports = {

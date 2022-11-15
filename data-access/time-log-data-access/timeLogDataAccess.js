@@ -2,6 +2,7 @@ const TimeLog = require('../../models/timeLog')
 const mongoose = require('mongoose')
 const { LOG_TYPES } = require('../../constants/log')
 const moment = require('moment')
+const taskDataAccess = require('../task-data-access/taskDataAccess')
 
 const createTimeLog = data => {
   return TimeLog.create(data)
@@ -49,7 +50,7 @@ const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate }) => {
 
   const timeLogs = await TimeLog.aggregate(pipeline).exec()
 
-  return timeLogs.reduce((acc, curr) => {
+  return timeLogs.reduce(async (acc, curr) => {
     const { _id, logs } = curr
     const logouts = logs.filter(log => log.logType === LOG_TYPES.LOGOUT).sort((a, b) => a.createdAt - b.createdAt)
     const logins = logs
@@ -69,12 +70,13 @@ const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate }) => {
       }
       return acc
     }, 0)
-
+    const trackingTime = await taskDataAccess.getUserTrackingTime({ userId, date: _id })
     acc.push({
       date: _id,
       totalTime,
       login: logins[0]?.createdAt || logins[logins.length - 1]?.createdAt || moment(),
-      logout: logouts[logouts.length - 1] ? logouts[logouts.length - 1].createdAt : logins[logins.length - 1].createdAt
+      logout: logouts[logouts.length - 1] ? logouts[logouts.length - 1].createdAt : logins[logins.length - 1].createdAt,
+      trackingTime
     })
     return acc
   }, [])

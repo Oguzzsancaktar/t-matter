@@ -20,7 +20,6 @@ import { IUserLog } from '@/models'
 import { secondsToHourMin } from '@utils/timeUtils'
 import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 import { emptyQueryParams } from '@constants/queryParams'
-import { TASK_CONDITION_OPTIONS } from '@constants/task'
 import { HR_LOGIN_CONDITIONS_OPTIONS } from '@constants/hrLogin'
 import { HrLoginBarChart, HrLoginConditionDonutChart, HrLoginRadialChart } from '@components/charts/hr'
 
@@ -92,7 +91,7 @@ const LoginHrTab = props => {
       name: 'Tracking',
       selector: row => '',
       sortable: true,
-      cell: d => 'coming'
+      cell: d => secondsToHourMin(d.trackingTime)
     },
     {
       name: 'Conditions',
