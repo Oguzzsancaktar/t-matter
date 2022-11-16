@@ -15,7 +15,7 @@ const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse; isSmall?: boolean 
         startAngle: 0,
         endAngle: 270,
         hollow: {
-          margin: 5,
+          margin: 15,
           size: '30%',
           background: 'transparent',
           image: undefined
@@ -43,8 +43,8 @@ const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse; isSmall?: boolean 
         useSeriesColors: true
       },
       markers: {
-        height: 0,
-        width: 0
+        height: 8,
+        width: 8
       },
       formatter: function (seriesName, opts) {
         return seriesName + ':  ' + opts.w.globals.series[opts.seriesIndex]
