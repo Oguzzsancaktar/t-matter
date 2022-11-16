@@ -35,9 +35,9 @@ const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse; isSmall?: boolean 
     legend: {
       show: true,
       floating: true,
-      fontSize: '11px',
+      fontSize: isSmall ? '11px' : '13px',
       position: 'left',
-      offsetX: -10,
+      offsetX: isSmall ? -24 : 0,
       offsetY: isSmall ? -18 : 1,
       labels: {
         useSeriesColors: true
@@ -47,7 +47,7 @@ const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse; isSmall?: boolean 
         width: 8
       },
       formatter: function (seriesName, opts) {
-        return seriesName + ':  ' + opts.w.globals.series[opts.seriesIndex]
+        return seriesName + ':  ' + opts.w.globals.series[opts.seriesIndex] + '%'
       },
       itemMargin: {
         vertical: 3
@@ -88,7 +88,7 @@ const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse; isSmall?: boolean 
 
   return (
     <div id="chart">
-      <ReactApexChart options={options} series={series} type="radialBar" width={210} />
+      <ReactApexChart options={options} series={series} type="radialBar" width={isSmall ? 210 : 280} />
     </div>
   )
 }
