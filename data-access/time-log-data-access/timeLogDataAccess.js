@@ -54,7 +54,16 @@ const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate, conditi
 
   const logs = await timeLogs.reduce(async (acc, curr) => {
     const { _id, logs } = curr
-    const logouts = logs.filter(log => log.logType === LOG_TYPES.LOGOUT).sort((a, b) => a.createdAt - b.createdAt)
+    const logouts = logs
+      .filter(log => log.logType === LOG_TYPES.LOGOUT)
+      .filter((l, i, array) => {
+        if (i === 0) return true
+        if (moment(l.createdAt).diff(array[i - 1].createdAt, 'minutes') === 0) {
+          return false
+        }
+        return true
+      })
+      .sort((a, b) => a.createdAt - b.createdAt)
     const logins = logs
       .filter(log => log.logType === LOG_TYPES.LOGIN)
       .filter((l, i, array) => {

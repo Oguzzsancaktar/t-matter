@@ -1,15 +1,19 @@
 import React from 'react'
 import { DashboardCard } from '@/pages'
 import useAccessStore from '@hooks/useAccessStore'
-import { openModal } from '@/store'
+import { openModal, selectUser } from '@/store'
 import { ESize } from '@/models'
 import HrDashboardInfoModal from '../../../components/modals/dashboard/HrDashboardInfoModal'
 import {
   HrDashboardLoginRadialChart,
   HrDashboardMentalRadialChart,
-  HrDashboardVocationRadialChart
+  HrDashboardVocationRadialChart,
+  HrLoginRadialChart
 } from '@components/charts/hr'
 import { Row } from '@nextui-org/react'
+import { useGetUserByIdQuery } from '@services/settings/user-planning/userService'
+import moment from 'moment'
+import { useGetUserLogsByIdQuery } from '@services/userLogService'
 
 const SmallBadge = ({ color, onClick, count, text }) => {
   return (
@@ -39,8 +43,18 @@ const SmallBadge = ({ color, onClick, count, text }) => {
 }
 
 const HrDashboardCard = () => {
-  const { useAppDispatch } = useAccessStore()
+  const { useAppDispatch, useAppSelector } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const user = useAppSelector(selectUser)
+
+  const { data } = useGetUserLogsByIdQuery({
+    condition: 'ALL',
+    startDate: moment().startOf('week').toISOString(true),
+    endDate: moment().endOf('week').toISOString(true),
+    userId: user?._id as string,
+    timeOffSet: new Date().getTimezoneOffset()
+  })
 
   const showHrDashboardInfo = (tab: string) => {
     dispatch(
@@ -98,9 +112,9 @@ const HrDashboardCard = () => {
       }
     >
       <Row>
-        <HrDashboardLoginRadialChart />
-        <HrDashboardMentalRadialChart />
-        <HrDashboardVocationRadialChart />
+        <HrLoginRadialChart isSmall data={data} />
+        {/*<HrDashboardMentalRadialChart />*/}
+        {/*<HrDashboardVocationRadialChart />*/}
       </Row>
     </DashboardCard>
   )

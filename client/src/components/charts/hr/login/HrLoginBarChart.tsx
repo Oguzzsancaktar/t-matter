@@ -1,16 +1,26 @@
 import { useEffect, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 import moment from 'moment'
+import { IUserLogResponse } from '@services/userLogService'
+import { groupBy } from 'lodash'
 
-const HrLoginBarChart = ({ dateRange }) => {
+interface IProps {
+  dateRange: {
+    startDate: Date
+    endDate: Date
+  }
+  data?: IUserLogResponse
+}
+
+const HrLoginBarChart: React.FC<IProps> = ({ dateRange, data }) => {
   const [series, setSeries] = useState([
     {
       name: 'Login',
-      data: [44, 55, 41, 67, 22, 43, 21]
+      data: [44, 55, 41, 67, 22, 43, 21, 2, 3, 55, 44, 12]
     },
     {
       name: 'Tracking',
-      data: [13, 23, 20, 8, 13, 27, 33]
+      data: [13, 23, 20, 8, 13, 27, 33, 2, 3, 55, 44, 12]
     }
   ])
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
@@ -61,6 +71,8 @@ const HrLoginBarChart = ({ dateRange }) => {
   useEffect(() => {
     if (moment(dateRange.startDate).year() === moment(dateRange.endDate).year()) {
       const months = Array.from({ length: 12 }, (_, i) => i)
+      const groupedByMonth = groupBy(data?.timeLogs, item => moment(item.date).month())
+
       setOptions({
         ...options,
         xaxis: {
@@ -81,7 +93,7 @@ const HrLoginBarChart = ({ dateRange }) => {
         labels: years.map(y => y.toString())
       })
     }
-  }, [dateRange])
+  }, [dateRange, data])
 
   return (
     <div style={{ height: '100%', width: '100%' }} id="chart">

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 import { IUserLogResponse } from '@services/userLogService'
 
-const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse }> = ({ data }) => {
+const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse; isSmall?: boolean }> = ({ data, isSmall }) => {
   const [series, setSeries] = useState([0, 0])
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
-      width: 280,
+      width: isSmall ? 210 : 280,
       type: 'radialBar'
     },
     plotOptions: {
@@ -35,16 +35,16 @@ const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse }> = ({ data }) => 
     legend: {
       show: true,
       floating: true,
-      fontSize: '13px',
+      fontSize: '11px',
       position: 'left',
       offsetX: -10,
-      offsetY: 1,
+      offsetY: isSmall ? -18 : 1,
       labels: {
         useSeriesColors: true
       },
       markers: {
-        // @ts-ignore
-        size: 0
+        height: 0,
+        width: 0
       },
       formatter: function (seriesName, opts) {
         return seriesName + ':  ' + opts.w.globals.series[opts.seriesIndex]
@@ -88,7 +88,7 @@ const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse }> = ({ data }) => 
 
   return (
     <div id="chart">
-      <ReactApexChart options={options} series={series} type="radialBar" width={280} />
+      <ReactApexChart options={options} series={series} type="radialBar" width={210} />
     </div>
   )
 }
