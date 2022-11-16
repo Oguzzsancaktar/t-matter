@@ -43,8 +43,8 @@ const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate, conditi
     pipeline.unshift({
       $match: {
         createdAt: {
-          $gte: moment(startDate).toDate(),
-          $lte: moment(endDate).toDate()
+          $gte: moment(startDate).startOf('day').toDate(),
+          $lte: moment(endDate).endOf('day').toDate()
         }
       }
     })
@@ -75,7 +75,7 @@ const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate, conditi
     const trackingTime = await taskDataAccess.getUserTrackingTime({ userId, date: _id })
     // calculate tracking condition
     const day = moment(_id).day()
-    const seconds = (await calculateUserWeeklyWorkingSeconds(userId))[day - 1]
+    const seconds = (await calculateUserWeeklyWorkingSeconds(userId))[day]
     const p = trackingTime / seconds
     let c = HR_LOGIN_CONDITIONS.POOR_TRACKING
     if (p > 0.6) {

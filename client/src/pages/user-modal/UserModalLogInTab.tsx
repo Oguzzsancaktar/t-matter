@@ -21,7 +21,7 @@ interface IProps {
 const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
   const { useAppDispatch } = useAccessStore()
 
-  const { data: userTimeLogData, isLoading: userTimeLogIsLoading } = useGetUserLogsByIdQuery({
+  const { data, isLoading: userTimeLogIsLoading } = useGetUserLogsByIdQuery({
     userId,
     timeOffSet: new Date().getTimezoneOffset(),
     condition: 'ALL'
@@ -81,8 +81,8 @@ const UserModalLogInTab: React.FC<IProps> = ({ userId }) => {
         </JustifyBetweenRow>
         <Column height="calc(100% - 200px - 1rem)">
           <DataTableHeader handleAddNew={() => console.log('not implemented')} showAddNew={false} />
-          {!userTimeLogIsLoading && userTimeLogData && userTimeLogData.length > 0 ? (
-            <DataTable className="data-table" fixedHeader columns={columns} data={userTimeLogData || []} />
+          {!userTimeLogIsLoading && data?.timeLogs && data?.timeLogs.length > 0 ? (
+            <DataTable className="data-table" fixedHeader columns={columns} data={data?.timeLogs || []} />
           ) : (
             <NoTableData />
           )}

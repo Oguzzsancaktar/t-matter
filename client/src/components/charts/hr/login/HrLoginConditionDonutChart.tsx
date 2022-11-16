@@ -5,7 +5,7 @@ import ReactApexChart from 'react-apexcharts'
 const HrLoginConditionDonutChart = () => {
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
-      width: 280,
+      width: 230,
       type: 'donut',
       offsetY: 0
     },
@@ -24,7 +24,7 @@ const HrLoginConditionDonutChart = () => {
             total: {
               show: true,
               showAlways: true,
-              fontSize: '22px',
+              fontSize: '18px',
               fontWeight: 500,
               label: 'Conditions',
               color: colors.text.primary,
@@ -67,7 +67,7 @@ const HrLoginConditionDonutChart = () => {
   const [series, setSeries] = useState<ApexCharts.ApexOptions['series']>([1, 2])
   return (
     <div style={{ height: '100%' }}>
-      <ReactApexChart options={options} series={series} type="donut" width={280} />
+      <ReactApexChart options={options} series={series} type="donut" width={230} />
     </div>
   )
 }

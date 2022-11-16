@@ -23,7 +23,6 @@ import { emptyQueryParams } from '@constants/queryParams'
 import { HR_LOGIN_CONDITIONS_COLOR, HR_LOGIN_CONDITIONS_OPTIONS } from '@constants/hrLogin'
 import { HrLoginBarChart, HrLoginConditionDonutChart, HrLoginRadialChart } from '@components/charts/hr'
 import { Badge } from '@nextui-org/react'
-import { snakeCase } from 'lodash'
 import constantToLabel from '@utils/constantToLabel'
 
 const LoginHrTab = props => {
@@ -34,7 +33,7 @@ const LoginHrTab = props => {
     startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('year').toDate(),
     endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
   })
-  const [fetchUserTimeLogs, { data: timeLogs, isLoading: timeLogsLoading }] = useLazyGetUserLogsByIdQuery()
+  const [fetchUserTimeLogs, { data, isLoading: timeLogsLoading }] = useLazyGetUserLogsByIdQuery()
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
   const [selectedUserId, setSelectedUserId] = useState('ALL')
   const [selectedCondition, setSelectedCondition] = useState('ALL')
@@ -123,7 +122,7 @@ const LoginHrTab = props => {
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
         <JustifyCenterColumn width="280px">
-          <HrLoginRadialChart />
+          <HrLoginRadialChart data={data} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
           <HrLoginBarChart dateRange={dateRange} />
@@ -210,8 +209,14 @@ const LoginHrTab = props => {
           <ItemContainer height="100%">
             <TableSkeltonLoader count={13} />
           </ItemContainer>
-        ) : timeLogs && timeLogs?.length > 0 ? (
-          <DataTable className="data-table" fixedHeader columns={columns} data={timeLogs} onRowClicked={() => {}} />
+        ) : data?.timeLogs && data?.timeLogs?.length > 0 ? (
+          <DataTable
+            className="data-table"
+            fixedHeader
+            columns={columns}
+            data={data.timeLogs}
+            onRowClicked={() => {}}
+          />
         ) : (
           <NoTableData />
         )}

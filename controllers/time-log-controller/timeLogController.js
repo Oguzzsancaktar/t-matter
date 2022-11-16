@@ -1,6 +1,7 @@
 const dataAccess = require('../../data-access')
 const utils = require('../../utils')
 const { StatusCodes } = require('http-status-codes')
+const { calculateUserScheduleTotalTimesByRange } = require('../../helpers/calculateUserScheduleTotalTimesByRange')
 
 const getUserTimeLogs = async (req, res) => {
   const { userId } = req.params
@@ -13,7 +14,12 @@ const getUserTimeLogs = async (req, res) => {
       endDate,
       condition
     })
-    res.status(StatusCodes.OK).send(timeLogs)
+    const { loginTotalTime, trackingTotalTime } = await calculateUserScheduleTotalTimesByRange({
+      userId,
+      startDate,
+      endDate
+    })
+    res.status(StatusCodes.OK).send({ timeLogs, loginTotalTime, trackingTotalTime })
   } catch (error) {
     console.log(error)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(utils.errorUtils.errorInstance({ message: error.message }))

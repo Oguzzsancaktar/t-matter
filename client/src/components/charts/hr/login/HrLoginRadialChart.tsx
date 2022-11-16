@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
+import { IUserLogResponse } from '@services/userLogService'
 
-const HrLoginRadialChart = () => {
-  const [series, setSeries] = useState([60, 80])
+const HrLoginRadialChart: React.FC<{ data?: IUserLogResponse }> = ({ data }) => {
+  const [series, setSeries] = useState([0, 0])
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
       width: 280,
@@ -34,10 +35,10 @@ const HrLoginRadialChart = () => {
     legend: {
       show: true,
       floating: true,
-      fontSize: '16px',
+      fontSize: '13px',
       position: 'left',
-      offsetX: 0,
-      offsetY: 0,
+      offsetX: -10,
+      offsetY: 1,
       labels: {
         useSeriesColors: true
       },
@@ -63,6 +64,28 @@ const HrLoginRadialChart = () => {
       }
     ]
   })
+
+  useEffect(() => {
+    if (!data) {
+      return
+    }
+    const x = data?.timeLogs.reduce(
+      (acc, curr) => {
+        acc.totalTime = acc.totalTime + curr.totalTime
+        acc.trackingTime = acc.trackingTime + curr.trackingTime
+        return acc
+      },
+      { totalTime: 0, trackingTime: 0 }
+    )
+    const time = x?.totalTime || 0
+    const trackingTime = x?.trackingTime || 0
+
+    setSeries([
+      +Number((time / data?.loginTotalTime) * 100).toFixed(1),
+      +Number((trackingTime / data?.trackingTotalTime) * 100).toFixed(1)
+    ])
+  }, [data])
+
   return (
     <div id="chart">
       <ReactApexChart options={options} series={series} type="radialBar" width={280} />
