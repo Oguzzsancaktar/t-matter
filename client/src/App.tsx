@@ -20,6 +20,7 @@ import { Freeze } from '@/components'
 import { useCreateLogMutation } from '@services/userLogService'
 import { LOG_TYPES } from '@constants/logTypes'
 import { Appointment, CheckInHome, DropOfDocuments, PickUpDocuments, NewConsultation } from '@pages/check-in-pages'
+import moment from 'moment'
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
@@ -80,9 +81,8 @@ function App() {
       createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
     }
   }, [user, isFreeze])
-
+  let timeout
   useEffect(() => {
-    let timeout
     document.onmousemove = e => {
       if (e.pageX === 0) {
         const sidebar = document.querySelector('.main-side-bar')
@@ -99,7 +99,7 @@ function App() {
         if (!isFreeze) {
           setIsFreeze(true)
         }
-      }, 600 * 1000)
+      }, 30 * 60 * 1000)
     }
   }, [user, isFreeze])
 
