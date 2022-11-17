@@ -125,7 +125,7 @@ const LoginHrTab = props => {
           <HrLoginRadialChart data={data} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
-          <HrLoginBarChart dateRange={dateRange} />
+          <HrLoginBarChart data={data} dateRange={dateRange} />
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
           <HrLoginConditionDonutChart data={data} />
