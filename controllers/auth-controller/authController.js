@@ -9,12 +9,12 @@ const loginController = async (req, res) => {
   const { email, password } = body
   const user = await dataAccess.authDataAccess.findUserByEmail({ email }).exec()
 
-  if (user.status === STATUS_TYPES.INACTIVE) {
-    return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User is inactive' }))
-  }
-
   if (!user) {
     return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User not found' }))
+  }
+
+  if (user.status === STATUS_TYPES.INACTIVE) {
+    return res.status(400).json(utils.errorUtils.errorInstance({ message: 'User is inactive' }))
   }
 
   const isPasswordValid = await utils.authUtils.comparePassword({
