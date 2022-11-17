@@ -4,10 +4,7 @@ const { clockToSeconds } = require('../utils/date-utils/dateUtils')
 const calculateUserWeeklyWorkingSeconds = (userId, offTrack = true) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let w = await workingScheduleDataAccess.findWorkingScheduleByUserId(userId)
-      if (!w) {
-        w = await workingScheduleDataAccess.findCompanyWorkingSchedule()
-      }
+      let w = await workingScheduleDataAccess.findWorkingScheduleByUserIdOrDefault(userId)
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
       w = w.workingSchedule
       resolve(

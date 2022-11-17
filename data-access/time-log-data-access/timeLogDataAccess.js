@@ -123,6 +123,10 @@ const removeTimeLog = async id => {
   return TimeLog.findByIdAndDelete(id).exec()
 }
 
+const getLastLoginByUserId = userId => {
+  return TimeLog.findOne({ owner: userId, logType: LOG_TYPES.LOGIN }).exec()
+}
+
 module.exports = {
   createTimeLog,
   getLogsByUserId,

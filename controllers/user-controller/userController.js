@@ -31,10 +31,7 @@ const getUser = async (req, res) => {
   const { id } = req.params
   try {
     const user = await dataAccess.userDataAccess.findUserById(id, 'role')
-    let workingSchedule = await dataAccess.workingScheduleDataAccess.findWorkingScheduleByUserId(id)
-    if (!workingSchedule) {
-      workingSchedule = await dataAccess.workingScheduleDataAccess.findCompanyWorkingSchedule()
-    }
+    let workingSchedule = await dataAccess.workingScheduleDataAccess.findWorkingScheduleByUserIdOrDefault(id)
     res.status(StatusCodes.OK).json({ ...user, workingSchedule })
   } catch (e) {
     console.log(e)

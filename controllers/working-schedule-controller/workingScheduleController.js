@@ -5,13 +5,10 @@ const { StatusCodes } = require('http-status-codes')
 const getUserWorkingSchedule = async (req, res) => {
   const { userId } = req.params
   try {
-    let workingSchedule = await dataAccess.workingScheduleDataAccess.findWorkingScheduleByUserId(userId)
+    let workingSchedule = await dataAccess.workingScheduleDataAccess.findWorkingScheduleByUserIdOrDefault(userId)
     let salarySetting = await dataAccess.salarySettingDataAccess.findSalarySettingByUserId(userId)
     if (!salarySetting) {
       salarySetting = await dataAccess.salarySettingDataAccess.findDefaultSalarySetting()
-    }
-    if (!workingSchedule) {
-      workingSchedule = await dataAccess.workingScheduleDataAccess.findCompanyWorkingSchedule()
     }
     res.status(StatusCodes.OK).json({ ...workingSchedule, ...salarySetting })
   } catch (error) {
