@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import colors from '@constants/colors'
 import ReactApexChart from 'react-apexcharts'
+import { IUserLogResponse } from '@services/userLogService'
+import { groupBy } from 'lodash'
+import constantToLabel from '@utils/constantToLabel'
+import { useTheme } from '@nextui-org/react'
+import { HR_LOGIN_CONDITIONS, HR_LOGIN_CONDITIONS_COLOR } from '@constants/hrLogin'
 
-const HrLoginConditionDonutChart = () => {
+const HrLoginConditionDonutChart: React.FC<{ data?: IUserLogResponse }> = ({ data }) => {
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
     chart: {
       width: 230,
@@ -65,6 +70,29 @@ const HrLoginConditionDonutChart = () => {
     }
   })
   const [series, setSeries] = useState<ApexCharts.ApexOptions['series']>([1, 2])
+  const { theme } = useTheme()
+
+  useEffect(() => {
+    if (data) {
+      const groups = groupBy(data.timeLogs, 'condition')
+      const { series, labels, colors } = Object.keys(groups).reduce<{
+        series: number[]
+        labels: string[]
+        colors: string[]
+      }>(
+        (acc, key) => {
+          acc.labels.push(constantToLabel(key))
+          acc.series.push(groups[key].length)
+          acc.colors.push(theme?.colors[theme?.colors[HR_LOGIN_CONDITIONS_COLOR[key]].value.substr(20, 6)].value)
+          return acc
+        },
+        { series: [], labels: [], colors: [] }
+      )
+      setSeries(series)
+      setOptions({ ...options, labels, colors })
+    }
+  }, [data])
+
   return (
     <div style={{ height: '100%' }}>
       <ReactApexChart options={options} series={series} type="donut" width={230} />

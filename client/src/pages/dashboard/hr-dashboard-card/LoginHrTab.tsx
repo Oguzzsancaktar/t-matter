@@ -30,8 +30,8 @@ const LoginHrTab = props => {
   const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
   const [dateRange, setDateRange] = useState({
-    startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('year').toDate(),
-    endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
+    startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('day').toDate(),
+    endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('day').toDate()
   })
   const [fetchUserTimeLogs, { data, isLoading: timeLogsLoading }] = useLazyGetUserLogsByIdQuery()
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
@@ -128,7 +128,7 @@ const LoginHrTab = props => {
           <HrLoginBarChart dateRange={dateRange} />
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
-          <HrLoginConditionDonutChart />
+          <HrLoginConditionDonutChart data={data} />
         </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">
