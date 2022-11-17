@@ -559,6 +559,9 @@ const getTaskYearsWithCustomerId = async customerId => {
 }
 
 const getUserTrackingTime = async ({ userId, date }) => {
+  const $gte = new Date(moment(date).add(-1, 'days').startOf('day').toISOString(true).slice(0, 10))
+  const $lte = new Date(moment(date).add(1, 'days').startOf('day').toISOString(true).slice(0, 10))
+
   const pipeline = [
     {
       $unwind: {
@@ -570,8 +573,8 @@ const getUserTrackingTime = async ({ userId, date }) => {
       $match: {
         'workHistory.user': mongoose.Types.ObjectId(userId),
         'workHistory.date': {
-          $gte: new Date(moment(date).add(-1, 'days').startOf('day').toISOString(true).slice(0, 10)),
-          $lte: new Date(moment(date).add(1, 'days').startOf('day').toISOString(true).slice(0, 10))
+          $gte,
+          $lte
         }
       }
     },
