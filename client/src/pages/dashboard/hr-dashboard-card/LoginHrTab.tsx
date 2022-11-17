@@ -184,8 +184,10 @@ const LoginHrTab = props => {
               justifyContent: 'center'
             }}
           >
-            <span style={{ color: colors.green.primary, marginRight: 3 }}>incoming -</span>
-            <span style={{ color: colors.green.primary }}>section</span>
+            <span style={{ color: colors.green.primary, marginRight: 3 }}>Sum of working: </span>
+            <span style={{ color: colors.green.primary }}>
+              {secondsToHourMin(data?.timeLogs.reduce((acc, curr) => acc + curr.totalTime, 0) || 0)}
+            </span>
           </div>
           <div
             style={{
@@ -199,8 +201,10 @@ const LoginHrTab = props => {
               justifyContent: 'center'
             }}
           >
-            <span style={{ color: colors.red.primary, marginRight: 3 }}>incoming -</span>
-            <span style={{ color: colors.red.primary }}>section</span>
+            <span style={{ color: colors.red.primary, marginRight: 3 }}>Sum of tracking: </span>
+            <span style={{ color: colors.red.primary }}>
+              {secondsToHourMin(data?.timeLogs.reduce((acc, curr) => acc + curr.trackingTime, 0) || 0)}
+            </span>
           </div>
         </div>
       </JustifyBetweenRow>
