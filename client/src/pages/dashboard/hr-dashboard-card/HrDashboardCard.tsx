@@ -48,13 +48,18 @@ const HrDashboardCard = () => {
 
   const user = useAppSelector(selectUser)
 
-  const { data } = useGetUserLogsByIdQuery({
-    condition: 'ALL',
-    startDate: moment().startOf('isoWeek').toISOString(true),
-    endDate: moment().endOf('isoWeek').toISOString(true),
-    userId: user?._id as string,
-    timeOffSet: new Date().getTimezoneOffset()
-  })
+  const { data } = useGetUserLogsByIdQuery(
+    {
+      condition: 'ALL',
+      startDate: moment().startOf('isoWeek').toISOString(true),
+      endDate: moment().endOf('isoWeek').toISOString(true),
+      userId: user?._id as string,
+      timeOffSet: new Date().getTimezoneOffset()
+    },
+    {
+      skip: user?._id === undefined
+    }
+  )
 
   const showHrDashboardInfo = (tab: string) => {
     dispatch(
