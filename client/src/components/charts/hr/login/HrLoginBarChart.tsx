@@ -72,7 +72,7 @@ const HrLoginBarChart: React.FC<IProps> = ({ dateRange, data }) => {
     if (moment(dateRange.startDate).year() === moment(dateRange.endDate).year()) {
       const months = Array.from({ length: 12 }, (_, i) => i)
       const groupedByMonth = groupBy(data?.timeLogs, item => moment(item.date).month())
-
+      console.log(data)
       setOptions({
         ...options,
         xaxis: {

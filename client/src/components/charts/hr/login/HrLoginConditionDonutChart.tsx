@@ -5,7 +5,7 @@ import { IUserLogResponse } from '@services/userLogService'
 import { groupBy } from 'lodash'
 import constantToLabel from '@utils/constantToLabel'
 import { useTheme } from '@nextui-org/react'
-import { HR_LOGIN_CONDITIONS, HR_LOGIN_CONDITIONS_COLOR } from '@constants/hrLogin'
+import { HR_LOGIN_CONDITIONS_COLOR } from '@constants/hrLogin'
 
 const HrLoginConditionDonutChart: React.FC<{ data?: IUserLogResponse }> = ({ data }) => {
   const [options, setOptions] = useState<ApexCharts.ApexOptions>({
@@ -83,7 +83,7 @@ const HrLoginConditionDonutChart: React.FC<{ data?: IUserLogResponse }> = ({ dat
         (acc, key) => {
           acc.labels.push(constantToLabel(key))
           acc.series.push(groups[key].length)
-          acc.colors.push(theme?.colors[theme?.colors[HR_LOGIN_CONDITIONS_COLOR[key]].value.substr(20, 6)].value)
+          acc.colors.push(HR_LOGIN_CONDITIONS_COLOR[key].hexCode)
           return acc
         },
         { series: [], labels: [], colors: [] }

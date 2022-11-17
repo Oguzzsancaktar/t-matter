@@ -106,7 +106,7 @@ const LoginHrTab = props => {
           <Badge
             disableOutline
             enableShadow //@ts-ignore
-            color={HR_LOGIN_CONDITIONS_COLOR[d.condition]}
+            color={HR_LOGIN_CONDITIONS_COLOR[d.condition].name}
           >
             {constantToLabel(d.condition)}
           </Badge>
