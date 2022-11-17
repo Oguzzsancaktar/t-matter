@@ -96,6 +96,7 @@ const getLogsByUserId = async ({ userId, timeOffSet, startDate, endDate, conditi
     if (p > 0.9) {
       c = HR_LOGIN_CONDITIONS.EXCELLENT_TRACKING
     }
+    acc = await acc
     acc.push({
       date: _id,
       totalTime,
