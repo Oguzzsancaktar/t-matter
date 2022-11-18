@@ -16,17 +16,12 @@ const hrTaskSender = async date => {
     if (!hrSetting) {
       hrSetting = await dataAccess.hrSettingDataAccess.getHrSettingByUserId({ userId: null }).lean()
     }
+
     if (hrSetting.monthlyWorking.isChecked) {
-      /*
-       * TODO:
-       *  - if user passed monthly working hours then create
-       *  - Create ${HR_TASK_TYPES.MENTAL} task for the user
-       *  - and notify the ${hrSetting.monthlyWorking.notificationReceivers}
-       * */
       const timeLogs = await dataAccess.timeLogDataAccess.getLogsByUserId({
         userId: user._id.toString(),
-        startDate: moment(date).startOf('month').toDate(),
-        endDate: moment(date).endOf('month').toDate(),
+        startDate: moment(date).startOf('month'),
+        endDate: moment(date).endOf('month'),
         condition: 'ALL',
         timeOffSet: 0
       })
@@ -35,8 +30,8 @@ const hrTaskSender = async date => {
       }, 0)
       const monthlyWorkingScheduleSeconds = calculateUserScheduleTotalTimesByRange({
         userId,
-        startDate: moment(date).startOf('month').toDate(),
-        endDate: moment(date).endOf('month').toDate()
+        startDate: moment(date).startOf('month'),
+        endDate: moment(date).endOf('month')
       })
       const hrTask = await dataAccess.hrTaskDataAccess.hrTaskFindOne({
         owner: user._id.toString(),
@@ -48,19 +43,15 @@ const hrTaskSender = async date => {
           type: HR_TASK_TYPES.MENTAL,
           description: '',
           days: 1,
-          startDate: moment(date).startOf('day').add(1, 'day').toDate(),
-          endDate: moment(date).endOf('day').add(1, 'day').toDate(),
+          startDate: moment(date).startOf('day').add(1, 'day'),
+          endDate: moment(date).endOf('day').add(1, 'day'),
           owner: user._id.toString(),
           month: moment(date).month()
         })
       }
     }
+
     if (hrSetting.loginLogout.isChecked) {
-      /*
-       *  - if user didn't 1 day then create
-       *  - Create ${HR_TASK_TYPES.ABSENT} task for the user
-       *  - and notify the ${hrSetting.loginLogout.notificationReceivers}
-       */
       const workingScheduleDay = workingSchedule[moment(date).format('dddd')]
       const workingDayEnd = moment(moment(date).startOf('day').format('MM DD YYYY HH:mm:ss'))
         .add(clockToSeconds(workingScheduleDay.endTime), 'seconds')
@@ -86,9 +77,22 @@ const hrTaskSender = async date => {
             endDate: moment(date).endOf('day'),
             owner: user._id.toString()
           })
+          const mentalTask = await dataAccess.hrTaskDataAccess.hrTaskFindOne({
+            owner: user._id.toString(),
+            type: HR_TASK_TYPES.MENTAL,
+            isCompleted: false
+          })
+          if (mentalTask) {
+            await dataAccess.hrTaskDataAccess.hrTaskFindByIdAndUpdate(mentalTask._id.toString(), {
+              isCompleted: true,
+              startDate: moment(date).startOf('day'),
+              endDate: moment(date).endOf('day')
+            })
+          }
         }
       }
     }
+
     if (hrSetting.vocations.length > 0) {
       for (const voc of hrSetting.vocations) {
         if (voc.isChecked) {
@@ -101,6 +105,7 @@ const hrTaskSender = async date => {
         }
       }
     }
+
     if (hrSetting.specialDays.length > 0) {
       for (const specialDay of hrSetting.specialDays) {
         if (specialDay.isChecked) {

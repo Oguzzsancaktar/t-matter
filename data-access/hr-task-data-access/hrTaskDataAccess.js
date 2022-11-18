@@ -9,7 +9,7 @@ const hrTaskFind = data => {
 }
 
 const hrTaskFindOne = data => {
-  return hrTask.findOne(data)
+  return hrTask.findOne(data).sort({ startDate: -1 })
 }
 
 const hrTaskFindByIdAndUpdate = (query, data) => {

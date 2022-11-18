@@ -10,6 +10,7 @@ interface IHrTask {
   createdAt: Date
   updatedAt: Date
   isCompleted: boolean
+  month?: number
 }
 
 export default IHrTask
