@@ -16,7 +16,7 @@ const hrTaskSender = async date => {
     if (!hrSetting) {
       hrSetting = await dataAccess.hrSettingDataAccess.getHrSettingByUserId({ userId: null }).lean()
     }
-
+    // MENTAL
     if (hrSetting.monthlyWorking.isChecked) {
       const timeLogs = await dataAccess.timeLogDataAccess.getLogsByUserId({
         userId: user._id.toString(),
@@ -50,7 +50,7 @@ const hrTaskSender = async date => {
         })
       }
     }
-
+    // ABSENT
     if (hrSetting.loginLogout.isChecked) {
       const workingScheduleDay = workingSchedule[moment(date).format('dddd')]
       const workingDayEnd = moment(moment(date).startOf('day').format('MM DD YYYY HH:mm:ss'))
@@ -59,7 +59,8 @@ const hrTaskSender = async date => {
       const isWorkingEndPassed = moment(date).isAfter(workingDayEnd)
       if (workingScheduleDay.isChecked && isWorkingEndPassed) {
         const lastLogin = await dataAccess.timeLogDataAccess.findLastLog(user._id.toString())
-        if (lastLogin && moment(lastLogin.createdAt).diff(moment(), 'days') === 0) {
+        const isLastLoginToday = moment(lastLogin?.createdAt).isSame(moment(date), 'day')
+        if (lastLogin && isLastLoginToday) {
           return
         }
         const hrTask = await dataAccess.hrTaskDataAccess.hrTaskFindOne({
