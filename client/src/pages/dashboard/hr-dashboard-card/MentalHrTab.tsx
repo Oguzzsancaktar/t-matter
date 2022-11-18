@@ -13,60 +13,47 @@ import {
 } from '@/components'
 import * as React from 'react'
 import colors from '@constants/colors'
+import { useGetHrTasksQuery } from '@services/hrTaskService'
+import { HR_TASK_TYPES } from '@constants/hrTask'
+import { selectUser } from '@/store'
+import { IHrTask } from '@/models'
+import { getFullName } from '@utils/userUtil'
+import constantToLabel from '@utils/constantToLabel'
 
 const MentalHrTab = props => {
-  const { useAppDispatch } = useAccessStore()
+  const { useAppDispatch, useAppSelector } = useAccessStore()
   const dispatch = useAppDispatch()
+  const user = useAppSelector(selectUser)
   const [dateRange, setDateRange] = useState({
     startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('year').toDate(),
     endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
   })
+  const { data, isLoading } = useGetHrTasksQuery(
+    {
+      userId: user?._id as string,
+      type: HR_TASK_TYPES.MENTAL
+    },
+    { skip: user?._id === undefined }
+  )
 
-  const columns: TableColumn<ITaskStep>[] = [
+  const columns: TableColumn<IHrTask>[] = [
     {
       name: 'User',
-      selector: row => '',
+      selector: row => getFullName(row.owner),
       sortable: true,
-      cell: row => ''
+      cell: row => getFullName(row.owner)
     },
     {
       name: 'Date',
-      selector: row => '',
+      selector: row => moment(row.startDate).toString(),
       sortable: true,
-      cell: row => ''
+      cell: row => moment(row.startDate).format('MMM DD YYYY')
     },
     {
-      name: 'Login',
-      selector: row => '',
+      name: 'Category',
+      selector: row => row.type,
       sortable: true,
-      cell: row => ''
-    },
-    {
-      name: 'Logout',
-      selector: row => '',
-      sortable: true,
-      cell: row => ''
-    },
-    {
-      name: 'Working time',
-      selector: row => '',
-      sortable: true,
-      cell: row => ''
-    },
-    {
-      name: 'Tracking',
-      selector: row => '',
-      sortable: true,
-      cell: d => ''
-    },
-    {
-      name: 'Conditions',
-      selector: row => '',
-      sortable: true,
-      width: '140px',
-      cell: d => {
-        return <JustifyBetweenRow></JustifyBetweenRow>
-      }
+      cell: row => constantToLabel(row.type)
     }
   ]
 
@@ -131,12 +118,12 @@ const MentalHrTab = props => {
         </div>
       </JustifyBetweenRow>
       <ItemContainer height="calc(100% - 300px)">
-        {false ? (
+        {isLoading ? (
           <ItemContainer height="100%">
             <TableSkeltonLoader count={13} />
           </ItemContainer>
-        ) : [] && [].length > 0 ? (
-          <DataTable className="data-table" fixedHeader columns={columns} data={[]} onRowClicked={() => {}} />
+        ) : data && data.length > 0 ? (
+          <DataTable className="data-table" fixedHeader columns={columns} data={data || []} onRowClicked={() => {}} />
         ) : (
           <NoTableData />
         )}
