@@ -17,11 +17,8 @@ const historyController = require('./history-controller/historyController')
 const hrSettingController = require('./hr-setting-controller/hrSettingController')
 const customerWorkActivityController = require('./customer-work-activity-controller/customerWorkActivityController')
 const customerHistoryController = require('./customer-history-controller/customerHistoryController')
-<<<<<<< HEAD
 const websiteSettingsController = require('./website-settings-controller/websiteSettingsController')
-=======
 const hrTaskController = require('./hr-task-controller/hrTaskController')
->>>>>>> refs/remotes/origin/master
 
 module.exports = {
   salarySettingController,
@@ -43,9 +40,6 @@ module.exports = {
   hrSettingController,
   customerWorkActivityController,
   customerHistoryController,
-<<<<<<< HEAD
-  websiteSettingsController
-=======
+  websiteSettingsController,
   hrTaskController
->>>>>>> refs/remotes/origin/master
 }
