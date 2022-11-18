@@ -27,15 +27,29 @@ const getHrTasks = (builder: IBuilder) => {
   })
 }
 
+const updateHrTask = (builder: IBuilder) => {
+  return builder.mutation<IHrTask, Partial<IHrTask>>({
+    query(params) {
+      return {
+        url: `/hr-task/${params._id}`,
+        method: 'PUT',
+        data: params
+      }
+    },
+    invalidatesTags: [HR_TASK_TAG]
+  })
+}
+
 const hrTaskApi = createApi({
   reducerPath: HR_TASK_API_REDUCER_PATH,
   tagTypes: [HR_TASK_TAG],
   baseQuery: axiosBaseQuery(),
   endpoints: builder => ({
-    getHrTasks: getHrTasks(builder)
+    getHrTasks: getHrTasks(builder),
+    updateHrTask: updateHrTask(builder)
   })
 })
 
-const { useGetHrTasksQuery } = hrTaskApi
+const { useGetHrTasksQuery, useUpdateHrTaskMutation } = hrTaskApi
 
-export { hrTaskApi, useGetHrTasksQuery }
+export { hrTaskApi, useGetHrTasksQuery, useUpdateHrTaskMutation }

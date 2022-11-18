@@ -12,8 +12,13 @@ const hrTaskFindOne = data => {
   return hrTask.findOne(data)
 }
 
+const hrTaskFindByIdAndUpdate = (query, data) => {
+  return hrTask.findByIdAndUpdate(query, data).exec()
+}
+
 module.exports = {
   hrTaskCreate,
   hrTaskFind,
-  hrTaskFindOne
+  hrTaskFindOne,
+  hrTaskFindByIdAndUpdate
 }
