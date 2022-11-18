@@ -28,8 +28,8 @@ const hrTaskSender = async date => {
       const totalWorkingSeconds = timeLogs.reduce((acc, curr) => {
         return acc + curr.totalTime
       }, 0)
-      const monthlyWorkingScheduleSeconds = calculateUserScheduleTotalTimesByRange({
-        userId,
+      const monthlyWorkingScheduleSeconds = await calculateUserScheduleTotalTimesByRange({
+        userId: user._id.toString(),
         startDate: moment(date).startOf('month'),
         endDate: moment(date).endOf('month')
       })
@@ -38,7 +38,7 @@ const hrTaskSender = async date => {
         type: HR_TASK_TYPES.MENTAL,
         month: moment(date).month()
       })
-      if (!hrTask && totalWorkingSeconds >= monthlyWorkingScheduleSeconds) {
+      if (!hrTask && totalWorkingSeconds >= monthlyWorkingScheduleSeconds?.loginTotalTime) {
         await dataAccess.hrTaskDataAccess.hrTaskCreate({
           type: HR_TASK_TYPES.MENTAL,
           description: '',
