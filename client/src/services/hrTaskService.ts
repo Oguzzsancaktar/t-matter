@@ -13,7 +13,7 @@ const getHrTasks = (builder: IBuilder) => {
     IHrTask[],
     {
       userId: IUser['_id']
-      type: IHrTask['type']
+      type?: IHrTask['type']
     }
   >({
     query(params) {
