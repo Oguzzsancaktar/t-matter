@@ -1,5 +1,5 @@
-import React, { Suspense, lazy, useEffect, useState, useCallback } from 'react'
-import { Navigate } from 'react-router-dom'
+import React, { Suspense, lazy, useEffect, useState, useMemo } from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { PrivateRoute } from '@routes/PrivateRoute'
@@ -14,7 +14,6 @@ import './styles/vendors/react-drag-drop-file.css'
 import './styles/vendors/apex.css'
 import { setOnlineUsers } from '@store/online-users'
 import { setSocket } from '@store/online-users/socketGlobal'
-import { useLogoutMutation } from '@services/authService'
 import { isEqual } from 'lodash'
 import { Freeze } from '@/components'
 import { useCreateLogMutation } from '@services/userLogService'
@@ -24,6 +23,7 @@ const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const CustomersPage = lazy(() => import('./pages/CustomersPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
+const HomePage = lazy(() => import('./website/views/HomePage'))
 
 function delay(ms) {
   var start = +new Date()
@@ -35,11 +35,14 @@ function App() {
   const openModals = useAppSelector(selectOpenModals)
   const minimizedModals = useAppSelector(selectMinimizedModals)
   const user = useAppSelector(selectUser)
-  const [logout] = useLogoutMutation()
   const [createLog] = useCreateLogMutation()
   let socket: Socket | null = null
   const dispatch = useAppDispatch()
   const [isFreeze, setIsFreeze] = useState<Boolean | undefined>(undefined)
+
+  const location = useLocation()
+
+  const isSidebarOpen = useMemo(() => (location.pathname !== '/' && user && user._id ? true : false), [location, user])
 
   useEffect(() => {
     if (!user) {
@@ -130,14 +133,12 @@ function App() {
         </MinimizedModalsBar>
       )}
 
-      {user && user._id && <SideBar />}
+      {isSidebarOpen && <SideBar />}
 
-      <ItemContainer
-        height="100vh"
-        width={user && user._id ? 'calc(100vw - 48px - 2rem)' : '100vw'}
-        margin="0 0 0 auto"
-      >
+      <ItemContainer height="100vh" width={isSidebarOpen ? 'calc(100vw - 48px - 2rem)' : '100vw'} margin="0 0 0 auto">
         <Routes>
+          <Route path="/" element={<HomePage />} />
+
           <Route path="/login" element={<LoginPage />} />
 
           <Route
@@ -159,7 +160,7 @@ function App() {
           />
 
           <Route
-            path="/"
+            path="/dashboard"
             element={
               <PrivateRoute>
                 <DashboardPage />
@@ -167,7 +168,7 @@ function App() {
             }
           />
 
-          <Route path="/*" element={<Navigate replace to="/" />} />
+          <Route path="/*" element={<Navigate replace to="/login" />} />
         </Routes>
       </ItemContainer>
 

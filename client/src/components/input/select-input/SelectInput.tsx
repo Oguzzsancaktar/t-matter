@@ -3,6 +3,7 @@ import { CircleColor, Column, H1, ItemContainer, JustifyBetweenRow, Label } from
 import Select, { StylesConfig } from 'react-select'
 import { IOption } from '@/models'
 import colors from '@/constants/colors'
+import { selectIconWithText } from '@/utils/selectIconWithText'
 
 interface IProps {
   labelText?: string
@@ -74,7 +75,7 @@ const SelectInput: React.FC<IProps> = ({
                 {data.label}
               </H1>
               <ItemContainer width="20px">
-                <CircleColor color={data.color?.color} />
+                {data.color ? <CircleColor color={data.color?.color} /> : data.icon && selectIconWithText(data.icon)}
               </ItemContainer>
             </JustifyBetweenRow>
           </ItemContainer>

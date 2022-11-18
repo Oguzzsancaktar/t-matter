@@ -1,3 +1,4 @@
+import { websiteSettingsApi } from '@/services/settings/website-settings/websiteSettingsService'
 import { userRoleApi } from '@/services/settings/user-planning/userRoleService'
 import { salarySettingsApi } from '@/services/settings/company-planning/salarySettingsService'
 import { companyPricingApi } from '@/services/settings/company-planning/companyPricingService'
@@ -32,7 +33,8 @@ const StoreMiddlewares = [
   taskApi.middleware,
   activityApi.middleware,
   historyApi.middleware,
-  financePlanningApi.middleware
+  financePlanningApi.middleware,
+  websiteSettingsApi.middleware
 ]
 
 export default StoreMiddlewares

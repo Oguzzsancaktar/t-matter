@@ -9,7 +9,7 @@ export const ButtonSC = styled.button<Pick<IProps, 'width' | 'height' | 'disable
   width: ${({ width }) => (width ? width : '100%')};
   height: ${({ height }) => (height ? height : '100%')};
   padding: ${({ padding }) => (padding ? padding : '0.4rem 0.6rem')};
-
+  cursor: pointer;
   color: ${colors.white.light};
 
   background-color: ${({ disabled, color }) =>

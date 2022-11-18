@@ -3,4 +3,5 @@ export default interface IOption {
   label: string
   value: string
   color?: IColor
+  icon?: string
 }

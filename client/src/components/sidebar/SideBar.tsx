@@ -12,6 +12,7 @@ import useAccessStore from '@/hooks/useAccessStore'
 import CalendarModal from '../modals/general/CalendarModal'
 import { FinanceModal } from '@/components'
 import CustomerModal from '../modals/general/CustomerModal'
+import { CgWebsite } from 'react-icons/cg'
 
 const SidebarShowWhenHover = styled.div`
   color: ${colors.white.bg};
@@ -151,6 +152,24 @@ const SideBar = () => {
 
               <ItemContainer margin="0 0 0.5rem 0" width="100%">
                 <Link to="/">
+                  <Row width="100%">
+                    <SidebarIcon>
+                      <CgWebsite size={20} />
+                    </SidebarIcon>
+
+                    <ItemContainer margin="0 0 0 0.25rem" width="calc(100% - 40px)">
+                      <SidebarShowWhenHover className="sidebar__hover_hide_show">
+                        <H1 cursor="pointer" color="white">
+                          Website
+                        </H1>
+                      </SidebarShowWhenHover>
+                    </ItemContainer>
+                  </Row>
+                </Link>
+              </ItemContainer>
+
+              <ItemContainer margin="0 0 0.5rem 0" width="100%">
+                <Link to="/dashboard">
                   <Row width="100%">
                     <SidebarIcon>
                       <Home size={20} />

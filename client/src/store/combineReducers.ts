@@ -21,6 +21,8 @@ import { companyInfoApi } from '@services/settings/company-info/companyInfoServi
 import { historyApi } from '@services/historyService'
 import { customerHistoryApi } from '@/services/customers/customerHistoryService'
 
+import { websiteSettingsApi } from '@/services/settings/website-settings/websiteSettingsService'
+
 const rootReducer = combineReducers({
   auth: AuthReducer,
   modal: ModalReducer,
@@ -40,7 +42,8 @@ const rootReducer = combineReducers({
   [historyApi.reducerPath]: historyApi.reducer,
   [financePlanningApi.reducerPath]: financePlanningApi.reducer,
   [customerActivityApi.reducerPath]: customerActivityApi.reducer,
-  [customerHistoryApi.reducerPath]: customerHistoryApi.reducer
+  [customerHistoryApi.reducerPath]: customerHistoryApi.reducer,
+  [websiteSettingsApi.reducerPath]: websiteSettingsApi.reducer
 })
 
 export default rootReducer

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 interface IProps extends IComponentProps {
   backgroundColor?: string
   borderRadius?: string
+  backgroundImage?: string
   overflow?: string
   maxWidth?: string
   minWidth?: string
@@ -31,6 +32,10 @@ interface IProps extends IComponentProps {
 
 const Item = styled.div<IProps>`
   background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : 'transparent')};
+  background-image: ${({ backgroundImage }) => (backgroundImage ? `url("${backgroundImage}")` : '')};
+  background-image: ${({ backgroundImage }) => (backgroundImage ? `url("${backgroundImage}")` : '')};
+  background-repeat: no-repeat;
+  background-size: cover;
   width: ${({ width }) => (width ? width : '100%')};
   height: ${({ height }) => (height ? height : 'auto')};
   margin: ${({ margin }) => (margin ? margin : '0')};

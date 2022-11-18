@@ -6,6 +6,7 @@ import {
   PageWrapper,
   SettingsCard,
   UserPlanningModal,
+  WebsitePlaningModal,
   WorkflowPlanningModal
 } from '@components/index'
 import { ESize } from '@models/index'
@@ -62,6 +63,16 @@ const SettingsPage = () => {
             width: ESize.WXLarge,
             height: ESize.HLarge,
             body: <FinancePlaningModal />
+          }}
+        />
+
+        <SettingsCard
+          modal={{
+            id: 'websitePlanningModal',
+            title: 'Website Planning',
+            width: ESize.WXLarge,
+            height: ESize.HLarge,
+            body: <WebsitePlaningModal />
           }}
         />
       </WrapLayout>

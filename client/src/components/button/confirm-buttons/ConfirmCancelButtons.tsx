@@ -11,14 +11,14 @@ interface IProps {
 
 const ConfirmCancelButtons: React.FC<IProps> = ({ onConfirm, onCancel }) => {
   return (
-    <JustifyBetweenRow>
-      <ItemContainer margin="0 0.5rem 0 0">
-        <Button color={colors.red.primary} onClick={() => onCancel()}>
+    <JustifyBetweenRow height="30px">
+      <ItemContainer margin="0 0.5rem 0 0" height="100%">
+        <Button color={colors.red.primary} onClick={() => onCancel()} height="100%">
           Cancel
         </Button>
       </ItemContainer>
-      <ItemContainer margin="0 0 0 0.5rem">
-        <Button color={colors.blue.primary} onClick={() => onConfirm()}>
+      <ItemContainer margin="0 0 0 0.5rem" height="100%">
+        <Button color={colors.blue.primary} onClick={() => onConfirm()} height="100%">
           Submit
         </Button>
       </ItemContainer>

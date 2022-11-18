@@ -47,12 +47,10 @@ const GlobalStyle = createGlobalStyle`
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
-
-  /* font-size: calc(100vw / 1920 * 10);
-
+    font-size: calc(100vw / 1920 * 20); 
   @media (max-height: 750px) {
     font-size: calc(100vw / 750 * 10);
-  } */
+  } 
 }
 
 body {

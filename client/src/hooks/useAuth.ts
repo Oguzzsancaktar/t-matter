@@ -25,7 +25,7 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (isLoginSuccessfull) {
-      navigate('/')
+      navigate('/dashboard')
     }
   }, [isLoginSuccessfull])
 

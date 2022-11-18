@@ -17,6 +17,7 @@ const historyController = require('./history-controller/historyController')
 const hrSettingController = require('./hr-setting-controller/hrSettingController')
 const customerWorkActivityController = require('./customer-work-activity-controller/customerWorkActivityController')
 const customerHistoryController = require('./customer-history-controller/customerHistoryController')
+const websiteSettingsController = require('./website-settings-controller/websiteSettingsController')
 
 module.exports = {
   salarySettingController,
@@ -37,5 +38,6 @@ module.exports = {
   historyController,
   hrSettingController,
   customerWorkActivityController,
-  customerHistoryController
+  customerHistoryController,
+  websiteSettingsController
 }
