@@ -20,6 +20,7 @@ import { companyInfoApi } from '@services/settings/company-info/companyInfoServi
 
 import { historyApi } from '@services/historyService'
 import { customerHistoryApi } from '@/services/customers/customerHistoryService'
+import { hrTaskApi } from '@services/hrTaskService'
 
 import { websiteSettingsApi } from '@/services/settings/website-settings/websiteSettingsService'
 
@@ -43,7 +44,11 @@ const rootReducer = combineReducers({
   [financePlanningApi.reducerPath]: financePlanningApi.reducer,
   [customerActivityApi.reducerPath]: customerActivityApi.reducer,
   [customerHistoryApi.reducerPath]: customerHistoryApi.reducer,
+<<<<<<< HEAD
   [websiteSettingsApi.reducerPath]: websiteSettingsApi.reducer
+=======
+  [hrTaskApi.reducerPath]: hrTaskApi.reducer
+>>>>>>> refs/remotes/origin/master
 })
 
 export default rootReducer

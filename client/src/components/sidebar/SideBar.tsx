@@ -1,13 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Column, H1, ItemContainer, JustifyBetweenColumn, Row, SearchCustomersModal } from '@components/index'
+import {
+  Column,
+  H1,
+  ItemContainer,
+  JustifyBetweenColumn,
+  ReadUserModal,
+  Row,
+  SearchCustomersModal
+} from '@components/index'
 import { useAuth } from '@/hooks/useAuth'
 import colors from '@/constants/colors'
 import { Calendar, DollarSign, File, Home, MapPin, Package, Power, Search, Settings, UserCheck } from 'react-feather'
 import styled from 'styled-components'
 import CircleImage from '../image/CircleImage'
 import { ESize } from '@/models'
-import { openModal } from '@/store'
+import { openModal, selectUser } from '@/store'
 import useAccessStore from '@/hooks/useAccessStore'
 import CalendarModal from '../modals/general/CalendarModal'
 import { FinanceModal } from '@/components'
@@ -39,9 +47,11 @@ const Sidebar = styled.div`
   height: 100vh;
   background-color: ${colors.primary.dark};
   z-index: 10;
-  transition: 0.4s ease-in-out width;
-  &:hover {
+  transition: 0.4s ease-in-out all;
+  &:hover,
+  &.hover {
     width: 200px;
+    z-index: 99999999999;
   }
 
   &:hover .sidebar__hover_hide_show {
@@ -67,8 +77,9 @@ const SidebarIcon = styled.div`
 `
 
 const SideBar = () => {
-  const { useAppDispatch } = useAccessStore()
+  const { useAppDispatch, useAppSelector } = useAccessStore()
   const dispatch = useAppDispatch()
+  const user = useAppSelector(selectUser)
 
   const { loggedUser, logout } = useAuth()
 
@@ -126,14 +137,30 @@ const SideBar = () => {
     )
   }
 
+  const handleShowUserPage = () => {
+    if (!user) {
+      return
+    }
+    dispatch(
+      openModal({
+        id: `userDetailModal-${user._id}`,
+        title: 'User / ' + user.firstname + ' ' + user.lastname,
+        body: <ReadUserModal userId={user._id} />,
+        width: ESize.WXLarge,
+        height: ESize.HLarge,
+        backgroundColor: colors.gray.disabled
+      })
+    )
+  }
+
   return (
-    <Sidebar>
+    <Sidebar className="main-side-bar">
       <ItemContainer height="100vh">
         <JustifyBetweenColumn height="100%" padding="1rem">
           <ItemContainer>
             <Column>
               {loggedUser.user && (
-                <ItemContainer margin="0 0 0.5rem 0">
+                <ItemContainer cursorType="pointer" onClick={handleShowUserPage} margin="0 0 0.5rem 0">
                   <Row>
                     <ItemContainer width="35px" margin="0 0.5rem 0 0">
                       <CircleImage height="35px" width="35px" imageUrl={loggedUser.user?.profile_img || ''} />

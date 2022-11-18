@@ -5,15 +5,20 @@ const hrTaskCreate = data => {
 }
 
 const hrTaskFind = data => {
-  return hrTask.find(data)
+  return hrTask.find(data).populate('owner').sort({ startDate: -1 })
 }
 
 const hrTaskFindOne = data => {
-  return hrTask.findOne(data)
+  return hrTask.findOne(data).sort({ startDate: -1 })
+}
+
+const hrTaskFindByIdAndUpdate = (query, data) => {
+  return hrTask.findByIdAndUpdate(query, data).exec()
 }
 
 module.exports = {
   hrTaskCreate,
   hrTaskFind,
-  hrTaskFindOne
+  hrTaskFindOne,
+  hrTaskFindByIdAndUpdate
 }

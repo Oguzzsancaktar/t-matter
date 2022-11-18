@@ -18,9 +18,18 @@ const findCompanyWorkingSchedule = () => {
     .exec()
 }
 
+const findWorkingScheduleByUserIdOrDefault = async owner => {
+  let ws = await WorkingSchedule.findOne({ owner }).lean().exec()
+  if (!ws) {
+    ws = await findCompanyWorkingSchedule()
+  }
+  return ws
+}
+
 module.exports = {
   createWorkingSchedule,
   updateWorkingSchedule,
   findWorkingScheduleByUserId,
-  findCompanyWorkingSchedule
+  findCompanyWorkingSchedule,
+  findWorkingScheduleByUserIdOrDefault
 }

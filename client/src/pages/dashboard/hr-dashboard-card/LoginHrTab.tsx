@@ -20,19 +20,20 @@ import { IUserLog } from '@/models'
 import { secondsToHourMin } from '@utils/timeUtils'
 import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 import { emptyQueryParams } from '@constants/queryParams'
-import { TASK_CONDITION_OPTIONS } from '@constants/task'
-import { HR_LOGIN_CONDITIONS_OPTIONS } from '@constants/hrLogin'
+import { HR_LOGIN_CONDITIONS_COLOR, HR_LOGIN_CONDITIONS_OPTIONS } from '@constants/hrLogin'
 import { HrLoginBarChart, HrLoginConditionDonutChart, HrLoginRadialChart } from '@components/charts/hr'
+import { Badge } from '@nextui-org/react'
+import constantToLabel from '@utils/constantToLabel'
 
 const LoginHrTab = props => {
   const { useAppDispatch, useAppSelector } = useAccessStore()
   const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
   const [dateRange, setDateRange] = useState({
-    startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('year').toDate(),
-    endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
+    startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('day').toDate(),
+    endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('day').toDate()
   })
-  const [fetchUserTimeLogs, { data: timeLogs, isLoading: timeLogsLoading }] = useLazyGetUserLogsByIdQuery()
+  const [fetchUserTimeLogs, { data, isLoading: timeLogsLoading }] = useLazyGetUserLogsByIdQuery()
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery(emptyQueryParams)
   const [selectedUserId, setSelectedUserId] = useState('ALL')
   const [selectedCondition, setSelectedCondition] = useState('ALL')
@@ -43,10 +44,11 @@ const LoginHrTab = props => {
         userId: user._id,
         timeOffSet: new Date().getTimezoneOffset(),
         startDate: moment(dateRange.startDate).toISOString(true),
-        endDate: moment(dateRange.endDate).toISOString(true)
+        endDate: moment(dateRange.endDate).toISOString(true),
+        condition: selectedCondition
       })
     }
-  }, [dateRange])
+  }, [dateRange, selectedCondition])
 
   const columns: TableColumn<IUserLog>[] = [
     {
@@ -92,7 +94,7 @@ const LoginHrTab = props => {
       name: 'Tracking',
       selector: row => '',
       sortable: true,
-      cell: d => 'coming'
+      cell: d => secondsToHourMin(d.trackingTime)
     },
     {
       name: 'Conditions',
@@ -100,7 +102,15 @@ const LoginHrTab = props => {
       sortable: true,
       width: '140px',
       cell: d => {
-        return <JustifyBetweenRow>coming</JustifyBetweenRow>
+        return (
+          <Badge
+            disableOutline
+            enableShadow //@ts-ignore
+            color={HR_LOGIN_CONDITIONS_COLOR[d.condition].name}
+          >
+            {constantToLabel(d.condition)}
+          </Badge>
+        )
       }
     }
   ]
@@ -112,13 +122,13 @@ const LoginHrTab = props => {
     <ItemContainer padding="1rem" height="100%">
       <JustifyBetweenRow height="200px" margin="0 0 1rem 0">
         <JustifyCenterColumn width="280px">
-          <HrLoginRadialChart />
+          <HrLoginRadialChart data={data} />
         </JustifyCenterColumn>
         <JustifyCenterColumn>
-          <HrLoginBarChart dateRange={dateRange} />
+          <HrLoginBarChart data={data} dateRange={dateRange} />
         </JustifyCenterColumn>
         <JustifyCenterColumn width="280px">
-          <HrLoginConditionDonutChart />
+          <HrLoginConditionDonutChart data={data} />
         </JustifyCenterColumn>
       </JustifyBetweenRow>
       <JustifyBetweenRow height="65px" margin="0 0 0.5rem 0">
@@ -174,8 +184,10 @@ const LoginHrTab = props => {
               justifyContent: 'center'
             }}
           >
-            <span style={{ color: colors.green.primary, marginRight: 3 }}>incoming -</span>
-            <span style={{ color: colors.green.primary }}>section</span>
+            <span style={{ color: colors.green.primary, marginRight: 3 }}>Sum of working: </span>
+            <span style={{ color: colors.green.primary }}>
+              {secondsToHourMin(data?.timeLogs.reduce((acc, curr) => acc + curr.totalTime, 0) || 0)}
+            </span>
           </div>
           <div
             style={{
@@ -189,8 +201,10 @@ const LoginHrTab = props => {
               justifyContent: 'center'
             }}
           >
-            <span style={{ color: colors.red.primary, marginRight: 3 }}>incoming -</span>
-            <span style={{ color: colors.red.primary }}>section</span>
+            <span style={{ color: colors.red.primary, marginRight: 3 }}>Sum of tracking: </span>
+            <span style={{ color: colors.red.primary }}>
+              {secondsToHourMin(data?.timeLogs.reduce((acc, curr) => acc + curr.trackingTime, 0) || 0)}
+            </span>
           </div>
         </div>
       </JustifyBetweenRow>
@@ -199,8 +213,14 @@ const LoginHrTab = props => {
           <ItemContainer height="100%">
             <TableSkeltonLoader count={13} />
           </ItemContainer>
-        ) : timeLogs && timeLogs?.length > 0 ? (
-          <DataTable className="data-table" fixedHeader columns={columns} data={timeLogs} onRowClicked={() => {}} />
+        ) : data?.timeLogs && data?.timeLogs?.length > 0 ? (
+          <DataTable
+            className="data-table"
+            fixedHeader
+            columns={columns}
+            data={data.timeLogs}
+            onRowClicked={() => {}}
+          />
         ) : (
           <NoTableData />
         )}

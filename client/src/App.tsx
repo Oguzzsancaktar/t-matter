@@ -18,6 +18,8 @@ import { isEqual } from 'lodash'
 import { Freeze } from '@/components'
 import { useCreateLogMutation } from '@services/userLogService'
 import { LOG_TYPES } from '@constants/logTypes'
+import { Appointment, CheckInHome, DropOfDocuments, PickUpDocuments, NewConsultation } from '@pages/check-in-pages'
+import moment from 'moment'
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
@@ -45,20 +47,53 @@ function App() {
   const isSidebarOpen = useMemo(() => (location.pathname !== '/' && user && user._id ? true : false), [location, user])
 
   useEffect(() => {
-    if (!user) {
+    if (!('Notification' in window)) {
+      console.log('Browser does not support desktop notification')
+    } else {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          console.log('Notification permission granted.')
+        } else {
+          alert('Please allow notification to use this app')
+        }
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!user || isEqual(user, {})) {
       return
     }
     if (typeof isFreeze === 'boolean' && isFreeze) {
       createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
+      const n = new Notification('Click if you here', {
+        vibrate: [200, 100, 200],
+        body: 'Now you are offline please click this notification or move your mouse to online again',
+        icon: 'https://res.cloudinary.com/de0xihdep/image/upload/v1668026524/Screen_Shot_2022-11-09_at_15.38.57_bjlqvy.png',
+        tag: 'offline'
+      })
+      n.onclick = () => {
+        if (isFreeze) {
+          setIsFreeze(false)
+          createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
+          n.close()
+        }
+      }
     }
     if (typeof isFreeze === 'boolean' && !isFreeze) {
       createLog({ logType: LOG_TYPES.LOGIN, owner: user._id }).unwrap()
     }
   }, [user, isFreeze])
-
+  let timeout
   useEffect(() => {
-    let timeout
-    document.onmousemove = () => {
+    document.onmousemove = e => {
+      if (e.pageX === 0) {
+        const sidebar = document.querySelector('.main-side-bar')
+        sidebar?.classList.add('hover')
+        setTimeout(() => {
+          sidebar?.classList.remove('hover')
+        }, 200)
+      }
       clearTimeout(timeout)
       if (isFreeze) {
         setIsFreeze(false)
@@ -67,12 +102,12 @@ function App() {
         if (!isFreeze) {
           setIsFreeze(true)
         }
-      }, 180 * 1000)
+      }, 30 * 60 * 1000)
     }
   }, [user, isFreeze])
 
   const alertUser = e => {
-    if (!user) {
+    if (!user || isEqual(user, {})) {
       return ''
     }
     createLog({ logType: LOG_TYPES.LOGOUT, owner: user._id }).unwrap()
@@ -140,7 +175,11 @@ function App() {
           <Route path="/" element={<HomePage />} />
 
           <Route path="/login" element={<LoginPage />} />
-
+          <Route path="/checkin" element={<CheckInHome />} />
+          <Route path="/checkin/walk-in" element={<NewConsultation />} />
+          <Route path="/checkin/appointment" element={<Appointment />} />
+          <Route path="/checkin/drop-of-documents" element={<DropOfDocuments />} />
+          <Route path="/checkin/pick-up-documents" element={<PickUpDocuments />} />
           <Route
             path="/settings"
             element={

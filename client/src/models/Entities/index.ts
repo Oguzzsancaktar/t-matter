@@ -13,4 +13,8 @@ export * from './query-params'
 export * from './finance-plannin'
 export * from './finance'
 export * from './history'
+<<<<<<< HEAD
 export * from './website-planning'
+=======
+export * from './hr'
+>>>>>>> refs/remotes/origin/master

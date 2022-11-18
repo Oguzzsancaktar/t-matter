@@ -9,7 +9,7 @@ import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import useAccessStore from '@/hooks/useAccessStore'
 import { ESize, EStatus, IUser } from '@/models'
-import { UserModalLogInTab, UserModalSettingsTab } from '@/pages'
+import { UserModalCalendar, UserModalLogInTab, UserModalSettingsTab } from '@/pages'
 import { useGetUserByIdQuery, useUpdateUserStatusMutation } from '@/services/settings/user-planning/userService'
 import { openModal, closeModal } from '@/store'
 import { selectColorForStatus } from '@/utils/statusColorUtil'
@@ -40,6 +40,8 @@ const UserReadModal: React.FC<IProps> = ({ userId }) => {
         return <UserModalLogInTab userId={userId} />
       case 'settings':
         return <UserModalSettingsTab userId={userId} />
+      case 'calendar':
+        return <UserModalCalendar userId={userId} />
     }
   }
 

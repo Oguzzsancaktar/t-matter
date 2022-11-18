@@ -1,7 +1,7 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { ICustomer, ICustomerCreateDTO, ICustomerType, ICustomerUpdateDTO, IQueryParams } from '@/models'
+import { ICustomer, ICustomerCreateDTO, ICustomerType, ICustomerUpdateDTO, IQueryParams, IUser } from '@/models'
 
 const CUSTOMER_REDUCER_PATH = 'customerApi'
 const CUSTOMER_TAG_TYPE = 'customerTag' as const
@@ -135,6 +135,39 @@ const addOrUpdateCustomerImage = (builder: IBuilder) => {
   })
 }
 
+const checkInCreateCustomer = (builder: IBuilder) => {
+  return builder.mutation<ICustomer, FormData>({
+    query(dto) {
+      return {
+        url: `/customer/checkin`,
+        method: 'POST',
+        data: dto
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: CUSTOMER_TAG_TYPE, id: 'LIST' }]
+    }
+  })
+}
+
+const getCustomerByPhone = (builder: IBuilder) => {
+  return builder.query<ICustomer, string>({
+    query(phone) {
+      return {
+        url: `/customer/phone/${phone}`,
+        method: 'GET'
+      }
+    },
+    providesTags(result) {
+      if (!result) return [{ type: CUSTOMER_TAG_TYPE, id: 'LIST' }]
+      return [
+        { type: CUSTOMER_TAG_TYPE, id: result._id },
+        { type: CUSTOMER_TAG_TYPE, id: 'LIST' }
+      ]
+    }
+  })
+}
+
 const customerApi = createApi({
   reducerPath: CUSTOMER_REDUCER_PATH,
   tagTypes: [CUSTOMER_TAG_TYPE],
@@ -146,7 +179,9 @@ const customerApi = createApi({
     updateCustomer: updateCustomer(builder),
     updateCustomerStatus: updateCustomerStatus(builder),
     getCustomerReliables: getCustomerReliables(builder),
-    addOrUpdateCustomerImage: addOrUpdateCustomerImage(builder)
+    addOrUpdateCustomerImage: addOrUpdateCustomerImage(builder),
+    checkInCreateCustomer: checkInCreateCustomer(builder),
+    getCustomerByPhone: getCustomerByPhone(builder)
   })
 })
 
@@ -157,7 +192,9 @@ const {
   useUpdateCustomerMutation,
   useUpdateCustomerStatusMutation,
   useGetCustomerReliablesQuery,
-  useAddOrUpdateCustomerImageMutation
+  useAddOrUpdateCustomerImageMutation,
+  useCheckInCreateCustomerMutation,
+  useLazyGetCustomerByPhoneQuery
 } = customerApi
 export {
   customerApi,
@@ -167,5 +204,7 @@ export {
   useUpdateCustomerMutation,
   useUpdateCustomerStatusMutation,
   useGetCustomerReliablesQuery,
-  useAddOrUpdateCustomerImageMutation
+  useAddOrUpdateCustomerImageMutation,
+  useCheckInCreateCustomerMutation,
+  useLazyGetCustomerByPhoneQuery
 }

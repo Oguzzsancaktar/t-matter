@@ -152,6 +152,83 @@ const addOrChangeCustomerProfileImage = async (req, res) => {
   }
 }
 
+const checkInCreateContactAndRelateNewConsultationTask = async (req, res) => {
+  const { body } = req
+  try {
+    const customer = await dataAccess.customerDataAccess.createCustomer(body)
+    let result
+    if (body.file) {
+      result = await cloudinary.uploader.upload(req.body.file)
+    } else {
+      result = await cloudinary.uploader.upload(req.file.path)
+    }
+
+    customer.cloudinary_id = result.public_id
+    customer.profile_img = result.secure_url
+    const updatedCustomer = await dataAccess.customerDataAccess.findByIdAndUpdateCustomerForCreate(
+      customer._id,
+      customer
+    )
+
+    const newConsultationWF = await dataAccess.workflowDataAccess.findByNameWorkflowPlan(body.wfName)
+    const now = new Date()
+    await dataAccess.taskDataAccess.createTask({
+      workflowId: newConsultationWF._id,
+      startDate: now,
+      name: newConsultationWF.name,
+      customer: customer._id,
+      totalDuration: newConsultationWF.totalDuration,
+      totalPrice: newConsultationWF.totalPrice,
+      status: 2,
+      steps: newConsultationWF.steps.map((step, i) => {
+        return {
+          ...step,
+          category: mongoose.Types.ObjectId(step.category._id),
+          location: mongoose.Types.ObjectId(step.location._id),
+          tabs: step.tabs,
+          responsibleUser: mongoose.Types.ObjectId(body.userId),
+          startDate: i === 0 ? +now : +newConsultationWF.steps[index - 1].endDate,
+          endDate:
+            i === 0
+              ? +now + step.expireDuration * 60 * 60 * 24 * 1000
+              : +newConsultationWF.steps[index - 1].endDate + step.expireDuration * 60 * 60 * 24 * 1000,
+          stepStatus: 2,
+          expireDuration: step.expireDuration,
+          workedTimes: [],
+          totalPassedTime: 0,
+          isPostponePassed: false,
+          isDeadllinePassed: false,
+          isExpireDatePassed: false,
+          postponeLimit: step.postponeLimit,
+          usedPostpone: 0,
+          postponedDate: 0,
+          checklistItems: step.checklistItems.map(item => ({
+            ...item,
+            isChecked: false
+          })),
+          addedFrom: 'CUSTOMER'
+        }
+      })
+    })
+
+    res.sendStatus(StatusCodes.OK)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getCustomerByPhone = async (req, res) => {
+  const { phone } = req.params
+  try {
+    const [customer] = await dataAccess.customerDataAccess.findCustomer({ phone: { $regex: phone, $options: 'i' } })
+    res.status(StatusCodes.OK).json(customer)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createCustomer,
   getCustomers,
@@ -159,5 +236,7 @@ module.exports = {
   getCustomer,
   updateCustomer,
   getCustomerReliablesWithId,
-  addOrChangeCustomerProfileImage
+  addOrChangeCustomerProfileImage,
+  checkInCreateContactAndRelateNewConsultationTask,
+  getCustomerByPhone
 }

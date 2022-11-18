@@ -1,0 +1,5 @@
+export { default as CheckInHome } from './CheckInHome'
+export { default as PickUpDocuments } from './PickUpDocuments'
+export { default as DropOfDocuments } from './DropOfDocuments'
+export { default as NewConsultation } from './NewConsultation'
+export { default as Appointment } from './Appointment'

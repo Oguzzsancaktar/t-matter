@@ -2,6 +2,7 @@ const Task = require('../../models/task')
 const mongoose = require('mongoose')
 const calculateHourlyCompanyFee = require('../../helpers/calculateHourlyCompanyFee')
 const moment = require('moment')
+const { mongo } = require('mongoose')
 
 const taskPopulatePipe = [
   {
@@ -91,7 +92,8 @@ const taskPopulatePipe = [
       totalPrice: { $first: '$totalPrice' },
       index: { $first: '$index' },
       isInvoiced: { $first: '$isInvoiced' },
-      status: { $first: '$status' }
+      status: { $first: '$status' },
+      workHistory: { $first: '$workHistory' }
     }
   },
   // TODO created At gelmiyor
@@ -106,7 +108,7 @@ const createTask = data => {
   return Task.create(data)
 }
 
-const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId, categoryId, year }) => {
+const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId, categoryId, year, startDate }) => {
   const $match = {}
   const $match2 = {}
 
@@ -131,6 +133,12 @@ const getCustomerTasks = ({ customerId, isInvoiced, search, size, status, userId
   }
   if (status && status !== '-9') {
     $match.status = { $eq: +status }
+  }
+  if (startDate && startDate.trim().length > 0) {
+    $match.startDate = {
+      $gte: +moment(startDate).startOf('day').toDate(),
+      $lte: +moment(startDate).endOf('day').toDate()
+    }
   }
 
   if (isInvoiced) {
@@ -550,33 +558,45 @@ const getTaskYearsWithCustomerId = async customerId => {
   return Task.aggregate(pipeline).exec()
 }
 
-const getUserTrackingTime = async userId => {
+const getUserTrackingTime = async ({ userId, date }) => {
   const pipeline = [
     {
       $unwind: {
-        path: '$steps',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $unwind: {
-        path: '$steps.workedTimes',
+        path: '$workHistory',
         preserveNullAndEmptyArrays: true
       }
     },
     {
       $match: {
-        'steps.workedTimes.user': mongoose.Types.ObjectId(userId)
+        'workHistory.user': mongoose.Types.ObjectId(userId)
+      }
+    },
+    {
+      $addFields: {
+        dateString: {
+          $dateToString: {
+            format: '%Y-%m-%d',
+            date: '$workHistory.date'
+          }
+        }
+      }
+    },
+    {
+      $match: {
+        dateString: date
       }
     },
     {
       $group: {
-        _id: '$steps.workedTimes.user',
-        trackingTime: { $sum: '$steps.workedTimes.time' }
+        _id: '$_id',
+        totalDuration: {
+          $sum: '$workHistory.time'
+        }
       }
     }
   ]
-  return Task.aggregate(pipeline).exec()
+  const task = await Task.aggregate(pipeline).exec()
+  return task.reduce((acc, curr) => acc + curr.totalDuration, 0)
 }
 
 module.exports = {

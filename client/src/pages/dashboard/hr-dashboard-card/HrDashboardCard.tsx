@@ -1,15 +1,20 @@
 import React from 'react'
 import { DashboardCard } from '@/pages'
 import useAccessStore from '@hooks/useAccessStore'
-import { openModal } from '@/store'
+import { openModal, selectUser } from '@/store'
 import { ESize } from '@/models'
 import HrDashboardInfoModal from '../../../components/modals/dashboard/HrDashboardInfoModal'
 import {
   HrDashboardLoginRadialChart,
   HrDashboardMentalRadialChart,
-  HrDashboardVocationRadialChart
+  HrDashboardVocationRadialChart,
+  HrLoginRadialChart
 } from '@components/charts/hr'
 import { Row } from '@nextui-org/react'
+import { useGetUserByIdQuery } from '@services/settings/user-planning/userService'
+import moment from 'moment'
+import { useGetUserLogsByIdQuery } from '@services/userLogService'
+import { HR_TASK_TYPE_COLORS } from '@constants/hrTask'
 
 const SmallBadge = ({ color, onClick, count, text }) => {
   return (
@@ -39,8 +44,23 @@ const SmallBadge = ({ color, onClick, count, text }) => {
 }
 
 const HrDashboardCard = () => {
-  const { useAppDispatch } = useAccessStore()
+  const { useAppDispatch, useAppSelector } = useAccessStore()
   const dispatch = useAppDispatch()
+
+  const user = useAppSelector(selectUser)
+
+  const { data } = useGetUserLogsByIdQuery(
+    {
+      condition: 'ALL',
+      startDate: moment().startOf('isoWeek').toISOString(true),
+      endDate: moment().endOf('isoWeek').toISOString(true),
+      userId: user?._id as string,
+      timeOffSet: new Date().getTimezoneOffset()
+    },
+    {
+      skip: user?._id === undefined
+    }
+  )
 
   const showHrDashboardInfo = (tab: string) => {
     dispatch(
@@ -78,29 +98,34 @@ const HrDashboardCard = () => {
           <SmallBadge
             count={11}
             text="Mental"
-            color={'#3b4b8d'}
+            color={HR_TASK_TYPE_COLORS.MENTAL}
             onClick={showHrDashboardInfo.bind(this, 'MentalHrTab')}
           />
           <SmallBadge
             count={12}
             text="Absent"
-            color={'#ca5b5b'}
+            color={HR_TASK_TYPE_COLORS.ABSENT}
             onClick={showHrDashboardInfo.bind(this, 'AbsentHrTab')}
           />
           <SmallBadge
             count={12}
-            text="Vacation"
-            color={'#416fc7'}
+            text="Vocation"
+            color={HR_TASK_TYPE_COLORS.VOCATION}
             onClick={showHrDashboardInfo.bind(this, 'VocationHrTab')}
           />
-          <SmallBadge count={13} text="Others" color={'#ccc'} onClick={showHrDashboardInfo.bind(this, 'OthersHrTab')} />
+          <SmallBadge
+            count={13}
+            text="Others"
+            color={HR_TASK_TYPE_COLORS.OTHERS}
+            onClick={showHrDashboardInfo.bind(this, 'OthersHrTab')}
+          />
         </div>
       }
     >
       <Row>
-        <HrDashboardLoginRadialChart />
-        <HrDashboardMentalRadialChart />
-        <HrDashboardVocationRadialChart />
+        <HrLoginRadialChart isSmall data={data} />
+        {/*<HrDashboardMentalRadialChart />*/}
+        {/*<HrDashboardVocationRadialChart />*/}
       </Row>
     </DashboardCard>
   )

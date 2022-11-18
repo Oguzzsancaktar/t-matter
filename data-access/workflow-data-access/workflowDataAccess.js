@@ -366,6 +366,20 @@ const findByIdAndUpdateWorkflowPlan = (id, data) => {
   return WorkflowPlan.findByIdAndUpdate(id, data)
 }
 
+const findByNameWorkflowPlan = async name => {
+  const { hourlyCompanyFee } = await calculateHourlyCompanyFee()
+
+  const [plan] = await WorkflowPlan.aggregate([
+    {
+      $match: {
+        name: { $regex: name, $options: 'i' }
+      }
+    },
+    ...pipelineData(hourlyCompanyFee)
+  ]).exec()
+  return plan
+}
+
 module.exports = {
   createWorkflowCategory,
   getWorkflowCategories,
@@ -382,5 +396,6 @@ module.exports = {
   findWorkflowPlanById,
   findByIdAndUpdateWorkflowPlan,
   getWorkflowPlanUsedUserData,
-  getWorkflowCountForMonthsData
+  getWorkflowCountForMonthsData,
+  findByNameWorkflowPlan
 }

@@ -16,6 +16,7 @@ import { companyInfoApi } from '@services/settings/company-info/companyInfoServi
 import { historyApi } from '@services/historyService'
 import { customerActivityApi } from '@/services/customers/customerActivityService'
 import { customerHistoryApi } from '@/services/customers/customerHistoryService'
+import { hrTaskApi } from '@services/hrTaskService'
 
 const StoreMiddlewares = [
   authApi.middleware,
@@ -34,7 +35,11 @@ const StoreMiddlewares = [
   activityApi.middleware,
   historyApi.middleware,
   financePlanningApi.middleware,
+<<<<<<< HEAD
   websiteSettingsApi.middleware
+=======
+  hrTaskApi.middleware
+>>>>>>> refs/remotes/origin/master
 ]
 
 export default StoreMiddlewares

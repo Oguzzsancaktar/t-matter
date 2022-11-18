@@ -77,7 +77,7 @@ const removeTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
   const { customerId } = req.params
-  const { isInvoiced, search, size, status, year } = req.query
+  const { isInvoiced, search, size, status, year, startDate } = req.query
 
   try {
     const tasks = await dataAccess.taskDataAccess.getCustomerTasks({
@@ -86,7 +86,8 @@ const getTasks = async (req, res) => {
       search,
       size,
       status,
-      year
+      year,
+      startDate
     })
     res.status(200).json(tasks)
   } catch (error) {
