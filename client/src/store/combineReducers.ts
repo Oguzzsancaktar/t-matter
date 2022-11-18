@@ -44,11 +44,8 @@ const rootReducer = combineReducers({
   [financePlanningApi.reducerPath]: financePlanningApi.reducer,
   [customerActivityApi.reducerPath]: customerActivityApi.reducer,
   [customerHistoryApi.reducerPath]: customerHistoryApi.reducer,
-<<<<<<< HEAD
-  [websiteSettingsApi.reducerPath]: websiteSettingsApi.reducer
-=======
+  [websiteSettingsApi.reducerPath]: websiteSettingsApi.reducer,
   [hrTaskApi.reducerPath]: hrTaskApi.reducer
->>>>>>> refs/remotes/origin/master
 })
 
 export default rootReducer

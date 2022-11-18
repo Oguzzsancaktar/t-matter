@@ -35,11 +35,8 @@ const StoreMiddlewares = [
   activityApi.middleware,
   historyApi.middleware,
   financePlanningApi.middleware,
-<<<<<<< HEAD
-  websiteSettingsApi.middleware
-=======
+  websiteSettingsApi.middleware,
   hrTaskApi.middleware
->>>>>>> refs/remotes/origin/master
 ]
 
 export default StoreMiddlewares
