@@ -3,6 +3,7 @@ const dataAccess = require('../data-access')
 const moment = require('moment')
 const { clockToSeconds } = require('../utils/date-utils/dateUtils')
 const { HR_TASK_TYPES } = require('../constants/hrConstants')
+const { calculateUserScheduleTotalTimesByRange } = require('../helpers/calculateUserScheduleTotalTimesByRange')
 
 const hrTaskSender = async date => {
   console.log('HR TASK CREATOR CRON JOB', date)
@@ -22,6 +23,37 @@ const hrTaskSender = async date => {
        *  - Create ${HR_TASK_TYPES.MENTAL} task for the user
        *  - and notify the ${hrSetting.monthlyWorking.notificationReceivers}
        * */
+      const timeLogs = await dataAccess.timeLogDataAccess.getLogsByUserId({
+        userId: user._id.toString(),
+        startDate: moment(date).startOf('month').toDate(),
+        endDate: moment(date).endOf('month').toDate(),
+        condition: 'ALL',
+        timeOffSet: 0
+      })
+      const totalWorkingSeconds = timeLogs.reduce((acc, curr) => {
+        return acc + curr.totalTime
+      }, 0)
+      const monthlyWorkingScheduleSeconds = calculateUserScheduleTotalTimesByRange({
+        userId,
+        startDate: moment(date).startOf('month').toDate(),
+        endDate: moment(date).endOf('month').toDate()
+      })
+      const hrTask = await dataAccess.hrTaskDataAccess.hrTaskFindOne({
+        owner: user._id.toString(),
+        type: HR_TASK_TYPES.MENTAL,
+        month: moment(date).month()
+      })
+      if (!hrTask && totalWorkingSeconds >= monthlyWorkingScheduleSeconds) {
+        await dataAccess.hrTaskDataAccess.hrTaskCreate({
+          type: HR_TASK_TYPES.MENTAL,
+          description: '',
+          days: 1,
+          startDate: moment(date).startOf('day').add(1, 'day').toDate(),
+          endDate: moment(date).endOf('day').add(1, 'day').toDate(),
+          owner: user._id.toString(),
+          month: moment(date).month()
+        })
+      }
     }
     if (hrSetting.loginLogout.isChecked) {
       /*

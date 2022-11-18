@@ -23,6 +23,13 @@ const HrTaskSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false
+    },
+    month: {
+      type: Number
     }
   },
   { timestamps: true }

@@ -9,6 +9,7 @@ interface IHrTask {
   endDate: Date
   createdAt: Date
   updatedAt: Date
+  isCompleted: boolean
 }
 
 export default IHrTask
