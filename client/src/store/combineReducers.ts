@@ -20,6 +20,7 @@ import { companyInfoApi } from '@services/settings/company-info/companyInfoServi
 
 import { historyApi } from '@services/historyService'
 import { customerHistoryApi } from '@/services/customers/customerHistoryService'
+import { hrTaskApi } from '@services/hrTaskService'
 
 const rootReducer = combineReducers({
   auth: AuthReducer,
@@ -40,7 +41,8 @@ const rootReducer = combineReducers({
   [historyApi.reducerPath]: historyApi.reducer,
   [financePlanningApi.reducerPath]: financePlanningApi.reducer,
   [customerActivityApi.reducerPath]: customerActivityApi.reducer,
-  [customerHistoryApi.reducerPath]: customerHistoryApi.reducer
+  [customerHistoryApi.reducerPath]: customerHistoryApi.reducer,
+  [hrTaskApi.reducerPath]: hrTaskApi.reducer
 })
 
 export default rootReducer

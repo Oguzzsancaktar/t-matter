@@ -22,6 +22,7 @@ const hrSettingRoutes = require('./hr-setting-routes/hrSettingRoutes')
 
 const customerWorkActivityRoutes = require('./customer-work-activity-routes/customerWorkActivityRoutes')
 const customerHistoryRoutes = require('./history-routes/customerHistoryRoutes')
+const hrTaskRoutes = require('./hr-task-routes/hrTaskRoutes')
 
 router.get('/hello', (req, res) => {
   res.send('hello')
@@ -46,5 +47,6 @@ router.use('/history/customer', customerHistoryRoutes)
 router.use('/history', middlewares.authMiddlewares.checkAuth, historyRoutes)
 router.use('/hr-setting', middlewares.authMiddlewares.checkAuth, hrSettingRoutes)
 router.use('/customer-work-activity', customerWorkActivityRoutes)
+router.use('/hr-task', middlewares.authMiddlewares.checkAuth, hrTaskRoutes)
 
 module.exports = router

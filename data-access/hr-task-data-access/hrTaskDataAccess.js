@@ -5,7 +5,7 @@ const hrTaskCreate = data => {
 }
 
 const hrTaskFind = data => {
-  return hrTask.find(data)
+  return hrTask.find(data).populate('owner').sort({ startDate: -1 })
 }
 
 const hrTaskFindOne = data => {
