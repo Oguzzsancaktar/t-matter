@@ -49,10 +49,7 @@ router.use('/history/customer', customerHistoryRoutes)
 router.use('/history', middlewares.authMiddlewares.checkAuth, historyRoutes)
 router.use('/hr-setting', middlewares.authMiddlewares.checkAuth, hrSettingRoutes)
 router.use('/customer-work-activity', customerWorkActivityRoutes)
-<<<<<<< HEAD
 router.use('/website-settings', websiteSettingRoutes)
-=======
 router.use('/hr-task', middlewares.authMiddlewares.checkAuth, hrTaskRoutes)
->>>>>>> refs/remotes/origin/master
 
 module.exports = router
