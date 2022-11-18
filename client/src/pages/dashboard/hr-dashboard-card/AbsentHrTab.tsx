@@ -28,7 +28,7 @@ const AbsentHrTab = props => {
     startDate: props.dateRange ? props.dateRange.startDate : moment().startOf('year').toDate(),
     endDate: props.dateRange ? props.dateRange.endDate : moment().endOf('year').toDate()
   })
-  const { data } = useGetHrTasksQuery(
+  const { data, isLoading } = useGetHrTasksQuery(
     {
       userId: user?._id as string,
       type: HR_TASK_TYPES.ABSENT
@@ -118,11 +118,11 @@ const AbsentHrTab = props => {
         </div>
       </JustifyBetweenRow>
       <ItemContainer height="calc(100% - 300px)">
-        {data && data.length > 0 ? (
+        {isLoading ? (
           <ItemContainer height="100%">
             <TableSkeltonLoader count={13} />
           </ItemContainer>
-        ) : [] && [].length > 0 ? (
+        ) : data && data.length > 0 ? (
           <DataTable className="data-table" fixedHeader columns={columns} data={data || []} onRowClicked={() => {}} />
         ) : (
           <NoTableData />
