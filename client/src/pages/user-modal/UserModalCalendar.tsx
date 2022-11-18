@@ -6,7 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import { useGetHrTasksQuery, useUpdateHrTaskMutation } from '@services/hrTaskService'
-import { HR_TASK_TYPES } from '@constants/hrTask'
+import { HR_TASK_TYPE_COLORS } from '@constants/hrTask'
 import constantToLabel from '@utils/constantToLabel'
 import moment from 'moment'
 
@@ -29,7 +29,8 @@ const UserModalCalendar: React.FC<IProps> = ({ userId }) => {
     return {
       id: hrTask._id,
       title: constantToLabel(hrTask.type),
-      date: moment(hrTask.startDate).format('YYYY-MM-DD')
+      date: moment(hrTask.startDate).format('YYYY-MM-DD'),
+      backgroundColor: HR_TASK_TYPE_COLORS[hrTask.type]
     }
   })
 
@@ -46,18 +47,17 @@ const UserModalCalendar: React.FC<IProps> = ({ userId }) => {
         }}
         events={events}
         eventClick={i => {}}
-        rerenderDelay={10}
         eventDurationEditable={false}
         editable={true}
         droppable={true}
         ref={calendarComponentRef}
-        eventDrop={info => {
+        eventDrop={async info => {
           if (info.event.start) {
-            update({
+            await update({
               _id: info.oldEvent.id,
               startDate: info.event.start,
               endDate: moment(info.event.start).endOf('day').toDate()
-            })
+            }).unwrap()
           }
         }}
       />
