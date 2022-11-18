@@ -118,7 +118,7 @@ const AbsentHrTab = props => {
         </div>
       </JustifyBetweenRow>
       <ItemContainer height="calc(100% - 300px)">
-        {false ? (
+        {data && data.length > 0 ? (
           <ItemContainer height="100%">
             <TableSkeltonLoader count={13} />
           </ItemContainer>
