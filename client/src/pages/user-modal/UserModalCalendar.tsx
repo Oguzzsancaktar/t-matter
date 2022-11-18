@@ -6,7 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import { useGetHrTasksQuery, useUpdateHrTaskMutation } from '@services/hrTaskService'
-import { HR_TASK_TYPE_COLORS } from '@constants/hrTask'
+import { HR_TASK_TYPE_COLORS, HR_TASK_TYPES } from '@constants/hrTask'
 import constantToLabel from '@utils/constantToLabel'
 import moment from 'moment'
 
@@ -26,9 +26,13 @@ const UserModalCalendar: React.FC<IProps> = ({ userId }) => {
   const [update] = useUpdateHrTaskMutation()
 
   const events = (data || []).map(hrTask => {
+    let title = constantToLabel(hrTask.type)
+    if (hrTask.type === HR_TASK_TYPES.MENTAL && hrTask.isCompleted) {
+      title += ' - used'
+    }
     return {
       id: hrTask._id,
-      title: constantToLabel(hrTask.type),
+      title,
       date: moment(hrTask.startDate).format('YYYY-MM-DD'),
       backgroundColor: HR_TASK_TYPE_COLORS[hrTask.type]
     }
