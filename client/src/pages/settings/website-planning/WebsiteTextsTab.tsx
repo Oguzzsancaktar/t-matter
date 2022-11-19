@@ -17,7 +17,7 @@ import colors from '@/constants/colors'
 import { iconSelectOptions } from '@/constants/iconSelect'
 import { Delete } from 'react-feather'
 import {
-  useCreateOrUpdateWebsiteSettingsMutation,
+  useCreateOrUpdateWebsiteTextSettingsMutation,
   useGetWebsiteTextSettingsQuery
 } from '@/services/settings/website-settings/websiteSettingsService'
 import { defaultWebsiteTextSettings } from '@/constants/websiteSettings'
@@ -42,7 +42,7 @@ const RowItem = styled.div`
 
 const WebsiteTextsTab = () => {
   const { data: websiteSettingsTextData, isLoading: websiteTextSettingsIsLoading } = useGetWebsiteTextSettingsQuery()
-  const [createOrUpdateTextSettings] = useCreateOrUpdateWebsiteSettingsMutation()
+  const [createOrUpdateTextSettings] = useCreateOrUpdateWebsiteTextSettingsMutation()
 
   const [websiteTextsData, setWebsiteTextsData] = useState<IWebsiteTextsData>(defaultWebsiteTextSettings)
 
@@ -142,13 +142,14 @@ const WebsiteTextsTab = () => {
   }
 
   const handleAddNewContactInfo = () => {
-    const tempData = { ...websiteTextsData }
-    tempData.contactInformations.push({
+    const tempData = [...websiteTextsData.contactInformations]
+
+    tempData.push({
       icon: '',
       title: '',
       content: ''
     })
-    setWebsiteTextsData(tempData)
+    setWebsiteTextsData({ ...websiteTextsData, contactInformations: tempData })
   }
 
   const handleRemoveContact = (index: number) => {

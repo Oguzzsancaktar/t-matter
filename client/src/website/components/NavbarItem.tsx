@@ -5,11 +5,13 @@ import styled from 'styled-components'
 
 interface IProps {
   children: React.ReactNode | string
+  color: string
+  hoverColor: string
 }
 
-const NavItem = styled.h3`
+const NavItem = styled.h3<{ color: string; hoverColor: string }>`
   text-transform: uppercase;
-  color: #ffce00;
+  color: ${props => props.color};
   font-size: 1rem;
   cursor: pointer;
   text-align: center;
@@ -17,15 +19,17 @@ const NavItem = styled.h3`
 
   &:hover {
     letter-spacing: 2px;
-    color: ${colors.gray.dark};
+    color: ${props => props.hoverColor};
     transition: all 0.4s ease-in;
   }
 `
 
-const NavbarItem: React.FC<IProps> = ({ children }) => {
+const NavbarItem: React.FC<IProps> = ({ children, color = '#ffce00', hoverColor = '#ff8c19' }) => {
   return (
     <ItemContainer width="auto" margin="0 1rem">
-      <NavItem>{children}</NavItem>
+      <NavItem color={color} hoverColor={hoverColor}>
+        {children}
+      </NavItem>
     </ItemContainer>
   )
 }

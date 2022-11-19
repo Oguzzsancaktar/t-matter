@@ -5,6 +5,7 @@ import { AiOutlineClockCircle } from 'react-icons/ai'
 import styled from 'styled-components'
 import colors from '@/constants/colors'
 import { selectIconWithText } from '@/utils/selectIconWithText'
+import { IWebsiteStylesData } from '@/models'
 
 const ContactContainer = styled(ItemContainer)`
   &:not(&:first-child) {
@@ -25,16 +26,17 @@ interface IProps {
   icon: string
   title: string
   content: string
+  websiteSettingsStyleData: IWebsiteStylesData
 }
 
-const ContactItem: React.FC<IProps> = ({ icon, title, content }) => {
+const ContactItem: React.FC<IProps> = ({ icon, title, content, websiteSettingsStyleData }) => {
   return (
     <ContactContainer>
       <Column>
         <ItemContainer>
           <ContactRow>
             <ItemContainer width="25px" height="25px" margin="0 0.5rem 0 0">
-              {selectIconWithText(icon)}
+              {selectIconWithText(icon, '20px', websiteSettingsStyleData.contactIconColor.color)}
             </ItemContainer>
 
             <ItemContainer height="25px" width="calc(100% - 0.5rem - 25px)">
@@ -43,7 +45,7 @@ const ContactItem: React.FC<IProps> = ({ icon, title, content }) => {
                 width="100%"
                 fontFamily="Satoshi-Light"
                 fontWeight="100"
-                color={colors.white.primary}
+                color={websiteSettingsStyleData.contactTitleColor.color}
                 fontSize="0.8rem"
               >
                 {title}
@@ -58,7 +60,7 @@ const ContactItem: React.FC<IProps> = ({ icon, title, content }) => {
             fontFamily="Satoshi-Medium"
             fontWeight="400"
             fontSize="0.9rem"
-            color={colors.white.secondary}
+            color={websiteSettingsStyleData.contactContentColor.color}
           >
             {content}
           </ContactText>

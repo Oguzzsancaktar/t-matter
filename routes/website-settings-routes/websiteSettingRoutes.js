@@ -12,6 +12,15 @@ router.post(
 
 router.get('/text', controllers.websiteSettingsController.getWebsiteTextSettings)
 
+// styles
+router.post(
+  '/style',
+  middlewares.validations.websiteSettingValidations.createOrUpdateWebsiteStyleSettingsValidation,
+  controllers.websiteSettingsController.createOrUpdateWebsiteStyleSettings
+)
+
+router.get('/style', controllers.websiteSettingsController.getWebsiteStyleSettings)
+
 // router.get('/category', controllers.workflowController.getWorkflowCategories)
 // router.get('/category/:id', controllers.workflowController.getWorkflowCategoryById)
 

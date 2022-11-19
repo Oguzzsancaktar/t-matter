@@ -11,7 +11,7 @@ import { H1, Label } from '../texts'
 import CircleColor from './CircleColor'
 
 interface IProps extends IComponentProps {
-  value: IColor
+  value: IColor | undefined
   labelText?: string
   validationError?: boolean
   onClick: (color: IColor) => void
@@ -39,7 +39,7 @@ const ColorSelect: React.FC<IProps> = ({ margin, labelText, onClick, value, vali
           colorList.map((color, index) => (
             <CircleColor
               onClick={() => onClick(color)}
-              isSelected={color._id === value._id}
+              isSelected={color?._id === value?._id}
               key={index}
               color={color.color}
             />

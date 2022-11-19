@@ -3,9 +3,9 @@ import { ItemContainer } from '@/components'
 import styled from 'styled-components'
 import NavbarItem from './NavbarItem'
 import CompanyLogo from './CompanyLogo'
-import { IWebsiteTextsData } from '@/models'
+import { IWebsiteStylesData, IWebsiteTextsData } from '@/models'
 
-const NavbarLayout = styled.div`
+const NavbarLayout = styled.div<{ borderColor: string }>`
   max-width: 1200px;
   width: 100%;
   height: 100%;
@@ -14,7 +14,7 @@ const NavbarLayout = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #ffce00;
+  border-bottom: 1px solid ${props => props.borderColor};
   padding: 2rem;
 `
 
@@ -25,18 +25,29 @@ const NavLinkList = styled.ul`
 `
 interface IProps {
   websiteTextsData: IWebsiteTextsData
+  websiteSettingsStyleData: IWebsiteStylesData
 }
-const WebsiteNavbar: React.FC<IProps> = ({ websiteTextsData }) => {
+const WebsiteNavbar: React.FC<IProps> = ({ websiteTextsData, websiteSettingsStyleData }) => {
+  console.log('websiteSettingsStyleData', websiteSettingsStyleData)
   return (
     <ItemContainer position="fixed" top="1rem" left="0" height="60px" backgroundColor="transparent">
-      <NavbarLayout>
+      <NavbarLayout borderColor={websiteSettingsStyleData.navbarBorderColor.color}>
         <ItemContainer width="200px" height="70px">
           <CompanyLogo url="https://1000logos.net/wp-content/uploads/2021/04/National-Geographic-logo.png" />
         </ItemContainer>
         <ItemContainer>
           <NavLinkList>
             {websiteTextsData.navlinks.map(
-              (navlink, index) => navlink.show && <NavbarItem key={index}>{navlink.name}</NavbarItem>
+              (navlink, index) =>
+                navlink.show && (
+                  <NavbarItem
+                    key={index}
+                    color={websiteSettingsStyleData?.navlinkTextColor?.color}
+                    hoverColor={websiteSettingsStyleData?.navlinkHoverTextColor?.color}
+                  >
+                    {navlink.name}
+                  </NavbarItem>
+                )
             )}
           </NavLinkList>
         </ItemContainer>

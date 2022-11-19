@@ -22,7 +22,30 @@ const getWebsiteTextSettings = async (req, res) => {
   }
 }
 
+const createOrUpdateWebsiteStyleSettings = async (req, res) => {
+  const { body } = req
+  try {
+    await dataAccess.websiteSettingsDataAccess.createOrUpdateWebsiteStyleSettings(body)
+    res.sendStatus(StatusCodes.CREATED)
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
+const getWebsiteStyleSettings = async (req, res) => {
+  try {
+    const websiteStyleSettings = await dataAccess.websiteSettingsDataAccess.getStyleSettings()
+    res.status(StatusCodes.OK).json(websiteStyleSettings[0])
+  } catch (e) {
+    console.log(e)
+    res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR)
+  }
+}
+
 module.exports = {
   createOrUpdateWebsiteTextSettings,
-  getWebsiteTextSettings
+  getWebsiteTextSettings,
+  createOrUpdateWebsiteStyleSettings,
+  getWebsiteStyleSettings
 }

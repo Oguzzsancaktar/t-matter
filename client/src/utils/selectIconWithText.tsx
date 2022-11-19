@@ -14,47 +14,47 @@ import {
 import { BiCurrentLocation } from 'react-icons/bi'
 import { FaDiscord, FaPinterest, FaReddit, FaSkype, FaSnapchat, FaTelegram, FaWhatsapp } from 'react-icons/fa'
 
-export const selectIconWithText = (icon: string) => {
+export const selectIconWithText = (icon: string, size: string = '40', color: string = '#000000') => {
   const findIcon = (icon: string) => {
     switch (icon) {
       case 'clock':
-        return <FiClock />
+        return <FiClock size={size} color={color} />
       case 'mail':
-        return <FiMail />
+        return <FiMail size={size} color={color} />
       case 'phone':
-        return <FiPhone />
+        return <FiPhone size={size} color={color} />
       case 'website':
-        return <CgWebsite />
+        return <CgWebsite size={size} color={color} />
       case 'location':
-        return <BiCurrentLocation />
+        return <BiCurrentLocation size={size} color={color} />
       case 'facebook':
-        return <FiFacebook />
+        return <FiFacebook size={size} color={color} />
       case 'instagram':
-        return <FiInstagram />
+        return <FiInstagram size={size} color={color} />
       case 'twitter':
-        return <FiTwitter />
+        return <FiTwitter size={size} color={color} />
       case 'linkedin':
-        return <FiLinkedin />
+        return <FiLinkedin size={size} color={color} />
       case 'youtube':
-        return <FiYoutube />
+        return <FiYoutube size={size} color={color} />
       case 'github':
-        return <FiGithub />
+        return <FiGithub size={size} color={color} />
       case 'twitch':
-        return <FiTwitch />
+        return <FiTwitch size={size} color={color} />
       case 'discord':
-        return <FaDiscord />
+        return <FaDiscord size={size} color={color} />
       case 'whatsapp':
-        return <FaWhatsapp />
+        return <FaWhatsapp size={size} color={color} />
       case 'telegram':
-        return <FaTelegram />
+        return <FaTelegram size={size} color={color} />
       case 'skype':
-        return <FaSkype />
+        return <FaSkype size={size} color={color} />
       case 'snapchat':
-        return <FaSnapchat />
+        return <FaSnapchat size={size} color={color} />
       case 'pinterest':
-        return <FaPinterest />
+        return <FaPinterest size={size} color={color} />
       case 'reddit':
-        return <FaReddit />
+        return <FaReddit size={size} color={color} />
     }
   }
 
