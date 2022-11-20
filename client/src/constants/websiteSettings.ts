@@ -1,4 +1,4 @@
-import { IWebsiteStylesData, IWebsiteTextsData } from '@/models'
+import { IWebsiteImageData, IWebsiteStylesData, IWebsiteTextsData } from '@/models'
 
 export const defaultWebsiteTextSettings: IWebsiteTextsData = {
   contactInformations: [
@@ -53,4 +53,14 @@ export const defaultWebsiteStyleSettings: IWebsiteStylesData = {
   websiteModalIconColor: { _id: '', color: '#F2F2FF', status: 0 },
   websiteModalTitleColor: { _id: '', color: '#F2F2FF', status: 0 },
   websiteModalContentColor: { _id: '', color: '#F2F2FF', status: 0 }
+}
+
+export const defaultWebsiteImageSettings: IWebsiteImageData = {
+  company_logo: '',
+  company_img: '',
+  modal_section_img_1: '',
+  modal_section_img_2: '',
+  modal_section_img_3: '',
+  modal_section_img_4: '',
+  cloudinary_id: ''
 }

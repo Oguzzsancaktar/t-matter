@@ -1,18 +1,26 @@
 import React from 'react'
 import { ItemContainer, JustifyBetweenColumn } from '@/components'
 import WebsiteNavbar from '../components/WebsiteNavbar'
-import colors from '@/constants/colors'
 import { CompanyInformationsSection, ModalButtonsSection } from '../components'
 import {
+  useGetWebsiteImageSettingsQuery,
   useGetWebsiteStyleSettingsQuery,
   useGetWebsiteTextSettingsQuery
 } from '@/services/settings/website-settings/websiteSettingsService'
+import styled from 'styled-components'
+
+const InformationSection = styled(ItemContainer)`
+  @media (max-width: 768px) {
+    height: auto;
+  }
+`
 
 const HomePage = () => {
   const { data: websiteSettingsTextData, isLoading: websiteTextSettingsIsLoading } = useGetWebsiteTextSettingsQuery()
   const { data: websiteSettingsStyleData, isLoading: websiteStyleSettingsIsLoading } = useGetWebsiteStyleSettingsQuery()
+  const { data: websiteImageSettingsData, isLoading: websiteImageSettingsIsLoading } = useGetWebsiteImageSettingsQuery()
 
-  if (!websiteSettingsTextData || !websiteSettingsStyleData) {
+  if (!websiteSettingsTextData || !websiteSettingsStyleData || !websiteImageSettingsData) {
     return <div>Loading...</div>
   }
   return (
@@ -30,20 +38,26 @@ const HomePage = () => {
         margin="auto"
         padding="2rem"
       >
-        <WebsiteNavbar websiteTextsData={websiteSettingsTextData} websiteSettingsStyleData={websiteSettingsStyleData} />
+        <WebsiteNavbar
+          websiteTextsData={websiteSettingsTextData}
+          websiteSettingsStyleData={websiteSettingsStyleData}
+          websiteImageSettingsData={websiteImageSettingsData}
+        />
         <ItemContainer height="calc(100%)">
           <JustifyBetweenColumn height="100%">
-            <ItemContainer margin="120px 0 0 0" maxWidth="1200px" height="calc(100% - 250px - 30px - 10rem)">
+            <InformationSection margin="120px 0 0 0" maxWidth="1200px" height="calc(100% - 250px - 30px - 10rem)">
               <CompanyInformationsSection
                 websiteTextsData={websiteSettingsTextData}
                 websiteSettingsStyleData={websiteSettingsStyleData}
+                websiteImageSettingsData={websiteImageSettingsData}
               />
-            </ItemContainer>
+            </InformationSection>
 
             <ItemContainer margin="0 0 30px 0" height="250px" maxWidth="1200px">
               <ModalButtonsSection
                 websiteTextsData={websiteSettingsTextData}
                 websiteSettingsStyleData={websiteSettingsStyleData}
+                websiteImageSettingsData={websiteImageSettingsData}
               />
             </ItemContainer>
           </JustifyBetweenColumn>

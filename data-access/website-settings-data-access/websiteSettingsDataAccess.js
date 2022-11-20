@@ -1,5 +1,6 @@
 const WebsiteTextSettings = require('../../models/website-setting-models/websiteTexts')
 const WebsiteStyleSettings = require('../../models/website-setting-models/websiteStyles')
+const WebsiteImageSettings = require('../../models/website-setting-models/websiteImages')
 
 const createOrUpdateWebsiteTextSettings = async body => {
   try {
@@ -292,9 +293,42 @@ const getStyleSettings = async () => {
   }
 }
 
+const createOrUpdateWebsiteImageSettings = async body => {
+  try {
+    const websiteImageSettings = await WebsiteImageSettings.findOneAndUpdate({})
+
+    if (!websiteImageSettings) {
+      return await WebsiteImageSettings.create(body)
+    } else {
+      return await WebsiteImageSettings.findOneAndUpdate(
+        { _id: websiteImageSettings._id },
+        {
+          $set: {
+            ...body
+          }
+        },
+        { new: true }
+      )
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getImageSettings = async () => {
+  try {
+    const websiteImageSettings = await WebsiteImageSettings.findOne({})
+    return websiteImageSettings
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   createOrUpdateWebsiteTextSettings,
   getTextSettings,
   createOrUpdateWebsiteStyleSettings,
-  getStyleSettings
+  getStyleSettings,
+  createOrUpdateWebsiteImageSettings,
+  getImageSettings
 }

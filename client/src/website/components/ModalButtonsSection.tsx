@@ -1,13 +1,18 @@
 import React from 'react'
 import { ItemContainer, JustifyBetweenRow } from '@/components'
 import DetailModalButton from './DetailModalButton'
-import { IWebsiteStylesData, IWebsiteTextsData } from '@/models'
+import { IWebsiteImageData, IWebsiteStylesData, IWebsiteTextsData } from '@/models'
 
 interface IProps {
   websiteTextsData: IWebsiteTextsData
   websiteSettingsStyleData: IWebsiteStylesData
+  websiteImageSettingsData: IWebsiteImageData
 }
-const ModalButtonsSection: React.FC<IProps> = ({ websiteTextsData, websiteSettingsStyleData }) => {
+const ModalButtonsSection: React.FC<IProps> = ({
+  websiteTextsData,
+  websiteSettingsStyleData,
+  websiteImageSettingsData
+}) => {
   return (
     <ItemContainer
       height="100%"
@@ -22,6 +27,7 @@ const ModalButtonsSection: React.FC<IProps> = ({ websiteTextsData, websiteSettin
             header={section.header}
             text={section.text}
             websiteSettingsStyleData={websiteSettingsStyleData}
+            url={websiteImageSettingsData['modal_section_img_' + (index + 1)] as string}
           />
         ))}
       </JustifyBetweenRow>

@@ -20,12 +20,19 @@ import { useCreateLogMutation } from '@services/userLogService'
 import { LOG_TYPES } from '@constants/logTypes'
 import { Appointment, CheckInHome, DropOfDocuments, PickUpDocuments, NewConsultation } from '@pages/check-in-pages'
 import moment from 'moment'
+import styled from 'styled-components'
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const CustomersPage = lazy(() => import('./pages/CustomersPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const HomePage = lazy(() => import('./website/views/HomePage'))
+
+const AppLayout = styled(ItemContainer)`
+  @media (max-width: 768px) {
+    height: auto;
+  }
+`
 
 function delay(ms) {
   var start = +new Date()
@@ -170,7 +177,7 @@ function App() {
 
       {isSidebarOpen && <SideBar />}
 
-      <ItemContainer height="100vh" width={isSidebarOpen ? 'calc(100vw - 48px - 2rem)' : '100vw'} margin="0 0 0 auto">
+      <AppLayout height="100vh" width={isSidebarOpen ? 'calc(100vw - 48px - 2rem)' : '100vw'} margin="0 0 0 auto">
         <Routes>
           <Route path="/" element={<HomePage />} />
 
@@ -209,7 +216,7 @@ function App() {
 
           <Route path="/*" element={<Navigate replace to="/login" />} />
         </Routes>
-      </ItemContainer>
+      </AppLayout>
 
       <ToastContainer />
     </Suspense>

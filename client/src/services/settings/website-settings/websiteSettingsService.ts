@@ -1,6 +1,6 @@
 import { axiosBaseQuery, IAxiosBaseQueryFn } from '@services/AxiosBaseQuery'
 import { EndpointBuilder } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { IWebsiteStylesData, IWebsiteTextsData } from '@/models'
+import { IWebsiteImageData, IWebsiteStylesData, IWebsiteTextsData } from '@/models'
 import { createApi } from '@reduxjs/toolkit/query/react'
 
 const WEBSITE_SETTINGS_API_REDUCER_PATH = 'websiteSettingsApi'
@@ -11,6 +11,35 @@ type IBuilder = EndpointBuilder<
   typeof WEBSITE_SETTINGS_TAG,
   typeof WEBSITE_SETTINGS_API_REDUCER_PATH
 >
+
+const createOrUpdateWebsiteImageSettings = (builder: IBuilder) => {
+  return builder.mutation<IWebsiteImageData, { file: FormData; fileName: string }>({
+    query(dto) {
+      return {
+        url: `/website-settings/image/${dto.fileName}`,
+        method: 'POST',
+        data: dto.file
+      }
+    },
+    invalidatesTags(result) {
+      return [{ type: WEBSITE_SETTINGS_TAG, id: 'LIST' }]
+    }
+  })
+}
+
+const getWebsiteImageSettings = (builder: IBuilder) => {
+  return builder.query<IWebsiteImageData, void>({
+    query() {
+      return {
+        url: '/website-settings/image',
+        method: 'GET'
+      }
+    },
+    providesTags() {
+      return [{ type: WEBSITE_SETTINGS_TAG, id: 'LIST' }]
+    }
+  })
+}
 
 const createOrUpdateWebsiteTextSettings = (builder: IBuilder) => {
   return builder.mutation<IWebsiteTextsData, IWebsiteTextsData>({
@@ -98,7 +127,9 @@ const websiteSettingsApi = createApi({
     createOrUpdateWebsiteTextSettings: createOrUpdateWebsiteTextSettings(builder),
     getWebsiteTextSettings: getWebsiteTextSettings(builder),
     createOrUpdateWebsiteStyleSettings: createOrUpdateWebsiteStyleSettings(builder),
-    getWebsiteStyleSettings: getWebsiteStyleSettings(builder)
+    getWebsiteStyleSettings: getWebsiteStyleSettings(builder),
+    createOrUpdateWebsiteImageSettings: createOrUpdateWebsiteImageSettings(builder),
+    getWebsiteImageSettings: getWebsiteImageSettings(builder)
   })
 })
 
@@ -106,7 +137,9 @@ const {
   useCreateOrUpdateWebsiteTextSettingsMutation,
   useGetWebsiteTextSettingsQuery,
   useCreateOrUpdateWebsiteStyleSettingsMutation,
-  useGetWebsiteStyleSettingsQuery
+  useGetWebsiteStyleSettingsQuery,
+  useCreateOrUpdateWebsiteImageSettingsMutation,
+  useGetWebsiteImageSettingsQuery
 } = websiteSettingsApi
 
 export {
@@ -114,5 +147,7 @@ export {
   useGetWebsiteTextSettingsQuery,
   useCreateOrUpdateWebsiteStyleSettingsMutation,
   useGetWebsiteStyleSettingsQuery,
+  useCreateOrUpdateWebsiteImageSettingsMutation,
+  useGetWebsiteImageSettingsQuery,
   websiteSettingsApi
 }

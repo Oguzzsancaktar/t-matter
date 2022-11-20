@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const middlewares = require('../../middlewares')
 const controllers = require('../../controllers')
+const upload = require('../../utils/upload-utils/multer')
 
 // Texts
 router.post(
@@ -20,6 +21,13 @@ router.post(
 )
 
 router.get('/style', controllers.websiteSettingsController.getWebsiteStyleSettings)
+
+router.post(
+  '/image/:fileName',
+  upload.single('file'),
+  controllers.websiteSettingsController.createOrUpdateWebsiteImageSettings
+)
+router.get('/image', controllers.websiteSettingsController.getWebsiteImageSettings)
 
 // router.get('/category', controllers.workflowController.getWorkflowCategories)
 // router.get('/category/:id', controllers.workflowController.getWorkflowCategoryById)

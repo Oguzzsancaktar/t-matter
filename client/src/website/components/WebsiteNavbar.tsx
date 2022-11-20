@@ -3,7 +3,7 @@ import { ItemContainer } from '@/components'
 import styled from 'styled-components'
 import NavbarItem from './NavbarItem'
 import CompanyLogo from './CompanyLogo'
-import { IWebsiteStylesData, IWebsiteTextsData } from '@/models'
+import { IWebsiteImageData, IWebsiteStylesData, IWebsiteTextsData } from '@/models'
 
 const NavbarLayout = styled.div<{ borderColor: string }>`
   max-width: 1200px;
@@ -26,14 +26,15 @@ const NavLinkList = styled.ul`
 interface IProps {
   websiteTextsData: IWebsiteTextsData
   websiteSettingsStyleData: IWebsiteStylesData
+  websiteImageSettingsData: IWebsiteImageData
 }
-const WebsiteNavbar: React.FC<IProps> = ({ websiteTextsData, websiteSettingsStyleData }) => {
+const WebsiteNavbar: React.FC<IProps> = ({ websiteTextsData, websiteSettingsStyleData, websiteImageSettingsData }) => {
   console.log('websiteSettingsStyleData', websiteSettingsStyleData)
   return (
     <ItemContainer position="fixed" top="1rem" left="0" height="60px" backgroundColor="transparent">
       <NavbarLayout borderColor={websiteSettingsStyleData.navbarBorderColor.color}>
-        <ItemContainer width="200px" height="70px">
-          <CompanyLogo url="https://1000logos.net/wp-content/uploads/2021/04/National-Geographic-logo.png" />
+        <ItemContainer width="200px" height="40px">
+          <CompanyLogo url={websiteImageSettingsData.company_logo as string} />
         </ItemContainer>
         <ItemContainer>
           <NavLinkList>

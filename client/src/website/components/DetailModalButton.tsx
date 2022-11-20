@@ -1,6 +1,5 @@
 import { H1, ItemContainer, JustifyBetweenColumn } from '@/components'
-import colors from '@/constants/colors'
-import { IWebsiteStylesData, IWebsiteTextsData } from '@/models'
+import { IWebsiteStylesData } from '@/models'
 import React from 'react'
 import styled from 'styled-components'
 import CompanyLogo from './CompanyLogo'
@@ -23,9 +22,10 @@ interface IProps {
   header: string
   text: string
   websiteSettingsStyleData: IWebsiteStylesData
+  url: string
 }
 
-const DetailModalButton: React.FC<IProps> = ({ header, text, websiteSettingsStyleData }) => {
+const DetailModalButton: React.FC<IProps> = ({ header, text, websiteSettingsStyleData, url }) => {
   return (
     <Item
       backgroundColor={websiteSettingsStyleData.websiteModalButtonsBackgroundColor.color}
@@ -37,8 +37,8 @@ const DetailModalButton: React.FC<IProps> = ({ header, text, websiteSettingsStyl
         <H1 textAlign="center" color={websiteSettingsStyleData.websiteModalTitleColor.color}>
           {header}
         </H1>
-        <ItemContainer height="80px">
-          <CompanyLogo url="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ford_logo_flat.svg/2560px-Ford_logo_flat.svg.png" />
+        <ItemContainer height="60px" width="60px">
+          <CompanyLogo url={url} />
         </ItemContainer>
         <H1 textAlign="center" color={websiteSettingsStyleData.websiteModalContentColor.color}>
           {text}

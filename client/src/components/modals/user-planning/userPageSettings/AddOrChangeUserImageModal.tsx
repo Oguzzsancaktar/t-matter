@@ -34,6 +34,7 @@ const AddOrChangeUserImageModal: React.FC<IProps> = ({ user }) => {
 
     if (typeof file === 'string') {
       try {
+        console.log('x')
         tempFormData.append('file', file)
         setImage(file)
       } catch (error) {
@@ -41,6 +42,8 @@ const AddOrChangeUserImageModal: React.FC<IProps> = ({ user }) => {
       }
     } else {
       try {
+        console.log('y')
+
         const base64Image = await getBase64(file)
         setImage(base64Image as string)
         tempFormData.append('file', file)
