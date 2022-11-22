@@ -8,7 +8,6 @@ import { Label } from '../texts'
 import { Container, IconContainer } from '../input/input-with-icon/styled'
 import { ItemContainer } from '../item-container'
 import colors from '@/constants/colors'
-import moment from 'moment'
 
 interface IProps {
   name: string
@@ -83,15 +82,6 @@ const DatePicker: React.FC<IProps> = ({
             </Row>
           </Container>
         </Column>
-
-        {/* <InputWithIcon
-          onChange={e => onChange(e.target.value)}
-          name={name}
-          type="text"
-          value={time}
-          onFocus={() => setShowTime(true)}
-          // onBlur={() => setShowTime(false)}
-        /> */}
       </Row>
     </Column>
   )

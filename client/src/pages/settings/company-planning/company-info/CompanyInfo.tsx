@@ -53,7 +53,7 @@ const CompanyInfo: React.FC<IProps> = props => {
   return (
     <JustifyCenterRow height="100%" width="auto">
       <Column width="50%">
-        <JustifyCenterColumn margin="0 0 1rem 0">
+        <JustifyCenterColumn margin="0 0 10px 0">
           {state.profile_img && (
             <a href={state.profile_img} target="_blank">
               <img
@@ -65,7 +65,7 @@ const CompanyInfo: React.FC<IProps> = props => {
           )}
           <FileUploader handleChange={handleUploadChange} name="file" types={['JPG', 'PNG', 'JPEG']} />
         </JustifyCenterColumn>
-        <JustifyCenterRow margin="0 0 1rem 0">
+        <JustifyCenterRow margin="0 0 10px 0">
           <InputRegular
             name="name"
             placeholder="Company Name"
@@ -75,7 +75,7 @@ const CompanyInfo: React.FC<IProps> = props => {
             labelText="Company Name"
           />
         </JustifyCenterRow>
-        <JustifyCenterRow margin="0 0 1rem 0">
+        <JustifyCenterRow margin="0 0 10px 0">
           <InputRegular
             name="address"
             placeholder="Company Address"
@@ -85,7 +85,7 @@ const CompanyInfo: React.FC<IProps> = props => {
             labelText="Company Address"
           />
         </JustifyCenterRow>
-        <JustifyCenterRow margin="0 0 1rem 0">
+        <JustifyCenterRow margin="0 0 10px 0">
           <InputRegular
             name="phone"
             placeholder="Company Phone"
@@ -95,7 +95,7 @@ const CompanyInfo: React.FC<IProps> = props => {
             labelText="Company Phone"
           />
         </JustifyCenterRow>
-        <JustifyCenterRow margin="0 0 1rem 0">
+        <JustifyCenterRow margin="0 0 10px 0">
           <InputRegular
             name="email"
             placeholder="Company Email"
@@ -105,7 +105,7 @@ const CompanyInfo: React.FC<IProps> = props => {
             labelText="Company Email"
           />
         </JustifyCenterRow>
-        <JustifyCenterRow margin="0 0 1rem 0">
+        <JustifyCenterRow margin="0 0 10px 0">
           <InputRegular
             name="website"
             placeholder="Company Website"
@@ -115,7 +115,7 @@ const CompanyInfo: React.FC<IProps> = props => {
             labelText="Company Website"
           />
         </JustifyCenterRow>
-        <JustifyCenterRow margin="0 0 1rem 0">
+        <JustifyCenterRow margin="0 0 10px 0">
           <InputRegular
             name="fax"
             placeholder="Company Fax"

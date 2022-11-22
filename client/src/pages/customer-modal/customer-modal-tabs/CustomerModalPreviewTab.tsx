@@ -55,7 +55,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customer }) => {
               top="40%"
               zIndex="999"
             >
-              <H1 fontSize="1.2rem" fontWeight="bold" color={colors.gray.disabled}>
+              <H1 fontSize="20px" fontWeight="bold" color={colors.gray.disabled}>
                 Performance
               </H1>
             </ItemContainer>
@@ -89,7 +89,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customer }) => {
             top="30%"
             zIndex="999"
           >
-            <H1 fontSize="1.2rem" fontWeight="bold" color={colors.gray.disabled}>
+            <H1 fontSize="20px" fontWeight="bold" color={colors.gray.disabled}>
               Workflow
             </H1>
           </ItemContainer>
@@ -122,7 +122,7 @@ const CustomerModalPreviewTab: React.FC<IProps> = ({ customer }) => {
                       top="50%"
                       zIndex="999"
                     >
-                      <H1 fontSize="1.2rem" fontWeight="bold" color={colors.gray.disabled}>
+                      <H1 fontSize="20px" fontWeight="bold" color={colors.gray.disabled}>
                         Finance
                       </H1>
                     </ItemContainer>

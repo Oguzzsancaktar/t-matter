@@ -20,6 +20,7 @@ const TabStyled = styled.div<Pick<IProps, 'margin'>>`
 const TabName = styled.p<Pick<IProps, 'isActive'>>`
   transition: color 0.4s ease-in-out;
   color: ${({ isActive }) => (isActive ? colors.blue.primary : colors.gray.secondary)};
+  font-size: 16px;
 `
 
 const Tab: React.FC<IProps> = ({ name, index, isActive, margin, onClick }) => {

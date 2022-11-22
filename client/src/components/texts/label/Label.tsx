@@ -12,7 +12,7 @@ interface IProps {
 const LabelStyled = styled.label<IProps>`
   cursor: ${({ cursorType }) => cursorType && cursorType};
   color: ${({ color }) => (color ? color : colors.orange.primary)};
-  font-size: ${({ fontSize }) => fontSize && fontSize};
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : '16px')};
   width: 100%;
   text-align: left;
 `

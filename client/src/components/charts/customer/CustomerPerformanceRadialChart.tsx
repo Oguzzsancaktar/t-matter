@@ -1,10 +1,9 @@
-import CircleImage from '@/components/image/CircleImage'
 import { ItemContainer } from '@/components/item-container'
 import { NoTableData } from '@/components/no-table-data'
 import { H1 } from '@/components/texts'
 import colors from '@/constants/colors'
 import { emptyQueryParams } from '@/constants/queryParams'
-import { ICustomer, IUser } from '@/models'
+import { ICustomer } from '@/models'
 import { useGetTasksByCustomerIdQuery } from '@/services/customers/taskService'
 import { ApexOptions } from 'apexcharts'
 import React, { useMemo, useState } from 'react'
@@ -142,7 +141,7 @@ const CustomerPerformanceRadialChart: React.FC<IProps> = ({ customerId }) => {
             },
             value: {
               show: true,
-              fontSize: '1.3rem',
+              fontSize: '20px',
               fontFamily: undefined,
               fontWeight: 400,
               color: colors.gray.disabled,

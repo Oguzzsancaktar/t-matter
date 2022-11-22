@@ -66,14 +66,14 @@ const HistoryItem: React.FC<{ history: ICustomerHistory }> = ({ history }) => {
                 <H1 width="max-content" fontSize="1rem" fontWeight="bold" color={colors.text.primary}>
                   {CustomerHistoryTypesString[history.type]}{' '}
                 </H1>
-                <H1 color={colors.gray.middle} fontSize="0.7rem" width="max-content" margin="0 0.2rem">
+                <H1 color={colors.gray.middle} fontSize="13px" width="max-content" margin="0 0.2rem">
                   by
                 </H1>
                 <CircleImage height="25px" width="25px" imageUrl={history.responsible?.profile_img || ''} />
               </Row>
             </ItemContainer>
 
-            <H1 fontSize="0.7rem" color={colors.text.primary} width="100%">
+            <H1 fontSize="13px" color={colors.text.primary} width="100%">
               {moment(history.createdAt).fromNow()}
             </H1>
           </Column>
@@ -85,8 +85,6 @@ const HistoryItem: React.FC<{ history: ICustomerHistory }> = ({ history }) => {
 
 const CustomerHistory: React.FC<IProps> = ({ customerId }) => {
   const { data: customerHistoryData, isLoading: customerHistoryIsLoading } = useGetCustomerHistoriesQuery(customerId)
-
-  console.log(customerHistoryData)
 
   return (
     <ItemContainer height="100%" padding="0 1rem" overflow="auto">

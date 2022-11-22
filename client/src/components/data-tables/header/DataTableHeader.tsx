@@ -1,11 +1,12 @@
 import React from 'react'
-import { JustifyBetweenRow, Row } from '@/components/layout'
+import { JustifyBetweenRow, JustifyCenterRow, Row } from '@/components/layout'
 import { InputRegular, SelectInput } from '@/components/input'
 import { Button } from '@/components/button'
 import { Upload } from 'react-feather'
 import { IOption } from '@/models'
 import { statusOptions } from '@/constants/statuses'
 import colors from '@/constants/colors'
+import { H1 } from '@/components/texts'
 
 interface IProps {
   status?: IOption
@@ -36,7 +37,7 @@ const DataTableHeader: React.FC<IProps> = ({
   }
 
   return (
-    <JustifyBetweenRow margin="0 0 0.5rem 0" height="40px">
+    <JustifyBetweenRow margin="0 0 8px 0" height="40px">
       <Row>
         {/* {showPagination && (
           <Row width="100px">
@@ -54,7 +55,7 @@ const DataTableHeader: React.FC<IProps> = ({
         )} */}
 
         {showStatus && (
-          <Row width="150px" margin="0 0.5rem 0 0">
+          <Row width="150px" margin="0 8px 0 0">
             <SelectInput
               name="status"
               onChange={handleStatusChange}
@@ -70,18 +71,25 @@ const DataTableHeader: React.FC<IProps> = ({
         )}
       </Row>
 
-      <Row width="calc(1rem + 200px)" margin="0 0 0 0.5rem">
+      <Row width="calc(16px + 200px)" margin="0 0 0 8px">
         {showExport && (
-          <Row width={showAddNew ? '100px' : '100%'} margin="0 0.5rem 0 0">
-            <Button color={colors.primary.light}>
-              <Upload size={16} /> Export
+          <Row width={showAddNew ? '100px' : '100%'} margin="0 8px 0 0">
+            <Button color={colors.primary.light} height="100%">
+              <JustifyCenterRow>
+                <Upload size={16} />
+                <H1 fontSize="14px" cursor="pointer" color={colors.white.secondary} margin="0 0 0 8px">
+                  Export
+                </H1>
+              </JustifyCenterRow>
             </Button>
           </Row>
         )}
         {showAddNew && (
           <Row width={showExport ? '100px' : '100%'}>
             <Button onClick={handleAddNew} color={colors.primary.light}>
-              Add New
+              <H1 fontSize="14px" cursor="pointer" color={colors.white.secondary} textAlign="center">
+                Add New
+              </H1>
             </Button>
           </Row>
         )}

@@ -1,5 +1,5 @@
 import { openModal } from '@/store'
-import { Button, H1, ItemContainer, JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
+import { Button, H1, JustifyBetweenColumn, JustifyCenterRow } from '@components/index'
 import colors from '@constants/colors'
 import useAccessStore from '@hooks/useAccessStore'
 import { IModal } from '@models/index'
@@ -21,7 +21,7 @@ const Card = styled.div`
 `
 
 const CardTitle = styled.h1`
-  font-size: 1.5rem;
+  font-size: 22px;
   font-weight: bold;
   text-align: center;
   padding: 1rem;

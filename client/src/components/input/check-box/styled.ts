@@ -30,8 +30,8 @@ export const HiddenCheckbox = styled.input`
 
 export const StyledCheckbox = styled.div<IStyledProps>`
   display: inline-block;
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 20px;
+  height: 20px;
   background: ${props => (props.checked ? colors.green.primary : colors.gray.disabled)};
   border-radius: 3px;
   transition: all 150ms;

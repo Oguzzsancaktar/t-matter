@@ -28,6 +28,7 @@ export const Input = styled.input<Pick<IStyledProps, 'validationError' | 'disabl
   padding: 0.2rem 0.4rem;
   transition: all 0.4s ease-in-out;
   font-weight: 400;
+  font-size: 16px;
 
   &:focus {
     color: ${colors.text.primary};
@@ -51,4 +52,5 @@ export const TextContainer = styled.div<Pick<IStyledProps, 'validationError' | '
   padding: 0 1rem;
   border-left: 1px solid ${({ validationError }) => (validationError ? colors.red.primary : colors.gray.disabled)};
   background-color: ${({ disabled }) => disabled && colors.gray.disabled};
+  font-size: 16px;
 `

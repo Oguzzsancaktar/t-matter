@@ -94,7 +94,7 @@ const CustomerMostUsedUserDonutChart: React.FC<IProps> = ({ chartData }) => {
             height="40px"
             margin="auto"
           />
-          <H1 color={colors.text.primary} margin="0.25rem 0" fontSize="0.8rem" textAlign="center">
+          <H1 color={colors.text.primary} margin="0.25rem 0" fontSize="14px" textAlign="center">
             User
           </H1>
         </ItemContainer>

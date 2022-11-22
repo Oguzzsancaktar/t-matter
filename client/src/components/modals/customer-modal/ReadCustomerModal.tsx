@@ -202,13 +202,14 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
                     position="relative"
                   >
                     {customerData.customerType._id === '636108db15070e01a633c583' && (
-                      <ItemContainer position="absolute">
+                      <ItemContainer position="absolute" height="30px">
                         <Button
                           color={colors.primary.light}
                           width="auto"
                           onClick={() => openMakeContactToClientModal()}
+                          padding="0.2rem 0.5rem"
                         >
-                          <H1 color={colors.white.bg} cursor="pointer" fontSize="0.7rem">
+                          <H1 color={colors.white.bg} cursor="pointer" fontSize="13px">
                             Make Client
                           </H1>
                         </Button>
@@ -219,17 +220,19 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
                         <JustifyCenterRow width="100%">
                           <ItemContainer
                             cursorType="pointer"
-                            padding="0.3rem"
                             position="absolute"
                             left="calc(100% - 30px)"
                             top="calc(100% - 35px)"
                             zIndex="9"
                             backgroundColor={colors.secondary.dark}
                             borderRadius="0.3rem"
-                            width="auto"
+                            width="30px"
+                            height="30px"
                             onClick={openAddOrChangeImageModal}
                           >
-                            <Camera size={15} height="15px" width={'15px'} color={colors.white.secondary} />
+                            <JustifyCenterRow width="100%">
+                              <Camera size={15} height="15px" width={'15px'} color={colors.white.secondary} />
+                            </JustifyCenterRow>
                           </ItemContainer>
 
                           <UserImage width="100px" height="100px" src={customerData?.profile_img} />
@@ -237,30 +240,45 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
                       </ItemContainer>
                     </ItemContainer>
                   </ItemContainer>
-                  <ItemContainer>
-                    <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary} margin="2rem 0 1rem 0">
-                      {customerData.firstname + ' ' + customerData.lastname}
-                    </H1>
-                  </ItemContainer>
-                  <ItemContainer>
-                    <JustifyCenterRow>
-                      <ItemContainer width="auto" margin="0 0.5rem 0 0">
-                        <Badge children={customerData.customerType.name} color={colors.gray.dark} />
-                      </ItemContainer>
-
-                      <ItemContainer width="auto">
-                        <Badge
-                          children={EStatus[customerData.status]}
-                          color={selectColorForStatus(+customerData.status)}
-                        />
-                      </ItemContainer>
-                    </JustifyCenterRow>
-                  </ItemContainer>
                 </JustifyBetweenColumn>
               </ItemContainer>
 
               <ItemContainer height="calc(100% - 200px - 40px - 1rem )">
                 <JustifyBetweenColumn>
+                  <ItemContainer>
+                    <H1 fontSize="18px" textAlign="center" color={colors.text.primary} margin="2rem 0 1rem 0">
+                      {customerData.firstname + ' ' + customerData.lastname}
+                    </H1>
+                  </ItemContainer>
+
+                  <ItemContainer>
+                    <JustifyCenterRow>
+                      <ItemContainer width="auto" margin="0 0.5rem 0 0">
+                        <Badge
+                          children={
+                            <H1 color={colors.gray.dark} fontSize="14px">
+                              {customerData.customerType.name}
+                            </H1>
+                          }
+                          color={colors.gray.dark}
+                          height="30px"
+                        />
+                      </ItemContainer>
+
+                      <ItemContainer width="auto">
+                        <Badge
+                          children={
+                            <H1 color={EStatus[customerData.status]} fontSize="14px">
+                              {EStatus[customerData.status]}
+                            </H1>
+                          }
+                          color={selectColorForStatus(+customerData.status)}
+                          height="30px"
+                        />
+                      </ItemContainer>
+                    </JustifyCenterRow>
+                  </ItemContainer>
+
                   <ItemContainer margin="0.5rem 0">
                     <JustifyCenterRow>
                       <H1 fontSize="12px" color={colors.black.light} textAlign="center">
@@ -341,7 +359,7 @@ const CustomerReadModal: React.FC<IProps> = ({ customer, defaultActiveTab }) => 
           )}
         </ItemContainer>
 
-        <ItemContainer height="100%" width="120px" padding="1rem" backgroundColor={colors.gray.disabled}>
+        <ItemContainer height="100%" width="120px" padding="0.5rem" backgroundColor={colors.gray.disabled}>
           <JustifyBetweenColumn height="100%">
             <ItemContainer height="100%" margin="0 0 0.25rem 0">
               <Button

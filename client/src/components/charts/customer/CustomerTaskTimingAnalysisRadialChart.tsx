@@ -70,7 +70,7 @@ const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) 
           },
           value: {
             show: true,
-            fontSize: '1.3rem',
+            fontSize: '20px',
             fontFamily: undefined,
             fontWeight: 400,
             color: colors.gray.disabled,
@@ -158,7 +158,7 @@ const CustomerTaskTimingAnalysisRadialChart: React.FC<IProps> = ({ chartData }) 
     <ItemContainer height="100%" transform="translate(0%, 3%)" position="relative">
       {chartData && chartData?.length !== 0 && (
         <ItemContainer position="absolute" top="50%" left="50%" transform="translate(-30px, 5px)">
-          <H1 fontSize="0.8rem" color={colors.text.primary}>
+          <H1 fontSize="14px" color={colors.text.primary}>
             {secondsToHourMin(taskTotaşDuration, true)}
           </H1>
         </ItemContainer>

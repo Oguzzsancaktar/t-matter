@@ -1,5 +1,4 @@
 import { Badge } from '@/components/badge'
-import { Button } from '@/components/button'
 import { UserImage } from '@/components/image'
 import { ItemContainer } from '@/components/item-container'
 import { JustifyBetweenColumn, JustifyBetweenRow, JustifyCenterColumn, JustifyCenterRow } from '@/components/layout'
@@ -13,7 +12,6 @@ import { ESize, ETaskStatus, ICustomer, ICustomerTask, ITaskItem, IUser } from '
 import { openModal } from '@/store'
 import { selectColorForTaskStatus } from '@/utils/statusColorUtil'
 import React from 'react'
-import { PlayCircle, XCircle } from 'react-feather'
 
 interface IProps {
   taskActiveStep: ITaskItem
@@ -87,7 +85,7 @@ const TaskUserCard: React.FC<IProps> = ({
               height="calc(100% - 20px - 20px)"
               textAlign="center"
               fontWeight="900"
-              fontSize="0.8rem"
+              fontSize="14px"
               color={colors.blue.primary}
             >
               {taskData.name}
@@ -100,7 +98,7 @@ const TaskUserCard: React.FC<IProps> = ({
               margin="0 0 0.25rem 0"
             >
               <JustifyCenterColumn width="100%" height="100%">
-                <H1 width="100%" textAlign="center" fontWeight="600" fontSize="0.8rem" color={colors.primary.dark}>
+                <H1 width="100%" textAlign="center" fontWeight="600" fontSize="14px" color={colors.primary.dark}>
                   {taskActiveStep?.category.name}
                 </H1>
               </JustifyCenterColumn>
@@ -113,7 +111,7 @@ const TaskUserCard: React.FC<IProps> = ({
                   height="20px"
                   children={
                     <H1
-                      fontSize="0.8rem"
+                      fontSize="14px"
                       width="100%"
                       textAlign="center"
                       color={selectColorForTaskStatus(taskActiveStep?.stepStatus)}

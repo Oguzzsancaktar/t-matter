@@ -22,6 +22,7 @@ const IndexCircle = styled.span<Pick<IProps, 'isActive' | 'tabColor'>>`
   border-radius: 0.3rem;
   margin-right: 0.3rem;
   transition: background 0.4s ease-in-out;
+  font-size: 16px;
 `
 const TabIndex: React.FC<IProps> = ({ index, isActive, tabColor }) => {
   return (

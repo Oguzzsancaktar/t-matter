@@ -35,7 +35,7 @@ const InputWithIcon: React.FC<Props> = ({
   return (
     <Column>
       {labelText && (
-        <ItemContainer margin="0 0 0.4rem 0">
+        <ItemContainer margin="0 0 5px 0">
           <Label color={colors.text.primary}>{labelText}</Label>
         </ItemContainer>
       )}

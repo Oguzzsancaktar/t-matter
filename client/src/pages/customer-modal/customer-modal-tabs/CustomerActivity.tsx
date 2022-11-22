@@ -24,7 +24,7 @@ const ActivityItem: React.FC<{ activity: ICustomerActivity }> = ({ activity }) =
     <ItemContainer width="100%" padding="1rem 0" overflow="hidden">
       <JustifyBetweenRow height="auto">
         <ItemContainer width="100px" height="100%">
-          <H1 textAlign="center" fontSize="0.8rem" width="100%" fontWeight="900" color={colors.text.primary}>
+          <H1 textAlign="center" fontSize="14px" width="100%" fontWeight="900" color={colors.text.primary}>
             {moment(activity.createdAt).format('Do MMM')}
           </H1>
         </ItemContainer>
@@ -60,11 +60,11 @@ const ActivityItem: React.FC<{ activity: ICustomerActivity }> = ({ activity }) =
         </ItemContainer>
         <ItemContainer>
           <Column>
-            <H1 width="100%" fontSize="1rem" fontWeight="bold" color={colors.text.primary}>
+            <H1 width="100%" fontSize="16px" fontWeight="bold" color={colors.text.primary}>
               {CustomerActivityTypesString[activity.type]}
             </H1>
 
-            <H1 fontSize="0.7rem" color={colors.text.primary} width="100%">
+            <H1 fontSize="13px" color={colors.text.primary} width="100%">
               {moment(activity.createdAt).fromNow()}
             </H1>
           </Column>

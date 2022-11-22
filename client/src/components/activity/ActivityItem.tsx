@@ -20,14 +20,14 @@ const ActivityItem: React.FC<IProps> = ({ activity, updatable = false }) => {
   return (
     <RowBaseline width="100%" padding="1rem 0" height="auto">
       <ItemContainer width="100px" height="100%">
-        <H1 textAlign="center" fontSize="0.8rem" width="100%" fontWeight="900" color={colors.text.primary}>
+        <H1 textAlign="center" fontSize="14px" width="100%" fontWeight="900" color={colors.text.primary}>
           {moment(activity.createdAt).format('Do YYYY')}
         </H1>
-        <H1 textAlign="center" fontSize="0.7rem" color={colors.text.primary} width="100%">
+        <H1 textAlign="center" fontSize="13px" color={colors.text.primary} width="100%">
           {moment(activity.createdAt).fromNow()}
         </H1>
         {activity?.usedTime && (
-          <H1 textAlign="center" fontSize="0.7rem" color={colors.text.primary} width="100%">
+          <H1 textAlign="center" fontSize="13px" color={colors.text.primary} width="100%">
             {secondsToHourMin(activity.usedTime, true)}
           </H1>
         )}

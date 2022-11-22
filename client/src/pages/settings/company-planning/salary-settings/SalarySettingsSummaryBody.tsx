@@ -1,9 +1,7 @@
 import { ISalarySettings } from '@/models'
 import { SummaryCardText, SummaryCardValue } from '@/shared'
 import { JustifyBetweenColumn, JustifyBetweenRow } from '@components/layout'
-import colors from '@constants/colors'
 import React from 'react'
-import styled from 'styled-components'
 
 interface IProps {
   data: ISalarySettings

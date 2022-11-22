@@ -277,7 +277,7 @@ const CompanyPricing = () => {
             <Row key={index}>
               <Column height="100%">
                 {index === 0 && (
-                  <Label fontSize="1rem" color={colors.text.primary}>
+                  <Label fontSize="16px" color={colors.text.primary}>
                     Day
                   </Label>
                 )}
@@ -298,7 +298,7 @@ const CompanyPricing = () => {
 
               <Column margin="0 0.25rem 0 0">
                 {index === 0 && (
-                  <Label fontSize="1rem" color={colors.text.primary}>
+                  <Label fontSize="16px" color={colors.text.primary}>
                     Start Time
                   </Label>
                 )}
@@ -311,7 +311,7 @@ const CompanyPricing = () => {
               </Column>
               <Column margin="0 0.25rem">
                 {index === 0 && (
-                  <Label fontSize="1rem" color={colors.text.primary}>
+                  <Label fontSize="16px" color={colors.text.primary}>
                     End Time
                   </Label>
                 )}
@@ -325,7 +325,7 @@ const CompanyPricing = () => {
 
               <Column height="100%" margin="0 0 0 0.25rem">
                 {index === 0 && (
-                  <Label fontSize="1rem" color={colors.text.primary}>
+                  <Label fontSize="16px" color={colors.text.primary}>
                     Off tracking time
                   </Label>
                 )}

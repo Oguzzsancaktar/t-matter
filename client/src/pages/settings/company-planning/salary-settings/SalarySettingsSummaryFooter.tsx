@@ -9,10 +9,10 @@ interface IProps {
 }
 
 const Text = styled.h3`
-  font-size: 0.8rem;
+  font-size: 14px;
 `
 const Value = styled.h3`
-  font-size: 0.8rem;
+  font-size: 14px;
   width: 80px;
   text-align: center;
   border-left: 1px solid ${colors.gray.disabled};

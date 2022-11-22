@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react'
 import {
   Button,
   Column,
-  H1,
   InputRegular,
   InputWithIcon,
   ItemContainer,
   JustifyBetweenColumn,
   JustifyBetweenRow,
   JustifyCenterColumn,
-  Row,
   SummaryCard
 } from '@components/index'
 import { DollarSign, Percent } from 'react-feather'
@@ -20,7 +18,6 @@ import {
 } from '@/services/settings/company-planning/salarySettingsService'
 import { ISalarySettings } from '@/models'
 import { toastSuccess } from '@/utils/toastUtil'
-import colors from '@/constants/colors'
 
 const DEFAULT_PAYROLL_RATE: number = 30
 const DEFAULT_HOUR_IN_YEAR: number = 1920
@@ -65,21 +62,6 @@ const SalarySettings = () => {
       }
     ]
   })
-
-  // const notificationOptions = [
-  //   { value: NOTIFICATION_BEFORE_AFTER.AFTER, label: 'After' },
-  //   { value: NOTIFICATION_BEFORE_AFTER.BEFORE, label: 'Before' }
-  // ]
-
-  // const userTaskOptions = [
-  //   { value: 'task1', label: 'Task 1' },
-  //   { value: 'task2', label: 'Task 2' }
-  // ]
-
-  // const userRoleOptions = [
-  //   { value: USER_ROLE_TYPES.ADMIN, label: 'Admin' },
-  //   { value: USER_ROLE_TYPES.USER, label: 'User' }
-  // ]
 
   useEffect(() => {
     if (salarySettingsData && salarySettingsData?.defaultPayrollRate && salarySettingsData?.payrollIncreases) {
@@ -132,11 +114,6 @@ const SalarySettings = () => {
         <>
           <JustifyBetweenColumn height="100%" margin="0 2rem 0 0">
             <Column margin="0 0 2rem 0">
-              {/* <Row margin="0 0 1rem 0">
-                <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
-                  Default
-                </H1>
-              </Row> */}
               <InputWithIcon
                 labelText="Default Payroll Rate"
                 onBlur={() => console.log('blue')}
@@ -177,49 +154,9 @@ const SalarySettings = () => {
               )
             })}
           </JustifyBetweenColumn>
-          {/* 
-          <JustifyBetweenColumn margin="0px 3rem" height="100%">
-            <Column>
-              <Row margin="0 0 2rem 0">
-                <H1>Notifications</H1>
-              </Row>
-              <SelectInput
-                name="notificationType"
-                options={notificationOptions}
-                isClearable={false}
-                labelText="Type"
-                onChange={handleSelectChange}
-              />
-            </Column>
-            <JustifyBetweenRow>
-              <SelectInput
-                name="taskType"
-                options={userTaskOptions}
-                isClearable={false}
-                labelText="Create Task"
-                onChange={handleSelectChange}
-              />
-            </JustifyBetweenRow>
-
-            <JustifyBetweenRow>
-              <SelectInput
-                name="sendAllertFor"
-                options={userRoleOptions}
-                isClearable={false}
-                labelText="Send Alert"
-                isMulti={true}
-                onChange={handleSelectChange}
-              />
-            </JustifyBetweenRow>
-          </JustifyBetweenColumn> */}
 
           <JustifyCenterColumn height="100%">
             <JustifyBetweenColumn height="calc(100% - 1rem - 40px)">
-              {/* <ItemContainer margin="0 0 1rem 0">
-                <H1 fontSize="1.2rem" textAlign="center" color={colors.text.primary}>
-                  Summary
-                </H1>
-              </ItemContainer> */}
               <SummaryCard
                 body={<SalarySettingsSummaryBody data={salarySettingsStateData} />}
                 footer={<SalarySettingsSummaryFooter data={salarySettingsStateData} />}

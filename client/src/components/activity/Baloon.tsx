@@ -47,7 +47,6 @@ const BaloonHeader = styled.div`
 
 const BaloonTitle = styled.span`
   font-size: 16px;
-  height: 35px;
   font-weight: 700;
   color: ${colors.black.primary};
   display: flex;
@@ -64,7 +63,7 @@ const BaloonBody = styled.div`
 const BaloonContent = styled.div`
   margin-top: 1rem;
   height: auto;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 300;
   color: ${colors.text.primary};
   flex: 1;
@@ -144,17 +143,19 @@ const Baloon: React.FC<IProps> = ({
       <BaloonHeader>
         <Column>
           <ItemContainer cursorType="pointer" onClick={() => handleOpenCustomerModal(customer)}>
-            <H1>{customer?.firstname + ' ' + customer?.lastname}</H1>
+            <H1 color={colors.text.primary} fontSize="18px" cursor="pointer">
+              {customer?.firstname + ' ' + customer?.lastname}
+            </H1>
           </ItemContainer>
-          <ItemContainer height="20px" margin="-0.5rem 0 0 0">
+          <ItemContainer>
             <BaloonTitle onClick={() => handleOpenTaskModal(task?._id)}>
-              <H1 fontSize="1rem" cursor="pointer" width="auto" color={colors.secondary.middle}>
+              <H1 fontSize="16px" cursor="pointer" width="auto" color={colors.secondary.middle}>
                 {task?.name}
               </H1>
               <H1 cursor="pointer" margin="0 0.2rem" width="auto" color={colors.text.primary}>
                 -
               </H1>
-              <H1 cursor="pointer" width="auto" fontSize="0.8rem" color={selectColorForActivityType(type || 0)}>
+              <H1 cursor="pointer" width="auto" fontSize="14px" color={selectColorForActivityType(type || 0)}>
                 {title}
               </H1>
             </BaloonTitle>

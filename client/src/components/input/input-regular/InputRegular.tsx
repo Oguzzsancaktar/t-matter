@@ -1,7 +1,6 @@
 import React from 'react'
 import colors from '@/constants/colors'
-import { Column, ItemContainer, Label, Row } from '@components/index'
-import styled from 'styled-components'
+import { Column, ItemContainer, Label } from '@components/index'
 import { Input } from './styled'
 
 interface IProps {
@@ -30,7 +29,7 @@ const InputRegular: React.FC<IProps> = ({
   return (
     <Column margin={margin}>
       {labelText && (
-        <ItemContainer margin="0 0 0.4rem 0">
+        <ItemContainer margin="0 0 5px 0">
           <Label color={colors.text.primary}>{labelText}</Label>
         </ItemContainer>
       )}

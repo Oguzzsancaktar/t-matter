@@ -169,6 +169,7 @@ ddd .flatpickr-calendar .flatpickr-day:hover {
   -webkit-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
   font-weight: 400;
+  font-size: 16px;
 }
 
 .flatpickr-input[readonly]::placeholder,
@@ -198,7 +199,7 @@ ddd .flatpickr-calendar .flatpickr-day:hover {
 .flatpickr-current-month .flatpickr-monthDropdown-months,
 .flatpickr-current-month .numInputWrapper {
   color: #6e6b7b;
-  font-size: 1.1rem;
+  font-size: 16px !important;
   border-radius: 4px;
   padding: 2px;
   transition: all 0.15s ease-out;

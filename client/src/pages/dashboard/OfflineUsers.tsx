@@ -1,7 +1,7 @@
-import { Column, H1, ItemContainer, JustifyCenterColumn, Row, UserImage } from '@/components'
-import colors from '@/constants/colors'
 import React, { useState } from 'react'
-import { Avatar, Grid, Tooltip } from '@nextui-org/react'
+import { H1, JustifyCenterColumn, Row } from '@/components'
+import colors from '@/constants/colors'
+import { Avatar, Tooltip } from '@nextui-org/react'
 import { useGetUsersQuery } from '@services/settings/user-planning/userService'
 import { emptyQueryParams } from '@constants/queryParams'
 import useAccessStore from '@hooks/useAccessStore'
@@ -36,14 +36,15 @@ const OfflineUsers = () => {
           onClick={() => setIsOnline(!isOnline)}
         >
           <JustifyCenterColumn height="100%">
-            <H1 textAlign="center" fontSize="0.8rem" color={colors.primary.middle}>
+            <H1 textAlign="center" fontSize="14px" color={colors.primary.middle}>
               {userArr.length}
             </H1>
-            <H1 textAlign="center" fontSize="0.8rem" color={colors.blue.primary}>
+            <H1 textAlign="center" fontSize="14px" color={colors.blue.primary}>
               {isOnline ? 'Online' : 'Offline'}
             </H1>
           </JustifyCenterColumn>
         </div>
+
         <Row>
           <Avatar.Group animated>
             {userArr?.map((user, index) => (

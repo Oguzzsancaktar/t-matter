@@ -24,7 +24,7 @@ import { CgWebsite } from 'react-icons/cg'
 
 const SidebarShowWhenHover = styled.div`
   color: ${colors.white.bg};
-  font-size: 1.2rem;
+  font-size: 22px;
   font-weight: bold;
   text-align: center;
   padding: 10px;
@@ -168,7 +168,7 @@ const SideBar = () => {
                     <SidebarShowWhenHover className="sidebar__hover_hide_show">
                       <Column>
                         <H1 color={colors.white.primary}>{loggedUser.user?.firstname + loggedUser.user?.lastname}</H1>
-                        <H1 color={colors.text.primary} fontSize={'0.8rem'}>
+                        <H1 color={colors.text.primary} fontSize={'14px'}>
                           {loggedUser.user?.email}
                         </H1>
                       </Column>
