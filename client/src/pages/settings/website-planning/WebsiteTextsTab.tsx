@@ -36,8 +36,9 @@ const RowItem = styled.div`
   display: flex;
   flex: 1;
   min-width: 200px;
-  margin: 1rem;
+  margin: 10px 0;
   margin-left: 0;
+  height: 65px;
 `
 
 const WebsiteTextsTab = () => {
@@ -184,89 +185,91 @@ const WebsiteTextsTab = () => {
   return (
     <ItemContainer width="100%" height="calc(100% - 30px - 1rem)">
       <JustifyBetweenRow width="100%" height="100%">
-        <Column width="100%" margin="1rem" height="100%">
-          <ItemContainer width="100%" height="100%">
-            <ItemContainer margin="1rem 0" borderBottom={'1px solid ' + colors.text.primary}>
-              <H1 fontSize="2rem" color={colors.text.primary} margin="0.5rem 0">
-                Navlink
-              </H1>
+        <ItemContainer height="100%" margin="0 0.5rem 0 0">
+          <Column width="100%" height="100%">
+            <ItemContainer width="100%" height="100%">
+              <ItemContainer borderBottom={'1px solid ' + colors.text.primary}>
+                <H1 fontSize="25px" color={colors.text.primary} margin="0 0 5px 0">
+                  Navlink
+                </H1>
+              </ItemContainer>
+              <RowWrap>
+                {websiteTextsData.navlinks.map((item, index) => (
+                  <RowItem>
+                    <Row>
+                      <ItemContainer width="40px" margin="30px 0 0 0" onClick={() => handleNavlinkShowClick(index)}>
+                        <Checkbox isChecked={item.show} onChange={() => null} />
+                      </ItemContainer>
+                      <ItemContainer>
+                        <InputRegular
+                          name={'navlink-' + item.index}
+                          placeholder={'Enter Navigation Link ' + (item.index + 1) + ' ...'}
+                          onChange={handleNavlinkChange}
+                          // validationError={validationErrors.nameError}
+                          value={item.name}
+                          type="text"
+                          labelText={'Navigation Link ' + (item.index + 1)}
+                        />
+                      </ItemContainer>
+                    </Row>
+                  </RowItem>
+                ))}
+              </RowWrap>
             </ItemContainer>
-            <RowWrap>
-              {websiteTextsData.navlinks.map((item, index) => (
-                <RowItem>
-                  <Row>
-                    <ItemContainer width="40px" margin="2rem 0 0 0" onClick={() => handleNavlinkShowClick(index)}>
-                      <Checkbox isChecked={item.show} onChange={() => null} />
-                    </ItemContainer>
-                    <ItemContainer>
-                      <InputRegular
-                        name={'navlink-' + item.index}
-                        placeholder={'Enter Navigation Link ' + (item.index + 1) + ' ...'}
-                        onChange={handleNavlinkChange}
-                        // validationError={validationErrors.nameError}
-                        value={item.name}
-                        type="text"
-                        labelText={'Navigation Link ' + (item.index + 1)}
-                      />
-                    </ItemContainer>
-                  </Row>
-                </RowItem>
-              ))}
-            </RowWrap>
-          </ItemContainer>
 
-          <ItemContainer width="100%" height="100%">
-            <ItemContainer margin="1rem 0" borderBottom={'1px solid ' + colors.text.primary}>
-              <H1 fontSize="2rem" color={colors.text.primary} margin="0.5rem 0">
-                Main Information
-              </H1>
+            <ItemContainer width="100%" height="100%">
+              <ItemContainer borderBottom={'1px solid ' + colors.text.primary}>
+                <H1 fontSize="25px" color={colors.text.primary} margin="0 0 5px 0">
+                  Main Information
+                </H1>
+              </ItemContainer>
+              <RowItem>
+                <InputRegular
+                  name={'informationHeader'}
+                  placeholder={'Enter Information Title...'}
+                  onChange={handleInputChange}
+                  // validationError={validationErrors.nameError}
+                  value={websiteTextsData.informationHeader}
+                  type="text"
+                  labelText={'Information Title'}
+                />
+              </RowItem>
+              <RowItem>
+                <InputRegular
+                  name={'informationDescription'}
+                  placeholder={'Enter Information Description...'}
+                  onChange={handleInputChange}
+                  // validationError={validationErrors.nameError}
+                  value={websiteTextsData.informationDescription}
+                  type="text"
+                  labelText={'Information Description'}
+                />
+              </RowItem>
+
+              <RowItem>
+                <InputRegular
+                  name={'informationButtonText'}
+                  placeholder={'Enter Information Button Text...'}
+                  onChange={handleInputChange}
+                  // validationError={validationErrors.nameError}
+                  value={websiteTextsData.informationButtonText}
+                  type="text"
+                  labelText={'Information Button Text'}
+                />
+              </RowItem>
             </ItemContainer>
-            <RowItem>
-              <InputRegular
-                name={'informationHeader'}
-                placeholder={'Enter Information Title...'}
-                onChange={handleInputChange}
-                // validationError={validationErrors.nameError}
-                value={websiteTextsData.informationHeader}
-                type="text"
-                labelText={'Information Title'}
-              />
-            </RowItem>
-            <RowItem>
-              <InputRegular
-                name={'informationDescription'}
-                placeholder={'Enter Information Description...'}
-                onChange={handleInputChange}
-                // validationError={validationErrors.nameError}
-                value={websiteTextsData.informationDescription}
-                type="text"
-                labelText={'Information Description'}
-              />
-            </RowItem>
-
-            <RowItem>
-              <InputRegular
-                name={'informationButtonText'}
-                placeholder={'Enter Information Button Text...'}
-                onChange={handleInputChange}
-                // validationError={validationErrors.nameError}
-                value={websiteTextsData.informationButtonText}
-                type="text"
-                labelText={'Information Button Text'}
-              />
-            </RowItem>
-          </ItemContainer>
-        </Column>
-        <ItemContainer height="100%">
+          </Column>
+        </ItemContainer>
+        <ItemContainer height="100%" margin="0 0 0 0.5rem">
           <Column width="100%" height="100%">
             <ItemContainer width="100%" height="50%">
-              <ItemContainer margin="1rem 0" borderBottom={'1px solid ' + colors.text.primary}>
-                <H1 fontSize="2rem" color={colors.text.primary} margin="0.5rem 0">
+              <ItemContainer borderBottom={'1px solid ' + colors.text.primary}>
+                <H1 fontSize="25px" color={colors.text.primary} margin="0 0 5px 0">
                   Contact Informations
                 </H1>
               </ItemContainer>
 
-              <ItemContainer height="calc(100% - 3rem - 60px)" overflow="auto">
+              <ItemContainer height="calc(100% - 1rem - 60px)" overflow="auto">
                 {websiteTextsData.contactInformations.map((item, index) => (
                   <Row>
                     <ItemContainer width="200px">
@@ -284,7 +287,7 @@ const WebsiteTextsTab = () => {
                         options={iconSelectOptions}
                       />
                     </ItemContainer>
-                    <ItemContainer width="calc(100% - 200px - 1rem)" margin="0 0.5rem">
+                    <ItemContainer width="calc((100% - 200px - 1rem)/2)" margin="0 0.5rem">
                       <InputRegular
                         name={'contactTitle-' + index}
                         placeholder={'Enter Contact Title ' + (index + 1) + ' ...'}
@@ -295,7 +298,7 @@ const WebsiteTextsTab = () => {
                         labelText={'Contact Title ' + (index + 1)}
                       />
                     </ItemContainer>
-                    <ItemContainer width="calc(100% - 200px - 1rem)">
+                    <ItemContainer width="calc((100% - 200px - 1rem)/2)">
                       <InputRegular
                         name={'contactContent-' + index}
                         placeholder={'Enter Contact Content ' + (index + 1) + ' ...'}
@@ -314,14 +317,14 @@ const WebsiteTextsTab = () => {
                 ))}
               </ItemContainer>
 
-              <ItemContainer margin="1rem 0 0 0">
+              <ItemContainer margin="10px 0 0 0">
                 <Button onClick={handleAddNewContactInfo}>Create New</Button>
               </ItemContainer>
             </ItemContainer>
 
             <ItemContainer width="100%" height="50%">
-              <ItemContainer margin="1rem 0" borderBottom={'1px solid ' + colors.text.primary}>
-                <H1 fontSize="2rem" color={colors.text.primary} margin="0.5rem 0">
+              <ItemContainer borderBottom={'1px solid ' + colors.text.primary}>
+                <H1 fontSize="25px" color={colors.text.primary} margin="0 0 5px 0">
                   Modal Button Texts
                 </H1>
               </ItemContainer>
@@ -356,7 +359,7 @@ const WebsiteTextsTab = () => {
           </Column>
         </ItemContainer>
       </JustifyBetweenRow>
-      <ItemContainer width="100%" height="30px" margin="1rem 0 0 0">
+      <ItemContainer width="100%" height="30px" margin="10px 0 0 0">
         <ConfirmCancelButtons
           onConfirm={handleSubmit}
           onCancel={function (): void {

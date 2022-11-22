@@ -75,7 +75,11 @@ const SelectInput: React.FC<IProps> = ({
                 {data.label}
               </H1>
               <ItemContainer width="20px">
-                {data.color ? <CircleColor color={data.color?.color} /> : data.icon && selectIconWithText(data.icon)}
+                {data.color ? (
+                  <CircleColor color={data.color?.color} />
+                ) : (
+                  data.icon && selectIconWithText(data.icon, '20px')
+                )}
               </ItemContainer>
             </JustifyBetweenRow>
           </ItemContainer>

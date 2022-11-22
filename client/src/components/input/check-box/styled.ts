@@ -6,7 +6,7 @@ export const CheckboxContainer = styled.div`
   display: flex;
   vertical-align: middle;
   cursor: pointer;
-  margin-right: 0.4rem;
+  margin-right: 7px;
 `
 
 export const Icon = styled.svg`
