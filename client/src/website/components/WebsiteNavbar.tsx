@@ -6,7 +6,7 @@ import CompanyLogo from './CompanyLogo'
 import { IWebsiteImageData, IWebsiteStylesData, IWebsiteTextsData } from '@/models'
 
 const NavbarLayout = styled.div<{ borderColor: string }>`
-  max-width: 1200px;
+  max-width: 1600px;
   width: 100%;
   height: 100%;
   margin: auto;

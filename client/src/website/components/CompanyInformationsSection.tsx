@@ -16,6 +16,7 @@ const Layout = styled(ItemContainer)`
 const InformationLayout = styled(ItemContainer)``
 
 const InformationItem = styled(ItemContainer)`
+  margin: 0 1rem;
   @media (max-width: 768px) {
     margin: 2rem 0;
 
