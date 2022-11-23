@@ -34,7 +34,7 @@ const HomePage = () => {
         position="relative"
         top="50%"
         transform="translateY(-50%)"
-        maxWidth="1200px"
+        maxWidth="1600px"
         margin="auto"
         padding="2rem"
       >
@@ -45,7 +45,7 @@ const HomePage = () => {
         />
         <ItemContainer height="calc(100%)">
           <JustifyBetweenColumn height="100%">
-            <InformationSection margin="120px 0 0 0" maxWidth="1200px" height="calc(100% - 250px - 30px - 10rem)">
+            <InformationSection margin="120px 0 0 0" maxWidth="1600px" height="calc(100% - 250px - 30px - 10rem)">
               <CompanyInformationsSection
                 websiteTextsData={websiteSettingsTextData}
                 websiteSettingsStyleData={websiteSettingsStyleData}
@@ -53,7 +53,7 @@ const HomePage = () => {
               />
             </InformationSection>
 
-            <ItemContainer margin="0 0 30px 0" height="250px" maxWidth="1200px">
+            <ItemContainer margin="0 0 30px 0" height="250px" maxWidth="1600px">
               <ModalButtonsSection
                 websiteTextsData={websiteSettingsTextData}
                 websiteSettingsStyleData={websiteSettingsStyleData}
